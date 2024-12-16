@@ -3123,6 +3123,7 @@ describe("Entity builder", () => {
           reference: "1:1",
           name: "email",
           entity: "Email",
+          fieldName: "email_id",
         },
         email_id: {
           columnType: "text",
@@ -3233,6 +3234,7 @@ describe("Entity builder", () => {
           name: "emails",
           entity: "Email",
           nullable: true,
+          fieldName: "emails_id",
         },
         emails_id: {
           columnType: "text",
@@ -3334,6 +3336,7 @@ describe("Entity builder", () => {
           name: "email",
           entity: "Email",
           mappedBy: "owner",
+          fieldName: "email_id",
         },
         email_id: {
           columnType: "text",
@@ -3439,6 +3442,7 @@ describe("Entity builder", () => {
           entity: "Email",
           cascade: ["persist", "soft-remove"],
           mappedBy: "user",
+          fieldName: "email_id",
         },
         email_id: {
           columnType: "text",
@@ -3614,6 +3618,7 @@ describe("Entity builder", () => {
           entity: "Email",
           cascade: ["persist", "soft-remove"],
           mappedBy: "user",
+          fieldName: "email_id",
         },
         email_id: {
           columnType: "text",
