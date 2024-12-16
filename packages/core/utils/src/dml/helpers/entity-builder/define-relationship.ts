@@ -172,7 +172,9 @@ export function defineHasOneWithFKRelationship(
   { relatedModelName }: { relatedModelName: string },
   cascades: EntityCascades<string[]>
 ) {
-  const foreignKeyName = camelToSnakeCase(`${relationship.name}Id`)
+  const foreignKeyName =
+    relationship.options.foreignKeyName ??
+    camelToSnakeCase(`${relationship.name}Id`)
   const shouldRemoveRelated = !!cascades.delete?.includes(relationship.name)
 
   let mappedBy: string | undefined = camelToSnakeCase(MikroORMEntity.name)
@@ -183,6 +185,7 @@ export function defineHasOneWithFKRelationship(
   OneToOne({
     entity: relatedModelName,
     nullable: relationship.nullable,
+    fieldName: foreignKeyName,
     ...(mappedBy ? { mappedBy } : {}),
     cascade: shouldRemoveRelated
       ? (["persist", "soft-remove"] as any)

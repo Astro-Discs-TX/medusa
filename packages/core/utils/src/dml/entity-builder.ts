@@ -338,6 +338,7 @@ export class EntityBuilder {
     entityBuilder: T,
     options: RelationshipOptions & {
       foreignKey: true
+      foreignKeyName?: string
     }
   ): HasOneWithForeignKey<T>
   hasOne<T>(
