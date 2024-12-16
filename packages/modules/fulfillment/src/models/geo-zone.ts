@@ -1,6 +1,28 @@
-import { GeoZoneType, model } from "@medusajs/framework/utils"
+import {
+  BelongsTo,
+  DmlEntity,
+  DMLEntitySchemaBuilder,
+  GeoZoneType,
+  IdProperty,
+  JSONProperty,
+  model,
+  NullableModifier,
+  PrimaryKeyModifier,
+  TextProperty,
+} from "@medusajs/framework/utils"
 
-import ServiceZone from "./service-zone"
+import { ServiceZone } from "./service-zone"
+
+export type GeoZoneSchema = {
+  id: PrimaryKeyModifier<string, IdProperty>
+  type: TextProperty
+  country_code: TextProperty
+  province_code?: NullableModifier<string, TextProperty>
+  city?: NullableModifier<string, TextProperty>
+  postal_expression?: NullableModifier<Record<string, unknown>, JSONProperty>
+  service_zone: BelongsTo<() => typeof ServiceZone>
+  metadata?: NullableModifier<Record<string, unknown>, JSONProperty>
+}
 
 export const GeoZone = model
   .define("geo_zone", {
@@ -10,7 +32,7 @@ export const GeoZone = model
     province_code: model.text().nullable(),
     city: model.text().nullable(),
     postal_expression: model.json().nullable(),
-    service_zone: model.belongsTo(() => ServiceZone, {
+    service_zone: model.belongsTo<() => typeof ServiceZone>(() => ServiceZone, {
       mappedBy: "geo_zones",
     }),
     metadata: model.json().nullable(),
@@ -28,4 +50,4 @@ export const GeoZone = model
       on: ["city"],
       where: "deleted_at IS NULL",
     },
-  ])
+  ]) as unknown as DmlEntity<DMLEntitySchemaBuilder<GeoZoneSchema>, "GeoZone">

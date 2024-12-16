@@ -26,6 +26,7 @@ export const Fulfillment = model
     }),
     provider: model.hasOne(() => FulfillmentProvider, {
       foreignKey: true,
+      mappedBy: undefined,
     }),
     shipping_option: model.belongsTo(() => ShippingOption, {
       mappedBy: "fulfillments",
@@ -33,6 +34,7 @@ export const Fulfillment = model
     delivery_address: model
       .hasOne(() => FulfillmentAddress, {
         foreignKey: true,
+        mappedBy: undefined,
       })
       .nullable(),
     metadata: model.json().nullable(),

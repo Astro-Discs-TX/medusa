@@ -3,15 +3,9 @@ import {
   IDmlEntityConfig,
   RelationshipOptions,
 } from "@medusajs/types"
-import { DmlEntity } from "./entity"
-import {
-  createBigNumberProperties,
-  DMLSchemaWithBigNumber,
-} from "./helpers/entity-builder/create-big-number-properties"
-import {
-  createDefaultProperties,
-  DMLSchemaDefaults,
-} from "./helpers/entity-builder/create-default-properties"
+import { DmlEntity, DMLEntitySchemaBuilder } from "./entity"
+import { createBigNumberProperties } from "./helpers/entity-builder/create-big-number-properties"
+import { createDefaultProperties } from "./helpers/entity-builder/create-default-properties"
 import { ArrayProperty } from "./properties/array"
 import { BigNumberProperty } from "./properties/big-number"
 import { BooleanProperty } from "./properties/boolean"
@@ -24,8 +18,8 @@ import { TextProperty } from "./properties/text"
 import { BelongsTo } from "./relations/belongs-to"
 import { HasMany } from "./relations/has-many"
 import { HasOne } from "./relations/has-one"
-import { ManyToMany } from "./relations/many-to-many"
 import { HasOneWithForeignKey } from "./relations/has-one-fk"
+import { ManyToMany } from "./relations/many-to-many"
 
 /**
  * The implicit properties added by EntityBuilder in every schema
@@ -121,20 +115,14 @@ export class EntityBuilder {
   define<Schema extends DMLSchema, const TConfig extends IDmlEntityConfig>(
     nameOrConfig: TConfig,
     schema: Schema
-  ): DmlEntity<
-    Schema & DMLSchemaWithBigNumber<Schema> & DMLSchemaDefaults,
-    TConfig
-  > {
+  ): DmlEntity<DMLEntitySchemaBuilder<Schema>, TConfig> {
     this.#disallowImplicitProperties(schema)
 
     return new DmlEntity<Schema, TConfig>(nameOrConfig, {
       ...schema,
       ...createBigNumberProperties(schema),
       ...createDefaultProperties(),
-    }) as unknown as DmlEntity<
-      Schema & DMLSchemaWithBigNumber<Schema> & DMLSchemaDefaults,
-      TConfig
-    >
+    }) as unknown as DmlEntity<DMLEntitySchemaBuilder<Schema>, TConfig>
   }
 
   /**
