@@ -7,7 +7,7 @@ export const ShippingOptionType = model.define("shipping_option_type", {
   label: model.text(),
   description: model.text().nullable(),
   code: model.text(),
-  shipping_option: model.belongsTo(() => ShippingOption, {
+  shipping_option: model.hasOne(() => ShippingOption, {
     mappedBy: "type",
   }),
 })

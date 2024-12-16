@@ -12,7 +12,7 @@ export const FulfillmentItem = model
     line_item_id: model.text().nullable(),
     inventory_item_id: model.text().nullable(),
     fulfillment: model.belongsTo(() => Fulfillment, {
-      mappedBy: "fulfillment_items",
+      mappedBy: "items",
     }),
   })
   .indexes([

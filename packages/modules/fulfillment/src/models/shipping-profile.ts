@@ -15,6 +15,7 @@ export const ShippingProfile = model
   .indexes([
     {
       on: ["name"],
+      unique: true,
       where: "deleted_at IS NULL",
     },
   ])

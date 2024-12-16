@@ -19,17 +19,21 @@ export const ShippingOption = model
     service_zone: model.belongsTo(() => ServiceZone, {
       mappedBy: "shipping_options",
     }),
-    shipping_profile: model.belongsTo(() => ShippingProfile, {
-      mappedBy: "shipping_options",
-    }),
-    provider: model.hasOne(() => FulfillmentProvider, {
-      foreignKey: true,
-      mappedBy: undefined,
-    }),
+    shipping_profile: model
+      .belongsTo(() => ShippingProfile, {
+        mappedBy: "shipping_options",
+      })
+      .nullable(),
+    provider: model
+      .hasOne(() => FulfillmentProvider, {
+        foreignKey: true,
+        mappedBy: undefined,
+      })
+      .nullable(),
     type: model.hasOne(() => ShippingOptionType, {
       foreignKey: true,
       foreignKeyName: "shipping_option_type_id",
-      mappedBy: "shipping_option",
+      mappedBy: undefined,
     }),
     rules: model.hasMany(() => ShippingOptionRule, {
       mappedBy: "shipping_option",

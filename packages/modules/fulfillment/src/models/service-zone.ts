@@ -25,7 +25,7 @@ export type ServiceZoneSchema = {
 }
 
 export const ServiceZone = model
-  .define("serivce_zone", {
+  .define("service_zone", {
     id: model.id({ prefix: "serzo" }).primaryKey(),
     name: model.text(),
     fulfillment_set: model.belongsTo<() => typeof FulfillmentSet>(
@@ -48,6 +48,7 @@ export const ServiceZone = model
   .indexes([
     {
       on: ["name"],
+      unique: true,
       where: "deleted_at IS NULL",
     },
   ])

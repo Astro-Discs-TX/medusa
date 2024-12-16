@@ -24,13 +24,17 @@ export const Fulfillment = model
     labels: model.hasMany(() => FulfillmentLabel, {
       mappedBy: "fulfillment",
     }),
-    provider: model.hasOne(() => FulfillmentProvider, {
-      foreignKey: true,
-      mappedBy: undefined,
-    }),
-    shipping_option: model.belongsTo(() => ShippingOption, {
-      mappedBy: "fulfillments",
-    }),
+    provider: model
+      .hasOne(() => FulfillmentProvider, {
+        foreignKey: true,
+        mappedBy: undefined,
+      })
+      .nullable(),
+    shipping_option: model
+      .belongsTo(() => ShippingOption, {
+        mappedBy: "fulfillments",
+      })
+      .nullable(),
     delivery_address: model
       .hasOne(() => FulfillmentAddress, {
         foreignKey: true,
