@@ -50,7 +50,12 @@ export const listShippingOptionsForCartWorkflow = createWorkflow(
     const scFulfillmentSetQuery = useQueryGraphStep({
       entity: "sales_channels",
       filters: { id: cart.sales_channel_id },
-      fields: ["stock_locations.fulfillment_sets.id"],
+      fields: [
+        "stock_locations.fulfillment_sets.id",
+        "stock_locations.id",
+        "stock_locations.name",
+        "stock_locations.address.*",
+      ],
     }).config({ name: "sales_channels-fulfillment-query" })
 
     const scFulfillmentSets = transform(

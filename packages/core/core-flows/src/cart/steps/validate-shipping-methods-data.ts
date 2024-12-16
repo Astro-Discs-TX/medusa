@@ -2,7 +2,7 @@ import { Modules, promiseAll } from "@medusajs/framework/utils"
 import {
   CartDTO,
   IFulfillmentModuleService,
-  StockLocationAddressDTO,
+  StockLocationDTO,
 } from "@medusajs/types"
 import { createStep, StepResponse } from "@medusajs/workflows-sdk"
 
@@ -13,7 +13,7 @@ export interface ValidateShippingMethodsDataInput {
     provider_id: string
     option_data: Record<string, unknown>
     method_data: Record<string, unknown>
-    from_location: StockLocationAddressDTO
+    from_location: StockLocationDTO
   }[]
 }
 
