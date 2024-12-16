@@ -86,10 +86,9 @@ export function prepareLineItemData(data: PrepareLineItemDataInput) {
 
   let compareAtUnitPrice = item?.compare_at_unit_price
 
-  const isSalePrice = !!(
+  const isSalePrice =
     variant?.calculated_price?.calculated_price?.price_list_type ===
     PriceListType.SALE
-  )
 
   if (
     !isDefined(compareAtUnitPrice) &&
@@ -143,7 +142,7 @@ export function prepareLineItemData(data: PrepareLineItemDataInput) {
 
     unit_price: unitPrice,
     compare_at_unit_price: compareAtUnitPrice,
-    is_tax_inclusive: isTaxInclusive,
+    is_tax_inclusive: !!isTaxInclusive,
 
     metadata: item?.metadata ?? {},
   }
@@ -162,11 +161,6 @@ export function prepareLineItemData(data: PrepareLineItemDataInput) {
 
   if (cartId) {
     lineItem.cart_id = cartId
-  }
-
-  // If there are still no unit price after checking the variant and item, we reject the request
-  if (!lineItem.unit_price) {
-    throw new Error(`Unit price missing on line item: ${item?.title}`)
   }
 
   return lineItem
