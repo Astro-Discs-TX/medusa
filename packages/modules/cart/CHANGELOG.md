@@ -1,5 +1,15 @@
 # @medusajs/cart
 
+## 2.1.1
+
+### Patch Changes
+
+- [#10385](https://github.com/medusajs/medusa/pull/10385) [`0a16efa4266f93302b31589349e777bc8d24dc07`](https://github.com/medusajs/medusa/commit/0a16efa4266f93302b31589349e777bc8d24dc07) Thanks [@thetutlage](https://github.com/thetutlage)! - refactor: migrate cart module to DML
+
+## 2.1.0
+
+## 2.0.7
+
 ## 2.0.6
 
 ## 2.0.5

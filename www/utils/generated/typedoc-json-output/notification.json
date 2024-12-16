@@ -1,12 +1,12 @@
 {
-	"id": 37540,
+	"id": 43202,
 	"name": "notification",
 	"variant": "project",
 	"kind": 1,
 	"flags": {},
 	"children": [
 		{
-			"id": 37541,
+			"id": 43203,
 			"name": "AbstractNotificationProviderService",
 			"variant": "declaration",
 			"kind": 128,
@@ -25,7 +25,7 @@
 			},
 			"children": [
 				{
-					"id": 37542,
+					"id": 43204,
 					"name": "validateOptions",
 					"variant": "declaration",
 					"kind": 2048,
@@ -34,7 +34,7 @@
 					},
 					"signatures": [
 						{
-							"id": 37543,
+							"id": 43205,
 							"name": "validateOptions",
 							"variant": "signature",
 							"kind": 4096,
@@ -68,7 +68,7 @@
 							},
 							"parameters": [
 								{
-									"id": 37544,
+									"id": 43206,
 									"name": "options",
 									"variant": "param",
 									"kind": 32768,
@@ -110,21 +110,21 @@
 					]
 				},
 				{
-					"id": 37545,
+					"id": 43207,
 					"name": "constructor",
 					"variant": "declaration",
 					"kind": 512,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 37546,
+							"id": 43208,
 							"name": "new AbstractNotificationProviderService",
 							"variant": "signature",
 							"kind": 16384,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 37541,
+								"target": 43203,
 								"name": "AbstractNotificationProviderService",
 								"package": "@medusajs/utils"
 							}
@@ -132,14 +132,14 @@
 					]
 				},
 				{
-					"id": 37547,
+					"id": 43209,
 					"name": "send",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 37548,
+							"id": 43210,
 							"name": "send",
 							"variant": "signature",
 							"kind": 4096,
@@ -174,7 +174,7 @@
 							},
 							"parameters": [
 								{
-									"id": 37549,
+									"id": 43211,
 									"name": "notification",
 									"variant": "param",
 									"kind": 32768,
@@ -236,14 +236,14 @@
 				{
 					"title": "Constructors",
 					"children": [
-						37545
+						43207
 					]
 				},
 				{
 					"title": "Methods",
 					"children": [
-						37542,
-						37547
+						43204,
+						43209
 					]
 				}
 			],
@@ -264,41 +264,41 @@
 		{
 			"title": "Classes",
 			"children": [
-				37541
+				43203
 			]
 		}
 	],
 	"packageName": "@medusajs/utils",
 	"symbolIdMap": {
-		"37540": {
+		"43202": {
 			"sourceFileName": "../../../../packages/core/utils/src/notification/abstract-notification-provider.ts",
 			"qualifiedName": ""
 		},
-		"37541": {
+		"43203": {
 			"sourceFileName": "../../../../packages/core/utils/src/notification/abstract-notification-provider.ts",
 			"qualifiedName": "AbstractNotificationProviderService"
 		},
-		"37542": {
+		"43204": {
 			"sourceFileName": "../../../../packages/core/utils/src/notification/abstract-notification-provider.ts",
 			"qualifiedName": "AbstractNotificationProviderService.validateOptions"
 		},
-		"37543": {
+		"43205": {
 			"sourceFileName": "../../../../packages/core/utils/src/notification/abstract-notification-provider.ts",
 			"qualifiedName": "AbstractNotificationProviderService.validateOptions"
 		},
-		"37544": {
+		"43206": {
 			"sourceFileName": "../../../../packages/core/utils/src/notification/abstract-notification-provider.ts",
 			"qualifiedName": "options"
 		},
-		"37547": {
+		"43209": {
 			"sourceFileName": "../../../../packages/core/utils/src/notification/abstract-notification-provider.ts",
 			"qualifiedName": "AbstractNotificationProviderService.send"
 		},
-		"37548": {
+		"43210": {
 			"sourceFileName": "../../../../packages/core/utils/src/notification/abstract-notification-provider.ts",
 			"qualifiedName": "AbstractNotificationProviderService.send"
 		},
-		"37549": {
+		"43211": {
 			"sourceFileName": "../../../../packages/core/utils/src/notification/abstract-notification-provider.ts",
 			"qualifiedName": "notification"
 		}
@@ -308,7 +308,7 @@
 			"1": "../../../../packages/core/utils/src/notification/abstract-notification-provider.ts"
 		},
 		"reflections": {
-			"1": 37540
+			"1": 43202
 		}
 	}
 }

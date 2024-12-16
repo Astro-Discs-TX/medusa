@@ -1,5 +1,29 @@
 # @medusajs/core-flows
 
+## 2.1.1
+
+### Patch Changes
+
+- [#10459](https://github.com/medusajs/medusa/pull/10459) [`90ae187e097c42a224c701f31cbc2924ea6ee86b`](https://github.com/medusajs/medusa/commit/90ae187e097c42a224c701f31cbc2924ea6ee86b) Thanks [@carlos-r-l-rodrigues](https://github.com/carlos-r-l-rodrigues)! - fix: when/then step name
+
+- [#10489](https://github.com/medusajs/medusa/pull/10489) [`f95c4e240c4a5ca0fb88a09636c3d8a2266de279`](https://github.com/medusajs/medusa/commit/f95c4e240c4a5ca0fb88a09636c3d8a2266de279) Thanks [@riqwan](https://github.com/riqwan)! - fix(promotion, core-flows): updating cart with removed promotion removes adjustments
+
+- [#10193](https://github.com/medusajs/medusa/pull/10193) [`559fc6587aa02cd4f8fbc9e97ff1f1ba094a4b1a`](https://github.com/medusajs/medusa/commit/559fc6587aa02cd4f8fbc9e97ff1f1ba094a4b1a) Thanks [@adrien2p](https://github.com/adrien2p)! - fix(): Deleted default sales channel should be prevented
+
+## 2.1.0
+
+### Patch Changes
+
+- [#10374](https://github.com/medusajs/medusa/pull/10374) [`11bd55613304350a5478fd4c001e2309cca3a995`](https://github.com/medusajs/medusa/commit/11bd55613304350a5478fd4c001e2309cca3a995) Thanks [@riqwan](https://github.com/riqwan)! - feat(core-flows,framework,medusa): list shipping options pass in cart as pricing context
+
+## 2.0.7
+
+### Patch Changes
+
+- [#10313](https://github.com/medusajs/medusa/pull/10313) [`030ee871506cfe178702853714feaaa33f1d9cf4`](https://github.com/medusajs/medusa/commit/030ee871506cfe178702853714feaaa33f1d9cf4) Thanks [@kasperkristensen](https://github.com/kasperkristensen)! - fix(core-workflows): Fix data returned from reset password event.
+
+  Deprecate `actorType` in favor of `actor_type`. The field `actorType` will be removed in a future version, so please update your code to use `actor_type` instead.
+
 ## 2.0.6
 
 ## 2.0.5

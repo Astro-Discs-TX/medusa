@@ -1,5 +1,29 @@
 # @medusajs/types
 
+## 2.1.1
+
+### Patch Changes
+
+- [#10386](https://github.com/medusajs/medusa/pull/10386) [`a1a1e0e789424546443ce195b95f652d081d7b3b`](https://github.com/medusajs/medusa/commit/a1a1e0e789424546443ce195b95f652d081d7b3b) Thanks [@kasperkristensen](https://github.com/kasperkristensen)! - feat(dashboard,types): Add UI to manage conditional SO prices
+
+- [#10449](https://github.com/medusajs/medusa/pull/10449) [`16663ec8132e99bac7fbfe2adda542a5294d2384`](https://github.com/medusajs/medusa/commit/16663ec8132e99bac7fbfe2adda542a5294d2384) Thanks [@kasperkristensen](https://github.com/kasperkristensen)! - fix(dashboard,types): Add missing Metadata form for Region domain and fix types
+
+- [#10193](https://github.com/medusajs/medusa/pull/10193) [`559fc6587aa02cd4f8fbc9e97ff1f1ba094a4b1a`](https://github.com/medusajs/medusa/commit/559fc6587aa02cd4f8fbc9e97ff1f1ba094a4b1a) Thanks [@adrien2p](https://github.com/adrien2p)! - fix(): Deleted default sales channel should be prevented
+
+- [#10457](https://github.com/medusajs/medusa/pull/10457) [`864f53011b892e1ed0abee2e241b662eccef7e6d`](https://github.com/medusajs/medusa/commit/864f53011b892e1ed0abee2e241b662eccef7e6d) Thanks [@kasperkristensen](https://github.com/kasperkristensen)! - fix(dashboard,types): Fix TS errors
+
+- [#10482](https://github.com/medusajs/medusa/pull/10482) [`69f4c4f4e06022990fcd9c66d8f1a68ff0ff97b1`](https://github.com/medusajs/medusa/commit/69f4c4f4e06022990fcd9c66d8f1a68ff0ff97b1) Thanks [@carlos-r-l-rodrigues](https://github.com/carlos-r-l-rodrigues)! - chore: index module to DML
+
+## 2.1.0
+
+### Patch Changes
+
+- [#10391](https://github.com/medusajs/medusa/pull/10391) [`3e98364bd1631f96846cd3199bf7497702cf5923`](https://github.com/medusajs/medusa/commit/3e98364bd1631f96846cd3199bf7497702cf5923) Thanks [@thetutlage](https://github.com/thetutlage)! - feature: add support for check constraints in DML
+
+- [#10350](https://github.com/medusajs/medusa/pull/10350) [`324b4ab438662f44de495ffe4d9137677a032a00`](https://github.com/medusajs/medusa/commit/324b4ab438662f44de495ffe4d9137677a032a00) Thanks [@riqwan](https://github.com/riqwan)! - feat(pricing, types): add price rule operators to price calculations
+
+## 2.0.7
+
 ## 2.0.6
 
 ## 2.0.5

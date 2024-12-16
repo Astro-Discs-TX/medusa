@@ -44,7 +44,11 @@ dmlModules.forEach((module) => {
   }
 })
 
-getNamespaceNames(getCoreFlowNamespaces()).forEach((namespace) => {
+const { mainNamespaces: mainCoreFlowNamespaces } = getNamespaceNames(
+  getCoreFlowNamespaces()
+)
+
+mainCoreFlowNamespaces.forEach((namespace) => {
   allowedProjectDocuments[namespace] = {
     ...commonAllowedDocuments,
   }
@@ -77,7 +81,7 @@ const mergerOptions: Partial<TypeDocOptions> = {
       mdxImports: [`import { TypeList } from "docs-ui"`],
       parameterComponentExtraProps: {
         expandUrl:
-          "https://docs.medusajs.com/v2/advanced-development/data-models/manage-relationships#retrieve-records-of-relation",
+          "https://docs.medusajs.com/learn/fundamentals/data-models/manage-relationships#retrieve-records-of-relation",
       },
     },
     internal: {
@@ -157,7 +161,9 @@ You should only use the methods in this reference when implementing complex cust
             slug: `/references/${moduleName}/models/{{alias}}`,
             sidebar_label: "{{alias}}",
           },
-          reflectionDescription: `This documentation provides a reference to the {{alias}} {{kind}}. This belongs to the ${titleModuleName} Module.`,
+          reflectionDescription: !isDmlModule
+            ? `This documentation provides a reference to the {{alias}} {{kind}}. This belongs to the ${titleModuleName} Module.`
+            : `This documentation provides a reference to the {{alias}} data model. It belongs to the ${titleModuleName} Module.`,
           reflectionTitle: {
             kind: false,
             typeParameters: false,
