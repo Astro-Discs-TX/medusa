@@ -330,7 +330,9 @@ export function defineBelongsToRelationship(
     HasMany.isHasMany(otherSideRelation) ||
     DmlManyToMany.isManyToMany(otherSideRelation)
   ) {
-    const foreignKeyName = camelToSnakeCase(`${relationship.name}Id`)
+    const foreignKeyName =
+      relationship.options.foreignKeyName ??
+      camelToSnakeCase(`${relationship.name}Id`)
 
     ManyToOne({
       entity: relatedModelName,
@@ -374,7 +376,9 @@ export function defineBelongsToRelationship(
     HasOne.isHasOne(otherSideRelation) ||
     HasOneWithForeignKey.isHasOneWithForeignKey(otherSideRelation)
   ) {
-    const foreignKeyName = camelToSnakeCase(`${relationship.name}Id`)
+    const foreignKeyName =
+      relationship.options.foreignKeyName ??
+      camelToSnakeCase(`${relationship.name}Id`)
 
     Object.defineProperty(MikroORMEntity.prototype, foreignKeyName, {
       value: null,

@@ -382,7 +382,12 @@ export class EntityBuilder {
    *
    * @customNamespace Relationship Methods
    */
-  belongsTo<T>(entityBuilder: T, options?: RelationshipOptions) {
+  belongsTo<T>(
+    entityBuilder: T,
+    options?: RelationshipOptions & {
+      foreignKeyName?: string
+    }
+  ) {
     return new BelongsTo<T>(entityBuilder, options || {})
   }
 
