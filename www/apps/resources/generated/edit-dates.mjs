@@ -119,7 +119,7 @@ export const generatedEditDates = {
   "app/deployment/medusa-application/railway/page.mdx": "2024-11-11T11:50:10.517Z",
   "app/deployment/storefront/vercel/page.mdx": "2024-07-26T07:21:31+00:00",
   "app/deployment/page.mdx": "2024-11-25T14:31:45.277Z",
-  "app/integrations/page.mdx": "2024-12-10T08:20:41.203Z",
+  "app/integrations/page.mdx": "2024-12-16T16:46:12.395Z",
   "app/medusa-cli/page.mdx": "2024-08-28T11:25:32.382Z",
   "app/medusa-container-resources/page.mdx": "2024-12-09T16:18:38.852Z",
   "app/medusa-workflows-reference/page.mdx": "2024-12-09T16:22:32.129Z",
@@ -5688,5 +5688,6 @@ export const generatedEditDates = {
   "references/types/DmlTypes/types/types.DmlTypes.KnownDataTypes/page.mdx": "2024-12-10T14:54:55.434Z",
   "references/types/DmlTypes/types/types.DmlTypes.RelationshipTypes/page.mdx": "2024-12-10T14:54:55.435Z",
   "app/recipes/commerce-automation/restock-notification/page.mdx": "2024-12-11T08:47:27.471Z",
-  "app/troubleshooting/workflow-errors/page.mdx": "2024-12-11T08:44:36.598Z"
+  "app/troubleshooting/workflow-errors/page.mdx": "2024-12-11T08:44:36.598Z",
+  "app/integrations/guides/shipstation/page.mdx": "2024-12-16T16:41:54.976Z"
 }

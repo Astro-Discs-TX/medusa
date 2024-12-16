@@ -33,7 +33,7 @@ In this guide, you'll learn how to integrate Medusa with ShipStation.
 
 When you install a Medusa application, you get a fully-fledged commerce platform with support for customizations. Medusa's [Fulfillment Module](../../../commerce-modules/fulfillment/page.mdx) provides fulfillment-related resources and functionalities in your store, but it delegates the processing and shipment of order fulfillments to providers that you can integrate.
 
-ShipStation is a shipping toolbox that connects all your shipping providers within one platform. By integrating it with Medusa, you can allow customers to choose from different providers like DHL and FedEx, calculate the shipping rate for each shipping method, and process order fulfillment with the chosen provider.
+[ShipStation](https://shipstation.com/) is a shipping toolbox that connects all your shipping providers within one platform. By integrating it with Medusa, you can allow customers to choose from different providers like DHL and FedEx and view price rates retrieved from ShipStation. Admin users will also process the order fulfillment using the ShipStation integration.
 
 This guide will teach you how to:
 
@@ -119,12 +119,9 @@ Based on the provider you chose, you'll have to enter your account details, then
 
 ### Activate Shipping API
 
-To integrate ShipStation using their API, you must enable its Add-On. To do that:
+To integrate ShipStation using their API, you must enable the Shipping API Add-On. To do that:
 
 1. Go to Add-Ons from the navigation bar.
-
-![Click on Add-Ons in the navigation bar](https://res.cloudinary.com/dza7lstvk/image/upload/v1734337981/Medusa%20Resources/Screenshot_2024-12-16_at_10.32.40_AM_u2m1bi.png)
-
 2. Find Shipping API and activate it.
 
 You'll later retrieve your API key.
@@ -133,7 +130,7 @@ You'll later retrieve your API key.
 
 ## Step 3: Create ShipStation Module Provider
 
-o integrate third-party services into Medusa, you create a custom module. A module is a re-usable package with functionalities related to a single feature or domain. Medusa integrates the module into your application without implications or side effects on your setup.
+To integrate third-party services into Medusa, you create a custom module. A module is a re-usable package with functionalities related to a single feature or domain. Medusa integrates the module into your application without implications or side effects on your setup.
 
 Medusa's Fulfillment Module delegates processing fulfillments and shipments to other modules, called module providers. In this step, you'll create a ShipStation Module Provider that implements all functionalities required for fulfillment. In later steps, you'll add into Medusa shipping options for ShipStation, and allow customers to choose it during checkout.
 
@@ -190,13 +187,13 @@ class ShipStationProviderService extends AbstractFulfillmentProviderService {
 export default ShipStationProviderService
 ```
 
-A Fulfillment Module Provider service must extend the `AbstractFulfillmentProviderService` class. You'll implement the abstract methods of this class in the upcoming steps.
+A Fulfillment Module Provider service must extend the `AbstractFulfillmentProviderService` class. You'll implement the abstract methods of this class in the upcoming sections.
 
-The service must also have an `identifier` static property, which is a unique identifier for the provider. You set the identifier to `shipstation`.
+The service must have an `identifier` static property, which is a unique identifier for the provider. You set the identifier to `shipstation`.
 
-A module can receive options when it's later added to Medusa's configurations. These options allow you to safely store secret values outside of your code.
+A module can receive options that are set when you later add the module to Medusa's configurations. These options allow you to safely store secret values outside of your code.
 
-The ShipStation module requires an `api_key` option, indicating your ShipStation's API key. It also accepts a `sandbox` option which, when enabled, sends requests to ShipStation's mock server. You receive the options as a second parameter of the constructor.
+The ShipStation module requires an `api_key` option, indicating your ShipStation's API key. It also accepts a `sandbox` option which, when enabled, sends requests to ShipStation's mock server. You receive the options as a second parameter of the service's constructor.
 
 ### Create Client
 
@@ -213,7 +210,7 @@ export const clientHighlights1 = [
   ["19", "api_key", "Pass the API key in the request header."]
 ]
 
-```ts title="src/modules/shipstation/client.ts"
+```ts title="src/modules/shipstation/client.ts" highlights={clientHighlights1}
 import { ShipStationOptions } from "./service"
 
 export class ShipStationClient {
@@ -242,7 +239,7 @@ export class ShipStationClient {
 
 The `ShipStationClient` class accepts the ShipStation options in its constructor and sets those options in the `options` property.
 
-You also add a private `sendRequest` method that sends a request to a specified URL with request data. In the method, you determine the base URL of the request based on whether the `sandbox` option is enabled. You then send a request using the Fetch API, passing the API key from the options in the request header.
+You also add a private `sendRequest` method that accepts a path to send a request to and the request's configurations. In the method, you determine the base URL of the request based on whether the `sandbox` option is enabled. You then send a request using the Fetch API, passing the API key from the options in the request header.
 
 You'll add more methods to send requests in the upcoming steps.
 
@@ -254,7 +251,7 @@ export const serviceHighlights2 = [
   ["12", "ShipStationClient", "Initialize the client."]
 ]
 
-```ts title="src/modules/shipstation/service.ts"
+```ts title="src/modules/shipstation/service.ts" highlights={serviceHighlights2}
 // imports...
 import { ShipStationClient } from "./client"
 
@@ -289,7 +286,13 @@ Refer to [this guide](/references/fulfillment/provider) for a full reference of 
 
 The `getFulfillmentOptions` method returns the options this fulfillment provider supports. When admin users add shipping options later in the Medusa Admin, they'll select one of these options.
 
-ShipStation requires that a shipment must be associated with a carrier and one of its services. So, in this method, you'll retrieve the list of carriers from ShipStation and return them as fulfillment options.
+<Note>
+
+Learn more about shipping options in [this guide](../../../commerce-modules/fulfillment/shipping-option/page.mdx).
+
+</Note>
+
+ShipStation requires that a shipment must be associated with a carrier and one of its services. So, in this method, you'll retrieve the list of carriers from ShipStation and return them as fulfillment options. Shipping options created from these fulfillment options will always have access to the option's carrier and service.
 
 Before you start implementing methods, you'll add the expected carrier types returned by ShipStation. Create the file `src/modules/shipstation/types.ts` with the following content:
 
@@ -310,7 +313,7 @@ export type CarriersResponse = {
 }
 ```
 
-You define a `Carrier` type that holds a carrier's details, and a `CarriersResponse` type, which is the response returned by ShipStation when retrieving carriers.
+You define a `Carrier` type that holds a carrier's details, and a `CarriersResponse` type, which is the response returned by ShipStation.
 
 <Note title="Tip">
 
@@ -325,7 +328,7 @@ export const clientHighlights2 = [
   ["9", "sendRequest", "Use this method to send the request."]
 ]
 
-```ts title="src/modules/shipstation/client.ts"
+```ts title="src/modules/shipstation/client.ts" highlights={clientHighlights2}
 // other imports...
 import { 
   CarriersResponse
@@ -346,9 +349,9 @@ Finally, add the `getFulfillmentOptions` method to `ShipStationProviderService`:
 export const serviceHighlights3 = [
   ["8", "getFulfillmentOptions", "Method to return the options this fulfillment provider supports."],
   ["9", "getCarriers", "Retrieve the carriers from ShipStation."],
-  ["12", "filter", "Filter out carriers that are disabled by the billing plan."],
-  ["14", "services", "Loop over the services that the carrier provides."],
-  ["15", "push", "Add an option for the carrier and service combination."]
+  ["13", "filter", "Filter out carriers that are disabled by the billing plan."],
+  ["15", "services", "Loop over the services that the carrier provides."],
+  ["16", "push", "Add an option for the carrier and service combination."]
 ]
 
 ```ts title="src/modules/shipstation/service.ts" highlights={serviceHighlights3}
@@ -379,9 +382,15 @@ class ShipStationProviderService extends AbstractFulfillmentProviderService {
 }
 ```
 
-In the `getFulfillmentOptions` method, you retrieve the carriers from ShipStation. You then filter out the carriers disabled by the billing plan, and loop over each carrier and its services.
+In the `getFulfillmentOptions` method, you retrieve the carriers from ShipStation. You then filter out the carriers disabled by the billing plan, and loop over the remaining carriers and their services.
 
-For each carrier-service pair, you add a new item to the fulfillment options that are returned by this method. Each fulfillment option is an object that must have an `id` property, which you set to the carrier's ID. You can pass other data, such as the `carrier_service_code`, and Medusa will store all the fulfillment option data in the shipping option created later.
+For each carrier-service pair, you add a new item to the fulfillment options that are returned by this method. Each fulfillment option is an object that must have an `id` property, which you set to the carrier's ID. You can pass other data, such as the `carrier_service_code`, and Medusa will store the fulfillment option in the `data` property of shipping options created later.
+
+<Note>
+
+Learn more about the shipping option's `data` property in [this guide](../../../commerce-modules/fulfillment/shipping-option/page.mdx).
+
+</Note>
 
 You'll see this method in action later when you create a shipping option.
 
@@ -412,9 +421,15 @@ You'll implement the calculation mechanism in a later method.
 
 When a customer chooses a shipping option during checkout, Medusa creates a shipping method from that option. A shipping method has a `data` property to store data relevant for later processing of the method and its fulfillments.
 
+<Note title="Tip">
+
+Shipping methods are implemented in the [Cart Module](../../../commerce-modules/cart/concepts/page.mdx#shipping-methods) to be used with carts, and the [Order Module](../../../commerce-modules/order/concepts/page.mdx#orders-shipping-method) for processing an order's fulfillment.
+
+</Note>
+
 ShipStation has an [endpoint to get shipping rates](https://docs.shipstation.com/openapi/rates/calculate_rates) for a chosen carrier and service. It also creates a shipment for that rate that you can later purchase a label for.
 
-So, in the `validateFulfillmentData` method of your provider, you'll use that endpoint to create a shipment with rates for carrier and service code associated with the selected shipping option, then store the ID of that shipment in the created shipping method's data.
+So, in the `validateFulfillmentData` method of your provider, you'll use that endpoint to create a shipment with rates for the carrier and service code of the selected shipping option, then store the ID of that shipment in the created shipping method's `data` property.
 
 First, add the following types to `src/modules/shipstation/types.ts`:
 
@@ -525,7 +540,7 @@ You add the following types:
 - `GetShippingRatesResponse`: The response of the [ShipStation's get shipping rates endpoint](https://docs.shipstation.com/openapi/rates/calculate_rates). You can refer to their API reference for other response fields.
 - `Shipment`: A shipment's details.
 
-Next, add to `ShipStationClient` a method to send a request to [ShipStation's get shipping rates endpoint](https://docs.shipstation.com/openapi/rates/calculate_rates):
+Next, add to `ShipStationClient` a method that sends a request to [ShipStation's get shipping rates endpoint](https://docs.shipstation.com/openapi/rates/calculate_rates):
 
 ```ts title="src/modules/shipstation/client.ts"
 // other imports...
@@ -547,7 +562,7 @@ export class ShipStationClient {
 }
 ```
 
-The `getShippingRates` accepts the request body of the [ShipStation's get shipping rates endpoint](https://docs.shipstation.com/openapi/rates/calculate_rates). It uses the `sendRequest` method to send a request to ShipStation, and returns the endpoint's response.
+The `getShippingRates` method accepts the request body of the [ShipStation's get shipping rates endpoint](https://docs.shipstation.com/openapi/rates/calculate_rates). It uses the `sendRequest` method to send a request to ShipStation, and returns the endpoint's response.
 
 Finally, add the `validateFulfillmentData` method to `ShipStationProviderService`:
 
@@ -607,7 +622,7 @@ The `validateFulfillmentData` method accepts the following parameters:
 2. The `data` property of the shipping method to be created. This can hold custom data sent in the [Add Shipping Method API route](!api!/store#carts_postcartsidshippingmethods).
 3. An object of the checkout's context, including the cart's items, the location associated with the shipping option, and more.
 
-In the method, you prepare the data to get the shipping rates and create the shipment in ShipStation, including the carrier ID, the address to ship from and to, and more.
+In the method, you prepare the data to get the shipping rates and create the shipment in ShipStation, including the carrier ID and the addresses to ship from and to.
 
 Finally, you return the object to be stored in the shipping method's `data` property. You include in it the ID of the shipment in ShipStation.
 
@@ -642,7 +657,7 @@ export const serviceHighlights5 = [
   ["14", "shipment_id", "Retrieve the shipping method's shipment ID."],
   ["18", "getShipmentRates", "Retrieve the rates from ShipStation."],
   ["20", "calculatedPrice", "Calculate the price from the specified rate."],
-  ["25", "is_calculated_price_tax_inclusive", "Return whether the price includes taxes."]
+  ["26", "is_calculated_price_tax_inclusive", "Return whether the price includes taxes."]
 ]
 
 ```ts title="src/modules/shipstation/service.ts" highlights={serviceHighlights5}
@@ -698,7 +713,7 @@ The method returns an object having the following properties:
 
 #### createFulfillment
 
-After the customer places the order, the admin user can manage it including its fulfillments. When the admin user creates a fulfillment for the order, Medusa uses the `createFulfillment` method of the associated provider to handle any processing in the third-party provider.
+After the customer places the order, the admin user can manage its fulfillments. When the admin user creates a fulfillment for the order, Medusa uses the `createFulfillment` method of the associated provider to handle any processing in the third-party provider.
 
 In this method, you'll retrieve the shipment details from ShipStation, then use those details to purchase a label for a new shipment.
 
@@ -761,7 +776,7 @@ export const clientHighlights3 = [
   ["15", "purchaseLabel", "Method to purchase a label in ShipStation."]
 ]
 
-```ts title="src/modules/shipstation/client.ts"
+```ts title="src/modules/shipstation/client.ts" highlights={clientHighlights3}
 // other imports...
 import { 
   // ...
@@ -795,11 +810,11 @@ Finally, add the `createFulfillment` method in `ShipStationProviderService`:
 export const serviceHighlights6 = [
   ["9", "shipment_id", "Retrieve the shipping method's shipment ID."],
   ["13", "shipment", "Get the shipment's details from ShipStation."],
-  ["17", "label", "Purchase a label in ShipStation."],
-  ["19", "shipment_data", "Pass the shipment's details."],
-  ["20", "items", "Set the items to be fulfilled."],
-  ["29", "outbound_label_id", "Set the ID of the original shipment."],
-  ["33", "label_id", "Store the label's ID in the fulfillment's `data` property."]
+  ["16", "label", "Purchase a label in ShipStation."],
+  ["18", "shipment_data", "Pass the shipment's details."],
+  ["19", "items", "Set the items to be fulfilled."],
+  ["28", "outbound_label_id", "Set the ID of the original shipment."],
+  ["32", "label_id", "Store the label's ID in the fulfillment's `data` property."]
 ]
 
 ```ts title="src/modules/shipstation/service.ts" highlights={serviceHighlights6}
@@ -1009,7 +1024,7 @@ SHIPSTATION_API_KEY=123...
 
 Where:
 
-- `SHIPSTATION_SANDBOX`'s value is `true`, indicating that requests shouldn't be sent to the ShipStation's production server. You can change this to `false` when the integration is production-ready at the end of this guide.
+- `SHIPSTATION_SANDBOX`'s value is `true`, indicating that requests shouldn't be sent to the ShipStation's production server. Change this to `false` in a production environment.
 - `SHIPSTATION_API_KEY` is the ShipStation API key, which you can retrieve on the ShipStation dashboard:
     - Click on the cog icon in the navigation bar to go to Settings.
 
