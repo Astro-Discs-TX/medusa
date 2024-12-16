@@ -79,6 +79,7 @@ export const addShippingMethodToCartWorkflow = createWorkflow(
             provider_id: shippingOption?.provider_id,
             option_data: shippingOption?.data ?? {},
             method_data: inputOption.data ?? {},
+            from_location: shippingOption?.stock_location ?? {},
           }
         })
       }
@@ -86,7 +87,7 @@ export const addShippingMethodToCartWorkflow = createWorkflow(
 
     const validatedMethodData = validateAndReturnShippingMethodsDataStep({
       options_to_validate: validateShippingMethodsDataInput,
-      context: {}, // TODO: Add cart, when we have a better idea about what's appropriate to pass
+      context: cart,
     })
 
     const shippingMethodInput = transform(

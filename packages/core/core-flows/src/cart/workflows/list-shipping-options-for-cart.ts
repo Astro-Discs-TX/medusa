@@ -1,4 +1,3 @@
-import { deepFlatMap } from "@medusajs/framework/utils"
 import {
   createWorkflow,
   transform,
@@ -59,22 +58,23 @@ export const listShippingOptionsForCartWorkflow = createWorkflow(
       ({ scFulfillmentSetQuery }) => scFulfillmentSetQuery.data[0]
     )
 
-    const fulfillmentSetIds = transform(
-      { options: scFulfillmentSets },
-      (data) => {
+    const { fulfillmentSetIds, fulfillmentSetLocationMap } = transform(
+      { scFulfillmentSets },
+      ({ scFulfillmentSets }) => {
         const fulfillmentSetIds = new Set<string>()
+        const fulfillmentSetLocationMap = {}
 
-        deepFlatMap(
-          data.options,
-          "stock_locations.fulfillment_sets",
-          ({ fulfillment_sets: fulfillmentSet }) => {
-            if (fulfillmentSet?.id) {
-              fulfillmentSetIds.add(fulfillmentSet.id)
-            }
-          }
-        )
+        scFulfillmentSets.stock_locations.forEach((stockLocation) => {
+          stockLocation.fulfillment_sets.forEach((fulfillmentSet) => {
+            fulfillmentSetLocationMap[fulfillmentSet.id] = stockLocation
+            fulfillmentSetIds.add(fulfillmentSet.id)
+          })
+        })
 
-        return Array.from(fulfillmentSetIds)
+        return {
+          fulfillmentSetIds: Array.from(fulfillmentSetIds),
+          fulfillmentSetLocationMap,
+        }
       }
     )
 
@@ -113,6 +113,7 @@ export const listShippingOptionsForCartWorkflow = createWorkflow(
         "shipping_profile_id",
         "provider_id",
         "data",
+        "service_zone.fulfillment_set_id",
 
         "type.id",
         "type.label",
@@ -134,15 +135,19 @@ export const listShippingOptionsForCartWorkflow = createWorkflow(
     }).config({ name: "shipping-options-query" })
 
     const shippingOptionsWithPrice = transform(
-      { shippingOptions },
-      ({ shippingOptions }) =>
+      { shippingOptions, fulfillmentSetLocationMap },
+      ({ shippingOptions, fulfillmentSetLocationMap }) =>
         shippingOptions.map((shippingOption) => {
           const price = shippingOption.calculated_price
+          const fulfillmentSetId =
+            shippingOption.service_zone.fulfillment_set_id
+          const stockLocation = fulfillmentSetLocationMap[fulfillmentSetId]
 
           return {
             ...shippingOption,
             amount: price?.calculated_amount,
             is_tax_inclusive: !!price?.is_calculated_price_tax_inclusive,
+            stock_location: stockLocation,
           }
         })
     )

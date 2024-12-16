@@ -1,14 +1,19 @@
 import { Modules, promiseAll } from "@medusajs/framework/utils"
-import { IFulfillmentModuleService } from "@medusajs/types"
+import {
+  CartDTO,
+  IFulfillmentModuleService,
+  StockLocationAddressDTO,
+} from "@medusajs/types"
 import { createStep, StepResponse } from "@medusajs/workflows-sdk"
 
 export interface ValidateShippingMethodsDataInput {
-  context: Record<string, unknown>
+  context: CartDTO & Record<string, unknown>
   options_to_validate: {
     id: string
     provider_id: string
     option_data: Record<string, unknown>
     method_data: Record<string, unknown>
+    from_location: StockLocationAddressDTO
   }[]
 }
 
@@ -36,7 +41,7 @@ export const validateAndReturnShippingMethodsDataStep = createStep(
           option.provider_id,
           option.option_data,
           option.method_data,
-          data.context
+          { ...data.context, from_location: option.from_location }
         )
 
         return {
