@@ -1,0 +1,1103 @@
+import { Card, Prerequisites, Details } from "docs-ui"
+import { Github } from "@medusajs/icons"
+
+export const ogImage = "https://res.cloudinary.com/dza7lstvk/image/upload/v1732200494/Medusa%20Resources/opengraph-image_kstzrn.jpg"
+
+export const metadata = {
+  title: `Integrate Medusa with ShipStation`,
+  openGraph: {
+    images: [
+      {
+        url: ogImage,
+        width: 800,
+        height: 450,
+        type: "image/jpeg"
+      }
+    ],
+  },
+  twitter: {
+    images: [
+      {
+        url: ogImage,
+        width: 800,
+        height: 450,
+        type: "image/jpeg"
+      }
+    ]
+  }
+}
+
+# {metadata.title}
+
+In this guide, you'll learn how to integrate Medusa with ShipStation.
+
+When you install a Medusa application, you get a fully-fledged commerce platform with support for customizations. Medusa's [Fulfillment Module](../../../commerce-modules/fulfillment/page.mdx) provides fulfillment-related resources and functionalities in your store, but it delegates the processing and shipment of order fulfillments to providers that you can integrate.
+
+ShipStation is a shipping toolbox that connects all your shipping providers within one platform. By integrating it with Medusa, you can allow customers to choose from different providers like DHL and FedEx, calculate the shipping rate for each shipping method, and process order fulfillment with the chosen provider.
+
+This guide will teach you how to:
+
+- Install and set up Medusa.
+- Set up a ShipStation account.
+- Integrate ShipStation as a fulfillment provider in Medusa.
+
+You can follow this guide whether you're new to Medusa or an advanced Medusa developer.
+
+<Card
+  title="Example Repository"
+  text="Find the full code of the guide in this repository."
+  href="https://github.com/medusajs/examples/tree/main/shipstation-integration"
+  icon={Github}
+/>
+
+---
+
+## Step 1: Install a Medusa Application
+
+<Prerequisites items={[
+  {
+    text: "Node.js v20+",
+    link: "https://nodejs.org/en/download"
+  },
+  {
+    text: "Git CLI tool",
+    link: "https://git-scm.com/downloads"
+  },
+  {
+    text: "PostgreSQL",
+    link: "https://www.postgresql.org/download/"
+  }
+]} />
+
+Start by installing the Medusa application on your machine with the following command:
+
+```bash
+npx create-medusa-app@latest
+```
+
+You'll first be asked for the project's name. Then, when you're asked whether you want to install the Next.js storefront, choose `Y` for yes.
+
+Afterwards, the installation process will start, which will install the Medusa application in a directory with your project's name, and the Next.js storefront in a directory with the `{project-name}-storefront` name.
+
+<Note title="Why is the storefront installed separately?">
+
+The Medusa application is composed of a headless Node.js server and an admin dashboard. The storefront is installed or custom-built separately and connects to the Medusa application through its REST endpoints, called [API routes](!docs!/learn/fundamentals/api-routes). Learn more about Medusa's architecture in [this documentation](!docs!/learn/introduction/architecture).
+
+</Note>
+
+Once the installation finishes successfully, the Medusa Admin dashboard will open with a form to create a new user. Enter the user's credential and submit the form.
+
+Afterwards, you can login with the new user and explore the dashboard. The Next.js storefront is also running at `http://localhost:8000`.
+
+<Note title="Ran to Errors?">
+
+Check out the [troubleshooting guides](../../../troubleshooting/create-medusa-app-errors/page.mdx) for help.
+
+</Note>
+
+---
+
+## Step 2: Prepare ShipStation Account
+
+In this step, you'll prepare your ShipStation account before integrating it into Medusa. If you don't have an account, create one [here](https://www.shipstation.com/start-a-free-trial).
+
+### Add Carriers
+
+You must have at least one carrier (shipping provider) added in your ShipStation account. You'll later provide shipping options for each of these carriers in your Medusa application.
+
+To add carriers:
+
+1. On the Onboard page, in the "Enable carriers & see rates" section, click on the "Add your carrier accounts" link.
+
+![Scroll down to the Enable carriers & see rates section, and find the "Add your carrier accounts" link under the "Enable Carriers" button](https://res.cloudinary.com/dza7lstvk/image/upload/v1734336612/Medusa%20Resources/Screenshot_2024-12-16_at_10.09.08_AM_nqshhg.png)
+
+2. Click on a provider from the pop-up window.
+
+![Click on the provider tiles in the pop-up window](https://res.cloudinary.com/dza7lstvk/image/upload/v1734336826/Medusa%20Resources/Screenshot_2024-12-16_at_10.13.37_AM_og4sdq.png)
+
+Based on the provider you chose, you'll have to enter your account details, then submit the form.
+
+### Activate Shipping API
+
+To integrate ShipStation using their API, you must enable its Add-On. To do that:
+
+1. Go to Add-Ons from the navigation bar.
+
+![Click on Add-Ons in the navigation bar](https://res.cloudinary.com/dza7lstvk/image/upload/v1734337981/Medusa%20Resources/Screenshot_2024-12-16_at_10.32.40_AM_u2m1bi.png)
+
+2. Find Shipping API and activate it.
+
+You'll later retrieve your API key.
+
+---
+
+## Step 3: Create ShipStation Module Provider
+
+o integrate third-party services into Medusa, you create a custom module. A module is a re-usable package with functionalities related to a single feature or domain. Medusa integrates the module into your application without implications or side effects on your setup.
+
+Medusa's Fulfillment Module delegates processing fulfillments and shipments to other modules, called module providers. In this step, you'll create a ShipStation Module Provider that implements all functionalities required for fulfillment. In later steps, you'll add into Medusa shipping options for ShipStation, and allow customers to choose it during checkout.
+
+<Note>
+
+Learn more about modules in [this documentation](!docs!/learn/fundamentals/modules).
+
+</Note>
+
+### Create Module Directory
+
+A module is created under the `src/modules` directory of your Medusa application. So, create the directory `src/modules/shipstation`.
+
+![The directory structure of the Medusa application after adding the module's directory](https://res.cloudinary.com/dza7lstvk/image/upload/v1734338950/Medusa%20Resources/shipstation-dir-overview-1_dlsrbv.jpg)
+
+### Create Service
+
+You define a module's functionalities in a service. A service is a TypeScript or JavaScript class that the module exports. In the service's methods, you can connect to the database, which is useful if your module defines tables in the database, or connect to a third-party service.
+
+In this section, you'll create the ShipStation Module Provider's service and the methods necessary to handle fulfillment.
+
+Start by creating the file `src/modules/shipstation/service.ts` with the following content:
+
+![The directory structure of the Medusa application after adding the service](https://res.cloudinary.com/dza7lstvk/image/upload/v1734339042/Medusa%20Resources/shipstation-dir-overview-2_cmgvcj.jpg)
+
+export const serviceHighlights1 = [
+  ["3", "ShipStationOptions", "The type of options that the module expects."],
+  ["8", "AbstractFulfillmentProviderService", "Fulfillment provider service must extend this class."],
+  ["9", "identifier", "Each fulfillment provider has a unique identifier."],
+  ["12", "options", "Receive the module's options as a second parameter."]
+]
+
+```ts title="src/modules/shipstation/service.ts" highlights={serviceHighlights1}
+import { AbstractFulfillmentProviderService } from "@medusajs/framework/utils"
+
+export type ShipStationOptions = {
+  api_key: string
+  sandbox?: boolean
+}
+
+class ShipStationProviderService extends AbstractFulfillmentProviderService {
+  static identifier = "shipstation"
+  protected options_: ShipStationOptions
+
+  constructor({}, options: ShipStationOptions) {
+    super()
+
+    this.options_ = options
+  }
+
+  // TODO add methods
+}
+
+export default ShipStationProviderService
+```
+
+A Fulfillment Module Provider service must extend the `AbstractFulfillmentProviderService` class. You'll implement the abstract methods of this class in the upcoming steps.
+
+The service must also have an `identifier` static property, which is a unique identifier for the provider. You set the identifier to `shipstation`.
+
+A module can receive options when it's later added to Medusa's configurations. These options allow you to safely store secret values outside of your code.
+
+The ShipStation module requires an `api_key` option, indicating your ShipStation's API key. It also accepts a `sandbox` option which, when enabled, sends requests to ShipStation's mock server. You receive the options as a second parameter of the constructor.
+
+### Create Client
+
+To send requests to ShipStation, you'll create a client class that provides the methods to send requests. You'll then use that class in your service.
+
+Create the file `src/modules/shipstation/client.ts` with the following content:
+
+![The directory structure of the Medusa application after adding the client file](https://res.cloudinary.com/dza7lstvk/image/upload/v1734339519/Medusa%20Resources/shipstation-dir-overview-3_b8im2d.jpg)
+
+export const clientHighlights1 = [
+  ["4", "options", "Add the client options as a class property."],
+  ["10", "sendRequest", "Send a request to ShipStation."],
+  ["11", "baseUrl", "Set the base URL based on whether sandbox is enabled."],
+  ["19", "api_key", "Pass the API key in the request header."]
+]
+
+```ts title="src/modules/shipstation/client.ts"
+import { ShipStationOptions } from "./service"
+
+export class ShipStationClient {
+  options: ShipStationOptions
+
+  constructor(options) {
+    this.options = options
+  }
+
+  private async sendRequest(url: string, data?: RequestInit): Promise<any> {
+    const baseUrl = this.options.sandbox ? 
+      `https://docs.shipstation.com/_mock/openapi/v2`
+      : `https://api.shipstation.com/v2`
+
+    return fetch(`${baseUrl}${url}`, {
+      ...data,
+      headers: {
+        ...data?.headers,
+        'api-key': this.options.api_key,
+        "Content-Type": "application/"
+      }
+    }).then((resp) => resp.json())
+  }
+}
+```
+
+The `ShipStationClient` class accepts the ShipStation options in its constructor and sets those options in the `options` property.
+
+You also add a private `sendRequest` method that sends a request to a specified URL with request data. In the method, you determine the base URL of the request based on whether the `sandbox` option is enabled. You then send a request using the Fetch API, passing the API key from the options in the request header.
+
+You'll add more methods to send requests in the upcoming steps.
+
+To use the client in `ShipStationProviderService`, add it as a class property and initialize it in the constructor:
+
+export const serviceHighlights2 = [
+  ["2", "", "Import the client."],
+  ["8", "client", "Add client property."],
+  ["12", "ShipStationClient", "Initialize the client."]
+]
+
+```ts title="src/modules/shipstation/service.ts"
+// imports...
+import { ShipStationClient } from "./client"
+
+// ...
+
+class ShipStationProviderService extends AbstractFulfillmentProviderService {
+  // properties...
+  protected client: ShipStationClient
+
+  constructor({}, options: ShipStationOptions) {
+    // ...
+    this.client = new ShipStationClient(options)
+  }
+}
+```
+
+You import `ShipStationClient` and add a new `client` property in `ShipStationProviderService`. In the class's constructor, you set the `client` property by initializing `ShipStationProviderService`, passing it the module's options.
+
+You'll use the `client` property when implementing the service's methods.
+
+### Implement Service Methods
+
+In this section, you'll go back to the `ShipStationProviderService` method to implement the abstract methods of `AbstractFulfillmentProviderService`.
+
+<Note>
+
+Refer to [this guide](/references/fulfillment/provider) for a full reference of all methods, their parameters and return types.
+
+</Note>
+
+#### getFulfillmentOptions
+
+The `getFulfillmentOptions` method returns the options this fulfillment provider supports. When admin users add shipping options later in the Medusa Admin, they'll select one of these options.
+
+ShipStation requires that a shipment must be associated with a carrier and one of its services. So, in this method, you'll retrieve the list of carriers from ShipStation and return them as fulfillment options.
+
+Before you start implementing methods, you'll add the expected carrier types returned by ShipStation. Create the file `src/modules/shipstation/types.ts` with the following content:
+
+![The directory structure of the Medusa application after adding the types file](https://res.cloudinary.com/dza7lstvk/image/upload/v1734340402/Medusa%20Resources/shipstation-dir-overview-4_fwsle0.jpg)
+
+```ts title="src/modules/shipstation/types.ts"
+export type Carrier = {
+  carrier_id: string
+  disabled_by_billing_plan: boolean
+  services: {
+    service_code: string
+  }[]
+  [k: string]: unknown
+}
+
+export type CarriersResponse = {
+  carriers: Carrier[]
+}
+```
+
+You define a `Carrier` type that holds a carrier's details, and a `CarriersResponse` type, which is the response returned by ShipStation when retrieving carriers.
+
+<Note title="Tip">
+
+A carrier has more fields that you can use. Refer to [ShipStation's documentation](https://docs.shipstation.com/openapi/carriers/list_carriers#carriers/list_carriers/t=response&c=200&path=carriers) for all carrier fields.
+
+</Note>
+
+Next, you'll add in `ShipStationClient` the method to retrieve the carriers from ShipStation. So, add to the class defined in `src/modules/shipstation/client.ts` a new method:
+
+export const clientHighlights2 = [
+  ["8", "getCarriers", "Add a method to get carriers from ShipStation."],
+  ["9", "sendRequest", "Use this method to send the request."]
+]
+
+```ts title="src/modules/shipstation/client.ts"
+// other imports...
+import { 
+  CarriersResponse
+} from "./types"
+
+export class ShipStationClient {
+  // ...
+  async getCarriers(): Promise<CarriersResponse> {
+    return await this.sendRequest("/carriers") 
+  }
+}
+```
+
+You added a new `getCarriers` method that uses the `sendRequest` method to send a request to the [ShipStation's List Carriers endpoint](https://docs.shipstation.com/openapi/carriers/list_carriers). The method returns `CarriersResponse` that you defined earlier.
+
+Finally, add the `getFulfillmentOptions` method to `ShipStationProviderService`:
+
+export const serviceHighlights3 = [
+  ["8", "getFulfillmentOptions", "Method to return the options this fulfillment provider supports."],
+  ["9", "getCarriers", "Retrieve the carriers from ShipStation."],
+  ["12", "filter", "Filter out carriers that are disabled by the billing plan."],
+  ["14", "services", "Loop over the services that the carrier provides."],
+  ["15", "push", "Add an option for the carrier and service combination."]
+]
+
+```ts title="src/modules/shipstation/service.ts" highlights={serviceHighlights3}
+// other imports...
+import { 
+  FulfillmentOption
+} from "@medusajs/framework/types"
+
+class ShipStationProviderService extends AbstractFulfillmentProviderService {
+  // ...
+  async getFulfillmentOptions(): Promise<FulfillmentOption[]> {
+    const { carriers } = await this.client.getCarriers() 
+    const fulfillmentOptions: FulfillmentOption[] = []
+
+    carriers
+      .filter((carrier) => !carrier.disabled_by_billing_plan)
+      .forEach((carrier) => {
+        carrier.services.forEach((service) => {
+          fulfillmentOptions.push({
+            id: carrier.carrier_id,
+            carrier_service_code: service.service_code
+          })
+        })
+      })
+
+    return fulfillmentOptions
+  }
+}
+```
+
+In the `getFulfillmentOptions` method, you retrieve the carriers from ShipStation. You then filter out the carriers disabled by the billing plan, and loop over each carrier and its services.
+
+For each carrier-service pair, you add a new item to the fulfillment options that are returned by this method. Each fulfillment option is an object that must have an `id` property, which you set to the carrier's ID. You can pass other data, such as the `carrier_service_code`, and Medusa will store all the fulfillment option data in the shipping option created later.
+
+You'll see this method in action later when you create a shipping option.
+
+#### canCalculate
+
+When an admin user creates a shipping option for your provider, they can choose whether the price is flat rate or calculated during checkout.
+
+If the user chooses calculated, Medusa validates that your fulfillment provider supports calculated prices using the `canCalculate` method of your provider's service.
+
+This method accepts the shipping option's `data` field, which will hold the data of an option returned by `getFulfillmentOptions`. It returns a boolean value indicating whether the shipping option can have a calculated price.
+
+Add the method to `ShipStationProviderService` in `src/modules/shipstation/service.ts`:
+
+```ts title="src/modules/shipstation/service.ts"
+class ShipStationProviderService extends AbstractFulfillmentProviderService {
+  // ...
+  async canCalculate(data: Record<string, unknown>): Promise<boolean> {
+    return true
+  }
+}
+```
+
+Since all shipping option prices can be calculated with ShipStation based on the chosen carrier and service zone, you always return `true` in this method.
+
+You'll implement the calculation mechanism in a later method.
+
+#### validateFulfillmentData
+
+When a customer chooses a shipping option during checkout, Medusa creates a shipping method from that option. A shipping method has a `data` property to store data relevant for later processing of the method and its fulfillments.
+
+ShipStation has an [endpoint to get shipping rates](https://docs.shipstation.com/openapi/rates/calculate_rates) for a chosen carrier and service. It also creates a shipment for that rate that you can later purchase a label for.
+
+So, in the `validateFulfillmentData` method of your provider, you'll use that endpoint to create a shipment with rates for carrier and service code associated with the selected shipping option, then store the ID of that shipment in the created shipping method's data.
+
+First, add the following types to `src/modules/shipstation/types.ts`:
+
+export const typesHighlights1 = [
+  ["1", "ShipStationAddress", "An address to ship from or to."],
+  ["21", "Rate", "A price rate for a specified carrier and service zone."],
+  ["45", "RateResponse", "The response when retrieving rates."],
+  ["49", "GetShippingRatesRequest", "The request body data for ShipStation's get shipping rates endpoint."],
+  ["59", "GetShippingRatesResponse", "The response of the ShipStation's get shipping rates endpoint."],
+  ["67", "Shipment", "A shipment's details."]
+]
+
+```ts title="src/modules/shipstation/types.ts" highlights={typesHighlights1}
+export type ShipStationAddress = {
+  name: string
+  phone: string
+  email?: string | null
+  company_name?: string | null
+  address_line1: string
+  address_line2?: string | null
+  address_line3?: string | null
+  city_locality: string
+  state_province: string
+  postal_code: string
+  country_code: string
+  address_residential_indicator: "unknown" | "yes" | "no"
+  instructions?: string | null
+  geolocation?: {
+    type?: string
+    value?: string
+  }[]
+}
+
+export type Rate = {
+  rate_id: string
+  shipping_amount: {
+    currency: string
+    amount: number
+  }
+  insurance_amount: {
+    currency: string
+    amount: number
+  }
+  confirmation_amount: {
+    currency: string
+    amount: number
+  }
+  other_amount: {
+    currency: string
+    amount: number
+  }
+  tax_amount: {
+    currency: string
+    amount: number
+  }
+}
+
+export type RateResponse = {
+  rates: Rate[]
+}
+
+export type GetShippingRatesRequest = {
+  shipment_id?: string
+  shipment?: Omit<Shipment, "shipment_id" | "shipment_status">
+  rate_options: {
+    carrier_ids: string[]
+    service_codes: string[]
+    preferred_currency: string
+  }
+}
+
+export type GetShippingRatesResponse = {
+  shipment_id: string
+  carrier_id?: string
+  service_code?: string
+  external_order_id?: string
+  rate_response: RateResponse
+}
+
+export type Shipment = {
+  shipment_id: string
+  carrier_id: string
+  service_code: string
+  ship_to: ShipStationAddress
+  return_to?: ShipStationAddress
+  is_return?: boolean
+  ship_from: ShipStationAddress
+  items?: [
+    {
+      name?: string
+      quantity?: number
+      sku?: string
+    }
+  ]
+  warehouse_id?: string
+  shipment_status: "pending" | "processing" | "label_purchased" | "cancelled"
+  [k: string]: unknown
+}
+
+```
+
+You add the following types:
+
+- `ShipStationAddress`: an address to ship from or to.
+- `Rate`: a price rate for a specified carrier and service zone.
+- `RateResponse`: The response when retrieving rates.
+- `GetShippingRatesRequest`: The request body data for [ShipStation's get shipping rates endpoint](https://docs.shipstation.com/openapi/rates/calculate_rates). You can refer to their API reference for other accepted parameters.
+- `GetShippingRatesResponse`: The response of the [ShipStation's get shipping rates endpoint](https://docs.shipstation.com/openapi/rates/calculate_rates). You can refer to their API reference for other response fields.
+- `Shipment`: A shipment's details.
+
+Next, add to `ShipStationClient` a method to send a request to [ShipStation's get shipping rates endpoint](https://docs.shipstation.com/openapi/rates/calculate_rates):
+
+```ts title="src/modules/shipstation/client.ts"
+// other imports...
+import { 
+  // ...
+  GetShippingRatesRequest,
+  GetShippingRatesResponse
+} from "./types";
+
+export class ShipStationClient {
+  // ...
+  async getShippingRates(
+    data: GetShippingRatesRequest
+  ): Promise<GetShippingRatesResponse> {
+    return await this.sendRequest("/rates", {
+      body: JSON.stringify(data)
+    })
+  }
+}
+```
+
+The `getShippingRates` accepts the request body of the [ShipStation's get shipping rates endpoint](https://docs.shipstation.com/openapi/rates/calculate_rates). It uses the `sendRequest` method to send a request to ShipStation, and returns the endpoint's response.
+
+Finally, add the `validateFulfillmentData` method to `ShipStationProviderService`:
+
+export const serviceHighlights4 = [
+  ["8", "optionData", "Get the carrier ID and service code from the shipping option's `data`."],
+  ["13", "ship_from", "The address to ship the order items from."],
+  ["15", "ship_to", "The customer address to ship the items to."],
+  ["17", "getShippingRates", "Retrieve the shipping rates from ShipStation."],
+  ["36", "shipment_id", "Store the shipment's ID in the shipping method's `data`."]
+]
+
+```ts title="src/modules/shipstation/service.ts" highlights={serviceHighlights4}
+class ShipStationProviderService extends AbstractFulfillmentProviderService {
+  // ...
+  async validateFulfillmentData(
+    optionData: Record<string, unknown>, 
+    data: Record<string, unknown>, 
+    context: Record<string, unknown>
+  ): Promise<any> {
+    const { id: carrier_id, carrier_service_code } = optionData as {
+      id: string
+      carrier_service_code: string
+    }
+    // TODO get from cart's location
+    const ship_from = {}
+    // TODO get from cart
+    const ship_to = {}
+
+    const { shipment_id } = await this.client.getShippingRates({
+      shipment: {
+        carrier_id: carrier_id,
+        service_code: carrier_service_code,
+        // @ts-ignore
+        ship_to,
+        // @ts-ignore
+        ship_from
+      },
+      rate_options: {
+        carrier_ids: [carrier_id],
+        service_codes: [carrier_service_code],
+        // TODO check if this is correct
+        preferred_currency: context.currency_code as string
+      }
+    })
+
+    return {
+      ...data,
+      shipment_id
+    }
+  }
+}
+```
+
+The `validateFulfillmentData` method accepts the following parameters:
+
+1. The `data` property of the chosen shipping option during checkout. It will hold the carrier ID and its service code.
+2. The `data` property of the shipping method to be created. This can hold custom data sent in the [Add Shipping Method API route](!api!/store#carts_postcartsidshippingmethods).
+3. An object of the checkout's context, including the cart's items, the location associated with the shipping option, and more.
+
+In the method, you prepare the data to get the shipping rates and create the shipment in ShipStation, including the carrier ID, the address to ship from and to, and more.
+
+Finally, you return the object to be stored in the shipping method's `data` property. You include in it the ID of the shipment in ShipStation.
+
+#### calculatePrice
+
+After the customer selects a shipping option, if its price is calculated, Medusa retrieves the shipping option's price using the provider's `calculatePrice` method.
+
+In this method, you'll send a request to [ShipStation's get shipment rates endpoint](https://docs.shipstation.com/openapi/shipments/list_shipment_rates) to retrieve the price.
+
+So, start by adding a method in `ShipStationClient` to send the request:
+
+```ts title="src/modules/shipstation/client.ts"
+// other imports...
+import { 
+  // ...
+  RateResponse
+} from "./types";
+
+export class ShipStationClient {
+  // ...
+  async getShipmentRates(id: string): Promise<RateResponse> {
+    return await this.sendRequest(`/shipments/${id}/rates`)
+  }
+}
+```
+
+The `getShipmentRates` method accepts the ID of the shipment as a parameter, sends the request using the `sendRequest` method and returns its response holding the shipment's rates.
+
+Then, add the `calculatePrice` method to `ShipStationProviderService`:
+
+export const serviceHighlights5 = [
+  ["14", "shipment_id", "Retrieve the shipping method's shipment ID."],
+  ["18", "getShipmentRates", "Retrieve the rates from ShipStation."],
+  ["20", "calculatedPrice", "Calculate the price from the specified rate."],
+  ["25", "is_calculated_price_tax_inclusive", "Return whether the price includes taxes."]
+]
+
+```ts title="src/modules/shipstation/service.ts" highlights={serviceHighlights5}
+// other imports...
+import { 
+  // ...
+  CalculatedShippingOptionPrice
+} from "@medusajs/framework/types"
+
+class ShipStationProviderService extends AbstractFulfillmentProviderService {
+  // ...
+  async calculatePrice(
+    optionData: Record<string, unknown>, 
+    data: Record<string, unknown>, 
+    context: Record<string, unknown>
+  ): Promise<CalculatedShippingOptionPrice> {
+    const { shipment_id } = data as {
+      shipment_id: string
+    }
+
+    const { rates: [rate] } = await this.client.getShipmentRates(shipment_id)
+
+    const calculatedPrice = rate.shipping_amount.amount + rate.insurance_amount.amount + 
+      rate.confirmation_amount.amount + rate.other_amount.amount + 
+      (rate.tax_amount?.amount || 0)
+
+    return {
+      calculated_price: calculatedPrice,
+      is_calculated_price_tax_inclusive: !!rate.tax_amount
+    }
+  }
+}
+```
+
+The `calculatePrice` method accepts the following parameters:
+
+1. The `data` property of the chosen shipping option during checkout.
+2. The `data` property of the shipping method, which will hold the ID of the shipment in ShipStation.
+3. An object of the checkout's context, including the cart's items, the location associated with the shipping option, and more.
+
+In the method, you use the client's `getShipmentRates` to get the rates and only select the first one returned. A rate returned by ShipStation has four properties that, when added up, make up the full price: `shipping_amount`, `insurance_amount`, `confirmation_amount`, and `other_amount`. It may have a `tax_amount` property, which is the amount for applied taxes.
+
+<Note>
+
+Learn more about these fields returned in a rate in [ShipStation's documentation](https://docs.shipstation.com/rate-shopping#about-the-response).
+
+</Note>
+
+The method returns an object having the following properties:
+
+- `calculated_price`: The shipping method's price calculated by adding the four rate properties with the tax property, if available.
+- `is_calculated_price_tax_inclusive`: Whether the price includes taxes, which is inferred from whether the `tax_amount` property is set in the rate.
+
+#### createFulfillment
+
+After the customer places the order, the admin user can manage it including its fulfillments. When the admin user creates a fulfillment for the order, Medusa uses the `createFulfillment` method of the associated provider to handle any processing in the third-party provider.
+
+In this method, you'll retrieve the shipment details from ShipStation, then use those details to purchase a label for a new shipment.
+
+First, add new types to `src/modules/shipstation/types.ts`:
+
+export const typesHighlights2 = [
+  ["1", "PurchaseLabelRequest", "The request body type to purchase a label."],
+  ["7", "Label", "A label's details."]
+]
+
+```ts title="src/modules/shipstation/types.ts" highlights={typesHighlights2}
+export type PurchaseLabelRequest = {
+  shipment?: Omit<Shipment, "shipment_id" | "shipment_status">
+  is_return_label?: boolean
+  outbound_label_id?: string
+}
+
+export type Label = {
+  label_id: string
+  status: "processing" | "completed" | "error" | "voided"
+  shipment_id: string
+  ship_date: Date
+  shipment_cost: {
+    currency: string
+    amount: number
+  }
+  insurance_cost: {
+    currency: string
+    amount: number
+  }
+  confirmation_amount: {
+    currency: string
+    amount: number
+  }
+  tracking_number: string
+  is_return_label: boolean
+  carrier_id: string
+  service_code: string
+  trackable: string
+  tracking_status: "unknown" | "in_transit" | "error" | "delivered"
+  label_download: {
+    href: string
+    pdf: string
+    png: string
+    zpl: string
+  }
+}
+
+```
+
+You add two types:
+
+- `PurchaseLabelRequest` for the request body type of [ShipStation's purchase label endpoint](https://docs.shipstation.com/openapi/labels/create_label).
+- `Label` for the details in a label object. You can find more properties in [ShipStation's documentation](https://docs.shipstation.com/openapi/labels/create_label#labels/create_label/response&c=200/body).
+
+Then, add two methods to the `ShipStationClient`:
+
+export const clientHighlights3 = [
+  ["11", "getShipment", "Method to retrieve shipment details from ShipStation."],
+  ["15", "purchaseLabel", "Method to purchase a label in ShipStation."]
+]
+
+```ts title="src/modules/shipstation/client.ts"
+// other imports...
+import { 
+  // ...
+  Shipment,
+  PurchaseLabelRequest,
+  Label
+} from "./types";
+
+export class ShipStationClient {
+  // ...
+  async getShipment(id: string): Promise<Shipment> {
+    return await this.sendRequest(`/shipments/${id}`)
+  }
+
+  async purchaseLabel(data: PurchaseLabelRequest): Promise<Label> {
+    return await this.sendRequest(`/labels`, {
+      method: "POST",
+      body: JSON.stringify(data)
+    })
+  }
+}
+```
+
+You add two methods:
+
+- `getShipment` to retrieve a shipment's details from ShipStation.
+- `purchaseLabel` to purchase a label in ShipStation.
+
+Finally, add the `createFulfillment` method in `ShipStationProviderService`:
+
+export const serviceHighlights6 = [
+  ["9", "shipment_id", "Retrieve the shipping method's shipment ID."],
+  ["13", "shipment", "Get the shipment's details from ShipStation."],
+  ["17", "label", "Purchase a label in ShipStation."],
+  ["19", "shipment_data", "Pass the shipment's details."],
+  ["20", "items", "Set the items to be fulfilled."],
+  ["29", "outbound_label_id", "Set the ID of the original shipment."],
+  ["33", "label_id", "Store the label's ID in the fulfillment's `data` property."]
+]
+
+```ts title="src/modules/shipstation/service.ts" highlights={serviceHighlights6}
+class ShipStationProviderService extends AbstractFulfillmentProviderService {
+  // ...
+  async createFulfillment(
+    data: object, 
+    items: object[], 
+    order: object | undefined, 
+    fulfillment: Record<string, unknown>
+  ): Promise<any> {
+    const { shipment_id } = data as {
+      shipment_id: string
+    }
+
+    const shipment = await this.client.getShipment(shipment_id)
+
+    const { shipment_id: _, ...shipment_data } = shipment
+    const label = await this.client.purchaseLabel({
+      shipment: {
+        ...shipment_data,
+        items: items.map((item) => ({
+          // @ts-ignore
+          name: item.title,
+          // @ts-ignore
+          sku: item.sku,
+          // @ts-ignore
+          quantity: item.quantity
+        }))
+      },
+      outbound_label_id: shipment.shipment_id,
+    })
+
+    return {
+      label_id: label.label_id,
+      shipment_id: label.shipment_id
+    }
+  }
+}
+```
+
+This method accepts the following parameters:
+
+- `data`: The `data` property of the associated shipping method, which holds the ID of the shipment.
+- `items`: The items to fulfill.
+- `order`: The order's details.
+- `fulfillment`: The details of the fulfillment to be created.
+
+In the method, you retrieve the shipment's details from ShipStation using the shipment ID from the first parameter. Then, you purchase a label in ShipStation, passing it the same shipment details and setting the items to those passed as a second parameter.
+
+You return an object to be stored in the created fulfillment's `data` property. You store in it the ID of the purchased label and the ID of its associated shipment.
+
+#### cancelFulfillment
+
+The last method you'll implement is the `cancelFulfillment` method. When an admin user cancels a fulfillment, Medusa uses the associated provider's `cancelFulfillment` method to perform any necessary actions in the third-party provider.
+
+You'll use this method to void the label in ShipStation that was purchased in the `createFulfillment` method and cancel its associated shipment.
+
+Start by adding the following type to `src/modules/shipstation/types.ts`:
+
+```ts title="src/modules/shipstation/types.ts"
+export type VoidLabelResponse = {
+  approved: boolean
+  message: string
+  reason_code?: string
+}
+```
+
+`VoidLabelResponse` is the response type of [ShipStation's void label endpoint](https://docs.shipstation.com/openapi/labels/void_label).
+
+Next, add two methods to `ShipStationClient`:
+
+export const clientHighlights4 = [
+  ["9", "voidLabel", "Void a label in ShipStation."],
+  ["15", "cancelShipment", "Cancel a shipment in ShipStation."]
+]
+
+```ts title="src/modules/shipstation/client.ts" highlights={clientHighlights4}
+// other imports...
+import { 
+  // ...
+  VoidLabelResponse
+} from "./types";
+
+export class ShipStationClient {
+  // ...
+  async voidLabel(id: string): Promise<VoidLabelResponse> {
+    return await this.sendRequest(`/labels/${id}/void`, {
+      method: "PUT"
+    })
+  }
+
+  async cancelShipment(id: string): Promise<void> {
+    return await this.sendRequest(`/shipments/${id}/cancel`, {
+      method: "PUT"
+    })
+  }
+}
+```
+
+You add two methods:
+
+- `voidLabel` that accepts the ID of a label to void using ShipStation's endpoint. It returns the endpoint's response.
+- `cancelShipment` that accepts the ID of a shipment to cancel using [ShipStation's endpoint](https://docs.shipstation.com/openapi/shipments/cancel_shipments).
+
+Finally, in `ShipStationProviderService`, add the `cancelFulfillment` method:
+
+```ts title="src/modules/shipstation/service.ts"
+class ShipStationProviderService extends AbstractFulfillmentProviderService {
+  // ...
+  async cancelFulfillment(fulfillment: Record<string, unknown>): Promise<any> {
+    const { label_id, shipment_id } = fulfillment.data as {
+      label_id: string
+      shipment_id: string
+    }
+
+    await this.client.voidLabel(label_id)
+    await this.client.cancelShipment(shipment_id)
+  }
+}
+```
+
+This method accepts the fulfillment's details as a parameter. You use the fulfillment's `data` property to get the ID of its label and shipment in ShipStation.
+
+Then, you use the client's `voidLabel` method to void the label, and `cancelShipment` to cancel the shipment.
+
+<Note>
+
+Refer to [this guide](/references/fulfillment/provider) for a full reference of all methods, their parameters and return types.
+
+</Note>
+
+### Export Module Definition
+
+The `ShipStationProviderService` class now has the methods necessary to handle fulfillments.
+
+Next, you must export the module provider's definition, which lets Medusa know what module this provider belongs to and its service.
+
+Create the file `src/modules/shipstation/index.ts` with the following content:
+
+![The directory structure of the Medusa application after adding the index file](https://res.cloudinary.com/dza7lstvk/image/upload/v1734350125/Medusa%20Resources/shipstation-dir-overview-5_zs6beg.jpg)
+
+```ts title="src/modules/shipstation/index.ts"
+import ShipStationProviderService from "./service"
+import { 
+  ModuleProvider, 
+  Modules
+} from "@medusajs/framework/utils"
+
+export default ModuleProvider(Modules.FULFILLMENT, {
+  services: [ShipStationProviderService],
+})
+```
+
+You export the module provider's definition using `ModuleProvider` from the Modules SDK. It accepts as a first parameter the name of the module that this provider belongs to, which is the Fulfillment Module. It also accepts as a second parameter an object having a `service` property indicating the provider's service.
+
+### Add Module to Configurations
+
+Finally, to register modules and module providers in Medusa, you must add them to Medusa's configurations.
+
+Medusa's configurations are set in the `medusa-config.ts` file, which is at the root directory of your Medusa application. The configuration object accepts a `modules` array, whose value is an array of modules to add to the application.
+
+Add the `modules` property to the exported configurations in `medusa-config.ts`:
+
+```ts title="medusa-config.ts"
+module.exports = defineConfig({
+  // ...
+  modules: [
+    {
+      resolve: "@medusajs/medusa/fulfillment",
+      options: {
+        providers: [
+          // default provider
+          {
+            resolve: "@medusajs/medusa/fulfillment-manual",
+            id: "manual",
+          },
+          {
+            resolve: "./src/modules/shipstation",
+            id: "shipstation",
+            options: {
+              api_key: process.env.SHIPSTATION_API_KEY,
+              sandbox: process.env.SHIPSTATION_SANDBOX === "true"
+            },
+          },
+        ],
+      },
+    },
+  ],
+})
+```
+
+In the `modules` array, you pass a module object having the following properties:
+
+- `resolve`: The NPM package of the Fulfillment Module. Since the ShipStation Module is a Fulfillment Module Provider, it'll be passed in the options of the Fulfillment Module.
+- `options`: An object of options to pass to the module. It has a `providers` property which is an array of module providers to register. Each module provider object has the following properties:
+    - `resolve`: The path to the module provider to register in the application. It can also be the name of an NPM package.
+    - `id`: A unique ID, which Medusa will use along with the `identifier` static property that you set earlier in the class to identify this module provider.
+    - `options`: An object of options to pass to the module provider. These are the options you expect and use in the module provider's service.
+
+The values of the ShipStation Module's options are set in environment variables. So, add the following environment variables to `.env`:
+
+```shell
+SHIPSTATION_SANDBOX=true
+SHIPSTATION_API_KEY=123...
+```
+
+Where:
+
+- `SHIPSTATION_SANDBOX`'s value is `true`, indicating that requests shouldn't be sent to the ShipStation's production server. You can change this to `false` when the integration is production-ready at the end of this guide.
+- `SHIPSTATION_API_KEY` is the ShipStation API key, which you can retrieve on the ShipStation dashboard:
+    - Click on the cog icon in the navigation bar to go to Settings.
+
+![The cog icon is at the top right of the navigation bar. It's the third icon from the right.](https://res.cloudinary.com/dza7lstvk/image/upload/v1734352047/Medusa%20Resources/Screenshot_2024-12-16_at_2.27.02_PM_nnmwzo.png)
+
+    - In the sidebar, expand Account and click on API Settings
+
+![The sidebar has an Account expandable. When you click on it, more items will show. Click on the API Settings](https://res.cloudinary.com/dza7lstvk/image/upload/v1734352145/Medusa%20Resources/Screenshot_2024-12-16_at_2.28.32_PM_wwfc1s.png).
+
+    - On the API Settings page, make sure V2 API is selected for "Select API Verion" field, then click the "Generate API Key" button.
+
+![Make sure V2 API is selected in the Select API Version dropdown, then click on the "Generate API Key" button.](https://res.cloudinary.com/dza7lstvk/image/upload/v1734352261/Medusa%20Resources/Screenshot_2024-12-16_at_2.30.31_PM_vbkz4i.png)
+
+    - Copy the generated API key and use it as the value of the `SHIPSTATION_API_KEY` environment variable.
+
+---
+
+## Step 4: Add Shipping Options for ShipStation
+
+Now that you've integrated ShipStation, you'll create shipping options that allow customers to choose from during checkout. As mentioned during the integration implementation, these shipping options will be associated with carriers in ShipStation.
+
+First, start the Medusa application:
+
+```bash npm2yarn
+npm run dev
+```
+
+Then:
+
+1. Open the Medusa Admin at `http://localhost:9000/app` and log in.
+2. Go to Settings -> Locations & Shipping
+
+![After clicking on settings in the main dashboard, a new sidebar will be shown where you can click on Location & Shipping](https://res.cloudinary.com/dza7lstvk/image/upload/v1733923761/Medusa%20Resources/Screenshot_2024-12-11_at_2.41.25_PM_wjbq5f.png)
+
+3. Each location has shipping methods. So, click on the "View details" link at the top-right of a location.
+
+![A location's card has the "View details" link at the top-right.](https://res.cloudinary.com/dza7lstvk/image/upload/v1733923793/Medusa%20Resources/Screenshot_2024-12-11_at_2.41.50_PM_idglsu.png)
+
+4. On the location's page and under Fulfillment Providers, click on the three-dots icon and choose Edit from the dropdown.
+
+![The location's page has as a "Fulfillment Providers" section in the side column at the right. Click on the three-dots icon in that section and choose Edit from the dropdown](https://res.cloudinary.com/dza7lstvk/image/upload/v1733923832/Medusa%20Resources/Screenshot_2024-12-11_at_2.42.47_PM_rzbjbf.png)
+
+5. A pop up will open with the list of all integrated fulfillment providers. Click the checkbox at the left of the "Shipstation" provider, then click Save.
+6. Under the Shipping section, click on the "Create option" link.
+7. In the form that opens:
+    - Select Calculated for the price type.
+    - Enter a name for the shipping option. This is the name that customers see in the storefront.
+    - Choose a Shipping Profile.
+    - For Fulfillment Method, you'll find a list of options coming from the `ShipStationProviderService`'s `getFulfillmentOptions` method, which retrieves the carriers and their services from ShipStation. Select one of them and click Save.
+
+
+Customers can now select this shipping option during checkout, and the fulfillment for their order will be processed by ShipStation.
+
+---
+
+## Test it Out: Place an Order and Fulfill It
+
+To test out the integration, you'll place an order using the Next.js Starter Storefront you installed with the Medusa application. You'll then create a fulfillment for the order's items from the Medusa Admin dashboard.
+
+Open the terminal in the Next.js Starter Storefront's directory. It's a sibling directory of the Medusa application with the name `{project-name}-storefront`, where `{project-name}` is the name of the Medusa application's project.
+
+Then, while the Medusa application is running, run the following command in the storefront's directory:
+
+```bash npm2yarn
+npm run dev
+```
+
+This will run the storefront at `http://localhost:8000`. Open it in your browser, then:
+
+1. Click on Menu at the top left of the navigation bar, then choose Store.
+2. Click on a product and add it to the cart.
+3. Click on "Cart" at the top right, and click on View Cart.
+4. From the cart's page, click on Proceed to Checkout.
+5. Enter the customer address as a first step of the Checkout. Make sure that the country you choose is the same as the location that the fulfillment provider's options are available in.
+6. In the Delivery step, you'll find the option you added for ShipStation.
+
+...
+
+
+---
+
+
+## Next Steps
+
+You've now integrated Medusa with ShipStation. You can fulfill orders with many carriers and providers, all from a single integration and platform.
+
+If you're new to Medusa, check out the [main documentation](!docs!/learn), where you'll get a more in-depth learning of all the concepts you've used in this guide and more.
+
+To learn more about the commerce features that Medusa provides, check out Medusa's [Commerce Modules](../../../commerce-modules/page.mdx).
+
+For other general guides related to deployment, storefront development, integrations, and more, check out the [Development Resources](../../../page.mdx).
