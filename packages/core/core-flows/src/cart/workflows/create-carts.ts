@@ -143,16 +143,13 @@ export const createCartWorkflow = createWorkflow(
           (v) => v.id === item.variant_id
         )!
 
-        const isTaxInclusive = !!(
-          item.is_tax_inclusive ??
-          variant?.calculated_price?.is_calculated_price_tax_inclusive
-        )
-
         const input: PrepareLineItemDataInput = {
           item,
           variant: variant,
-          unitPrice: item.unit_price ?? undefined,
-          isTaxInclusive,
+          unitPrice: item.unit_price,
+          isTaxInclusive:
+            item.is_tax_inclusive ??
+            variant?.calculated_price?.is_calculated_price_tax_inclusive,
           isCustomPrice: isDefined(item?.unit_price),
         }
 

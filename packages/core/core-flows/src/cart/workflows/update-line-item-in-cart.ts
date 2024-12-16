@@ -77,13 +77,13 @@ export const updateLineItemInCartWorkflow = createWorkflow(
         is_custom_price: isDefined(data.input.update.unit_price)
           ? true
           : item.is_custom_price,
-        is_tax_inclusive: item.is_tax_inclusive,
+        is_tax_inclusive:
+          item.is_tax_inclusive ||
+          variant?.calculated_price?.is_calculated_price_tax_inclusive,
       }
 
       if (variant && !updateData.is_custom_price) {
         updateData.unit_price = variant.calculated_price.calculated_amount
-        updateData.is_tax_inclusive =
-          !!variant.calculated_price.is_calculated_price_tax_inclusive
       }
 
       if (!isDefined(updateData.unit_price)) {
