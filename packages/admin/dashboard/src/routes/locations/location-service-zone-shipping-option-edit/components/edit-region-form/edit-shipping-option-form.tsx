@@ -1,6 +1,6 @@
 import { HttpTypes } from "@medusajs/types"
-import { Button, Input, RadioGroup, toast } from "@medusajs/ui"
-import { useForm } from "react-hook-form"
+import { Button, Input, RadioGroup, Select, toast } from "@medusajs/ui"
+import { useForm, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import * as zod from "zod"
 
@@ -17,6 +17,7 @@ import { pick } from "../../../../../lib/common"
 import { formatProvider } from "../../../../../lib/format-provider"
 import { isOptionEnabledInStore } from "../../../../../lib/shipping-options"
 import { ShippingOptionPriceType } from "../../../common/constants"
+import { useFulfillmentProviderOptions } from "../../../../../hooks/api/fulfillment-providers"
 
 type EditShippingOptionFormProps = {
   locationId: string
@@ -29,6 +30,7 @@ const EditShippingOptionSchema = zod.object({
   enabled_in_store: zod.boolean().optional(),
   shipping_profile_id: zod.string(),
   provider_id: zod.string(),
+  fulfillment_option_id: zod.string(),
 })
 
 export const EditShippingOptionForm = ({
@@ -71,8 +73,20 @@ export const EditShippingOptionForm = ({
       enabled_in_store: isOptionEnabledInStore(shippingOption),
       shipping_profile_id: shippingOption.shipping_profile_id,
       provider_id: shippingOption.provider_id,
+      fulfillment_option_id: shippingOption.data
+        ?.fulfillment_option_id as string,
     },
   })
+
+  const selectedProviderId = useWatch({
+    control: form.control,
+    name: "provider_id",
+  })
+
+  const { fulfillment_options: fulfillmentProviderOptions } =
+    useFulfillmentProviderOptions(selectedProviderId, {
+      enabled: !!selectedProviderId,
+    })
 
   const { mutateAsync, isPending: isLoading } = useUpdateShippingOptions(
     shippingOption.id
@@ -96,12 +110,18 @@ export const EditShippingOptionForm = ({
       storeRule.value = values.enabled_in_store ? "true" : "false"
     }
 
+    console.log(shippingOption)
+
     await mutateAsync(
       {
         name: values.name,
         price_type: values.price_type,
         shipping_profile_id: values.shipping_profile_id,
         provider_id: values.provider_id,
+        data: {
+          ...(shippingOption.data ?? {}),
+          fulfillment_option_id: values.fulfillment_option_id,
+        },
         rules,
       },
       {
@@ -232,6 +252,42 @@ export const EditShippingOptionForm = ({
                             }
                             disabled={fulfillmentProviders.disabled}
                           />
+                        </Form.Control>
+                        <Form.ErrorMessage />
+                      </Form.Item>
+                    )
+                  }}
+                />
+                <Form.Field
+                  control={form.control}
+                  name="fulfillment_option_id"
+                  render={({ field }) => {
+                    return (
+                      <Form.Item>
+                        <Form.Label>
+                          {t(
+                            "stockLocations.shippingOptions.fields.fulfillmentOption"
+                          )}
+                        </Form.Label>
+                        <Form.Control>
+                          <Select
+                            {...field}
+                            onValueChange={field.onChange}
+                            disabled={!selectedProviderId}
+                            key={selectedProviderId}
+                          >
+                            <Select.Trigger ref={field.ref}>
+                              <Select.Value />
+                            </Select.Trigger>
+
+                            <Select.Content>
+                              {fulfillmentProviderOptions?.map((option) => (
+                                <Select.Item value={option.id} key={option.id}>
+                                  {option.name || option.id}
+                                </Select.Item>
+                              ))}
+                            </Select.Content>
+                          </Select>
                         </Form.Control>
                         <Form.ErrorMessage />
                       </Form.Item>

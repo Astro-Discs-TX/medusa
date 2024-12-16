@@ -135,6 +135,7 @@ export const AdminCreateShippingOption = z
     name: z.string(),
     service_zone_id: z.string(),
     shipping_profile_id: z.string(),
+    fulfillment_option_id: z.string(),
     data: z.record(z.unknown()).optional(),
     price_type: z.nativeEnum(ShippingOptionPriceTypeEnum),
     provider_id: z.string(),

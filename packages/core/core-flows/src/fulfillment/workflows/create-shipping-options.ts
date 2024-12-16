@@ -40,6 +40,14 @@ export const createShippingOptionsWorkflow = createWorkflow(
          * so we can have simpler update flow for both cases and allow updating price_type.
          */
         const prices = (option as any).prices ?? []
+
+        option.data = {
+          fulfillment_option_id: option.fulfillment_option_id,
+          ...(option.data ?? {}),
+        }
+
+        delete (option as any).fulfillment_option_id
+
         return {
           shipping_option_index: index,
           prices,

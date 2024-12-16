@@ -1,5 +1,5 @@
-import { Heading, Input, RadioGroup, Text } from "@medusajs/ui"
-import { UseFormReturn } from "react-hook-form"
+import { Heading, Input, RadioGroup, Select, Text } from "@medusajs/ui"
+import { UseFormReturn, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 
 import { HttpTypes } from "@medusajs/types"
@@ -12,6 +12,8 @@ import { sdk } from "../../../../../lib/client"
 import { formatProvider } from "../../../../../lib/format-provider"
 import { ShippingOptionPriceType } from "../../../common/constants"
 import { CreateShippingOptionSchema } from "./schema"
+import { useFulfillmentProviderOptions } from "../../../../../hooks/api/fulfillment-providers"
+import { useEffect } from "react"
 
 type CreateShippingOptionDetailsFormProps = {
   form: UseFormReturn<CreateShippingOptionSchema>
@@ -27,6 +29,16 @@ export const CreateShippingOptionDetailsForm = ({
   locationId,
 }: CreateShippingOptionDetailsFormProps) => {
   const { t } = useTranslation()
+
+  const selectedProviderId = useWatch({
+    control: form.control,
+    name: "provider_id",
+  })
+
+  const { fulfillment_options: fulfillmentProviderOptions } =
+    useFulfillmentProviderOptions(selectedProviderId, {
+      enabled: !!selectedProviderId,
+    })
 
   const shippingProfiles = useComboboxData({
     queryFn: (params) => sdk.admin.shippingProfile.list(params),
@@ -51,6 +63,10 @@ export const CreateShippingOptionDetailsForm = ({
         value: provider.id,
       })),
   })
+
+  useEffect(() => {
+    form.setValue("fulfillment_option_id", undefined)
+  }, [selectedProviderId])
 
   return (
     <div className="flex flex-1 flex-col items-center overflow-y-auto">
@@ -134,9 +150,6 @@ export const CreateShippingOptionDetailsForm = ({
               )
             }}
           />
-        </div>
-
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <Form.Field
             control={form.control}
             name="shipping_profile_id"
@@ -160,7 +173,9 @@ export const CreateShippingOptionDetailsForm = ({
               )
             }}
           />
+        </div>
 
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <Form.Field
             control={form.control}
             name="provider_id"
@@ -184,6 +199,43 @@ export const CreateShippingOptionDetailsForm = ({
                       }
                       disabled={fulfillmentProviders.disabled}
                     />
+                  </Form.Control>
+                  <Form.ErrorMessage />
+                </Form.Item>
+              )
+            }}
+          />
+
+          <Form.Field
+            control={form.control}
+            name="fulfillment_option_id"
+            render={({ field }) => {
+              return (
+                <Form.Item>
+                  <Form.Label>
+                    {t(
+                      "stockLocations.shippingOptions.fields.fulfillmentOption"
+                    )}
+                  </Form.Label>
+                  <Form.Control>
+                    <Select
+                      {...field}
+                      onValueChange={field.onChange}
+                      disabled={!selectedProviderId}
+                      key={selectedProviderId}
+                    >
+                      <Select.Trigger ref={field.ref}>
+                        <Select.Value />
+                      </Select.Trigger>
+
+                      <Select.Content>
+                        {fulfillmentProviderOptions?.map((option) => (
+                          <Select.Item value={option.id} key={option.id}>
+                            {option.name || option.id}
+                          </Select.Item>
+                        ))}
+                      </Select.Content>
+                    </Select>
                   </Form.Control>
                   <Form.ErrorMessage />
                 </Form.Item>

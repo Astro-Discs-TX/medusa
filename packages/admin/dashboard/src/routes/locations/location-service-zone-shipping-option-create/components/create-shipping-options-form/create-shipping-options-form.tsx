@@ -50,6 +50,7 @@ export function CreateShippingOptionsForm({
       enabled_in_store: true,
       shipping_profile_id: "",
       provider_id: "",
+      fulfillment_option_id: "",
       region_prices: {},
       currency_prices: {},
       conditional_region_prices: {},
@@ -130,6 +131,7 @@ export function CreateShippingOptionsForm({
         service_zone_id: zone.id,
         shipping_profile_id: data.shipping_profile_id,
         provider_id: data.provider_id,
+        fulfillment_option_id: data.fulfillment_option_id,
         prices: allPrices,
         rules: [
           {
