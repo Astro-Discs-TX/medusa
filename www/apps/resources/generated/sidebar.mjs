@@ -96,7 +96,16 @@ export const generatedSidebar = [
         "type": "link",
         "path": "/recipes/commerce-automation",
         "title": "Commerce Automation",
-        "children": []
+        "children": [
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "link",
+            "path": "/recipes/commerce-automation/restock-notification",
+            "title": "Example: Restock Notifications",
+            "children": []
+          }
+        ]
       },
       {
         "loaded": true,
@@ -328,7 +337,7 @@ export const generatedSidebar = [
                     "type": "category",
                     "title": "Data Models",
                     "hasTitleStyling": true,
-                    "autogenerate_path": "/references/api_key_models/classes",
+                    "autogenerate_path": "/references/api_key_models/variables",
                     "children": [
                       {
                         "loaded": true,
@@ -1159,6 +1168,14 @@ export const generatedSidebar = [
                         "path": "/references/cart/updateLineItems",
                         "title": "updateLineItems",
                         "children": []
+                      },
+                      {
+                        "loaded": true,
+                        "isPathHref": true,
+                        "type": "link",
+                        "path": "/references/cart/updateShippingMethods",
+                        "title": "updateShippingMethods",
+                        "children": []
                       }
                     ]
                   }
@@ -1178,7 +1195,7 @@ export const generatedSidebar = [
                     "isPathHref": true,
                     "type": "category",
                     "title": "Data Models",
-                    "autogenerate_path": "/references/cart_models/classes",
+                    "autogenerate_path": "/references/cart_models/variables",
                     "children": [
                       {
                         "loaded": true,
@@ -6780,7 +6797,7 @@ export const generatedSidebar = [
                     "isPathHref": true,
                     "type": "category",
                     "title": "Data Models",
-                    "autogenerate_path": "/references/sales_channel_models/classes",
+                    "autogenerate_path": "/references/sales_channel_models/variables",
                     "children": [
                       {
                         "loaded": true,
@@ -7118,7 +7135,7 @@ export const generatedSidebar = [
                     "isPathHref": true,
                     "type": "category",
                     "title": "Data Models",
-                    "autogenerate_path": "/references/store_models/classes",
+                    "autogenerate_path": "/references/store_models/variables",
                     "children": [
                       {
                         "loaded": true,
@@ -7841,7 +7858,7 @@ export const generatedSidebar = [
         "loaded": true,
         "isPathHref": true,
         "type": "category",
-        "title": "File Provider Modules",
+        "title": "File Module Providers",
         "children": [
           {
             "loaded": true,
@@ -7889,7 +7906,7 @@ export const generatedSidebar = [
         "loaded": true,
         "isPathHref": true,
         "type": "category",
-        "title": "Notification Provider Modules",
+        "title": "Notification Module Providers",
         "children": [
           {
             "loaded": true,
@@ -7935,6 +7952,14 @@ export const generatedSidebar = [
                 "type": "link",
                 "path": "/references/notification-provider-module",
                 "title": "Create Notification Provider",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "path": "/integrations/guides/resend",
+                "title": "Integrate Resend",
                 "children": []
               }
             ]
@@ -7987,6 +8012,46 @@ export const generatedSidebar = [
         "loaded": true,
         "isPathHref": true,
         "type": "category",
+        "title": "Auth",
+        "children": [
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "link",
+            "path": "/commerce-modules/auth/auth-providers/google",
+            "title": "Google",
+            "children": []
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "link",
+            "path": "/commerce-modules/auth/auth-providers/github",
+            "title": "GitHub",
+            "children": []
+          }
+        ]
+      },
+      {
+        "loaded": true,
+        "isPathHref": true,
+        "type": "category",
+        "title": "CMS",
+        "children": [
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "link",
+            "path": "/integrations/guides/sanity",
+            "title": "Sanity",
+            "children": []
+          }
+        ]
+      },
+      {
+        "loaded": true,
+        "isPathHref": true,
+        "type": "category",
         "title": "File",
         "children": [
           {
@@ -8012,6 +8077,14 @@ export const generatedSidebar = [
             "path": "/architectural-modules/notification/sendgrid",
             "title": "SendGrid",
             "children": []
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "link",
+            "path": "/integrations/guides/resend",
+            "title": "Resend",
+            "children": []
           }
         ]
       },
@@ -8030,30 +8103,6 @@ export const generatedSidebar = [
             "children": []
           }
         ]
-      },
-      {
-        "loaded": true,
-        "isPathHref": true,
-        "type": "category",
-        "title": "Guides",
-        "children": [
-          {
-            "loaded": true,
-            "isPathHref": true,
-            "type": "link",
-            "path": "/integrations/guides/sanity",
-            "title": "Sanity",
-            "children": []
-          },
-          {
-            "loaded": true,
-            "isPathHref": true,
-            "type": "link",
-            "path": "/integrations/guides/resend",
-            "title": "Resend",
-            "children": []
-          }
-        ]
       }
     ]
   },
@@ -8068,21 +8117,26 @@ export const generatedSidebar = [
       {
         "loaded": true,
         "isPathHref": true,
-        "type": "link",
-        "path": "/storefront-development/tips",
-        "title": "Tips",
-        "children": []
-      },
-      {
-        "loaded": true,
-        "isPathHref": true,
-        "type": "link",
-        "path": "/storefront-development/publishable-api-keys",
-        "title": "Publishable API Key",
-        "children": []
-      },
-      {
-        "type": "separator"
+        "type": "category",
+        "title": "General",
+        "children": [
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "link",
+            "path": "/storefront-development/tips",
+            "title": "Tips",
+            "children": []
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "link",
+            "path": "/storefront-development/publishable-api-keys",
+            "title": "Publishable API Key",
+            "children": []
+          }
+        ]
       },
       {
         "loaded": true,
@@ -9113,8 +9167,34 @@ export const generatedSidebar = [
         "isPathHref": true,
         "type": "link",
         "path": "/nextjs-starter",
-        "title": "Next.js Starter",
-        "children": []
+        "title": "Next.js Starter Storefront",
+        "isChildSidebar": true,
+        "children": [
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "link",
+            "path": "/nextjs-starter",
+            "title": "Overview",
+            "children": []
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Payment",
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "path": "/nextjs-starter/guides/customize-stripe",
+                "title": "Customize Stripe Integration",
+                "children": []
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -9262,6 +9342,14 @@ export const generatedSidebar = [
                 "type": "link",
                 "path": "/troubleshooting/dist-imports",
                 "title": "Importing from /dist",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "path": "/troubleshooting/workflow-errors",
+                "title": "Workflow Errors",
                 "children": []
               }
             ]
@@ -9486,7 +9574,8 @@ export const generatedSidebar = [
         "isPathHref": true,
         "type": "link",
         "path": "/references/workflows",
-        "title": "Workflow API",
+        "title": "Workflows SDK",
+        "childSidebarTitle": "Workflows SDK Reference",
         "isChildSidebar": true,
         "children": [
           {
@@ -9535,14 +9624,6 @@ export const generatedSidebar = [
                 "path": "/references/workflows/transform",
                 "title": "transform",
                 "children": []
-              },
-              {
-                "loaded": true,
-                "isPathHref": true,
-                "type": "link",
-                "path": "/references/workflows/when",
-                "title": "when",
-                "children": []
               }
             ]
           }
@@ -9553,8 +9634,8 @@ export const generatedSidebar = [
         "isPathHref": true,
         "type": "link",
         "path": "/references/data-model",
-        "title": "Data Model API",
-        "childSidebarTitle": "Data Model API Reference",
+        "title": "Data Model Language",
+        "childSidebarTitle": "Data Model Language Reference",
         "isChildSidebar": true,
         "children": [
           {
@@ -9763,7 +9844,7 @@ export const generatedSidebar = [
         "isPathHref": true,
         "type": "link",
         "path": "/service-factory-reference",
-        "title": "Service Factory Reference",
+        "title": "Service Factory",
         "isChildSidebar": true,
         "children": [
           {
@@ -9863,7 +9944,7 @@ export const generatedSidebar = [
         "isPathHref": true,
         "type": "link",
         "path": "/references/helper-steps",
-        "title": "Helper Steps Reference",
+        "title": "Helper Steps",
         "isChildSidebar": true,
         "autogenerate_path": "/references/helper_steps/functions",
         "children": [
@@ -9937,7 +10018,7 @@ export const generatedSidebar = [
         "loaded": true,
         "isPathHref": true,
         "type": "link",
-        "title": "Medusa Workflows Reference",
+        "title": "Core Workflows",
         "path": "/medusa-workflows-reference",
         "isChildSidebar": true,
         "custom_autogenerate": "core-flows",
@@ -15075,7 +15156,7 @@ export const generatedSidebar = [
         "loaded": true,
         "isPathHref": true,
         "type": "link",
-        "title": "Testing Tools Reference",
+        "title": "Testing Framework",
         "path": "/test-tools-reference",
         "isChildSidebar": true,
         "children": [
