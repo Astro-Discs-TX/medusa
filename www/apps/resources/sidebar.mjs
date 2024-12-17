@@ -1655,7 +1655,7 @@ export const sidebar = sidebarAttachHrefCommonOptions([
       },
       {
         type: "category",
-        title: "File Provider Modules",
+        title: "File Module Providers",
         children: [
           {
             type: "link",
@@ -1687,7 +1687,7 @@ export const sidebar = sidebarAttachHrefCommonOptions([
       },
       {
         type: "category",
-        title: "Notification Provider Modules",
+        title: "Notification Module Providers",
         children: [
           {
             type: "link",
@@ -1717,6 +1717,11 @@ export const sidebar = sidebarAttachHrefCommonOptions([
                 type: "link",
                 path: "/references/notification-provider-module",
                 title: "Create Notification Provider",
+              },
+              {
+                type: "link",
+                path: "/integrations/guides/resend",
+                title: "Integrate Resend",
               },
             ],
           },
@@ -2154,6 +2159,25 @@ export const sidebar = sidebarAttachHrefCommonOptions([
         type: "link",
         path: "/nextjs-starter",
         title: "Next.js Starter Storefront",
+        isChildSidebar: true,
+        children: [
+          {
+            type: "link",
+            path: "/nextjs-starter",
+            title: "Overview",
+          },
+          {
+            type: "category",
+            title: "Payment",
+            children: [
+              {
+                type: "link",
+                path: "/nextjs-starter/guides/customize-stripe",
+                title: "Customize Stripe Integration",
+              },
+            ],
+          },
+        ],
       },
     ],
   },
