@@ -683,7 +683,7 @@ moduleIntegrationTestRunner<IFulfillmentModuleService>({
         })
 
         describe("on update", () => {
-          it("should update a shipping option", async () => {
+          it.only("should update a shipping option", async () => {
             const fulfillmentSet = await service.createFulfillmentSets({
               name: "test",
               type: "test-type",

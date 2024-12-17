@@ -35,6 +35,7 @@ import {
 } from "@medusajs/framework/utils"
 import {
   Fulfillment,
+  FulfillmentAddress,
   FulfillmentProvider,
   FulfillmentSet,
   GeoZone,
@@ -72,6 +73,7 @@ const generateMethodForModels = {
 
 type InjectedDependencies = {
   baseRepository: DAL.RepositoryService
+  fulfillmentAddressService: ModulesSdkTypes.IMedusaInternalService<any>
   fulfillmentSetService: ModulesSdkTypes.IMedusaInternalService<any>
   serviceZoneService: ModulesSdkTypes.IMedusaInternalService<any>
   geoZoneService: ModulesSdkTypes.IMedusaInternalService<any>
@@ -100,6 +102,9 @@ export default class FulfillmentModuleService
   protected baseRepository_: DAL.RepositoryService
   protected readonly fulfillmentSetService_: ModulesSdkTypes.IMedusaInternalService<
     InferEntityType<typeof FulfillmentSet>
+  >
+  protected readonly addressService_: ModulesSdkTypes.IMedusaInternalService<
+    InferEntityType<typeof FulfillmentAddress>
   >
   protected readonly serviceZoneService_: ModulesSdkTypes.IMedusaInternalService<
     InferEntityType<typeof ServiceZone>
@@ -136,6 +141,7 @@ export default class FulfillmentModuleService
       shippingOptionTypeService,
       fulfillmentProviderService,
       fulfillmentService,
+      fulfillmentAddressService,
     }: InjectedDependencies,
     protected readonly moduleDeclaration: InternalModuleDeclaration
   ) {
@@ -151,6 +157,7 @@ export default class FulfillmentModuleService
     this.shippingOptionTypeService_ = shippingOptionTypeService
     this.fulfillmentProviderService_ = fulfillmentProviderService
     this.fulfillmentService_ = fulfillmentService
+    this.addressService_ = fulfillmentAddressService
   }
 
   __joinerConfig(): ModuleJoinerConfig {
@@ -441,7 +448,9 @@ export default class FulfillmentModuleService
       | FulfillmentTypes.CreateShippingOptionDTO,
     @MedusaContext() sharedContext: Context = {}
   ): Promise<InferEntityType<typeof ShippingOption>[]> {
-    const data_ = Array.isArray(data) ? data : [data]
+    const data_ = Array.isArray(data)
+      ? data.map((d) => structuredClone(d))
+      : [structuredClone(data)]
 
     if (!data_.length) {
       return []
@@ -465,11 +474,6 @@ export default class FulfillmentModuleService
             typeof ShippingOption
           >
         ).shipping_option_type_id = typeId
-
-        shippingOptionTypeToCreate.push(shippingOptionData.type)
-
-        // @ts-ignore
-        delete shippingOptionData.type
       }
 
       return shippingOptionData
@@ -657,6 +661,25 @@ export default class FulfillmentModuleService
     @MedusaContext() sharedContext: Context = {}
   ): Promise<FulfillmentTypes.FulfillmentDTO> {
     const { order, ...fulfillmentDataToCreate } = data
+
+    const deliveryAddress = fulfillmentDataToCreate.delivery_address
+    if (deliveryAddress) {
+      if ("id" in deliveryAddress) {
+        ;(
+          fulfillmentDataToCreate as InferEntityType<typeof Fulfillment>
+        ).delivery_address_id = deliveryAddress.id as string
+        // @ts-ignore
+        delete fulfillmentDataToCreate.delivery_address
+      } else {
+        const id = generateEntityId(undefined, "fuladdr")
+        Object.assign(deliveryAddress, {
+          id,
+        })
+        ;(
+          fulfillmentDataToCreate as InferEntityType<typeof Fulfillment>
+        ).delivery_address_id = id
+      }
+    }
 
     const fulfillment = await this.fulfillmentService_.create(
       fulfillmentDataToCreate,
@@ -1364,7 +1387,9 @@ export default class FulfillmentModuleService
     | InferEntityType<typeof ShippingOption>
     | InferEntityType<typeof ShippingOption>[]
   > {
-    const dataArray = Array.isArray(data) ? data : [data]
+    const dataArray = Array.isArray(data)
+      ? data.map((d) => structuredClone(d))
+      : [structuredClone(data)]
 
     if (!dataArray.length) {
       return []
@@ -1399,7 +1424,10 @@ export default class FulfillmentModuleService
     const existingRuleIds: string[] = []
 
     const optionTypeDeletedIds: string[] = []
-    const optionTypeToCreate: any[] = []
+    const optionTypeToCreate: Map<
+      string,
+      InferEntityType<typeof ShippingOptionType>
+    > = new Map()
 
     dataArray.forEach((shippingOption) => {
       const existingShippingOption = existingShippingOptions.get(
@@ -1417,7 +1445,10 @@ export default class FulfillmentModuleService
           shippingOption as InferEntityType<typeof ShippingOption>
         ).shipping_option_type_id = typeId
 
-        optionTypeToCreate.push(shippingOption.type)
+        optionTypeToCreate.set(
+          shippingOption.id,
+          shippingOption.type as InferEntityType<typeof ShippingOptionType>
+        )
 
         // @ts-ignore
         delete shippingOption.type
@@ -1497,17 +1528,29 @@ export default class FulfillmentModuleService
       )
     }
 
-    if (optionTypeToCreate.length) {
-      await this.shippingOptionTypeService_.create(
-        optionTypeToCreate,
+    if (optionTypeToCreate.size) {
+      const createdTypes = await this.shippingOptionTypeService_.create(
+        [...optionTypeToCreate.values()],
         sharedContext
       )
+
+      for (let i = 0; i < optionTypeToCreate.size; i++) {
+        const soId = [...optionTypeToCreate.keys()][i]
+        const type = createdTypes[i]
+        optionTypeToCreate.set(soId, type)
+      }
     }
 
     const updatedShippingOptions = await this.shippingOptionService_.update(
       dataArray,
       sharedContext
     )
+
+    // Re attach new type, so that we dont have to re fetch and try to infer the relations to get
+    for (const [id, type] of optionTypeToCreate.entries()) {
+      updatedShippingOptions.find((so) => so.id === id)!.type =
+        type as unknown as InferEntityType<typeof ShippingOptionType>
+    }
 
     this.handleShippingOptionUpdateEvents({
       shippingOptionsData: dataArray,
@@ -1611,10 +1654,7 @@ export default class FulfillmentModuleService
       | FulfillmentTypes.UpsertShippingOptionDTO[]
       | FulfillmentTypes.UpsertShippingOptionDTO,
     @MedusaContext() sharedContext: Context = {}
-  ): Promise<
-    | InferEntityType<typeof ShippingOption>[]
-    | InferEntityType<typeof ShippingOption>
-  > {
+  ): Promise<InferEntityType<typeof ShippingOption>[]> {
     const input = Array.isArray(data) ? data : [data]
     const forUpdate = input.filter(
       (shippingOption): shippingOption is UpdateShippingOptionsInput =>
