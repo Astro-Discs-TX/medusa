@@ -76,8 +76,6 @@ export const useComboboxData = <
    */
   const disabled = !rest.isPending && !options.length && !searchValue
 
-  console.log(!rest.isPending, !options.length, !searchValue)
-
   // make sure that the default value is included in the options
   if (defaultValue && defaultOptions.length && !searchValue) {
     defaultOptions.forEach((option) => {
