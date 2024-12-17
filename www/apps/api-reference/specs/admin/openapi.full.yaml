@@ -52959,8 +52959,13 @@ components:
           title: id
           description: The price rule's ID.
         value:
-          type: string
-          title: value
+          oneOf:
+            - type: string
+              title: value
+              description: The price rule's value.
+            - type: number
+              title: value
+              description: The price rule's value.
           description: The price rule's value.
         operator:
           type: string
@@ -69233,6 +69238,15 @@ components:
           description: The shipping option's shipping options.
           items:
             $ref: '#/components/schemas/StoreCartShippingOption'
+    StoreShippingOptionResponse:
+      type: object
+      description: SUMMARY
+      x-schemaName: StoreShippingOptionResponse
+      required:
+        - shipping_option
+      properties:
+        shipping_option:
+          $ref: '#/components/schemas/StoreCartShippingOption'
     StoreShippingOptionType:
       type: object
       description: The shipping option type's details.
