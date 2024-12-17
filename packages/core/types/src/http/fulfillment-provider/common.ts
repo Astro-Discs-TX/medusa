@@ -17,5 +17,5 @@ export interface BaseFulfillmentProviderOption {
   /**
    * Whether the fulfillment provider option can be used for returns.
    */
-  is_returned: boolean
+  is_return: boolean
 }

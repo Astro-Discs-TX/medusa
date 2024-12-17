@@ -1,8 +1,10 @@
 import { Heading, Input, RadioGroup, Select, Text } from "@medusajs/ui"
-import { UseFormReturn, useWatch } from "react-hook-form"
+import { UseFormReturn } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 
 import { HttpTypes } from "@medusajs/types"
+import { useEffect } from "react"
+
 import { Divider } from "../../../../../components/common/divider"
 import { Form } from "../../../../../components/common/form"
 import { SwitchBox } from "../../../../../components/common/switch-box"
@@ -12,14 +14,14 @@ import { sdk } from "../../../../../lib/client"
 import { formatProvider } from "../../../../../lib/format-provider"
 import { ShippingOptionPriceType } from "../../../common/constants"
 import { CreateShippingOptionSchema } from "./schema"
-import { useFulfillmentProviderOptions } from "../../../../../hooks/api/fulfillment-providers"
-import { useEffect } from "react"
 
 type CreateShippingOptionDetailsFormProps = {
   form: UseFormReturn<CreateShippingOptionSchema>
   isReturn?: boolean
   zone: HttpTypes.AdminServiceZone
   locationId: string
+  fulfillmentProviderOptions: HttpTypes.AdminFulfillmentProviderOption[]
+  selectedProviderId?: string
 }
 
 export const CreateShippingOptionDetailsForm = ({
@@ -27,18 +29,10 @@ export const CreateShippingOptionDetailsForm = ({
   isReturn = false,
   zone,
   locationId,
+  fulfillmentProviderOptions,
+  selectedProviderId,
 }: CreateShippingOptionDetailsFormProps) => {
   const { t } = useTranslation()
-
-  const selectedProviderId = useWatch({
-    control: form.control,
-    name: "provider_id",
-  })
-
-  const { fulfillment_options: fulfillmentProviderOptions } =
-    useFulfillmentProviderOptions(selectedProviderId, {
-      enabled: !!selectedProviderId,
-    })
 
   const shippingProfiles = useComboboxData({
     queryFn: (params) => sdk.admin.shippingProfile.list(params),
@@ -229,11 +223,13 @@ export const CreateShippingOptionDetailsForm = ({
                       </Select.Trigger>
 
                       <Select.Content>
-                        {fulfillmentProviderOptions?.map((option) => (
-                          <Select.Item value={option.id} key={option.id}>
-                            {option.name || option.id}
-                          </Select.Item>
-                        ))}
+                        {fulfillmentProviderOptions
+                          ?.filter((fo) => !fo.is_return)
+                          .map((option) => (
+                            <Select.Item value={option.id} key={option.id}>
+                              {option.name || option.id}
+                            </Select.Item>
+                          ))}
                       </Select.Content>
                     </Select>
                   </Form.Control>

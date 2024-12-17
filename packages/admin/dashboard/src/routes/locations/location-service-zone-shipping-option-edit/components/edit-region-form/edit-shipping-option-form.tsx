@@ -18,6 +18,8 @@ import { formatProvider } from "../../../../../lib/format-provider"
 import { isOptionEnabledInStore } from "../../../../../lib/shipping-options"
 import { ShippingOptionPriceType } from "../../../common/constants"
 import { useFulfillmentProviderOptions } from "../../../../../hooks/api/fulfillment-providers"
+import { useEffect } from "react"
+import { zodResolver } from "@hookform/resolvers/zod"
 
 type EditShippingOptionFormProps = {
   locationId: string
@@ -73,9 +75,9 @@ export const EditShippingOptionForm = ({
       enabled_in_store: isOptionEnabledInStore(shippingOption),
       shipping_profile_id: shippingOption.shipping_profile_id,
       provider_id: shippingOption.provider_id,
-      fulfillment_option_id: shippingOption.data
-        ?.fulfillment_option_id as string,
+      fulfillment_option_id: shippingOption.data?.id as string,
     },
+    resolver: zodResolver(EditShippingOptionSchema),
   })
 
   const selectedProviderId = useWatch({
@@ -87,6 +89,10 @@ export const EditShippingOptionForm = ({
     useFulfillmentProviderOptions(selectedProviderId, {
       enabled: !!selectedProviderId,
     })
+
+  useEffect(() => {
+    form.setValue("fulfillment_option_id", undefined)
+  }, [selectedProviderId])
 
   const { mutateAsync, isPending: isLoading } = useUpdateShippingOptions(
     shippingOption.id
@@ -110,6 +116,10 @@ export const EditShippingOptionForm = ({
       storeRule.value = values.enabled_in_store ? "true" : "false"
     }
 
+    const fulfillmentOptionData = fulfillmentProviderOptions?.find(
+      (fo) => fo.id === values.fulfillment_option_id
+    )
+
     await mutateAsync(
       {
         name: values.name,
@@ -118,7 +128,7 @@ export const EditShippingOptionForm = ({
         provider_id: values.provider_id,
         data: {
           ...(shippingOption.data ?? {}),
-          fulfillment_option_id: values.fulfillment_option_id,
+          ...fulfillmentOptionData,
         },
         rules,
       },
