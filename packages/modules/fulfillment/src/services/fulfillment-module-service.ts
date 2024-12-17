@@ -1495,19 +1495,17 @@ export default class FulfillmentModuleService
               updatedRuleIds.push(rule.id)
             }
 
+            // @ts-ignore
+            delete rule.created_at
+            // @ts-ignore
+            delete rule.updated_at
+            // @ts-ignore
+            delete rule.deleted_at
+
             const ruleData: FulfillmentTypes.UpdateShippingOptionRuleDTO = {
               ...existingRule,
               ...rule,
             }
-
-            // console.log(typeof ruleData.created_at)
-
-            // @ts-ignore
-            delete ruleData.created_at
-            // @ts-ignore
-            delete ruleData.updated_at
-            // @ts-ignore
-            delete ruleData.deleted_at
 
             existingRulesMap.set(rule.id, ruleData)
             return ruleData

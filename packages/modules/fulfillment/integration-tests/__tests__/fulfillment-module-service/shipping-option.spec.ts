@@ -683,7 +683,7 @@ moduleIntegrationTestRunner<IFulfillmentModuleService>({
         })
 
         describe("on update", () => {
-          it.only("should update a shipping option", async () => {
+          it("should update a shipping option", async () => {
             const fulfillmentSet = await service.createFulfillmentSets({
               name: "test",
               type: "test-type",
@@ -728,15 +728,11 @@ moduleIntegrationTestRunner<IFulfillmentModuleService>({
                 {
                   ...existingRule,
                   value: "false",
-                  // created_at: new Date(),
-                  // updated_at: new Date(),
                 },
                 {
                   attribute: "new-test",
                   operator: "eq",
                   value: "new-test",
-                  // created_at: new Date(),
-                  // updated_at: new Date(),
                 },
               ],
             }
@@ -767,7 +763,7 @@ moduleIntegrationTestRunner<IFulfillmentModuleService>({
                 rules: expect.arrayContaining([
                   expect.objectContaining({
                     id: existingRule.id,
-                    value: '"false"',
+                    value: "false",
                   }),
                   expect.objectContaining({
                     id: expect.any(String),
