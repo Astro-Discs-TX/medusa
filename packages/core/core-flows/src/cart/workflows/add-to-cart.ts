@@ -7,6 +7,7 @@ import {
   when,
   WorkflowData,
 } from "@medusajs/framework/workflows-sdk"
+import { useQueryGraphStep } from "../../common"
 import { emitEventStep } from "../../common/steps/emit-event"
 import { useRemoteQueryStep } from "../../common/steps/use-remote-query"
 import {
@@ -17,13 +18,18 @@ import {
 import { validateCartStep } from "../steps/validate-cart"
 import { validateLineItemPricesStep } from "../steps/validate-line-item-prices"
 import { validateVariantPricesStep } from "../steps/validate-variant-prices"
-import { productVariantsFields } from "../utils/fields"
+import {
+  cartFieldsForPricingContext,
+  productVariantsFields,
+} from "../utils/fields"
 import {
   prepareLineItemData,
   PrepareLineItemDataInput,
 } from "../utils/prepare-line-item-data"
 import { confirmVariantInventoryWorkflow } from "./confirm-variant-inventory"
 import { refreshCartItemsWorkflow } from "./refresh-cart-items"
+
+const cartFields = ["completed_at"].concat(cartFieldsForPricingContext)
 
 export const addToCartWorkflowId = "add-to-cart"
 /**
@@ -32,20 +38,21 @@ export const addToCartWorkflowId = "add-to-cart"
 export const addToCartWorkflow = createWorkflow(
   addToCartWorkflowId,
   (input: WorkflowData<AddToCartWorkflowInputDTO>) => {
-    validateCartStep(input)
+    const cartQuery = useQueryGraphStep({
+      entity: "cart",
+      filters: { id: input.cart_id },
+      fields: cartFields,
+      options: { throwIfKeyNotFound: true },
+    }).config({ name: "get-cart" })
+
+    const cart = transform({ cartQuery }, ({ cartQuery }) => {
+      return cartQuery.data[0]
+    })
+
+    validateCartStep({ cart })
 
     const variantIds = transform({ input }, (data) => {
       return (data.input.items ?? []).map((i) => i.variant_id).filter(Boolean)
-    })
-
-    // TODO: This is on par with the context used in v1.*, but we can be more flexible.
-    // TODO: create a common workflow to fetch variants and its prices
-    const pricingContext = transform({ cart: input.cart }, (data) => {
-      return {
-        currency_code: data.cart.currency_code,
-        region_id: data.cart.region_id,
-        customer_id: data.cart.customer_id,
-      }
     })
 
     const variants = when({ variantIds }, ({ variantIds }) => {
@@ -57,7 +64,7 @@ export const addToCartWorkflow = createWorkflow(
         variables: {
           id: variantIds,
           calculated_price: {
-            context: pricingContext,
+            context: cart,
           },
         },
       })
@@ -74,7 +81,7 @@ export const addToCartWorkflow = createWorkflow(
         const input: PrepareLineItemDataInput = {
           item,
           variant: variant,
-          cartId: data.input.cart.id,
+          cartId: data.input.cart_id,
           unitPrice: item.unit_price,
           isTaxInclusive:
             item.is_tax_inclusive ??
@@ -95,13 +102,13 @@ export const addToCartWorkflow = createWorkflow(
     validateLineItemPricesStep({ items: lineItems })
 
     const { itemsToCreate = [], itemsToUpdate = [] } = getLineItemActionsStep({
-      id: input.cart.id,
+      id: cart.id,
       items: lineItems,
     })
 
     confirmVariantInventoryWorkflow.runAsStep({
       input: {
-        sales_channel_id: input.cart.sales_channel_id as string,
+        sales_channel_id: cart.sales_channel_id,
         variants,
         items: input.items,
         itemsToUpdate,
@@ -110,22 +117,22 @@ export const addToCartWorkflow = createWorkflow(
 
     parallelize(
       createLineItemsStep({
-        id: input.cart.id,
+        id: cart.id,
         items: itemsToCreate,
       }),
       updateLineItemsStep({
-        id: input.cart.id,
+        id: cart.id,
         items: itemsToUpdate,
       })
     )
 
     refreshCartItemsWorkflow.runAsStep({
-      input: { cart_id: input.cart.id },
+      input: { cart_id: cart.id },
     })
 
     emitEventStep({
       eventName: CartWorkflowEvents.UPDATED,
-      data: { id: input.cart.id },
+      data: { id: cart.id },
     })
   }
 )

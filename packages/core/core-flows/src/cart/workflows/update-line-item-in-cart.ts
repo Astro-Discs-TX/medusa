@@ -6,13 +6,19 @@ import {
   when,
   WorkflowData,
 } from "@medusajs/framework/workflows-sdk"
+import { useQueryGraphStep } from "../../common"
 import { useRemoteQueryStep } from "../../common/steps/use-remote-query"
 import { updateLineItemsStepWithSelector } from "../../line-item/steps"
 import { validateCartStep } from "../steps/validate-cart"
 import { validateVariantPricesStep } from "../steps/validate-variant-prices"
-import { productVariantsFields } from "../utils/fields"
+import {
+  cartFieldsForPricingContext,
+  productVariantsFields,
+} from "../utils/fields"
 import { confirmVariantInventoryWorkflow } from "./confirm-variant-inventory"
 import { refreshCartItemsWorkflow } from "./refresh-cart-items"
+
+const cartFields = cartFieldsForPricingContext.concat(["items.*"])
 
 export const updateLineItemInCartWorkflowId = "update-line-item-in-cart"
 /**
@@ -21,19 +27,22 @@ export const updateLineItemInCartWorkflowId = "update-line-item-in-cart"
 export const updateLineItemInCartWorkflow = createWorkflow(
   updateLineItemInCartWorkflowId,
   (input: WorkflowData<UpdateLineItemInCartWorkflowInputDTO>) => {
-    validateCartStep(input)
+    const cartQuery = useQueryGraphStep({
+      entity: "cart",
+      filters: { id: input.cart_id },
+      fields: cartFields,
+      options: { throwIfKeyNotFound: true },
+    }).config({ name: "get-cart" })
 
-    const variantIds = transform({ input }, (data) => {
-      return [data.input.item.variant_id].filter(Boolean)
+    const cart = transform({ cartQuery }, ({ cartQuery }) => cartQuery.data[0])
+    const item = transform({ cart, input }, ({ cart, input }) => {
+      return cart.items.find((i) => i.id === input.item_id)
     })
 
-    // TODO: This is on par with the context used in v1.*, but we can be more flexible.
-    const pricingContext = transform({ cart: input.cart }, (data) => {
-      return {
-        currency_code: data.cart.currency_code,
-        region_id: data.cart.region_id,
-        customer_id: data.cart.customer_id,
-      }
+    validateCartStep({ cart })
+
+    const variantIds = transform({ item }, ({ item }) => {
+      return [item.variant_id].filter(Boolean)
     })
 
     const variants = when({ variantIds }, ({ variantIds }) => {
@@ -45,7 +54,7 @@ export const updateLineItemInCartWorkflow = createWorkflow(
         variables: {
           id: variantIds,
           calculated_price: {
-            context: pricingContext,
+            context: cart,
           },
         },
       }).config({ name: "fetch-variants" })
@@ -53,21 +62,21 @@ export const updateLineItemInCartWorkflow = createWorkflow(
 
     validateVariantPricesStep({ variants })
 
-    const items = transform({ input }, (data) => {
-      return [data.input.item]
+    const items = transform({ item }, ({ item }) => {
+      return [item]
     })
 
     confirmVariantInventoryWorkflow.runAsStep({
       input: {
-        sales_channel_id: input.cart.sales_channel_id as string,
+        sales_channel_id: cart.sales_channel_id,
         variants,
         items,
       },
     })
 
-    const lineItemUpdate = transform({ input, variants }, (data) => {
+    const lineItemUpdate = transform({ input, variants, item }, (data) => {
       const variant = data.variants?.[0] ?? undefined
-      const item = data.input.item
+      const item = data.item
 
       const updateData = {
         ...data.input.update,
@@ -96,7 +105,7 @@ export const updateLineItemInCartWorkflow = createWorkflow(
       return {
         data: updateData,
         selector: {
-          id: item.id,
+          id: data.input.item_id,
         },
       }
     })
@@ -104,7 +113,7 @@ export const updateLineItemInCartWorkflow = createWorkflow(
     updateLineItemsStepWithSelector(lineItemUpdate)
 
     refreshCartItemsWorkflow.runAsStep({
-      input: { cart_id: input.cart.id },
+      input: { cart_id: input.cart_id },
     })
   }
 )
