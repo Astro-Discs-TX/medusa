@@ -38,10 +38,12 @@ function resolveFrontmatterVariables(
   frontmatterData: FrontmatterData,
   reflection: Reflection
 ): FrontmatterData {
-  const tempFrontmatterData = Object.assign({}, frontmatterData)
+  const tempFrontmatterData: FrontmatterData = JSON.parse(
+    JSON.stringify(frontmatterData)
+  )
   Object.keys(tempFrontmatterData).forEach((key) => {
     const value = tempFrontmatterData[key]
-    if (!value) {
+    if (!value || typeof value !== "string") {
       return
     }
 

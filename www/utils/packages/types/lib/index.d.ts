@@ -55,7 +55,7 @@ export type FrontmatterData = {
   sidebar_label?: string
   displayed_sidebar?: string
   tags?: string[]
-  [k: string]: string
+  [k: string]: unknown
 }
 
 export type FormattingOptionType = {
