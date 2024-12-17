@@ -1,0 +1,76 @@
+{
+	"CampaignBudget": {
+		"filePath": "packages/modules/promotion/src/models/campaign-budget.ts",
+		"properties": {
+			"id": "The ID of the campaign budget.",
+			"type": "The type of the campaign budget",
+			"currency_code": "The currency code of the campaign budget",
+			"limit": "The limit of the campaign budget",
+			"used": "The used of the campaign budget",
+			"campaign": "The associated campaign.\n\n@expandable"
+		}
+	},
+	"Campaign": {
+		"filePath": "packages/modules/promotion/src/models/campaign.ts",
+		"properties": {
+			"id": "The ID of the campaign.",
+			"name": "The name of the campaign",
+			"description": "The description of the campaign",
+			"campaign_identifier": "The campaign identifier of the campaign",
+			"starts_at": "The starts at of the campaign",
+			"ends_at": "The ends at of the campaign",
+			"budget": "The associated budget.\n\n@expandable",
+			"promotions": "The associated promotions.\n\n@expandable"
+		}
+	},
+	"PromotionRuleValue": {
+		"filePath": "packages/modules/promotion/src/models/promotion-rule-value.ts",
+		"properties": {
+			"id": "The ID of the promotion rule value.",
+			"value": "The value of the promotion rule value",
+			"promotion_rule": "The associated promotion_rule.\n\n@expandable"
+		}
+	},
+	"PromotionRule": {
+		"filePath": "packages/modules/promotion/src/models/promotion-rule.ts",
+		"properties": {
+			"id": "The ID of the promotion rule.",
+			"description": "The description of the promotion rule",
+			"attribute": "The attribute of the promotion rule",
+			"operator": "The operator of the promotion rule",
+			"values": "The associated values.\n\n@expandable",
+			"promotions": "The associated promotions.\n\n@expandable",
+			"method_target_rules": "The associated method_target_rules.\n\n@expandable",
+			"method_buy_rules": "The associated method_buy_rules.\n\n@expandable"
+		}
+	},
+	"Promotion": {
+		"filePath": "packages/modules/promotion/src/models/promotion.ts",
+		"properties": {
+			"id": "The ID of the promotion.",
+			"code": "The code of the promotion",
+			"is_automatic": "Whether the promotion is automatic.",
+			"type": "The type of the promotion",
+			"campaign": "The associated campaign.\n\n@expandable",
+			"application_method": "The associated application_method.\n\n@expandable",
+			"rules": "The associated rules.\n\n@expandable"
+		}
+	},
+	"ApplicationMethod": {
+		"filePath": "packages/modules/promotion/src/models/application-method.ts",
+		"properties": {
+			"id": "The ID of the application method.",
+			"value": "The value of the application method",
+			"currency_code": "The currency code of the application method",
+			"max_quantity": "The max quantity of the application method",
+			"apply_to_quantity": "The apply to quantity of the application method",
+			"buy_rules_min_quantity": "The buy rules min quantity of the application method",
+			"type": "The type of the application method",
+			"target_type": "The target type of the application method",
+			"allocation": "The allocation of the application method",
+			"promotion": "The associated promotion.\n\n@expandable",
+			"target_rules": "The associated target_rules.\n\n@expandable",
+			"buy_rules": "The associated buy_rules.\n\n@expandable"
+		}
+	}
+}
