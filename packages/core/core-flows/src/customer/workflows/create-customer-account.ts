@@ -45,14 +45,11 @@ export const createCustomerAccountWorkflow = createWorkflow(
       (customers: CustomerDTO[]) => customers[0]
     )
 
-    const customerIdEvents = transform(
-      { customers },
-      ({ createdCustomers }) => {
-        return createdCustomers.map((v) => {
-          return { id: v.id }
-        })
-      }
-    )
+    const customerIdEvents = transform({ customers }, ({ customers }) => {
+      return customers.map((v) => {
+        return { id: v.id }
+      })
+    })
 
     emitEventStep({
       eventName: CustomerWorkflowEvents.CREATED,
