@@ -7,13 +7,12 @@ import {
 import { createStep, StepResponse } from "@medusajs/workflows-sdk"
 
 export interface ValidateShippingMethodsDataInput {
-  context: CartDTO & Record<string, unknown>
   options_to_validate: {
     id: string
     provider_id: string
     option_data: Record<string, unknown>
     method_data: Record<string, unknown>
-    from_location: StockLocationDTO
+    context: CartDTO & { from_location: StockLocationDTO; [k: string]: unknown }
   }[]
 }
 
@@ -41,7 +40,7 @@ export const validateAndReturnShippingMethodsDataStep = createStep(
           option.provider_id,
           option.option_data,
           option.method_data,
-          { ...data.context, from_location: option.from_location }
+          option.context
         )
 
         return {

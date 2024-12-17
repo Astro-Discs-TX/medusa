@@ -20,7 +20,7 @@ type ComboboxQueryParams = {
 
 export const useComboboxData = <
   TResponse extends ComboboxExternalData,
-  TParams extends ComboboxQueryParams
+  TParams extends ComboboxQueryParams,
 >({
   queryKey,
   queryFn,
@@ -50,7 +50,6 @@ export const useComboboxData = <
     enabled: !!defaultValue,
   })
 
-
   const { data, ...rest } = useInfiniteQuery({
     queryKey: [...queryKey, query],
     queryFn: async ({ pageParam = 0 }) => {
@@ -76,6 +75,8 @@ export const useComboboxData = <
    * as there is no data to search for.
    */
   const disabled = !rest.isPending && !options.length && !searchValue
+
+  console.log(!rest.isPending, !options.length, !searchValue)
 
   // make sure that the default value is included in the options
   if (defaultValue && defaultOptions.length && !searchValue) {

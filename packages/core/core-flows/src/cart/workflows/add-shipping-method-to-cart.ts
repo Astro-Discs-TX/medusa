@@ -68,8 +68,8 @@ export const addShippingMethodToCartWorkflow = createWorkflow(
     validateCartShippingOptionsPriceStep({ shippingOptions })
 
     const validateShippingMethodsDataInput = transform(
-      { input, shippingOptions },
-      ({ input, shippingOptions }) => {
+      { input, shippingOptions, cart },
+      ({ input, shippingOptions, cart }) => {
         return input.options.map((inputOption) => {
           const shippingOption = shippingOptions.find(
             (so) => so.id === inputOption.id
@@ -80,7 +80,10 @@ export const addShippingMethodToCartWorkflow = createWorkflow(
             provider_id: shippingOption?.provider_id,
             option_data: shippingOption?.data ?? {},
             method_data: inputOption.data ?? {},
-            from_location: shippingOption?.stock_location ?? {},
+            context: {
+              ...cart,
+              from_location: shippingOption?.stock_location ?? {},
+            },
           }
         })
       }
@@ -88,7 +91,6 @@ export const addShippingMethodToCartWorkflow = createWorkflow(
 
     const validatedMethodData = validateAndReturnShippingMethodsDataStep({
       options_to_validate: validateShippingMethodsDataInput,
-      context: cart,
     })
 
     const shippingMethodInput = transform(
