@@ -224,7 +224,7 @@ export const CreateShippingOptionDetailsForm = ({
 
                       <Select.Content>
                         {fulfillmentProviderOptions
-                          ?.filter((fo) => !fo.is_return)
+                          ?.filter((fo) => !!fo.is_return === isReturn)
                           .map((option) => (
                             <Select.Item value={option.id} key={option.id}>
                               {option.name || option.id}
