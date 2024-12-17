@@ -7,7 +7,12 @@ import {
   LineItemTaxLineDTO,
   ProductVariantDTO,
 } from "@medusajs/framework/types"
-import { isDefined, MathBN, PriceListType } from "@medusajs/framework/utils"
+import {
+  isDefined,
+  isPresent,
+  MathBN,
+  PriceListType,
+} from "@medusajs/framework/utils"
 
 interface PrepareItemLineItemInput {
   title?: string
@@ -91,7 +96,7 @@ export function prepareLineItemData(data: PrepareLineItemDataInput) {
     PriceListType.SALE
 
   if (
-    !isDefined(compareAtUnitPrice) &&
+    !isPresent(compareAtUnitPrice) &&
     isSalePrice &&
     !MathBN.eq(
       variant.calculated_price?.original_amount,
