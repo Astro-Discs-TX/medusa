@@ -1018,6 +1018,29 @@ medusaIntegrationTestRunner({
               })
             )
           })
+
+          it("should add metadata to order", async () => {
+            await api.post(
+              `/store/carts/${cart.id}`,
+              {
+                metadata: {
+                  test: "test",
+                },
+              },
+              storeHeaders
+            )
+
+            const response = await api.post(
+              `/store/carts/${cart.id}/complete?fields=+metadata`,
+              {},
+              storeHeaders
+            )
+
+            expect(response.status).toEqual(200)
+            expect(response.data.order).toEqual(
+              expect.objectContaining({ metadata: { test: "test" } })
+            )
+          })
         })
       })
 

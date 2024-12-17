@@ -56,6 +56,7 @@ export const completeCartFields = [
   "original_shipping_tax_total",
   "original_shipping_subtotal",
   "original_shipping_total",
+  "metadata",
   "raw_total",
   "raw_subtotal",
   "raw_tax_total",
