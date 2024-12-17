@@ -5,18 +5,18 @@
 			"id": "The ID of the customer group.",
 			"name": "The name of the customer group",
 			"metadata": "Holds custom data in key-value pairs.",
-			"created_by": "The created by of the customer group",
+			"created_by": "The ID of the user that created the customer group.",
 			"customers": "The associated customers.\n\n@expandable"
 		}
 	},
 	"CustomerGroupCustomer": {
 		"filePath": "packages/modules/customer/src/models/customer-group-customer.ts",
 		"properties": {
-			"id": "The ID of the customer group customer.",
-			"created_by": "The created by of the customer group customer",
+			"id": "The ID of the group-customer pairing.",
+			"created_by": "The ID of the user that added the customer to the group.",
 			"metadata": "Holds custom data in key-value pairs.",
 			"customer": "The associated customer.\n\n@expandable",
-			"customer_group": "The associated customer_group.\n\n@expandable"
+			"customer_group": "The associated customer group.\n\n@expandable"
 		}
 	},
 	"Customer": {
@@ -28,9 +28,9 @@
 			"last_name": "The last name of the customer",
 			"email": "The email of the customer",
 			"phone": "The phone of the customer",
-			"has_account": "Whether the customer has account.",
+			"has_account": "Whether the customer has account. Learn more in [this documentation](https://docs.medusajs.com/resources/commerce-modules/customer/customer-accounts)",
 			"metadata": "Holds custom data in key-value pairs.",
-			"created_by": "The created by of the customer",
+			"created_by": "The ID of the user that created the customer.",
 			"groups": "The associated groups.\n\n@expandable",
 			"addresses": "The associated addresses.\n\n@expandable"
 		}
@@ -39,16 +39,16 @@
 		"filePath": "packages/modules/customer/src/models/address.ts",
 		"properties": {
 			"id": "The ID of the customer address.",
-			"address_name": "The address name of the customer address",
-			"is_default_shipping": "Whether the customer address is default shipping.",
-			"is_default_billing": "Whether the customer address is default billing.",
+			"address_name": "The name of the customer address",
+			"is_default_shipping": "Whether the customer address is used by default for shipping.",
+			"is_default_billing": "Whether the customer address is used by default for billing.",
 			"company": "The company of the customer address",
 			"first_name": "The first name of the customer address",
 			"last_name": "The last name of the customer address",
-			"address_1": "The address 1 of the customer address",
-			"address_2": "The address 2 of the customer address",
+			"address_1": "The first line of the customer address",
+			"address_2": "The second line of the customer address",
 			"city": "The city of the customer address",
-			"country_code": "The country code of the customer address",
+			"country_code": "The country code of the customer address.\n\n@example us",
 			"province": "The province of the customer address",
 			"postal_code": "The postal code of the customer address",
 			"phone": "The phone of the customer address",
