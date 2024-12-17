@@ -53,7 +53,7 @@ export const generatedEditDates = {
   "app/commerce-modules/payment/payment/page.mdx": "2024-10-09T10:59:08.463Z",
   "app/commerce-modules/payment/payment-collection/page.mdx": "2024-10-09T10:56:49.510Z",
   "app/commerce-modules/payment/payment-flow/page.mdx": "2024-10-09T11:18:53.332Z",
-  "app/commerce-modules/payment/payment-provider/stripe/page.mdx": "2024-11-19T11:46:31.140Z",
+  "app/commerce-modules/payment/payment-provider/stripe/page.mdx": "2024-12-16T13:21:03.554Z",
   "app/commerce-modules/payment/payment-provider/page.mdx": "2024-10-09T11:07:27.269Z",
   "app/commerce-modules/payment/payment-session/page.mdx": "2024-10-09T10:58:00.960Z",
   "app/commerce-modules/payment/webhook-events/page.mdx": "2024-11-19T11:45:02.167Z",
@@ -123,7 +123,7 @@ export const generatedEditDates = {
   "app/medusa-cli/page.mdx": "2024-08-28T11:25:32.382Z",
   "app/medusa-container-resources/page.mdx": "2024-12-09T16:18:38.852Z",
   "app/medusa-workflows-reference/page.mdx": "2024-12-09T16:22:32.129Z",
-  "app/nextjs-starter/page.mdx": "2024-12-10T08:44:33.783Z",
+  "app/nextjs-starter/page.mdx": "2024-12-12T12:31:16.661Z",
   "app/recipes/b2b/page.mdx": "2024-10-03T13:07:44.153Z",
   "app/recipes/commerce-automation/page.mdx": "2024-10-16T08:52:01.585Z",
   "app/recipes/digital-products/examples/standard/page.mdx": "2024-12-13T16:04:34.105Z",
@@ -2172,7 +2172,7 @@ export const generatedEditDates = {
   "app/admin-components/components/header/page.mdx": "2024-10-07T11:16:47.407Z",
   "app/admin-components/components/json-view-section/page.mdx": "2024-10-07T11:15:58.833Z",
   "app/admin-components/components/section-row/page.mdx": "2024-10-07T11:15:58.832Z",
-  "app/admin-components/components/table/page.mdx": "2024-10-07T11:15:58.833Z",
+  "app/admin-components/components/table/page.mdx": "2024-12-16T15:28:59.428Z",
   "app/admin-components/page.mdx": "2024-10-07T11:09:49.493Z",
   "app/admin-components/layouts/single-column/page.mdx": "2024-10-07T11:16:06.435Z",
   "app/admin-components/layouts/two-column/page.mdx": "2024-10-07T11:16:10.092Z",
@@ -2182,7 +2182,7 @@ export const generatedEditDates = {
   "app/commerce-modules/api-key/links-to-other-modules/page.mdx": "2024-10-08T08:05:36.596Z",
   "app/commerce-modules/cart/extend/page.mdx": "2024-12-11T09:05:37.041Z",
   "app/commerce-modules/cart/links-to-other-modules/page.mdx": "2024-10-08T08:22:35.190Z",
-  "app/commerce-modules/customer/extend/page.mdx": "2024-12-11T09:05:35.368Z",
+  "app/commerce-modules/customer/extend/page.mdx": "2024-12-16T14:11:47.517Z",
   "app/commerce-modules/fulfillment/links-to-other-modules/page.mdx": "2024-10-08T14:58:24.935Z",
   "app/commerce-modules/inventory/links-to-other-modules/page.mdx": "2024-10-08T15:18:30.109Z",
   "app/commerce-modules/pricing/links-to-other-modules/page.mdx": "2024-10-09T13:51:49.986Z",
@@ -5689,5 +5689,6 @@ export const generatedEditDates = {
   "references/types/DmlTypes/types/types.DmlTypes.RelationshipTypes/page.mdx": "2024-12-10T14:54:55.435Z",
   "app/recipes/commerce-automation/restock-notification/page.mdx": "2024-12-11T08:47:27.471Z",
   "app/troubleshooting/workflow-errors/page.mdx": "2024-12-11T08:44:36.598Z",
-  "app/integrations/guides/shipstation/page.mdx": "2024-12-16T16:41:54.976Z"
+  "app/integrations/guides/shipstation/page.mdx": "2024-12-16T16:41:54.976Z",
+  "app/nextjs-starter/guides/customize-stripe/page.mdx": "2024-12-12T12:46:33.999Z"
 }
