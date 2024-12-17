@@ -38,7 +38,7 @@ export function flattenObjectToKeyValuePairs(obj: NestedObject): NestedObject {
   ): string[][] {
     const paths: string[][] = []
 
-    if (!obj || !isObject(obj)) {
+    if (!obj || typeof obj !== "object") {
       return paths
     }
 
@@ -61,7 +61,7 @@ export function flattenObjectToKeyValuePairs(obj: NestedObject): NestedObject {
   // Extract array values at a specific path
   function getArrayValues(obj: unknown, path: string[]): unknown[] {
     const arrayObj = path.reduce((acc: unknown, key: string) => {
-      if (isObject(acc)) {
+      if (acc && isObject(acc)) {
         return (acc as Record<string, unknown>)[key]
       }
       return undefined
@@ -74,7 +74,7 @@ export function flattenObjectToKeyValuePairs(obj: NestedObject): NestedObject {
 
   // Process non-array paths
   function processRegularPaths(obj: unknown, prefix = ""): void {
-    if (!obj || !isObject(obj)) {
+    if (!obj || typeof obj !== "object") {
       result[prefix] = obj
       return
     }
@@ -83,7 +83,7 @@ export function flattenObjectToKeyValuePairs(obj: NestedObject): NestedObject {
 
     Object.entries(obj as Record<string, unknown>).forEach(([key, value]) => {
       const newPrefix = prefix ? `${prefix}.${key}` : key
-      if (isObject(obj) && !Array.isArray(value)) {
+      if (value && isObject(value) && !Array.isArray(value)) {
         processRegularPaths(value, newPrefix)
       } else if (!Array.isArray(value)) {
         result[newPrefix] = value
@@ -104,7 +104,7 @@ export function flattenObjectToKeyValuePairs(obj: NestedObject): NestedObject {
       // Get all possible keys from the array objects
       const keys = new Set<string>()
       arrayObjects.forEach((item) => {
-        if (isObject(item)) {
+        if (item && isObject(item)) {
           Object.keys(item as object).forEach((k) => keys.add(k))
         }
       })
@@ -113,7 +113,7 @@ export function flattenObjectToKeyValuePairs(obj: NestedObject): NestedObject {
       keys.forEach((key) => {
         const values = arrayObjects
           .map((item) => {
-            if (isObject(item)) {
+            if (item && isObject(item)) {
               return (item as Record<string, unknown>)[key]
             }
             return undefined
