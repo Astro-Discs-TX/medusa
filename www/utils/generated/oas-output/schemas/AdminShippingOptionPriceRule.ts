@@ -19,13 +19,8 @@
  *     title: id
  *     description: The price rule's ID.
  *   value:
- *     oneOf:
- *       - type: string
- *         title: value
- *         description: The price rule's value.
- *       - type: number
- *         title: value
- *         description: The price rule's value.
+ *     type: string
+ *     title: value
  *     description: The price rule's value.
  *   operator:
  *     type: string
