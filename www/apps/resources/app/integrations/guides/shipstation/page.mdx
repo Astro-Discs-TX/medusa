@@ -715,7 +715,7 @@ The method returns an object having the following properties:
 
 After the customer places the order, the admin user can manage its fulfillments. When the admin user creates a fulfillment for the order, Medusa uses the `createFulfillment` method of the associated provider to handle any processing in the third-party provider.
 
-In this method, you'll retrieve the shipment details from ShipStation, then use those details to purchase a label for a new shipment.
+In this method, you'll retrieve the shipment details from ShipStation, then use those details to purchase a label for a new shipment. You'll also store the ID of the label and shipment within the created fulfillment's `data` property.
 
 First, add new types to `src/modules/shipstation/types.ts`:
 
@@ -849,8 +849,11 @@ class ShipStationProviderService extends AbstractFulfillmentProviderService {
     })
 
     return {
-      label_id: label.label_id,
-      shipment_id: label.shipment_id,
+      data: {
+        ...(fulfillment.data as object || {}),
+        label_id: label.label_id,
+        shipment_id: label.shipment_id
+      },
     }
   }
 }
@@ -865,7 +868,7 @@ This method accepts the following parameters:
 
 In the method, you retrieve the shipment's details from ShipStation using the shipment ID from the first parameter. Then, you purchase a label in ShipStation, passing it the same shipment details and setting the items to those passed as a second parameter.
 
-You return an object to be stored in the created fulfillment's `data` property. You store in it the ID of the purchased label and the ID of its associated shipment.
+You return an object whose `data` property will be stored in the created fulfillment's `data` property. You store in it the ID of the purchased label and the ID of its associated shipment.
 
 #### cancelFulfillment
 
