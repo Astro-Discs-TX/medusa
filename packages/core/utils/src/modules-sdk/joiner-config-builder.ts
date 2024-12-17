@@ -362,32 +362,8 @@ export function buildLinkConfigFromModelObjects<
   const linkableModels = Object.values(linkableKeys)
   const linkConfig = {} as InfersLinksConfig<ServiceName, T>
 
-  for (const [linkableKey, modelName] of Object.entries(linkableKeys)) {
-    const classLikeModelName = upperCaseFirst(modelName)
-    const model = models[modelName]
-
-    /**
-     * In this case, we have been provided linakble keys that refers to model that are not set
-     * in the module service.
-     */
-    if (!model) {
-      linkConfig[lowerCaseFirst(modelName)] ??= {
-        toJSON: function () {
-          const linkables = Object.entries(this)
-            .filter(([name]) => name !== "toJSON")
-            .map(([, object]) => object)
-          return linkables[0]
-        },
-        id: {
-          linkable: linkableKey,
-          primaryKey: "id",
-          serviceName,
-          field: lowerCaseFirst(modelName),
-          entity: classLikeModelName,
-        },
-      }
-      continue
-    }
+  for (const model of Object.values(models) ?? []) {
+    const classLikeModelName = upperCaseFirst(model.name)
 
     if (
       !DmlEntity.isDmlEntity(model) ||
@@ -437,41 +413,41 @@ export function buildLinkConfigFromModelObjects<
         }
       }
     }
+  }
 
-    /**
-     * If the joiner config specify some custom linkable keys, we merge them with the
-     * existing linkable keys infered from the model above.
-     */
-    const linkableKeysPerModel = Object.entries(linkableKeys).reduce(
-      (acc, [key, entityName]) => {
-        acc[entityName] ??= []
-        acc[entityName].push(key)
-        return acc
-      },
-      {}
+  /**
+   * If the joiner config specify some custom linkable keys, we merge them with the
+   * existing linkable keys infered from the model above.
+   */
+  for (const [linkableKey, modelName] of Object.entries(linkableKeys) ?? []) {
+    const snakeCasedModelName = camelToSnakeCase(toCamelCase(modelName))
+
+    // Linkable keys by default are prepared with snake cased model name _id
+    // So to be able to compare only the property we have to remove the first part
+    const inferredReferenceProperty = linkableKey.replace(
+      `${snakeCasedModelName}_`,
+      ""
     )
 
-    for (const linkableKey of linkableKeysPerModel[classLikeModelName] ?? []) {
-      const snakeCasedModelName = camelToSnakeCase(toCamelCase(model.name))
+    linkConfig[lowerCaseFirst(modelName)] ??= {
+      toJSON: function () {
+        const linkables = Object.entries(this)
+          .filter(([name]) => name !== "toJSON")
+          .map(([, object]) => object)
+        return linkables[0]
+      },
+    }
 
-      // Linkable keys by default are prepared with snake cased model name _id
-      // So to be able to compare only the property we have to remove the first part
-      const inferredReferenceProperty = linkableKey.replace(
-        `${snakeCasedModelName}_`,
-        ""
-      )
+    if (linkConfig[lowerCaseFirst(modelName)][inferredReferenceProperty]) {
+      continue
+    }
 
-      if (modelLinkConfig[inferredReferenceProperty]) {
-        continue
-      }
-
-      modelLinkConfig[linkableKey] = {
-        linkable: linkableKey,
-        primaryKey: linkableKey,
-        serviceName,
-        field: lowerCaseFirst(model.name),
-        entity: upperCaseFirst(model.name),
-      }
+    linkConfig[lowerCaseFirst(modelName)][inferredReferenceProperty] = {
+      linkable: linkableKey,
+      primaryKey: inferredReferenceProperty,
+      serviceName,
+      field: lowerCaseFirst(modelName),
+      entity: upperCaseFirst(modelName),
     }
   }
 
