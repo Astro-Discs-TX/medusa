@@ -1,4 +1,5 @@
 import { CreateCustomerDTO, CustomerDTO } from "@medusajs/framework/types"
+import { CustomerWorkflowEvents } from "@medusajs/framework/utils"
 import {
   createWorkflow,
   transform,
@@ -7,6 +8,7 @@ import {
 } from "@medusajs/framework/workflows-sdk"
 import { setAuthAppMetadataStep } from "../../auth"
 import { validateCustomerAccountCreation } from "../steps/validate-customer-account-creation"
+import { emitEventStep } from "../../common/steps/emit-event"
 import { createCustomersWorkflow } from "./create-customers"
 
 export type CreateCustomerAccountWorkflowInput = {
@@ -42,6 +44,20 @@ export const createCustomerAccountWorkflow = createWorkflow(
       customers,
       (customers: CustomerDTO[]) => customers[0]
     )
+
+    const customerIdEvents = transform(
+      { customers },
+      ({ createdCustomers }) => {
+        return createdCustomers.map((v) => {
+          return { id: v.id }
+        })
+      }
+    )
+
+    emitEventStep({
+      eventName: CustomerWorkflowEvents.CREATED,
+      data: customerIdEvents,
+    })
 
     setAuthAppMetadataStep({
       authIdentityId: input.authIdentityId,
