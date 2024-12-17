@@ -110,8 +110,6 @@ export const EditShippingOptionForm = ({
       storeRule.value = values.enabled_in_store ? "true" : "false"
     }
 
-    console.log(shippingOption)
-
     await mutateAsync(
       {
         name: values.name,

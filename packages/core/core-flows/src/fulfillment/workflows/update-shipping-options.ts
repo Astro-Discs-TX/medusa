@@ -40,15 +40,6 @@ export const updateShippingOptionsWorkflow = createWorkflow(
         delete (option as FulfillmentWorkflow.UpdateFlatRateShippingOptionInput)
           .prices
 
-        if (option.fulfillment_option_id) {
-          option.data = {
-            fulfillment_option_id: option.fulfillment_option_id,
-            ...(option.data ?? {}),
-          }
-
-          delete (option as any).fulfillment_option_id
-        }
-
         /**
          * When we are updating an option to be calculated, remove the prices.
          */

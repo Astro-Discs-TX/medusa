@@ -17,7 +17,6 @@ type CreateFlatShippingOptionInputBase = {
   shipping_profile_id: string
   data?: Record<string, unknown>
   provider_id: string
-  fulfillment_option_id: string
   type: {
     label: string
     description: string

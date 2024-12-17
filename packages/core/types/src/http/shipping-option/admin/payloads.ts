@@ -39,7 +39,6 @@ export interface AdminCreateShippingOption {
   name: string
   service_zone_id: string
   shipping_profile_id: string
-  fulfillment_option_id: string
   data?: Record<string, unknown>
   price_type: ShippingOptionPriceType
   provider_id: string
