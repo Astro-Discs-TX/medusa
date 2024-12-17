@@ -4,5 +4,5 @@ export const NESTED_ROUTE_POSITIONS = [
   "/inventory",
   "/customers",
   "/promotions",
-  "/price-list",
+  "/price-lists",
 ] as const
