@@ -1,6 +1,6 @@
 import { Migration } from "@mikro-orm/migrations"
 
-export class Migration20241216142632 extends Migration {
+export class Migration20241217104528 extends Migration {
   async up(): Promise<void> {
     this.addSql(
       'alter table if exists "shipping_option" drop constraint if exists "shipping_option_shipping_option_type_id_foreign";'
@@ -24,16 +24,10 @@ export class Migration20241216142632 extends Migration {
     this.addSql(
       'alter table if exists "shipping_option" add constraint "shipping_option_shipping_option_type_id_foreign" foreign key ("shipping_option_type_id") references "shipping_option_type" ("id") on update cascade;'
     )
-    this.addSql(
-      'alter table if exists "shipping_option" add constraint "shipping_option_provider_id_unique" unique ("provider_id");'
-    )
 
     this.addSql('drop index if exists "IDX_fulfillment_provider_id";')
     this.addSql(
       'alter table if exists "fulfillment" add constraint "fulfillment_delivery_address_id_foreign" foreign key ("delivery_address_id") references "fulfillment_address" ("id") on update cascade on delete set null;'
-    )
-    this.addSql(
-      'alter table if exists "fulfillment" add constraint "fulfillment_provider_id_unique" unique ("provider_id");'
     )
   }
 
@@ -58,9 +52,6 @@ export class Migration20241216142632 extends Migration {
     )
 
     this.addSql(
-      'alter table if exists "shipping_option" drop constraint if exists "shipping_option_provider_id_unique";'
-    )
-    this.addSql(
       'alter table if exists "shipping_option" add constraint "shipping_option_shipping_option_type_id_foreign" foreign key ("shipping_option_type_id") references "shipping_option_type" ("id") on update cascade on delete cascade;'
     )
     this.addSql(
@@ -70,9 +61,6 @@ export class Migration20241216142632 extends Migration {
       'CREATE INDEX IF NOT EXISTS "IDX_shipping_option_shipping_option_type_id" ON "shipping_option" (shipping_option_type_id) WHERE deleted_at IS NULL;'
     )
 
-    this.addSql(
-      'alter table if exists "fulfillment" drop constraint if exists "fulfillment_provider_id_unique";'
-    )
     this.addSql(
       'alter table if exists "fulfillment" add constraint "fulfillment_delivery_address_id_foreign" foreign key ("delivery_address_id") references "fulfillment_address" ("id") on update cascade on delete cascade;'
     )
