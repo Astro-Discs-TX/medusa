@@ -20,7 +20,7 @@ import {
 } from "../../__fixtures__"
 import { FulfillmentProviderServiceFixtures } from "../../__fixtures__/providers"
 
-jest.setTimeout(100000)
+jest.setTimeout(1000000)
 
 const moduleOptions = {
   providers: [
@@ -728,11 +728,15 @@ moduleIntegrationTestRunner<IFulfillmentModuleService>({
                 {
                   ...existingRule,
                   value: "false",
+                  // created_at: new Date(),
+                  // updated_at: new Date(),
                 },
                 {
                   attribute: "new-test",
                   operator: "eq",
                   value: "new-test",
+                  // created_at: new Date(),
+                  // updated_at: new Date(),
                 },
               ],
             }

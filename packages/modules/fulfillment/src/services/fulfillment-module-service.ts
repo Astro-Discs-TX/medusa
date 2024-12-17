@@ -1372,9 +1372,21 @@ export default class FulfillmentModuleService
       sharedContext
     )
 
+    const refreshedShippingOptions = await this.listShippingOptions(
+      {
+        id: Array.isArray(updatedShippingOptions)
+          ? updatedShippingOptions.map((s) => s.id)
+          : updatedShippingOptions.id,
+      },
+      {
+        relations: ["type", "rules"],
+      },
+      sharedContext
+    )
+
     const serialized = await this.baseRepository_.serialize<
       FulfillmentTypes.ShippingOptionDTO | FulfillmentTypes.ShippingOptionDTO[]
-    >(updatedShippingOptions)
+    >(refreshedShippingOptions)
 
     return isString(idOrSelector) ? serialized[0] : serialized
   }
@@ -1488,6 +1500,15 @@ export default class FulfillmentModuleService
               ...rule,
             }
 
+            // console.log(typeof ruleData.created_at)
+
+            // @ts-ignore
+            delete ruleData.created_at
+            // @ts-ignore
+            delete ruleData.updated_at
+            // @ts-ignore
+            delete ruleData.deleted_at
+
             existingRulesMap.set(rule.id, ruleData)
             return ruleData
           }
@@ -1529,16 +1550,16 @@ export default class FulfillmentModuleService
     }
 
     if (optionTypeToCreate.size) {
-      const createdTypes = await this.shippingOptionTypeService_.create(
+      await this.shippingOptionTypeService_.create(
         [...optionTypeToCreate.values()],
         sharedContext
       )
 
-      for (let i = 0; i < optionTypeToCreate.size; i++) {
-        const soId = [...optionTypeToCreate.keys()][i]
-        const type = createdTypes[i]
-        optionTypeToCreate.set(soId, type)
-      }
+      // for (let i = 0; i < optionTypeToCreate.size; i++) {
+      //   const soId = [...optionTypeToCreate.keys()][i]
+      //   const type = createdTypes[i]
+      //   optionTypeToCreate.set(soId, type)
+      // }
     }
 
     const updatedShippingOptions = await this.shippingOptionService_.update(
@@ -1546,11 +1567,17 @@ export default class FulfillmentModuleService
       sharedContext
     )
 
-    // Re attach new type, so that we dont have to re fetch and try to infer the relations to get
-    for (const [id, type] of optionTypeToCreate.entries()) {
-      updatedShippingOptions.find((so) => so.id === id)!.type =
-        type as unknown as InferEntityType<typeof ShippingOptionType>
-    }
+    // const result: any[] = []
+    // // // Re attach new type, so that we dont have to re fetch and try to infer the relations to get
+    // for (const [id, type] of optionTypeToCreate.entries()) {
+    //   const resultShippingOption = structuredClone(
+    //     updatedShippingOptions.find((so) => so.id === id)!
+    //   )
+    //   resultShippingOption!.type = type as unknown as InferEntityType<
+    //     typeof ShippingOptionType
+    //   >
+    //   result.push(resultShippingOption)
+    // }
 
     this.handleShippingOptionUpdateEvents({
       shippingOptionsData: dataArray,
