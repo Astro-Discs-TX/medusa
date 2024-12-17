@@ -670,9 +670,9 @@ import {
 class ShipStationProviderService extends AbstractFulfillmentProviderService {
   // ...
   async calculatePrice(
-    optionData: Record<string, unknown>, 
-    data: Record<string, unknown>, 
-    context: Record<string, unknown>
+    optionData: CalculateShippingOptionPriceDTO["optionData"], 
+    data: CalculateShippingOptionPriceDTO["data"], 
+    context: CalculateShippingOptionPriceDTO["context"]
   ): Promise<CalculatedShippingOptionPrice> {
     const { shipment_id } = data as {
       shipment_id: string
@@ -685,8 +685,8 @@ class ShipStationProviderService extends AbstractFulfillmentProviderService {
       (rate.tax_amount?.amount || 0)
 
     return {
-      calculated_price: calculatedPrice,
-      is_calculated_price_tax_inclusive: !!rate.tax_amount,
+      calculated_amount: calculatedPrice,
+      is_calculated_price_tax_inclusive: !!rate.tax_amount
     }
   }
 }
@@ -708,7 +708,7 @@ Learn more about these fields returned in a rate in [ShipStation's documentation
 
 The method returns an object having the following properties:
 
-- `calculated_price`: The shipping method's price calculated by adding the four rate properties with the tax property, if available.
+- `calculated_amount`: The shipping method's price calculated by adding the four rate properties with the tax property, if available.
 - `is_calculated_price_tax_inclusive`: Whether the price includes taxes, which is inferred from whether the `tax_amount` property is set in the rate.
 
 #### createFulfillment
