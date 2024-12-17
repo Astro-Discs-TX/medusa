@@ -89,9 +89,9 @@ export const addShippingMethodToCartWorkflow = createWorkflow(
       }
     )
 
-    const validatedMethodData = validateAndReturnShippingMethodsDataStep({
-      options_to_validate: validateShippingMethodsDataInput,
-    })
+    const validatedMethodData = validateAndReturnShippingMethodsDataStep(
+      validateShippingMethodsDataInput
+    )
 
     const shippingMethodInput = transform(
       { input, shippingOptions, validatedMethodData },
