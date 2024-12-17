@@ -49,7 +49,7 @@ export const updateLineItemInCartWorkflow = createWorkflow(
     validateVariantPricesStep({ variants })
 
     const items = transform({ input }, (data) => {
-      return [{...data.input.item, quantity: data.input.update.quantity as number }]
+      return [Object.assign(data.input.item, { quantity: data.input.update.quantity })]
     })
 
     confirmVariantInventoryWorkflow.runAsStep({
