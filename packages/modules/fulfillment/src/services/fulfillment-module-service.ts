@@ -21,6 +21,7 @@ import {
   arrayDifference,
   deepEqualObj,
   EmitEvents,
+  generateEntityId,
   getSetDifference,
   InjectManager,
   InjectTransactionManager,
@@ -451,8 +452,38 @@ export default class FulfillmentModuleService
       validateAndNormalizeRules(rules as Record<string, unknown>[])
     }
 
+    const shippingOptionTypeToCreate: any[] = []
+
+    const shippingOptionsToCreate = data_.map((shippingOptionData) => {
+      if (shippingOptionData.type) {
+        const typeId = generateEntityId(undefined, "sotype")
+        Object.assign(shippingOptionData.type, {
+          id: typeId,
+        })
+        ;(
+          shippingOptionData as unknown as InferEntityType<
+            typeof ShippingOption
+          >
+        ).shipping_option_type_id = typeId
+
+        shippingOptionTypeToCreate.push(shippingOptionData.type)
+
+        // @ts-ignore
+        delete shippingOptionData.type
+      }
+
+      return shippingOptionData
+    })
+
+    if (shippingOptionTypeToCreate.length) {
+      await this.shippingOptionTypeService_.create(
+        shippingOptionTypeToCreate,
+        sharedContext
+      )
+    }
+
     const createdSO = await this.shippingOptionService_.create(
-      data_,
+      shippingOptionsToCreate,
       sharedContext
     )
 
@@ -642,7 +673,7 @@ export default class FulfillmentModuleService
     try {
       const providerResult =
         await this.fulfillmentProviderService_.createFulfillment(
-          provider_id,
+          provider_id!, // TODO: should we add a runtime check on provider_id being provided?
           fulfillmentData || {},
           items.map((i) => i),
           order,
@@ -709,7 +740,7 @@ export default class FulfillmentModuleService
     try {
       const providerResult =
         await this.fulfillmentProviderService_.createReturn(
-          fulfillment.provider_id,
+          fulfillment.provider_id!, // TODO: should we add a runtime check on provider_id being provided?,
           fulfillment as Record<any, any>
         )
       await this.fulfillmentService_.update(
@@ -1368,6 +1399,7 @@ export default class FulfillmentModuleService
     const existingRuleIds: string[] = []
 
     const optionTypeDeletedIds: string[] = []
+    const optionTypeToCreate: any[] = []
 
     dataArray.forEach((shippingOption) => {
       const existingShippingOption = existingShippingOptions.get(
@@ -1376,6 +1408,19 @@ export default class FulfillmentModuleService
 
       if (shippingOption.type && !("id" in shippingOption.type)) {
         optionTypeDeletedIds.push(existingShippingOption.type.id)
+
+        const typeId = generateEntityId(undefined, "sotype")
+        Object.assign(shippingOption.type, {
+          id: typeId,
+        })
+        ;(
+          shippingOption as InferEntityType<typeof ShippingOption>
+        ).shipping_option_type_id = typeId
+
+        optionTypeToCreate.push(shippingOption.type)
+
+        // @ts-ignore
+        delete shippingOption.type
       }
 
       if (!shippingOption.rules) {
@@ -1448,6 +1493,13 @@ export default class FulfillmentModuleService
 
       await this.shippingOptionRuleService_.delete(
         ruleIdsToDelete,
+        sharedContext
+      )
+    }
+
+    if (optionTypeToCreate.length) {
+      await this.shippingOptionTypeService_.create(
+        optionTypeToCreate,
         sharedContext
       )
     }
@@ -1954,7 +2006,7 @@ export default class FulfillmentModuleService
     if (!fulfillment.canceled_at) {
       try {
         await this.fulfillmentProviderService_.cancelFulfillment(
-          fulfillment.provider_id,
+          fulfillment.provider_id!, // TODO: should we add a runtime check on provider_id being provided?,
           fulfillment.data ?? {}
         )
       } catch (error) {

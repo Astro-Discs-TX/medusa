@@ -362,8 +362,32 @@ export function buildLinkConfigFromModelObjects<
   const linkableModels = Object.values(linkableKeys)
   const linkConfig = {} as InfersLinksConfig<ServiceName, T>
 
-  for (const model of Object.values(models) ?? []) {
-    const classLikeModelName = upperCaseFirst(model.name)
+  for (const [linkableKey, modelName] of Object.entries(linkableKeys)) {
+    const classLikeModelName = upperCaseFirst(modelName)
+    const model = models[modelName]
+
+    /**
+     * In this case, we have been provided linakble keys that refers to model that are not set
+     * in the module service.
+     */
+    if (!model) {
+      linkConfig[lowerCaseFirst(modelName)] ??= {
+        toJSON: function () {
+          const linkables = Object.entries(this)
+            .filter(([name]) => name !== "toJSON")
+            .map(([, object]) => object)
+          return linkables[0]
+        },
+        id: {
+          linkable: linkableKey,
+          primaryKey: "id",
+          serviceName,
+          field: lowerCaseFirst(modelName),
+          entity: classLikeModelName,
+        },
+      }
+      continue
+    }
 
     if (
       !DmlEntity.isDmlEntity(model) ||

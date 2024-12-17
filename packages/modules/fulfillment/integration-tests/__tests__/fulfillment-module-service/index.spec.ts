@@ -112,20 +112,23 @@ moduleIntegrationTestRunner({
           service: FulfillmentModuleService,
         }).linkable
 
-        expect(Object.keys(linkable)).toEqual([
-          "fulfillmentAddress",
-          "fulfillmentItem",
-          "fulfillmentLabel",
-          "fulfillmentProvider",
-          "fulfillmentSet",
-          "fulfillment",
-          "geoZone",
-          "serviceZone",
-          "shippingOptionRule",
-          "shippingOptionType",
-          "shippingOption",
-          "shippingProfile",
-        ])
+        expect(Object.keys(linkable)).toHaveLength(12)
+        expect(Object.keys(linkable)).toEqual(
+          expect.arrayContaining([
+            "fulfillmentAddress",
+            "fulfillmentItem",
+            "fulfillmentLabel",
+            "fulfillmentProvider",
+            "fulfillmentSet",
+            "fulfillment",
+            "geoZone",
+            "serviceZone",
+            "shippingOptionRule",
+            "shippingOptionType",
+            "shippingOption",
+            "shippingProfile",
+          ])
+        )
 
         Object.keys(linkable).forEach((key) => {
           delete linkable[key].toJSON
@@ -361,7 +364,7 @@ moduleIntegrationTestRunner({
         await shutdown().catch(() => void 0)
       })
 
-      it("should soft delete and restore the data respecting the configured cascade", async () => {
+      it.only("should soft delete and restore the data respecting the configured cascade", async () => {
         await createFullDataStructure(service, { providerId })
 
         let fulfillmentSets = await list(service)

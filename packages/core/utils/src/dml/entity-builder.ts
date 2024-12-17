@@ -386,27 +386,31 @@ export class EntityBuilder {
    *
    * @customNamespace Relationship Methods
    */
-  hasOne<T>(
+  hasOne<T, const ForeignKeyName extends string | undefined = undefined>(
     entityBuilder: T,
     options: RelationshipOptions & {
       foreignKey: true
-      foreignKeyName?: string
+      foreignKeyName?: ForeignKeyName
     }
-  ): HasOneWithForeignKey<T>
+  ): HasOneWithForeignKey<T, ForeignKeyName>
   hasOne<T>(
     entityBuilder: T,
     options?: RelationshipOptions & {
       foreignKey?: false
     }
   ): HasOne<T>
-  hasOne<T>(
+  hasOne<T, const ForeignKeyName extends string | undefined = undefined>(
     entityBuilder: T,
     options?: RelationshipOptions & {
       foreignKey?: boolean
+      foreignKeyName?: ForeignKeyName
     }
-  ): HasOneWithForeignKey<T> | HasOne<T> {
+  ): HasOneWithForeignKey<T, ForeignKeyName> | HasOne<T> {
     if (options?.foreignKey) {
-      return new HasOneWithForeignKey<T>(entityBuilder, options || {})
+      return new HasOneWithForeignKey<T, ForeignKeyName>(
+        entityBuilder,
+        options || {}
+      )
     }
     return new HasOne<T>(entityBuilder, options || {})
   }
@@ -434,13 +438,13 @@ export class EntityBuilder {
    *
    * @customNamespace Relationship Methods
    */
-  belongsTo<T>(
+  belongsTo<T, const ForeignKeyName extends string | undefined = undefined>(
     entityBuilder: T,
     options?: RelationshipOptions & {
-      foreignKeyName?: string
+      foreignKeyName?: ForeignKeyName
     }
   ) {
-    return new BelongsTo<T>(entityBuilder, options || {})
+    return new BelongsTo<T, ForeignKeyName>(entityBuilder, options || {})
   }
 
   /**

@@ -984,24 +984,6 @@
       "schema": "public",
       "indexes": [
         {
-          "columnNames": [
-            "provider_id"
-          ],
-          "composite": false,
-          "keyName": "shipping_option_provider_id_unique",
-          "primary": false,
-          "unique": true
-        },
-        {
-          "columnNames": [
-            "shipping_option_type_id"
-          ],
-          "composite": false,
-          "keyName": "shipping_option_shipping_option_type_id_unique",
-          "primary": false,
-          "unique": true
-        },
-        {
           "keyName": "IDX_shipping_option_service_zone_id",
           "columnNames": [],
           "composite": false,
@@ -1061,31 +1043,6 @@
           ],
           "referencedTableName": "public.shipping_profile",
           "deleteRule": "set null",
-          "updateRule": "cascade"
-        },
-        "shipping_option_provider_id_foreign": {
-          "constraintName": "shipping_option_provider_id_foreign",
-          "columnNames": [
-            "provider_id"
-          ],
-          "localTableName": "public.shipping_option",
-          "referencedColumnNames": [
-            "id"
-          ],
-          "referencedTableName": "public.fulfillment_provider",
-          "deleteRule": "set null",
-          "updateRule": "cascade"
-        },
-        "shipping_option_shipping_option_type_id_foreign": {
-          "constraintName": "shipping_option_shipping_option_type_id_foreign",
-          "columnNames": [
-            "shipping_option_type_id"
-          ],
-          "localTableName": "public.shipping_option",
-          "referencedColumnNames": [
-            "id"
-          ],
-          "referencedTableName": "public.shipping_option_type",
           "updateRule": "cascade"
         }
       }
@@ -1396,24 +1353,6 @@
       "schema": "public",
       "indexes": [
         {
-          "columnNames": [
-            "provider_id"
-          ],
-          "composite": false,
-          "keyName": "fulfillment_provider_id_unique",
-          "primary": false,
-          "unique": true
-        },
-        {
-          "columnNames": [
-            "delivery_address_id"
-          ],
-          "composite": false,
-          "keyName": "fulfillment_delivery_address_id_unique",
-          "primary": false,
-          "unique": true
-        },
-        {
           "keyName": "IDX_fulfillment_shipping_option_id",
           "columnNames": [],
           "composite": false,
@@ -1449,19 +1388,6 @@
       ],
       "checks": [],
       "foreignKeys": {
-        "fulfillment_provider_id_foreign": {
-          "constraintName": "fulfillment_provider_id_foreign",
-          "columnNames": [
-            "provider_id"
-          ],
-          "localTableName": "public.fulfillment",
-          "referencedColumnNames": [
-            "id"
-          ],
-          "referencedTableName": "public.fulfillment_provider",
-          "deleteRule": "set null",
-          "updateRule": "cascade"
-        },
         "fulfillment_shipping_option_id_foreign": {
           "constraintName": "fulfillment_shipping_option_id_foreign",
           "columnNames": [
@@ -1472,19 +1398,6 @@
             "id"
           ],
           "referencedTableName": "public.shipping_option",
-          "deleteRule": "set null",
-          "updateRule": "cascade"
-        },
-        "fulfillment_delivery_address_id_foreign": {
-          "constraintName": "fulfillment_delivery_address_id_foreign",
-          "columnNames": [
-            "delivery_address_id"
-          ],
-          "localTableName": "public.fulfillment",
-          "referencedColumnNames": [
-            "id"
-          ],
-          "referencedTableName": "public.fulfillment_address",
           "deleteRule": "set null",
           "updateRule": "cascade"
         }
