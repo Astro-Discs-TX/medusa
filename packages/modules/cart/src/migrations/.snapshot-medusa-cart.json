@@ -624,6 +624,7 @@
           "autoincrement": false,
           "primary": false,
           "nullable": false,
+          "default": "false",
           "mappedType": "boolean"
         },
         "compare_at_unit_price": {
