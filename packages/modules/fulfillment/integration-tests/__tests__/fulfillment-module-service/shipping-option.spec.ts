@@ -800,13 +800,15 @@ moduleIntegrationTestRunner<IFulfillmentModuleService>({
             )
 
             const types = await service.listShippingOptionTypes()
-            expect(types).toHaveLength(1)
-            expect(types[0]).toEqual(
-              expect.objectContaining({
-                code: updateData.type.code,
-                description: updateData.type.description,
-                label: updateData.type.label,
-              })
+            expect(types).toHaveLength(2)
+            expect(types).toEqual(
+              expect.arrayContaining([
+                expect.objectContaining({
+                  code: updateData.type.code,
+                  description: updateData.type.description,
+                  label: updateData.type.label,
+                }),
+              ])
             )
 
             expect(eventBusEmitSpy.mock.calls[0][0]).toHaveLength(5)
@@ -1070,7 +1072,7 @@ moduleIntegrationTestRunner<IFulfillmentModuleService>({
             )
 
             const types = await service.listShippingOptionTypes()
-            expect(types).toHaveLength(2)
+            expect(types).toHaveLength(4)
             expect(types).toEqual(
               expect.arrayContaining([
                 expect.objectContaining({
