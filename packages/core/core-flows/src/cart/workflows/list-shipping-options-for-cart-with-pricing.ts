@@ -6,10 +6,12 @@ import {
   WorkflowData,
   WorkflowResponse,
 } from "@medusajs/framework/workflows-sdk"
+import { CalculateShippingOptionPriceDTO } from "@medusajs/types"
+
 import { useQueryGraphStep, validatePresenceOfStep } from "../../common"
 import { useRemoteQueryStep } from "../../common/steps/use-remote-query"
 import { calculateShippingOptionsPricesStep } from "../../fulfillment"
-import { CalculateShippingOptionPriceDTO } from "@medusajs/types"
+import { cartFieldsForCalculateShippingOptionsPrices } from "../utils/fields"
 
 const COMMON_OPTIONS_FIELDS = [
   "id",
@@ -57,24 +59,10 @@ export const listShippingOptionsForCartWithPricingWorkflow = createWorkflow(
       entity: "cart",
       filters: { id: input.cart_id },
       fields: [
-        "id",
+        ...cartFieldsForCalculateShippingOptionsPrices,
         "sales_channel_id",
         "currency_code",
         "region_id",
-        "shipping_address.*",
-        // ensure that the same subset of fileds needed to calculate shipping options is retrieved here and in calculateShippingOptionsPricesWorkflow when fetching cart
-        "items.*",
-        "items.product.id",
-        "items.product.collection_id",
-        "items.product.categories.id",
-        "items.product.tags.id",
-        "items.variant.id",
-        "items.variant.product.id",
-        "items.variant.weight",
-        "items.variant.length",
-        "items.variant.height",
-        "items.variant.width",
-        "items.variant.material",
         "item_total",
         "total",
       ],

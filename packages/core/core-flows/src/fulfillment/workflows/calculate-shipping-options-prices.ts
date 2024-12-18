@@ -7,6 +7,7 @@ import {
 } from "@medusajs/framework/workflows-sdk"
 import { calculateShippingOptionsPricesStep } from "../steps"
 import { useQueryGraphStep } from "../../common"
+import { cartFieldsForCalculateShippingOptionsPrices } from "../../cart/utils/fields"
 
 export const calculateShippingOptionsPricesWorkflowId =
   "calculate-shipping-options-prices-workflow"
@@ -31,18 +32,7 @@ export const calculateShippingOptionsPricesWorkflow = createWorkflow(
     const cartQuery = useQueryGraphStep({
       entity: "cart",
       filters: { id: input.cart_id },
-      fields: [
-        "id",
-        "items.*",
-        "items.variant.id",
-        "items.variant.product.id",
-        "items.variant.weight",
-        "items.variant.length",
-        "items.variant.height",
-        "items.variant.width",
-        "items.variant.material",
-        "shipping_address.*",
-      ],
+      fields: cartFieldsForCalculateShippingOptionsPrices,
     }).config({ name: "cart-query" })
 
     const fulfillmentSetId = transform(
