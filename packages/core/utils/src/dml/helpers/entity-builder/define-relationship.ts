@@ -21,13 +21,13 @@ import {
 } from "@mikro-orm/core"
 import { camelToSnakeCase, pluralize } from "../../../common"
 import { DmlEntity } from "../../entity"
+import { BelongsTo } from "../../relations"
 import { HasMany } from "../../relations/has-many"
 import { HasOne } from "../../relations/has-one"
 import { HasOneWithForeignKey } from "../../relations/has-one-fk"
 import { ManyToMany as DmlManyToMany } from "../../relations/many-to-many"
 import { applyEntityIndexes } from "../mikro-orm/apply-indexes"
 import { parseEntityName } from "./parse-entity-name"
-import { BelongsTo } from "../../relations"
 
 type Context = {
   MANY_TO_MANY_TRACKED_RELATIONS: Record<string, boolean>
@@ -230,7 +230,6 @@ export function defineHasOneWithFKRelationship(
     if (this[relationship.name] === null) {
       this[foreignKeyName] = null
     } else {
-      this[relationship.name] ??= this[relationship.name]?.id
       this[foreignKeyName] = this[relationship.name]
         ? this[relationship.name]?.id ?? this[relationship.name]
         : this[foreignKeyName]
@@ -339,7 +338,6 @@ export function defineBelongsToRelationship(
         if (this[relationship.name] === null) {
           this[foreignKeyName] = null
         } else {
-          this[relationship.name] ??= this[relationship.name]?.id
           this[foreignKeyName] = this[relationship.name]
             ? this[relationship.name]?.id ?? this[relationship.name]
             : this[foreignKeyName]
