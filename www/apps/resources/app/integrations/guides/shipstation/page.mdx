@@ -635,9 +635,8 @@ Next, add to `ShipStationProviderService` a private method that'll be used to cr
 
 export const serviceHighlights8 = [
   ["17", "createShipment", "Add method to create a shipment and get its rate."],
-  ["23", "optionData", "Retrieve the carrier ID and service code from the shipping option's `data`."],
-  ["34", "ship_from", "Prepare the address to ship items from."],
-  ["52", "ship_to", "Prepare the address to ship items to."]
+  ["45", "ship_from", "Prepare the address to ship items from."],
+  ["62", "ship_to", "Prepare the address to ship items to."]
 ]
 
 ```ts title="src/modules/shipstation/service.ts" highlights={serviceHighlights8}
@@ -657,35 +656,45 @@ import {
 
 class ShipStationProviderService extends AbstractFulfillmentProviderService {
   // ...
-  private async createShipment(
-    optionData: CalculateShippingOptionPriceDTO["optionData"], 
-    data: CalculateShippingOptionPriceDTO["data"], 
-    context: CalculateShippingOptionPriceDTO["context"]
-  ): Promise<GetShippingRatesResponse> {
-
-    const { carrier_id, carrier_service_code } = optionData as {
-      carrier_id: string
-      carrier_service_code: string
-    }
-    if (!context.from_location?.address) {
+  private async createShipment({
+    carrier_id,
+    carrier_service_code,
+    from_address,
+    to_address,
+    items,
+    currency_code
+  }: {
+    carrier_id: string
+    carrier_service_code: string
+    from_address?: {
+      name?: string
+      address?: Omit<
+        StockLocationAddressDTO, "created_at" | "updated_at" | "deleted_at"
+      >
+    },
+    to_address?: Omit<
+      CartAddressDTO, "created_at" | "updated_at" | "deleted_at" | "id"
+    >,
+    items: CartLineItemDTO[] | OrderLineItemDTO[],
+    currency_code: string
+  }): Promise<GetShippingRatesResponse> {
+    if (!from_address?.address) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
         "from_location.address is required to calculate shipping rate"
       )
     }
-
     const ship_from: ShipStationAddress = {
-      name: context.from_location?.name || "",
-      phone: context.from_location?.address?.phone || "",
-      address_line1: context.from_location?.address?.address_1 || "",
-      city_locality: context.from_location?.address?.city || "",
-      state_province: context.from_location?.address?.province || "",
-      postal_code: context.from_location?.address?.postal_code || "",
-      country_code: context.from_location?.address?.country_code || "",
+      name: from_address?.name || "",
+      phone: from_address?.address?.phone || "",
+      address_line1: from_address?.address?.address_1 || "",
+      city_locality: from_address?.address?.city || "",
+      state_province: from_address?.address?.province || "",
+      postal_code: from_address?.address?.postal_code || "",
+      country_code: from_address?.address?.country_code || "",
       address_residential_indicator: "unknown"
     }
-
-    if (!context.shipping_address) {
+    if (!to_address) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
         "shipping_address is required to calculate shipping rate"
@@ -693,13 +702,13 @@ class ShipStationProviderService extends AbstractFulfillmentProviderService {
     }
     
     const ship_to: ShipStationAddress = {
-      name: `${context.shipping_address.first_name} ${context.shipping_address.last_name}`,
-      phone: context.shipping_address.phone || "",
-      address_line1: context.shipping_address.address_1 || "",
-      city_locality: context.shipping_address.city || "",
-      state_province: context.shipping_address.province || "",
-      postal_code: context.shipping_address.postal_code || "",
-      country_code: context.shipping_address.country_code || "",
+      name: `${to_address.first_name} ${to_address.last_name}`,
+      phone: to_address.phone || "",
+      address_line1: to_address.address_1 || "",
+      city_locality: to_address.city || "",
+      state_province: to_address.province || "",
+      postal_code: to_address.postal_code || "",
+      country_code: to_address.country_code || "",
       address_residential_indicator: "unknown"
     }
 
@@ -708,15 +717,16 @@ class ShipStationProviderService extends AbstractFulfillmentProviderService {
 }
 ```
 
-The `createShipment` method accepts the following parameters:
+The `createShipment` method accepts as a parameter an object having the following properties:
 
-1. The `data` property of the chosen shipping option during checkout.
-2. The `data` property of the shipping method, which will hold the ID of the shipment in ShipStation.
-3. An object of the checkout's context, including the cart's items, the location associated with the shipping option, and more.
+- `carrier_id`: The ID of the carrier to create the shipment for.
+- `carrier_service_code`: The code of the carrier's service.
+- `from_address`: The address to ship items from, which is the address of the stock location associated with a shipping option.
+- `to_address`: The address to ship items to, which is the customer's address.
+- `items`: An array of the items in the cart or order (for fulfilling the order later).
+- `currency_code`: The currency code of the cart or order.
 
-These parameters are passed to the `calculatePrice` method and others as well, so you can reuse this `createShipment` method in the other methods.
-
-In the `createShipment` method, so far you only prepare the data to be sent to ShipStation. ShipStation requires the address to ship the items from, which is the address of the stock location associated with the chosen shipping option, and the address to ship items to, which is the customer's address.
+In the `createShipment` method, so far you only prepare the data to be sent to ShipStation. ShipStation requires the addresses to ship the items from and to.
 
 To send the request, replace the `TODO` with the following:
 
@@ -731,7 +741,7 @@ return await this.client.getShippingRates({
     ship_to,
     ship_from,
     validate_address: "no_validation",
-    items: context.items?.map((item) => ({
+    items: items?.map((item) => ({
       name: item.title,
       quantity: item.quantity,
       sku: item.variant_sku || ""
@@ -750,7 +760,7 @@ return await this.client.getShippingRates({
   rate_options: {
     carrier_ids: [carrier_id],
     service_codes: [carrier_service_code],
-    preferred_currency: context.currency_code as string,
+    preferred_currency: currency_code as string,
   }
 })
 ```
@@ -784,20 +794,33 @@ class ShipStationProviderService extends AbstractFulfillmentProviderService {
     const { shipment_id } = data as {
       shipment_id?: string
     } || {}
+    const { carrier_id, carrier_service_code } = optionData as {
+      carrier_id: string
+      carrier_service_code: string
+    }
     let rate: Rate | undefined
 
     if (!shipment_id) {
-      const shipment = await this.createShipment(optionData, data, context)
+      const shipment = await this.createShipment({
+        carrier_id,
+        carrier_service_code,
+        from_address: {
+          name: context.from_location?.name,
+          address: context.from_location?.address
+        },
+        to_address: context.shipping_address,
+        items: context.items || [],
+        currency_code: context.currency_code
+      })
       rate = shipment.rate_response.rates[0]
     } else {
       const rateResponse = await this.client.getShipmentRates(shipment_id)
       rate = rateResponse[0].rates[0]
     }
 
-    const calculatedPrice = !rate ? 0 
-      : rate.shipping_amount.amount + rate.insurance_amount.amount + 
-        rate.confirmation_amount.amount + rate.other_amount.amount + 
-        (rate.tax_amount?.amount || 0)
+    const calculatedPrice = !rate ? 0 : rate.shipping_amount.amount + rate.insurance_amount.amount + 
+      rate.confirmation_amount.amount + rate.other_amount.amount + 
+      (rate.tax_amount?.amount || 0)
 
     return {
       calculated_amount: calculatedPrice,
@@ -857,8 +880,22 @@ class ShipStationProviderService extends AbstractFulfillmentProviderService {
     }
 
     if (!shipment_id) {
-      // @ts-ignore
-      const shipment = await this.createShipment(optionData, data, context)
+      const { carrier_id, carrier_service_code } = optionData as {
+        carrier_id: string
+        carrier_service_code: string
+      }
+      const shipment = await this.createShipment({
+        carrier_id,
+        carrier_service_code,
+        // @ts-ignore
+        from_address: context.from_location,
+        // @ts-ignore
+        to_address: context.shipping_address,
+        // @ts-ignore
+        items: context.items || [],
+        // @ts-ignore
+        currency_code: context.currency_code
+      })
       shipment_id = shipment.shipment_id
     }
 
@@ -884,7 +921,7 @@ Finally, you return the object to be stored in the shipping method's `data` prop
 
 After the customer places the order, the admin user can manage its fulfillments. When the admin user creates a fulfillment for the order, Medusa uses the `createFulfillment` method of the associated provider to handle any processing in the third-party provider.
 
-In this method, you'll purchase a label for the shipment that was previously created for the associated shipping method. You'll also store the ID of the label and shipment within the created fulfillment's `data` property.
+This method supports creating split fulfillments, meaning you can partially fulfill and order's items. So, you'll create a new shipment, then purchase a label for that shipment. You'll use the existing shipment to retrieve details like the address to ship from and to.
 
 First, add a new type to `src/modules/shipstation/types.ts`:
 
@@ -923,17 +960,23 @@ export type Label = {
 
 You add the `Label` type for the details in a label object. You can find more properties in [ShipStation's documentation](https://docs.shipstation.com/openapi/labels/create_label#labels/create_label/response&c=200/body).
 
-Then, add the following method to the `ShipStationClient`:
+Then, add the following methods to the `ShipStationClient`:
 
 ```ts title="src/modules/shipstation/client.ts"
 // other imports...
 import { 
   // ...
   Label,
+  Shipment,
 } from "./types"
 
 export class ShipStationClient {
   // ...
+
+  async getShipment(id: string): Promise<Shipment> {
+    return await this.sendRequest(`/shipments/${id}`)
+  }
+
   async purchaseLabelForShipment(id: string): Promise<Label> {
     return await this.sendRequest(`/labels/shipment/${id}`, {
       method: "POST",
@@ -943,14 +986,17 @@ export class ShipStationClient {
 }
 ```
 
-You add the `purchaseLabelForShipment` method to purchase a label in ShipStation for a shipment by its ID.
+You add the `getShipment` method to retrieve a shipment's details, and the `purchaseLabelForShipment` method to purchase a label in ShipStation for a shipment by its ID.
 
 Finally, add the `createFulfillment` method in `ShipStationProviderService`:
 
 export const serviceHighlights6 = [
   ["9", "shipment_id", "Retrieve the shipping method's shipment ID."],
-  ["13", "label", "Purchase a label in ShipStation."],
-  ["16", "data", "Return the data to be stored in the fulfillment's `data` property."]
+  ["13", "originalShipment", "Retrieve the original shipment associated with the order's shipping method."],
+  ["16", "orderItemsToFulfill", "Get the order items to fulfill."],
+  ["21", "newShipment", "Create a new shipment for the fulfillment."],
+  ["44", "label", "Purchase a label for the new shipment."],
+  ["47", "data", "Store the ID of the label and its shipment in the fulfillment's data property."]
 ]
 
 ```ts title="src/modules/shipstation/service.ts" highlights={serviceHighlights6}
@@ -966,7 +1012,38 @@ class ShipStationProviderService extends AbstractFulfillmentProviderService {
       shipment_id: string
     }
 
-    const label = await this.client.purchaseLabelForShipment(shipment_id)
+    const originalShipment = await this.client.getShipment(shipment_id)
+
+    // @ts-ignore
+    const orderItemsToFulfill = order.items.filter((item) => {
+      // @ts-ignore
+      return items.some((i) => i.line_item_id === item.id)
+    })
+
+    const newShipment = await this.createShipment({
+      carrier_id: originalShipment.carrier_id,
+      carrier_service_code: originalShipment.service_code,
+      from_address: {
+        name: originalShipment.ship_from.name,
+        address: {
+          ...originalShipment.ship_from,
+          address_1: originalShipment.ship_from.address_line1,
+          city: originalShipment.ship_from.city_locality,
+          province: originalShipment.ship_from.state_province,
+        }
+      },
+      to_address: {
+        ...originalShipment.ship_to,
+        address_1: originalShipment.ship_to.address_line1,
+        city: originalShipment.ship_to.city_locality,
+        province: originalShipment.ship_to.state_province,
+      },
+      items: orderItemsToFulfill as OrderLineItemDTO[],
+      // @ts-ignore
+      currency_code: order.currency_code
+    })
+
+    const label = await this.client.purchaseLabelForShipment(newShipment.shipment_id)
 
     return {
       data: {
@@ -986,7 +1063,12 @@ This method accepts the following parameters:
 - `order`: The order's details.
 - `fulfillment`: The details of the fulfillment to be created.
 
-In the method, you retrieve the shipment ID from the associated shipping method's `data` property, then use the client's `purchaseLabelForShipment` method to purchase the label.
+In the method, you:
+
+- Retrieve the details of the shipment originally associated with the fulfillment's shipping method.
+- Filter out the order items to retrieve the items to fulfill.
+- Create a new shipment for the items to fulfill. You use the original shipment for details like the carrier ID or the addresses to ship from and to.
+- Purchase a label for the new shipment.
 
 You return an object whose `data` property will be stored in the created fulfillment's `data` property. You store in it the ID of the purchased label and the ID of its associated shipment.
 
