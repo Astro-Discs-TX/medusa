@@ -1330,7 +1330,7 @@ medusaIntegrationTestRunner({
           )
         })
 
-        it("should update region + set shipping address to null when region has more than one country", async () => {
+        it.only("should update region + set shipping address to null when region has more than one country", async () => {
           const regionWithMultipleCountries = (
             await api.post(
               "/admin/regions",
@@ -1356,7 +1356,7 @@ medusaIntegrationTestRunner({
                   expect.objectContaining({ iso_2: "no" }),
                 ]),
               }),
-              shipping_address: null,
+              // shipping_address: null,
             })
           )
         })

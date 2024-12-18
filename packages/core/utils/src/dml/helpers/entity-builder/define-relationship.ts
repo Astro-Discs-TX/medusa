@@ -9,6 +9,7 @@ import {
   BeforeCreate,
   BeforeUpdate,
   Cascade,
+  EventArgs,
   ManyToMany,
   ManyToOne,
   OneToMany,
@@ -218,15 +219,23 @@ export function defineHasOneWithFKRelationship(
   /**
    * Hook to handle foreign key assignation
    */
-  MikroORMEntity.prototype[hookName] = function () {
-    const relationMeta = this.__meta.relations.find(
-      (relation) => relation.name === relationship.name
-    ).targetMeta
-    this[relationship.name] ??= rel(relationMeta.class, this[foreignKeyName])
-    this[relationship.name] ??= this[relationship.name]?.id
-    this[foreignKeyName] = this[relationship.name]
-      ? this[relationship.name]?.id ?? this[relationship.name]
-      : this[foreignKeyName]
+  MikroORMEntity.prototype[hookName] = function (args: EventArgs<any>) {
+    if (args.changeSet?.type !== "update") {
+      const relationMeta = this.__meta.relations.find(
+        (relation) => relation.name === relationship.name
+      ).targetMeta
+      this[relationship.name] ??= rel(relationMeta.class, this[foreignKeyName])
+    }
+
+    if (this[relationship.name] === null) {
+      this[foreignKeyName] = null
+    } else {
+      this[relationship.name] ??= this[relationship.name]?.id
+      this[foreignKeyName] = this[relationship.name]
+        ? this[relationship.name]?.id ?? this[relationship.name]
+        : this[foreignKeyName]
+    }
+
     return
   }
 
@@ -307,7 +316,7 @@ export function defineBelongsToRelationship(
     /**
      * Hook to handle foreign key assignation
      */
-    MikroORMEntity.prototype[hookName] = function () {
+    MikroORMEntity.prototype[hookName] = function (args: EventArgs<any>) {
       /**
        * In case of has one relation, in order to be able to have both ways
        * to associate a relation (through the relation or the foreign key) we need to handle it
@@ -317,17 +326,25 @@ export function defineBelongsToRelationship(
         HasOne.isHasOne(otherSideRelation) ||
         HasOneWithForeignKey.isHasOneWithForeignKey(otherSideRelation)
       ) {
-        const relationMeta = this.__meta.relations.find(
-          (relation) => relation.name === relationship.name
-        ).targetMeta
-        this[relationship.name] ??= rel(
-          relationMeta.class,
-          this[foreignKeyName]
-        )
-        this[relationship.name] ??= this[relationship.name]?.id
-        this[foreignKeyName] = this[relationship.name]
-          ? this[relationship.name]?.id ?? this[relationship.name]
-          : this[foreignKeyName]
+        if (args.changeSet?.type !== "update") {
+          const relationMeta = this.__meta.relations.find(
+            (relation) => relation.name === relationship.name
+          ).targetMeta
+          this[relationship.name] ??= rel(
+            relationMeta.class,
+            this[foreignKeyName]
+          )
+        }
+
+        if (this[relationship.name] === null) {
+          this[foreignKeyName] = null
+        } else {
+          this[relationship.name] ??= this[relationship.name]?.id
+          this[foreignKeyName] = this[relationship.name]
+            ? this[relationship.name]?.id ?? this[relationship.name]
+            : this[foreignKeyName]
+        }
+
         return
       }
 
