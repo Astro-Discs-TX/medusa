@@ -3010,7 +3010,6 @@ describe("Entity builder", () => {
           onDelete: "cascade",
           owner: true,
           reference: "1:1",
-          orphanRemoval: true,
           cascade: ["persist", "soft-remove"],
         },
         user_id: {
@@ -3126,7 +3125,6 @@ describe("Entity builder", () => {
           name: "email",
           entity: "Email",
           fieldName: "email_id",
-          orphanRemoval: true,
         },
         email_id: {
           columnType: "text",
@@ -3239,7 +3237,6 @@ describe("Entity builder", () => {
           entity: "Email",
           nullable: true,
           fieldName: "emails_id",
-          orphanRemoval: true,
         },
         emails_id: {
           columnType: "text",
@@ -3343,7 +3340,6 @@ describe("Entity builder", () => {
           entity: "Email",
           mappedBy: "owner",
           fieldName: "email_id",
-          orphanRemoval: true,
         },
         email_id: {
           columnType: "text",
@@ -3450,7 +3446,6 @@ describe("Entity builder", () => {
           entity: "Email",
           cascade: ["persist", "soft-remove"],
           mappedBy: "user",
-          orphanRemoval: true,
           fieldName: "email_id",
         },
         email_id: {
@@ -3628,7 +3623,6 @@ describe("Entity builder", () => {
           entity: "Email",
           cascade: ["persist", "soft-remove"],
           mappedBy: "user",
-          orphanRemoval: true,
           fieldName: "email_id",
         },
         email_id: {
@@ -3712,7 +3706,6 @@ describe("Entity builder", () => {
           onDelete: "cascade",
           owner: true,
           reference: "1:1",
-          orphanRemoval: true,
           cascade: ["persist", "soft-remove"],
           fieldName: "user_id",
         },
@@ -4662,7 +4655,6 @@ describe("Entity builder", () => {
           nullable: false,
           mappedBy: "email",
           onDelete: undefined,
-          orphanRemoval: true,
           owner: true,
         },
         user_id: {
@@ -4861,7 +4853,6 @@ describe("Entity builder", () => {
           nullable: true,
           onDelete: undefined,
           mappedBy: "email",
-          orphanRemoval: true,
           owner: true,
         },
         user_id: {
@@ -5481,7 +5472,6 @@ describe("Entity builder", () => {
           nullable: false,
           mappedBy: "email",
           onDelete: undefined,
-          orphanRemoval: true,
           owner: true,
         },
         user_id: {
@@ -5682,7 +5672,6 @@ describe("Entity builder", () => {
           nullable: false,
           mappedBy: "email",
           onDelete: undefined,
-          orphanRemoval: true,
           owner: true,
         },
         user_id: {
@@ -5906,7 +5895,6 @@ describe("Entity builder", () => {
           entity: "User",
           nullable: false,
           onDelete: undefined,
-          orphanRemoval: true,
           owner: true,
         },
         parent_id: {
