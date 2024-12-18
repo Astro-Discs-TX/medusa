@@ -5,6 +5,7 @@ import {
   FilterableFulfillmentSetProps,
   FindConfig,
   FulfillmentDTO,
+  FulfillmentOption,
   FulfillmentTypes,
   IFulfillmentModuleService,
   InferEntityType,
@@ -1992,7 +1993,7 @@ export default class FulfillmentModuleService
 
   async retrieveFulfillmentOptions(
     providerId: string
-  ): Promise<Record<string, any>[]> {
+  ): Promise<FulfillmentOption[]> {
     return await this.fulfillmentProviderService_.getFulfillmentOptions(
       providerId
     )
