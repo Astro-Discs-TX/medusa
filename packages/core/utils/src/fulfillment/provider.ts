@@ -98,7 +98,8 @@ export class AbstractFulfillmentProviderService
    * This method is useful if your third-party provider allows you to retrieve support options, carriers, or services from an API. You can then
    * retrieve those and return then in the method, allowing the admin user to choose from the services provided by the third-party provider.
    *
-   * @returns The list of fulfillment options.
+   * @returns The list of fulfillment options. Each object in the array should have an `id` property unique to an item, and a `name` property
+   * that's used to display the option in the admin.
    *
    * @example
    * // other imports...
@@ -112,6 +113,7 @@ export class AbstractFulfillmentProviderService
    * 
    *     return services.map((service) => ({
    *       id: service.service_id,
+   *       name: service.name,
    *       service_code: service.code,
    *       // can add other relevant data for the provider to later process the shipping option.
    *     }))
@@ -298,22 +300,22 @@ export class AbstractFulfillmentProviderService
    * This method is used when a fulfillment is canceled. Use it to perform operations
    * with the third-party fulfillment service.
    *
-   * @param fulfillment - The fulfillment's details.
+   * @param data - The fulfillment's `data` property.
    *
    * @example
    * class MyFulfillmentProviderService extends AbstractFulfillmentProviderService {
    *   // ...
-   *   async cancelFulfillment(fulfillment: Record<string, unknown>): Promise<any> {
+   *   async cancelFulfillment(data: Record<string, unknown>): Promise<any> {
    *     // assuming the client cancels a fulfillment
    *     // in the third-party service
-   *     const { external_id } = fulfillment.data as {
+   *     const { external_id } = data as {
    *       external_id: string
    *     }
    *     await this.client.cancel(external_id)
    *   }
    * }
    */
-  async cancelFulfillment(fulfillment: Record<string, unknown>): Promise<any> {
+  async cancelFulfillment(data: Record<string, unknown>): Promise<any> {
     throw Error("cancelFulfillment must be overridden by the child class")
   }
 
