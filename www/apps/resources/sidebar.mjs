@@ -512,7 +512,7 @@ export const sidebar = sidebarAttachHrefCommonOptions([
                   {
                     type: "category",
                     title: "Data Models",
-                    autogenerate_path: "/references/customer_models/classes",
+                    autogenerate_path: "/references/customer_models/variables",
                   },
                 ],
               },
@@ -687,7 +687,7 @@ export const sidebar = sidebarAttachHrefCommonOptions([
                     type: "category",
                     title: "Data Models",
                     autogenerate_path:
-                      "/references/inventory_next_models/classes",
+                      "/references/inventory_next_models/variables",
                   },
                 ],
               },
@@ -916,7 +916,7 @@ export const sidebar = sidebarAttachHrefCommonOptions([
                   {
                     type: "category",
                     title: "Data Models",
-                    autogenerate_path: "/references/payment_models/classes",
+                    autogenerate_path: "/references/payment_models/variables",
                   },
                 ],
               },
@@ -1164,7 +1164,7 @@ export const sidebar = sidebarAttachHrefCommonOptions([
                     type: "category",
                     title: "Data Models",
                     hasTitleStyling: true,
-                    autogenerate_path: "/references/promotion_models/classes",
+                    autogenerate_path: "/references/promotion_models/variables",
                   },
                 ],
               },
@@ -1368,7 +1368,7 @@ export const sidebar = sidebarAttachHrefCommonOptions([
                     type: "category",
                     title: "Data Models",
                     autogenerate_path:
-                      "/references/stock_location_next_models/classes",
+                      "/references/stock_location_next_models/variables",
                   },
                 ],
               },
@@ -1509,7 +1509,7 @@ export const sidebar = sidebarAttachHrefCommonOptions([
                   {
                     type: "category",
                     title: "Data Models",
-                    autogenerate_path: "/references/tax_models/classes",
+                    autogenerate_path: "/references/tax_models/variables",
                   },
                 ],
               },
