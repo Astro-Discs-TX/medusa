@@ -1356,7 +1356,7 @@ medusaIntegrationTestRunner({
                   expect.objectContaining({ iso_2: "no" }),
                 ]),
               }),
-              // shipping_address: null,
+              shipping_address: null,
             })
           )
         })
