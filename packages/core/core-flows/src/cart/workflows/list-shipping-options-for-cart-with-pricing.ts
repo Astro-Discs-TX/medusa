@@ -61,11 +61,20 @@ export const listShippingOptionsForCartWithPricingWorkflow = createWorkflow(
         "sales_channel_id",
         "currency_code",
         "region_id",
-        "shipping_address.city",
-        "shipping_address.country_code",
-        "shipping_address.province",
-        "shipping_address.postal_code",
+        "shipping_address.*",
+        // ensure that the same subset of fileds needed to calculate shipping options is retrieved here and in calculateShippingOptionsPricesWorkflow when fetching cart
         "items.*",
+        "items.product.id",
+        "items.product.collection_id",
+        "items.product.categories.id",
+        "items.product.tags.id",
+        "items.variant.id",
+        "items.variant.product.id",
+        "items.variant.weight",
+        "items.variant.length",
+        "items.variant.height",
+        "items.variant.width",
+        "items.variant.material",
         "item_total",
         "total",
       ],
@@ -245,8 +254,18 @@ export const listShippingOptionsForCartWithPricingWorkflow = createWorkflow(
     )
 
     const shippingOptionsWithPrice = transform(
-      { shippingOptionsFlatRate, shippingOptionsCalculated, prices },
-      ({ shippingOptionsFlatRate, shippingOptionsCalculated, prices }) => {
+      {
+        shippingOptionsFlatRate,
+        shippingOptionsCalculated,
+        prices,
+        fulfillmentSetLocationMap,
+      },
+      ({
+        shippingOptionsFlatRate,
+        shippingOptionsCalculated,
+        prices,
+        fulfillmentSetLocationMap,
+      }) => {
         return [
           ...shippingOptionsFlatRate.map((shippingOption) => {
             const price = shippingOption.calculated_price
@@ -264,6 +283,10 @@ export const listShippingOptionsForCartWithPricingWorkflow = createWorkflow(
               is_tax_inclusive:
                 prices[index]?.is_calculated_price_tax_inclusive,
               calculated_price: prices[index],
+              stock_location:
+                fulfillmentSetLocationMap[
+                  shippingOption.service_zone.fulfillment_set_id
+                ],
             }
           }),
         ]
