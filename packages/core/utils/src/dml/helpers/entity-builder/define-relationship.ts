@@ -487,13 +487,6 @@ export function defineBelongsToRelationship(
       relationship.options.foreignKeyName ??
       camelToSnakeCase(`${relationship.name}Id`)
 
-    Object.defineProperty(MikroORMEntity.prototype, foreignKeyName, {
-      value: null,
-      configurable: true,
-      enumerable: true,
-      writable: true,
-    })
-
     Property({
       columnType: "text",
       type: "string",
