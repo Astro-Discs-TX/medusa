@@ -325,6 +325,9 @@ export function defineBelongsToRelationship(
           this[foreignKeyName]
         )
         this[relationship.name] ??= this[relationship.name]?.id
+        this[foreignKeyName] = this[relationship.name]
+          ? this[relationship.name]?.id ?? this[relationship.name]
+          : this[foreignKeyName]
         return
       }
 
@@ -358,6 +361,7 @@ export function defineBelongsToRelationship(
      * Execute hook via lifecycle decorators
      */
     BeforeCreate()(MikroORMEntity.prototype, hookName)
+    BeforeUpdate()(MikroORMEntity.prototype, hookName)
     OnInit()(MikroORMEntity.prototype, hookName)
   }
 
