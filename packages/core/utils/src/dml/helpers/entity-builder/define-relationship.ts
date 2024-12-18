@@ -9,7 +9,6 @@ import {
   BeforeCreate,
   BeforeUpdate,
   Cascade,
-  EventArgs,
   ManyToMany,
   ManyToOne,
   OneToMany,
@@ -19,7 +18,7 @@ import {
   Property,
   rel,
 } from "@mikro-orm/core"
-import { camelToSnakeCase, pluralize } from "../../../common"
+import { camelToSnakeCase, isDefined, pluralize } from "../../../common"
 import { DmlEntity } from "../../entity"
 import { BelongsTo } from "../../relations"
 import { HasMany } from "../../relations/has-many"
@@ -215,35 +214,57 @@ export function defineHasOneWithFKRelationship(
     persist: false,
   })(MikroORMEntity.prototype, foreignKeyName)
 
-  const hookName = `assignRelationFromForeignKeyValue${foreignKeyName}`
-  /**
-   * Hook to handle foreign key assignation
-   */
-  MikroORMEntity.prototype[hookName] = function (args: EventArgs<any>) {
-    if (args.changeSet?.type !== "update") {
-      const relationMeta = this.__meta.relations.find(
-        (relation) => relation.name === relationship.name
-      ).targetMeta
-      this[relationship.name] ??= rel(relationMeta.class, this[foreignKeyName])
-    }
+  const hookFactory = function (
+    name: string,
+    type: "init" | "create" | "update",
+    hookFn: Function
+  ) {
+    MikroORMEntity.prototype[name] = function (
+      this: typeof MikroORMEntity.prototype
+    ) {
+      if (type !== "update") {
+        const relationMeta = this.__meta.relations.find(
+          (relation) => relation.name === relationship.name
+        ).targetMeta
 
-    if (this[relationship.name] === null) {
-      this[foreignKeyName] = null
-    } else {
-      this[foreignKeyName] = this[relationship.name]
-        ? this[relationship.name]?.id ?? this[relationship.name]
-        : this[foreignKeyName]
-    }
+        this[relationship.name] ??= rel(
+          relationMeta.class,
+          this[foreignKeyName]
+        )
+      }
 
-    return
+      if (this[relationship.name] === null && type !== "init") {
+        this[foreignKeyName] = null
+        return
+      }
+
+      if (isDefined(this[relationship.name]?.id)) {
+        this[foreignKeyName] = this[relationship.name]?.id
+      }
+
+      return
+    }
+    hookFn()(MikroORMEntity.prototype, name)
   }
 
   /**
-   * Execute hook via lifecycle decorators
+   * Hook to handle foreign key assignation
    */
-  BeforeCreate()(MikroORMEntity.prototype, hookName)
-  BeforeUpdate()(MikroORMEntity.prototype, hookName)
-  OnInit()(MikroORMEntity.prototype, hookName)
+  hookFactory(
+    `assignRelationFromForeignKeyValue${foreignKeyName}_init`,
+    "init",
+    OnInit
+  )
+  hookFactory(
+    `assignRelationFromForeignKeyValue${foreignKeyName}_create`,
+    "create",
+    BeforeCreate
+  )
+  hookFactory(
+    `assignRelationFromForeignKeyValue${foreignKeyName}_update`,
+    "update",
+    BeforeUpdate
+  )
 }
 
 /**
@@ -311,73 +332,88 @@ export function defineBelongsToRelationship(
   }
 
   function applyForeignKeyAssignationHooks(foreignKeyName: string) {
-    const hookName = `assignRelationFromForeignKeyValue${foreignKeyName}`
-    /**
-     * Hook to handle foreign key assignation
-     */
-    MikroORMEntity.prototype[hookName] = function (args: EventArgs<any>) {
-      /**
-       * In case of has one relation, in order to be able to have both ways
-       * to associate a relation (through the relation or the foreign key) we need to handle it
-       * specifically
-       */
-      if (
-        HasOne.isHasOne(otherSideRelation) ||
-        HasOneWithForeignKey.isHasOneWithForeignKey(otherSideRelation)
+    const hookFactory = function (
+      name: string,
+      type: "init" | "create" | "update",
+      hookFn: Function
+    ) {
+      MikroORMEntity.prototype[name] = function (
+        this: typeof MikroORMEntity.prototype
       ) {
-        if (args.changeSet?.type !== "update") {
-          const relationMeta = this.__meta.relations.find(
-            (relation) => relation.name === relationship.name
-          ).targetMeta
-          this[relationship.name] ??= rel(
-            relationMeta.class,
-            this[foreignKeyName]
-          )
+        /**
+         * In case of has one relation, in order to be able to have both ways
+         * to associate a relation (through the relation or the foreign key) we need to handle it
+         * specifically
+         */
+        if (
+          HasOne.isHasOne(otherSideRelation) ||
+          HasOneWithForeignKey.isHasOneWithForeignKey(otherSideRelation)
+        ) {
+          if (type !== "update") {
+            const relationMeta = this.__meta.relations.find(
+              (relation) => relation.name === relationship.name
+            ).targetMeta
+            this[relationship.name] ??= rel(
+              relationMeta.class,
+              this[foreignKeyName]
+            )
+          }
+
+          if (this[relationship.name] === null && type !== "init") {
+            this[foreignKeyName] = null
+          } else if (isDefined(this[relationship.name]?.id)) {
+            this[foreignKeyName] = this[relationship.name]?.id
+          }
+
+          return
         }
 
+        /**
+         * Do not override the existing foreign key value if
+         * exists
+         */
+        if (this[foreignKeyName] !== undefined) {
+          return
+        }
+
+        /**
+         * Set the foreign key when the relationship is initialized
+         * as null
+         */
         if (this[relationship.name] === null) {
           this[foreignKeyName] = null
-        } else {
-          this[foreignKeyName] = this[relationship.name]
-            ? this[relationship.name]?.id ?? this[relationship.name]
-            : this[foreignKeyName]
+          return
         }
 
-        return
+        /**
+         * Set the foreign key when the relationship is initialized
+         * and as the id
+         */
+        if (this[relationship.name] && "id" in this[relationship.name]) {
+          this[foreignKeyName] = this[relationship.name].id
+        }
       }
-
-      /**
-       * Do not override the existing foreign key value if
-       * exists
-       */
-      if (this[foreignKeyName] !== undefined) {
-        return
-      }
-
-      /**
-       * Set the foreign key when the relationship is initialized
-       * as null
-       */
-      if (this[relationship.name] === null) {
-        this[foreignKeyName] = null
-        return
-      }
-
-      /**
-       * Set the foreign key when the relationship is initialized
-       * and as the id
-       */
-      if (this[relationship.name] && "id" in this[relationship.name]) {
-        this[foreignKeyName] = this[relationship.name].id
-      }
+      hookFn()(MikroORMEntity.prototype, name)
     }
 
     /**
-     * Execute hook via lifecycle decorators
+     * Hook to handle foreign key assignation
      */
-    BeforeCreate()(MikroORMEntity.prototype, hookName)
-    BeforeUpdate()(MikroORMEntity.prototype, hookName)
-    OnInit()(MikroORMEntity.prototype, hookName)
+    hookFactory(
+      `assignRelationFromForeignKeyValue${foreignKeyName}_init`,
+      "init",
+      OnInit
+    )
+    hookFactory(
+      `assignRelationFromForeignKeyValue${foreignKeyName}_create`,
+      "create",
+      BeforeCreate
+    )
+    hookFactory(
+      `assignRelationFromForeignKeyValue${foreignKeyName}_update`,
+      "update",
+      BeforeUpdate
+    )
   }
 
   /**
