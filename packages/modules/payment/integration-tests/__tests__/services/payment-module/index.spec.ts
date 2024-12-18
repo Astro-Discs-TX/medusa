@@ -29,7 +29,7 @@ moduleIntegrationTestRunner<IPaymentModuleService>({
           "paymentSession",
           "payment",
           "refundReason",
-          "PaymentProvider",
+          "paymentProvider",
         ])
 
         Object.keys(linkable).forEach((key) => {
@@ -73,7 +73,7 @@ moduleIntegrationTestRunner<IPaymentModuleService>({
               field: "refundReason",
             },
           },
-          PaymentProvider: {
+          paymentProvider: {
             id: {
               linkable: "payment_provider_id",
               entity: "PaymentProvider",

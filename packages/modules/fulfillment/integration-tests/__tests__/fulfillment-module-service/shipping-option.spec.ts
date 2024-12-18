@@ -709,7 +709,18 @@ moduleIntegrationTestRunner<IFulfillmentModuleService>({
 
             const existingRule = shippingOption.rules[0]!
 
-            const updateData: UpdateShippingOptionDTO = {
+            const updateData: UpdateShippingOptionDTO & {
+              type: {
+                code: string
+                description: string
+                label: string
+              }
+              rules: {
+                attribute: string
+                operator: string
+                value: string
+              }[]
+            } = {
               id: shippingOption.id,
               name: "updated-test",
               price_type: "calculated",
@@ -767,9 +778,9 @@ moduleIntegrationTestRunner<IFulfillmentModuleService>({
                   }),
                   expect.objectContaining({
                     id: expect.any(String),
-                    attribute: updateData.rules[1].attribute,
-                    operator: updateData.rules[1].operator,
-                    value: updateData.rules[1].value,
+                    attribute: updateData.rules![1].attribute,
+                    operator: updateData.rules![1].operator,
+                    value: updateData.rules![1].value,
                   }),
                 ]),
               })
