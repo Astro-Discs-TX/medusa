@@ -1560,6 +1560,7 @@ medusaIntegrationTestRunner({
                 variant_id: product.variants[0].id,
                 quantity: 1,
                 unit_price: 5000,
+                is_custom_price: true,
                 title: "Test variant",
               },
             ],
@@ -1591,7 +1592,8 @@ medusaIntegrationTestRunner({
           expect(updatedItem).toEqual(
             expect.objectContaining({
               id: item.id,
-              unit_price: 3000,
+              unit_price: 5000,
+              is_custom_price: true,
               quantity: 2,
               title: "Test variant",
             })
