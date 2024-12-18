@@ -18,7 +18,7 @@ import {
   Property,
   rel,
 } from "@mikro-orm/core"
-import { camelToSnakeCase, isDefined, pluralize } from "../../../common"
+import { camelToSnakeCase, pluralize } from "../../../common"
 import { DmlEntity } from "../../entity"
 import { BelongsTo } from "../../relations"
 import { HasMany } from "../../relations/has-many"
@@ -212,6 +212,9 @@ export function defineHasOneWithFKRelationship(
     columnType: "text",
     nullable: relationship.nullable,
     persist: false,
+    formula(alias) {
+      return alias + "." + foreignKeyName
+    },
   })(MikroORMEntity.prototype, foreignKeyName)
 
   const hookFactory = function (
@@ -223,23 +226,25 @@ export function defineHasOneWithFKRelationship(
       this: typeof MikroORMEntity.prototype
     ) {
       if (type !== "update") {
+        // During creation
         const relationMeta = this.__meta.relations.find(
           (relation) => relation.name === relationship.name
         ).targetMeta
-
         this[relationship.name] ??= rel(
           relationMeta.class,
           this[foreignKeyName]
         )
-      }
+        this[foreignKeyName] ??= this[relationship.name]?.id
 
-      if (this[relationship.name] === null && type !== "init") {
-        this[foreignKeyName] = null
         return
       }
 
-      if (isDefined(this[relationship.name]?.id)) {
-        this[foreignKeyName] = this[relationship.name]?.id
+      if (this[relationship.name]) {
+        this[foreignKeyName] = this[relationship.name].id
+      }
+
+      if (this[relationship.name] === null) {
+        this[foreignKeyName] = null
       }
 
       return
@@ -322,15 +327,6 @@ export function defineBelongsToRelationship(
    */
   const shouldCascade = !!relationCascades.delete?.includes(mappedBy)
 
-  /**
-   * Ensure the mapped by is defined as relationship on the other side
-   */
-  if (!otherSideRelation) {
-    throw new Error(
-      `Missing property "${mappedBy}" on "${relatedModelName}" entity. Make sure to define it as a relationship`
-    )
-  }
-
   function applyForeignKeyAssignationHooks(foreignKeyName: string) {
     const hookFactory = function (
       name: string,
@@ -350,6 +346,7 @@ export function defineBelongsToRelationship(
           HasOneWithForeignKey.isHasOneWithForeignKey(otherSideRelation)
         ) {
           if (type !== "update") {
+            // During creation
             const relationMeta = this.__meta.relations.find(
               (relation) => relation.name === relationship.name
             ).targetMeta
@@ -357,12 +354,17 @@ export function defineBelongsToRelationship(
               relationMeta.class,
               this[foreignKeyName]
             )
+            this[foreignKeyName] ??= this[relationship.name]?.id
+
+            return
           }
 
-          if (this[relationship.name] === null && type !== "init") {
+          if (this[relationship.name]) {
+            this[foreignKeyName] = this[relationship.name].id
+          }
+
+          if (this[relationship.name] === null) {
             this[foreignKeyName] = null
-          } else if (isDefined(this[relationship.name]?.id)) {
-            this[foreignKeyName] = this[relationship.name]?.id
           }
 
           return
@@ -420,6 +422,7 @@ export function defineBelongsToRelationship(
    * Otherside is a has many. Hence we should defined a ManyToOne
    */
   if (
+    !otherSideRelation ||
     HasMany.isHasMany(otherSideRelation) ||
     DmlManyToMany.isManyToMany(otherSideRelation)
   ) {
@@ -496,6 +499,9 @@ export function defineBelongsToRelationship(
       type: "string",
       nullable: relationship.nullable,
       persist: false,
+      formula(alias) {
+        return alias + "." + foreignKeyName
+      },
     })(MikroORMEntity.prototype, foreignKeyName)
 
     const oneToOneOptions: Parameters<typeof OneToOne>[0] = {

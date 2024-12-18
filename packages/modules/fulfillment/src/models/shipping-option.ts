@@ -24,12 +24,7 @@ export const ShippingOption = model
         mappedBy: "shipping_options",
       })
       .nullable(),
-    provider: model
-      .hasOne(() => FulfillmentProvider, {
-        foreignKey: true,
-        mappedBy: undefined,
-      })
-      .nullable(),
+    provider: model.belongsTo(() => FulfillmentProvider).nullable(),
     type: model.hasOne(() => ShippingOptionType, {
       foreignKey: true,
       foreignKeyName: "shipping_option_type_id",
