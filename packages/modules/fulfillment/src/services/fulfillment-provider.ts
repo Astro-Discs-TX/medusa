@@ -1,6 +1,8 @@
 import {
+  CalculateShippingOptionPriceDTO,
   Constructor,
   DAL,
+  FulfillmentOption,
   FulfillmentTypes,
   IFulfillmentProvider,
   Logger,
@@ -80,7 +82,7 @@ export default class FulfillmentProviderService extends ModulesSdkUtils.MedusaIn
 
   async getFulfillmentOptions(
     providerId: string
-  ): Promise<Record<string, unknown>[]> {
+  ): Promise<FulfillmentOption[]> {
     const provider = this.retrieveProviderRegistration(providerId)
     return await provider.getFulfillmentOptions()
   }
@@ -107,9 +109,9 @@ export default class FulfillmentProviderService extends ModulesSdkUtils.MedusaIn
 
   async calculatePrice(
     providerId: string,
-    optionData: Record<string, unknown>,
-    data: Record<string, unknown>,
-    context: Record<string, unknown>
+    optionData: CalculateShippingOptionPriceDTO["optionData"],
+    data: CalculateShippingOptionPriceDTO["data"],
+    context: CalculateShippingOptionPriceDTO["context"]
   ) {
     const provider = this.retrieveProviderRegistration(providerId)
     return await provider.calculatePrice(optionData, data, context)
