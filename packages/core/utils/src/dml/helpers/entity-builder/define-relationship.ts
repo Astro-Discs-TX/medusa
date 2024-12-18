@@ -7,6 +7,7 @@ import {
 } from "@medusajs/types"
 import {
   BeforeCreate,
+  BeforeUpdate,
   Cascade,
   ManyToMany,
   ManyToOne,
@@ -210,8 +211,31 @@ export function defineHasOneWithFKRelationship(
     type: "string",
     columnType: "text",
     nullable: relationship.nullable,
-    persist: true,
+    persist: false,
   })(MikroORMEntity.prototype, foreignKeyName)
+
+  const hookName = `assignRelationFromForeignKeyValue${foreignKeyName}`
+  /**
+   * Hook to handle foreign key assignation
+   */
+  MikroORMEntity.prototype[hookName] = function () {
+    const relationMeta = this.__meta.relations.find(
+      (relation) => relation.name === relationship.name
+    ).targetMeta
+    this[relationship.name] ??= rel(relationMeta.class, this[foreignKeyName])
+    this[relationship.name] ??= this[relationship.name]?.id
+    this[foreignKeyName] = this[relationship.name]
+      ? this[relationship.name]?.id ?? this[relationship.name]
+      : this[foreignKeyName]
+    return
+  }
+
+  /**
+   * Execute hook via lifecycle decorators
+   */
+  BeforeCreate()(MikroORMEntity.prototype, hookName)
+  BeforeUpdate()(MikroORMEntity.prototype, hookName)
+  OnInit()(MikroORMEntity.prototype, hookName)
 }
 
 /**

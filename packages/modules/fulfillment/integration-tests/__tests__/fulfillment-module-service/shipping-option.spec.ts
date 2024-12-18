@@ -774,7 +774,7 @@ moduleIntegrationTestRunner<IFulfillmentModuleService>({
                 rules: expect.arrayContaining([
                   expect.objectContaining({
                     id: existingRule.id,
-                    value: "false",
+                    value: '"false"',
                   }),
                   expect.objectContaining({
                     id: expect.any(String),

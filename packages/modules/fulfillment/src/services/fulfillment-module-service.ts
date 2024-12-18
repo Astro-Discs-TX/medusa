@@ -21,7 +21,6 @@ import {
   arrayDifference,
   deepEqualObj,
   EmitEvents,
-  generateEntityId,
   getSetDifference,
   InjectManager,
   InjectTransactionManager,
@@ -35,7 +34,6 @@ import {
 } from "@medusajs/framework/utils"
 import {
   Fulfillment,
-  FulfillmentAddress,
   FulfillmentProvider,
   FulfillmentSet,
   GeoZone,
@@ -103,9 +101,6 @@ export default class FulfillmentModuleService
   protected readonly fulfillmentSetService_: ModulesSdkTypes.IMedusaInternalService<
     InferEntityType<typeof FulfillmentSet>
   >
-  protected readonly addressService_: ModulesSdkTypes.IMedusaInternalService<
-    InferEntityType<typeof FulfillmentAddress>
-  >
   protected readonly serviceZoneService_: ModulesSdkTypes.IMedusaInternalService<
     InferEntityType<typeof ServiceZone>
   >
@@ -157,7 +152,6 @@ export default class FulfillmentModuleService
     this.shippingOptionTypeService_ = shippingOptionTypeService
     this.fulfillmentProviderService_ = fulfillmentProviderService
     this.fulfillmentService_ = fulfillmentService
-    this.addressService_ = fulfillmentAddressService
   }
 
   __joinerConfig(): ModuleJoinerConfig {
@@ -461,33 +455,8 @@ export default class FulfillmentModuleService
       validateAndNormalizeRules(rules as Record<string, unknown>[])
     }
 
-    const shippingOptionTypeToCreate: any[] = []
-
-    const shippingOptionsToCreate = data_.map((shippingOptionData) => {
-      if (shippingOptionData.type) {
-        const typeId = generateEntityId(undefined, "sotype")
-        Object.assign(shippingOptionData.type, {
-          id: typeId,
-        })
-        ;(
-          shippingOptionData as unknown as InferEntityType<
-            typeof ShippingOption
-          >
-        ).shipping_option_type_id = typeId
-      }
-
-      return shippingOptionData
-    })
-
-    if (shippingOptionTypeToCreate.length) {
-      await this.shippingOptionTypeService_.create(
-        shippingOptionTypeToCreate,
-        sharedContext
-      )
-    }
-
     const createdSO = await this.shippingOptionService_.create(
-      shippingOptionsToCreate,
+      data_,
       sharedContext
     )
 
@@ -661,25 +630,6 @@ export default class FulfillmentModuleService
     @MedusaContext() sharedContext: Context = {}
   ): Promise<FulfillmentTypes.FulfillmentDTO> {
     const { order, ...fulfillmentDataToCreate } = data
-
-    const deliveryAddress = fulfillmentDataToCreate.delivery_address
-    if (deliveryAddress) {
-      if ("id" in deliveryAddress) {
-        ;(
-          fulfillmentDataToCreate as InferEntityType<typeof Fulfillment>
-        ).delivery_address_id = deliveryAddress.id as string
-        // @ts-ignore
-        delete fulfillmentDataToCreate.delivery_address
-      } else {
-        const id = generateEntityId(undefined, "fuladdr")
-        Object.assign(deliveryAddress, {
-          id,
-        })
-        ;(
-          fulfillmentDataToCreate as InferEntityType<typeof Fulfillment>
-        ).delivery_address_id = id
-      }
-    }
 
     const fulfillment = await this.fulfillmentService_.create(
       fulfillmentDataToCreate,
@@ -1372,21 +1322,9 @@ export default class FulfillmentModuleService
       sharedContext
     )
 
-    const refreshedShippingOptions = await this.listShippingOptions(
-      {
-        id: Array.isArray(updatedShippingOptions)
-          ? updatedShippingOptions.map((s) => s.id)
-          : updatedShippingOptions.id,
-      },
-      {
-        relations: ["type", "rules"],
-      },
-      sharedContext
-    )
-
     const serialized = await this.baseRepository_.serialize<
       FulfillmentTypes.ShippingOptionDTO | FulfillmentTypes.ShippingOptionDTO[]
-    >(refreshedShippingOptions)
+    >(updatedShippingOptions)
 
     return isString(idOrSelector) ? serialized[0] : serialized
   }
@@ -1436,10 +1374,6 @@ export default class FulfillmentModuleService
     const existingRuleIds: string[] = []
 
     const optionTypeDeletedIds: string[] = []
-    const optionTypeToCreate: Map<
-      string,
-      InferEntityType<typeof ShippingOptionType>
-    > = new Map()
 
     dataArray.forEach((shippingOption) => {
       const existingShippingOption = existingShippingOptions.get(
@@ -1448,22 +1382,6 @@ export default class FulfillmentModuleService
 
       if (shippingOption.type && !("id" in shippingOption.type)) {
         optionTypeDeletedIds.push(existingShippingOption.type.id)
-
-        const typeId = generateEntityId(undefined, "sotype")
-        Object.assign(shippingOption.type, {
-          id: typeId,
-        })
-        ;(
-          shippingOption as InferEntityType<typeof ShippingOption>
-        ).shipping_option_type_id = typeId
-
-        optionTypeToCreate.set(
-          typeId,
-          shippingOption.type as InferEntityType<typeof ShippingOptionType>
-        )
-
-        // @ts-ignore
-        delete shippingOption.type
       }
 
       if (!shippingOption.rules) {
@@ -1547,28 +1465,14 @@ export default class FulfillmentModuleService
       )
     }
 
-    if (optionTypeDeletedIds.length) {
-      await this.shippingOptionTypeService_.delete(
-        optionTypeDeletedIds,
-        sharedContext
-      )
-    }
-
-    if (optionTypeToCreate.size) {
-      await this.shippingOptionTypeService_.create(
-        [...optionTypeToCreate.values()],
-        sharedContext
-      )
-    }
-
     const updatedShippingOptions = await this.shippingOptionService_.update(
       dataArray,
       sharedContext
     )
 
     this.handleShippingOptionUpdateEvents({
+      shippingOptionsData: dataArray,
       updatedShippingOptions,
-      createdOptionTypeIds: [...optionTypeToCreate.keys()],
       optionTypeDeletedIds,
       updatedRuleIds,
       existingRuleIds,
@@ -1581,9 +1485,9 @@ export default class FulfillmentModuleService
   }
 
   private handleShippingOptionUpdateEvents({
+    shippingOptionsData,
     updatedShippingOptions,
     optionTypeDeletedIds,
-    createdOptionTypeIds = [] as string[],
     updatedRuleIds,
     existingRuleIds,
     sharedContext,
@@ -1596,6 +1500,13 @@ export default class FulfillmentModuleService
       data: optionTypeDeletedIds.map((id) => ({ id })),
       sharedContext,
     })
+
+    const createdOptionTypeIds = updatedShippingOptions
+      .filter((so) => {
+        const updateData = shippingOptionsData.find((sod) => sod.id === so.id)
+        return updateData?.type && !("id" in updateData.type)
+      })
+      .map((so) => so.type.id)
 
     eventBuilders.createdShippingOptionType({
       data: createdOptionTypeIds.map((id) => ({ id })),
@@ -1648,19 +1559,9 @@ export default class FulfillmentModuleService
       sharedContext
     )
 
-    const refreshedShippingOptions = await this.listShippingOptions(
-      {
-        id: upsertedShippingOptions.map((s) => s.id),
-      },
-      {
-        relations: ["rules", "type"],
-      },
-      sharedContext
-    )
-
     const allShippingOptions = await this.baseRepository_.serialize<
       FulfillmentTypes.ShippingOptionDTO[] | FulfillmentTypes.ShippingOptionDTO
-    >(refreshedShippingOptions)
+    >(upsertedShippingOptions)
 
     return Array.isArray(data) ? allShippingOptions : allShippingOptions[0]
   }
