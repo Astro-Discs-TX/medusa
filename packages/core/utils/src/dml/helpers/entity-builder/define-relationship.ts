@@ -198,7 +198,6 @@ export function defineHasOneWithFKRelationship(
     ...(relationship.nullable ? { nullable: relationship.nullable } : {}),
     ...(mappedBy ? { mappedBy } : {}),
     orphanRemoval: true,
-    persist: false,
   } as OneToOneOptions<any, any>
 
   if (shouldRemoveRelated) {
