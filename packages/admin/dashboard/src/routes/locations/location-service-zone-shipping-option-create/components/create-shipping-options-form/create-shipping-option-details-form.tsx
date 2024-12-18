@@ -3,7 +3,6 @@ import { UseFormReturn } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 
 import { HttpTypes } from "@medusajs/types"
-import { useEffect } from "react"
 
 import { Divider } from "../../../../../components/common/divider"
 import { Form } from "../../../../../components/common/form"
@@ -57,10 +56,6 @@ export const CreateShippingOptionDetailsForm = ({
         value: provider.id,
       })),
   })
-
-  useEffect(() => {
-    form.setValue("fulfillment_option_id", undefined)
-  }, [selectedProviderId])
 
   return (
     <div className="flex flex-1 flex-col items-center overflow-y-auto">
@@ -186,6 +181,10 @@ export const CreateShippingOptionDetailsForm = ({
                   <Form.Control>
                     <Combobox
                       {...field}
+                      onChange={(e) => {
+                        field.onChange(e)
+                        form.setValue("fulfillment_option_id", "")
+                      }}
                       options={fulfillmentProviders.options}
                       searchValue={fulfillmentProviders.searchValue}
                       onSearchValueChange={
