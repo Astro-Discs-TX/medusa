@@ -1,5 +1,5 @@
 import path from "path"
-import { getFileSlugSync } from "docs-utils"
+import { getFileSlugSync } from "../../../docs-utils/dist/index.js"
 
 export type FixLinkOptions = {
   currentPageFilePath: string

@@ -8470,9 +8470,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"docs-utils@*, docs-utils@workspace:packages/utils":
+"docs-utils@*, docs-utils@workspace:packages/docs-utils":
   version: 0.0.0-use.local
-  resolution: "docs-utils@workspace:packages/utils"
+  resolution: "docs-utils@workspace:packages/docs-utils"
   dependencies:
     "@types/node": ^20.11.20
     remark-frontmatter: ^5.0.0
