@@ -38,6 +38,9 @@
     "types": "*",
     "typescript": "^5.3.3"
   },
+  "peerDependencies": {
+    "docs-utils": "*"
+  },
   "engines": {
     "node": ">=18.17.0"
   }

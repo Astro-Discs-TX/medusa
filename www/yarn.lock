@@ -7220,6 +7220,8 @@ __metadata:
     tsconfig: "*"
     types: "*"
     typescript: ^5.3.3
+  peerDependencies:
+    docs-utils: "*"
   languageName: unknown
   linkType: soft
 

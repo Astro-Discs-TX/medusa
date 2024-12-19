@@ -1,6 +1,6 @@
 import { readdirSync } from "fs"
 import path from "path"
-// import { getFileSlugSync } from "docs-utils"
+import { getFileSlugSync } from "docs-utils"
 
 type Options = {
   basePath: string
@@ -24,7 +24,7 @@ export function retrieveMdxPages({ basePath }: Options): string[] {
         continue
       }
 
-      const slug = ""
+      const slug = getFileSlugSync(filePath)
 
       urls.push(
         slug ||
