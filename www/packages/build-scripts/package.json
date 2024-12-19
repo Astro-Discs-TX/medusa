@@ -28,7 +28,8 @@
     "watch": "tsc --watch"
   },
   "dependencies": {
-    "remark-rehype-plugins": "*"
+    "remark-rehype-plugins": "*",
+    "tags": "*"
   },
   "devDependencies": {
     "@types/node": "^20.11.20",

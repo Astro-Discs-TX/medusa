@@ -7217,6 +7217,7 @@ __metadata:
     docs-utils: "*"
     remark-rehype-plugins: "*"
     rimraf: ^5.0.5
+    tags: "*"
     tsconfig: "*"
     types: "*"
     typescript: ^5.3.3
