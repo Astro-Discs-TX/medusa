@@ -54,6 +54,9 @@ const nextConfig = {
   pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
 
   transpilePackages: ["docs-ui"],
+  experimental: {
+    optimizePackageImports: ["tags"],
+  },
 
   basePath: process.env.NEXT_PUBLIC_BASE_PATH || "/resources",
   async redirects() {
