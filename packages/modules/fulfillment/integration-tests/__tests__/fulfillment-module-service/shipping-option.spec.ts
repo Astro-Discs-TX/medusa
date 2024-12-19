@@ -1103,7 +1103,7 @@ moduleIntegrationTestRunner<IFulfillmentModuleService>({
               type: "default",
             })
 
-            const shippingOptionData = {
+            const shippingOptionData: UpdateShippingOptionDTO = {
               id: "sp_jdafwfleiwuonl",
               name: "test",
               price_type: "flat",
