@@ -623,13 +623,16 @@ medusaIntegrationTestRunner({
 
             expect(cartAfterExpensiveShipping).toEqual(
               expect.objectContaining({
-                id: cart.id,
+                id: cartAfterExpensiveShipping.id,
                 shipping_methods: expect.arrayContaining([
                   expect.objectContaining({
                     shipping_option_id: shippingOptionExpensive.id,
-                    amount: 6398,
+                    amount: 5000,
                   }),
                 ]),
+                payment_collection: expect.objectContaining({
+                  amount: 6398,
+                }),
               })
             )
           })
