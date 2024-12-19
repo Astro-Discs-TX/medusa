@@ -1,8 +1,8 @@
 export type Tag = {
   title: string
   path: string
-}
+}[]
 
 export type Tags = {
-  [k: string]: Tag[]
+  [k: string]: Tag
 }

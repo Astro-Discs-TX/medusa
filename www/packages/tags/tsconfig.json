@@ -1,5 +1,5 @@
 {
-  "extends": ["tsconfig/base.json"],
+  "extends": "tsconfig/base.json",
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist",
@@ -16,5 +16,10 @@
     "skipLibCheck": true,
     "resolveJsonModule": true
   },
-  "include": ["src"]
+  "include": ["src"],
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node",
+    "transpileOnly": true
+  }
 }
