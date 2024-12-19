@@ -1007,10 +1007,11 @@ Finally, add the `createFulfillment` method in `ShipStationProviderService`:
 export const serviceHighlights6 = [
   ["9", "shipment_id", "Retrieve the shipping method's shipment ID."],
   ["13", "originalShipment", "Retrieve the original shipment associated with the order's shipping method."],
-  ["16", "orderItemsToFulfill", "Get the order items to fulfill."],
-  ["21", "newShipment", "Create a new shipment for the fulfillment."],
-  ["44", "label", "Purchase a label for the new shipment."],
-  ["47", "data", "Store the ID of the label and its shipment in the fulfillment's data property."]
+  ["15", "orderItemsToFulfill", "Get the order items to fulfill."],
+  ["29", "quantity", "Set the quantity based on the quantity to be fulfilled."],
+  ["33", "newShipment", "Create a new shipment for the fulfillment."],
+  ["56", "label", "Purchase a label for the new shipment."],
+  ["59", "data", "Store the ID of the label and its shipment in the fulfillment's data property."]
 ]
 
 ```ts title="src/modules/shipstation/service.ts" highlights={serviceHighlights6}
@@ -1028,10 +1029,22 @@ class ShipStationProviderService extends AbstractFulfillmentProviderService {
 
     const originalShipment = await this.client.getShipment(shipment_id)
 
-    // @ts-ignore
-    const orderItemsToFulfill = order.items.filter((item) => {
+    const orderItemsToFulfill = []
+
+    items.map((item) => {
       // @ts-ignore
-      return items.some((i) => i.line_item_id === item.id)
+      const orderItem = order.items.find((i) => i.id === item.line_item_id)
+
+      if (!orderItem) {
+        return
+      }
+
+      // @ts-ignore
+      orderItemsToFulfill.push({
+        ...orderItem,
+        // @ts-ignore
+        quantity: item.quantity
+      })
     })
 
     const newShipment = await this.createShipment({
