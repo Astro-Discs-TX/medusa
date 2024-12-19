@@ -1,7 +1,6 @@
 import type { RawSidebarItem, SidebarItem } from "types"
 import { existsSync, mkdirSync, readdirSync, statSync } from "fs"
 import path from "path"
-import { getTagItems } from "tags"
 import { getSidebarItemLink, sidebarAttachHrefCommonOptions } from "./index.js"
 import getCoreFlowsRefSidebarChildren from "./utils/get-core-flows-ref-sidebar-children.js"
 import { parseTags } from "./utils/parse-tags.js"
