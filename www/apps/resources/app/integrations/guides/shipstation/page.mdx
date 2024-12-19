@@ -731,8 +731,10 @@ In the `createShipment` method, so far you only prepare the data to be sent to S
 To send the request, replace the `TODO` with the following:
 
 ```ts title="src/modules/shipstation/service.ts"
-// TODO calculate weight
-let packageWeight = 1
+const packageWeight = items.reduce((sum, item) => {
+  // @ts-ignore
+  return sum + (item.variant.weight || 0)
+}, 0)
 
 return await this.client.getShippingRates({
   shipment: {
@@ -887,8 +889,12 @@ class ShipStationProviderService extends AbstractFulfillmentProviderService {
       const shipment = await this.createShipment({
         carrier_id,
         carrier_service_code,
-        // @ts-ignore
-        from_address: context.from_location,
+        from_address: {
+          // @ts-ignore
+          name: context.from_location.name,
+          // @ts-ignore
+          address: context.from_location?.address
+        },
         // @ts-ignore
         to_address: context.shipping_address,
         // @ts-ignore
