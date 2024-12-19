@@ -20,6 +20,7 @@ import {
 } from "@medusajs/framework/types"
 import {
   arrayDifference,
+  deepCopy,
   deepEqualObj,
   EmitEvents,
   getSetDifference,
@@ -443,9 +444,7 @@ export default class FulfillmentModuleService
       | FulfillmentTypes.CreateShippingOptionDTO,
     @MedusaContext() sharedContext: Context = {}
   ): Promise<InferEntityType<typeof ShippingOption>[]> {
-    const data_ = Array.isArray(data)
-      ? data.map((d) => structuredClone(d))
-      : [structuredClone(data)]
+    const data_ = Array.isArray(data) ? data : [data]
 
     if (!data_.length) {
       return []
@@ -1339,8 +1338,8 @@ export default class FulfillmentModuleService
     | InferEntityType<typeof ShippingOption>[]
   > {
     const dataArray = Array.isArray(data)
-      ? data.map((d) => structuredClone(d))
-      : [structuredClone(data)]
+      ? data.map((d) => deepCopy(d))
+      : [deepCopy(data)]
 
     if (!dataArray.length) {
       return []
