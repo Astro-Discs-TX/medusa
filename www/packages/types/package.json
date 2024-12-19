@@ -28,7 +28,8 @@
   ],
   "scripts": {
     "build": "yarn clean && tsc",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist",
+    "watch": "tsc --watch"
   },
   "devDependencies": {
     "@types/node": "^20.11.20",
