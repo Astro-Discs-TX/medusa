@@ -2,7 +2,7 @@ import { statSync } from "fs"
 import { mkdir, readdir, rm, writeFile } from "fs/promises"
 import path from "path"
 import type { Tags } from "types"
-import { findPageTitle, getFrontMatterSync } from "utils"
+import { findPageTitle, getFrontMatterSync } from "docs-utils"
 
 type ConfigItem = {
   path: string

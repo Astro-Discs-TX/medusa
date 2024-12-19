@@ -54,7 +54,7 @@ const nextConfig = {
   // Configure `pageExtensions` to include MDX files
   pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
 
-  transpilePackages: ["docs-ui", "tags", "utils"],
+  transpilePackages: ["docs-ui", "tags", "docs-utils"],
 
   basePath: process.env.NEXT_PUBLIC_BASE_PATH || "/resources",
   async redirects() {
