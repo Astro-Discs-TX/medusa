@@ -731,6 +731,8 @@ In the `createShipment` method, so far you only prepare the data to be sent to S
 To send the request, replace the `TODO` with the following:
 
 ```ts title="src/modules/shipstation/service.ts"
+// Sum the package's weight
+// You can instead create different packages for each item
 const packageWeight = items.reduce((sum, item) => {
   // @ts-ignore
   return sum + (item.variant.weight || 0)
@@ -768,6 +770,12 @@ return await this.client.getShippingRates({
 ```
 
 You create a shipment and get its rates using the `getShippingRates` method you added to the client. You pass the method the expected request body parameters by [ShipStation's get shipping rates endpoint](https://docs.shipstation.com/openapi/rates/calculate_rates), including the carrier ID, the items to be shipped, and more.
+
+<Note title="Tip">
+
+The above snippet assumes all items are sent in a single package. You can instead pass a package for each item, specifying its weight and optionally its height, width, and length.
+
+</Note>
 
 Finally, add the `calculatePrice` method to `ShipStationProviderService`:
 
