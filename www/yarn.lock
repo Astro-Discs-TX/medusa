@@ -7142,6 +7142,7 @@ __metadata:
     rehype-mdx-code-props: ^2.0.0
     rehype-slug: ^6.0.0
     remark-rehype-plugins: "*"
+    tags: "*"
     tailwind: "*"
     tailwindcss: ^3.3.0
     tsconfig: "*"
@@ -14819,6 +14820,7 @@ __metadata:
     remark-directive: ^3.0.0
     remark-frontmatter: ^5.0.0
     remark-rehype-plugins: "*"
+    tags: "*"
     tailwind: "*"
     tailwindcss: ^3.3.0
     ts-node: ^10.9.2
@@ -15652,7 +15654,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tags@workspace:packages/tags":
+"tags@*, tags@workspace:packages/tags":
   version: 0.0.0-use.local
   resolution: "tags@workspace:packages/tags"
   dependencies:

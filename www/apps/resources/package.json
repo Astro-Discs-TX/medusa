@@ -38,6 +38,7 @@
     "eslint-plugin-react-hooks": "^5.0.0",
     "postcss": "^8",
     "remark-rehype-plugins": "*",
+    "tags": "*",
     "tailwind": "*",
     "tailwindcss": "^3.3.0",
     "ts-node": "^10.9.2",

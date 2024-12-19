@@ -1,5 +1,5 @@
 import { Tag, Tags } from "types"
-import * as tags from "./tags/index.js"
+import * as tags from "../tags/index.js"
 
 export const getTagItems = (tagName: string): Tag | undefined => {
   if (!Object.hasOwn(tags, tagName)) {
