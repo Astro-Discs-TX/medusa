@@ -1,6 +1,15 @@
 import { matter } from "vfile-matter"
 import { readSync } from "to-vfile"
-import { FrontMatter } from "types"
+
+type FrontMatter = {
+  slug?: string
+  sidebar_label?: string
+  sidebar_group?: string
+  sidebar_group_main?: boolean
+  sidebar_position?: number
+  sidebar_autogenerate_exclude?: boolean
+  tags?: string[]
+}
 
 export function getFileSlugSync(filePath: string): string | undefined {
   const content = readSync(filePath)
