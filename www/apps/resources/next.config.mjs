@@ -6,6 +6,7 @@ import {
   typeListLinkFixerPlugin,
   workflowDiagramLinkFixerPlugin,
 } from "remark-rehype-plugins"
+import bundleAnalyzer from "@next/bundle-analyzer"
 import mdxPluginOptions from "./mdx-options.mjs"
 import path from "node:path"
 
@@ -53,7 +54,7 @@ const nextConfig = {
   // Configure `pageExtensions` to include MDX files
   pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
 
-  transpilePackages: ["docs-ui", "tags"],
+  transpilePackages: ["docs-ui", "tags", "utils"],
 
   basePath: process.env.NEXT_PUBLIC_BASE_PATH || "/resources",
   async redirects() {
@@ -137,4 +138,8 @@ const nextConfig = {
   // },
 }
 
-export default withMDX(nextConfig)
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === "true",
+})
+
+export default withMDX(withBundleAnalyzer(nextConfig))
