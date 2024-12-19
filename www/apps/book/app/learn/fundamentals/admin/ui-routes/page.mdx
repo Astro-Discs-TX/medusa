@@ -145,9 +145,8 @@ Some caveats for nested UI routes in the sidebar:
 - Nested routes in setting pages aren't shown in the sidebar to follow the admin's design conventions.
 - The `icon` configuration is ignored for the sidebar item of nested UI route to follow the admin's design conventions.
 
-
 ### Route Under Existing Admin Route
-You can locate a route under an existing route. For example, you can locate a route under the orders route in the sidebar.
+You can add a custom UI route under an existing route. For example, you can add a route under the orders route:
 
 ```tsx title="src/admin/routes/orders/nested/page.tsx"
 import { defineRouteConfig } from "@medusajs/admin-sdk"
@@ -171,6 +170,7 @@ export const config = defineRouteConfig({
 export default NestedOrdersPage
 ```
 
+The `nested` property passed to `defineRouteConfig` specifies which route this custom route is nested under. This route will now show in the sidebar under the existing "Orders" sidebar item.
 ---
 
 ## Create Settings Page
