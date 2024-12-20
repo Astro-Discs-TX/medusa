@@ -15374,6 +15374,50 @@ paths:
           $ref: '#/components/responses/invalid_request_error'
         '500':
           $ref: '#/components/responses/500_error'
+  /admin/fulfillment-providers/{id}/options:
+    get:
+      operationId: GetFulfillmentProvidersIdOptions
+      summary: List Options
+      description: Retrieve a list of options in a fulfillment provider. The options can be filtered by fields like FILTER FIELDS. The options can also be paginated.
+      x-authenticated: true
+      parameters:
+        - name: id
+          in: path
+          description: The fulfillment provider's ID.
+          required: true
+          schema:
+            type: string
+      security:
+        - api_token: []
+        - cookie_auth: []
+        - jwt_token: []
+      x-codeSamples:
+        - lang: Shell
+          label: cURL
+          source: |-
+            curl '{backend_url}/admin/fulfillment-providers/{id}/options' \
+            -H 'Authorization: Bearer {access_token}'
+      tags:
+        - Fulfillment Providers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminFulfillmentProviderOptionsListResponse'
+        '400':
+          $ref: '#/components/responses/400_error'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/not_found_error'
+        '409':
+          $ref: '#/components/responses/invalid_state_error'
+        '422':
+          $ref: '#/components/responses/invalid_request_error'
+        '500':
+          $ref: '#/components/responses/500_error'
   /admin/fulfillment-sets/{id}:
     delete:
       operationId: DeleteFulfillmentSetsId
@@ -47310,6 +47354,49 @@ components:
           description: The list of fulfillment providers.
           items:
             $ref: '#/components/schemas/AdminFulfillmentProvider'
+    AdminFulfillmentProviderOption:
+      type: object
+      description: The fulfillment option's fulfillment options.
+      x-schemaName: AdminFulfillmentProviderOption
+      required:
+        - id
+        - is_return
+      properties:
+        id:
+          type: string
+          title: id
+          description: The fulfillment option's ID.
+        is_return:
+          type: boolean
+          title: is_return
+          description: The fulfillment option's is return.
+    AdminFulfillmentProviderOptionsListResponse:
+      type: object
+      description: SUMMARY
+      x-schemaName: AdminFulfillmentProviderOptionsListResponse
+      required:
+        - limit
+        - offset
+        - count
+        - fulfillment_options
+      properties:
+        limit:
+          type: number
+          title: limit
+          description: The fulfillment provider's limit.
+        offset:
+          type: number
+          title: offset
+          description: The fulfillment provider's offset.
+        count:
+          type: number
+          title: count
+          description: The fulfillment provider's count.
+        fulfillment_options:
+          type: array
+          description: The fulfillment provider's fulfillment options.
+          items:
+            $ref: '#/components/schemas/AdminFulfillmentProviderOption'
     AdminFulfillmentResponse:
       type: object
       description: A fulfillment's details.
@@ -52959,8 +53046,13 @@ components:
           title: id
           description: The price rule's ID.
         value:
-          type: string
-          title: value
+          oneOf:
+            - type: string
+              title: value
+              description: The price rule's value.
+            - type: number
+              title: value
+              description: The price rule's value.
           description: The price rule's value.
         operator:
           type: string
@@ -58909,6 +59001,11 @@ components:
           type: number
           title: display_id
           description: The order's display ID.
+        credit_lines:
+          type: array
+          description: The order's credit lines.
+          items:
+            $ref: '#/components/schemas/OrderCreditLine'
     OrderAddress:
       type: object
       description: The address's details.
@@ -59334,6 +59431,51 @@ components:
           title: canceled_at
           description: The date the claim was canceled.
           format: date-time
+    OrderCreditLine:
+      type: object
+      description: The credit line's credit lines.
+      x-schemaName: OrderCreditLine
+      required:
+        - id
+        - order_id
+        - order
+        - reference
+        - reference_id
+        - metadata
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+          title: id
+          description: The credit line's ID.
+        order_id:
+          type: string
+          title: order_id
+          description: The credit line's order id.
+        order:
+          type: object
+        reference:
+          type: string
+          title: reference
+          description: The credit line's reference.
+        reference_id:
+          type: string
+          title: reference_id
+          description: The credit line's reference id.
+        metadata:
+          type: object
+          description: The credit line's metadata.
+        created_at:
+          type: string
+          format: date-time
+          title: created_at
+          description: The credit line's created at.
+        updated_at:
+          type: string
+          format: date-time
+          title: updated_at
+          description: The credit line's updated at.
     OrderExchange:
       type: object
       description: The order change's exchange.

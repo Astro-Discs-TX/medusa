@@ -1,0 +1,44 @@
+type: object
+description: The credit line's credit lines.
+x-schemaName: OrderCreditLine
+required:
+  - id
+  - order_id
+  - order
+  - reference
+  - reference_id
+  - metadata
+  - created_at
+  - updated_at
+properties:
+  id:
+    type: string
+    title: id
+    description: The credit line's ID.
+  order_id:
+    type: string
+    title: order_id
+    description: The credit line's order id.
+  order:
+    type: object
+  reference:
+    type: string
+    title: reference
+    description: The credit line's reference.
+  reference_id:
+    type: string
+    title: reference_id
+    description: The credit line's reference id.
+  metadata:
+    type: object
+    description: The credit line's metadata.
+  created_at:
+    type: string
+    format: date-time
+    title: created_at
+    description: The credit line's created at.
+  updated_at:
+    type: string
+    format: date-time
+    title: updated_at
+    description: The credit line's updated at.

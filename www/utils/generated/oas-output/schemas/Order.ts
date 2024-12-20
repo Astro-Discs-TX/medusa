@@ -213,6 +213,11 @@
  *     type: number
  *     title: display_id
  *     description: The order's display ID.
+ *   credit_lines:
+ *     type: array
+ *     description: The order's credit lines.
+ *     items:
+ *       $ref: "#/components/schemas/OrderCreditLine"
  * 
 */
 
