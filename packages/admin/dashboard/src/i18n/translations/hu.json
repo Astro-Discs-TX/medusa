@@ -1,0 +1,2840 @@
+{
+  "$schema": "./$schema.json",
+  "general": {
+    "ascending": "Növekvő",
+    "descending": "Csökkenő",
+    "add": "Hozzáadás",
+    "start": "Kezdés",
+    "end": "Befejezés",
+    "open": "Megnyitás",
+    "close": "Bezárás",
+    "apply": "Alkalmaz",
+    "range": "Tartomány",
+    "search": "Keresés",
+    "of": "ből/ből",
+    "results": "eredmények",
+    "pages": "oldalak",
+    "next": "Következő",
+    "prev": "Előző",
+    "is": "van",
+    "timeline": "Idővonal",
+    "success": "Siker",
+    "warning": "Figyelmeztetés",
+    "tip": "Tipp",
+    "error": "Hiba",
+    "select": "Kiválasztás",
+    "selected": "Kiválasztott",
+    "enabled": "Engedélyezve",
+    "disabled": "Letiltva",
+    "expired": "Lejárt",
+    "active": "Aktív",
+    "revoked": "Visszavonva",
+    "new": "Új",
+    "modified": "Módosítva",
+    "added": "Hozzáadva",
+    "removed": "Eltávolítva",
+    "admin": "Admin",
+    "store": "Bolt",
+    "details": "Részletek",
+    "items_one": "{{count}} tétel",
+    "items_other": "{{count}} tétel",
+    "countSelected": "{{count}} kiválasztva",
+    "countOfTotalSelected": "{{count}} a {{total}}-ból kiválasztva",
+    "plusCount": "+ {{count}}",
+    "plusCountMore": "+ {{count}} több",
+    "areYouSure": "Biztos vagy benne?",
+    "noRecordsFound": "Nincsenek találatok",
+    "typeToConfirm": "Írd be {val}-t a megerősítéshez:",
+    "noResultsTitle": "Nincs találat",
+    "noResultsMessage": "Próbáld meg módosítani a szűrőket vagy a keresési lekérdezést",
+    "noSearchResults": "Nincs keresési találat",
+    "noSearchResultsFor": "Nincs keresési találat a következőre: <0>'{{query}}'</0>",
+    "noRecordsTitle": "Nincsenek rekordok",
+    "noRecordsMessage": "Nincsenek rekordok, amit meg lehetne jeleníteni",
+    "unsavedChangesTitle": "Biztosan el akarod hagyni ezt a űrlapot?",
+    "unsavedChangesDescription": "Nem mentett változtatásaid vannak, amelyek elvesznek, ha elhagyod az űrlapot.",
+    "includesTaxTooltip": "Az ebben az oszlopban szereplő árak áfát tartalmaznak.",
+    "excludesTaxTooltip": "Az ebben az oszlopban szereplő árak áfát nem tartalmaznak.",
+    "noMoreData": "Nincs több adat"
+  },
+  "json": {
+    "header": "JSON",
+    "numberOfKeys_one": "{{count}} kulcs",
+    "numberOfKeys_other": "{{count}} kulcs",
+    "drawer": {
+      "header_one": "JSON <0>· {{count}} kulcs</0>",
+      "header_other": "JSON <0>· {{count}} kulcs</0>",
+      "description": "A JSON adatokat nézheted meg ehhez az objektumhoz."
+    }
+  },
+  "metadata": {
+    "header": "Metaadatok",
+    "numberOfKeys_one": "{{count}} kulcs",
+    "numberOfKeys_other": "{{count}} kulcs",
+    "edit": {
+      "header": "Metaadatok szerkesztése",
+      "description": "A metaadatok szerkesztése ehhez az objektumhoz.",
+      "successToast": "A metaadatok sikeresen frissítve.",
+      "actions": {
+        "insertRowAbove": "Sor beszúrása felül",
+        "insertRowBelow": "Sor beszúrása alul",
+        "deleteRow": "Sor törlése"
+      },
+      "labels": {
+        "key": "Kulcs",
+        "value": "Érték"
+      },
+      "complexRow": {
+        "label": "Néhány sor le van tiltva",
+        "description": "Ez az objektum nem primitív metaadatokat tartalmaz, mint például tömbök vagy objektumok, amelyeket itt nem lehet szerkeszteni. A letiltott sorok szerkesztéséhez használd közvetlenül az API-t.",
+        "tooltip": "Ez a sor le van tiltva, mert nem primitív adatokat tartalmaz."
+      }
+    }
+  },
+  "validation": {
+    "mustBeInt": "Az értéknek egész számnak kell lennie.",
+    "mustBePositive": "Az értéknek pozitív számnak kell lennie."
+  },
+  "actions": {
+    "save": "Mentés",
+    "saveAsDraft": "Mentés piszkozatra",
+    "copy": "Másolás",
+    "copied": "Másolva",
+    "duplicate": "Duplikálás",
+    "publish": "Közzététel",
+    "create": "Létrehozás",
+    "delete": "Törlés",
+    "remove": "Eltávolítás",
+    "revoke": "Visszavonás",
+    "cancel": "Mégse",
+    "forceConfirm": "Kényszerített megerősítés",
+    "continueEdit": "Szerkesztés folytatása",
+    "enable": "Engedélyezés",
+    "disable": "Letiltás",
+    "undo": "Visszavonás",
+    "complete": "Befejezés",
+    "viewDetails": "Részletek megtekintése",
+    "back": "Vissza",
+    "close": "Bezárás",
+    "showMore": "Több mutatása",
+    "continue": "Folytatás",
+    "continueWithEmail": "Folytatás e-maillel",
+    "idCopiedToClipboard": "ID másolva a vágólapra",
+    "addReason": "Indok hozzáadása",
+    "addNote": "Jegyzet hozzáadása",
+    "reset": "Visszaállítás",
+    "confirm": "Megerősítés",
+    "edit": "Szerkesztés",
+    "addItems": "Tételek hozzáadása",
+    "download": "Letöltés",
+    "clear": "Törlés",
+    "clearAll": "Összes törlése",
+    "apply": "Alkalmazás",
+    "add": "Hozzáadás",
+    "select": "Kiválasztás",
+    "browse": "Böngészés",
+    "logout": "Kijelentkezés",
+    "hide": "Elrejtés",
+    "export": "Exportálás",
+    "import": "Importálás",
+    "cannotUndo": "Ez a művelet nem vonható vissza"
+  },
+  "operators": {
+    "in": "Benne"
+  },
+  "app": {
+    "search": {
+      "label": "Keresés",
+      "title": "Keresés",
+      "description": "Keresd meg a boltod teljes tartalmát, beleértve a rendeléseket, termékeket, vásárlókat és egyebeket.",
+      "allAreas": "Minden terület",
+      "navigation": "Navigáció",
+      "openResult": "Eredmény megnyitása",
+      "showMore": "Több mutatása",
+      "placeholder": "Ugrás ide vagy bármit keresni...",
+      "noResultsTitle": "Nincs találat",
+      "noResultsMessage": "Nem találtunk semmit, ami megfelel a keresésednek.",
+      "emptySearchTitle": "Írd be a keresni kívánt szót",
+      "emptySearchMessage": "Írj be egy kulcsszót vagy kifejezést a felfedezéshez.",
+      "loadMore": "Töltsd be a {{count}} több",
+      "groups": {
+        "all": "Minden terület",
+        "customer": "Vásárlók",
+        "customerGroup": "Vásárlói csoportok",
+        "product": "Termékek",
+        "productVariant": "Termékvariánsok",
+        "inventory": "Készlet",
+        "reservation": "Foglalások",
+        "category": "Kategóriák",
+        "collection": "Kolleciók",
+        "order": "Rendelések",
+        "promotion": "Promóciók",
+        "campaign": "Kampányok",
+        "priceList": "Árlisták",
+        "user": "Felhasználók",
+        "region": "Régiók",
+        "taxRegion": "Adózási régiók",
+        "returnReason": "Visszáru okok",
+        "salesChannel": "Értékesítési csatornák",
+        "productType": "Terméktípusok",
+        "productTag": "Termékkategóriák",
+        "location": "Helyszínek",
+        "shippingProfile": "Szállítási profilok",
+        "publishableApiKey": "Publikus API kulcsok",
+        "secretApiKey": "Titkos API kulcsok",
+        "command": "Parancsok",
+        "navigation": "Navigáció"
+      }
+    },
+    "keyboardShortcuts": {
+      "pageShortcut": "Ugrás ide",
+      "settingShortcut": "Beállítások",
+      "commandShortcut": "Parancsok",
+      "then": "akkor",
+      "navigation": {
+        "goToOrders": "Rendelések",
+        "goToProducts": "Termékek",
+        "goToCollections": "Kolleciók",
+        "goToCategories": "Kategóriák",
+        "goToCustomers": "Vásárlók",
+        "goToCustomerGroups": "Vásárlói csoportok",
+        "goToInventory": "Készlet",
+        "goToReservations": "Foglalások",
+        "goToPriceLists": "Árlisták",
+        "goToPromotions": "Promóciók",
+        "goToCampaigns": "Kampányok"
+      },
+      "settings": {
+        "goToSettings": "Beállítások",
+        "goToStore": "Bolt",
+        "goToUsers": "Felhasználók",
+        "goToRegions": "Régiók",
+        "goToTaxRegions": "Adózási régiók",
+        "goToSalesChannels": "Értékesítési csatornák",
+        "goToProductTypes": "Terméktípusok",
+        "goToLocations": "Helyszínek",
+        "goToPublishableApiKeys": "Publikus API kulcsok",
+        "goToSecretApiKeys": "Titkos API kulcsok",
+        "goToWorkflows": "Munka folyamatok",
+        "goToProfile": "Profil",
+        "goToReturnReasons": "Visszáru okok"
+      }
+    },
+    "menus": {
+      "user": {
+        "documentation": "Dokumentáció",
+        "changelog": "Változásnapló",
+        "shortcuts": "Billentyűparancsok",
+        "profileSettings": "Profil beállítások",
+        "theme": {
+          "label": "Téma",
+          "dark": "Sötét",
+          "light": "Világos",
+          "system": "Rendszer"
+        }
+      },
+      "store": {
+        "label": "Bolt",
+        "storeSettings": "Bolt beállítások"
+      },
+      "actions": {
+        "logout": "Kijelentkezés"
+      }
+    },
+    "nav": {
+      "accessibility": {
+        "title": "Navigáció",
+        "description": "Navigációs menü a vezérlőpulton."
+      },
+      "common": {
+        "extensions": "Bővítmények"
+      },
+      "main": {
+        "store": "Bolt",
+        "storeSettings": "Bolt beállítások"
+      },
+      "settings": {
+        "header": "Beállítások",
+        "general": "Általános",
+        "developer": "Fejlesztő",
+        "myAccount": "Fiókom"
+      }
+    }
+  },
+  "dataGrid": {
+    "columns": {
+      "view": "Megtekintés",
+      "resetToDefault": "Alapértelmezettre állítás",
+      "disabled": "Az oszlopok láthatóságának módosítása le van tiltva."
+    },
+    "shortcuts": {
+      "label": "Billentyűparancsok",
+      "commands": {
+        "undo": "Visszavonás",
+        "redo": "Újra",
+        "copy": "Másolás",
+        "paste": "Beillesztés",
+        "edit": "Szerkesztés",
+        "delete": "Törlés",
+        "clear": "Törlés",
+        "moveUp": "Mozgatás fel",
+        "moveDown": "Mozgatás le",
+        "moveLeft": "Mozgatás balra",
+        "moveRight": "Mozgatás jobbra",
+        "moveTop": "Mozgatás tetejére",
+        "moveBottom": "Mozgatás aljára",
+        "selectDown": "Kiválasztás le",
+        "selectUp": "Kiválasztás fel",
+        "selectColumnDown": "Oszlop kiválasztása le",
+        "selectColumnUp": "Oszlop kiválasztása fel",
+        "focusToolbar": "Fókuszálás eszköztárra",
+        "focusCancel": "Fókuszálás törlésre"
+      }
+    },
+    "errors": {
+      "fixError": "Hiba kijavítása",
+      "count_one": "{{count}} hiba",
+      "count_other": "{{count}} hiba"
+    }
+  },
+  "filters": {
+    "date": {
+      "today": "Ma",
+      "lastSevenDays": "Utolsó 7 nap",
+      "lastThirtyDays": "Utolsó 30 nap",
+      "lastNinetyDays": "Utolsó 90 nap",
+      "lastTwelveMonths": "Utolsó 12 hónap",
+      "custom": "Egyedi",
+      "from": "Tól",
+      "to": "Ig"
+    },
+    "compare": {
+      "lessThan": "Kevesebb mint",
+      "greaterThan": "Több mint",
+      "exact": "Pontosan",
+      "range": "Tartomány",
+      "lessThanLabel": "kevesebb mint {{value}}",
+      "greaterThanLabel": "több mint {{value}}",
+      "andLabel": "és"
+    },
+    "addFilter": "Szűrő hozzáadása"
+  },
+  "errorBoundary": {
+    "badRequestTitle": "400 - Hibás kérés",
+    "badRequestMessage": "A kérés nem érthető a szerver számára a rosszul formázott szintaxis miatt.",
+    "notFoundTitle": "404 - Nincs ilyen oldal ezen a címen",
+    "notFoundMessage": "Ellenőrizd az URL-t és próbáld újra, vagy használd a keresősávot, hogy megtaláld, amit keresel.",
+    "internalServerErrorTitle": "500 - Belső szerverhiba",
+    "internalServerErrorMessage": "Váratlan hiba történt a szerveren. Kérlek próbáld meg később.",
+    "defaultTitle": "Hiba történt",
+    "defaultMessage": "Váratlan hiba történt az oldal megjelenítése közben.",
+    "noMatchMessage": "A keresett oldal nem található.",
+    "backToDashboard": "Vissza a vezérlőpultra"
+  },
+  "addresses": {
+    "shippingAddress": {
+      "header": "Szállítási cím",
+      "editHeader": "Szállítási cím szerkesztése",
+      "editLabel": "Szállítási cím",
+      "label": "Szállítási cím"
+    },
+    "billingAddress": {
+      "header": "Számlázási cím",
+      "editHeader": "Számlázási cím szerkesztése",
+      "editLabel": "Számlázási cím",
+      "label": "Számlázási cím",
+      "sameAsShipping": "Megegyezik a szállítási címmel"
+    },
+    "contactHeading": "Kapcsolat",
+    "locationHeading": "Helyszín"
+  },
+  "email": {
+    "editHeader": "Email szerkesztése",
+    "editLabel": "Email",
+    "label": "Email"
+  },
+  "transferOwnership": {
+    "header": "Tulajdonjog átruházása",
+    "label": "Tulajdonjog átruházása",
+    "details": {
+      "order": "Rendelési részletek",
+      "draft": "Tervezet részletei"
+    },
+    "currentOwner": {
+      "label": "Jelenlegi tulajdonos",
+      "hint": "A rendelés jelenlegi tulajdonosa."
+    },
+    "newOwner": {
+      "label": "Új tulajdonos",
+      "hint": "Az új tulajdonos, akinek át szeretnéd ruházni a rendelést."
+    },
+    "validation": {
+      "mustBeDifferent": "Az új tulajdonosnak különböznie kell a jelenlegi tulajdonostól.",
+      "required": "Új tulajdonos szükséges."
+    }
+  },
+  "sales_channels": {
+    "availableIn": "Elérhető <0>{{x}}</0> a <1>{{y}}</1> értékesítési csatornából"
+  },
+  "products": {
+    "domain": "Termékek",
+    "list": {
+      "noRecordsMessage": "Hozz létre egy első terméket az eladáshoz."
+    },
+    "edit": {
+      "header": "Termék szerkesztése",
+      "description": "A termék részleteinek szerkesztése.",
+      "successToast": "A(z) {{title}} termék sikeresen frissítve lett."
+    },
+    "create": {
+      "title": "Termék létrehozása",
+      "description": "Új termék létrehozása.",
+      "header": "Általános",
+      "tabs": {
+        "details": "Részletek",
+        "organize": "Rendezés",
+        "variants": "Variánsok",
+        "inventory": "Készletkészletek"
+      },
+      "errors": {
+        "variants": "Kérlek válassz legalább egy variánst.",
+        "options": "Kérlek hozz létre legalább egy opciót.",
+        "uniqueSku": "Az SKU-nak egyedinek kell lennie."
+      },
+      "inventory": {
+        "heading": "Készletkészletek",
+        "label": "Add készlet elemeket a variáns készletkészletéhez.",
+        "itemPlaceholder": "Válassz készlet elemet",
+        "quantityPlaceholder": "Hány darab szükséges a készlethez?"
+      },
+      "variants": {
+        "header": "Variánsok",
+        "subHeadingTitle": "Igen, ez egy variánsokkal rendelkező termék",
+        "subHeadingDescription": "Ha nem jelölöd be, létrehozunk egy alapértelmezett variánst.",
+        "optionTitle": {
+          "placeholder": "Méret"
+        },
+        "optionValues": {
+          "placeholder": "Kicsi, Közepes, Nagy"
+        },
+        "productVariants": {
+          "label": "Termékvariánsok",
+          "hint": "Ez a rangsorolás befolyásolja a variánsok sorrendjét az üzlethelyiségben.",
+          "alert": "Opciók hozzáadása a variánsok létrehozásához.",
+          "tip": "A nem kijelölt variánsok nem lesznek létrehozva. Mindig létrehozhatsz és szerkeszthetsz variánsokat később, de ez a lista illeszkedik a termékopciók variációihoz."
+        },
+        "productOptions": {
+          "label": "Termék opciók",
+          "hint": "Definiáld a termék opcióit, pl. szín, méret, stb."
+        }
+      },
+      "successToast": "A(z) {{title}} termék sikeresen létrehozva."
+    },
+    "export": {
+      "header": "Terméklista exportálása",
+      "description": "Terméklista exportálása CSV fájlba.",
+      "success": {
+        "title": "Feldolgozzuk az exportot",
+        "description": "Az adatok exportálása néhány percet igénybe vehet. Értesítünk, ha kész vagyunk."
+      },
+      "filters": {
+        "title": "Szűrők",
+        "description": "Szűrők alkalmazása az asztali áttekintéshez, hogy módosítsd ezt a nézetet"
+      },
+      "columns": {
+        "title": "Oszlopok",
+        "description": "A kiexportált adatokat testreszabhatod a specifikus igényeknek megfelelően"
+      }
+    },
+    "import": {
+      "header": "Terméklista importálása",
+      "uploadLabel": "Termékek importálása",
+      "uploadHint": "Húzd ide a CSV fájlt, vagy kattints a feltöltéshez",
+      "description": "Termékek importálása előre definiált formátumban lévő CSV fájl megadásával",
+      "template": {
+        "title": "Nem biztos benne, hogyan rendezd el a listát?",
+        "description": "Töltsd le az alábbi sablont, hogy biztosan a megfelelő formátumot kövesd."
+      },
+      "upload": {
+        "title": "CSV fájl feltöltése",
+        "description": "Importálással termékeket adhatsz hozzá vagy frissíthetsz. A meglévő termékek frissítéséhez használni kell a meglévő fogantyút és ID-t, a meglévő variánsok frissítéséhez használni kell a meglévő ID-t. A termékek importálása előtt megerősítést kérünk.",
+        "preprocessing": "Előkészítés...",
+        "productsToCreate": "Termékek lesznek létrehozva",
+        "productsToUpdate": "Termékek lesznek frissítve"
+      },
+      "success": {
+        "title": "Feldolgozzuk az importot",
+        "description": "Az adatok importálása egy kis időt igénybe vehet. Értesítünk, ha kész vagyunk."
+      }
+    },
+    "deleteWarning": "Biztosan törölni szeretnéd a(z) {{title}} terméket? Ez a művelet nem vonható vissza.",
+    "variants": "Variánsok",
+    "attributes": "Attribútumok",
+    "editAttributes": "Attribútumok szerkesztése",
+    "editOptions": "Opciók szerkesztése",
+    "editPrices": "Árak szerkesztése",
+    "media": {
+      "label": "Média",
+      "editHint": "Adj hozzá médiát a termékhez, hogy bemutathasd az üzlethelyiségedben.",
+      "makeThumbnail": "Miniatúra készítése",
+      "uploadImagesLabel": "Képek feltöltése",
+      "uploadImagesHint": "Húzd ide a képeket, vagy kattints a feltöltéshez.",
+      "invalidFileType": "'{{name}}' nem támogatott fájltípus. A támogatott fájltípusok: {{types}}.",
+      "failedToUpload": "A hozzáadott média feltöltése sikertelen. Kérlek próbáld újra.",
+      "deleteWarning_one": "Biztosan törölni szeretnéd a {{count}} képet? Ez a művelet nem vonható vissza.",
+      "deleteWarning_other": "Biztosan törölni szeretnéd a {{count}} képet? Ez a művelet nem vonható vissza.",
+      "deleteWarningWithThumbnail_one": "Biztosan törölni szeretnéd a {{count}} képet a miniatúrával együtt? Ez a művelet nem vonható vissza.",
+      "deleteWarningWithThumbnail_other": "Biztosan törölni szeretnéd a {{count}} képet a miniatúrával együtt? Ez a művelet nem vonható vissza.",
+      "thumbnailTooltip": "Miniatúra",
+      "galleryLabel": "Galéria",
+      "downloadImageLabel": "Jelenlegi kép letöltése",
+      "deleteImageLabel": "Jelenlegi kép törlése",
+      "emptyState": {
+        "header": "Még nincs média",
+        "description": "Adj hozzá médiát a termékhez, hogy bemutathasd az üzlethelyiségedben.",
+        "action": "Média hozzáadása"
+      },
+      "successToast": "A média sikeresen frissítve lett."
+    },
+    "discountableHint": "Ha nem jelölöd be, a kedvezmények nem kerülnek alkalmazásra erre a termékre.",
+    "noSalesChannels": "Nincs elérhető értékesítési csatorna",
+    "variantCount_one": "{{count}} variáns",
+    "variantCount_other": "{{count}} variánsok",
+    "deleteVariantWarning": "Biztosan törölni szeretnéd a {{title}} variánst? Ez a művelet nem vonható vissza.",
+    "productStatus": {
+      "draft": "Tervezet",
+      "published": "Közzétéve",
+      "proposed": "Javasolt",
+      "rejected": "Elutasítva"
+    },
+    "fields": {
+      "title": {
+        "label": "Cím",
+        "hint": "Adj rövid és világos címet a termékednek.<0/>A 50-60 karakter a javasolt hossz keresőoptimalizáláshoz."
+      },
+      "subtitle": {
+        "label": "Alcím"
+      },
+      "handle": {
+        "label": "Azonosító",
+        "tooltip": "Az azonosító arra szolgál, hogy hivatkozz a termékre az üzlethelyiségben. Ha nincs megadva, az azonosítót a termék címéből generáljuk."
+      },
+      "description": {
+        "label": "Leírás",
+        "hint": "Adj rövid és világos leírást a termékednek.<0/>A 120-160 karakter a javasolt hossz keresőoptimalizáláshoz."
+      },
+      "discountable": {
+        "label": "Kedvezményesíthető",
+        "hint": "Ha nem jelölöd be, a kedvezmények nem kerülnek alkalmazásra erre a termékre."
+      },
+      "type": {
+        "label": "Típus"
+      },
+      "collection": {
+        "label": "Gyűjtemény"
+      },
+      "categories": {
+        "label": "Kategóriák"
+      },
+      "tags": {
+        "label": "Címkék"
+      },
+      "sales_channels": {
+        "label": "Értékesítési csatornák",
+        "hint": "Ez a termék csak az alapértelmezett értékesítési csatornán lesz elérhető, ha nem változtatsz rajta."
+      },
+      "countryOrigin": {
+        "label": "Származási ország"
+      },
+      "material": {
+        "label": "Anyag"
+      },
+      "width": {
+        "label": "Szélesség"
+      },
+      "length": {
+        "label": "Hossz"
+      },
+      "height": {
+        "label": "Magasság"
+      },
+      "weight": {
+        "label": "Súly"
+      },
+      "options": {
+        "label": "Termék opciók",
+        "hint": "Az opciók a termék színét, méretét stb. definiálják",
+        "add": "Opció hozzáadása",
+        "optionTitle": "Opció cím",
+        "optionTitlePlaceholder": "Szín",
+        "variations": "Variációk (vesszővel elválasztva)",
+        "variantionsPlaceholder": "Piros, Kék, Zöld"
+      },
+      "variants": {
+        "label": "Termékvariánsok",
+        "hint": "A nem kijelölt variánsok nem lesznek létrehozva, ez a rangsorolás befolyásolja a variánsok sorrendjét a frontendben."
+      },
+      "mid_code": {
+        "label": "Mid kód"
+      },
+      "hs_code": {
+        "label": "HS kód"
+      }
+    },
+    "variant": {
+      "edit": {
+        "header": "Variáns szerkesztése",
+        "success": "Termék variáns sikeresen szerkesztve"
+      },
+      "create": {
+        "header": "Variáns részletei"
+      },
+      "deleteWarning": "Biztosan törölni szeretnéd ezt a variánst?",
+      "pricesPagination": "1 - {{current}} a {{total}} árakból",
+      "tableItemAvailable": "{{availableCount}} elérhető",
+      "tableItem_one": "{{availableCount}} elérhető {{locationCount}} helyszínen",
+      "tableItem_other": "{{availableCount}} elérhető {{locationCount}} helyszínen",
+      "inventory": {
+        "notManaged": "Nem kezelt",
+        "manageItems": "Készlet elemek kezelése",
+        "notManagedDesc": "A készlet nincs kezelve ezen a variánson. Kapcsold be a ‘Készletkezelést’ a variáns készletének nyomon követéséhez.",
+        "manageKit": "Készletkészlet kezelése",
+        "navigateToItem": "Ugrás a készlet elemhez",
+        "actions": {
+          "inventoryItems": "Ugrás a készlet elemhez",
+          "inventoryKit": "Készlet elemek megjelenítése"
+        },
+        "inventoryKit": "Készletkészlet",
+        "inventoryKitHint": "Ez a variáns több készlet elemből áll?",
+        "validation": {
+          "itemId": "Válassz készlet elemet.",
+          "quantity": "Mennyiség szükséges. Kérlek adj meg egy pozitív számot."
+        },
+        "header": "Készlet & Leltár",
+        "editItemDetails": "Készlet elem részleteinek szerkesztése",
+        "manageInventoryLabel": "Készletkezelés",
+        "manageInventoryHint": "Ha engedélyezve van, mi módosítjuk a készlet mennyiségét, amikor rendeléseket és visszaküldéseket hozol létre.",
+        "allowBackordersLabel": "Visszáru engedélyezése",
+        "allowBackordersHint": "Ha engedélyezve van, a vásárlók megvásárolhatják a variánst, akkor is, ha nincs elérhető mennyiség.",
+        "toast": {
+          "levelsBatch": "Készlet szintek frissítve.",
+          "update": "Készlet elem sikeresen frissítve.",
+          "updateLevel": "Készlet szint sikeresen frissítve.",
+          "itemsManageSuccess": "Készlet elemek sikeresen frissítve."
+        }
+      }
+    },
+    "options": {
+      "header": "Opciók",
+      "edit": {
+        "header": "Opció szerkesztése",
+        "successToast": "Az {{title}} opció sikeresen frissítve lett."
+      },
+      "create": {
+        "header": "Opció létrehozása",
+        "successToast": "Az {{title}} opció sikeresen létrehozva."
+      },
+      "deleteWarning": "Biztosan törölni szeretnéd a termék opciót: {{title}}? Ez a művelet nem vonható vissza."
+    },
+    "organization": {
+      "header": "Rendezés",
+      "edit": {
+        "header": "Szervezet szerkesztése",
+        "toasts": {
+          "success": "A(z) {{title}} szervezet sikeresen frissítve lett."
+        }
+      }
+    },
+    "toasts": {
+      "delete": {
+        "success": {
+          "header": "Termék törölve",
+          "description": "A(z) {{title}} termék sikeresen törölve lett."
+        },
+        "error": {
+          "header": "Nem sikerült törölni a terméket"
+        }
+      }
+    }
+  },
+  "collections": {
+    "domain": "Gyűjtemények",
+    "subtitle": "Szervezd a termékeket gyűjteményekbe.",
+    "createCollection": "Gyűjtemény létrehozása",
+    "createCollectionHint": "Hozz létre egy új gyűjteményt a termékeid rendszerezéséhez.",
+    "createSuccess": "A gyűjtemény sikeresen létrehozva.",
+    "editCollection": "Gyűjtemény szerkesztése",
+    "handleTooltip": "Az azonosító arra szolgál, hogy hivatkozz a gyűjteményre az üzlethelyiségben. Ha nincs megadva, az azonosítót a gyűjtemény címéből generáljuk.",
+    "deleteWarning": "Törölni fogod a(z) {{title}} gyűjteményt. Ez a művelet nem vonható vissza.",
+    "removeSingleProductWarning": "Eltávolítod a(z) {{title}} terméket a gyűjteményből. Ez a művelet nem vonható vissza.",
+    "removeProductsWarning_one": "Eltávolítod a(z) {{count}} terméket a gyűjteményből. Ez a művelet nem vonható vissza.",
+    "removeProductsWarning_other": "Eltávolítod a(z) {{count}} termékeket a gyűjteményből. Ez a művelet nem vonható vissza.",
+    "products": {
+      "list": {
+        "noRecordsMessage": "Nincsenek termékek a gyűjteményben."
+      },
+      "add": {
+        "successToast_one": "A termék sikeresen hozzáadva a gyűjteményhez.",
+        "successToast_other": "A termékek sikeresen hozzáadva a gyűjteményhez."
+      },
+      "remove": {
+        "successToast_one": "A termék sikeresen eltávolítva a gyűjteményből.",
+        "successToast_other": "A termékek sikeresen eltávolítva a gyűjteményből."
+      }
+    }
+  },
+  "categories": {
+    "domain": "Kategóriák",
+    "subtitle": "Szervezd a termékeket kategóriákba, és kezeld azok rangsorolását és hierarchiáját.",
+    "create": {
+      "header": "Kategória létrehozása",
+      "hint": "Hozz létre egy új kategóriát a termékeid rendszerezéséhez.",
+      "tabs": {
+        "details": "Részletek",
+        "organize": "Rangsorolás rendezése"
+      },
+      "successToast": "A(z) {{name}} kategória sikeresen létrehozva."
+    },
+    "edit": {
+      "header": "Kategória szerkesztése",
+      "description": "Szerkeszd a kategóriát a részletek frissítéséhez.",
+      "successToast": "A kategória sikeresen frissítve lett."
+    },
+    "delete": {
+      "confirmation": "Törölni fogod a(z) {{name}} kategóriát. Ez a művelet nem vonható vissza.",
+      "successToast": "A(z) {{name}} kategória sikeresen törölve lett."
+    },
+    "products": {
+      "add": {
+        "disabledTooltip": "A termék már szerepel ebben a kategóriában.",
+        "successToast_one": "A(z) {{count}} termék hozzáadva a kategóriához.",
+        "successToast_other": "A(z) {{count}} termékek hozzáadva a kategóriához."
+      },
+      "remove": {
+        "confirmation_one": "Eltávolítod a(z) {{count}} terméket a kategóriából. Ez a művelet nem vonható vissza.",
+        "confirmation_other": "Eltávolítod a(z) {{count}} terméket a kategóriából. Ez a művelet nem vonható vissza.",
+        "successToast_one": "A(z) {{count}} termék sikeresen eltávolítva a kategóriából.",
+        "successToast_other": "A(z) {{count}} termékek sikeresen eltávolítva a kategóriából."
+      },
+      "list": {
+        "noRecordsMessage": "Nincsenek termékek a kategóriában."
+      }
+    },
+    "organize": {
+      "header": "Szervezés",
+      "action": "Rangsorolás szerkesztése"
+    },
+    "fields": {
+      "visibility": {
+        "label": "Láthatóság",
+        "internal": "Belső",
+        "public": "Nyilvános"
+      },
+      "status": {
+        "label": "Státusz",
+        "active": "Aktív",
+        "inactive": "Inaktív"
+      },
+      "path": {
+        "label": "Útvonal",
+        "tooltip": "A kategória teljes útvonalának megjelenítése."
+      },
+      "children": {
+        "label": "Gyermekek"
+      },
+      "new": {
+        "label": "Új"
+      }
+    }
+  },
+  "inventory": {
+    "domain": "Leltár",
+    "subtitle": "Kezeld a készlet elemeidet",
+    "reserved": "Foglalt",
+    "available": "Elérhető",
+    "locationLevels": "Helyszínek",
+    "associatedVariants": "Kapcsolódó variánsok",
+    "manageLocations": "Helyszínek kezelése",
+    "deleteWarning": "Törölni fogsz egy készlet elemet. Ez a művelet nem vonható vissza.",
+    "editItemDetails": "Készlet elem részleteinek szerkesztése",
+    "create": {
+      "title": "Készlet elem létrehozása",
+      "details": "Részletek",
+      "availability": "Elérhetőség",
+      "locations": "Helyszínek",
+      "attributes": "Attribútumok",
+      "requiresShipping": "Szállítást igényel",
+      "requiresShippingHint": "A készlet elem igényel szállítást?",
+      "successToast": "A készlet elem sikeresen létrehozva."
+    },
+    "reservation": {
+      "header": "Foglalás a {{itemName}} termékre",
+      "editItemDetails": "Foglalás szerkesztése",
+      "lineItemId": "Sor tétele ID",
+      "orderID": "Rendelés ID",
+      "description": "Leírás",
+      "location": "Helyszín",
+      "inStockAtLocation": "Rendelkezésre áll ezen a helyszínen",
+      "availableAtLocation": "Elérhető ezen a helyszínen",
+      "reservedAtLocation": "Foglalt ezen a helyszínen",
+      "reservedAmount": "Foglalt mennyiség",
+      "create": "Foglalás létrehozása",
+      "itemToReserve": "Foglalni kívánt termék",
+      "quantityPlaceholder": "Mennyit szeretnél lefoglalni?",
+      "descriptionPlaceholder": "Mi a foglalás típusa?",
+      "successToast": "A foglalás sikeresen létrehozva.",
+      "updateSuccessToast": "A foglalás sikeresen frissítve lett.",
+      "deleteSuccessToast": "A foglalás sikeresen törölve lett.",
+      "errors": {
+        "noAvaliableQuantity": "A készlethelyszínen nincs elérhető mennyiség.",
+        "quantityOutOfRange": "A minimum mennyiség 1, a maximum mennyiség pedig {{max}}."
+      }
+    },
+    "adjustInventory": {
+      "errors": {
+        "stockedQuantity": "A készlet mennyisége nem csökkenthető a foglalt mennyiség alá, ami {{quantity}}."
+      }
+    },
+    "toast": {
+      "updateLocations": "A helyszínek sikeresen frissítve lettek.",
+      "updateLevel": "A készlet szint sikeresen frissítve lett.",
+      "updateItem": "A készlet elem sikeresen frissítve lett."
+    }
+  },
+  "giftCards": {
+    "domain": "Ajándékkártyák",
+    "editGiftCard": "Ajándékkártya szerkesztése",
+    "createGiftCard": "Ajándékkártya létrehozása",
+    "createGiftCardHint": "Hozz létre manuálisan egy ajándékkártyát, amely fizetési módként használható az üzletedben.",
+    "selectRegionFirst": "Először válassz egy régiót",
+    "deleteGiftCardWarning": "Törölni fogod a(z) {{code}} ajándékkártyát. Ez a művelet nem vonható vissza.",
+    "balanceHigherThanValue": "A kártya egyenlege nem lehet magasabb, mint az eredeti összeg.",
+    "balanceLowerThanZero": "A kártya egyenlege nem lehet negatív.",
+    "expiryDateHint": "Az ajándékkártyák lejárati idejére vonatkozó szabályok országonként eltérnek. Mielőtt beállítanád a lejárati dátumot, ellenőrizd a helyi előírásokat.",
+    "regionHint": "A kártya régiójának módosítása a valutáját is megváltoztatja, ami hatással lehet annak pénzbeli értékére.",
+    "enabledHint": "Állítsd be, hogy az ajándékkártya engedélyezett vagy letiltott legyen.",
+    "balance": "Egyenleg",
+    "currentBalance": "Jelenlegi egyenleg",
+    "initialBalance": "Kezdeti egyenleg",
+    "personalMessage": "Személyes üzenet",
+    "recipient": "Címzett"
+  },
+  "customers": {
+    "domain": "Vásárlók",
+    "list": {
+      "noRecordsMessage": "A vásárlóid itt fognak megjelenni."
+    },
+    "create": {
+      "header": "Vásárló létrehozása",
+      "hint": "Hozz létre egy új vásárlót és kezeld annak adatait.",
+      "successToast": "A(z) {{email}} vásárló sikeresen létrehozva."
+    },
+    "groups": {
+      "label": "Vásárlói csoportok",
+      "remove": "Biztosan el akarod távolítani a vásárlót a(z) \"{{name}}\" vásárlói csoportból?",
+      "removeMany": "Biztosan el akarod távolítani a vásárlót az alábbi vásárlói csoportokból: {{groups}}?",
+      "alreadyAddedTooltip": "A vásárló már tagja ennek a vásárlói csoportnak.",
+      "list": {
+        "noRecordsMessage": "Ez a vásárló nem tartozik semmilyen csoporthoz."
+      },
+      "add": {
+        "success": "A vásárló hozzáadva a(z) {{groups}} csoporthoz.",
+        "list": {
+          "noRecordsMessage": "Kérlek, először hozz létre egy vásárlói csoportot."
+        }
+      },
+      "removed": {
+        "success": "A vásárló eltávolítva a(z) {{groups}} csoportból.",
+        "list": {
+          "noRecordsMessage": "Kérlek, először hozz létre egy vásárlói csoportot."
+        }
+      }
+    },
+    "edit": {
+      "header": "Vásárló szerkesztése",
+      "emailDisabledTooltip": "A regisztrált vásárlók email címét nem lehet megváltoztatni.",
+      "successToast": "A(z) {{email}} vásárló sikeresen frissítve lett."
+    },
+    "delete": {
+      "title": "Vásárló törlése",
+      "description": "Törölni fogod a(z) {{email}} vásárlót. Ez a művelet nem vonható vissza.",
+      "successToast": "A(z) {{email}} vásárló sikeresen törölve lett."
+    },
+    "fields": {
+      "guest": "Vendég",
+      "registered": "Regisztrált",
+      "groups": "Csoportok"
+    },
+    "registered": "Regisztrált",
+    "guest": "Vendég",
+    "hasAccount": "Van fiókja"
+  },
+  "customerGroups": {
+    "domain": "Vásárlói csoportok",
+    "subtitle": "Szervezd a vásárlókat csoportokba. A csoportoknak különböző promóciók és árak lehetnek.",
+    "create": {
+      "header": "Vásárlói csoport létrehozása",
+      "hint": "Hozz létre egy új vásárlói csoportot a vásárlók szegmentálásához.",
+      "successToast": "A(z) {{name}} vásárlói csoport sikeresen létrehozva."
+    },
+    "edit": {
+      "header": "Vásárlói csoport szerkesztése",
+      "successToast": "A(z) {{name}} vásárlói csoport sikeresen frissítve lett."
+    },
+    "delete": {
+      "title": "Vásárlói csoport törlése",
+      "description": "Törölni fogod a(z) {{name}} vásárlói csoportot. Ez a művelet nem vonható vissza.",
+      "successToast": "A(z) {{name}} vásárlói csoport sikeresen törölve lett."
+    },
+    "customers": {
+      "alreadyAddedTooltip": "A vásárló már hozzá lett adva a csoporthoz.",
+      "add": {
+        "successToast_one": "A vásárló sikeresen hozzáadva a csoporthoz.",
+        "successToast_other": "A vásárlók sikeresen hozzáadva a csoporthoz.",
+        "list": {
+          "noRecordsMessage": "Először hozz létre egy vásárlót."
+        }
+      },
+      "remove": {
+        "title_one": "Vásárló eltávolítása",
+        "title_other": "Vásárlók eltávolítása",
+        "description_one": "Eltávolítod a(z) {{count}} vásárlót a vásárlói csoportból. Ez a művelet nem vonható vissza.",
+        "description_other": "Eltávolítod a(z) {{count}} vásárlót a vásárlói csoportból. Ez a művelet nem vonható vissza."
+      },
+      "list": {
+        "noRecordsMessage": "Ennek a csoportnak nincsenek vásárlói."
+      }
+    }
+  },
+  "orders": {
+    "domain": "Rendelések",
+    "claim": "Reklamáció",
+    "exchange": "Csere",
+    "return": "Visszatérés",
+    "cancelWarning": "A(z) {{id}} számú rendelés törlésére készül. Ez a művelet nem vonható vissza.",
+    "onDateFromSalesChannel": "{{date}} a(z) {{salesChannel}}-ról",
+    "list": {
+      "noRecordsMessage": "A rendelései itt jelennek meg."
+    },
+    "summary": {
+      "requestReturn": "Visszatérés kérése",
+      "allocateItems": "Tételek kijelölése",
+      "editOrder": "Rendelés szerkesztése",
+      "editOrderContinue": "Rendelés szerkesztésének folytatása",
+      "inventoryKit": "A következőből áll: {{count}}x készlet tétel",
+      "itemTotal": "Tétel összesen",
+      "shippingTotal": "Szállítás összesen",
+      "discountTotal": "Kedvezmény összesen",
+      "taxTotalIncl": "Adó összesen (beleértve)",
+      "itemSubtotal": "Tétel alösszeg",
+      "shippingSubtotal": "Szállítás alösszeg",
+      "discountSubtotal": "Kedvezmény alösszeg",
+      "taxTotal": "Adó összesen"
+    },
+    "transfer": {
+      "title": "Tulajdonjog átruházása",
+      "requestSuccess": "A rendelés átruházásának kérelme elküldve a következő címre: {{email}}.",
+      "currentOwner": "Jelenlegi tulajdonos",
+      "newOwner": "Új tulajdonos",
+      "currentOwnerDescription": "A rendeléshez jelenleg kapcsolódó vásárló.",
+      "newOwnerDescription": "Az új vásárló, akinek a rendelést átruházzák."
+    },
+    "payment": {
+      "title": "Fizetések",
+      "isReadyToBeCaptured": "A(z) <0/> fizetés rögzítésre kész.",
+      "totalPaidByCustomer": "A vásárló által kifizetett összeg",
+      "capture": "Fizetés rögzítése",
+      "capture_short": "Rögzítés",
+      "refund": "Visszatérítés",
+      "markAsPaid": "Fizetésként jelölés",
+      "statusLabel": "Fizetés állapota",
+      "statusTitle": "Fizetés állapota",
+      "status": {
+        "notPaid": "Nincs kifizetve",
+        "authorized": "Engedélyezve",
+        "partiallyAuthorized": "Részlegesen engedélyezve",
+        "awaiting": "Várakozik",
+        "captured": "Rögzítve",
+        "partiallyRefunded": "Részlegesen visszatérítve",
+        "partiallyCaptured": "Részlegesen rögzítve",
+        "refunded": "Visszatérítve",
+        "canceled": "Törölve",
+        "requiresAction": "Művelet szükséges"
+      },
+      "capturePayment": "A(z) {{amount}} összeg rögzítése.",
+      "capturePaymentSuccess": "A(z) {{amount}} összeg sikeresen rögzítve",
+      "markAsPaidPayment": "A(z) {{amount}} összeg fizetésként lesz jelölve.",
+      "markAsPaidPaymentSuccess": "A(z) {{amount}} összeg sikeresen fizetésként jelölve",
+      "createRefund": "Visszatérítés létrehozása",
+      "refundPaymentSuccess": "A(z) {{amount}} összeg visszatérítése sikeres",
+      "createRefundWrongQuantity": "A mennyiségnek 1 és {{number}} között kell lennie",
+      "refundAmount": "Visszatérítés {{amount}}",
+      "paymentLink": "Fizetési link másolása {{amount}} összegre",
+      "selectPaymentToRefund": "Válassza ki a visszatérítendő fizetést"
+    },
+    "edits": {
+      "title": "Rendelés szerkesztése",
+      "confirm": "Módosítás megerősítése",
+      "confirmText": "A rendelés szerkesztésének megerősítésére készül. Ez a művelet nem vonható vissza.",
+      "cancel": "Módosítás törlése",
+      "currentItems": "Jelenlegi tételek",
+      "currentItemsDescription": "Módosíthatja a tételek mennyiségét vagy eltávolíthatja őket.",
+      "addItemsDescription": "Új tételeket adhat a rendeléshez.",
+      "addItems": "Tételek hozzáadása",
+      "amountPaid": "Kifizetett összeg",
+      "newTotal": "Új összeg",
+      "differenceDue": "Tartozó különbözet",
+      "create": "Rendelés szerkesztése",
+      "currentTotal": "Jelenlegi összeg",
+      "noteHint": "Adjon hozzá egy belső megjegyzést a szerkesztéshez",
+      "cancelSuccessToast": "Rendelés szerkesztése törölve",
+      "createSuccessToast": "Rendelés szerkesztési kérelem létrehozva",
+      "activeChangeError": "Már van egy aktív rendelésmódosítás (visszatérés, reklamáció, csere stb.). Kérjük, fejezze be vagy törölje a módosítást, mielőtt szerkesztené a rendelést.",
+      "panel": {
+        "title": "Rendelés szerkesztése kérve",
+        "titlePending": "Rendelés szerkesztése függőben"
+      },
+      "toast": {
+        "canceledSuccessfully": "Rendelés szerkesztése sikeresen törölve",
+        "confirmedSuccessfully": "Rendelés szerkesztése sikeresen megerősítve"
+      },
+      "validation": {
+        "quantityLowerThanFulfillment": "A mennyiség nem lehet kisebb vagy egyenlő a teljesített mennyiségnél"
+      }
+    },
+    "edit": {
+      "email": {
+        "title": "Email szerkesztése",
+        "requestSuccess": "A rendelés email címe {{email}}-ra frissítve."
+      },
+      "shippingAddress": {
+        "title": "Szállítási cím szerkesztése",
+        "requestSuccess": "A rendelés szállítási címe frissítve."
+      },
+      "billingAddress": {
+        "title": "Számlázási cím szerkesztése",
+        "requestSuccess": "A rendelés számlázási címe frissítve."
+      }
+    },
+    "returns": {
+      "create": "Visszatérés létrehozása",
+      "confirm": "Visszatérés megerősítése",
+      "confirmText": "A visszatérés megerősítésére készül. Ez a művelet nem vonható vissza.",
+      "inbound": "Beérkező",
+      "outbound": "Kimenő",
+      "sendNotification": "Értesítés küldése",
+      "sendNotificationHint": "Értesítse a vásárlót a visszatérésről.",
+      "returnTotal": "Visszatérítés összesen",
+      "inboundTotal": "Beérkező összesen",
+      "refundAmount": "Visszatérítendő összeg",
+      "outstandingAmount": "Tartozó összeg",
+      "reason": "Indok",
+      "reasonHint": "Válassza ki, miért szeretné a vásárló visszaküldeni a termékeket.",
+      "note": "Megjegyzés",
+      "noInventoryLevel": "Nincs készletszint",
+      "noInventoryLevelDesc": "A kiválasztott helyszínen nincs készletszint a kiválasztott tételekhez. A visszatérés kérhető, de nem fogadható el, amíg nem kerül létrehozásra készletszint az adott helyszínen.",
+      "noteHint": "Írhat bármit, ha szeretné pontosítani.",
+      "location": "Helyszín",
+      "locationHint": "Válassza ki, melyik helyszínre szeretné visszaküldeni a tételeket.",
+      "inboundShipping": "Visszaküldési szállítás",
+      "inboundShippingHint": "Válassza ki, melyik módszert szeretné használni.",
+      "returnableQuantityLabel": "Visszaküldhető mennyiség",
+      "refundableAmountLabel": "Visszatéríthető összeg",
+      "returnRequestedInfo": "{{requestedItemsCount}}x tétel visszakérése kérve",
+      "returnReceivedInfo": "{{requestedItemsCount}}x tétel visszaküldve",
+      "itemReceived": "Tétel fogadva",
+      "returnRequested": "Visszatérés kérve",
+      "damagedItemReceived": "Hibás tétel fogadva",
+      "damagedItemsReturned": "{{quantity}}x hibás tétel visszaküldve",
+      "activeChangeError": "Aktív rendelésmódosítás folyamatban van. Kérjük, fejezze be vagy törölje a módosítást előbb.",
+      "cancel": {
+        "title": "Visszatérés törlése",
+        "description": "Biztosan törölni szeretné a visszatérési kérelmet?"
+      },
+      "placeholders": {
+        "noReturnShippingOptions": {
+          "title": "Nincsenek visszaküldési szállítási lehetőségek",
+          "hint": "Nincs létrehozva visszaküldési szállítási lehetőség a helyszínen. Létrehozhat egyet a <LinkComponent>Helyszín & Szállítás</LinkComponent> menüpontban."
+        },
+        "outboundShippingOptions": {
+          "title": "Nincsenek kimenő szállítási lehetőségek",
+          "hint": "Nincs létrehozva kimenő szállítási lehetőség a helyszínen. Létrehozhat egyet a <LinkComponent>Helyszín & Szállítás</LinkComponent> menüpontban."
+        }
+      },
+      "receive": {
+        "action": "Tételek fogadása",
+        "receiveItems": "{{returnType}} {{id}}",
+        "restockAll": "Minden tétel visszatöltése",
+        "itemsLabel": "Tételek fogadva",
+        "title": "Tételek fogadása a(z) #{{returnId}} visszatéréshez",
+        "sendNotificationHint": "Értesítse a vásárlót a visszatérés átvételéről.",
+        "inventoryWarning": "Kérjük, vegye figyelembe, hogy automatikusan módosítjuk a készletszinteket a fenti bevitel alapján.",
+        "writeOffInputLabel": "Hány tétel sérült?",
+        "toast": {
+          "success": "Visszatérés sikeresen átvéve.",
+          "errorLargeValue": "A mennyiség nagyobb, mint a kért tétel mennyisége.",
+          "errorNegativeValue": "A mennyiség nem lehet negatív.",
+          "errorLargeDamagedValue": "A sérült tételek mennyisége + a nem sérült tételek mennyisége meghaladja a teljes visszatérési mennyiséget. Kérjük, csökkentse a nem sérült tételek mennyiségét."
+        }
+      },
+      "toast": {
+        "canceledSuccessfully": "Visszatérés sikeresen törölve",
+        "confirmedSuccessfully": "Visszatérés sikeresen megerősítve"
+      },
+      "panel": {
+        "title": "Visszatérés kezdeményezve",
+        "description": "Nyitott visszatérési kérés vár befejezésre"
+      }
+    },
+    "claims": {
+      "create": "Reklamáció létrehozása",
+      "confirm": "Reklamáció megerősítése",
+      "confirmText": "A reklámáció megerősítésére készül. Ez a művelet nem vonható vissza.",
+      "manage": "Reklamáció kezelése",
+      "outbound": "Kimenő",
+      "outboundItemAdded": "{{itemsCount}}x hozzáadva reklamációval",
+      "outboundTotal": "Kimenő összesen",
+      "outboundShipping": "Kimenő szállítás",
+      "outboundShippingHint": "Válassza ki, melyik módszert szeretné használni.",
+      "refundAmount": "Becsült különbözet",
+      "activeChangeError": "Aktív rendelésmódosítás van ezen a rendelésen. Kérjük, fejezze be vagy dobja el az előző módosítást.",
+      "actions": {
+        "cancelClaim": {
+          "successToast": "A reklamáció sikeresen törölve."
+        }
+      },
+      "cancel": {
+        "title": "Reklamáció törlése",
+        "description": "Biztosan törölni szeretné a reklamációt?"
+      },
+      "tooltips": {
+        "onlyReturnShippingOptions": "Ez a lista csak visszaküldési szállítási lehetőségekből áll."
+      },
+      "toast": {
+        "canceledSuccessfully": "Reklamáció sikeresen törölve",
+        "confirmedSuccessfully": "Reklamáció sikeresen megerősítve"
+      },
+      "panel": {
+        "title": "Reklamáció kezdeményezve",
+        "description": "Nyitott reklamációs kérés vár befejezésre"
+      }
+    },
+    "exchanges": {
+      "create": "Csere létrehozása",
+      "manage": "Csere kezelése",
+      "confirm": "Csere megerősítése",
+      "confirmText": "A csere megerősítésére készül. Ez a művelet nem vonható vissza.",
+      "outbound": "Kimenő",
+      "outboundItemAdded": "{{itemsCount}}x hozzáadva cserével",
+      "outboundTotal": "Kimenő összesen",
+      "outboundShipping": "Kimenő szállítás",
+      "outboundShippingHint": "Válassza ki, melyik módszert szeretné használni.",
+      "refundAmount": "Becsült különbözet",
+      "activeChangeError": "Aktív rendelésmódosítás van ezen a rendelésen. Kérjük, fejezze be vagy dobja el az előző módosítást.",
+      "actions": {
+        "cancelExchange": {
+          "successToast": "A csere sikeresen törölve."
+        }
+      },
+      "cancel": {
+        "title": "Csere törlése",
+        "description": "Biztosan törölni szeretné a cserét?"
+      },
+      "tooltips": {
+        "onlyReturnShippingOptions": "Ez a lista csak visszaküldési szállítási lehetőségekből áll."
+      },
+      "toast": {
+        "canceledSuccessfully": "Csere sikeresen törölve",
+        "confirmedSuccessfully": "Csere sikeresen megerősítve"
+      },
+      "panel": {
+        "title": "Csere kezdeményezve",
+        "description": "Nyitott csere kérés vár befejezésre"
+      }
+    },
+    "reservations": {
+      "allocatedLabel": "Kiosztva",
+      "notAllocatedLabel": "Nincs kiosztva"
+    },
+    "allocateItems": {
+      "action": "Tételek kiosztása",
+      "title": "Rendelési tételek kiosztása",
+      "locationDescription": "Válassza ki, melyik helyszínről szeretné kiosztani a tételeket.",
+      "itemsToAllocate": "Kiosztandó tételek",
+      "itemsToAllocateDesc": "Válassza ki, hány tételt szeretne kiosztani",
+      "search": "Tételek keresése",
+      "consistsOf": "A következőkből áll: {{num}}x készlet tétel",
+      "requires": "Követelmény: {{num}} darab minden variánsból",
+      "toast": {
+        "created": "Tételek sikeresen kiosztva"
+      },
+      "error": {
+        "quantityNotAllocated": "Vannak még ki nem osztott tételek."
+      }
+    },
+    "shipment": {
+      "title": "Teljesítés kiszállítva",
+      "trackingNumber": "Követési szám",
+      "addTracking": "Követési szám hozzáadása",
+      "sendNotification": "Értesítés küldése",
+      "sendNotificationHint": "Értesítse a vásárlót a szállításról.",
+      "toastCreated": "Szállítás sikeresen létrehozva."
+    },
+    "fulfillment": {
+      "cancelWarning": "A teljesítés törlésére készül. Ez a művelet nem vonható vissza.",
+      "markAsDeliveredWarning": "A teljesítést szállítottként jelölni készül. Ez a művelet nem vonható vissza.",
+      "unfulfilledItems": "Teljesítetlen tételek",
+      "statusLabel": "Teljesítés állapota",
+      "statusTitle": "Teljesítés állapota",
+      "fulfillItems": "Tételek teljesítése",
+      "awaitingFulfillmentBadge": "Várakozik teljesítésre",
+      "requiresShipping": "Szállítást igényel",
+      "number": "Teljesítés #{{number}}",
+      "itemsToFulfill": "Teljesítendő tételek",
+      "create": "Teljesítés létrehozása",
+      "available": "Elérhető",
+      "inStock": "Raktáron",
+      "markAsShipped": "Jelölje szállítottnak",
+      "markAsDelivered": "Jelölje kézbesítetnek",
+      "itemsToFulfillDesc": "Válassza ki a teljesítendő tételeket és mennyiségeket",
+      "locationDescription": "Válassza ki, melyik helyszínről szeretné teljesíteni a tételeket.",
+      "sendNotificationHint": "Értesítse a vásárlót a teljesítésről.",
+      "methodDescription": "Válasszon másik szállítási módszert, mint amit a vásárló választott.",
+      "error": {
+        "wrongQuantity": "Csak egy tétel érhető el teljesítésre",
+        "wrongQuantity_other": "A mennyiségnek 1 és {{number}} között kell lennie",
+        "noItems": "Nincsenek teljesítendő tételek."
+      },
+      "status": {
+        "notFulfilled": "Nem teljesítve",
+        "partiallyFulfilled": "Részben teljesítve",
+        "fulfilled": "Teljesítve",
+        "partiallyShipped": "Részben szállítva",
+        "shipped": "Szállítva",
+        "delivered": "Kézbesítve",
+        "partiallyDelivered": "Részben kézbesítve",
+        "partiallyReturned": "Részben visszaküldve",
+        "returned": "Visszaküldve",
+        "canceled": "Törölve",
+        "requiresAction": "Művelet szükséges"
+      },
+      "toast": {
+        "created": "Teljesítés sikeresen létrehozva",
+        "canceled": "Teljesítés sikeresen törölve",
+        "fulfillmentShipped": "Már kiszállított teljesítést nem lehet törölni",
+        "fulfillmentDelivered": "Teljesítés sikeresen kézbesítve"
+      },
+      "trackingLabel": "Követés",
+      "shippingFromLabel": "Szállítva innen",
+      "itemsLabel": "Tételek"
+    },
+    "refund": {
+      "title": "Visszatérítés létrehozása",
+      "sendNotificationHint": "Értesítse a vásárlót a visszatérítésről.",
+      "systemPayment": "Rendszer fizetés",
+      "systemPaymentDesc": "Egy vagy több fizetése rendszer fizetés. Vegye figyelembe, hogy a rendszer fizetésekkel kapcsolatos rögzítés és visszatérítés nem kezelhető a Medusa által.",
+      "error": {
+        "amountToLarge": "Nem téríthet vissza többet, mint az eredeti rendelési összeg.",
+        "amountNegative": "A visszatérítési összegnek pozitív számnak kell lennie.",
+        "reasonRequired": "Kérjük, válasszon visszatérítési indokot."
+      }
+    },
+    "customer": {
+      "contactLabel": "Kapcsolat",
+      "editEmail": "Email módosítása",
+      "transferOwnership": "Tulajdonjog átruházása",
+      "editBillingAddress": "Számlázási cím módosítása",
+      "editShippingAddress": "Szállítási cím módosítása"
+    },
+    "activity": {
+      "header": "Tevékenység",
+      "showMoreActivities_one": "Mutasson még {{count}} tevékenységet",
+      "showMoreActivities_other": "Mutasson még {{count}} tevékenységet",
+      "comment": {
+        "label": "Kommentár",
+        "placeholder": "Hagyjon egy megjegyzést",
+        "addButtonText": "Kommentár hozzáadása",
+        "deleteButtonText": "Kommentár törlése"
+      },
+      "from": "Tól",
+      "to": "Ig",
+      "events": {
+        "common": {
+          "toReturn": "Vissza kell küldeni",
+          "toSend": "Küldeni kell"
+        },
+        "placed": {
+          "title": "Rendelés leadva",
+          "fromSalesChannel": "{{salesChannel}}-ról"
+        },
+        "canceled": {
+          "title": "Rendelés törölve"
+        },
+        "payment": {
+          "awaiting": "Fizetés váratban",
+          "captured": "Fizetés rögzítve",
+          "canceled": "Fizetés törölve",
+          "refunded": "Fizetés visszatérítve"
+        },
+        "fulfillment": {
+          "created": "Tételek teljesítve",
+          "canceled": "Teljesítés törölve",
+          "shipped": "Tételek szállítva",
+          "delivered": "Tételek kézbesítve",
+          "items_one": "{{count}} tétel",
+          "items_other": "{{count}} tétel"
+        },
+        "return": {
+          "created": "Visszatérítés #{{returnId}} kérve",
+          "canceled": "Visszatérítés #{{returnId}} törölve",
+          "received": "Visszatérítés #{{returnId}} megérkezett",
+          "items_one": "{{count}} tétel visszaküldve",
+          "items_other": "{{count}} tétel visszaküldve"
+        },
+        "note": {
+          "comment": "Kommentár",
+          "byLine": "írta: {{author}}"
+        },
+        "claim": {
+          "created": "Reklamáció #{{claimId}} kérve",
+          "canceled": "Reklamáció #{{claimId}} törölve",
+          "itemsInbound": "{{count}} tétel visszaküldésre",
+          "itemsOutbound": "{{count}} tétel küldésre"
+        },
+        "exchange": {
+          "created": "Csere #{{exchangeId}} kérve",
+          "canceled": "Csere #{{exchangeId}} törölve",
+          "itemsInbound": "{{count}} tétel visszaküldésre",
+          "itemsOutbound": "{{count}} tétel küldésre"
+        },
+        "edit": {
+          "requested": "Rendelés szerkesztése #{{editId}} kérve",
+          "confirmed": "Rendelés szerkesztése #{{editId}} megerősítve"
+        },
+        "transfer": {
+          "requested": "Rendelés átruházás #{{transferId}} kérve",
+          "confirmed": "Rendelés átruházás #{{transferId}} megerősítve",
+          "declined": "Rendelés átruházás #{{transferId}} elutasítva"
+        },
+        "update_order": {
+          "shipping_address": "Szállítási cím frissítve",
+          "billing_address": "Számlázási cím frissítve",
+          "email": "Email frissítve"
+        }
+      }
+    },
+    "fields": {
+      "displayId": "Kijelző ID",
+      "refundableAmount": "Visszatéríthető összeg",
+      "returnableQuantity": "Visszaküldhető mennyiség"
+    }
+  },
+  "draftOrders": {
+    "domain": "Tervezett rendelések",
+    "deleteWarning": "Ön most törölni fogja a tervezett rendelést {{id}}. Ez a művelet nem vonható vissza.",
+    "paymentLinkLabel": "Fizetési link",
+    "cartIdLabel": "Kosár azonosító",
+    "markAsPaid": {
+      "label": "Fizetettként jelölés",
+      "warningTitle": "Fizetettként jelölés",
+      "warningDescription": "Ön most fizetettként fogja jelölni a tervezett rendelést. Ez a művelet nem vonható vissza, és a fizetés később nem lesz lehetséges."
+    },
+    "status": {
+      "open": "Nyitott",
+      "completed": "Befejezett"
+    },
+    "create": {
+      "createDraftOrder": "Tervezett rendelés létrehozása",
+      "createDraftOrderHint": "Hozzon létre egy új tervezett rendelést, hogy kezelje a rendelés részleteit, mielőtt azt leadnák.",
+      "chooseRegionHint": "Válasszon régiót",
+      "existingItemsLabel": "Meglévő tételek",
+      "existingItemsHint": "Adjon hozzá meglévő termékeket a tervezett rendeléshez.",
+      "customItemsLabel": "Egyedi tételek",
+      "customItemsHint": "Adjon hozzá egyedi tételeket a tervezett rendeléshez.",
+      "addExistingItemsAction": "Meglévő tételek hozzáadása",
+      "addCustomItemAction": "Egyedi tétel hozzáadása",
+      "noCustomItemsAddedLabel": "Még nem lett hozzáadva egyedi tétel",
+      "noExistingItemsAddedLabel": "Még nem lett hozzáadva meglévő tétel",
+      "chooseRegionTooltip": "Válasszon először régiót",
+      "useExistingCustomerLabel": "Meglévő vásárló használata",
+      "addShippingMethodsAction": "Szállítási módok hozzáadása",
+      "unitPriceOverrideLabel": "Egységár felülírása",
+      "shippingOptionLabel": "Szállítási lehetőség",
+      "shippingOptionHint": "Válassza ki a szállítási lehetőséget a tervezett rendeléshez.",
+      "shippingPriceOverrideLabel": "Szállítási ár felülírása",
+      "shippingPriceOverrideHint": "Felülírhatja a szállítási árat a tervezett rendeléshez.",
+      "sendNotificationLabel": "Értesítés küldése",
+      "sendNotificationHint": "Küldjön értesítést az ügyfélnek, amikor a tervezett rendelés létrejön."
+    },
+    "validation": {
+      "requiredEmailOrCustomer": "Email vagy vásárló megadása szükséges.",
+      "requiredItems": "Legalább egy tétel szükséges.",
+      "invalidEmail": "Az email címnek érvényesnek kell lennie."
+    }
+  },
+  "stockLocations": {
+    "domain": "Helyszínek és szállítás",
+    "list": {
+      "description": "Kezelje a boltja készlethelyszíneit és szállítási lehetőségeit."
+    },
+    "create": {
+      "header": "Készlethelyszín létrehozása",
+      "hint": "A készlethelyszín egy fizikai hely, ahol a termékek tárolódnak és ahonnan kiszállítják őket.",
+      "successToast": "A(z) {{name}} helyszín sikeresen létrejött."
+    },
+    "edit": {
+      "header": "Készlethelyszín szerkesztése",
+      "viewInventory": "Készlet megtekintése",
+      "successToast": "A(z) {{name}} helyszín sikeresen frissítve lett."
+    },
+    "delete": {
+      "confirmation": "Ön most törölni fogja a {{name}} készlethelyszínt. Ez a művelet nem vonható vissza."
+    },
+    "fulfillmentProviders": {
+      "header": "Teljesítési szolgáltatók",
+      "shippingOptionsTooltip": "Ez a legördülő menü csak azokkal a szolgáltatókkal fog rendelkezni, akik engedélyezve vannak ezen a helyszínen. Adja hozzá őket a helyszínhez, ha a legördülő menü le van tiltva.",
+      "label": "Kapcsolódó teljesítési szolgáltatók",
+      "connectedTo": "Kapcsolódva van {{count}} a {{total}} teljesítési szolgáltatóból",
+      "noProviders": "Ez a készlethelyszín nincs összekapcsolva semmilyen teljesítési szolgáltatóval.",
+      "action": "Szolgáltatók csatlakoztatása",
+      "successToast": "A készlethelyszínhez tartozó teljesítési szolgáltatók sikeresen frissítve lettek."
+    },
+    "fulfillmentSets": {
+      "pickup": {
+        "header": "Átvétel"
+      },
+      "shipping": {
+        "header": "Szállítás"
+      },
+      "disable": {
+        "confirmation": "Biztosan le szeretné tiltani a(z) {{name}}-t? Ez törli az összes kapcsolódó szolgáltatási zónát és szállítási lehetőséget, és nem vonható vissza.",
+        "pickup": "Az átvétel sikeresen letiltva.",
+        "shipping": "A szállítás sikeresen letiltva."
+      },
+      "enable": {
+        "pickup": "Az átvétel sikeresen engedélyezve.",
+        "shipping": "A szállítás sikeresen engedélyezve."
+      }
+    },
+    "sidebar": {
+      "header": "Szállítási beállítások",
+      "shippingProfiles": {
+        "label": "Szállítási profilok",
+        "description": "Csoportosítja a termékeket szállítási igényeik alapján"
+      }
+    },
+    "salesChannels": {
+      "header": "Értékesítési csatornák",
+      "label": "Kapcsolódó értékesítési csatornák",
+      "connectedTo": "Kapcsolódva van {{count}} a {{total}} értékesítési csatornából",
+      "noChannels": "A helyszín nincs összekapcsolva semmilyen értékesítési csatornával.",
+      "action": "Értékesítési csatornák csatlakoztatása",
+      "successToast": "Az értékesítési csatornák sikeresen frissítve lettek."
+    },
+    "shippingOptions": {
+      "create": {
+        "shipping": {
+          "header": "Szállítási lehetőség létrehozása a(z) {{zone}}-tól",
+          "hint": "Hozzon létre egy új szállítási lehetőséget, hogy meghatározza, hogyan történjen a termékek szállítása ezen a helyszínen.",
+          "label": "Szállítási lehetőségek",
+          "successToast": "A szállítási lehetőség {{name}} sikeresen létrejött."
+        },
+        "returns": {
+          "header": "Visszaküldési lehetőség létrehozása a(z) {{zone}}-tól",
+          "hint": "Hozzon létre egy új visszaküldési lehetőséget, hogy meghatározza, hogyan történjen a termékek visszaküldése ezen a helyszínen.",
+          "label": "Visszaküldési lehetőségek",
+          "successToast": "A visszaküldési lehetőség {{name}} sikeresen létrejött."
+        },
+        "tabs": {
+          "details": "Részletek",
+          "prices": "Árak"
+        },
+        "action": "Lehetőség létrehozása"
+      },
+      "delete": {
+        "confirmation": "Ön most törölni fogja a szállítási lehetőséget {{name}}. Ez a művelet nem vonható vissza.",
+        "successToast": "A szállítási lehetőség {{name}} sikeresen törlésre került."
+      },
+      "edit": {
+        "header": "Szállítási lehetőség szerkesztése",
+        "action": "Lehetőség szerkesztése",
+        "successToast": "A szállítási lehetőség {{name}} sikeresen frissítve lett."
+      },
+      "pricing": {
+        "action": "Árak szerkesztése"
+      },
+      "conditionalPrices": {
+        "header": "Feltételes árak a(z) {{name}}-hoz",
+        "description": "A feltételes árak kezelése ezen a szállítási lehetőségen belül a kosár tétel összértéke alapján.",
+        "attributes": {
+          "cartItemTotal": "Kosár tétel összértéke"
+        },
+        "summaries": {
+          "range": "Ha <0>{{attribute}}</0> a <1>{{gte}}</1> és <2>{{lte}}</2> között van",
+          "greaterThan": "Ha <0>{{attribute}}</0> ≥ <1>{{gte}}</1>",
+          "lessThan": "Ha <0>{{attribute}}</0> ≤ <1>{{lte}}</1>"
+        },
+        "actions": {
+          "addPrice": "Ár hozzáadása",
+          "manageConditionalPrices": "Feltételes árak kezelése"
+        },
+        "rules": {
+          "amount": "Szállítási lehetőség ára",
+          "gte": "Minimum kosár tétel összértéke",
+          "lte": "Maximum kosár tétel összértéke"
+        },
+        "customRules": {
+          "label": "Egyedi szabályok",
+          "tooltip": "Ez a feltételes ár olyan szabályokat tartalmaz, amelyek nem kezelhetők a vezérlőpulton.",
+          "eq": "A kosár tétel összértékének egyeznie kell",
+          "gt": "A kosár tétel összértékének nagyobbnak kell lennie",
+          "lt": "A kosár tétel összértékének kisebbnek kell lennie"
+        },
+        "errors": {
+          "amountRequired": "A szállítási lehetőség ára kötelező",
+          "minOrMaxRequired": "A minimum vagy maximum kosár tétel összértéket meg kell adni",
+          "minGreaterThanMax": "A minimum kosár tétel összértéke nem lehet nagyobb a maximum kosár tétel összértékénél",
+          "duplicateAmount": "A szállítási lehetőség ára egyedinek kell lennie minden feltételnél",
+          "overlappingConditions": "A feltételeknek egyedieknek kell lenniük az összes árrendszer között"
+        }
+      },
+      "fields": {
+        "count": {
+          "shipping_one": "{{count}} szállítási lehetőség",
+          "shipping_other": "{{count}} szállítási lehetőség",
+          "returns_one": "{{count}} visszaküldési lehetőség",
+          "returns_other": "{{count}} visszaküldési lehetőség"
+        },
+        "priceType": {
+          "label": "Ár típus",
+          "options": {
+            "fixed": {
+              "label": "Fix",
+              "hint": "A szállítási lehetőség ára fix, és nem változik a rendelés tartalmától függően."
+            },
+            "calculated": {
+              "label": "Számított",
+              "hint": "A szállítási lehetőség ára a teljesítési szolgáltató által kerül kiszámításra a vásárlás során."
+            }
+          }
+        },
+        "enableInStore": {
+          "label": "Engedélyezés boltban",
+          "hint": "A vásárlók használhatják-e ezt az opciót a pénztárnál?"
+        },
+        "provider": "Teljesítési szolgáltató",
+        "profile": "Szállítási profil",
+        "fulfillmentOption": "Teljesítési lehetőség"
+      }
+    },
+    "serviceZones": {
+      "create": {
+        "headerPickup": "Szolgáltatási zóna létrehozása átvételhez a(z) {{location}}-ról",
+        "headerShipping": "Szolgáltatási zóna létrehozása szállításhoz a(z) {{location}}-ról",
+        "action": "Szolgáltatási zóna létrehozása",
+        "successToast": "A szolgáltatási zóna {{name}} sikeresen létrejött."
+      },
+      "edit": {
+        "header": "Szolgáltatási zóna szerkesztése",
+        "successToast": "A szolgáltatási zóna {{name}} sikeresen frissítve lett."
+      },
+      "delete": {
+        "confirmation": "Ön most törölni fogja a szolgáltatási zónát {{name}}. Ez a művelet nem vonható vissza.",
+        "successToast": "A szolgáltatási zóna {{name}} sikeresen törlésre került."
+      },
+      "manageAreas": {
+        "header": "Területek kezelése a(z) {{name}} számára",
+        "action": "Területek kezelése",
+        "label": "Területek",
+        "hint": "Válassza ki azokat a földrajzi területeket, amelyeket a szolgáltatási zóna lefed.",
+        "successToast": "A(z) {{name}} területei sikeresen frissítve lettek."
+      },
+      "fields": {
+        "noRecords": "Nincs olyan szolgáltatási zóna, amelyhez szállítási lehetőségeket lehetne hozzáadni.",
+        "tip": "A szolgáltatási zóna egy földrajzi területek vagy zónák gyűjteménye. Ez arra szolgál, hogy a szállítási lehetőségeket korlátozza a meghatározott helyszínekre."
+      }
+    }
+  },
+  "shippingProfile": {
+    "domain": "Szállítási profilok",
+    "subtitle": "Csoportosítsa a hasonló szállítási igényekkel rendelkező termékeket profilokba.",
+    "create": {
+      "header": "Szállítási profil létrehozása",
+      "hint": "Hozzon létre egy új szállítási profilt a hasonló szállítási igényekkel rendelkező termékek csoportosításához.",
+      "successToast": "A szállítási profil {{name}} sikeresen létrejött."
+    },
+    "delete": {
+      "title": "Szállítási profil törlése",
+      "description": "Ön most törölni fogja a szállítási profilt {{name}}. Ez a művelet nem vonható vissza.",
+      "successToast": "A szállítási profil {{name}} sikeresen törlésre került."
+    },
+    "tooltip": {
+      "type": "Adja meg a szállítási profil típusát, például: Nehéz, Túlméretes, Csak szállítás, stb."
+    }
+  },
+  "taxRegions": {
+    "domain": "Adózási Régiók",
+    "list": {
+      "hint": "Kezelje, hogy mit számít fel a vásárlóknak, amikor különböző országokból és régiókból vásárolnak."
+    },
+    "delete": {
+      "confirmation": "Ön most törölni fog egy adózási régiót. Ez a művelet nem vonható vissza.",
+      "successToast": "Az adózási régió sikeresen törlésre került."
+    },
+    "create": {
+      "header": "Adózási Régió Létrehozása",
+      "hint": "Hozzon létre egy új adózási régiót egy adott ország adókulcsainak meghatározásához.",
+      "errors": {
+        "rateIsRequired": "Adókulcs megadása szükséges az alapértelmezett adókulcs létrehozásakor.",
+        "nameIsRequired": "Név megadása szükséges az alapértelmezett adókulcs létrehozásakor."
+      },
+      "successToast": "Az adózási régió sikeresen létrejött."
+    },
+    "province": {
+      "header": "Tartományok",
+      "create": {
+        "header": "Tartomány Adózási Régió Létrehozása",
+        "hint": "Hozzon létre egy új adózási régiót egy adott tartomány adókulcsainak meghatározásához."
+      }
+    },
+    "state": {
+      "header": "Államok",
+      "create": {
+        "header": "Állam Adózási Régió Létrehozása",
+        "hint": "Hozzon létre egy új adózási régiót egy adott állam adókulcsainak meghatározásához."
+      }
+    },
+    "stateOrTerritory": {
+      "header": "Államok vagy Területek",
+      "create": {
+        "header": "Állam/Terület Adózási Régió Létrehozása",
+        "hint": "Hozzon létre egy új adózási régiót egy adott állam/terület adókulcsainak meghatározásához."
+      }
+    },
+    "county": {
+      "header": "Megyék",
+      "create": {
+        "header": "Megye Adózási Régió Létrehozása",
+        "hint": "Hozzon létre egy új adózási régiót egy adott megye adókulcsainak meghatározásához."
+      }
+    },
+    "region": {
+      "header": "Régiók",
+      "create": {
+        "header": "Régió Adózási Régió Létrehozása",
+        "hint": "Hozzon létre egy új adózási régiót egy adott régió adókulcsainak meghatározásához."
+      }
+    },
+    "department": {
+      "header": "Osztályok",
+      "create": {
+        "header": "Osztály Adózási Régió Létrehozása",
+        "hint": "Hozzon létre egy új adózási régiót egy adott osztály adókulcsainak meghatározásához."
+      }
+    },
+    "territory": {
+      "header": "Területek",
+      "create": {
+        "header": "Terület Adózási Régió Létrehozása",
+        "hint": "Hozzon létre egy új adózási régiót egy adott terület adókulcsainak meghatározásához."
+      }
+    },
+    "prefecture": {
+      "header": "Prefektúrák",
+      "create": {
+        "header": "Prefektúra Adózási Régió Létrehozása",
+        "hint": "Hozzon létre egy új adózási régiót egy adott prefektúra adókulcsainak meghatározásához."
+      }
+    },
+    "district": {
+      "header": "Kerületek",
+      "create": {
+        "header": "Kerület Adózási Régió Létrehozása",
+        "hint": "Hozzon létre egy új adózási régiót egy adott kerület adókulcsainak meghatározásához."
+      }
+    },
+    "governorate": {
+      "header": "Kormányzóságok",
+      "create": {
+        "header": "Kormányzóság Adózási Régió Létrehozása",
+        "hint": "Hozzon létre egy új adózási régiót egy adott kormányzóság adókulcsainak meghatározásához."
+      }
+    },
+    "canton": {
+      "header": "Kantonok",
+      "create": {
+        "header": "Kanton Adózási Régió Létrehozása",
+        "hint": "Hozzon létre egy új adózási régiót egy adott kanton adókulcsainak meghatározásához."
+      }
+    },
+    "emirate": {
+      "header": "Emírségek",
+      "create": {
+        "header": "Emírség Adózási Régió Létrehozása",
+        "hint": "Hozzon létre egy új adózási régiót egy adott emírség adókulcsainak meghatározásához."
+      }
+    },
+    "sublevel": {
+      "header": "Alszintek",
+      "create": {
+        "header": "Alszint Adózási Régió Létrehozása",
+        "hint": "Hozzon létre egy új adózási régiót egy adott alszint adókulcsainak meghatározásához."
+      }
+    },
+    "taxOverrides": {
+      "header": "Felülírások",
+      "create": {
+        "header": "Felülírás Létrehozása",
+        "hint": "Hozzon létre egy adókulcsot, amely felülírja az alapértelmezett adókulcsokat meghatározott feltételek esetén."
+      },
+      "edit": {
+        "header": "Felülírás Szerkesztése",
+        "hint": "Szerkessze a felülíró adókulcsot meghatározott feltételekhez."
+      }
+    },
+    "taxRates": {
+      "create": {
+        "header": "Adókulcs Létrehozása",
+        "hint": "Hozzon létre egy új adókulcsot egy régió adókulcsainak meghatározásához.",
+        "successToast": "Adókulcs sikeresen létrejött."
+      },
+      "edit": {
+        "header": "Adókulcs Szerkesztése",
+        "hint": "Szerkessze az adókulcsot egy régió adókulcsainak meghatározásához.",
+        "successToast": "Adókulcs sikeresen frissítve lett."
+      },
+      "delete": {
+        "confirmation": "Ön most törölni fogja a {{name}} adókulcsot. Ez a művelet nem vonható vissza.",
+        "successToast": "Adókulcs sikeresen törlésre került."
+      }
+    },
+    "fields": {
+      "isCombinable": {
+        "label": "Kombinálható",
+        "hint": "Azt jelzi, hogy ez az adókulcs kombinálható-e az adózási régió alapértelmezett adókulcsával.",
+        "true": "Kombinálható",
+        "false": "Nem kombinálható"
+      },
+      "defaultTaxRate": {
+        "label": "Alapértelmezett adókulcs",
+        "tooltip": "Az alapértelmezett adókulcs ezen a régióban. Példa erre egy ország vagy régió standard ÁFA kulcsa.",
+        "action": "Alapértelmezett adókulcs létrehozása"
+      },
+      "taxRate": "Adókulcs",
+      "taxCode": "Adó kód",
+      "targets": {
+        "label": "Célok",
+        "hint": "Válassza ki azokat a célokat, amelyekre alkalmazni kívánja ezt az adókulcsot.",
+        "options": {
+          "product": "Termékek",
+          "productCollection": "Termékgyűjtemények",
+          "productTag": "Termék címkék",
+          "productType": "Terméktípusok",
+          "customerGroup": "Vásárlói csoportok"
+        },
+        "operators": {
+          "in": "benne",
+          "on": "azon",
+          "and": "és"
+        },
+        "placeholders": {
+          "product": "Keressen termékeket",
+          "productCollection": "Keressen termékgyűjteményeket",
+          "productTag": "Keressen termék címkéket",
+          "productType": "Keressen terméktípusokat",
+          "customerGroup": "Keressen vásárlói csoportokat"
+        },
+        "tags": {
+          "product": "Termék",
+          "productCollection": "Termékgyűjtemény",
+          "productTag": "Termék címke",
+          "productType": "Terméktípus",
+          "customerGroup": "Vásárlói csoport"
+        },
+        "modal": {
+          "header": "Célok hozzáadása"
+        },
+        "values_one": "{{count}} érték",
+        "values_other": "{{count}} értékek",
+        "numberOfTargets_one": "{{count}} cél",
+        "numberOfTargets_other": "{{count}} célok",
+        "additionalValues_one": "és {{count}} további érték",
+        "additionalValues_other": "és {{count}} további értékek",
+        "action": "Cél hozzáadása"
+      },
+      "sublevels": {
+        "labels": {
+          "province": "Tartomány",
+          "state": "Állam",
+          "region": "Régió",
+          "stateOrTerritory": "Állam/Terület",
+          "department": "Osztály",
+          "county": "Megye",
+          "territory": "Terület",
+          "prefecture": "Prefektúra",
+          "district": "Kerület",
+          "governorate": "Kormányzóság",
+          "emirate": "Emírség",
+          "canton": "Kanton",
+          "sublevel": "Alszint kód"
+        },
+        "placeholders": {
+          "province": "Válassza ki a tartományt",
+          "state": "Válassza ki az államot",
+          "region": "Válassza ki a régiót",
+          "stateOrTerritory": "Válassza ki az államot/területet",
+          "department": "Válassza ki az osztályt",
+          "county": "Válassza ki a megyét",
+          "territory": "Válassza ki a területet",
+          "prefecture": "Válassza ki a prefektúrát",
+          "district": "Válassza ki a kerületet",
+          "governorate": "Válassza ki a kormányzóságot",
+          "emirate": "Válassza ki az emírséget",
+          "canton": "Válassza ki a kantont"
+        },
+        "tooltips": {
+          "sublevel": "Adja meg az ISO 3166-2 kódot az alszint adózási régióhoz.",
+          "notPartOfCountry": "{{province}} nem tűnik része {{country}}-nak. Kérem, ellenőrizze, hogy ez helyes-e."
+        },
+        "alert": {
+          "header": "Alszint régiók le vannak tiltva ehhez az adózási régióhoz",
+          "description": "Alszint régiók le vannak tiltva ehhez a régióhoz alapértelmezetten. Engedélyezheti őket, hogy létrehozhasson alszint régiókat, mint például tartományokat, államokat vagy területeket.",
+          "action": "Alszint régiók engedélyezése"
+        }
+      },
+      "noDefaultRate": {
+        "label": "Nincs alapértelmezett adókulcs",
+        "tooltip": "Ez az adózási régió nem rendelkezik alapértelmezett adókulccsal. Ha van egy standard kulcs, mint például egy ország ÁFA kulcsa, kérjük, adja hozzá ezt a régióhoz."
+      }
+    }
+  },
+  "promotions": {
+    "domain": "Promóciók",
+    "sections": {
+      "details": "Promóciós Részletek"
+    },
+    "tabs": {
+      "template": "Típus",
+      "details": "Részletek",
+      "campaign": "Kampány"
+    },
+    "fields": {
+      "type": "Típus",
+      "value_type": "Érték Típus",
+      "value": "Érték",
+      "campaign": "Kampány",
+      "method": "Módszer",
+      "allocation": "Elosztás",
+      "addCondition": "Feltétel hozzáadása",
+      "clearAll": "Összes törlése",
+      "amount": {
+        "tooltip": "Válassza ki az valutakódot az összeg beállításához"
+      },
+      "conditions": {
+        "rules": {
+          "title": "Ki használhatja ezt a kódot?",
+          "description": "Melyik vásárló használhatja a promóciós kódot? A promóciós kódot minden vásárló használhatja, ha nem változtatják."
+        },
+        "target-rules": {
+          "title": "Milyen termékekre alkalmazható a promóció?",
+          "description": "A promóció olyan termékekre vonatkozik, amelyek megfelelnek a következő feltételeknek."
+        },
+        "buy-rules": {
+          "title": "Mi szükséges a kosárban, hogy feloldja a promóciót?",
+          "description": "Ha ezek a feltételek teljesülnek, a promóció érvényesül a célzott termékekre."
+        }
+      }
+    },
+    "tooltips": {
+      "campaignType": "A valutakódot a promóció részletei között kell kiválasztani a költési keret beállításához."
+    },
+    "errors": {
+      "requiredField": "Kötelező mező",
+      "promotionTabError": "A promóciós lap hibáinak kijavítása szükséges a folytatáshoz"
+    },
+    "toasts": {
+      "promotionCreateSuccess": "A promóció ({{code}}) sikeresen létrejött."
+    },
+    "create": {},
+    "edit": {
+      "title": "Promóciós Részletek Szerkesztése",
+      "rules": {
+        "title": "Használati feltételek szerkesztése"
+      },
+      "target-rules": {
+        "title": "Céltermékek feltételeinek szerkesztése"
+      },
+      "buy-rules": {
+        "title": "Vásárlási feltételek szerkesztése"
+      }
+    },
+    "campaign": {
+      "header": "Kampány",
+      "edit": {
+        "header": "Kampány szerkesztése",
+        "successToast": "A promóció kampányának sikeres frissítése."
+      },
+      "actions": {
+        "goToCampaign": "Ugrás a kampányra"
+      }
+    },
+    "campaign_currency": {
+      "tooltip": "Ez a promóció valutája. A Részletek lapon módosítható."
+    },
+    "form": {
+      "required": "Kötelező",
+      "and": "ÉS",
+      "selectAttribute": "Válassza ki az attribútumot",
+      "campaign": {
+        "existing": {
+          "title": "Létező Kampány",
+          "description": "Adjon hozzá promóciót egy létező kampányhoz.",
+          "placeholder": {
+            "title": "Nincs létező kampány",
+            "desc": "Létrehozhat egyet, hogy több promóciót követhessen, és beállíthassa a költségvetési limiteket."
+          }
+        },
+        "new": {
+          "title": "Új Kampány",
+          "description": "Hozzon létre egy új kampányt ehhez a promócióhoz."
+        },
+        "none": {
+          "title": "Kampány Nélkül",
+          "description": "Folyamatosan haladhat a promóció kampány nélküli használatával"
+        }
+      },
+      "status": {
+        "title": "Állapot"
+      },
+      "method": {
+        "label": "Módszer",
+        "code": {
+          "title": "Promóciós kód",
+          "description": "A vásárlóknak be kell írniuk ezt a kódot a pénztárnál"
+        },
+        "automatic": {
+          "title": "Automatikus",
+          "description": "A vásárlók automatikusan látni fogják ezt a promóciót a pénztárnál"
+        }
+      },
+      "max_quantity": {
+        "title": "Maximális mennyiség",
+        "description": "A maximális mennyiségű termék, amire a promóció alkalmazható."
+      },
+      "type": {
+        "standard": {
+          "title": "Alapértelmezett",
+          "description": "Alap promóció"
+        },
+        "buyget": {
+          "title": "Vásárolj, szerezd meg",
+          "description": "Vásárolj X-et, szerezd meg Y-t promóció"
+        }
+      },
+      "allocation": {
+        "each": {
+          "title": "Minden",
+          "description": "Minden egyes termékre alkalmazza az értéket"
+        },
+        "across": {
+          "title": "Keresztül",
+          "description": "A termékek között osztja el az értéket"
+        }
+      },
+      "code": {
+        "title": "Kód",
+        "description": "A kódot, amit a vásárlók beírnak a pénztárnál."
+      },
+      "value": {
+        "title": "Promóciós érték"
+      },
+      "value_type": {
+        "fixed": {
+          "title": "Promóciós érték",
+          "description": "Az összeg, amelyet kedvezményként alkalmaznak. Pl. 100"
+        },
+        "percentage": {
+          "title": "Promóciós érték",
+          "description": "A kedvezmény százaléka. Pl. 8%"
+        }
+      }
+    },
+    "deleteWarning": "Törölni fogja a promóciót {{code}}. Ez a művelet nem vonható vissza.",
+    "createPromotionTitle": "Promóció létrehozása",
+    "type": "Promóció típusa",
+    "conditions": {
+      "add": "Feltétel hozzáadása",
+      "list": {
+        "noRecordsMessage": "Adjon hozzá egy feltételt a promócióra vonatkozóan, hogy korlátozza, mely termékekre vonatkozik."
+      }
+    }
+  },
+  "campaigns": {
+    "domain": "Kampányok",
+    "details": "Kampány részletei",
+    "status": {
+      "active": "Aktív",
+      "expired": "Lejárt",
+      "scheduled": "Ütemezett"
+    },
+    "delete": {
+      "title": "Biztos benne?",
+      "description": "Most törölni fogja a '{{name}}' kampányt. Ez a művelet nem vonható vissza.",
+      "successToast": "A '{{name}}' kampány sikeresen létrejött."
+    },
+    "edit": {
+      "header": "Kampány szerkesztése",
+      "description": "Szerkessze a kampány részleteit.",
+      "successToast": "A '{{name}}' kampány sikeresen frissítve lett."
+    },
+    "configuration": {
+      "header": "Konfiguráció",
+      "edit": {
+        "header": "Kampány konfiguráció szerkesztése",
+        "description": "Szerkessze a kampány konfigurációját.",
+        "successToast": "A kampány konfigurációja sikeresen frissítve lett."
+      }
+    },
+    "create": {
+      "title": "Kampány létrehozása",
+      "description": "Hozzon létre egy promóciós kampányt.",
+      "hint": "Hozzon létre egy promóciós kampányt.",
+      "header": "Kampány létrehozása",
+      "successToast": "A '{{name}}' kampány sikeresen létrejött."
+    },
+    "fields": {
+      "name": "Név",
+      "identifier": "Azonosító",
+      "start_date": "Kezdési dátum",
+      "end_date": "Befejezési dátum",
+      "total_spend": "Költött összeg",
+      "total_used": "Felhasznált összeg",
+      "budget_limit": "Költségvetési limit",
+      "campaign_id": {
+        "hint": "Csak azok a kampányok jelennek meg ebben a listában, amelyek ugyanazzal az valutakóddal rendelkeznek, mint a promóció."
+      }
+    },
+    "budget": {
+      "create": {
+        "hint": "Hozzon létre egy költségvetést a kampányhoz.",
+        "header": "Kampány költségvetés"
+      },
+      "details": "Kampány költségvetés",
+      "fields": {
+        "type": "Típus",
+        "currency": "Valuta",
+        "limit": "Limit",
+        "used": "Felhasznált"
+      },
+      "type": {
+        "spend": {
+          "title": "Kiadás",
+          "description": "Állítson be egy limitet az összes promóciós használat kedvezményezett összegére."
+        },
+        "usage": {
+          "title": "Használat",
+          "description": "Állítson be egy limitet arra, hogy hányszor használható a promóció."
+        }
+      },
+      "edit": {
+        "header": "Kampány költségvetés szerkesztése"
+      }
+    },
+    "promotions": {
+      "remove": {
+        "title": "Promóció eltávolítása a kampányból",
+        "description": "Most eltávolítja a {{count}} promóciót a kampányból. Ez a művelet nem vonható vissza."
+      },
+      "alreadyAdded": "Ez a promóció már hozzá lett adva a kampányhoz.",
+      "alreadyAddedDiffCampaign": "Ez a promóció már hozzá lett adva egy másik kampányhoz ({{name}}).",
+      "currencyMismatch": "A promóció és a kampány valutája nem egyezik meg",
+      "toast": {
+        "success": "Sikeresen hozzáadta a {{count}} promóciót a kampányhoz"
+      },
+      "add": {
+        "list": {
+          "noRecordsMessage": "Hozzon létre egy promóciót először."
+        }
+      },
+      "list": {
+        "noRecordsMessage": "Nincsenek promóciók a kampányban."
+      }
+    },
+    "deleteCampaignWarning": "Most törli a {{name}} kampányt. Ez a művelet nem vonható vissza.",
+    "totalSpend": "<0>{{amount}}</0> <1>{{currency}}</1>"
+  },
+  "priceLists": {
+    "domain": "Árlisták",
+    "subtitle": "Hozzon létre értékesítési vagy felülírt árakat speciális feltételekhez.",
+    "delete": {
+      "confirmation": "Most törli az árlistát {{title}}. Ez a művelet nem vonható vissza.",
+      "successToast": "Az árlista {{title}} sikeresen törölve lett."
+    },
+    "create": {
+      "header": "Árlista létrehozása",
+      "subheader": "Hozzon létre egy új árlistát, hogy kezelje termékeinek árait.",
+      "tabs": {
+        "details": "Részletek",
+        "products": "Termékek",
+        "prices": "Árak"
+      },
+      "successToast": "Az árlista {{title}} sikeresen létrejött.",
+      "products": {
+        "list": {
+          "noRecordsMessage": "Először hozzon létre egy terméket."
+        }
+      }
+    },
+    "edit": {
+      "header": "Árlista szerkesztése",
+      "successToast": "Az árlista {{title}} sikeresen frissítve lett."
+    },
+    "configuration": {
+      "header": "Konfiguráció",
+      "edit": {
+        "header": "Árlista konfiguráció szerkesztése",
+        "description": "Szerkessze az árlista konfigurációját.",
+        "successToast": "Az árlista konfigurációja sikeresen frissítve lett."
+      }
+    },
+    "products": {
+      "header": "Termékek",
+      "actions": {
+        "addProducts": "Termékek hozzáadása",
+        "editPrices": "Árak szerkesztése"
+      },
+      "delete": {
+        "confirmation_one": "Most törli az árakat {{count}} termékről az árlistában. Ez a művelet nem vonható vissza.",
+        "confirmation_other": "Most törli az árakat {{count}} termékről az árlistában. Ez a művelet nem vonható vissza.",
+        "successToast_one": "Sikeresen törölte az árakat {{count}} termékről.",
+        "successToast_other": "Sikeresen törölte az árakat {{count}} termékről."
+      },
+      "add": {
+        "successToast": "Az árak sikeresen hozzá lettek adva az árlistához."
+      },
+      "edit": {
+        "successToast": "Az árak sikeresen frissítve lettek."
+      }
+    },
+    "fields": {
+      "priceOverrides": {
+        "label": "Ár felülírások",
+        "header": "Ár Felülírások"
+      },
+      "status": {
+        "label": "Állapot",
+        "options": {
+          "active": "Aktív",
+          "draft": "Piszkozat",
+          "expired": "Lejárt",
+          "scheduled": "Ütemezett"
+        }
+      },
+      "type": {
+        "label": "Típus",
+        "hint": "Válassza ki az árlista típusát, amit létre szeretne hozni.",
+        "options": {
+          "sale": {
+            "label": "Akció",
+            "description": "Az akciók ideiglenes árváltoztatások a termékekhez."
+          },
+          "override": {
+            "label": "Felülírás",
+            "description": "A felülírások általában ügyfélspecifikus árak létrehozására szolgálnak."
+          }
+        }
+      },
+      "startsAt": {
+        "label": "Az árlistának van kezdési dátuma?",
+        "hint": "Ütemezze az árlistát, hogy a jövőben aktiválódjon."
+      },
+      "endsAt": {
+        "label": "Az árlistának van lejárati dátuma?",
+        "hint": "Ütemezze az árlistát, hogy a jövőben deaktiválódjon."
+      },
+      "customerAvailability": {
+        "header": "Válassza ki az ügyfélszervezeteket",
+        "label": "Ügyfélszervezeti elérhetőség",
+        "hint": "Válassza ki, hogy mely ügyfélszervezetek számára legyen alkalmazva az árlista.",
+        "placeholder": "Keresés ügyfélszervezetekre",
+        "attribute": "Ügyfélszervezetek"
+      }
+    }
+  },
+  "profile": {
+    "domain": "Profil",
+    "manageYourProfileDetails": "Kezeled a profilod részleteit.",
+    "fields": {
+      "languageLabel": "Nyelv",
+      "usageInsightsLabel": "Használati betekintés"
+    },
+    "edit": {
+      "header": "Profil szerkesztése",
+      "languageHint": "A nyelv, amit az adminisztrációs felületen használni szeretnél. Ez nem változtatja meg az üzleted nyelvét.",
+      "languagePlaceholder": "Válasszon nyelvet",
+      "usageInsightsHint": "Ossza meg velünk a használati betekintéseket, és segítse a Medusa fejlesztését. Több információt talál az <0>dokumentációban</0>."
+    },
+    "toast": {
+      "edit": "A profil módosításai sikeresen mentve"
+    }
+  },
+  "users": {
+    "domain": "Felhasználók",
+    "editUser": "Felhasználó szerkesztése",
+    "inviteUser": "Felhasználó meghívása",
+    "inviteUserHint": "Meghívhat egy új felhasználót az üzletébe.",
+    "sendInvite": "Meghívó küldése",
+    "pendingInvites": "Függő meghívók",
+    "deleteInviteWarning": "Most törli a meghívót {{email}}. Ez a művelet nem vonható vissza.",
+    "resendInvite": "Meghívó újraküldése",
+    "copyInviteLink": "Meghívó link másolása",
+    "expiredOnDate": "Lejárt: {{date}}",
+    "validFromUntil": "Érvényes <0>{{from}}</0> - <1>{{until}}</1>",
+    "acceptedOnDate": "Elfogadva: {{date}}",
+    "inviteStatus": {
+      "accepted": "Elfogadva",
+      "pending": "Függőben",
+      "expired": "Lejárt"
+    },
+    "roles": {
+      "admin": "Admin",
+      "developer": "Fejlesztő",
+      "member": "Tag"
+    },
+    "deleteUserWarning": "Most törli a {{name}} felhasználót. Ez a művelet nem vonható vissza.",
+    "invite": "Meghívás"
+  },
+  "store": {
+    "domain": "Üzlet",
+    "manageYourStoresDetails": "Kezeled az üzleted részleteit",
+    "editStore": "Üzlet szerkesztése",
+    "defaultCurrency": "Alapértelmezett valuta",
+    "defaultRegion": "Alapértelmezett régió",
+    "swapLinkTemplate": "Link csere sablon",
+    "paymentLinkTemplate": "Fizetési link sablon",
+    "inviteLinkTemplate": "Meghívó link sablon",
+    "currencies": "Valuták",
+    "addCurrencies": "Valuták hozzáadása",
+    "enableTaxInclusivePricing": "Adót tartalmazó árképzés engedélyezése",
+    "disableTaxInclusivePricing": "Adót tartalmazó árképzés letiltása",
+    "removeCurrencyWarning_one": "Most törli a {{count}} valutát az üzletéből. Ügyeljen arra, hogy eltávolította az összes árat, amely ezt a valutát használja, mielőtt folytatná.",
+    "removeCurrencyWarning_other": "Most törli a {{count}} valutát az üzletéből. Ügyeljen arra, hogy eltávolította az összes árat, amely ezeket a valutákat használja, mielőtt folytatná.",
+    "currencyAlreadyAdded": "A valuta már hozzá lett adva az üzletéhez.",
+    "edit": {
+      "header": "Üzlet szerkesztése"
+    },
+    "toast": {
+      "update": "Az üzlet sikeresen frissítve",
+      "currenciesUpdated": "A valuták sikeresen frissítve lettek",
+      "currenciesRemoved": "A valuták sikeresen eltávolítva lettek az üzletből",
+      "updatedTaxInclusivitySuccessfully": "Adót tartalmazó árképzés sikeresen frissítve"
+    }
+  },
+  "regions": {
+    "domain": "Régiók",
+    "subtitle": "A régió egy olyan terület, ahol termékeket értékesítesz. Több országot is magában foglalhat, és különböző adókulcsokkal, szolgáltatókkal és valutákkal rendelkezhet.",
+    "createRegion": "Régió létrehozása",
+    "createRegionHint": "Meneddzselje az adókulcsokat és szolgáltatókat egy országcsoport számára.",
+    "addCountries": "Országok hozzáadása",
+    "editRegion": "Régió szerkesztése",
+    "countriesHint": "Adja hozzá azokat az országokat, amelyek a régió részét képezik.",
+    "deleteRegionWarning": "Most törölni fogja a(z) {{name}} régiót. Ez a művelet nem vonható vissza.",
+    "removeCountriesWarning_one": "Most eltávolítja a {{count}} országot a régióból. Ez a művelet nem vonható vissza.",
+    "removeCountriesWarning_other": "Most eltávolítja a {{count}} országot a régióból. Ez a művelet nem vonható vissza.",
+    "removeCountryWarning": "Most eltávolítja a(z) {{name}} országot a régióból. Ez a művelet nem vonható vissza.",
+    "automaticTaxesHint": "Ha engedélyezve van, az adók csak a szállítási cím alapján kerülnek kiszámításra a pénztárnál.",
+    "taxInclusiveHint": "Ha engedélyezve van, az árak a régióban adót tartalmaznak.",
+    "providersHint": "Adja hozzá, hogy melyik fizetési szolgáltatók érhetők el ebben a régióban.",
+    "shippingOptions": "Szállítási lehetőségek",
+    "deleteShippingOptionWarning": "Most törölni fogja a(z) {{name}} szállítási lehetőséget. Ez a művelet nem vonható vissza.",
+    "return": "Visszaküldés",
+    "outbound": "Kimenő",
+    "priceType": "Ár típus",
+    "flatRate": "Fix díj",
+    "calculated": "Számított",
+    "list": {
+      "noRecordsMessage": "Hozzon létre egy régiót a területekhez, ahol értékesít."
+    },
+    "toast": {
+      "delete": "A régió sikeresen törölve",
+      "edit": "A régió módosítása sikeresen elmentve",
+      "create": "A régió sikeresen létrehozva",
+      "countries": "A régió országai sikeresen frissítve"
+    },
+    "shippingOption": {
+      "createShippingOption": "Szállítási lehetőség létrehozása",
+      "createShippingOptionHint": "Hozzon létre új szállítási lehetőséget a régió számára.",
+      "editShippingOption": "Szállítási lehetőség szerkesztése",
+      "fulfillmentMethod": "Teljesítési módszer",
+      "type": {
+        "outbound": "Kimenő",
+        "outboundHint": "Használja ezt, ha egy szállítási lehetőséget hoz létre a termékek vásárlóhoz történő küldésére.",
+        "return": "Visszaküldés",
+        "returnHint": "Használja ezt, ha egy szállítási lehetőséget hoz létre a vásárló által történő termék-visszaküldéshez."
+      },
+      "priceType": {
+        "label": "Ár típus",
+        "flatRate": "Fix díj",
+        "calculated": "Számított"
+      },
+      "availability": {
+        "adminOnly": "Csak adminisztrátor",
+        "adminOnlyHint": "Ha engedélyezve van, a szállítási lehetőség csak az adminisztrációs felületen lesz elérhető, nem a boltban."
+      },
+      "taxInclusiveHint": "Ha engedélyezve van, a szállítási lehetőség ára adót tartalmaz.",
+      "requirements": {
+        "label": "Követelmények",
+        "hint": "Adja meg a szállítási lehetőséghez szükséges követelményeket."
+      }
+    }
+  },
+  "taxes": {
+    "domain": "Adó régiók",
+    "domainDescription": "Kezelje az adó régióját",
+    "countries": {
+      "taxCountriesHint": "Az adóbeállítások a felsorolt országokra vonatkoznak."
+    },
+    "settings": {
+      "editTaxSettings": "Adóbeállítások szerkesztése",
+      "taxProviderLabel": "Adó szolgáltató",
+      "systemTaxProviderLabel": "Rendszer adó szolgáltató",
+      "calculateTaxesAutomaticallyLabel": "Adók automatikus számítása",
+      "calculateTaxesAutomaticallyHint": "Ha engedélyezve van, az adókulcsok automatikusan kiszámításra kerülnek és alkalmazásra a kosarakban. Ha le van tiltva, az adókat manuálisan kell kiszámítani a pénztárnál. A manuális adók harmadik féltől származó adószolgáltatókkal való használatra ajánlott.",
+      "applyTaxesOnGiftCardsLabel": "Adó alkalmazása ajándékkártyákra",
+      "applyTaxesOnGiftCardsHint": "Ha engedélyezve van, adókat alkalmaznak az ajándékkártyákra a pénztárnál. Egyes országokban az adószabályok előírják, hogy adót kell alkalmazni az ajándékkártyákra vásárláskor.",
+      "defaultTaxRateLabel": "Alapértelmezett adókulcs",
+      "defaultTaxCodeLabel": "Alapértelmezett adó kód"
+    },
+    "defaultRate": {
+      "sectionTitle": "Alapértelmezett adókulcs"
+    },
+    "taxRate": {
+      "sectionTitle": "Adókulcsok",
+      "createTaxRate": "Adókulcs létrehozása",
+      "createTaxRateHint": "Hozzon létre új adókulcsot a régió számára.",
+      "deleteRateDescription": "Most törli a {{name}} adókulcsot. Ez a művelet nem vonható vissza.",
+      "editTaxRate": "Adókulcs szerkesztése",
+      "editRateAction": "Kulcs szerkesztése",
+      "editOverridesAction": "Felülírások szerkesztése",
+      "editOverridesTitle": "Adókulcs felülírások szerkesztése",
+      "editOverridesHint": "Adja meg az adókulcs felülírásait.",
+      "deleteTaxRateWarning": "Most törli a {{name}} adókulcsot. Ez a művelet nem vonható vissza.",
+      "productOverridesLabel": "Termék felülírások",
+      "productOverridesHint": "Adja meg a termékek felülírásait az adókulcshoz.",
+      "addProductOverridesAction": "Termék felülírások hozzáadása",
+      "productTypeOverridesLabel": "Termék típus felülírások",
+      "productTypeOverridesHint": "Adja meg a terméktípusok felülírásait az adókulcshoz.",
+      "addProductTypeOverridesAction": "Terméktípus felülírások hozzáadása",
+      "shippingOptionOverridesLabel": "Szállítási lehetőség felülírások",
+      "shippingOptionOverridesHint": "Adja meg a szállítási lehetőség felülírásait az adókulcshoz.",
+      "addShippingOptionOverridesAction": "Szállítási lehetőség felülírások hozzáadása",
+      "productOverridesHeader": "Termékek",
+      "productTypeOverridesHeader": "Terméktípusok",
+      "shippingOptionOverridesHeader": "Szállítási lehetőségek"
+    }
+  },
+  "locations": {
+    "domain": "Helyszínek",
+    "editLocation": "Helyszín szerkesztése",
+    "addSalesChannels": "Értékesítési csatornák hozzáadása",
+    "noLocationsFound": "Nincsenek helyszínek",
+    "selectLocations": "Válassza ki azokat a helyszíneket, amelyek készletet tartanak az adott tételről.",
+    "deleteLocationWarning": "Most törli a {{name}} helyszínt. Ez a művelet nem vonható vissza.",
+    "removeSalesChannelsWarning_one": "Most eltávolítja a {{count}} értékesítési csatornát a helyszínről.",
+    "removeSalesChannelsWarning_other": "Most eltávolítja a {{count}} értékesítési csatornát a helyszínről.",
+    "toast": {
+      "create": "A helyszín sikeresen létrehozva",
+      "update": "A helyszín sikeresen frissítve",
+      "removeChannel": "Az értékesítési csatorna sikeresen eltávolítva"
+    }
+  },
+  "reservations": {
+    "domain": "Fenntartások",
+    "subtitle": "Kezelje a készlethez tartozó fenntartott mennyiségeket.",
+    "deleteWarning": "Most törli a fenntartást. Ez a művelet nem vonható vissza."
+  },
+  "salesChannels": {
+    "domain": "Értékesítési csatornák",
+    "subtitle": "Kezelje az online és offline csatornákat, ahol termékeket értékesít.",
+    "createSalesChannel": "Értékesítési csatorna létrehozása",
+    "createSalesChannelHint": "Hozzon létre új értékesítési csatornát a termékei értékesítésére.",
+    "enabledHint": "Adja meg, hogy az értékesítési csatorna engedélyezve van-e.",
+    "removeProductsWarning_one": "Most eltávolítja a {{count}} terméket a {{sales_channel}} csatornából.",
+    "removeProductsWarning_other": "Most eltávolítja a {{count}} terméket a {{sales_channel}} csatornából.",
+    "addProducts": "Termékek hozzáadása",
+    "editSalesChannel": "Értékesítési csatorna szerkesztése",
+    "productAlreadyAdded": "A termék már hozzá lett adva az értékesítési csatornához.",
+    "deleteSalesChannelWarning": "Most törli a {{name}} értékesítési csatornát. Ez a művelet nem vonható vissza.",
+    "toast": {
+      "create": "Az értékesítési csatorna sikeresen létrehozva",
+      "update": "Az értékesítési csatorna sikeresen frissítve",
+      "delete": "Az értékesítési csatorna sikeresen törölve"
+    },
+    "tooltip": {
+      "cannotDeleteDefault": "A rendszerértékesítési csatorna nem törölhető"
+    },
+    "products": {
+      "list": {
+        "noRecordsMessage": "Nincsenek termékek az értékesítési csatornában."
+      },
+      "add": {
+        "list": {
+          "noRecordsMessage": "Először hozzon létre egy terméket."
+        }
+      }
+    }
+  },
+  "apiKeyManagement": {
+    "domain": {
+      "publishable": "Közzétett API kulcsok",
+      "secret": "Titkos API kulcsok"
+    },
+    "subtitle": {
+      "publishable": "Kezeled az API kulcsokat, amelyek a boltban használatosak, és korlátozzák a kérések hatókörét az adott értékesítési csatornákra.",
+      "secret": "Kezeled az API kulcsokat, amelyek az adminisztrátori felhasználók hitelesítésére szolgálnak az admin alkalmazásokban."
+    },
+    "status": {
+      "active": "Aktív",
+      "revoked": "Visszavonva"
+    },
+    "type": {
+      "publishable": "Közzétett",
+      "secret": "Titkos"
+    },
+    "create": {
+      "createPublishableHeader": "Közzétett API kulcs létrehozása",
+      "createPublishableHint": "Hozz létre új közzétett API kulcsot, hogy korlátozd a kérések hatókörét az adott értékesítési csatornákra.",
+      "createSecretHeader": "Titkos API kulcs létrehozása",
+      "createSecretHint": "Hozz létre új titkos API kulcsot a Medusa API eléréséhez hitelesített adminisztrátori felhasználóként.",
+      "secretKeyCreatedHeader": "Titkos kulcs létrehozva",
+      "secretKeyCreatedHint": "A titkos kulcsod létrejött. Másold ki és biztonságosan tárold most. Ez az egyetlen alkalom, hogy megjelenik.",
+      "copySecretTokenSuccess": "A titkos kulcs sikeresen a vágólapra másolva.",
+      "copySecretTokenFailure": "A titkos kulcs másolása a vágólapra nem sikerült.",
+      "successToast": "Az API kulcs sikeresen létrejött."
+    },
+    "edit": {
+      "header": "API kulcs szerkesztése",
+      "description": "Szerkeszd az API kulcs címét.",
+      "successToast": "Az API kulcs {{title}} sikeresen frissítve."
+    },
+    "salesChannels": {
+      "title": "Értékesítési csatornák hozzáadása",
+      "description": "Add hozzá azokat az értékesítési csatornákat, amelyeket az API kulcsra korlátozni szeretnél.",
+      "successToast_one": "{{count}} értékesítési csatorna sikeresen hozzáadva az API kulcshoz.",
+      "successToast_other": "{{count}} értékesítési csatorna sikeresen hozzáadva az API kulcshoz.",
+      "alreadyAddedTooltip": "Az értékesítési csatorna már hozzá lett adva az API kulcshoz.",
+      "list": {
+        "noRecordsMessage": "Nincsenek értékesítési csatornák a közzétett API kulcs hatókörében."
+      }
+    },
+    "delete": {
+      "warning": "Most törli az API kulcsot {{title}}. Ez a művelet nem vonható vissza.",
+      "successToast": "Az API kulcs {{title}} sikeresen törölve."
+    },
+    "revoke": {
+      "warning": "Most visszavonja az API kulcsot {{title}}. Ez a művelet nem vonható vissza.",
+      "successToast": "Az API kulcs {{title}} sikeresen visszavonva."
+    },
+    "addSalesChannels": {
+      "list": {
+        "noRecordsMessage": "Először hozz létre egy értékesítési csatornát."
+      }
+    },
+    "removeSalesChannel": {
+      "warning": "Most eltávolítja az {{name}} értékesítési csatornát az API kulcsból. Ez a művelet nem vonható vissza.",
+      "warningBatch_one": "Most eltávolítja {{count}} értékesítési csatornát az API kulcsból. Ez a művelet nem vonható vissza.",
+      "warningBatch_other": "Most eltávolítja {{count}} értékesítési csatornát az API kulcsból. Ez a művelet nem vonható vissza.",
+      "successToast": "Az értékesítési csatorna sikeresen eltávolítva az API kulcsból.",
+      "successToastBatch_one": "{{count}} értékesítési csatorna sikeresen eltávolítva az API kulcsból.",
+      "successToastBatch_other": "{{count}} értékesítési csatorna sikeresen eltávolítva az API kulcsból."
+    },
+    "actions": {
+      "revoke": "API kulcs visszavonása",
+      "copy": "API kulcs másolása",
+      "copySuccessToast": "Az API kulcs sikeresen a vágólapra másolva."
+    },
+    "table": {
+      "lastUsedAtHeader": "Utoljára használva",
+      "createdAtHeader": "Létrehozva"
+    },
+    "fields": {
+      "lastUsedAtLabel": "Utoljára használva",
+      "revokedByLabel": "Visszavonva általa",
+      "revokedAtLabel": "Visszavonva ekkor",
+      "createdByLabel": "Létrehozta"
+    }
+  },
+  "returnReasons": {
+    "domain": "Visszaküldési okok",
+    "subtitle": "Kezelje a visszaküldött tételek okait.",
+    "calloutHint": "Kezeled az okokat, hogy kategorizáld a visszaküldéseket.",
+    "editReason": "Visszaküldési ok szerkesztése",
+    "create": {
+      "header": "Visszaküldési ok hozzáadása",
+      "subtitle": "Adja meg a leggyakoribb okokat a visszaküldésekhez.",
+      "hint": "Hozzon létre új visszaküldési okot a visszaküldések kategorizálásához.",
+      "successToast": "A visszaküldési ok {{label}} sikeresen létrejött."
+    },
+    "edit": {
+      "header": "Visszaküldési ok szerkesztése",
+      "subtitle": "Szerkeszd a visszaküldési ok értékét.",
+      "successToast": "A visszaküldési ok {{label}} sikeresen frissítve."
+    },
+    "delete": {
+      "confirmation": "Most törli a visszaküldési okot {{label}}. Ez a művelet nem vonható vissza.",
+      "successToast": "A visszaküldési ok {{label}} sikeresen törölve."
+    },
+    "fields": {
+      "value": {
+        "label": "Érték",
+        "placeholder": "wrong_size",
+        "tooltip": "Az értéknek egyedi azonosítónak kell lennie a visszaküldési okhoz."
+      },
+      "label": {
+        "label": "Címke",
+        "placeholder": "Rossz méret"
+      },
+      "description": {
+        "label": "Leírás",
+        "placeholder": "A vásárló rossz méretet kapott"
+      }
+    }
+  },
+  "login": {
+    "forgotPassword": "Elfelejtette a jelszavát? - <0>Állítsa vissza</0>",
+    "title": "Üdvözöljük a Medusa-ban",
+    "hint": "Jelentkezzen be, hogy hozzáférjen a fiókhoz"
+  },
+  "invite": {
+    "title": "Üdvözöljük a Medusa-ban",
+    "hint": "Hozza létre fiókját az alábbiakban",
+    "backToLogin": "Vissza a bejelentkezéshez",
+    "createAccount": "Fiók létrehozása",
+    "alreadyHaveAccount": "Már van fiókja? - <0>Jelentkezzen be</0>",
+    "emailTooltip": "Az e-mail címét nem lehet módosítani. Ha másik e-mailt szeretne használni, új meghívót kell küldeni.",
+    "invalidInvite": "A meghívó érvénytelen vagy lejárt.",
+    "successTitle": "A fiókja sikeresen regisztrálva lett",
+    "successHint": "Kezdje el a Medusa Admin használatát most.",
+    "successAction": "Indítsa el a Medusa Admin-t",
+    "invalidTokenTitle": "A meghívó token érvénytelen",
+    "invalidTokenHint": "Próbáljon új meghívó linket kérni.",
+    "passwordMismatch": "A jelszavak nem egyeznek",
+    "toast": {
+      "accepted": "A meghívó sikeresen elfogadva"
+    }
+  },
+  "resetPassword": {
+    "title": "Jelszó visszaállítása",
+    "hint": "Adja meg az e-mail címét, és elküldjük Önnek az utasításokat a jelszó visszaállításához.",
+    "email": "E-mail",
+    "sendResetInstructions": "Visszaállítási utasítások küldése",
+    "backToLogin": "<0>Vissza a bejelentkezéshez</0>",
+    "newPasswordHint": "Válasszon új jelszót az alábbiakban.",
+    "invalidTokenTitle": "A visszaállítási token érvénytelen",
+    "invalidTokenHint": "Próbáljon új visszaállítási linket kérni.",
+    "expiredTokenTitle": "A visszaállítási token lejárt",
+    "goToResetPassword": "Menjen a jelszó visszaállításhoz",
+    "resetPassword": "Jelszó visszaállítása",
+    "newPassword": "Új jelszó",
+    "repeatNewPassword": "Ismételje meg az új jelszót",
+    "tokenExpiresIn": "A token lejár <0>{{time}}</0> perc múlva",
+    "successfulRequestTitle": "A kérést sikeresen elküldtük",
+    "successfulRequest": "Elküldtük az e-mailt, amelyet a jelszó visszaállításához használhat. Ha néhány percen belül nem kapja meg, ellenőrizze a spam mappát.",
+    "successfulResetTitle": "A jelszó visszaállítása sikeres",
+    "successfulReset": "Kérjük, jelentkezzen be a bejelentkezési oldalon.",
+    "passwordMismatch": "A jelszavak nem egyeznek",
+    "invalidLinkTitle": "A visszaállítási link érvénytelen",
+    "invalidLinkHint": "Próbálja meg újra visszaállítani a jelszót."
+  },
+  "workflowExecutions": {
+    "domain": "Munkafolyamatok",
+    "subtitle": "Tekintse meg és kövesse nyomon a munkafolyamatok végrehajtását a Medusa alkalmazásában.",
+    "transactionIdLabel": "Tranzakció ID",
+    "workflowIdLabel": "Munkafolyamat ID",
+    "progressLabel": "Haladás",
+    "stepsCompletedLabel_one": "{{completed}} / {{count}} lépés",
+    "stepsCompletedLabel_other": "{{completed}} / {{count}} lépés",
+    "list": {
+      "noRecordsMessage": "Még nem lett végrehajtva munkafolyamat."
+    },
+    "history": {
+      "sectionTitle": "Történelem",
+      "runningState": "Fut...",
+      "awaitingState": "Várakozik",
+      "failedState": "Sikertelen",
+      "skippedState": "Kihagyva",
+      "skippedFailureState": "Kihagyva (Hiba)",
+      "definitionLabel": "Definíció",
+      "outputLabel": "Kimenet",
+      "compensateInputLabel": "Kompzenzációs bemenet",
+      "revertedLabel": "Visszavonva",
+      "errorLabel": "Hiba"
+    },
+    "state": {
+      "done": "Kész",
+      "failed": "Sikertelen",
+      "reverted": "Visszavonva",
+      "invoking": "Hívás",
+      "compensating": "Kompzenzáció",
+      "notStarted": "Nem indult el"
+    },
+    "transaction": {
+      "state": {
+        "waitingToCompensate": "Várakozás a kompenzálásra"
+      }
+    },
+    "step": {
+      "state": {
+        "skipped": "Kihagyva",
+        "skippedFailure": "Kihagyva (Hiba)",
+        "dormant": "Inaktív",
+        "timeout": "Időtúllépés"
+      }
+    }
+  },
+  "productTypes": {
+    "domain": "Termék típusok",
+    "subtitle": "Rendezze a termékeit típusokba.",
+    "create": {
+      "header": "Termék típus létrehozása",
+      "hint": "Hozzon létre új termék típust a termékei kategorizálásához.",
+      "successToast": "A termék típus {{value}} sikeresen létrejött."
+    },
+    "edit": {
+      "header": "Termék típus szerkesztése",
+      "successToast": "A termék típus {{value}} sikeresen frissítve."
+    },
+    "delete": {
+      "confirmation": "Most törli a termék típust {{value}}. Ez a művelet nem vonható vissza.",
+      "successToast": "A termék típus {{value}} sikeresen törölve."
+    },
+    "fields": {
+      "value": "Érték"
+    }
+  },
+  "productTags": {
+    "domain": "Termék címkék",
+    "create": {
+      "header": "Termék címke létrehozása",
+      "subtitle": "Hozzon létre új termék címkét a termékei kategorizálásához.",
+      "successToast": "A termék címke {{value}} sikeresen létrejött."
+    },
+    "edit": {
+      "header": "Termék címke szerkesztése",
+      "subtitle": "Szerkeszd a termék címke értékét.",
+      "successToast": "A termék címke {{value}} sikeresen frissítve."
+    },
+    "delete": {
+      "confirmation": "Most törli a termék címkét {{value}}. Ez a művelet nem vonható vissza.",
+      "successToast": "A termék címke {{value}} sikeresen törölve."
+    },
+    "fields": {
+      "value": "Érték"
+    }
+  },
+  "notifications": {
+    "domain": "Értesítések",
+    "emptyState": {
+      "title": "Nincsenek értesítések",
+      "description": "Jelenleg nincs értesítése, de amint lesz, itt fognak megjelenni."
+    },
+    "accessibility": {
+      "description": "A Medusa tevékenységeiről szóló értesítések itt lesznek felsorolva."
+    }
+  },
+  "errors": {
+    "serverError": "Szerverhiba - Próbálja újra később.",
+    "invalidCredentials": "Hibás e-mail vagy jelszó"
+  },
+  "statuses": {
+    "scheduled": "Ütemezve",
+    "expired": "Lejárt",
+    "active": "Aktív",
+    "enabled": "Engedélyezve",
+    "disabled": "Letiltva"
+  },
+  "labels": {
+    "productVariant": "Termékvariáns",
+    "prices": "Árak",
+    "available": "Elérhető",
+    "inStock": "Raktáron",
+    "added": "Hozzáadva",
+    "removed": "Eltávolítva",
+    "from": "Tól",
+    "to": "Ig"
+  },
+  "fields": {
+    "amount": "Összeg",
+    "refundAmount": "Visszatérítési összeg",
+    "name": "Név",
+    "default": "Alapértelmezett",
+    "lastName": "Vezetéknév",
+    "firstName": "Keresztnév",
+    "title": "Cím",
+    "customTitle": "Egyedi cím",
+    "manageInventory": "Készlet kezelése",
+    "inventoryKit": "Van készletkészlet",
+    "inventoryItems": "Készlet tételek",
+    "inventoryItem": "Készlet tétel",
+    "requiredQuantity": "Szükséges mennyiség",
+    "description": "Leírás",
+    "email": "E-mail",
+    "password": "Jelszó",
+    "repeatPassword": "Jelszó ismétlése",
+    "confirmPassword": "Jelszó megerősítése",
+    "newPassword": "Új jelszó",
+    "repeatNewPassword": "Új jelszó ismétlése",
+    "categories": "Kategóriák",
+    "shippingMethod": "Szállítási mód",
+    "configurations": "Konfigurációk",
+    "conditions": "Feltételek",
+    "category": "Kategória",
+    "collection": "Gyűjtemény",
+    "discountable": "Kedvezményesíthető",
+    "handle": "Kezelés",
+    "subtitle": "Alcím",
+    "by": "Által",
+    "item": "Tétel",
+    "qty": "db.",
+    "limit": "Limit",
+    "tags": "Címkék",
+    "type": "Típus",
+    "reason": "Indoklás",
+    "none": "Nincs",
+    "all": "Mind",
+    "search": "Keresés",
+    "percentage": "Százalék",
+    "sales_channels": "Értékesítési csatornák",
+    "customer_groups": "Vásárlói csoportok",
+    "product_tags": "Termék címkék",
+    "product_types": "Termék típusok",
+    "product_collections": "Termék gyűjtemények",
+    "status": "Állapot",
+    "code": "Kód",
+    "value": "Érték",
+    "disabled": "Letiltva",
+    "dynamic": "Dinamikus",
+    "normal": "Normál",
+    "years": "Évek",
+    "months": "Hónapok",
+    "days": "Napok",
+    "hours": "Órák",
+    "minutes": "Percek",
+    "totalRedemptions": "Összes beváltás",
+    "countries": "Országok",
+    "paymentProviders": "Fizetési szolgáltatók",
+    "refundReason": "Visszatérítés indoka",
+    "fulfillmentProviders": "Kiszolgálási szolgáltatók",
+    "fulfillmentProvider": "Kiszolgálási szolgáltató",
+    "providers": "Szolgáltatók",
+    "availability": "Elérhetőség",
+    "inventory": "Készlet",
+    "optional": "Opcionális",
+    "note": "Megjegyzés",
+    "automaticTaxes": "Automatikus adók",
+    "taxInclusivePricing": "Ár tartalmazza az adót",
+    "currency": "Valuta",
+    "address": "Cím",
+    "address2": "Lakás, iroda, stb.",
+    "city": "Város",
+    "postalCode": "Irányítószám",
+    "country": "Ország",
+    "state": "Állam",
+    "province": "Tartomány",
+    "company": "Cég",
+    "phone": "Telefon",
+    "metadata": "Metaadatok",
+    "selectCountry": "Válasszon országot",
+    "products": "Termékek",
+    "variants": "Variánsok",
+    "orders": "Rendelések",
+    "account": "Fiók",
+    "total": "Rendelés összesen",
+    "paidTotal": "Fizetett összeg",
+    "totalExclTax": "Összesen adó nélkül",
+    "subtotal": "Részösszeg",
+    "shipping": "Szállítás",
+    "outboundShipping": "Küldemény szállítás",
+    "returnShipping": "Visszaküldés szállítás",
+    "tax": "Adó",
+    "created": "Létrehozva",
+    "key": "Kulcs",
+    "customer": "Vásárló",
+    "date": "Dátum",
+    "order": "Rendelés",
+    "fulfillment": "Teljesítés",
+    "provider": "Szolgáltató",
+    "payment": "Fizetés",
+    "items": "Tételek",
+    "salesChannel": "Értékesítési csatorna",
+    "region": "Régió",
+    "discount": "Kedvezmény",
+    "role": "Szerep",
+    "sent": "Elküldve",
+    "salesChannels": "Értékesítési csatornák",
+    "product": "Termék",
+    "createdAt": "Létrehozva",
+    "updatedAt": "Frissítve",
+    "revokedAt": "Visszavonva",
+    "true": "Igaz",
+    "false": "Hamis",
+    "giftCard": "Ajándékkártya",
+    "tag": "Címke",
+    "dateIssued": "Kibocsátás dátuma",
+    "issuedDate": "Kibocsátás dátuma",
+    "expiryDate": "Lejárat dátuma",
+    "price": "Ár",
+    "priceTemplate": "Ár {{regionOrCurrency}}",
+    "height": "Magasság",
+    "width": "Szélesség",
+    "length": "Hosszúság",
+    "weight": "Súly",
+    "midCode": "MID kód",
+    "hsCode": "HS kód",
+    "ean": "EAN",
+    "upc": "UPC",
+    "inventoryQuantity": "Készlet mennyiség",
+    "barcode": "Vonalkód",
+    "countryOfOrigin": "Származási ország",
+    "material": "Anyag",
+    "thumbnail": "Kép",
+    "sku": "SKU",
+    "managedInventory": "Kezelt készlet",
+    "allowBackorder": "Vissza rendelés engedélyezése",
+    "inStock": "Készleten",
+    "location": "Helyszín",
+    "quantity": "Mennyiség",
+    "variant": "Variáns",
+    "id": "ID",
+    "parent": "Szülő",
+    "minSubtotal": "Min. részösszeg",
+    "maxSubtotal": "Max. részösszeg",
+    "shippingProfile": "Szállítási profil",
+    "summary": "Összefoglaló",
+    "details": "Részletek",
+    "label": "Címke",
+    "rate": "Díj",
+    "requiresShipping": "Szállítást igényel",
+    "unitPrice": "Egységár",
+    "startDate": "Kezdő dátum",
+    "endDate": "Befejező dátum",
+    "draft": "Piszkozat",
+    "values": "Értékek"
+  },
+  "dateTime": {
+    "years_one": "Év",
+    "years_other": "Évek",
+    "months_one": "Hónap",
+    "months_other": "Hónapok",
+    "weeks_one": "Hét",
+    "weeks_other": "Hetek",
+    "days_one": "Nap",
+    "days_other": "Napok",
+    "hours_one": "Óra",
+    "hours_other": "Órák",
+    "minutes_one": "Perc",
+    "minutes_other": "Percek",
+    "seconds_one": "Másodperc",
+    "seconds_other": "Másodpercek"
+  }
+}
