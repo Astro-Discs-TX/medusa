@@ -46,7 +46,7 @@ Learn more about the workflow hooks in [this chapter](../../../fundamentals/work
 
 </Note>
 
-The [createProductsWorkflow](!resources!/references/medusa-workflows/createProductsWorkflow) used in the [Create Product API route](!api!/admin#products_postproducts) has a `productsCreated` hook that runs after the product is created. You'll consume this hook to link the created product with the brand specified in the request paramters.
+The [createProductsWorkflow](!resources!/references/medusa-workflows/createProductsWorkflow) used in the [Create Product API route](!api!/admin#products_postproducts) has a `productsCreated` hook that runs after the product is created. You'll consume this hook to link the created product with the brand specified in the request parameters.
 
 To consume the `productsCreated` hook, create the file `src/workflows/hooks/created-product.ts` with the following content:
 
