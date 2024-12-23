@@ -15377,8 +15377,8 @@ paths:
   /admin/fulfillment-providers/{id}/options:
     get:
       operationId: GetFulfillmentProvidersIdOptions
-      summary: List Options
-      description: Retrieve a list of options in a fulfillment provider. The options can be filtered by fields like FILTER FIELDS. The options can also be paginated.
+      summary: List Fulfillment Options
+      description: Retrieve the list of fulfillment options of a fulfillment provider. These options may be retrieved from an integrated third-party service.
       x-authenticated: true
       parameters:
         - name: id
@@ -47356,7 +47356,7 @@ components:
             $ref: '#/components/schemas/AdminFulfillmentProvider'
     AdminFulfillmentProviderOption:
       type: object
-      description: The fulfillment option's fulfillment options.
+      description: The fulfillment option's details.
       x-schemaName: AdminFulfillmentProviderOption
       required:
         - id
@@ -47369,10 +47369,10 @@ components:
         is_return:
           type: boolean
           title: is_return
-          description: The fulfillment option's is return.
+          description: Whether the fulfillment option is used for returns.
     AdminFulfillmentProviderOptionsListResponse:
       type: object
-      description: SUMMARY
+      description: The paginated list of fulfillment options.
       x-schemaName: AdminFulfillmentProviderOptionsListResponse
       required:
         - limit
@@ -47383,18 +47383,18 @@ components:
         limit:
           type: number
           title: limit
-          description: The fulfillment provider's limit.
+          description: The maximum number of items returned.
         offset:
           type: number
           title: offset
-          description: The fulfillment provider's offset.
+          description: The number of items skipped before retrieving the returned items.
         count:
           type: number
           title: count
-          description: The fulfillment provider's count.
+          description: The total number of items.
         fulfillment_options:
           type: array
-          description: The fulfillment provider's fulfillment options.
+          description: The list of fulfillment options.
           items:
             $ref: '#/components/schemas/AdminFulfillmentProviderOption'
     AdminFulfillmentResponse:
@@ -53046,13 +53046,8 @@ components:
           title: id
           description: The price rule's ID.
         value:
-          oneOf:
-            - type: string
-              title: value
-              description: The price rule's value.
-            - type: number
-              title: value
-              description: The price rule's value.
+          type: string
+          title: value
           description: The price rule's value.
         operator:
           type: string
@@ -59003,7 +58998,7 @@ components:
           description: The order's display ID.
         credit_lines:
           type: array
-          description: The order's credit lines.
+          description: The order's credit lines, useful to add additional payment amounts for an order.
           items:
             $ref: '#/components/schemas/OrderCreditLine'
     OrderAddress:
@@ -59433,7 +59428,7 @@ components:
           format: date-time
     OrderCreditLine:
       type: object
-      description: The credit line's credit lines.
+      description: The credit line's details.
       x-schemaName: OrderCreditLine
       required:
         - id
@@ -59452,30 +59447,30 @@ components:
         order_id:
           type: string
           title: order_id
-          description: The credit line's order id.
+          description: The ID of the associated order.
         order:
           type: object
         reference:
           type: string
           title: reference
-          description: The credit line's reference.
+          description: The table that this credit line references. For example, `payment_collection`.
         reference_id:
           type: string
           title: reference_id
-          description: The credit line's reference id.
+          description: The ID of the record in the referenced table. For example, `paycol_123`.
         metadata:
           type: object
-          description: The credit line's metadata.
+          description: The credit line's metadata, can hold custom key-value pairs.
         created_at:
           type: string
           format: date-time
           title: created_at
-          description: The credit line's created at.
+          description: The date the credit line was created.
         updated_at:
           type: string
           format: date-time
           title: updated_at
-          description: The credit line's updated at.
+          description: The date the credit line was updated.
     OrderExchange:
       type: object
       description: The order change's exchange.

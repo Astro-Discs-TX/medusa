@@ -1,7 +1,7 @@
 /**
  * @schema AdminFulfillmentProviderOption
  * type: object
- * description: The fulfillment option's fulfillment options.
+ * description: The fulfillment option's details.
  * x-schemaName: AdminFulfillmentProviderOption
  * required:
  *   - id
@@ -14,7 +14,7 @@
  *   is_return:
  *     type: boolean
  *     title: is_return
- *     description: The fulfillment option's is return.
+ *     description: Whether the fulfillment option is used for returns.
  * 
 */
 

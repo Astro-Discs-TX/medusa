@@ -1,7 +1,7 @@
 /**
  * @schema AdminFulfillmentProviderOptionsListResponse
  * type: object
- * description: SUMMARY
+ * description: The paginated list of fulfillment options.
  * x-schemaName: AdminFulfillmentProviderOptionsListResponse
  * required:
  *   - limit
@@ -12,18 +12,18 @@
  *   limit:
  *     type: number
  *     title: limit
- *     description: The fulfillment provider's limit.
+ *     description: The maximum number of items returned.
  *   offset:
  *     type: number
  *     title: offset
- *     description: The fulfillment provider's offset.
+ *     description: The number of items skipped before retrieving the returned items.
  *   count:
  *     type: number
  *     title: count
- *     description: The fulfillment provider's count.
+ *     description: The total number of items.
  *   fulfillment_options:
  *     type: array
- *     description: The fulfillment provider's fulfillment options.
+ *     description: The list of fulfillment options.
  *     items:
  *       $ref: "#/components/schemas/AdminFulfillmentProviderOption"
  * 

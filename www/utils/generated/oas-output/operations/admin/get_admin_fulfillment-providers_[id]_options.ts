@@ -1,8 +1,8 @@
 /**
  * @oas [get] /admin/fulfillment-providers/{id}/options
  * operationId: GetFulfillmentProvidersIdOptions
- * summary: List Options
- * description: Retrieve a list of options in a fulfillment provider. The options can be filtered by fields like FILTER FIELDS. The options can also be paginated.
+ * summary: List Fulfillment Options
+ * description: Retrieve the list of fulfillment options of a fulfillment provider. These options may be retrieved from an integrated third-party service.
  * x-authenticated: true
  * parameters:
  *   - name: id
