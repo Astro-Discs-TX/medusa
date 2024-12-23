@@ -5660,7 +5660,7 @@ export const generatedEditDates = {
   "references/types/DmlTypes/types/types.DmlTypes.RelationshipTypes/page.mdx": "2024-12-10T14:54:55.435Z",
   "app/recipes/commerce-automation/restock-notification/page.mdx": "2024-12-11T08:47:27.471Z",
   "app/troubleshooting/workflow-errors/page.mdx": "2024-12-11T08:44:36.598Z",
-  "app/integrations/guides/shipstation/page.mdx": "2024-12-18T17:08:55.403Z",
+  "app/integrations/guides/shipstation/page.mdx": "2024-12-23T07:48:47.719Z",
   "app/nextjs-starter/guides/customize-stripe/page.mdx": "2024-12-12T12:46:33.999Z",
   "references/core_flows/Cart/Workflows_Cart/functions/core_flows.Cart.Workflows_Cart.listShippingOptionsForCartWithPricingWorkflow/page.mdx": "2024-12-17T16:57:22.046Z",
   "references/core_flows/Cart/Workflows_Cart/variables/core_flows.Cart.Workflows_Cart.listShippingOptionsForCartWithPricingWorkflowId/page.mdx": "2024-12-17T16:57:22.044Z",
