@@ -1,7 +1,13 @@
-import { de, enUS, es, fr, it, ja, pl, ptBR, th, tr, uk } from "date-fns/locale"
+import { faIR, de, enUS, es, fr, it, ja, pl, ptBR, th, tr, uk } from "date-fns/locale"
 import { Language } from "./types"
 
 export const languages: Language[] = [
+  {
+    code: "fa",
+    display_name: "Persian",
+    ltr: false,
+    date_locale: faIR,
+  },
   {
     code: "en",
     display_name: "English",
