@@ -9,7 +9,7 @@ import {
 import { HttpTypes } from "@medusajs/framework/types"
 
 export const GET = async (
-  req: RequestWithContext<HttpTypes.StoreProductPricingContext>,
+  req: RequestWithContext<HttpTypes.StoreProductParams>,
   res: MedusaResponse<HttpTypes.StoreProductResponse>
 ) => {
   const withInventoryQuantity = req.remoteQueryConfig.fields.some((field) =>
