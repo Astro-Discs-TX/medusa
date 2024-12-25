@@ -3921,17 +3921,12 @@ export const generatedSidebar = [
             "children": []
           },
           {
-            "loaded": true,
-            "isPathHref": true,
-            "type": "link",
-            "path": "/commerce-modules/inventory/examples",
-            "title": "Examples",
-            "children": []
+            "type": "separator"
           },
           {
             "loaded": true,
             "isPathHref": true,
-            "type": "sub-category",
+            "type": "category",
             "title": "Concepts",
             "children": [
               {
@@ -3963,7 +3958,416 @@ export const generatedSidebar = [
           {
             "loaded": true,
             "isPathHref": true,
-            "type": "sub-category",
+            "type": "category",
+            "title": "Storefront Guides",
+            "autogenerate_tags": "storefront+inventory",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Retrieve Product Variant's Inventory in Storefront",
+                "path": "/storefront-development/products/inventory",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Workflows",
+            "autogenerate_tags": "workflow+inventory",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "addToCartWorkflow",
+                "path": "/references/medusa-workflows/addToCartWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "confirmVariantInventoryWorkflow",
+                "path": "/references/medusa-workflows/confirmVariantInventoryWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createCartWorkflow",
+                "path": "/references/medusa-workflows/createCartWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateLineItemInCartWorkflow",
+                "path": "/references/medusa-workflows/updateLineItemInCartWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "bulkCreateDeleteLevelsWorkflow",
+                "path": "/references/medusa-workflows/bulkCreateDeleteLevelsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createInventoryItemsWorkflow",
+                "path": "/references/medusa-workflows/createInventoryItemsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createInventoryLevelsWorkflow",
+                "path": "/references/medusa-workflows/createInventoryLevelsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteInventoryItemWorkflow",
+                "path": "/references/medusa-workflows/deleteInventoryItemWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateInventoryItemsWorkflow",
+                "path": "/references/medusa-workflows/updateInventoryItemsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateInventoryLevelsWorkflow",
+                "path": "/references/medusa-workflows/updateInventoryLevelsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "addOrderLineItemsWorkflow",
+                "path": "/references/medusa-workflows/addOrderLineItemsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "cancelOrderClaimWorkflow",
+                "path": "/references/medusa-workflows/cancelOrderClaimWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "cancelOrderExchangeWorkflow",
+                "path": "/references/medusa-workflows/cancelOrderExchangeWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "cancelOrderFulfillmentWorkflow",
+                "path": "/references/medusa-workflows/cancelOrderFulfillmentWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "cancelOrderWorkflow",
+                "path": "/references/medusa-workflows/cancelOrderWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "confirmClaimRequestWorkflow",
+                "path": "/references/medusa-workflows/confirmClaimRequestWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "confirmExchangeRequestWorkflow",
+                "path": "/references/medusa-workflows/confirmExchangeRequestWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "confirmOrderEditRequestWorkflow",
+                "path": "/references/medusa-workflows/confirmOrderEditRequestWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "confirmReturnReceiveWorkflow",
+                "path": "/references/medusa-workflows/confirmReturnReceiveWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createOrderFulfillmentWorkflow",
+                "path": "/references/medusa-workflows/createOrderFulfillmentWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createOrderWorkflow",
+                "path": "/references/medusa-workflows/createOrderWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "orderClaimAddNewItemWorkflow",
+                "path": "/references/medusa-workflows/orderClaimAddNewItemWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "orderEditAddNewItemWorkflow",
+                "path": "/references/medusa-workflows/orderEditAddNewItemWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "orderExchangeAddNewItemWorkflow",
+                "path": "/references/medusa-workflows/orderExchangeAddNewItemWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "batchProductVariantsWorkflow",
+                "path": "/references/medusa-workflows/batchProductVariantsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "batchProductsWorkflow",
+                "path": "/references/medusa-workflows/batchProductsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createProductVariantsWorkflow",
+                "path": "/references/medusa-workflows/createProductVariantsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createProductsWorkflow",
+                "path": "/references/medusa-workflows/createProductsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteProductVariantsWorkflow",
+                "path": "/references/medusa-workflows/deleteProductVariantsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteProductsWorkflow",
+                "path": "/references/medusa-workflows/deleteProductsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createReservationsWorkflow",
+                "path": "/references/medusa-workflows/createReservationsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteReservationsByLineItemsWorkflow",
+                "path": "/references/medusa-workflows/deleteReservationsByLineItemsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteReservationsWorkflow",
+                "path": "/references/medusa-workflows/deleteReservationsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateReservationsWorkflow",
+                "path": "/references/medusa-workflows/updateReservationsWorkflow",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Steps",
+            "autogenerate_tags": "step+inventory",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "confirmInventoryStep",
+                "path": "/references/medusa-workflows/steps/confirmInventoryStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "reserveInventoryStep",
+                "path": "/references/medusa-workflows/steps/reserveInventoryStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "adjustInventoryLevelsStep",
+                "path": "/references/medusa-workflows/steps/adjustInventoryLevelsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createInventoryItemsStep",
+                "path": "/references/medusa-workflows/steps/createInventoryItemsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createInventoryLevelsStep",
+                "path": "/references/medusa-workflows/steps/createInventoryLevelsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteInventoryItemStep",
+                "path": "/references/medusa-workflows/steps/deleteInventoryItemStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateInventoryItemsStep",
+                "path": "/references/medusa-workflows/steps/updateInventoryItemsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateInventoryLevelsStep",
+                "path": "/references/medusa-workflows/steps/updateInventoryLevelsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createReservationsStep",
+                "path": "/references/medusa-workflows/steps/createReservationsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteReservationsByLineItemsStep",
+                "path": "/references/medusa-workflows/steps/deleteReservationsByLineItemsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteReservationsStep",
+                "path": "/references/medusa-workflows/steps/deleteReservationsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateReservationsStep",
+                "path": "/references/medusa-workflows/steps/updateReservationsStep",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
             "title": "References",
             "children": [
               {
