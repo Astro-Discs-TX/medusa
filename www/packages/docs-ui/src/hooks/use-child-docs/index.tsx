@@ -1,7 +1,16 @@
 "use client"
 
 import React, { useMemo } from "react"
-import { Card, CardList, H2, H3, H4, Hr, useSidebar } from "../.."
+import {
+  Card,
+  CardList,
+  H2,
+  H3,
+  H4,
+  Hr,
+  isSidebarItemLink,
+  useSidebar,
+} from "../.."
 import { InteractiveSidebarItem, SidebarItem, SidebarItemLink } from "types"
 import slugify from "slugify"
 import { MDXComponents } from "../.."
@@ -61,12 +70,12 @@ export const useChildDocs = ({
     switch (filterType) {
       case "hide":
         return (
-          (item.type !== "link" || !hideItems.includes(item.path)) &&
+          (!isSidebarItemLink(item) || !hideItems.includes(item.path)) &&
           !hideItems.includes(item.title)
         )
       case "show":
         return (
-          (item.type === "link" && showItems!.includes(item.path)) ||
+          (isSidebarItemLink(item) && showItems!.includes(item.path)) ||
           showItems!.includes(item.title)
         )
       case "all":
@@ -151,16 +160,15 @@ export const useChildDocs = ({
       <CardList
         items={
           filterNonInteractiveItems(items).map((childItem) => {
-            const href =
-              childItem.type === "link"
-                ? childItem.path
-                : childItem.children?.length
-                  ? (
-                      childItem.children.find(
-                        (item) => item.type === "link"
-                      ) as SidebarItemLink
-                    )?.path
-                  : "#"
+            const href = isSidebarItemLink(childItem)
+              ? childItem.path
+              : childItem.children?.length
+                ? (
+                    childItem.children.find((item) =>
+                      isSidebarItemLink(item)
+                    ) as SidebarItemLink
+                  )?.path
+                : "#"
             return {
               title: childItem.title,
               href,
@@ -193,7 +201,7 @@ export const useChildDocs = ({
                 items={
                   itemChildren?.map((childItem) => ({
                     title: childItem.title,
-                    href: childItem.type === "link" ? childItem.path : "",
+                    href: isSidebarItemLink(childItem) ? childItem.path : "",
                   })) || []
                 }
                 itemsPerRow={itemsPerRow}
@@ -201,7 +209,7 @@ export const useChildDocs = ({
               {key !== filteredItems.length - 1 && <Hr />}
             </>
           )}
-          {!HeadingComponent && item.type === "link" && (
+          {!HeadingComponent && isSidebarItemLink(item) && (
             <Card title={item.title} href={item.path} />
           )}
         </React.Fragment>

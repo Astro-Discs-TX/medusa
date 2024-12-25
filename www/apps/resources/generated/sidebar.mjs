@@ -223,11 +223,12 @@ export const generatedSidebar = [
             "title": "Storefront Guides",
             "initialOpen": false,
             "autogenerate_tags": "storefront+apiKey",
+            "autogenerate_as_ref": true,
             "children": [
               {
                 "loaded": true,
                 "isPathHref": true,
-                "type": "link",
+                "type": "ref",
                 "title": "Use a Publishable API Key in the Storefront",
                 "path": "/storefront-development/publishable-api-keys",
                 "children": []
@@ -241,11 +242,12 @@ export const generatedSidebar = [
             "title": "Workflows",
             "initialOpen": false,
             "autogenerate_tags": "workflow+apiKey",
+            "autogenerate_as_ref": true,
             "children": [
               {
                 "loaded": true,
                 "isPathHref": true,
-                "type": "link",
+                "type": "ref",
                 "title": "createApiKeysWorkflow",
                 "path": "/references/medusa-workflows/createApiKeysWorkflow",
                 "children": []
@@ -253,7 +255,7 @@ export const generatedSidebar = [
               {
                 "loaded": true,
                 "isPathHref": true,
-                "type": "link",
+                "type": "ref",
                 "title": "deleteApiKeysWorkflow",
                 "path": "/references/medusa-workflows/deleteApiKeysWorkflow",
                 "children": []
@@ -261,7 +263,7 @@ export const generatedSidebar = [
               {
                 "loaded": true,
                 "isPathHref": true,
-                "type": "link",
+                "type": "ref",
                 "title": "revokeApiKeysWorkflow",
                 "path": "/references/medusa-workflows/revokeApiKeysWorkflow",
                 "children": []
@@ -269,7 +271,7 @@ export const generatedSidebar = [
               {
                 "loaded": true,
                 "isPathHref": true,
-                "type": "link",
+                "type": "ref",
                 "title": "updateApiKeysWorkflow",
                 "path": "/references/medusa-workflows/updateApiKeysWorkflow",
                 "children": []
@@ -283,11 +285,12 @@ export const generatedSidebar = [
             "title": "Steps",
             "initialOpen": false,
             "autogenerate_tags": "step+apiKey",
+            "autogenerate_as_ref": true,
             "children": [
               {
                 "loaded": true,
                 "isPathHref": true,
-                "type": "link",
+                "type": "ref",
                 "title": "createApiKeysStep",
                 "path": "/references/medusa-workflows/steps/createApiKeysStep",
                 "children": []
@@ -295,7 +298,7 @@ export const generatedSidebar = [
               {
                 "loaded": true,
                 "isPathHref": true,
-                "type": "link",
+                "type": "ref",
                 "title": "deleteApiKeysStep",
                 "path": "/references/medusa-workflows/steps/deleteApiKeysStep",
                 "children": []
@@ -303,7 +306,7 @@ export const generatedSidebar = [
               {
                 "loaded": true,
                 "isPathHref": true,
-                "type": "link",
+                "type": "ref",
                 "title": "revokeApiKeysStep",
                 "path": "/references/medusa-workflows/steps/revokeApiKeysStep",
                 "children": []
@@ -311,7 +314,7 @@ export const generatedSidebar = [
               {
                 "loaded": true,
                 "isPathHref": true,
-                "type": "link",
+                "type": "ref",
                 "title": "updateApiKeysStep",
                 "path": "/references/medusa-workflows/steps/updateApiKeysStep",
                 "children": []
@@ -530,11 +533,12 @@ export const generatedSidebar = [
             "title": "Server Guides",
             "autogenerate_tags": "server+auth",
             "initialOpen": false,
+            "autogenerate_as_ref": true,
             "children": [
               {
                 "loaded": true,
                 "isPathHref": true,
-                "type": "link",
+                "type": "ref",
                 "title": "Create an Actor Type",
                 "path": "/commerce-modules/auth/create-actor-type",
                 "children": []
@@ -542,7 +546,7 @@ export const generatedSidebar = [
               {
                 "loaded": true,
                 "isPathHref": true,
-                "type": "link",
+                "type": "ref",
                 "title": "Handle Password Reset Event",
                 "path": "/commerce-modules/auth/reset-password",
                 "children": []
@@ -550,7 +554,7 @@ export const generatedSidebar = [
               {
                 "loaded": true,
                 "isPathHref": true,
-                "type": "link",
+                "type": "ref",
                 "title": "How to Create an Auth Provider Module",
                 "path": "/references/auth/provider",
                 "children": []
@@ -564,11 +568,12 @@ export const generatedSidebar = [
             "title": "Storefront Guides",
             "autogenerate_tags": "storefront+auth",
             "initialOpen": false,
+            "autogenerate_as_ref": true,
             "children": [
               {
                 "loaded": true,
                 "isPathHref": true,
-                "type": "link",
+                "type": "ref",
                 "title": "Log-out Customer in Storefront",
                 "path": "/storefront-development/customers/log-out",
                 "children": []
@@ -576,7 +581,7 @@ export const generatedSidebar = [
               {
                 "loaded": true,
                 "isPathHref": true,
-                "type": "link",
+                "type": "ref",
                 "title": "Login Customer in Storefront",
                 "path": "/storefront-development/customers/login",
                 "children": []
@@ -584,7 +589,7 @@ export const generatedSidebar = [
               {
                 "loaded": true,
                 "isPathHref": true,
-                "type": "link",
+                "type": "ref",
                 "title": "Register Customer in Storefront",
                 "path": "/storefront-development/customers/register",
                 "children": []
@@ -592,7 +597,7 @@ export const generatedSidebar = [
               {
                 "loaded": true,
                 "isPathHref": true,
-                "type": "link",
+                "type": "ref",
                 "title": "Reset Customer Password in Storefront",
                 "path": "/storefront-development/customers/reset-password",
                 "children": []
@@ -600,7 +605,7 @@ export const generatedSidebar = [
               {
                 "loaded": true,
                 "isPathHref": true,
-                "type": "link",
+                "type": "ref",
                 "title": "Retrieve Customer in Storefront",
                 "path": "/storefront-development/customers/retrieve",
                 "children": []
@@ -608,7 +613,7 @@ export const generatedSidebar = [
               {
                 "loaded": true,
                 "isPathHref": true,
-                "type": "link",
+                "type": "ref",
                 "title": "Third-Party or Social Login in Storefront",
                 "path": "/storefront-development/customers/third-party-login",
                 "children": []
@@ -622,11 +627,12 @@ export const generatedSidebar = [
             "title": "Workflows",
             "autogenerate_tags": "workflow+auth",
             "initialOpen": false,
+            "autogenerate_as_ref": true,
             "children": [
               {
                 "loaded": true,
                 "isPathHref": true,
-                "type": "link",
+                "type": "ref",
                 "title": "createCustomerAccountWorkflow",
                 "path": "/references/medusa-workflows/createCustomerAccountWorkflow",
                 "children": []
@@ -634,7 +640,7 @@ export const generatedSidebar = [
               {
                 "loaded": true,
                 "isPathHref": true,
-                "type": "link",
+                "type": "ref",
                 "title": "removeCustomerAccountWorkflow",
                 "path": "/references/medusa-workflows/removeCustomerAccountWorkflow",
                 "children": []
@@ -642,7 +648,7 @@ export const generatedSidebar = [
               {
                 "loaded": true,
                 "isPathHref": true,
-                "type": "link",
+                "type": "ref",
                 "title": "acceptInviteWorkflow",
                 "path": "/references/medusa-workflows/acceptInviteWorkflow",
                 "children": []
@@ -650,7 +656,7 @@ export const generatedSidebar = [
               {
                 "loaded": true,
                 "isPathHref": true,
-                "type": "link",
+                "type": "ref",
                 "title": "createUserAccountWorkflow",
                 "path": "/references/medusa-workflows/createUserAccountWorkflow",
                 "children": []
@@ -658,7 +664,7 @@ export const generatedSidebar = [
               {
                 "loaded": true,
                 "isPathHref": true,
-                "type": "link",
+                "type": "ref",
                 "title": "removeUserAccountWorkflow",
                 "path": "/references/medusa-workflows/removeUserAccountWorkflow",
                 "children": []
@@ -672,11 +678,12 @@ export const generatedSidebar = [
             "title": "Steps",
             "autogenerate_tags": "step+auth",
             "initialOpen": false,
+            "autogenerate_as_ref": true,
             "children": [
               {
                 "loaded": true,
                 "isPathHref": true,
-                "type": "link",
+                "type": "ref",
                 "title": "setAuthAppMetadataStep",
                 "path": "/references/medusa-workflows/steps/setAuthAppMetadataStep",
                 "children": []
