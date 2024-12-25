@@ -512,10 +512,6 @@ export const filesMap = [
     "pathname": "/commerce-modules/sales-channel/events"
   },
   {
-    "filePath": "/www/apps/resources/app/commerce-modules/sales-channel/examples/page.mdx",
-    "pathname": "/commerce-modules/sales-channel/examples"
-  },
-  {
     "filePath": "/www/apps/resources/app/commerce-modules/sales-channel/links-to-other-modules/page.mdx",
     "pathname": "/commerce-modules/sales-channel/links-to-other-modules"
   },

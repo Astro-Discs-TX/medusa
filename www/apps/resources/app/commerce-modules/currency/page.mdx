@@ -108,14 +108,14 @@ You can then execute the workflow in your custom API routes, scheduled jobs, or 
   </CodeTab>
   <CodeTab label="Subscriber" value="subscriber">
     
-    ```ts title="src/subscribers/customer-created.ts" highlights={[["11"], ["12"], ["13"], ["14"]]} collapsibleLines="1-6" expandButtonLabel="Show Imports"
+    ```ts title="src/subscribers/user-created.ts" highlights={[["11"], ["12"], ["13"], ["14"]]} collapsibleLines="1-6" expandButtonLabel="Show Imports"
     import {
       type SubscriberConfig,
       type SubscriberArgs,
     } from "@medusajs/framework"
     import {retrievePriceWithCurrency} from "../workflows/retrieve-price-with-currency"
 
-    export default async function handleCustomerCreate({
+    export default async function handleUserCreated({
       event: { data },
       container,
     }: SubscriberArgs<{ id: string }>) {
@@ -135,7 +135,7 @@ You can then execute the workflow in your custom API routes, scheduled jobs, or 
   </CodeTab>
   <CodeTab label="Scheduled Job" value="scheduled-job">
     
-    ```ts title="src/jobs/message-daily.ts" highlights={[["7"], ["8"], ["9"], ["10"]]}
+    ```ts title="src/jobs/run-daily.ts" highlights={[["7"], ["8"], ["9"], ["10"]]}
     import { MedusaContainer } from "@medusajs/framework/types"
     import {retrievePriceWithCurrency} from "../workflows/retrieve-price-with-currency"
 
