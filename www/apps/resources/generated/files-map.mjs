@@ -360,10 +360,6 @@ export const filesMap = [
     "pathname": "/commerce-modules"
   },
   {
-    "filePath": "/www/apps/resources/app/commerce-modules/payment/examples/page.mdx",
-    "pathname": "/commerce-modules/payment/examples"
-  },
-  {
     "filePath": "/www/apps/resources/app/commerce-modules/payment/links-to-other-modules/page.mdx",
     "pathname": "/commerce-modules/payment/links-to-other-modules"
   },

@@ -1,5 +1,9 @@
 export const storefront = [
   {
+    "title": "Customize the Stripe Integration in the Next.js Starter",
+    "path": "/nextjs-starter/guides/customize-stripe"
+  },
+  {
     "title": "Create Cart Context in Storefront",
     "path": "/storefront-development/cart/context"
   },

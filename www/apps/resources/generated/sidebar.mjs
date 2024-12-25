@@ -4752,6 +4752,9 @@ export const generatedSidebar = [
             "children": []
           },
           {
+            "type": "separator"
+          },
+          {
             "loaded": true,
             "isPathHref": true,
             "type": "category",
@@ -7189,18 +7192,14 @@ export const generatedSidebar = [
             "children": []
           },
           {
-            "loaded": true,
-            "isPathHref": true,
-            "type": "link",
-            "path": "/commerce-modules/payment/examples",
-            "title": "Examples",
-            "children": []
+            "type": "separator"
           },
           {
             "loaded": true,
             "isPathHref": true,
-            "type": "sub-category",
+            "type": "category",
             "title": "Concepts",
+            "initialOpen": false,
             "children": [
               {
                 "loaded": true,
@@ -7255,8 +7254,11 @@ export const generatedSidebar = [
           {
             "loaded": true,
             "isPathHref": true,
-            "type": "sub-category",
-            "title": "Guides",
+            "type": "category",
+            "title": "Server Guides",
+            "autogenerate_tags": "server+payment",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
             "children": [
               {
                 "loaded": true,
@@ -7279,8 +7281,258 @@ export const generatedSidebar = [
           {
             "loaded": true,
             "isPathHref": true,
-            "type": "sub-category",
-            "title": "Payment Providers",
+            "type": "category",
+            "title": "Storefront Guides",
+            "autogenerate_tags": "storefront+payment",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Customize the Stripe Integration in the Next.js Starter",
+                "path": "/nextjs-starter/guides/customize-stripe",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Checkout Step 5: Complete Cart",
+                "path": "/storefront-development/checkout/complete-cart",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Checkout Step 4: Choose Payment Provider",
+                "path": "/storefront-development/checkout/payment",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Payment with Stripe in React Storefront",
+                "path": "/storefront-development/checkout/payment/stripe",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Workflows",
+            "autogenerate_tags": "workflow+payment",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createCartWorkflow",
+                "path": "/references/medusa-workflows/createCartWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createPaymentCollectionForCartWorkflow",
+                "path": "/references/medusa-workflows/createPaymentCollectionForCartWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "refreshPaymentCollectionForCartWorkflow",
+                "path": "/references/medusa-workflows/refreshPaymentCollectionForCartWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "cancelOrderWorkflow",
+                "path": "/references/medusa-workflows/cancelOrderWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createOrderPaymentCollectionWorkflow",
+                "path": "/references/medusa-workflows/createOrderPaymentCollectionWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "markPaymentCollectionAsPaid",
+                "path": "/references/medusa-workflows/markPaymentCollectionAsPaid",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "capturePaymentWorkflow",
+                "path": "/references/medusa-workflows/capturePaymentWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "processPaymentWorkflow",
+                "path": "/references/medusa-workflows/processPaymentWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "refundPaymentWorkflow",
+                "path": "/references/medusa-workflows/refundPaymentWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createPaymentSessionsWorkflow",
+                "path": "/references/medusa-workflows/createPaymentSessionsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createRefundReasonsWorkflow",
+                "path": "/references/medusa-workflows/createRefundReasonsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deletePaymentSessionsWorkflow",
+                "path": "/references/medusa-workflows/deletePaymentSessionsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateRefundReasonsWorkflow",
+                "path": "/references/medusa-workflows/updateRefundReasonsWorkflow",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Steps",
+            "autogenerate_tags": "step+payment",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createPaymentCollectionsStep",
+                "path": "/references/medusa-workflows/steps/createPaymentCollectionsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "authorizePaymentSessionStep",
+                "path": "/references/medusa-workflows/steps/authorizePaymentSessionStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "cancelPaymentStep",
+                "path": "/references/medusa-workflows/steps/cancelPaymentStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "capturePaymentStep",
+                "path": "/references/medusa-workflows/steps/capturePaymentStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "refundPaymentStep",
+                "path": "/references/medusa-workflows/steps/refundPaymentStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createPaymentSessionStep",
+                "path": "/references/medusa-workflows/steps/createPaymentSessionStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createRefundReasonStep",
+                "path": "/references/medusa-workflows/steps/createRefundReasonStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deletePaymentSessionsStep",
+                "path": "/references/medusa-workflows/steps/deletePaymentSessionsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updatePaymentCollectionStep",
+                "path": "/references/medusa-workflows/steps/updatePaymentCollectionStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateRefundReasonsStep",
+                "path": "/references/medusa-workflows/steps/updateRefundReasonsStep",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Providers",
+            "initialOpen": false,
             "children": [
               {
                 "loaded": true,
@@ -7295,8 +7547,9 @@ export const generatedSidebar = [
           {
             "loaded": true,
             "isPathHref": true,
-            "type": "sub-category",
+            "type": "category",
             "title": "References",
+            "initialOpen": false,
             "children": [
               {
                 "loaded": true,

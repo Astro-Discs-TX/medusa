@@ -1,5 +1,9 @@
 export const payment = [
   {
+    "title": "Customize the Stripe Integration in the Next.js Starter",
+    "path": "/nextjs-starter/guides/customize-stripe"
+  },
+  {
     "title": "Checkout Step 5: Complete Cart",
     "path": "/storefront-development/checkout/complete-cart"
   },
