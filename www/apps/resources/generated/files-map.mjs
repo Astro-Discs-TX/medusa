@@ -408,10 +408,6 @@ export const filesMap = [
     "pathname": "/commerce-modules/pricing/concepts"
   },
   {
-    "filePath": "/www/apps/resources/app/commerce-modules/pricing/examples/page.mdx",
-    "pathname": "/commerce-modules/pricing/examples"
-  },
-  {
     "filePath": "/www/apps/resources/app/commerce-modules/pricing/links-to-other-modules/page.mdx",
     "pathname": "/commerce-modules/pricing/links-to-other-modules"
   },

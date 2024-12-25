@@ -7931,18 +7931,14 @@ export const generatedSidebar = [
             "children": []
           },
           {
-            "loaded": true,
-            "isPathHref": true,
-            "type": "link",
-            "path": "/commerce-modules/pricing/examples",
-            "title": "Examples",
-            "children": []
+            "type": "separator"
           },
           {
             "loaded": true,
             "isPathHref": true,
-            "type": "sub-category",
+            "type": "category",
             "title": "Concepts",
+            "initialOpen": false,
             "children": [
               {
                 "loaded": true,
@@ -7989,8 +7985,405 @@ export const generatedSidebar = [
           {
             "loaded": true,
             "isPathHref": true,
-            "type": "sub-category",
+            "type": "category",
+            "title": "Server Guides",
+            "autogenerate_tags": "server+pricing",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Get Variant Prices",
+                "path": "/commerce-modules/product/guides/price",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Get Variant Price with Taxes",
+                "path": "/commerce-modules/product/guides/price-with-taxes",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Storefront Guides",
+            "autogenerate_tags": "storefront+pricing",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Example: Show Sale Price",
+                "path": "/storefront-development/products/price/examples/sale-price",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Example: Show Variant's Price",
+                "path": "/storefront-development/products/price/examples/show-price",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Example: Show Price with Taxes",
+                "path": "/storefront-development/products/price/examples/tax-price",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Retrieve Product Variant's Prices in Storefront",
+                "path": "/storefront-development/products/price",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Workflows",
+            "autogenerate_tags": "workflow+pricing",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createShippingOptionsWorkflow",
+                "path": "/references/medusa-workflows/createShippingOptionsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateShippingOptionsWorkflow",
+                "path": "/references/medusa-workflows/updateShippingOptionsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "batchPriceListPricesWorkflow",
+                "path": "/references/medusa-workflows/batchPriceListPricesWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createPriceListPricesWorkflow",
+                "path": "/references/medusa-workflows/createPriceListPricesWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createPriceListsWorkflow",
+                "path": "/references/medusa-workflows/createPriceListsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deletePriceListsWorkflow",
+                "path": "/references/medusa-workflows/deletePriceListsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "removePriceListPricesWorkflow",
+                "path": "/references/medusa-workflows/removePriceListPricesWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updatePriceListPricesWorkflow",
+                "path": "/references/medusa-workflows/updatePriceListPricesWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updatePriceListsWorkflow",
+                "path": "/references/medusa-workflows/updatePriceListsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createPricePreferencesWorkflow",
+                "path": "/references/medusa-workflows/createPricePreferencesWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deletePricePreferencesWorkflow",
+                "path": "/references/medusa-workflows/deletePricePreferencesWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updatePricePreferencesWorkflow",
+                "path": "/references/medusa-workflows/updatePricePreferencesWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "batchProductVariantsWorkflow",
+                "path": "/references/medusa-workflows/batchProductVariantsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "batchProductsWorkflow",
+                "path": "/references/medusa-workflows/batchProductsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createProductVariantsWorkflow",
+                "path": "/references/medusa-workflows/createProductVariantsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createProductsWorkflow",
+                "path": "/references/medusa-workflows/createProductsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateProductVariantsWorkflow",
+                "path": "/references/medusa-workflows/updateProductVariantsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateProductsWorkflow",
+                "path": "/references/medusa-workflows/updateProductsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "upsertVariantPricesWorkflow",
+                "path": "/references/medusa-workflows/upsertVariantPricesWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createRegionsWorkflow",
+                "path": "/references/medusa-workflows/createRegionsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateRegionsWorkflow",
+                "path": "/references/medusa-workflows/updateRegionsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createStoresWorkflow",
+                "path": "/references/medusa-workflows/createStoresWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateStoresWorkflow",
+                "path": "/references/medusa-workflows/updateStoresWorkflow",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Steps",
+            "autogenerate_tags": "step+pricing",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createShippingOptionsPriceSetsStep",
+                "path": "/references/medusa-workflows/steps/createShippingOptionsPriceSetsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "setShippingOptionsPricesStep",
+                "path": "/references/medusa-workflows/steps/setShippingOptionsPricesStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createPriceListPricesStep",
+                "path": "/references/medusa-workflows/steps/createPriceListPricesStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createPriceListsStep",
+                "path": "/references/medusa-workflows/steps/createPriceListsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deletePriceListsStep",
+                "path": "/references/medusa-workflows/steps/deletePriceListsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "removePriceListPricesStep",
+                "path": "/references/medusa-workflows/steps/removePriceListPricesStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updatePriceListPricesStep",
+                "path": "/references/medusa-workflows/steps/updatePriceListPricesStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updatePriceListsStep",
+                "path": "/references/medusa-workflows/steps/updatePriceListsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "validatePriceListsStep",
+                "path": "/references/medusa-workflows/steps/validatePriceListsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createPricePreferencesStep",
+                "path": "/references/medusa-workflows/steps/createPricePreferencesStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createPriceSetsStep",
+                "path": "/references/medusa-workflows/steps/createPriceSetsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deletePricePreferencesStep",
+                "path": "/references/medusa-workflows/steps/deletePricePreferencesStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updatePricePreferencesAsArrayStep",
+                "path": "/references/medusa-workflows/steps/updatePricePreferencesAsArrayStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updatePricePreferencesStep",
+                "path": "/references/medusa-workflows/steps/updatePricePreferencesStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updatePriceSetsStep",
+                "path": "/references/medusa-workflows/steps/updatePriceSetsStep",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
             "title": "References",
+            "initialOpen": false,
             "children": [
               {
                 "loaded": true,
