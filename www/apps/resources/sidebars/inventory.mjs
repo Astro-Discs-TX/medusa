@@ -16,6 +16,7 @@ export const inventorySidebar = [
       {
         type: "category",
         title: "Concepts",
+        initialOpen: false,
         children: [
           {
             type: "link",
@@ -79,6 +80,7 @@ export const inventorySidebar = [
       {
         type: "category",
         title: "References",
+        initialOpen: false,
         children: [
           {
             type: "link",

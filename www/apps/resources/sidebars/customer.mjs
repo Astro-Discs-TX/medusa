@@ -16,6 +16,7 @@ export const customerSidebar = [
       {
         type: "category",
         title: "Concepts",
+        initialOpen: false,
         children: [
           {
             type: "link",
@@ -81,6 +82,7 @@ export const customerSidebar = [
       {
         type: "category",
         title: "References",
+        initialOpen: false,
         children: [
           {
             type: "link",

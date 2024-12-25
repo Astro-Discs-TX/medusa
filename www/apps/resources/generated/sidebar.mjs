@@ -955,6 +955,7 @@ export const generatedSidebar = [
             "isPathHref": true,
             "type": "category",
             "title": "Concepts",
+            "initialOpen": false,
             "children": [
               {
                 "loaded": true,
@@ -1319,6 +1320,7 @@ export const generatedSidebar = [
             "isPathHref": true,
             "type": "category",
             "title": "References",
+            "initialOpen": false,
             "children": [
               {
                 "loaded": true,
@@ -1867,6 +1869,7 @@ export const generatedSidebar = [
             "isPathHref": true,
             "type": "sub-category",
             "title": "Concepts",
+            "initialOpen": false,
             "children": [
               {
                 "loaded": true,
@@ -1883,6 +1886,7 @@ export const generatedSidebar = [
             "isPathHref": true,
             "type": "sub-category",
             "title": "References",
+            "initialOpen": false,
             "children": [
               {
                 "loaded": true,
@@ -1983,6 +1987,7 @@ export const generatedSidebar = [
             "isPathHref": true,
             "type": "category",
             "title": "Concepts",
+            "initialOpen": false,
             "children": [
               {
                 "loaded": true,
@@ -2403,6 +2408,7 @@ export const generatedSidebar = [
             "isPathHref": true,
             "type": "category",
             "title": "References",
+            "initialOpen": false,
             "children": [
               {
                 "loaded": true,
@@ -2719,6 +2725,7 @@ export const generatedSidebar = [
             "isPathHref": true,
             "type": "category",
             "title": "Concepts",
+            "initialOpen": false,
             "children": [
               {
                 "loaded": true,
@@ -3203,6 +3210,7 @@ export const generatedSidebar = [
             "isPathHref": true,
             "type": "category",
             "title": "References",
+            "initialOpen": false,
             "children": [
               {
                 "loaded": true,
@@ -3928,6 +3936,7 @@ export const generatedSidebar = [
             "isPathHref": true,
             "type": "category",
             "title": "Concepts",
+            "initialOpen": false,
             "children": [
               {
                 "loaded": true,
@@ -4369,6 +4378,7 @@ export const generatedSidebar = [
             "isPathHref": true,
             "type": "category",
             "title": "References",
+            "initialOpen": false,
             "children": [
               {
                 "loaded": true,
@@ -4744,8 +4754,9 @@ export const generatedSidebar = [
           {
             "loaded": true,
             "isPathHref": true,
-            "type": "sub-category",
+            "type": "category",
             "title": "Concepts",
+            "initialOpen": false,
             "children": [
               {
                 "loaded": true,
@@ -4840,8 +4851,1026 @@ export const generatedSidebar = [
           {
             "loaded": true,
             "isPathHref": true,
-            "type": "sub-category",
+            "type": "category",
+            "title": "Storefront Guides",
+            "autogenerate_tags": "storefront+order",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Checkout Step 5: Complete Cart",
+                "path": "/storefront-development/checkout/complete-cart",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Workflows",
+            "autogenerate_tags": "workflow+order",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "acceptOrderTransferWorkflow",
+                "path": "/references/medusa-workflows/acceptOrderTransferWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "addOrderLineItemsWorkflow",
+                "path": "/references/medusa-workflows/addOrderLineItemsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "archiveOrderWorkflow",
+                "path": "/references/medusa-workflows/archiveOrderWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "beginClaimOrderWorkflow",
+                "path": "/references/medusa-workflows/beginClaimOrderWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "beginExchangeOrderWorkflow",
+                "path": "/references/medusa-workflows/beginExchangeOrderWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "beginOrderEditOrderWorkflow",
+                "path": "/references/medusa-workflows/beginOrderEditOrderWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "beginReceiveReturnWorkflow",
+                "path": "/references/medusa-workflows/beginReceiveReturnWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "beginReturnOrderWorkflow",
+                "path": "/references/medusa-workflows/beginReturnOrderWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "cancelBeginOrderClaimWorkflow",
+                "path": "/references/medusa-workflows/cancelBeginOrderClaimWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "cancelBeginOrderEditWorkflow",
+                "path": "/references/medusa-workflows/cancelBeginOrderEditWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "cancelBeginOrderExchangeWorkflow",
+                "path": "/references/medusa-workflows/cancelBeginOrderExchangeWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "cancelOrderChangeWorkflow",
+                "path": "/references/medusa-workflows/cancelOrderChangeWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "cancelOrderClaimWorkflow",
+                "path": "/references/medusa-workflows/cancelOrderClaimWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "cancelOrderExchangeWorkflow",
+                "path": "/references/medusa-workflows/cancelOrderExchangeWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "cancelOrderFulfillmentWorkflow",
+                "path": "/references/medusa-workflows/cancelOrderFulfillmentWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "cancelOrderTransferRequestWorkflow",
+                "path": "/references/medusa-workflows/cancelOrderTransferRequestWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "cancelOrderWorkflow",
+                "path": "/references/medusa-workflows/cancelOrderWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "cancelReturnReceiveWorkflow",
+                "path": "/references/medusa-workflows/cancelReturnReceiveWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "cancelReturnRequestWorkflow",
+                "path": "/references/medusa-workflows/cancelReturnRequestWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "cancelReturnWorkflow",
+                "path": "/references/medusa-workflows/cancelReturnWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "completeOrderWorkflow",
+                "path": "/references/medusa-workflows/completeOrderWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "confirmClaimRequestWorkflow",
+                "path": "/references/medusa-workflows/confirmClaimRequestWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "confirmExchangeRequestWorkflow",
+                "path": "/references/medusa-workflows/confirmExchangeRequestWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "confirmOrderEditRequestWorkflow",
+                "path": "/references/medusa-workflows/confirmOrderEditRequestWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "confirmReturnReceiveWorkflow",
+                "path": "/references/medusa-workflows/confirmReturnReceiveWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "confirmReturnRequestWorkflow",
+                "path": "/references/medusa-workflows/confirmReturnRequestWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createAndCompleteReturnOrderWorkflow",
+                "path": "/references/medusa-workflows/createAndCompleteReturnOrderWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createClaimShippingMethodWorkflow",
+                "path": "/references/medusa-workflows/createClaimShippingMethodWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createExchangeShippingMethodWorkflow",
+                "path": "/references/medusa-workflows/createExchangeShippingMethodWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createOrderChangeWorkflow",
+                "path": "/references/medusa-workflows/createOrderChangeWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createOrderEditShippingMethodWorkflow",
+                "path": "/references/medusa-workflows/createOrderEditShippingMethodWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createOrderFulfillmentWorkflow",
+                "path": "/references/medusa-workflows/createOrderFulfillmentWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createOrderShipmentWorkflow",
+                "path": "/references/medusa-workflows/createOrderShipmentWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createOrderWorkflow",
+                "path": "/references/medusa-workflows/createOrderWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createReturnShippingMethodWorkflow",
+                "path": "/references/medusa-workflows/createReturnShippingMethodWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "declineOrderChangeWorkflow",
+                "path": "/references/medusa-workflows/declineOrderChangeWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "declineOrderTransferRequestWorkflow",
+                "path": "/references/medusa-workflows/declineOrderTransferRequestWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteOrderChangeActionsWorkflow",
+                "path": "/references/medusa-workflows/deleteOrderChangeActionsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteOrderChangeWorkflow",
+                "path": "/references/medusa-workflows/deleteOrderChangeWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "dismissItemReturnRequestWorkflow",
+                "path": "/references/medusa-workflows/dismissItemReturnRequestWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "markPaymentCollectionAsPaid",
+                "path": "/references/medusa-workflows/markPaymentCollectionAsPaid",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "orderClaimAddNewItemWorkflow",
+                "path": "/references/medusa-workflows/orderClaimAddNewItemWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "orderClaimItemWorkflow",
+                "path": "/references/medusa-workflows/orderClaimItemWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "orderClaimRequestItemReturnWorkflow",
+                "path": "/references/medusa-workflows/orderClaimRequestItemReturnWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "orderEditAddNewItemWorkflow",
+                "path": "/references/medusa-workflows/orderEditAddNewItemWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "orderEditUpdateItemQuantityWorkflow",
+                "path": "/references/medusa-workflows/orderEditUpdateItemQuantityWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "orderExchangeAddNewItemWorkflow",
+                "path": "/references/medusa-workflows/orderExchangeAddNewItemWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "orderExchangeRequestItemReturnWorkflow",
+                "path": "/references/medusa-workflows/orderExchangeRequestItemReturnWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "receiveItemReturnRequestWorkflow",
+                "path": "/references/medusa-workflows/receiveItemReturnRequestWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "removeAddItemClaimActionWorkflow",
+                "path": "/references/medusa-workflows/removeAddItemClaimActionWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "removeClaimShippingMethodWorkflow",
+                "path": "/references/medusa-workflows/removeClaimShippingMethodWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "removeExchangeShippingMethodWorkflow",
+                "path": "/references/medusa-workflows/removeExchangeShippingMethodWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "removeItemClaimActionWorkflow",
+                "path": "/references/medusa-workflows/removeItemClaimActionWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "removeItemExchangeActionWorkflow",
+                "path": "/references/medusa-workflows/removeItemExchangeActionWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "removeItemOrderEditActionWorkflow",
+                "path": "/references/medusa-workflows/removeItemOrderEditActionWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "removeItemReceiveReturnActionWorkflow",
+                "path": "/references/medusa-workflows/removeItemReceiveReturnActionWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "removeItemReturnActionWorkflow",
+                "path": "/references/medusa-workflows/removeItemReturnActionWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "removeOrderEditShippingMethodWorkflow",
+                "path": "/references/medusa-workflows/removeOrderEditShippingMethodWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "removeReturnShippingMethodWorkflow",
+                "path": "/references/medusa-workflows/removeReturnShippingMethodWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "requestItemReturnWorkflow",
+                "path": "/references/medusa-workflows/requestItemReturnWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "requestOrderEditRequestWorkflow",
+                "path": "/references/medusa-workflows/requestOrderEditRequestWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "requestOrderTransferWorkflow",
+                "path": "/references/medusa-workflows/requestOrderTransferWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateClaimAddItemWorkflow",
+                "path": "/references/medusa-workflows/updateClaimAddItemWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateClaimItemWorkflow",
+                "path": "/references/medusa-workflows/updateClaimItemWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateClaimShippingMethodWorkflow",
+                "path": "/references/medusa-workflows/updateClaimShippingMethodWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateExchangeAddItemWorkflow",
+                "path": "/references/medusa-workflows/updateExchangeAddItemWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateExchangeShippingMethodWorkflow",
+                "path": "/references/medusa-workflows/updateExchangeShippingMethodWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateOrderChangeActionsWorkflow",
+                "path": "/references/medusa-workflows/updateOrderChangeActionsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateOrderChangesWorkflow",
+                "path": "/references/medusa-workflows/updateOrderChangesWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateOrderEditAddItemWorkflow",
+                "path": "/references/medusa-workflows/updateOrderEditAddItemWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateOrderEditItemQuantityWorkflow",
+                "path": "/references/medusa-workflows/updateOrderEditItemQuantityWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateOrderEditShippingMethodWorkflow",
+                "path": "/references/medusa-workflows/updateOrderEditShippingMethodWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateOrderTaxLinesWorkflow",
+                "path": "/references/medusa-workflows/updateOrderTaxLinesWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateOrderWorkflow",
+                "path": "/references/medusa-workflows/updateOrderWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateReceiveItemReturnRequestWorkflow",
+                "path": "/references/medusa-workflows/updateReceiveItemReturnRequestWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateRequestItemReturnWorkflow",
+                "path": "/references/medusa-workflows/updateRequestItemReturnWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateReturnShippingMethodWorkflow",
+                "path": "/references/medusa-workflows/updateReturnShippingMethodWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateReturnWorkflow",
+                "path": "/references/medusa-workflows/updateReturnWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "capturePaymentWorkflow",
+                "path": "/references/medusa-workflows/capturePaymentWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "processPaymentWorkflow",
+                "path": "/references/medusa-workflows/processPaymentWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "refundPaymentWorkflow",
+                "path": "/references/medusa-workflows/refundPaymentWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createReturnReasonsWorkflow",
+                "path": "/references/medusa-workflows/createReturnReasonsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteReturnReasonsWorkflow",
+                "path": "/references/medusa-workflows/deleteReturnReasonsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateReturnReasonsWorkflow",
+                "path": "/references/medusa-workflows/updateReturnReasonsWorkflow",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Steps",
+            "autogenerate_tags": "step+order",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "addOrderTransactionStep",
+                "path": "/references/medusa-workflows/steps/addOrderTransactionStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "archiveOrdersStep",
+                "path": "/references/medusa-workflows/steps/archiveOrdersStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "cancelOrderChangeStep",
+                "path": "/references/medusa-workflows/steps/cancelOrderChangeStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "cancelOrderClaimStep",
+                "path": "/references/medusa-workflows/steps/cancelOrderClaimStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "cancelOrderExchangeStep",
+                "path": "/references/medusa-workflows/steps/cancelOrderExchangeStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "cancelOrderFulfillmentStep",
+                "path": "/references/medusa-workflows/steps/cancelOrderFulfillmentStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "cancelOrderReturnStep",
+                "path": "/references/medusa-workflows/steps/cancelOrderReturnStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "cancelOrdersStep",
+                "path": "/references/medusa-workflows/steps/cancelOrdersStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "completeOrdersStep",
+                "path": "/references/medusa-workflows/steps/completeOrdersStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createCompleteReturnStep",
+                "path": "/references/medusa-workflows/steps/createCompleteReturnStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createOrderChangeStep",
+                "path": "/references/medusa-workflows/steps/createOrderChangeStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createOrderClaimItemsFromActionsStep",
+                "path": "/references/medusa-workflows/steps/createOrderClaimItemsFromActionsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createOrderClaimsStep",
+                "path": "/references/medusa-workflows/steps/createOrderClaimsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createOrderExchangeItemsFromActionsStep",
+                "path": "/references/medusa-workflows/steps/createOrderExchangeItemsFromActionsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createOrderExchangesStep",
+                "path": "/references/medusa-workflows/steps/createOrderExchangesStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createOrderLineItemsStep",
+                "path": "/references/medusa-workflows/steps/createOrderLineItemsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createOrdersStep",
+                "path": "/references/medusa-workflows/steps/createOrdersStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createReturnsStep",
+                "path": "/references/medusa-workflows/steps/createReturnsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "declineOrderChangeStep",
+                "path": "/references/medusa-workflows/steps/declineOrderChangeStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteClaimsStep",
+                "path": "/references/medusa-workflows/steps/deleteClaimsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteExchangesStep",
+                "path": "/references/medusa-workflows/steps/deleteExchangesStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteOrderChangeActionsStep",
+                "path": "/references/medusa-workflows/steps/deleteOrderChangeActionsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteOrderChangesStep",
+                "path": "/references/medusa-workflows/steps/deleteOrderChangesStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteOrderShippingMethods",
+                "path": "/references/medusa-workflows/steps/deleteOrderShippingMethods",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteReturnsStep",
+                "path": "/references/medusa-workflows/steps/deleteReturnsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "previewOrderChangeStep",
+                "path": "/references/medusa-workflows/steps/previewOrderChangeStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "registerOrderChangesStep",
+                "path": "/references/medusa-workflows/steps/registerOrderChangesStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "registerOrderFulfillmentStep",
+                "path": "/references/medusa-workflows/steps/registerOrderFulfillmentStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "registerOrderShipmentStep",
+                "path": "/references/medusa-workflows/steps/registerOrderShipmentStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "setOrderTaxLinesForItemsStep",
+                "path": "/references/medusa-workflows/steps/setOrderTaxLinesForItemsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateOrderChangeActionsStep",
+                "path": "/references/medusa-workflows/steps/updateOrderChangeActionsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateOrderChangesStep",
+                "path": "/references/medusa-workflows/steps/updateOrderChangesStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateOrderExchangesStep",
+                "path": "/references/medusa-workflows/steps/updateOrderExchangesStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateOrderShippingMethodsStep",
+                "path": "/references/medusa-workflows/steps/updateOrderShippingMethodsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateOrdersStep",
+                "path": "/references/medusa-workflows/steps/updateOrdersStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createReturnReasonsStep",
+                "path": "/references/medusa-workflows/steps/createReturnReasonsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteReturnReasonStep",
+                "path": "/references/medusa-workflows/steps/deleteReturnReasonStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateReturnReasonsStep",
+                "path": "/references/medusa-workflows/steps/updateReturnReasonsStep",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
             "title": "References",
+            "initialOpen": false,
             "children": [
               {
                 "loaded": true,

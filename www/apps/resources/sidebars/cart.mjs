@@ -16,6 +16,7 @@ export const cartSidebar = [
       {
         type: "category",
         title: "Concepts",
+        initialOpen: false,
         children: [
           {
             type: "link",
@@ -91,6 +92,7 @@ export const cartSidebar = [
       {
         type: "category",
         title: "References",
+        initialOpen: false,
         children: [
           {
             type: "link",

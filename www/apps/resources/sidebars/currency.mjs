@@ -16,6 +16,7 @@ export const currencySidebar = [
       {
         type: "sub-category",
         title: "Concepts",
+        initialOpen: false,
         children: [
           {
             type: "link",
@@ -69,6 +70,7 @@ export const currencySidebar = [
       {
         type: "sub-category",
         title: "References",
+        initialOpen: false,
         children: [
           {
             type: "link",
