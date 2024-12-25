@@ -8854,26 +8854,14 @@ export const generatedSidebar = [
             "children": []
           },
           {
-            "loaded": true,
-            "isPathHref": true,
-            "type": "link",
-            "path": "/commerce-modules/product/examples",
-            "title": "Examples",
-            "children": []
+            "type": "separator"
           },
           {
             "loaded": true,
             "isPathHref": true,
-            "type": "link",
-            "path": "/commerce-modules/product/extend",
-            "title": "Extend Module",
-            "children": []
-          },
-          {
-            "loaded": true,
-            "isPathHref": true,
-            "type": "sub-category",
+            "type": "category",
             "title": "Concepts",
+            "initialOpen": false,
             "children": [
               {
                 "loaded": true,
@@ -8888,10 +8876,20 @@ export const generatedSidebar = [
           {
             "loaded": true,
             "isPathHref": true,
-            "type": "sub-category",
-            "title": "Guides",
-            "autogenerate_path": "/commerce-modules/product/guides",
+            "type": "category",
+            "title": "Server Guides",
+            "autogenerate_tags": "server+product",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
             "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "path": "/commerce-modules/product/extend",
+                "title": "Extend Module",
+                "children": []
+              },
               {
                 "loaded": true,
                 "isPathHref": true,
@@ -8913,8 +8911,562 @@ export const generatedSidebar = [
           {
             "loaded": true,
             "isPathHref": true,
-            "type": "sub-category",
+            "type": "category",
+            "title": "Storefront Guides",
+            "autogenerate_tags": "storefront+product",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "List Product Categories in Storefront",
+                "path": "/storefront-development/products/categories/list",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Retrieve Nested Categories in Storefront",
+                "path": "/storefront-development/products/categories/nested-categories",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Retrieve a Category's Products in Storefront",
+                "path": "/storefront-development/products/categories/products",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Retrieve a Category in Storefront",
+                "path": "/storefront-development/products/categories/retrieve",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "List Product Collections in Storefront",
+                "path": "/storefront-development/products/collections/list",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Retrieve a Collection's Products in Storefront",
+                "path": "/storefront-development/products/collections/products",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Retrieve a Collection in Storefront",
+                "path": "/storefront-development/products/collections/retrieve",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Retrieve Product Variant's Inventory in Storefront",
+                "path": "/storefront-development/products/inventory",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "List Products in Storefront",
+                "path": "/storefront-development/products/list",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Example: Show Sale Price",
+                "path": "/storefront-development/products/price/examples/sale-price",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Example: Show Variant's Price",
+                "path": "/storefront-development/products/price/examples/show-price",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Example: Show Price with Taxes",
+                "path": "/storefront-development/products/price/examples/tax-price",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Retrieve Product Variant's Prices in Storefront",
+                "path": "/storefront-development/products/price",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Retrieve a Product in Storefront",
+                "path": "/storefront-development/products/retrieve",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Select Product Variants in Storefront",
+                "path": "/storefront-development/products/variants",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Workflows",
+            "autogenerate_tags": "workflow+product",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "batchLinkProductsToCollectionWorkflow",
+                "path": "/references/medusa-workflows/batchLinkProductsToCollectionWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "batchProductVariantsWorkflow",
+                "path": "/references/medusa-workflows/batchProductVariantsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "batchProductsWorkflow",
+                "path": "/references/medusa-workflows/batchProductsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createCollectionsWorkflow",
+                "path": "/references/medusa-workflows/createCollectionsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createProductOptionsWorkflow",
+                "path": "/references/medusa-workflows/createProductOptionsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createProductTagsWorkflow",
+                "path": "/references/medusa-workflows/createProductTagsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createProductTypesWorkflow",
+                "path": "/references/medusa-workflows/createProductTypesWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createProductVariantsWorkflow",
+                "path": "/references/medusa-workflows/createProductVariantsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createProductsWorkflow",
+                "path": "/references/medusa-workflows/createProductsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteCollectionsWorkflow",
+                "path": "/references/medusa-workflows/deleteCollectionsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteProductOptionsWorkflow",
+                "path": "/references/medusa-workflows/deleteProductOptionsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteProductTagsWorkflow",
+                "path": "/references/medusa-workflows/deleteProductTagsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteProductTypesWorkflow",
+                "path": "/references/medusa-workflows/deleteProductTypesWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteProductVariantsWorkflow",
+                "path": "/references/medusa-workflows/deleteProductVariantsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteProductsWorkflow",
+                "path": "/references/medusa-workflows/deleteProductsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "importProductsWorkflow",
+                "path": "/references/medusa-workflows/importProductsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateCollectionsWorkflow",
+                "path": "/references/medusa-workflows/updateCollectionsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateProductOptionsWorkflow",
+                "path": "/references/medusa-workflows/updateProductOptionsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateProductTagsWorkflow",
+                "path": "/references/medusa-workflows/updateProductTagsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateProductTypesWorkflow",
+                "path": "/references/medusa-workflows/updateProductTypesWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateProductVariantsWorkflow",
+                "path": "/references/medusa-workflows/updateProductVariantsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateProductsWorkflow",
+                "path": "/references/medusa-workflows/updateProductsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createProductCategoriesWorkflow",
+                "path": "/references/medusa-workflows/createProductCategoriesWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteProductCategoriesWorkflow",
+                "path": "/references/medusa-workflows/deleteProductCategoriesWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateProductCategoriesWorkflow",
+                "path": "/references/medusa-workflows/updateProductCategoriesWorkflow",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Steps",
+            "autogenerate_tags": "step+product",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "batchLinkProductsToCollectionStep",
+                "path": "/references/medusa-workflows/steps/batchLinkProductsToCollectionStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createCollectionsStep",
+                "path": "/references/medusa-workflows/steps/createCollectionsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createProductOptionsStep",
+                "path": "/references/medusa-workflows/steps/createProductOptionsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createProductTagsStep",
+                "path": "/references/medusa-workflows/steps/createProductTagsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createProductTypesStep",
+                "path": "/references/medusa-workflows/steps/createProductTypesStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createProductVariantsStep",
+                "path": "/references/medusa-workflows/steps/createProductVariantsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createProductsStep",
+                "path": "/references/medusa-workflows/steps/createProductsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteCollectionsStep",
+                "path": "/references/medusa-workflows/steps/deleteCollectionsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteProductOptionsStep",
+                "path": "/references/medusa-workflows/steps/deleteProductOptionsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteProductTagsStep",
+                "path": "/references/medusa-workflows/steps/deleteProductTagsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteProductTypesStep",
+                "path": "/references/medusa-workflows/steps/deleteProductTypesStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteProductVariantsStep",
+                "path": "/references/medusa-workflows/steps/deleteProductVariantsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteProductsStep",
+                "path": "/references/medusa-workflows/steps/deleteProductsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "getProductsStep",
+                "path": "/references/medusa-workflows/steps/getProductsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "groupProductsForBatchStep",
+                "path": "/references/medusa-workflows/steps/groupProductsForBatchStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "parseProductCsvStep",
+                "path": "/references/medusa-workflows/steps/parseProductCsvStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateCollectionsStep",
+                "path": "/references/medusa-workflows/steps/updateCollectionsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateProductOptionsStep",
+                "path": "/references/medusa-workflows/steps/updateProductOptionsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateProductTagsStep",
+                "path": "/references/medusa-workflows/steps/updateProductTagsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateProductTypesStep",
+                "path": "/references/medusa-workflows/steps/updateProductTypesStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateProductVariantsStep",
+                "path": "/references/medusa-workflows/steps/updateProductVariantsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateProductsStep",
+                "path": "/references/medusa-workflows/steps/updateProductsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createProductCategoriesStep",
+                "path": "/references/medusa-workflows/steps/createProductCategoriesStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteProductCategoriesStep",
+                "path": "/references/medusa-workflows/steps/deleteProductCategoriesStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateProductCategoriesStep",
+                "path": "/references/medusa-workflows/steps/updateProductCategoriesStep",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
             "title": "References",
+            "initialOpen": false,
             "children": [
               {
                 "loaded": true,
