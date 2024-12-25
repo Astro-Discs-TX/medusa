@@ -11,6 +11,9 @@ export const currencySidebar = [
         title: "Overview",
       },
       {
+        type: "separator",
+      },
+      {
         type: "sub-category",
         title: "Concepts",
         children: [

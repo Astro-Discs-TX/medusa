@@ -11,6 +11,9 @@ export const apiKeySidebar = [
         title: "Overview",
       },
       {
+        type: "separator",
+      },
+      {
         type: "category",
         title: "Concepts",
         initialOpen: false,

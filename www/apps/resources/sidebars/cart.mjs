@@ -11,6 +11,9 @@ export const cartSidebar = [
         title: "Overview",
       },
       {
+        type: "separator",
+      },
+      {
         type: "category",
         title: "Concepts",
         children: [
