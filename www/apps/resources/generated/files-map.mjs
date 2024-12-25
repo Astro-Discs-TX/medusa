@@ -584,10 +584,6 @@ export const filesMap = [
     "pathname": "/commerce-modules/user/events"
   },
   {
-    "filePath": "/www/apps/resources/app/commerce-modules/user/examples/page.mdx",
-    "pathname": "/commerce-modules/user/examples"
-  },
-  {
     "filePath": "/www/apps/resources/app/commerce-modules/user/module-options/page.mdx",
     "pathname": "/commerce-modules/user/module-options"
   },

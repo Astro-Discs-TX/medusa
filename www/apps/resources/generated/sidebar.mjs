@@ -12866,18 +12866,16 @@ export const generatedSidebar = [
             "children": []
           },
           {
-            "loaded": true,
-            "isPathHref": true,
-            "type": "link",
-            "path": "/commerce-modules/user/examples",
-            "title": "Examples",
-            "children": []
+            "type": "separator"
           },
           {
             "loaded": true,
             "isPathHref": true,
-            "type": "sub-category",
-            "title": "Guides",
+            "type": "category",
+            "title": "Server Guides",
+            "autogenerate_tags": "server+user",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
             "children": [
               {
                 "loaded": true,
@@ -12892,8 +12890,159 @@ export const generatedSidebar = [
           {
             "loaded": true,
             "isPathHref": true,
-            "type": "sub-category",
+            "type": "category",
+            "title": "Workflows",
+            "autogenerate_tags": "workflow+user",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "acceptInviteWorkflow",
+                "path": "/references/medusa-workflows/acceptInviteWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createInvitesWorkflow",
+                "path": "/references/medusa-workflows/createInvitesWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteInvitesWorkflow",
+                "path": "/references/medusa-workflows/deleteInvitesWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "refreshInviteTokensWorkflow",
+                "path": "/references/medusa-workflows/refreshInviteTokensWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createUserAccountWorkflow",
+                "path": "/references/medusa-workflows/createUserAccountWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createUsersWorkflow",
+                "path": "/references/medusa-workflows/createUsersWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteUsersWorkflow",
+                "path": "/references/medusa-workflows/deleteUsersWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "removeUserAccountWorkflow",
+                "path": "/references/medusa-workflows/removeUserAccountWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateUsersWorkflow",
+                "path": "/references/medusa-workflows/updateUsersWorkflow",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Steps",
+            "autogenerate_tags": "step+user",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createInviteStep",
+                "path": "/references/medusa-workflows/steps/createInviteStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteInvitesStep",
+                "path": "/references/medusa-workflows/steps/deleteInvitesStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "refreshInviteTokensStep",
+                "path": "/references/medusa-workflows/steps/refreshInviteTokensStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "validateTokenStep",
+                "path": "/references/medusa-workflows/steps/validateTokenStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createUsersStep",
+                "path": "/references/medusa-workflows/steps/createUsersStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteUsersStep",
+                "path": "/references/medusa-workflows/steps/deleteUsersStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateUsersStep",
+                "path": "/references/medusa-workflows/steps/updateUsersStep",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
             "title": "References",
+            "initialOpen": false,
             "children": [
               {
                 "loaded": true,

@@ -66,7 +66,7 @@ const createTaxRegionStep = createStep(
 export const createTaxRegionWorkflow = createWorkflow(
   "create-tax-region",
   () => {
-    const { taxRegion } = await createTaxRegionStep()
+    const { taxRegion } = createTaxRegionStep()
 
     return new WorkflowResponse({ taxRegion })
   }
