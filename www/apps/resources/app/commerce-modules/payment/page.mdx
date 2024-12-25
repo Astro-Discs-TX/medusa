@@ -88,7 +88,7 @@ You can then execute the workflow in your custom API routes, scheduled jobs, or 
       MedusaRequest,
       MedusaResponse,
     } from "@medusajs/framework/http"
-    import createPaymentCollectionWorkflow from "../../workflows/create-payment-collection"
+    import {createPaymentCollectionWorkflow} from "../../workflows/create-payment-collection"
 
     export async function GET(
       req: MedusaRequest,
@@ -109,7 +109,7 @@ You can then execute the workflow in your custom API routes, scheduled jobs, or 
       type SubscriberConfig,
       type SubscriberArgs,
     } from "@medusajs/framework"
-    import createPaymentCollectionWorkflow from "../workflows/create-payment-collection"
+    import {createPaymentCollectionWorkflow} from "../workflows/create-payment-collection"
 
     export default async function handleCustomerCreate({
       event: { data },
@@ -131,7 +131,7 @@ You can then execute the workflow in your custom API routes, scheduled jobs, or 
     
     ```ts title="src/jobs/message-daily.ts" highlights={[["7"], ["8"]]}
     import { MedusaContainer } from "@medusajs/framework/types"
-    import createPaymentCollectionWorkflow from "../workflows/create-payment-collection"
+    import {createPaymentCollectionWorkflow} from "../workflows/create-payment-collection"
 
     export default async function myCustomJob(
       container: MedusaContainer

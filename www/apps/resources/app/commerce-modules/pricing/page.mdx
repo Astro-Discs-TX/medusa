@@ -99,7 +99,7 @@ You can then execute the workflow in your custom API routes, scheduled jobs, or 
       MedusaRequest,
       MedusaResponse,
     } from "@medusajs/framework/http"
-    import createPriceSetWorkflow from "../../workflows/create-price-set"
+    import {createPriceSetWorkflow} from "../../workflows/create-price-set"
 
     export async function GET(
       req: MedusaRequest,
@@ -120,7 +120,7 @@ You can then execute the workflow in your custom API routes, scheduled jobs, or 
       type SubscriberConfig,
       type SubscriberArgs,
     } from "@medusajs/framework"
-    import createPriceSetWorkflow from "../workflows/create-price-set"
+    import {createPriceSetWorkflow} from "../workflows/create-price-set"
 
     export default async function handleCustomerCreate({
       event: { data },
@@ -142,7 +142,7 @@ You can then execute the workflow in your custom API routes, scheduled jobs, or 
     
     ```ts title="src/jobs/message-daily.ts" highlights={[["7"], ["8"]]}
     import { MedusaContainer } from "@medusajs/framework/types"
-    import createPriceSetWorkflow from "../workflows/create-price-set"
+    import {createPriceSetWorkflow} from "../workflows/create-price-set"
 
     export default async function myCustomJob(
       container: MedusaContainer

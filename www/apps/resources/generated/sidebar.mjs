@@ -10177,26 +10177,14 @@ export const generatedSidebar = [
             "children": []
           },
           {
-            "loaded": true,
-            "isPathHref": true,
-            "type": "link",
-            "path": "/commerce-modules/promotion/examples",
-            "title": "Examples",
-            "children": []
+            "type": "separator"
           },
           {
             "loaded": true,
             "isPathHref": true,
-            "type": "link",
-            "path": "/commerce-modules/promotion/extend",
-            "title": "Extend Module",
-            "children": []
-          },
-          {
-            "loaded": true,
-            "isPathHref": true,
-            "type": "sub-category",
+            "type": "category",
             "title": "Concepts",
+            "initialOpen": false,
             "children": [
               {
                 "loaded": true,
@@ -10243,8 +10231,274 @@ export const generatedSidebar = [
           {
             "loaded": true,
             "isPathHref": true,
-            "type": "sub-category",
+            "type": "category",
+            "title": "Server Guides",
+            "autogenerate_tags": "server+promotion",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "path": "/commerce-modules/promotion/extend",
+                "title": "Extend Module",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Workflows",
+            "autogenerate_tags": "workflow+promotion",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createCartWorkflow",
+                "path": "/references/medusa-workflows/createCartWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateCartPromotionsWorkflow",
+                "path": "/references/medusa-workflows/updateCartPromotionsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "addOrRemoveCampaignPromotionsWorkflow",
+                "path": "/references/medusa-workflows/addOrRemoveCampaignPromotionsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "batchPromotionRulesWorkflow",
+                "path": "/references/medusa-workflows/batchPromotionRulesWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createCampaignsWorkflow",
+                "path": "/references/medusa-workflows/createCampaignsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createPromotionRulesWorkflow",
+                "path": "/references/medusa-workflows/createPromotionRulesWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createPromotionsWorkflow",
+                "path": "/references/medusa-workflows/createPromotionsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteCampaignsWorkflow",
+                "path": "/references/medusa-workflows/deleteCampaignsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deletePromotionRulesWorkflow",
+                "path": "/references/medusa-workflows/deletePromotionRulesWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deletePromotionsWorkflow",
+                "path": "/references/medusa-workflows/deletePromotionsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateCampaignsWorkflow",
+                "path": "/references/medusa-workflows/updateCampaignsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updatePromotionRulesWorkflow",
+                "path": "/references/medusa-workflows/updatePromotionRulesWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updatePromotionsWorkflow",
+                "path": "/references/medusa-workflows/updatePromotionsWorkflow",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Steps",
+            "autogenerate_tags": "step+promotion",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "getActionsToComputeFromPromotionsStep",
+                "path": "/references/medusa-workflows/steps/getActionsToComputeFromPromotionsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "getPromotionCodesToApply",
+                "path": "/references/medusa-workflows/steps/getPromotionCodesToApply",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "prepareAdjustmentsFromPromotionActionsStep",
+                "path": "/references/medusa-workflows/steps/prepareAdjustmentsFromPromotionActionsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateCartPromotionsStep",
+                "path": "/references/medusa-workflows/steps/updateCartPromotionsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "addCampaignPromotionsStep",
+                "path": "/references/medusa-workflows/steps/addCampaignPromotionsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "addRulesToPromotionsStep",
+                "path": "/references/medusa-workflows/steps/addRulesToPromotionsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createCampaignsStep",
+                "path": "/references/medusa-workflows/steps/createCampaignsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createPromotionsStep",
+                "path": "/references/medusa-workflows/steps/createPromotionsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteCampaignsStep",
+                "path": "/references/medusa-workflows/steps/deleteCampaignsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deletePromotionsStep",
+                "path": "/references/medusa-workflows/steps/deletePromotionsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "removeCampaignPromotionsStep",
+                "path": "/references/medusa-workflows/steps/removeCampaignPromotionsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "removeRulesFromPromotionsStep",
+                "path": "/references/medusa-workflows/steps/removeRulesFromPromotionsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateCampaignsStep",
+                "path": "/references/medusa-workflows/steps/updateCampaignsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updatePromotionRulesStep",
+                "path": "/references/medusa-workflows/steps/updatePromotionRulesStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updatePromotionsStep",
+                "path": "/references/medusa-workflows/steps/updatePromotionsStep",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
             "title": "References",
+            "initialOpen": false,
             "children": [
               {
                 "loaded": true,
