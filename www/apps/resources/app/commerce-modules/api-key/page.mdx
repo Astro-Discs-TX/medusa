@@ -33,7 +33,11 @@ You can build custom workflows and steps. You can also re-use Medusa's workflows
 
 For example:
 
-```ts title="src/workflows/create-api-key.ts"
+export const highlights = [
+  ["12", "Modules.API_KEY", "Resolve the module in a step."]
+]
+
+```ts title="src/workflows/create-api-key.ts" highlights={highlights}
 import { 
   createWorkflow, 
   WorkflowResponse,
@@ -41,7 +45,6 @@ import {
   StepResponse,
 } from "@medusajs/framework/workflows-sdk"
 import { Modules } from "@medusajs/framework/utils"
-
 
 const createApiKeyStep = createStep(
   "create-api-key",

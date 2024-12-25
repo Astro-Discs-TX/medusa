@@ -33,7 +33,11 @@ You can build custom workflows and steps. You can also re-use Medusa's workflows
 
 For example:
 
-```ts title="src/workflows/create-cart.ts"
+export const highlights = [
+  ["12", "Modules.CART", "Resolve the module in a step."]
+]
+
+```ts title="src/workflows/create-cart.ts" highlights={highlights}
 import { 
   createWorkflow, 
   WorkflowResponse,

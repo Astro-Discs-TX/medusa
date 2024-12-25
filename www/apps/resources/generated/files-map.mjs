@@ -216,10 +216,6 @@ export const filesMap = [
     "pathname": "/commerce-modules/cart/tax-lines"
   },
   {
-    "filePath": "/www/apps/resources/app/commerce-modules/currency/examples/page.mdx",
-    "pathname": "/commerce-modules/currency/examples"
-  },
-  {
     "filePath": "/www/apps/resources/app/commerce-modules/currency/links-to-other-modules/page.mdx",
     "pathname": "/commerce-modules/currency/links-to-other-modules"
   },

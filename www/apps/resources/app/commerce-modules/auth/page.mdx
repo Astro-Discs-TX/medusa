@@ -33,7 +33,11 @@ You can build custom workflows and steps. You can also re-use Medusa's workflows
 
 For example:
 
-```ts title="src/workflows/authenticate-user.ts"
+export const highlights = [
+  ["17", "Modules.AUTH", "Resolve the module in a step."]
+]
+
+```ts title="src/workflows/authenticate-user.ts" highlights={highlights}
 import { 
   createWorkflow, 
   WorkflowResponse,

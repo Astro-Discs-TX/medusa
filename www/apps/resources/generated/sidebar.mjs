@@ -1853,14 +1853,6 @@ export const generatedSidebar = [
           {
             "loaded": true,
             "isPathHref": true,
-            "type": "link",
-            "path": "/commerce-modules/currency/examples",
-            "title": "Examples",
-            "children": []
-          },
-          {
-            "loaded": true,
-            "isPathHref": true,
             "type": "sub-category",
             "title": "Concepts",
             "children": [
@@ -1887,7 +1879,7 @@ export const generatedSidebar = [
                 "path": "/references/currency",
                 "title": "Main Service Reference",
                 "isChildSidebar": true,
-                "childSidebarTitle": "Cart Module's Main Service Reference",
+                "childSidebarTitle": "Currency Module's Main Service Reference",
                 "children": [
                   {
                     "loaded": true,

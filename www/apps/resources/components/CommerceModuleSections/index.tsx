@@ -5,10 +5,12 @@ import React from "react"
 
 type CommerceModuleSectionsProps = {
   name: string
+  hideWorkflowsSection?: boolean
 }
 
 export const CommerceModuleSections = ({
   name,
+  hideWorkflowsSection = false,
 }: CommerceModuleSectionsProps) => {
   const components: (JSX.Element | JSX.Element[])[] = []
   const { component: workflowsComponent } = useChildDocs({
@@ -64,18 +66,23 @@ export const CommerceModuleSections = ({
 
   return (
     <>
-      <H2 id="medusa-workflows-and-steps">Medusa Workflows and Steps</H2>
-      <p>
-        Medusa provides the following workflows and steps that use the {name}{" "}
-        Module. You can use these workflows and steps in your customizations:
-      </p>
-      {workflowsComponent}
-      {stepsComponent}
+      {!hideWorkflowsSection && (
+        <>
+          <H2 id="medusa-workflows-and-steps">Medusa Workflows and Steps</H2>
+          <p>
+            Medusa provides the following workflows and steps that use the{" "}
+            {name} Module. You can use these workflows and steps in your
+            customizations:
+          </p>
+          {workflowsComponent}
+          {stepsComponent}
+        </>
+      )}
 
       {components.map((component, i) => (
         <React.Fragment key={i}>
           <>
-            <Hr />
+            {i !== 0 || !hideWorkflowsSection ? <Hr /> : null}
             {component}
           </>
         </React.Fragment>
