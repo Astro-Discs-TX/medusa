@@ -29,12 +29,27 @@ export const customerSidebar = [
             path: "/commerce-modules/customer/customer-accounts",
             title: "Customer Accounts",
           },
+          {
+            type: "link",
+            path: "/commerce-modules/customer/links-to-other-modules",
+            title: "Link to Modules",
+          },
         ],
       },
       {
         type: "sub-category",
         title: "References",
         children: [
+          {
+            type: "link",
+            path: "/commerce-modules/customer/events",
+            title: "Events Reference",
+          },
+          {
+            type: "link",
+            path: "/commerce-modules/customer/admin-widget-zones",
+            title: "Admin Widget Zones",
+          },
           {
             type: "link",
             path: "/references/customer",

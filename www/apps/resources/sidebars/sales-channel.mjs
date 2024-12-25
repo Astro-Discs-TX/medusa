@@ -37,6 +37,16 @@ export const salesChannelSidebar = [
         children: [
           {
             type: "link",
+            path: "/commerce-modules/sales-channel/events",
+            title: "Events Reference",
+          },
+          {
+            type: "link",
+            path: "/commerce-modules/sales-channel/admin-widget-zones",
+            title: "Admin Widget Zones",
+          },
+          {
+            type: "link",
             path: "/references/sales-channel",
             title: "Main Service Reference",
             isChildSidebar: true,
