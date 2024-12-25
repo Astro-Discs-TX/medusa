@@ -128,10 +128,6 @@ export const filesMap = [
     "pathname": "/commerce-modules/api-key/concepts"
   },
   {
-    "filePath": "/www/apps/resources/app/commerce-modules/api-key/examples/page.mdx",
-    "pathname": "/commerce-modules/api-key/examples"
-  },
-  {
     "filePath": "/www/apps/resources/app/commerce-modules/api-key/links-to-other-modules/page.mdx",
     "pathname": "/commerce-modules/api-key/links-to-other-modules"
   },

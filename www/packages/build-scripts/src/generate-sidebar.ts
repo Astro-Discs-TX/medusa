@@ -138,21 +138,29 @@ async function checkItem(item: RawSidebarItem): Promise<RawSidebarItem> {
   ) {
     item.children = await customGenerators[item.custom_autogenerate]()
   } else if (item.children) {
-    item.children = await Promise.all(
-      item.children.map(async (childItem) => await checkItem(childItem))
-    )
+    item.children = await checkItems(item.children)
   }
 
   return item
+}
+
+async function checkItems(items: RawSidebarItem[]): Promise<RawSidebarItem[]> {
+  return (
+    await Promise.all(items.map(async (item) => await checkItem(item)))
+  ).filter((item) => {
+    if (item.type !== "category" && item.type !== "sub-category") {
+      return true
+    }
+
+    return (item.children?.length || 0) > 0
+  })
 }
 
 export async function generateSidebar(sidebar: RawSidebarItem[]) {
   const path = await import("path")
   const { writeFileSync } = await import("fs")
 
-  const normalizedSidebar = await Promise.all(
-    sidebar.map(async (item) => await checkItem(item))
-  )
+  const normalizedSidebar = await checkItems(sidebar)
 
   const generatedDirPath = path.resolve("generated")
 

@@ -194,15 +194,7 @@ export const generatedSidebar = [
           {
             "loaded": true,
             "isPathHref": true,
-            "type": "link",
-            "path": "/commerce-modules/api-key/examples",
-            "title": "Examples",
-            "children": []
-          },
-          {
-            "loaded": true,
-            "isPathHref": true,
-            "type": "sub-category",
+            "type": "category",
             "title": "Concepts",
             "children": [
               {
@@ -226,7 +218,106 @@ export const generatedSidebar = [
           {
             "loaded": true,
             "isPathHref": true,
-            "type": "sub-category",
+            "type": "category",
+            "title": "Storefront Guides",
+            "autogenerate_tags": "storefront+apiKey",
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "title": "Use a Publishable API Key in the Storefront",
+                "path": "/app/storefront-development/publishable-api-keys",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Workflows",
+            "autogenerate_tags": "workflow+apiKey",
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "title": "createApiKeysWorkflow",
+                "path": "/references/medusa-workflows/createApiKeysWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "title": "deleteApiKeysWorkflow",
+                "path": "/references/medusa-workflows/deleteApiKeysWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "title": "revokeApiKeysWorkflow",
+                "path": "/references/medusa-workflows/revokeApiKeysWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "title": "updateApiKeysWorkflow",
+                "path": "/references/medusa-workflows/updateApiKeysWorkflow",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Steps",
+            "autogenerate_tags": "step+apiKey",
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "title": "createApiKeysStep",
+                "path": "/references/medusa-workflows/steps/createApiKeysStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "title": "deleteApiKeysStep",
+                "path": "/references/medusa-workflows/steps/deleteApiKeysStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "title": "revokeApiKeysStep",
+                "path": "/references/medusa-workflows/steps/revokeApiKeysStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "title": "updateApiKeysStep",
+                "path": "/references/medusa-workflows/steps/updateApiKeysStep",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
             "title": "References",
             "children": [
               {
