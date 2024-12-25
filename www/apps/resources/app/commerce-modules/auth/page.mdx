@@ -86,7 +86,7 @@ const authenticateUserStep = createStep(
 export const authenticateUserWorkflow = createWorkflow(
   "authenticate-user",
   (input: Input) => {
-    const authIdentity = authenticateUserStep(input)
+    const { authIdentity } = authenticateUserStep(input)
 
     return new WorkflowResponse({
       authIdentity,

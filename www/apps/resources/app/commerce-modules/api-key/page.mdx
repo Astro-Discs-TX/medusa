@@ -69,7 +69,7 @@ const createApiKeyStep = createStep(
 export const createApiKeyWorkflow = createWorkflow(
   "create-api-key",
   () => {
-    const apiKey = createApiKeyStep()
+    const { apiKey } = createApiKeyStep()
 
     return new WorkflowResponse({
       apiKey,

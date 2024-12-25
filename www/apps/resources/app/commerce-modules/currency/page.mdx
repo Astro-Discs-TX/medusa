@@ -64,7 +64,7 @@ type Input = {
 export const retrievePriceWithCurrency = createWorkflow(
   "create-currency",
   (input: Input) => {
-    const currency = await retrieveCurrencyStep()
+    const { currency } = await retrieveCurrencyStep()
 
     const formattedPrice = transform({
       input,
@@ -163,4 +163,4 @@ Learn more about workflows in [this documentation](!docs!/learn/fundamentals/wor
 
 ---
 
-<CommerceModuleSections name="Currency" hideWorkflowsSection />
+<CommerceModuleSections name="Currency" />

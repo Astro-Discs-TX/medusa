@@ -1,28 +1,31 @@
 "use client"
 
 import { H2, Hr, useChildDocs } from "docs-ui"
-import React from "react"
+import React, { useMemo } from "react"
 
 type CommerceModuleSectionsProps = {
   name: string
-  hideWorkflowsSection?: boolean
 }
 
 export const CommerceModuleSections = ({
   name,
-  hideWorkflowsSection = false,
 }: CommerceModuleSectionsProps) => {
   const components: (JSX.Element | JSX.Element[])[] = []
-  const { component: workflowsComponent } = useChildDocs({
+  const { items: workflowItems, component: workflowsComponent } = useChildDocs({
     showItems: ["Workflows"],
     titleLevel: 3,
     itemsPerRow: 2,
   })
-  const { component: stepsComponent } = useChildDocs({
+  const { items: stepItems, component: stepsComponent } = useChildDocs({
     showItems: ["Steps"],
     titleLevel: 3,
     itemsPerRow: 2,
   })
+
+  const hideWorkflowsSection = useMemo(() => {
+    return !workflowItems?.default.length && !stepItems?.default.length
+  }, [workflowItems, stepItems])
+
   const { items: serverGuideItems, component: serverGuidesComponent } =
     useChildDocs({
       showItems: ["Server Guides"],

@@ -1966,23 +1966,7 @@ export const generatedSidebar = [
           {
             "loaded": true,
             "isPathHref": true,
-            "type": "link",
-            "path": "/commerce-modules/customer/examples",
-            "title": "Examples",
-            "children": []
-          },
-          {
-            "loaded": true,
-            "isPathHref": true,
-            "type": "link",
-            "path": "/commerce-modules/customer/extend",
-            "title": "Extend Module",
-            "children": []
-          },
-          {
-            "loaded": true,
-            "isPathHref": true,
-            "type": "sub-category",
+            "type": "category",
             "title": "Concepts",
             "children": [
               {
@@ -2006,7 +1990,403 @@ export const generatedSidebar = [
           {
             "loaded": true,
             "isPathHref": true,
-            "type": "sub-category",
+            "type": "category",
+            "title": "Server Guides",
+            "autogenerate_tags": "server+customer",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "path": "/commerce-modules/customer/extend",
+                "title": "Extend Module",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Storefront Guides",
+            "autogenerate_tags": "storefront+customer",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Manage Customer Addresses in Storefront",
+                "path": "/storefront-development/customers/addresses",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Customer Context in Storefront",
+                "path": "/storefront-development/customers/context",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Log-out Customer in Storefront",
+                "path": "/storefront-development/customers/log-out",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Login Customer in Storefront",
+                "path": "/storefront-development/customers/login",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Edit Customer Profile in Storefront",
+                "path": "/storefront-development/customers/profile",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Register Customer in Storefront",
+                "path": "/storefront-development/customers/register",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Reset Customer Password in Storefront",
+                "path": "/storefront-development/customers/reset-password",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Retrieve Customer in Storefront",
+                "path": "/storefront-development/customers/retrieve",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Third-Party or Social Login in Storefront",
+                "path": "/storefront-development/customers/third-party-login",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Workflows",
+            "autogenerate_tags": "workflow+customer",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createCartWorkflow",
+                "path": "/references/medusa-workflows/createCartWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateCartWorkflow",
+                "path": "/references/medusa-workflows/updateCartWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createCustomerAccountWorkflow",
+                "path": "/references/medusa-workflows/createCustomerAccountWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createCustomerAddressesWorkflow",
+                "path": "/references/medusa-workflows/createCustomerAddressesWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createCustomersWorkflow",
+                "path": "/references/medusa-workflows/createCustomersWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteCustomerAddressesWorkflow",
+                "path": "/references/medusa-workflows/deleteCustomerAddressesWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteCustomersWorkflow",
+                "path": "/references/medusa-workflows/deleteCustomersWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "removeCustomerAccountWorkflow",
+                "path": "/references/medusa-workflows/removeCustomerAccountWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateCustomerAddressesWorkflow",
+                "path": "/references/medusa-workflows/updateCustomerAddressesWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateCustomersWorkflow",
+                "path": "/references/medusa-workflows/updateCustomersWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createCustomerGroupsWorkflow",
+                "path": "/references/medusa-workflows/createCustomerGroupsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteCustomerGroupsWorkflow",
+                "path": "/references/medusa-workflows/deleteCustomerGroupsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "linkCustomerGroupsToCustomerWorkflow",
+                "path": "/references/medusa-workflows/linkCustomerGroupsToCustomerWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "linkCustomersToCustomerGroupWorkflow",
+                "path": "/references/medusa-workflows/linkCustomersToCustomerGroupWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateCustomerGroupsWorkflow",
+                "path": "/references/medusa-workflows/updateCustomerGroupsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "addOrderLineItemsWorkflow",
+                "path": "/references/medusa-workflows/addOrderLineItemsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createOrderWorkflow",
+                "path": "/references/medusa-workflows/createOrderWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "orderClaimAddNewItemWorkflow",
+                "path": "/references/medusa-workflows/orderClaimAddNewItemWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "orderEditAddNewItemWorkflow",
+                "path": "/references/medusa-workflows/orderEditAddNewItemWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "orderExchangeAddNewItemWorkflow",
+                "path": "/references/medusa-workflows/orderExchangeAddNewItemWorkflow",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Steps",
+            "autogenerate_tags": "step+customer",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "findOrCreateCustomerStep",
+                "path": "/references/medusa-workflows/steps/findOrCreateCustomerStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createCustomerAddressesStep",
+                "path": "/references/medusa-workflows/steps/createCustomerAddressesStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createCustomersStep",
+                "path": "/references/medusa-workflows/steps/createCustomersStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteCustomerAddressesStep",
+                "path": "/references/medusa-workflows/steps/deleteCustomerAddressesStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteCustomersStep",
+                "path": "/references/medusa-workflows/steps/deleteCustomersStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "maybeUnsetDefaultBillingAddressesStep",
+                "path": "/references/medusa-workflows/steps/maybeUnsetDefaultBillingAddressesStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "maybeUnsetDefaultShippingAddressesStep",
+                "path": "/references/medusa-workflows/steps/maybeUnsetDefaultShippingAddressesStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateCustomerAddressesStep",
+                "path": "/references/medusa-workflows/steps/updateCustomerAddressesStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateCustomersStep",
+                "path": "/references/medusa-workflows/steps/updateCustomersStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createCustomerGroupsStep",
+                "path": "/references/medusa-workflows/steps/createCustomerGroupsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteCustomerGroupStep",
+                "path": "/references/medusa-workflows/steps/deleteCustomerGroupStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "linkCustomerGroupsToCustomerStep",
+                "path": "/references/medusa-workflows/steps/linkCustomerGroupsToCustomerStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "linkCustomersToCustomerGroupStep",
+                "path": "/references/medusa-workflows/steps/linkCustomersToCustomerGroupStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateCustomerGroupsStep",
+                "path": "/references/medusa-workflows/steps/updateCustomerGroupsStep",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
             "title": "References",
             "children": [
               {

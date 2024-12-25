@@ -78,7 +78,7 @@ const createCartStep = createStep(
 export const createCartWorkflow = createWorkflow(
   "create-cart",
   () => {
-    const cart = createCartStep()
+    const { cart } = createCartStep()
 
     return new WorkflowResponse({
       cart,
