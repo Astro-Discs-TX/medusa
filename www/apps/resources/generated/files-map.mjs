@@ -544,10 +544,6 @@ export const filesMap = [
     "pathname": "/commerce-modules/store/admin-widget-zones"
   },
   {
-    "filePath": "/www/apps/resources/app/commerce-modules/store/examples/page.mdx",
-    "pathname": "/commerce-modules/store/examples"
-  },
-  {
     "filePath": "/www/apps/resources/app/commerce-modules/store/links-to-other-modules/page.mdx",
     "pathname": "/commerce-modules/store/links-to-other-modules"
   },

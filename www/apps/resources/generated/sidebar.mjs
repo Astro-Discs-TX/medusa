@@ -11908,18 +11908,14 @@ export const generatedSidebar = [
             "children": []
           },
           {
-            "loaded": true,
-            "isPathHref": true,
-            "type": "link",
-            "path": "/commerce-modules/store/examples",
-            "title": "Examples",
-            "children": []
+            "type": "separator"
           },
           {
             "loaded": true,
             "isPathHref": true,
-            "type": "sub-category",
+            "type": "category",
             "title": "Concepts",
+            "initialOpen": false,
             "children": [
               {
                 "loaded": true,
@@ -11934,8 +11930,167 @@ export const generatedSidebar = [
           {
             "loaded": true,
             "isPathHref": true,
-            "type": "sub-category",
+            "type": "category",
+            "title": "Workflows",
+            "autogenerate_tags": "workflow+store",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createCartWorkflow",
+                "path": "/references/medusa-workflows/createCartWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateCartWorkflow",
+                "path": "/references/medusa-workflows/updateCartWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createDefaultsWorkflow",
+                "path": "/references/medusa-workflows/createDefaultsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "addOrderLineItemsWorkflow",
+                "path": "/references/medusa-workflows/addOrderLineItemsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createOrderWorkflow",
+                "path": "/references/medusa-workflows/createOrderWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "orderClaimAddNewItemWorkflow",
+                "path": "/references/medusa-workflows/orderClaimAddNewItemWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "orderEditAddNewItemWorkflow",
+                "path": "/references/medusa-workflows/orderEditAddNewItemWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "orderExchangeAddNewItemWorkflow",
+                "path": "/references/medusa-workflows/orderExchangeAddNewItemWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createStoresWorkflow",
+                "path": "/references/medusa-workflows/createStoresWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteStoresWorkflow",
+                "path": "/references/medusa-workflows/deleteStoresWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateStoresWorkflow",
+                "path": "/references/medusa-workflows/updateStoresWorkflow",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Steps",
+            "autogenerate_tags": "step+store",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "findOneOrAnyRegionStep",
+                "path": "/references/medusa-workflows/steps/findOneOrAnyRegionStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "findSalesChannelStep",
+                "path": "/references/medusa-workflows/steps/findSalesChannelStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createDefaultStoreStep",
+                "path": "/references/medusa-workflows/steps/createDefaultStoreStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createStoresStep",
+                "path": "/references/medusa-workflows/steps/createStoresStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteStoresStep",
+                "path": "/references/medusa-workflows/steps/deleteStoresStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateStoresStep",
+                "path": "/references/medusa-workflows/steps/updateStoresStep",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
             "title": "References",
+            "initialOpen": false,
             "children": [
               {
                 "loaded": true,
