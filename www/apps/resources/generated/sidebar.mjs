@@ -12256,18 +12256,14 @@ export const generatedSidebar = [
             "children": []
           },
           {
-            "loaded": true,
-            "isPathHref": true,
-            "type": "link",
-            "path": "/commerce-modules/tax/examples",
-            "title": "Examples",
-            "children": []
+            "type": "separator"
           },
           {
             "loaded": true,
             "isPathHref": true,
-            "type": "sub-category",
+            "type": "category",
             "title": "Concepts",
+            "initialOpen": false,
             "children": [
               {
                 "loaded": true,
@@ -12298,8 +12294,11 @@ export const generatedSidebar = [
           {
             "loaded": true,
             "isPathHref": true,
-            "type": "sub-category",
-            "title": "Guides",
+            "type": "category",
+            "title": "Server Guides",
+            "autogenerate_tags": "server+tax",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
             "children": [
               {
                 "loaded": true,
@@ -12308,14 +12307,288 @@ export const generatedSidebar = [
                 "path": "/references/tax/provider",
                 "title": "Tax Provider Reference",
                 "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Get Variant Price with Taxes",
+                "path": "/commerce-modules/product/guides/price-with-taxes",
+                "children": []
               }
             ]
           },
           {
             "loaded": true,
             "isPathHref": true,
-            "type": "sub-category",
+            "type": "category",
+            "title": "Storefront Guides",
+            "autogenerate_tags": "storefront+tax",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Example: Show Price with Taxes",
+                "path": "/storefront-development/products/price/examples/tax-price",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Workflows",
+            "autogenerate_tags": "workflow+tax",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createCartWorkflow",
+                "path": "/references/medusa-workflows/createCartWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateTaxLinesWorkflow",
+                "path": "/references/medusa-workflows/updateTaxLinesWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createClaimShippingMethodWorkflow",
+                "path": "/references/medusa-workflows/createClaimShippingMethodWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createExchangeShippingMethodWorkflow",
+                "path": "/references/medusa-workflows/createExchangeShippingMethodWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createOrderEditShippingMethodWorkflow",
+                "path": "/references/medusa-workflows/createOrderEditShippingMethodWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createOrderWorkflow",
+                "path": "/references/medusa-workflows/createOrderWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createReturnShippingMethodWorkflow",
+                "path": "/references/medusa-workflows/createReturnShippingMethodWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "orderClaimAddNewItemWorkflow",
+                "path": "/references/medusa-workflows/orderClaimAddNewItemWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "orderEditAddNewItemWorkflow",
+                "path": "/references/medusa-workflows/orderEditAddNewItemWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "orderExchangeAddNewItemWorkflow",
+                "path": "/references/medusa-workflows/orderExchangeAddNewItemWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateOrderTaxLinesWorkflow",
+                "path": "/references/medusa-workflows/updateOrderTaxLinesWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createTaxRateRulesWorkflow",
+                "path": "/references/medusa-workflows/createTaxRateRulesWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createTaxRatesWorkflow",
+                "path": "/references/medusa-workflows/createTaxRatesWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createTaxRegionsWorkflow",
+                "path": "/references/medusa-workflows/createTaxRegionsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteTaxRateRulesWorkflow",
+                "path": "/references/medusa-workflows/deleteTaxRateRulesWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteTaxRatesWorkflow",
+                "path": "/references/medusa-workflows/deleteTaxRatesWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteTaxRegionsWorkflow",
+                "path": "/references/medusa-workflows/deleteTaxRegionsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "setTaxRateRulesWorkflow",
+                "path": "/references/medusa-workflows/setTaxRateRulesWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateTaxRatesWorkflow",
+                "path": "/references/medusa-workflows/updateTaxRatesWorkflow",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Steps",
+            "autogenerate_tags": "step+tax",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createTaxRateRulesStep",
+                "path": "/references/medusa-workflows/steps/createTaxRateRulesStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createTaxRatesStep",
+                "path": "/references/medusa-workflows/steps/createTaxRatesStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createTaxRegionsStep",
+                "path": "/references/medusa-workflows/steps/createTaxRegionsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteTaxRateRulesStep",
+                "path": "/references/medusa-workflows/steps/deleteTaxRateRulesStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteTaxRatesStep",
+                "path": "/references/medusa-workflows/steps/deleteTaxRatesStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteTaxRegionsStep",
+                "path": "/references/medusa-workflows/steps/deleteTaxRegionsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "getItemTaxLinesStep",
+                "path": "/references/medusa-workflows/steps/getItemTaxLinesStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "listTaxRateRuleIdsStep",
+                "path": "/references/medusa-workflows/steps/listTaxRateRuleIdsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateTaxRatesStep",
+                "path": "/references/medusa-workflows/steps/updateTaxRatesStep",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
             "title": "References",
+            "initialOpen": false,
             "children": [
               {
                 "loaded": true,

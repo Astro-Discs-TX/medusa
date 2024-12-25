@@ -556,10 +556,6 @@ export const filesMap = [
     "pathname": "/commerce-modules/tax/admin-widget-zones"
   },
   {
-    "filePath": "/www/apps/resources/app/commerce-modules/tax/examples/page.mdx",
-    "pathname": "/commerce-modules/tax/examples"
-  },
-  {
     "filePath": "/www/apps/resources/app/commerce-modules/tax/module-options/page.mdx",
     "pathname": "/commerce-modules/tax/module-options"
   },
