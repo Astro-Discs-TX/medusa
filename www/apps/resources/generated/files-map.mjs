@@ -532,10 +532,6 @@ export const filesMap = [
     "pathname": "/commerce-modules/stock-location/concepts"
   },
   {
-    "filePath": "/www/apps/resources/app/commerce-modules/stock-location/examples/page.mdx",
-    "pathname": "/commerce-modules/stock-location/examples"
-  },
-  {
     "filePath": "/www/apps/resources/app/commerce-modules/stock-location/links-to-other-modules/page.mdx",
     "pathname": "/commerce-modules/stock-location/links-to-other-modules"
   },
