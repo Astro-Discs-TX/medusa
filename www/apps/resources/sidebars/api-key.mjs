@@ -13,6 +13,7 @@ export const apiKeySidebar = [
       {
         type: "category",
         title: "Concepts",
+        initialOpen: false,
         children: [
           {
             type: "link",
@@ -29,31 +30,37 @@ export const apiKeySidebar = [
       {
         type: "category",
         title: "Storefront Guides",
+        initialOpen: false,
         autogenerate_tags: "storefront+apiKey",
       },
       {
         type: "category",
         title: "Admin Guides",
+        initialOpen: false,
         autogenerate_tags: "admin+apiKey",
       },
       {
         type: "category",
         title: "User Guides",
+        initialOpen: false,
         autogenerate_tags: "userGuide+apiKey",
       },
       {
         type: "category",
         title: "Workflows",
+        initialOpen: false,
         autogenerate_tags: "workflow+apiKey",
       },
       {
         type: "category",
         title: "Steps",
+        initialOpen: false,
         autogenerate_tags: "step+apiKey",
       },
       {
         type: "category",
         title: "References",
+        initialOpen: false,
         children: [
           {
             type: "link",

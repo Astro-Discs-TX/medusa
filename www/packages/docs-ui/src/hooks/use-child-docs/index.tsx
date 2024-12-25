@@ -18,6 +18,7 @@ export type UseChildDocsProps = {
   hideTitle?: boolean
   titleLevel?: number
   childLevel?: number
+  itemsPerRow?: number
 }
 
 export const useChildDocs = ({
@@ -28,6 +29,7 @@ export const useChildDocs = ({
   hideTitle = false,
   titleLevel = 2,
   childLevel = 1,
+  itemsPerRow,
 }: UseChildDocsProps) => {
   const { currentItems, activeItem } = useSidebar()
   const TitleHeaderComponent: HeadingComponent = useMemo(() => {
@@ -165,6 +167,7 @@ export const useChildDocs = ({
             }
           }) || []
         }
+        itemsPerRow={itemsPerRow}
       />
     )
   }
@@ -193,6 +196,7 @@ export const useChildDocs = ({
                     href: childItem.type === "link" ? childItem.path : "",
                   })) || []
                 }
+                itemsPerRow={itemsPerRow}
               />
               {key !== filteredItems.length - 1 && <Hr />}
             </>

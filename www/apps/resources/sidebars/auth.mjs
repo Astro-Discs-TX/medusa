@@ -16,13 +16,9 @@ export const authSidebar = [
         title: "Module Options",
       },
       {
-        type: "link",
-        path: "/commerce-modules/auth/examples",
-        title: "Examples",
-      },
-      {
-        type: "sub-category",
+        type: "category",
         title: "Concepts",
+        initialOpen: false,
         children: [
           {
             type: "link",
@@ -47,29 +43,45 @@ export const authSidebar = [
         ],
       },
       {
-        type: "sub-category",
-        title: "Guides",
-        children: [
-          {
-            type: "link",
-            path: "/commerce-modules/auth/create-actor-type",
-            title: "Create an Actor Type",
-          },
-          {
-            type: "link",
-            path: "/commerce-modules/auth/reset-password",
-            title: "Handle Password Reset Event",
-          },
-          {
-            type: "link",
-            path: "/references/auth/provider",
-            title: "Create Auth Provider Module",
-          },
-        ],
+        type: "category",
+        title: "Server Guides",
+        autogenerate_tags: "server+auth",
+        initialOpen: false,
       },
       {
-        type: "sub-category",
+        type: "category",
+        title: "Storefront Guides",
+        autogenerate_tags: "storefront+auth",
+        initialOpen: false,
+      },
+      {
+        type: "category",
+        title: "Admin Guides",
+        autogenerate_tags: "admin+auth",
+        initialOpen: false,
+      },
+      {
+        type: "category",
+        title: "User Guides",
+        autogenerate_tags: "userGuides+auth",
+        initialOpen: false,
+      },
+      {
+        type: "category",
+        title: "Workflows",
+        autogenerate_tags: "workflow+auth",
+        initialOpen: false,
+      },
+      {
+        type: "category",
+        title: "Steps",
+        autogenerate_tags: "step+auth",
+        initialOpen: false,
+      },
+      {
+        type: "category",
         title: "Providers",
+        initialOpen: false,
         children: [
           {
             type: "link",
@@ -89,8 +101,9 @@ export const authSidebar = [
         ],
       },
       {
-        type: "sub-category",
+        type: "category",
         title: "References",
+        initialOpen: false,
         children: [
           {
             type: "link",

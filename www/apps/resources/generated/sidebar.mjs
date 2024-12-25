@@ -196,6 +196,7 @@ export const generatedSidebar = [
             "isPathHref": true,
             "type": "category",
             "title": "Concepts",
+            "initialOpen": false,
             "children": [
               {
                 "loaded": true,
@@ -220,6 +221,7 @@ export const generatedSidebar = [
             "isPathHref": true,
             "type": "category",
             "title": "Storefront Guides",
+            "initialOpen": false,
             "autogenerate_tags": "storefront+apiKey",
             "children": [
               {
@@ -227,7 +229,7 @@ export const generatedSidebar = [
                 "isPathHref": true,
                 "type": "link",
                 "title": "Use a Publishable API Key in the Storefront",
-                "path": "/app/storefront-development/publishable-api-keys",
+                "path": "/storefront-development/publishable-api-keys",
                 "children": []
               }
             ]
@@ -237,6 +239,7 @@ export const generatedSidebar = [
             "isPathHref": true,
             "type": "category",
             "title": "Workflows",
+            "initialOpen": false,
             "autogenerate_tags": "workflow+apiKey",
             "children": [
               {
@@ -278,6 +281,7 @@ export const generatedSidebar = [
             "isPathHref": true,
             "type": "category",
             "title": "Steps",
+            "initialOpen": false,
             "autogenerate_tags": "step+apiKey",
             "children": [
               {
@@ -319,6 +323,7 @@ export const generatedSidebar = [
             "isPathHref": true,
             "type": "category",
             "title": "References",
+            "initialOpen": false,
             "children": [
               {
                 "loaded": true,
@@ -480,16 +485,9 @@ export const generatedSidebar = [
           {
             "loaded": true,
             "isPathHref": true,
-            "type": "link",
-            "path": "/commerce-modules/auth/examples",
-            "title": "Examples",
-            "children": []
-          },
-          {
-            "loaded": true,
-            "isPathHref": true,
-            "type": "sub-category",
+            "type": "category",
             "title": "Concepts",
+            "initialOpen": false,
             "children": [
               {
                 "loaded": true,
@@ -528,31 +526,33 @@ export const generatedSidebar = [
           {
             "loaded": true,
             "isPathHref": true,
-            "type": "sub-category",
-            "title": "Guides",
+            "type": "category",
+            "title": "Server Guides",
+            "autogenerate_tags": "server+auth",
+            "initialOpen": false,
             "children": [
               {
                 "loaded": true,
                 "isPathHref": true,
                 "type": "link",
-                "path": "/commerce-modules/auth/create-actor-type",
                 "title": "Create an Actor Type",
+                "path": "/commerce-modules/auth/create-actor-type",
                 "children": []
               },
               {
                 "loaded": true,
                 "isPathHref": true,
                 "type": "link",
-                "path": "/commerce-modules/auth/reset-password",
                 "title": "Handle Password Reset Event",
+                "path": "/commerce-modules/auth/reset-password",
                 "children": []
               },
               {
                 "loaded": true,
                 "isPathHref": true,
                 "type": "link",
+                "title": "How to Create an Auth Provider Module",
                 "path": "/references/auth/provider",
-                "title": "Create Auth Provider Module",
                 "children": []
               }
             ]
@@ -560,8 +560,135 @@ export const generatedSidebar = [
           {
             "loaded": true,
             "isPathHref": true,
-            "type": "sub-category",
+            "type": "category",
+            "title": "Storefront Guides",
+            "autogenerate_tags": "storefront+auth",
+            "initialOpen": false,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "title": "Log-out Customer in Storefront",
+                "path": "/storefront-development/customers/log-out",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "title": "Login Customer in Storefront",
+                "path": "/storefront-development/customers/login",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "title": "Register Customer in Storefront",
+                "path": "/storefront-development/customers/register",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "title": "Reset Customer Password in Storefront",
+                "path": "/storefront-development/customers/reset-password",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "title": "Retrieve Customer in Storefront",
+                "path": "/storefront-development/customers/retrieve",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "title": "Third-Party or Social Login in Storefront",
+                "path": "/storefront-development/customers/third-party-login",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Workflows",
+            "autogenerate_tags": "workflow+auth",
+            "initialOpen": false,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "title": "createCustomerAccountWorkflow",
+                "path": "/references/medusa-workflows/createCustomerAccountWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "title": "removeCustomerAccountWorkflow",
+                "path": "/references/medusa-workflows/removeCustomerAccountWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "title": "acceptInviteWorkflow",
+                "path": "/references/medusa-workflows/acceptInviteWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "title": "createUserAccountWorkflow",
+                "path": "/references/medusa-workflows/createUserAccountWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "title": "removeUserAccountWorkflow",
+                "path": "/references/medusa-workflows/removeUserAccountWorkflow",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Steps",
+            "autogenerate_tags": "step+auth",
+            "initialOpen": false,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "title": "setAuthAppMetadataStep",
+                "path": "/references/medusa-workflows/steps/setAuthAppMetadataStep",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
             "title": "Providers",
+            "initialOpen": false,
             "children": [
               {
                 "loaded": true,
@@ -592,8 +719,9 @@ export const generatedSidebar = [
           {
             "loaded": true,
             "isPathHref": true,
-            "type": "sub-category",
+            "type": "category",
             "title": "References",
+            "initialOpen": false,
             "children": [
               {
                 "loaded": true,
