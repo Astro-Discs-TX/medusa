@@ -496,10 +496,6 @@ export const filesMap = [
     "pathname": "/commerce-modules/region/events"
   },
   {
-    "filePath": "/www/apps/resources/app/commerce-modules/region/examples/page.mdx",
-    "pathname": "/commerce-modules/region/examples"
-  },
-  {
     "filePath": "/www/apps/resources/app/commerce-modules/region/links-to-other-modules/page.mdx",
     "pathname": "/commerce-modules/region/links-to-other-modules"
   },
