@@ -1,13 +1,5 @@
 export const auth = [
   {
-    "title": "Create an Actor Type",
-    "path": "/commerce-modules/auth/create-actor-type"
-  },
-  {
-    "title": "Handle Password Reset Event",
-    "path": "/commerce-modules/auth/reset-password"
-  },
-  {
     "title": "Log-out Customer in Storefront",
     "path": "/storefront-development/customers/log-out"
   },
@@ -30,10 +22,6 @@ export const auth = [
   {
     "title": "Third-Party or Social Login in Storefront",
     "path": "/storefront-development/customers/third-party-login"
-  },
-  {
-    "title": "How to Create an Auth Provider Module",
-    "path": "/references/auth/provider"
   },
   {
     "title": "setAuthAppMetadataStep",

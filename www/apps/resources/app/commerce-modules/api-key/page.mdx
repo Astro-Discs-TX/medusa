@@ -75,7 +75,7 @@ export const createApiKeyWorkflow = createWorkflow(
 )
 ```
 
-You can then execute the workflow in your cusotm API routes, scheduled jobs, or subscribers:
+You can then execute the workflow in your custom API routes, scheduled jobs, or subscribers:
 
 <CodeTabs group="resource-types">
   <CodeTab label="API Route" value="api-route">
@@ -85,7 +85,7 @@ You can then execute the workflow in your cusotm API routes, scheduled jobs, or 
       MedusaRequest,
       MedusaResponse,
     } from "@medusajs/framework/http"
-    import myWorkflow from "../../workflows/create-api-key"
+    import createApiKeyWorkflow from "../../workflows/create-api-key"
 
     export async function GET(
       req: MedusaRequest,
@@ -147,6 +147,8 @@ You can then execute the workflow in your cusotm API routes, scheduled jobs, or 
 
   </CodeTab>
 </CodeTabs>
+
+Learn more about workflows in [this documentation](!docs!/learn/fundamentals/workflows).
 
 ---
 

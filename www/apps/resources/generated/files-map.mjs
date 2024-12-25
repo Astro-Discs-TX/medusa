@@ -176,10 +176,6 @@ export const filesMap = [
     "pathname": "/commerce-modules/auth/events"
   },
   {
-    "filePath": "/www/apps/resources/app/commerce-modules/auth/examples/page.mdx",
-    "pathname": "/commerce-modules/auth/examples"
-  },
-  {
     "filePath": "/www/apps/resources/app/commerce-modules/auth/module-options/page.mdx",
     "pathname": "/commerce-modules/auth/module-options"
   },
@@ -198,10 +194,6 @@ export const filesMap = [
   {
     "filePath": "/www/apps/resources/app/commerce-modules/cart/events/page.mdx",
     "pathname": "/commerce-modules/cart/events"
-  },
-  {
-    "filePath": "/www/apps/resources/app/commerce-modules/cart/examples/page.mdx",
-    "pathname": "/commerce-modules/cart/examples"
   },
   {
     "filePath": "/www/apps/resources/app/commerce-modules/cart/extend/page.mdx",

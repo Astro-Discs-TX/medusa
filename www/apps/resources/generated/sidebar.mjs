@@ -538,25 +538,25 @@ export const generatedSidebar = [
               {
                 "loaded": true,
                 "isPathHref": true,
-                "type": "ref",
-                "title": "Create an Actor Type",
+                "type": "link",
                 "path": "/commerce-modules/auth/create-actor-type",
+                "title": "Create an Actor Type",
                 "children": []
               },
               {
                 "loaded": true,
                 "isPathHref": true,
-                "type": "ref",
-                "title": "Handle Password Reset Event",
+                "type": "link",
                 "path": "/commerce-modules/auth/reset-password",
+                "title": "Handle Password Reset Event",
                 "children": []
               },
               {
                 "loaded": true,
                 "isPathHref": true,
-                "type": "ref",
-                "title": "How to Create an Auth Provider Module",
+                "type": "link",
                 "path": "/references/auth/provider",
+                "title": "Create Auth Provider Module",
                 "children": []
               }
             ]
@@ -944,23 +944,7 @@ export const generatedSidebar = [
           {
             "loaded": true,
             "isPathHref": true,
-            "type": "link",
-            "path": "/commerce-modules/cart/examples",
-            "title": "Examples",
-            "children": []
-          },
-          {
-            "loaded": true,
-            "isPathHref": true,
-            "type": "link",
-            "path": "/commerce-modules/cart/extend",
-            "title": "Extend Module",
-            "children": []
-          },
-          {
-            "loaded": true,
-            "isPathHref": true,
-            "type": "sub-category",
+            "type": "category",
             "title": "Concepts",
             "children": [
               {
@@ -1000,7 +984,331 @@ export const generatedSidebar = [
           {
             "loaded": true,
             "isPathHref": true,
-            "type": "sub-category",
+            "type": "category",
+            "title": "Server Guides",
+            "autogenerate_tags": "server+cart",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "path": "/commerce-modules/cart/extend",
+                "title": "Extend Module",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Storefront Guides",
+            "autogenerate_tags": "storefront+cart",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Create Cart Context in Storefront",
+                "path": "/storefront-development/cart/context",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Create Cart in Storefront",
+                "path": "/storefront-development/cart/create",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Manage Cart's Items in Storefront",
+                "path": "/storefront-development/cart/manage-items",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Retrieve Cart in Storefront",
+                "path": "/storefront-development/cart/retrieve",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Update Cart in Storefront",
+                "path": "/storefront-development/cart/update",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Checkout Step 2: Enter Address",
+                "path": "/storefront-development/checkout/address",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Checkout Step 5: Complete Cart",
+                "path": "/storefront-development/checkout/complete-cart",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Checkout Step 1: Enter Email",
+                "path": "/storefront-development/checkout/email",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Checkout Step 4: Choose Payment Provider",
+                "path": "/storefront-development/checkout/payment",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Payment with Stripe in React Storefront",
+                "path": "/storefront-development/checkout/payment/stripe",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Checkout Step 3: Choose Shipping Method",
+                "path": "/storefront-development/checkout/shipping",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Workflows",
+            "autogenerate_tags": "workflow+cart",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "addShippingMethodToCartWorkflow",
+                "path": "/references/medusa-workflows/addShippingMethodToCartWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "addToCartWorkflow",
+                "path": "/references/medusa-workflows/addToCartWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createCartWorkflow",
+                "path": "/references/medusa-workflows/createCartWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "transferCartCustomerWorkflow",
+                "path": "/references/medusa-workflows/transferCartCustomerWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateCartPromotionsWorkflow",
+                "path": "/references/medusa-workflows/updateCartPromotionsWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateCartWorkflow",
+                "path": "/references/medusa-workflows/updateCartWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateLineItemInCartWorkflow",
+                "path": "/references/medusa-workflows/updateLineItemInCartWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateTaxLinesWorkflow",
+                "path": "/references/medusa-workflows/updateTaxLinesWorkflow",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteLineItemsWorkflow",
+                "path": "/references/medusa-workflows/deleteLineItemsWorkflow",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Steps",
+            "autogenerate_tags": "step+cart",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "addShippingMethodToCartStep",
+                "path": "/references/medusa-workflows/steps/addShippingMethodToCartStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createCartsStep",
+                "path": "/references/medusa-workflows/steps/createCartsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createLineItemAdjustmentsStep",
+                "path": "/references/medusa-workflows/steps/createLineItemAdjustmentsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createLineItemsStep",
+                "path": "/references/medusa-workflows/steps/createLineItemsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "createShippingMethodAdjustmentsStep",
+                "path": "/references/medusa-workflows/steps/createShippingMethodAdjustmentsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "getLineItemActionsStep",
+                "path": "/references/medusa-workflows/steps/getLineItemActionsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "removeLineItemAdjustmentsStep",
+                "path": "/references/medusa-workflows/steps/removeLineItemAdjustmentsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "removeShippingMethodAdjustmentsStep",
+                "path": "/references/medusa-workflows/steps/removeShippingMethodAdjustmentsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "removeShippingMethodFromCartStep",
+                "path": "/references/medusa-workflows/steps/removeShippingMethodFromCartStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "setTaxLinesForItemsStep",
+                "path": "/references/medusa-workflows/steps/setTaxLinesForItemsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateCartsStep",
+                "path": "/references/medusa-workflows/steps/updateCartsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateLineItemsStep",
+                "path": "/references/medusa-workflows/steps/updateLineItemsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "deleteLineItemsStep",
+                "path": "/references/medusa-workflows/steps/deleteLineItemsStep",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "updateLineItemsStepWithSelector",
+                "path": "/references/medusa-workflows/steps/updateLineItemsStepWithSelector",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
             "title": "References",
             "children": [
               {

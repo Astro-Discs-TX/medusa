@@ -48,6 +48,23 @@ export const authSidebar = [
         autogenerate_tags: "server+auth",
         initialOpen: false,
         autogenerate_as_ref: true,
+        children: [
+          {
+            type: "link",
+            path: "/commerce-modules/auth/create-actor-type",
+            title: "Create an Actor Type",
+          },
+          {
+            type: "link",
+            path: "/commerce-modules/auth/reset-password",
+            title: "Handle Password Reset Event",
+          },
+          {
+            type: "link",
+            path: "/references/auth/provider",
+            title: "Create Auth Provider Module",
+          },
+        ],
       },
       {
         type: "category",
