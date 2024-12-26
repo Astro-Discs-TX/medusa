@@ -34,7 +34,7 @@ You can build custom workflows and steps. You can also re-use Medusa's workflows
 For example:
 
 export const highlights = [
-  ["17", "Modules.AUTH", "Resolve the module in a step."]
+  ["18", "Modules.AUTH", "Resolve the module in a step."]
 ]
 
 ```ts title="src/workflows/authenticate-user.ts" highlights={highlights}
@@ -46,6 +46,7 @@ import {
 } from "@medusajs/framework/workflows-sdk"
 import { Modules, MedusaError } from "@medusajs/framework/utils"
 import { MedusaRequest } from "@medusajs/framework/http"
+import { AuthenticationInput } from "@medusajs/framework/types"
 
 type Input = {
   req: MedusaRequest
@@ -66,17 +67,24 @@ const authenticateUserStep = createStep(
           body: req.body,
           authScope: "admin", // or custom actor type
           protocol: req.protocol,
-        }
+        } as AuthenticationInput
       )
 
     if (!success) {
       // incorrect authentication details
-      throw new MedusaError(error)
+      throw new MedusaError(
+        MedusaError.Types.UNAUTHORIZED,
+        error || "Incorrect authentication details"
+      )
     }
 
-    return new StepResponse({ authIdentity }, authIdentity.id)
+    return new StepResponse({ authIdentity }, authIdentity?.id)
   },
   async (authIdentityId, { container }) => {
+    if (!authIdentityId) {
+      return
+    }
+    
     const authModuleService = container.resolve(Modules.AUTH)
 
     await authModuleService.deleteAuthIdentities([authIdentityId])
@@ -102,7 +110,7 @@ import type {
   MedusaRequest,
   MedusaResponse,
 } from "@medusajs/framework/http"
-import {authenticateUserWorkflow} from "../../workflows/authenticate-user"
+import { authenticateUserWorkflow } from "../../workflows/authenticate-user"
 
 export async function GET(
   req: MedusaRequest,
@@ -110,7 +118,7 @@ export async function GET(
 ) {
   const { result } = await authenticateUserWorkflow(req.scope)
     .run({
-      req
+      req,
     })
 
   res.send(result)

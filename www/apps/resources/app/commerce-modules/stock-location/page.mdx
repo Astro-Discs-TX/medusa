@@ -56,6 +56,9 @@ const createStockLocationStep = createStep(
     return new StepResponse({ stockLocation }, stockLocation.id)
   },
   async (stockLocationId, { container }) => {
+    if (!stockLocationId) {
+      return
+    }
     const stockLocationModuleService = container.resolve(Modules.STOCK_LOCATION)
 
     await stockLocationModuleService.deleteStockLocations([stockLocationId])
@@ -77,70 +80,70 @@ You can then execute the workflow in your custom API routes, scheduled jobs, or 
 <CodeTabs group="resource-types">
   <CodeTab label="API Route" value="api-route">
     
-    ```ts title="src/api/workflow/route.ts" highlights={[["11"], ["12"]]} collapsibleLines="1-6" expandButtonLabel="Show Imports"
-    import type {
-      MedusaRequest,
-      MedusaResponse,
-    } from "@medusajs/framework/http"
-    import { createStockLocationWorkflow } from "../../workflows/create-stock-location"
+```ts title="src/api/workflow/route.ts" highlights={[["11"], ["12"]]} collapsibleLines="1-6" expandButtonLabel="Show Imports"
+import type {
+  MedusaRequest,
+  MedusaResponse,
+} from "@medusajs/framework/http"
+import { createStockLocationWorkflow } from "../../workflows/create-stock-location"
 
-    export async function GET(
-      req: MedusaRequest,
-      res: MedusaResponse
-    ) {
-      const { result } = await createStockLocationWorkflow(req.scope)
-        .run()
+export async function GET(
+  req: MedusaRequest,
+  res: MedusaResponse
+) {
+  const { result } = await createStockLocationWorkflow(req.scope)
+    .run()
 
-      res.send(result)
-    }
-    ```
+  res.send(result)
+}
+```
 
   </CodeTab>
   <CodeTab label="Subscriber" value="subscriber">
     
-    ```ts title="src/subscribers/user-created.ts" highlights={[["11"], ["12"]]} collapsibleLines="1-6" expandButtonLabel="Show Imports"
-    import {
-      type SubscriberConfig,
-      type SubscriberArgs,
-    } from "@medusajs/framework"
-    import { createStockLocationWorkflow } from "../workflows/create-stock-location"
+```ts title="src/subscribers/user-created.ts" highlights={[["11"], ["12"]]} collapsibleLines="1-6" expandButtonLabel="Show Imports"
+import {
+  type SubscriberConfig,
+  type SubscriberArgs,
+} from "@medusajs/framework"
+import { createStockLocationWorkflow } from "../workflows/create-stock-location"
 
-    export default async function handleUserCreated({
-      event: { data },
-      container,
-    }: SubscriberArgs<{ id: string }>) {
-      const { result } = await createStockLocationWorkflow(container)
-        .run()
+export default async function handleUserCreated({
+  event: { data },
+  container,
+}: SubscriberArgs<{ id: string }>) {
+  const { result } = await createStockLocationWorkflow(container)
+    .run()
 
-      console.log(result)
-    }
+  console.log(result)
+}
 
-    export const config: SubscriberConfig = {
-      event: "user.created",
-    }
-    ```
+export const config: SubscriberConfig = {
+  event: "user.created",
+}
+```
 
   </CodeTab>
   <CodeTab label="Scheduled Job" value="scheduled-job">
     
-    ```ts title="src/jobs/run-daily.ts" highlights={[["7"], ["8"]]}
-    import { MedusaContainer } from "@medusajs/framework/types"
-    import { createStockLocationWorkflow } from "../workflows/create-stock-location"
+```ts title="src/jobs/run-daily.ts" highlights={[["7"], ["8"]]}
+import { MedusaContainer } from "@medusajs/framework/types"
+import { createStockLocationWorkflow } from "../workflows/create-stock-location"
 
-    export default async function myCustomJob(
-      container: MedusaContainer
-    ) {
-      const { result } = await createStockLocationWorkflow(container)
-        .run()
+export default async function myCustomJob(
+  container: MedusaContainer
+) {
+  const { result } = await createStockLocationWorkflow(container)
+    .run()
 
-      console.log(result)
-    }
+  console.log(result)
+}
 
-    export const config = {
-      name: "run-once-a-day",
-      schedule: `0 0 * * *`,
-    };
-    ```
+export const config = {
+  name: "run-once-a-day",
+  schedule: `0 0 * * *`,
+}
+```
 
   </CodeTab>
 </CodeTabs>
