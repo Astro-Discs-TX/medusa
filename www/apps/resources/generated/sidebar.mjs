@@ -242,6 +242,25 @@ export const generatedSidebar = [
             "loaded": true,
             "isPathHref": true,
             "type": "category",
+            "title": "Admin Guides",
+            "initialOpen": false,
+            "autogenerate_tags": "admin+apiKey",
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "apiKey",
+                "path": "/references/js-sdk/admin/apiKey",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
             "title": "Workflows",
             "initialOpen": false,
             "autogenerate_tags": "workflow+apiKey",
@@ -1106,6 +1125,14 @@ export const generatedSidebar = [
                 "title": "Checkout Step 3: Choose Shipping Method",
                 "path": "/storefront-development/checkout/shipping",
                 "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "cart",
+                "path": "/references/js-sdk/store/cart",
+                "children": []
               }
             ]
           },
@@ -1884,6 +1911,25 @@ export const generatedSidebar = [
           {
             "loaded": true,
             "isPathHref": true,
+            "type": "category",
+            "title": "Admin Guides",
+            "autogenerate_tags": "admin+currency",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "currency",
+                "path": "/references/js-sdk/admin/currency",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
             "type": "sub-category",
             "title": "References",
             "initialOpen": false,
@@ -2105,6 +2151,41 @@ export const generatedSidebar = [
                 "type": "ref",
                 "title": "Third-Party or Social Login in Storefront",
                 "path": "/storefront-development/customers/third-party-login",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "customer",
+                "path": "/references/js-sdk/store/customer",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Admin Guides",
+            "autogenerate_tags": "admin+customer",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "customer",
+                "path": "/references/js-sdk/admin/customer",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "customerGroup",
+                "path": "/references/js-sdk/admin/customerGroup",
                 "children": []
               }
             ]
@@ -2811,6 +2892,65 @@ export const generatedSidebar = [
                 "type": "ref",
                 "title": "Checkout Step 3: Choose Shipping Method",
                 "path": "/storefront-development/checkout/shipping",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "fulfillment",
+                "path": "/references/js-sdk/store/fulfillment",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Admin Guides",
+            "autogenerate_tags": "admin+fulfillment",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "fulfillment",
+                "path": "/references/js-sdk/admin/fulfillment",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "fulfillmentProvider",
+                "path": "/references/js-sdk/admin/fulfillmentProvider",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "fulfillmentSet",
+                "path": "/references/js-sdk/admin/fulfillmentSet",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "shippingOption",
+                "path": "/references/js-sdk/admin/shippingOption",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "shippingProfile",
+                "path": "/references/js-sdk/admin/shippingProfile",
                 "children": []
               }
             ]
@@ -3987,6 +4127,33 @@ export const generatedSidebar = [
             "loaded": true,
             "isPathHref": true,
             "type": "category",
+            "title": "Admin Guides",
+            "autogenerate_tags": "admin+inventory",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "inventoryItem",
+                "path": "/references/js-sdk/admin/inventoryItem",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "reservation",
+                "path": "/references/js-sdk/admin/reservation",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
             "title": "Workflows",
             "autogenerate_tags": "workflow+inventory",
             "initialOpen": false,
@@ -4866,6 +5033,81 @@ export const generatedSidebar = [
                 "type": "ref",
                 "title": "Checkout Step 5: Complete Cart",
                 "path": "/storefront-development/checkout/complete-cart",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "order",
+                "path": "/references/js-sdk/store/order",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Admin Guides",
+            "autogenerate_tags": "admin+order",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "claim",
+                "path": "/references/js-sdk/admin/claim",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "exchange",
+                "path": "/references/js-sdk/admin/exchange",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "order",
+                "path": "/references/js-sdk/admin/order",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "orderEdit",
+                "path": "/references/js-sdk/admin/orderEdit",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "refundReason",
+                "path": "/references/js-sdk/admin/refundReason",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "return",
+                "path": "/references/js-sdk/admin/return",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "returnReason",
+                "path": "/references/js-sdk/admin/returnReason",
                 "children": []
               }
             ]
@@ -7318,6 +7560,41 @@ export const generatedSidebar = [
                 "title": "Payment with Stripe in React Storefront",
                 "path": "/storefront-development/checkout/payment/stripe",
                 "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "payment",
+                "path": "/references/js-sdk/store/payment",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Admin Guides",
+            "autogenerate_tags": "admin+payment",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "payment",
+                "path": "/references/js-sdk/admin/payment",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "paymentCollection",
+                "path": "/references/js-sdk/admin/paymentCollection",
+                "children": []
               }
             ]
           },
@@ -8048,6 +8325,33 @@ export const generatedSidebar = [
                 "type": "ref",
                 "title": "Retrieve Product Variant's Prices in Storefront",
                 "path": "/storefront-development/products/price",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Admin Guides",
+            "autogenerate_tags": "admin+pricing",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "priceList",
+                "path": "/references/js-sdk/admin/priceList",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "pricePreference",
+                "path": "/references/js-sdk/admin/pricePreference",
                 "children": []
               }
             ]
@@ -9035,6 +9339,89 @@ export const generatedSidebar = [
                 "type": "ref",
                 "title": "Select Product Variants in Storefront",
                 "path": "/storefront-development/products/variants",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "category",
+                "path": "/references/js-sdk/store/category",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "collection",
+                "path": "/references/js-sdk/store/collection",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "product",
+                "path": "/references/js-sdk/store/product",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Admin Guides",
+            "autogenerate_tags": "admin+product",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "product",
+                "path": "/references/js-sdk/admin/product",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "productCategory",
+                "path": "/references/js-sdk/admin/productCategory",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "productCollection",
+                "path": "/references/js-sdk/admin/productCollection",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "productTag",
+                "path": "/references/js-sdk/admin/productTag",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "productType",
+                "path": "/references/js-sdk/admin/productType",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "productVariant",
+                "path": "/references/js-sdk/admin/productVariant",
                 "children": []
               }
             ]
@@ -10251,6 +10638,33 @@ export const generatedSidebar = [
             "loaded": true,
             "isPathHref": true,
             "type": "category",
+            "title": "Admin Guides",
+            "autogenerate_tags": "admin+promotion",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "campaign",
+                "path": "/references/js-sdk/admin/campaign",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "promotion",
+                "path": "/references/js-sdk/admin/promotion",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
             "title": "Workflows",
             "autogenerate_tags": "workflow+promotion",
             "initialOpen": false,
@@ -10901,6 +11315,33 @@ export const generatedSidebar = [
                 "title": "Store and Retrieve Region",
                 "path": "/storefront-development/regions/store-retrieve-region",
                 "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "region",
+                "path": "/references/js-sdk/store/region",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Admin Guides",
+            "autogenerate_tags": "admin+region",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "region",
+                "path": "/references/js-sdk/admin/region",
+                "children": []
               }
             ]
           },
@@ -11307,6 +11748,25 @@ export const generatedSidebar = [
             "loaded": true,
             "isPathHref": true,
             "type": "category",
+            "title": "Admin Guides",
+            "autogenerate_tags": "admin+salesChannel",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "salesChannel",
+                "path": "/references/js-sdk/admin/salesChannel",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
             "title": "Workflows",
             "autogenerate_tags": "workflow+salesChannel",
             "initialOpen": false,
@@ -11679,6 +12139,25 @@ export const generatedSidebar = [
             "loaded": true,
             "isPathHref": true,
             "type": "category",
+            "title": "Admin Guides",
+            "autogenerate_tags": "admin+stockLocation",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "stockLocation",
+                "path": "/references/js-sdk/admin/stockLocation",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
             "title": "Workflows",
             "autogenerate_tags": "workflow+stockLocation",
             "initialOpen": false,
@@ -11923,6 +12402,25 @@ export const generatedSidebar = [
                 "type": "link",
                 "path": "/commerce-modules/store/links-to-other-modules",
                 "title": "Link to Modules",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Admin Guides",
+            "autogenerate_tags": "admin+store",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "store",
+                "path": "/references/js-sdk/admin/store",
                 "children": []
               }
             ]
@@ -12333,6 +12831,33 @@ export const generatedSidebar = [
                 "type": "ref",
                 "title": "Example: Show Price with Taxes",
                 "path": "/storefront-development/products/price/examples/tax-price",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Admin Guides",
+            "autogenerate_tags": "admin+tax",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "taxRate",
+                "path": "/references/js-sdk/admin/taxRate",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "taxRegion",
+                "path": "/references/js-sdk/admin/taxRegion",
                 "children": []
               }
             ]
@@ -12883,6 +13408,33 @@ export const generatedSidebar = [
                 "type": "link",
                 "path": "/commerce-modules/user/user-creation-flows",
                 "title": "User Creation Flows",
+                "children": []
+              }
+            ]
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "category",
+            "title": "Admin Guides",
+            "autogenerate_tags": "admin+user",
+            "initialOpen": false,
+            "autogenerate_as_ref": true,
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "invite",
+                "path": "/references/js-sdk/admin/invite",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "user",
+                "path": "/references/js-sdk/admin/user",
                 "children": []
               }
             ]
