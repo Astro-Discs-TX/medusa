@@ -952,7 +952,7 @@ export function mikroOrmBaseRepositoryFactory<const T extends object>(
               return
             }
             const entity = manager.assign(existingEntity, data)
-            manager.persist(entity)
+            manager.persistAndFlush(entity)
             performedActions.updated[entityName] ??= []
             performedActions.updated[entityName].push({ id: data.id })
           } else {
