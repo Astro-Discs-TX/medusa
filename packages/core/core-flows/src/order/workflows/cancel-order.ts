@@ -156,20 +156,8 @@ export const cancelOrderWorkflow = createWorkflow(
       })
     )
 
-    // TODO: Remove after confirming summaries
-    const orderQuery2 = useQueryGraphStep({
-      entity: "orders",
-      fields: ["id", "summary"],
-      filters: { id: input.order_id },
-      options: { throwIfKeyNotFound: true },
-    }).config({ name: "get-cart2" })
-
-    const order2 = transform({ orderQuery2 }, ({ orderQuery2 }) => {
-      return orderQuery2.data[0]
-    })
-
     const orderCanceled = createHook("orderCanceled", {
-      order: order2,
+      order,
     })
 
     return new WorkflowResponse(void 0, {
