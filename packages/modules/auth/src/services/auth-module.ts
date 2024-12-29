@@ -5,7 +5,9 @@ import {
   AuthTypes,
   Context,
   DAL,
+  InferEntityType,
   InternalModuleDeclaration,
+  Logger,
   ModuleJoinerConfig,
   ModulesSdkTypes,
 } from "@medusajs/framework/types"
@@ -24,6 +26,7 @@ type InjectedDependencies = {
   authIdentityService: ModulesSdkTypes.IMedusaInternalService<any>
   providerIdentityService: ModulesSdkTypes.IMedusaInternalService<any>
   authProviderService: AuthProviderService
+  logger?: Logger
 }
 export default class AuthModuleService
   extends MedusaService<{
@@ -33,8 +36,12 @@ export default class AuthModuleService
   implements AuthTypes.IAuthModuleService
 {
   protected baseRepository_: DAL.RepositoryService
-  protected authIdentityService_: ModulesSdkTypes.IMedusaInternalService<AuthIdentity>
-  protected providerIdentityService_: ModulesSdkTypes.IMedusaInternalService<ProviderIdentity>
+  protected authIdentityService_: ModulesSdkTypes.IMedusaInternalService<
+    InferEntityType<typeof AuthIdentity>
+  >
+  protected providerIdentityService_: ModulesSdkTypes.IMedusaInternalService<
+    InferEntityType<typeof ProviderIdentity>
+  >
   protected readonly authProviderService_: AuthProviderService
 
   constructor(

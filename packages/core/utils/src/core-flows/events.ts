@@ -12,6 +12,8 @@ export const CustomerWorkflowEvents = {
 }
 
 export const OrderWorkflowEvents = {
+  UPDATED: "order.updated",
+
   PLACED: "order.placed",
   CANCELED: "order.canceled",
   COMPLETED: "order.completed",
@@ -25,6 +27,8 @@ export const OrderWorkflowEvents = {
 
   CLAIM_CREATED: "order.claim_created",
   EXCHANGE_CREATED: "order.exchange_created",
+
+  TRANSFER_REQUESTED: "order.transfer_requested",
 }
 
 export const UserWorkflowEvents = {

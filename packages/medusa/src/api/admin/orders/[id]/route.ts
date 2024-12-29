@@ -1,14 +1,17 @@
-import { getOrderDetailWorkflow } from "@medusajs/core-flows"
+import {
+  getOrderDetailWorkflow,
+  updateOrderWorkflow,
+} from "@medusajs/core-flows"
 import {
   AuthenticatedMedusaRequest,
   MedusaResponse,
 } from "@medusajs/framework/http"
-import { HttpTypes } from "@medusajs/framework/types"
+import { AdminOrder, HttpTypes } from "@medusajs/framework/types"
 import {
-  ContainerRegistrationKeys,
-  remoteQueryObjectFromString,
-} from "@medusajs/framework/utils"
-import { AdminGetOrdersOrderParamsType } from "../validators"
+  AdminGetOrdersOrderParamsType,
+  AdminUpdateOrderType,
+} from "../validators"
+import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 
 export const GET = async (
   req: AuthenticatedMedusaRequest<AdminGetOrdersOrderParamsType>,
@@ -27,21 +30,24 @@ export const GET = async (
 }
 
 export const POST = async (
-  req: AuthenticatedMedusaRequest,
+  req: AuthenticatedMedusaRequest<AdminUpdateOrderType>,
   res: MedusaResponse<HttpTypes.AdminOrderResponse>
 ) => {
-  const remoteQuery = req.scope.resolve(ContainerRegistrationKeys.REMOTE_QUERY)
+  const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
 
-  const variables = { id: req.params.id }
+  await updateOrderWorkflow(req.scope).run({
+    input: {
+      ...req.validatedBody,
+      user_id: req.auth_context.actor_id,
+      id: req.params.id,
+    },
+  })
 
-  // TODO: update order
-
-  const queryObject = remoteQueryObjectFromString({
-    entryPoint: "order",
-    variables,
+  const result = await query.graph({
+    entity: "order",
+    filters: { id: req.params.id },
     fields: req.remoteQueryConfig.fields,
   })
 
-  const [order] = await remoteQuery(queryObject)
-  res.status(200).json({ order })
+  res.status(200).json({ order: result.data[0] as AdminOrder })
 }

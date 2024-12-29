@@ -7055,12 +7055,12 @@ paths:
       parameters:
         - name: fields
           in: query
-          description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
+          description: 'Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields. NOTE: This route doesn''t allow expanding custom relations.'
           required: false
           schema:
             type: string
             title: fields
-            description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
+            description: 'Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields. NOTE: This route doesn''t allow expanding custom relations.'
             externalDocs:
               url: '#select-fields-and-relations'
         - name: offset
@@ -10440,12 +10440,12 @@ paths:
       parameters:
         - name: fields
           in: query
-          description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
+          description: 'Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields. NOTE: This route doesn''t allow expanding custom relations.'
           required: false
           schema:
             type: string
             title: fields
-            description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
+            description: 'Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields. NOTE: This route doesn''t allow expanding custom relations.'
             externalDocs:
               url: '#select-fields-and-relations'
       security:
@@ -10550,12 +10550,12 @@ paths:
             type: string
         - name: fields
           in: query
-          description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
+          description: 'Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields. NOTE: This route doesn''t allow expanding custom relations.'
           required: false
           schema:
             type: string
             title: fields
-            description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
+            description: 'Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields. NOTE: This route doesn''t allow expanding custom relations.'
             externalDocs:
               url: '#select-fields-and-relations'
       security:
@@ -10603,12 +10603,12 @@ paths:
             type: string
         - name: fields
           in: query
-          description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
+          description: 'Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields. NOTE: This route doesn''t allow expanding custom relations.'
           required: false
           schema:
             type: string
             title: fields
-            description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
+            description: 'Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields. NOTE: This route doesn''t allow expanding custom relations.'
             externalDocs:
               url: '#select-fields-and-relations'
       security:
@@ -10775,12 +10775,12 @@ paths:
             type: string
         - name: fields
           in: query
-          description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
+          description: 'Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields. NOTE: This route doesn''t allow expanding custom relations.'
           required: false
           schema:
             type: string
             title: fields
-            description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
+            description: 'Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields. NOTE: This route doesn''t allow expanding custom relations.'
             externalDocs:
               url: '#select-fields-and-relations'
         - name: offset
@@ -10984,12 +10984,12 @@ paths:
             type: string
         - name: fields
           in: query
-          description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
+          description: 'Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields. NOTE: This route doesn''t allow expanding custom relations.'
           required: false
           schema:
             type: string
             title: fields
-            description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
+            description: 'Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields. NOTE: This route doesn''t allow expanding custom relations.'
             externalDocs:
               url: '#select-fields-and-relations'
       security:
@@ -11143,12 +11143,12 @@ paths:
             type: string
         - name: fields
           in: query
-          description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
+          description: 'Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields. NOTE: This route doesn''t allow expanding custom relations.'
           required: false
           schema:
             type: string
             title: fields
-            description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
+            description: 'Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields. NOTE: This route doesn''t allow expanding custom relations.'
             externalDocs:
               url: '#select-fields-and-relations'
       security:
@@ -11203,12 +11203,12 @@ paths:
             type: string
         - name: fields
           in: query
-          description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
+          description: 'Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields. NOTE: This route doesn''t allow expanding custom relations.'
           required: false
           schema:
             type: string
             title: fields
-            description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
+            description: 'Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields. NOTE: This route doesn''t allow expanding custom relations.'
             externalDocs:
               url: '#select-fields-and-relations'
       security:
@@ -11361,12 +11361,12 @@ paths:
             type: string
         - name: fields
           in: query
-          description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
+          description: 'Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields. NOTE: This route doesn''t allow expanding custom relations.'
           required: false
           schema:
             type: string
             title: fields
-            description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
+            description: 'Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields. NOTE: This route doesn''t allow expanding custom relations.'
             externalDocs:
               url: '#select-fields-and-relations'
       security:
@@ -11440,14 +11440,14 @@ paths:
         - name: fields
           in: query
           description: |-
-            Comma-separated fields that should be included in the returned data.
+            "Comma-separated fields that should be included in the returned data.
             if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields.
-            without prefix it will replace the entire default fields.
+            without prefix it will replace the entire default fields. NOTE: This route doesn't allow expanding custom relations."
           required: false
           schema:
             type: string
             title: fields
-            description: Comma-separated fields that should be included in the returned data. If a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. Without prefix it will replace the entire default fields.
+            description: 'Comma-separated fields that should be included in the returned data. If a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. Without prefix it will replace the entire default fields. NOTE: This route doesn''t allow expanding custom relations.'
             externalDocs:
               url: '#select-fields-and-relations'
       security:
@@ -13379,7 +13379,7 @@ paths:
           $ref: '#/components/responses/invalid_request_error'
         '500':
           $ref: '#/components/responses/500_error'
-      x-workflow: createOrdersWorkflow
+      x-workflow: createOrderWorkflow
   /admin/draft-orders/{id}:
     get:
       operationId: GetDraftOrdersId
@@ -15362,6 +15362,50 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AdminFulfillmentProviderListResponse'
+        '400':
+          $ref: '#/components/responses/400_error'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/not_found_error'
+        '409':
+          $ref: '#/components/responses/invalid_state_error'
+        '422':
+          $ref: '#/components/responses/invalid_request_error'
+        '500':
+          $ref: '#/components/responses/500_error'
+  /admin/fulfillment-providers/{id}/options:
+    get:
+      operationId: GetFulfillmentProvidersIdOptions
+      summary: List Fulfillment Options
+      description: Retrieve the list of fulfillment options of a fulfillment provider. These options may be retrieved from an integrated third-party service.
+      x-authenticated: true
+      parameters:
+        - name: id
+          in: path
+          description: The fulfillment provider's ID.
+          required: true
+          schema:
+            type: string
+      security:
+        - api_token: []
+        - cookie_auth: []
+        - jwt_token: []
+      x-codeSamples:
+        - lang: Shell
+          label: cURL
+          source: |-
+            curl '{backend_url}/admin/fulfillment-providers/{id}/options' \
+            -H 'Authorization: Bearer {access_token}'
+      tags:
+        - Fulfillment Providers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminFulfillmentProviderOptionsListResponse'
         '400':
           $ref: '#/components/responses/400_error'
         '401':
@@ -19774,7 +19818,7 @@ paths:
       x-workflow: getOrderDetailWorkflow
     post:
       operationId: PostOrdersId
-      summary: Update an Order
+      summary: Update Order
       description: Update an order's details.
       x-authenticated: true
       parameters:
@@ -19786,18 +19830,26 @@ paths:
             type: string
         - name: fields
           in: query
-          description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
+          description: |-
+            Comma-separated fields that should be included in the returned data.
+            if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields.
+            without prefix it will replace the entire default fields.
           required: false
           schema:
             type: string
             title: fields
-            description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
+            description: Comma-separated fields that should be included in the returned data. If a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. Without prefix it will replace the entire default fields.
             externalDocs:
               url: '#select-fields-and-relations'
       security:
         - api_token: []
         - cookie_auth: []
         - jwt_token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminUpdateOrder'
       x-codeSamples:
         - lang: Shell
           label: cURL
@@ -19825,6 +19877,7 @@ paths:
           $ref: '#/components/responses/invalid_request_error'
         '500':
           $ref: '#/components/responses/500_error'
+      x-workflow: updateOrderWorkflow
   /admin/orders/{id}/archive:
     post:
       operationId: PostOrdersIdArchive
@@ -20670,6 +20723,133 @@ paths:
           $ref: '#/components/responses/invalid_request_error'
         '500':
           $ref: '#/components/responses/500_error'
+  /admin/orders/{id}/transfer:
+    post:
+      operationId: PostOrdersIdTransfer
+      x-sidebar-summary: Request Transfer
+      summary: Request Order Transfer
+      description: Request an order to be transfered to another customer. The transfer is confirmed by sending a request to the [Accept Order Transfer](https://docs.medusajs.com/api/store#orders_postordersidtransferaccept) Store API route.
+      x-authenticated: true
+      parameters:
+        - name: id
+          in: path
+          description: The order's ID.
+          required: true
+          schema:
+            type: string
+        - name: fields
+          in: query
+          description: |-
+            Comma-separated fields that should be included in the returned data.
+            if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields.
+            without prefix it will replace the entire default fields.
+          required: false
+          schema:
+            type: string
+            title: fields
+            description: Comma-separated fields that should be included in the returned data. If a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. Without prefix it will replace the entire default fields.
+            externalDocs:
+              url: '#select-fields-and-relations'
+      security:
+        - api_token: []
+        - cookie_auth: []
+        - jwt_token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminTransferOrder'
+      x-codeSamples:
+        - lang: Shell
+          label: cURL
+          source: |-
+            curl -X POST '{backend_url}/admin/orders/{id}/transfer' \
+            -H 'Authorization: Bearer {access_token}' \
+            -H 'Content-Type: application/json' \
+            --data-raw '{
+              "customer_id": "cus_123"
+            }'
+      tags:
+        - Orders
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminOrderResponse'
+        '400':
+          $ref: '#/components/responses/400_error'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/not_found_error'
+        '409':
+          $ref: '#/components/responses/invalid_state_error'
+        '422':
+          $ref: '#/components/responses/invalid_request_error'
+        '500':
+          $ref: '#/components/responses/500_error'
+      x-workflow: requestOrderTransferWorkflow
+  /admin/orders/{id}/transfer/cancel:
+    post:
+      operationId: PostOrdersIdTransferCancel
+      summary: Cancel Transfer Request
+      x-sidebar-summary: Cancel Transfer
+      description: Cancel a request to transfer an order to another customer.
+      x-authenticated: true
+      parameters:
+        - name: id
+          in: path
+          description: The order's ID.
+          required: true
+          schema:
+            type: string
+        - name: fields
+          in: query
+          description: |-
+            Comma-separated fields that should be included in the returned data.
+            if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields.
+            without prefix it will replace the entire default fields.
+          required: false
+          schema:
+            type: string
+            title: fields
+            description: Comma-separated fields that should be included in the returned data. If a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. Without prefix it will replace the entire default fields.
+            externalDocs:
+              url: '#select-fields-and-relations'
+      security:
+        - api_token: []
+        - cookie_auth: []
+        - jwt_token: []
+      x-codeSamples:
+        - lang: Shell
+          label: cURL
+          source: |-
+            curl -X POST '{backend_url}/admin/orders/{id}/transfer/cancel' \
+            -H 'Authorization: Bearer {access_token}'
+      tags:
+        - Orders
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminOrderResponse'
+        '400':
+          $ref: '#/components/responses/400_error'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/not_found_error'
+        '409':
+          $ref: '#/components/responses/invalid_state_error'
+        '422':
+          $ref: '#/components/responses/invalid_request_error'
+        '500':
+          $ref: '#/components/responses/500_error'
+      x-workflow: cancelOrderTransferRequestWorkflow
   /admin/payment-collections:
     post:
       operationId: PostPaymentCollections
@@ -22877,12 +23057,12 @@ paths:
       parameters:
         - name: fields
           in: query
-          description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
+          description: 'Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields. NOTE: This route doesn''t allow expanding custom relations.'
           required: false
           schema:
             type: string
             title: fields
-            description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
+            description: 'Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields. NOTE: This route doesn''t allow expanding custom relations.'
             externalDocs:
               url: '#select-fields-and-relations'
         - name: offset
@@ -22979,20 +23159,20 @@ paths:
                   description: A parent category's ID.
         - name: include_ancestors_tree
           in: query
-          description: Whether to include the parent category of each category. If enabled, the parent category is set in the `parent_category` property of each category object.
+          description: Whether to include the parent category of each category. If you enable this, add to the `fields` query parameter `parent_category` to set the parent of a category in this field. You can either pass `*parent_category` to retreieve the fields of all parent categories, or select specific fields to make the response size smaller. For example, `fields=parent_category.id,parent_category.name`.
           required: false
           schema:
             type: boolean
             title: include_ancestors_tree
-            description: Whether to include the parent category of each category. If enabled, the parent category is set in the `parent_category` property of each category object.
+            description: Whether to include the parent category of each category. If you enable this, add to the `fields` query parameter `parent_category` to set the parent of a category in this field. You can either pass `*parent_category` to retreieve the fields of all parent categories, or select specific fields to make the response size smaller. For example, `fields=parent_category.id,parent_category.name`.
         - name: include_descendants_tree
           in: query
-          description: Whether to include the child categories of each category. If enabled, the child categories are added to the `category_children` property of each category object.
+          description: Whether to include the child categories of each category. If you enable this, add to the `fields` query parameter `category_children` to set the children of a category in this field. You can either pass `*category_children` to retreieve the fields of all child categories, or select specific fields to make the response size smaller. For example, `fields=category_children.id,category_children.name`.
           required: false
           schema:
             type: boolean
             title: include_descendants_tree
-            description: Whether to include the child categories of each category. If enabled, the child categories are added to the `category_children` property of each category object.
+            description: Whether to include the child categories of each category. If you enable this, add to the `fields` query parameter `category_children` to set the children of a category in this field. You can either pass `*category_children` to retreieve the fields of all child categories, or select specific fields to make the response size smaller. For example, `fields=category_children.id,category_children.name`.
         - name: is_internal
           in: query
           description: Filter by whether the category is internal.
@@ -23437,12 +23617,12 @@ paths:
       parameters:
         - name: fields
           in: query
-          description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
+          description: 'Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields. NOTE: This route doesn''t allow expanding custom relations.'
           required: false
           schema:
             type: string
             title: fields
-            description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
+            description: 'Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields. NOTE: This route doesn''t allow expanding custom relations.'
             externalDocs:
               url: '#select-fields-and-relations'
       security:
@@ -23503,30 +23683,30 @@ paths:
             type: string
         - name: fields
           in: query
-          description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
+          description: 'Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields. NOTE: This route doesn''t allow expanding custom relations.'
           required: false
           schema:
             type: string
             title: fields
-            description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
+            description: 'Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields. NOTE: This route doesn''t allow expanding custom relations.'
             externalDocs:
               url: '#select-fields-and-relations'
         - name: include_ancestors_tree
           in: query
-          description: Whether to retrieve the category's parent. When enabled, the parent category is set in the `parent_category` property.
+          description: Whether to retrieve the category's parent. If you enable this, add to the `fields` query parameter `parent_category` to set the parent of a category in this field. You can either pass `*parent_category` to retreieve the fields of all parent categories, or select specific fields to make the response size smaller. For example, `fields=parent_category.id,parent_category.name`.
           required: false
           schema:
             type: boolean
             title: include_ancestors_tree
-            description: Whether to retrieve the category's parent. When enabled, the parent category is set in the `parent_category` property.
+            description: Whether to retrieve the category's parent. If you enable this, add to the `fields` query parameter `parent_category` to set the parent of a category in this field. You can either pass `*parent_category` to retreieve the fields of all parent categories, or select specific fields to make the response size smaller. For example, `fields=parent_category.id,parent_category.name`.
         - name: include_descendants_tree
           in: query
-          description: Whether to retrieve a list of child categories. When enabled, the parent categories are added to the `category_children` property.
+          description: Whether to retrieve a list of child categories. If you enable this, add to the `fields` query parameter `category_children` to set the children of a category in this field. You can either pass `*category_children` to retreieve the fields of all child categories, or select specific fields to make the response size smaller. For example, `fields=category_children.id,category_children.name`.
           required: false
           schema:
             type: boolean
             title: include_descendants_tree
-            description: Whether to retrieve a list of child categories. When enabled, the parent categories are added to the `category_children` property.
+            description: Whether to retrieve a list of child categories. If you enable this, add to the `fields` query parameter `category_children` to set the children of a category in this field. You can either pass `*category_children` to retreieve the fields of all child categories, or select specific fields to make the response size smaller. For example, `fields=category_children.id,category_children.name`.
       security:
         - api_token: []
         - cookie_auth: []
@@ -23572,12 +23752,12 @@ paths:
             type: string
         - name: fields
           in: query
-          description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
+          description: 'Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields. NOTE: This route doesn''t allow expanding custom relations.'
           required: false
           schema:
             type: string
             title: fields
-            description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
+            description: 'Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields. NOTE: This route doesn''t allow expanding custom relations.'
             externalDocs:
               url: '#select-fields-and-relations'
       security:
@@ -23715,12 +23895,12 @@ paths:
             type: string
         - name: fields
           in: query
-          description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
+          description: 'Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields. NOTE: This route doesn''t allow expanding custom relations.'
           required: false
           schema:
             type: string
             title: fields
-            description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
+            description: 'Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields. NOTE: This route doesn''t allow expanding custom relations.'
             externalDocs:
               url: '#select-fields-and-relations'
       security:
@@ -28337,7 +28517,7 @@ paths:
                       required_quantity:
                         type: number
                         title: required_quantity
-                        description: The variant's quantity.
+                        description: The number of units a single quantity is equivalent to. For example, if a customer orders one quantity of the variant, Medusa checks the availability of the quantity multiplied by the value set for `required_quantity`. When the customer orders the quantity, Medusa reserves the ordered quantity multiplied by the value set for `required_quantity`.
                       inventory_item_id:
                         type: string
                         title: inventory_item_id
@@ -28360,7 +28540,7 @@ paths:
                       required_quantity:
                         type: number
                         title: required_quantity
-                        description: The variant's quantity.
+                        description: The number of units a single quantity is equivalent to. For example, if a customer orders one quantity of the variant, Medusa checks the availability of the quantity multiplied by the value set for `required_quantity`. When the customer orders the quantity, Medusa reserves the ordered quantity multiplied by the value set for `required_quantity`.
                       inventory_item_id:
                         type: string
                         title: inventory_item_id
@@ -43517,7 +43697,7 @@ components:
         - id
       properties:
         promotion:
-          $ref: '#/components/schemas/AdminPromotion'
+          type: object
         target_rules:
           type: array
           description: The application method's target rules.
@@ -43586,7 +43766,7 @@ components:
           type: array
           description: The products to update.
           items:
-            $ref: '#/components/schemas/AdminUpdateProduct'
+            $ref: '#/components/schemas/AdminBatchUpdateProduct'
         delete:
           type: array
           description: The products to delete.
@@ -43702,6 +43882,164 @@ components:
               type: boolean
               title: deleted
               description: Whether the product variants were deleted.
+    AdminBatchUpdateProduct:
+      type: object
+      description: The product's details.
+      x-schemaName: AdminBatchUpdateProduct
+      properties:
+        title:
+          type: string
+          title: title
+          description: The product's title.
+        subtitle:
+          type: string
+          title: subtitle
+          description: The product's subtitle.
+        description:
+          type: string
+          title: description
+          description: The product's description.
+        is_giftcard:
+          type: boolean
+          title: is_giftcard
+          description: Whether the product is a gift card.
+        discountable:
+          type: boolean
+          title: discountable
+          description: Whether discounts can be applied on the product.
+        images:
+          type: array
+          description: The product's images.
+          items:
+            type: object
+            description: The image's details.
+            required:
+              - url
+            properties:
+              url:
+                type: string
+                title: url
+                description: The image's URL.
+        thumbnail:
+          type: string
+          title: thumbnail
+          description: The product's thumbnail URL.
+        handle:
+          type: string
+          title: handle
+          description: The product's unique handle.
+        status:
+          type: string
+          description: The product's status.
+          enum:
+            - draft
+            - proposed
+            - published
+            - rejected
+        type_id:
+          type: string
+          title: type_id
+          description: The ID of the product's type.
+        collection_id:
+          type: string
+          title: collection_id
+          description: The ID of the product's collection.
+        categories:
+          type: array
+          description: The product's categories.
+          items:
+            type: object
+            description: The product's category.
+            required:
+              - id
+            properties:
+              id:
+                type: string
+                title: id
+                description: The category's ID.
+        tags:
+          type: array
+          description: The product's tags.
+          items:
+            type: object
+            description: The product's tag.
+            required:
+              - id
+            properties:
+              id:
+                type: string
+                title: id
+                description: The tag's ID.
+        options:
+          type: array
+          description: The product's options.
+          items:
+            $ref: '#/components/schemas/AdminUpdateProductOption'
+        variants:
+          type: array
+          description: The product's variants. You can add new variants or update existing ones, passing their IDs in the object.
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/AdminCreateProductVariant'
+              - $ref: '#/components/schemas/AdminUpdateProductVariant'
+        sales_channels:
+          type: array
+          description: The sales channels that the product is available in.
+          items:
+            type: object
+            description: The sales channel's details.
+            required:
+              - id
+            properties:
+              id:
+                type: string
+                title: id
+                description: The sales channel's ID.
+        weight:
+          type: number
+          title: weight
+          description: The product's weight.
+        length:
+          type: number
+          title: length
+          description: The product's length.
+        height:
+          type: number
+          title: height
+          description: The product's height.
+        width:
+          type: number
+          title: width
+          description: The product's width.
+        hs_code:
+          type: string
+          title: hs_code
+          description: The product's HS code.
+        mid_code:
+          type: string
+          title: mid_code
+          description: The product's MID code.
+        origin_country:
+          type: string
+          title: origin_country
+          description: The product's origin country.
+        material:
+          type: string
+          title: material
+          description: The product's material.
+        metadata:
+          type: object
+          description: The product's metadata, can hold custom key-value pairs.
+        external_id:
+          type: string
+          title: external_id
+          description: The ID of the product in an external or third-party system.
+        id:
+          type: string
+          title: id
+          description: The product's ID.
+      required:
+        - id
     AdminBatchUpdateProductVariant:
       type: object
       description: The properties to update of a product variant.
@@ -47016,6 +47354,49 @@ components:
           description: The list of fulfillment providers.
           items:
             $ref: '#/components/schemas/AdminFulfillmentProvider'
+    AdminFulfillmentProviderOption:
+      type: object
+      description: The fulfillment option's details.
+      x-schemaName: AdminFulfillmentProviderOption
+      required:
+        - id
+        - is_return
+      properties:
+        id:
+          type: string
+          title: id
+          description: The fulfillment option's ID.
+        is_return:
+          type: boolean
+          title: is_return
+          description: Whether the fulfillment option is used for returns.
+    AdminFulfillmentProviderOptionsListResponse:
+      type: object
+      description: The paginated list of fulfillment options.
+      x-schemaName: AdminFulfillmentProviderOptionsListResponse
+      required:
+        - limit
+        - offset
+        - count
+        - fulfillment_options
+      properties:
+        limit:
+          type: number
+          title: limit
+          description: The maximum number of items returned.
+        offset:
+          type: number
+          title: offset
+          description: The number of items skipped before retrieving the returned items.
+        count:
+          type: number
+          title: count
+          description: The total number of items.
+        fulfillment_options:
+          type: array
+          description: The list of fulfillment options.
+          items:
+            $ref: '#/components/schemas/AdminFulfillmentProviderOption'
     AdminFulfillmentResponse:
       type: object
       description: A fulfillment's details.
@@ -47357,6 +47738,9 @@ components:
         - email
         - accepted
         - token
+        - expires_at
+        - created_at
+        - updated_at
       properties:
         id:
           type: string
@@ -50988,9 +51372,14 @@ components:
         metadata:
           type: object
           description: The image's metadata, can hold custom key-value pairs.
+        rank:
+          type: number
+          title: rank
+          description: The image's rank among sibling images.
       required:
         - id
         - url
+        - rank
     AdminProductOption:
       type: object
       description: The product option's details.
@@ -51644,7 +52033,7 @@ components:
         - deleted_at
       properties:
         application_method:
-          type: object
+          $ref: '#/components/schemas/AdminApplicationMethod'
         rules:
           type: array
           description: The promotion's rules.
@@ -52644,15 +53033,66 @@ components:
       required:
         - id
         - value
+        - operator
+        - attribute
+        - price_id
+        - priority
+        - created_at
+        - updated_at
+        - deleted_at
       properties:
         id:
           type: string
           title: id
           description: The price rule's ID.
         value:
-          type: string
-          title: value
+          oneOf:
+            - type: string
+              title: value
+              description: The price rule's value.
+            - type: number
+              title: value
+              description: The price rule's value.
           description: The price rule's value.
+        operator:
+          type: string
+          description: The price rule's operator.
+          enum:
+            - gt
+            - lt
+            - eq
+            - ne
+            - in
+            - lte
+            - gte
+            - nin
+        attribute:
+          type: string
+          title: attribute
+          description: The price rule's attribute.
+        price_id:
+          type: string
+          title: price_id
+          description: The ID of the price this rule applies to.
+        priority:
+          type: number
+          title: priority
+          description: The price rule's priority.
+        created_at:
+          type: string
+          format: date-time
+          title: created_at
+          description: The date the price rule was created.
+        updated_at:
+          type: string
+          format: date-time
+          title: updated_at
+          description: The date the price rule was updated.
+        deleted_at:
+          type: string
+          format: date-time
+          title: deleted_at
+          description: The date the price rule was deleted.
     AdminShippingOptionResponse:
       type: object
       description: The shipping option's details.
@@ -52691,18 +53131,8 @@ components:
           description: The shipping option rule's operator.
           example: eq
         value:
-          oneOf:
-            - type: string
-              title: value
-              description: The rule's value.
-              example: '"true"'
-            - type: array
-              description: The rule's values.
-              items:
-                type: string
-                title: value
-                description: A rule's value
-                example: '"true"'
+          type: string
+          title: value
         shipping_option_id:
           type: string
           title: shipping_option_id
@@ -53359,6 +53789,25 @@ components:
       properties:
         tax_region:
           $ref: '#/components/schemas/AdminTaxRegion'
+    AdminTransferOrder:
+      type: object
+      description: The details of the request to transfer the order.
+      x-schemaName: AdminTransferOrder
+      required:
+        - customer_id
+      properties:
+        customer_id:
+          type: string
+          title: customer_id
+          description: The ID of the customer to transfer the order to.
+        description:
+          type: string
+          title: description
+          description: The description of the order transfer, which can be shown to the customer receiving the order transfer request.
+        internal_note:
+          type: string
+          title: internal_note
+          description: An internal note viewable only by admin users.
     AdminUpdateApiKey:
       type: object
       description: The details to update in an API key.
@@ -53398,6 +53847,112 @@ components:
         metadata:
           type: object
           description: The customer group's metadata, can hold custom key-value pairs.
+    AdminUpdateOrder:
+      type: object
+      description: The details to update in the order.
+      x-schemaName: AdminUpdateOrder
+      properties:
+        email:
+          type: string
+          title: email
+          description: The order's email.
+          format: email
+        shipping_address:
+          type: object
+          description: The order's shipping address.
+          properties:
+            first_name:
+              type: string
+              title: first_name
+              description: The address's first name.
+            last_name:
+              type: string
+              title: last_name
+              description: The address's last name.
+            phone:
+              type: string
+              title: phone
+              description: The address's phone.
+            company:
+              type: string
+              title: company
+              description: The address's company.
+            address_1:
+              type: string
+              title: address_1
+              description: The address's first line.
+            address_2:
+              type: string
+              title: address_2
+              description: The address's second line.
+            city:
+              type: string
+              title: city
+              description: The address's city.
+            country_code:
+              type: string
+              title: country_code
+              description: The address's country code.
+              example: us
+            province:
+              type: string
+              title: province
+              description: The address's province.
+            postal_code:
+              type: string
+              title: postal_code
+              description: The address's postal code.
+            metadata:
+              type: object
+              description: The address's metadata, can hold custom key-value pairs.
+        billing_address:
+          type: object
+          description: The order's billing address.
+          properties:
+            first_name:
+              type: string
+              title: first_name
+              description: The address's first name.
+            last_name:
+              type: string
+              title: last_name
+              description: The address's last name.
+            phone:
+              type: string
+              title: phone
+              description: The address's phone.
+            company:
+              type: string
+              title: company
+              description: The address's company.
+            address_1:
+              type: string
+              title: address_1
+              description: The address's first line.
+            address_2:
+              type: string
+              title: address_2
+              description: The address's second line.
+            city:
+              type: string
+              title: city
+              description: The address's city.
+            country_code:
+              type: string
+              title: country_code
+              description: The address's country code.
+              example: us
+            province:
+              type: string
+              title: province
+              description: The address's province.
+            postal_code:
+              type: string
+              title: postal_code
+              description: The address's postal code.
+            metadata:
+              type: object
+              description: The address's metadata, can hold custom key-value pairs.
     AdminUpdatePriceList:
       type: object
       description: the details to update in a price list.
@@ -55006,7 +55561,7 @@ components:
           type: object
           description: The shipping method's data, useful for fulfillment handling by third-party services.
           externalDocs:
-            url: https://docs.medusajs.com/v2/resources/commerce-modules/cart/concepts#data-property
+            url: https://docs.medusajs.com/resources/commerce-modules/cart/concepts#data-property
         metadata:
           type: object
           description: The shipping method's metadata, can hold custom key-value pairs.
@@ -55031,36 +55586,36 @@ components:
           title: updated_at
           description: The date the shipping method was updated.
         original_total:
-          type: string
+          type: number
           title: original_total
           description: The shipping method's total including taxes, excluding promotions.
         original_subtotal:
-          type: string
+          type: number
           title: original_subtotal
           description: The shipping method's total excluding taxes, including promotions.
         original_tax_total:
-          type: string
+          type: number
           title: original_tax_total
           description: The total taxes applied on the shipping method's amount including promotions.
         total:
-          type: string
+          type: number
           title: total
           description: The shipping method's total amount including taxes and promotions.
         subtotal:
-          type: string
+          type: number
           title: subtotal
           description: The shipping method's total amount excluding taxes, including promotions.
         tax_total:
-          type: string
+          type: number
           title: tax_total
           description: The total taxes applied on the shipping method's amount including promotions.
         discount_total:
-          type: string
+          type: number
           title: discount_total
           description: The total amount discounted.
         discount_tax_total:
-          type: string
-          title: discount_total
+          type: number
+          title: discount_tax_total
           description: The taxes applied on the discounted amount.
     BaseClaimItem:
       type: object
@@ -55244,6 +55799,14 @@ components:
       type: object
       description: The adjustment's details.
       x-schemaName: BaseLineItemAdjustment
+      required:
+        - item
+        - item_id
+        - id
+        - amount
+        - cart_id
+        - created_at
+        - updated_at
       properties:
         item:
           type: object
@@ -55289,18 +55852,20 @@ components:
           format: date-time
           title: updated_at
           description: The date the adjustment was updated.
-      required:
-        - item
-        - item_id
-        - id
-        - amount
-        - cart_id
-        - created_at
-        - updated_at
     BaseLineItemTaxLine:
       type: object
       description: The tax line's details
       x-schemaName: BaseLineItemTaxLine
+      required:
+        - item
+        - item_id
+        - total
+        - subtotal
+        - id
+        - code
+        - rate
+        - created_at
+        - updated_at
       properties:
         item:
           $ref: '#/components/schemas/BaseCartLineItem'
@@ -55350,16 +55915,6 @@ components:
           format: date-time
           title: updated_at
           description: The date the tax line was updated.
-      required:
-        - item
-        - item_id
-        - total
-        - subtotal
-        - id
-        - code
-        - rate
-        - created_at
-        - updated_at
     BaseOrder:
       type: object
       description: The order's details.
@@ -57066,9 +57621,14 @@ components:
         metadata:
           type: object
           description: The image's metadata, can hold custom key-value pairs.
+        rank:
+          type: number
+          title: rank
+          description: The image's rank among its sibling images.
       required:
         - id
         - url
+        - rank
     BaseProductOption:
       type: object
       description: The product option's details.
@@ -58431,6 +58991,11 @@ components:
           type: number
           title: display_id
           description: The order's display ID.
+        credit_lines:
+          type: array
+          description: The order's credit lines, useful to add additional payment amounts for an order.
+          items:
+            $ref: '#/components/schemas/OrderCreditLine'
     OrderAddress:
       type: object
       description: The address's details.
@@ -58783,19 +59348,8 @@ components:
           title: no_notification
           description: Whether the customer should be notified about changes in the claim.
         refund_amount:
-          oneOf:
-            - type: string
-              title: refund_amount
-              description: The claim's refund amount.
-            - type: number
-              title: refund_amount
-              description: The claim's refund amount.
-            - type: string
-              title: refund_amount
-              description: The claim's refund amount.
-            - type: number
-              title: refund_amount
-              description: The claim's refund amount.
+          type: number
+          title: refund_amount
           description: The amount to be refunded.
         display_id:
           type: number
@@ -58867,6 +59421,51 @@ components:
           title: canceled_at
           description: The date the claim was canceled.
           format: date-time
+    OrderCreditLine:
+      type: object
+      description: The credit line's details.
+      x-schemaName: OrderCreditLine
+      required:
+        - id
+        - order_id
+        - order
+        - reference
+        - reference_id
+        - metadata
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+          title: id
+          description: The credit line's ID.
+        order_id:
+          type: string
+          title: order_id
+          description: The ID of the associated order.
+        order:
+          type: object
+        reference:
+          type: string
+          title: reference
+          description: The table that this credit line references. For example, `payment_collection`.
+        reference_id:
+          type: string
+          title: reference_id
+          description: The ID of the record in the referenced table. For example, `paycol_123`.
+        metadata:
+          type: object
+          description: The credit line's metadata, can hold custom key-value pairs.
+        created_at:
+          type: string
+          format: date-time
+          title: created_at
+          description: The date the credit line was created.
+        updated_at:
+          type: string
+          format: date-time
+          title: updated_at
+          description: The date the credit line was updated.
     OrderExchange:
       type: object
       description: The order change's exchange.
@@ -59876,6 +60475,17 @@ components:
           title: received_at
           description: The date the return was received.
           format: date-time
+    StoreAcceptOrderTransfer:
+      type: object
+      description: The details of accepting the order transfer.
+      x-schemaName: StoreAcceptOrderTransfer
+      required:
+        - token
+      properties:
+        token:
+          type: string
+          title: token
+          description: The order transfer's token issued when the transfer was requested.
     StoreAddCartLineItem:
       type: object
       description: The details of the line item to add.
@@ -59895,6 +60505,120 @@ components:
         metadata:
           type: object
           description: The item's metadata, can hold custom key-value pairs.
+    StoreCalculatedPrice:
+      type: object
+      description: The shipping option's calculated price.
+      x-schemaName: StoreCalculatedPrice
+      required:
+        - id
+        - calculated_amount
+        - original_amount
+        - currency_code
+      properties:
+        id:
+          type: string
+          title: id
+          description: The ID of the price set from which the price was selected.
+        is_calculated_price_price_list:
+          type: boolean
+          title: is_calculated_price_price_list
+          description: Whether the calculated price belongs to a price list.
+        is_calculated_price_tax_inclusive:
+          type: boolean
+          title: is_calculated_price_tax_inclusive
+          description: Whether the calculated price is tax inclusive.
+          externalDocs:
+            url: https://docs.medusajs.com/resources/commerce-modules/pricing/tax-inclusive-pricing
+        calculated_amount:
+          type: number
+          title: calculated_amount
+          description: The amount of the calculated price, or `null` if there isn't a calculated price. This is the amount shown to the customer.
+        calculated_amount_with_tax:
+          type: number
+          title: calculated_amount_with_tax
+          description: The `calculated_amount` with taxes applied.
+        calculated_amount_without_tax:
+          type: number
+          title: calculated_amount_without_tax
+          description: The `calculated_amount` without taxes applied.
+        is_original_price_price_list:
+          type: boolean
+          title: is_original_price_price_list
+          description: Whether the original price belongs to a price list.
+        is_original_price_tax_inclusive:
+          type: boolean
+          title: is_original_price_tax_inclusive
+          description: Whether the original price is tax inclusive.
+          externalDocs:
+            url: https://docs.medusajs.com/resources/commerce-modules/pricing/tax-inclusive-pricing
+        original_amount:
+          type: number
+          title: original_amount
+          description: The amount of the original price, or `null` if there isn't an original price. This amount is useful to compare with the `calculated_amount`, such as to check for discounted value.
+        currency_code:
+          type: string
+          title: currency_code
+          description: The currency code of the calculated price, or `null` if there isn't a calculated price.
+        calculated_price:
+          type: object
+          description: The calculated price's details.
+          required:
+            - id
+            - price_list_id
+            - price_list_type
+            - min_quantity
+            - max_quantity
+          properties:
+            id:
+              type: string
+              title: id
+              description: The ID of the price.
+            price_list_id:
+              type: string
+              title: price_list_id
+              description: The ID of the associated price list.
+            price_list_type:
+              type: string
+              title: price_list_type
+              description: The price list's type. For example, `sale` or `override`.
+            min_quantity:
+              type: number
+              title: min_quantity
+              description: The minimum quantity required in the cart for the price to apply.
+            max_quantity:
+              type: number
+              title: max_quantity
+              description: The maximum quantity required in the cart for the price to apply.
+        original_price:
+          type: object
+          description: The origin price's details.
+          required:
+            - id
+            - price_list_id
+            - price_list_type
+            - min_quantity
+            - max_quantity
+          properties:
+            id:
+              type: string
+              title: id
+              description: The ID of the price.
+            price_list_id:
+              type: string
+              title: price_list_id
+              description: The ID of the associated price list.
+            price_list_type:
+              type: string
+              title: price_list_type
+              description: The price list's type. For example, `sale` or `override`.
+            min_quantity:
+              type: number
+              title: min_quantity
+              description: The minimum quantity required in the cart for the price to apply.
+            max_quantity:
+              type: number
+              title: max_quantity
+              description: The maximum quantity required in the cart for the price to apply.
     StoreCart:
       type: object
       description: The cart's details.
@@ -60751,6 +61475,8 @@ components:
         - type
         - provider
         - amount
+        - prices
+        - calculated_price
       properties:
         id:
           type: string
@@ -60827,6 +61553,13 @@ components:
           description: The shipping option's data, useful for the provider handling fulfillment.
           externalDocs:
             url: https://docs.medusajs.com/v2/resources/commerce-modules/fulfillment/shipping-option#data-property
+        prices:
+          type: array
+          description: The shipping option's prices.
+          items:
+            $ref: '#/components/schemas/StorePrice'
+        calculated_price:
+          $ref: '#/components/schemas/StoreCalculatedPrice'
     StoreCollection:
       type: object
       description: The collection's details.
@@ -61336,6 +62069,17 @@ components:
       properties:
         customer:
           $ref: '#/components/schemas/StoreCustomer'
+    StoreDeclineOrderTransferRequest:
+      type: object
+      description: The details of declining the order transfer request.
+      x-schemaName: StoreDeclineOrderTransferRequest
+      required:
+        - token
+      properties:
+        token:
+          type: string
+          title: token
+          description: The order transfer's token issued when the transfer was requested.
     StoreInitializePaymentSession:
       type: object
       description: The payment session's details.
@@ -67638,6 +68382,74 @@ components:
         - provider_id
         - data
         - status
+    StorePrice:
+      type: object
+      description: The price's details.
+      x-schemaName: StorePrice
+      required:
+        - id
+        - currency_code
+        - amount
+        - min_quantity
+        - max_quantity
+      properties:
+        id:
+          type: string
+          title: id
+          description: The price's ID.
+        currency_code:
+          type: string
+          title: currency_code
+          description: The price's ISO 2 currency code.
+          example: usd
+        amount:
+          type: number
+          title: amount
+          description: The price's amount.
+        min_quantity:
+          type: number
+          title: min_quantity
+          description: The minimum quantity required in the cart for the price to apply.
+        max_quantity:
+          type: number
+          title: max_quantity
+          description: The maximum quantity required in the cart for the price to apply.
+        price_rules:
+          type: array
+          description: The price's rules.
+          items:
+            $ref: '#/components/schemas/StorePriceRule'
+    StorePriceRule:
+      type: object
+      description: The price rule's details.
+      x-schemaName: StorePriceRule
+      required:
+        - id
+        - attribute
+        - operator
+        - value
+      properties:
+        id:
+          type: string
+          title: id
+          description: The price rule's ID.
+        attribute:
+          type: string
+          title: attribute
+          description: The price rule's attribute.
+        operator:
+          type: string
+          description: The price rule's operator.
+          enum:
+            - gt
+            - lt
+            - eq
+            - lte
+            - gte
+        value:
+          type: string
+          title: value
+          description: The price rule's value.
     StoreProduct:
       type: object
       description: The product's details.
@@ -67915,6 +68727,7 @@ components:
       required:
         - id
         - url
+        - rank
       properties:
         id:
           type: string
@@ -67942,6 +68755,10 @@ components:
         metadata:
           type: object
           description: The image's metadata, can hold custom key-value pairs.
+        rank:
+          type: number
+          title: rank
+          description: The image's rank among its sibling images
     StoreProductOption:
       type: object
       description: The product option's details.
@@ -68290,6 +69107,15 @@ components:
           type: string
           title: display_name
           description: The country's display name.
+    StoreRequestOrderTransfer:
+      type: object
+      description: The details of requesting the order transfer.
+      x-schemaName: StoreRequestOrderTransfer
+      properties:
+        description:
+          type: string
+          title: description
+          description: The transfer's description, which can be shown to the other customer receiving the request.
     StoreReturn:
       type: object
       description: The return's details.
@@ -68539,6 +69365,15 @@ components:
           description: The shipping option's shipping options.
           items:
             $ref: '#/components/schemas/StoreCartShippingOption'
+    StoreShippingOptionResponse:
+      type: object
+      description: The shipping option's details.
+      x-schemaName: StoreShippingOptionResponse
+      required:
+        - shipping_option
+      properties:
+        shipping_option:
+          $ref: '#/components/schemas/StoreCartShippingOption'
     StoreShippingOptionType:
       type: object
       description: The shipping option type's details.
@@ -68917,10 +69752,9 @@ components:
         type: unknown_error
   securitySchemes:
     api_token:
-      type: apiKey
+      type: http
       x-displayName: API Token
-      in: header
-      name: x-medusa-access-token
+      scheme: bearer
     jwt_token:
       type: http
       x-displayName: JWT Token

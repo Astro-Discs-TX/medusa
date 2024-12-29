@@ -47,6 +47,7 @@ const cartFields = [
   "shipping_methods.amount",
   "customer.id",
   "customer.email",
+  "customer.metadata",
   "customer.groups.id",
   "shipping_address.id",
   "shipping_address.address_1",
@@ -56,6 +57,7 @@ const cartFields = [
   "shipping_address.country_code",
   "shipping_address.region_code",
   "shipping_address.province",
+  "shipping_address.metadata",
 ]
 
 export type UpdateTaxLinesWorkflowInput = {
@@ -84,9 +86,8 @@ export const updateTaxLinesWorkflow = createWorkflow(
     const taxLineItems = getItemTaxLinesStep(
       transform({ input, cart }, (data) => ({
         orderOrCart: data.cart,
-        items: data.input.items || data.cart.items,
-        shipping_methods:
-          data.input.shipping_methods || data.cart.shipping_methods,
+        items: data.cart.items,
+        shipping_methods: data.cart.shipping_methods,
         force_tax_calculation: data.input.force_tax_calculation,
       }))
     )

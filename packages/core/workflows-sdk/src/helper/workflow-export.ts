@@ -519,24 +519,15 @@ function attachOnFinishReleaseEvents(
       ) || console
 
     if (logOnError) {
-      const TERMINAL_SIZE = process.stdout?.columns ?? 60
-      const separator = new Array(TERMINAL_SIZE).join("-")
-
       const workflowName = transaction.getFlow().modelId
-      const allWorkflowErrors = transaction
+      transaction
         .getErrors()
-        .map(
-          (err) =>
+        .forEach((err) =>
+          logger.error(
             `${workflowName}:${err?.action}:${err?.handlerType} - ${err?.error?.message}${EOL}${err?.error?.stack}`
+          )
         )
-        .join(EOL + separator + EOL)
-
-      if (allWorkflowErrors) {
-        logger.error(allWorkflowErrors)
-      }
     }
-
-    await onFinish?.(args)
 
     const eventBusService = (
       flow.container as MedusaContainer
@@ -545,6 +536,7 @@ function attachOnFinishReleaseEvents(
     })
 
     if (!eventBusService || !flowEventGroupId) {
+      await onFinish?.(args)
       return
     }
 
@@ -560,14 +552,19 @@ function attachOnFinishReleaseEvents(
         })
     }
 
-    await eventBusService.releaseGroupedEvents(flowEventGroupId).catch((e) => {
-      logger.error(
-        `Failed to release grouped events for eventGroupId: ${flowEventGroupId}`,
-        e
-      )
+    await eventBusService
+      .releaseGroupedEvents(flowEventGroupId)
+      .then(async () => {
+        await onFinish?.(args)
+      })
+      .catch((e) => {
+        logger.error(
+          `Failed to release grouped events for eventGroupId: ${flowEventGroupId}`,
+          e
+        )
 
-      return flow.cancel(transaction)
-    })
+        return flow.cancel(transaction)
+      })
   }
 
   events.onFinish = wrappedOnFinish

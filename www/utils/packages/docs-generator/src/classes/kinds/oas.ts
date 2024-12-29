@@ -45,7 +45,7 @@ type SchemaDescriptionOptions = {
 
 export type OasArea = "admin" | "store"
 
-type ParameterType = "query" | "path"
+type ParameterType = "query" | "path" | "header"
 
 type AuthRequests = {
   exact?: string
@@ -65,7 +65,9 @@ class OasKindGenerator extends FunctionKindGenerator {
     "MedusaRequest",
     "RequestWithContext",
     "AuthenticatedMedusaRequest",
+    "MedusaStoreRequest",
   ]
+  readonly REQUEST_CHECK_QUERY_ARGS = ["RequestWithContext"]
   // as it's not always possible to detect authenticated request
   // use this to override the default detection logic.
   readonly AUTH_REQUESTS: AuthRequests[] = [
@@ -75,6 +77,14 @@ class OasKindGenerator extends FunctionKindGenerator {
     },
     {
       startsWith: "store/customers",
+      requiresAuthentication: true,
+    },
+    {
+      exact: "store/orders/[id]/transfer/request",
+      requiresAuthentication: true,
+    },
+    {
+      exact: "store/orders/[id]/transfer/cancel",
       requiresAuthentication: true,
     },
   ]
@@ -271,6 +281,10 @@ class OasKindGenerator extends FunctionKindGenerator {
       security: [],
     }
 
+    // get header params
+    const headerParams = this.getHeaderParameters(oasPath)
+    oas.parameters?.push(...headerParams)
+
     // retreive query and request parameters
     const { queryParameters, requestSchema } = this.getRequestParameters({
       node,
@@ -461,6 +475,11 @@ class OasKindGenerator extends FunctionKindGenerator {
 
     // update path parameters
     const newPathParameters = this.getPathParameters({ oasPath, tagName })
+
+    // get header params
+    const headerParams = this.getHeaderParameters(oasPath)
+    newPathParameters.push(...headerParams)
+
     oas.parameters = this.updateParameters({
       oldParameters: oas.parameters as OpenAPIV3.ParameterObject[],
       newParameters: newPathParameters,
@@ -892,7 +911,7 @@ class OasKindGenerator extends FunctionKindGenerator {
     /**
      * The parameter type.
      */
-    type: "path" | "query"
+    type: ParameterType
     /**
      * The name of the parameter.
      */
@@ -1007,122 +1026,198 @@ class OasKindGenerator extends FunctionKindGenerator {
      */
     requestSchema?: OpenApiSchema
   } {
-    const parameters: OpenAPIV3.ParameterObject[] = []
+    const queryParameters: OpenAPIV3.ParameterObject[] = []
     let requestSchema: OpenApiSchema | undefined
 
     if (
-      node.parameters[0].type &&
-      ts.isTypeReferenceNode(node.parameters[0].type)
+      !node.parameters[0].type ||
+      !ts.isTypeReferenceNode(node.parameters[0].type)
     ) {
-      const requestType = this.checker.getTypeFromTypeNode(
-        node.parameters[0].type
-      ) as ts.TypeReference
-      // TODO for now I'll use the type for validatedQuery until
-      // we have an actual approach to infer query types
-      const querySymbol = requestType.getProperty("validatedQuery")
-      if (querySymbol) {
-        const { shouldAddFields, shouldAddPagination } =
-          this.shouldAddQueryParams(node)
-        const queryType = this.checker.getTypeOfSymbol(querySymbol)
-        const queryTypeName = this.checker.typeToString(queryType)
-        queryType.getProperties().forEach((property) => {
-          const propertyName = property.getName()
-          // if this is a field / pagination query parameter and
-          // they're not used in the route, don't add them.
-          if (
-            (this.FIELD_QUERY_PARAMS.includes(propertyName) &&
-              !shouldAddFields) ||
-            (this.PAGINATION_QUERY_PARAMS.includes(propertyName) &&
-              !shouldAddPagination)
-          ) {
-            return
-          }
-          const propertyType = this.checker.getTypeOfSymbol(property)
-          const descriptionOptions: SchemaDescriptionOptions = {
-            typeStr: propertyName,
-            parentName: tagName,
-            rawParentName: queryTypeName,
-            node: property.valueDeclaration,
-            symbol: property,
-            nodeType: propertyType,
-          }
-          parameters.push(
-            this.getParameterObject({
-              name: propertyName,
-              type: "query",
-              description: this.getSchemaDescription(descriptionOptions),
-              required: this.isRequired(property),
-              schema: this.typeToSchema({
-                itemType: propertyType,
-                title: propertyName,
-                descriptionOptions,
-                context: "query",
-                saveSchema: !forUpdate,
-              }),
-            })
-          )
-        })
+      return {
+        queryParameters,
+        requestSchema,
       }
+    }
 
-      const requestTypeArguments =
-        requestType.typeArguments || requestType.aliasTypeArguments
+    const requestType = this.checker.getTypeFromTypeNode(
+      node.parameters[0].type
+    ) as ts.TypeReference
+    // TODO for now I'll use the type for validatedQuery until
+    // we have an actual approach to infer query types
+    const querySymbol = requestType.getProperty("validatedQuery")
+    if (querySymbol) {
+      const { shouldAddFields, shouldAddPagination } =
+        this.shouldAddQueryParams(node)
+      const queryType = this.checker.getTypeOfSymbol(querySymbol)
+      const queryTypeName = this.checker.typeToString(queryType)
+      queryType.getProperties().forEach((property) => {
+        const propertyName = property.getName()
+        // if this is a field / pagination query parameter and
+        // they're not used in the route, don't add them.
+        if (
+          (this.FIELD_QUERY_PARAMS.includes(propertyName) &&
+            !shouldAddFields) ||
+          (this.PAGINATION_QUERY_PARAMS.includes(propertyName) &&
+            !shouldAddPagination)
+        ) {
+          return
+        }
+        const propertyType = this.checker.getTypeOfSymbol(property)
+        const descriptionOptions: SchemaDescriptionOptions = {
+          typeStr: propertyName,
+          parentName: tagName,
+          rawParentName: queryTypeName,
+          node: property.valueDeclaration,
+          symbol: property,
+          nodeType: propertyType,
+        }
+        queryParameters.push(
+          this.getParameterObject({
+            name: propertyName,
+            type: "query",
+            description: this.getSchemaDescription(descriptionOptions),
+            required: this.isRequired(property),
+            schema: this.typeToSchema({
+              itemType: propertyType,
+              title: propertyName,
+              descriptionOptions,
+              context: "query",
+              saveSchema: !forUpdate,
+            }),
+          })
+        )
+      })
+    }
 
-      if (requestTypeArguments?.length === 1) {
-        const zodObjectTypeName = getCorrectZodTypeName({
-          typeReferenceNode: node.parameters[0].type,
-          itemType: requestTypeArguments[0],
-        })
-        const isQuery = methodName === "get"
-        const parameterSchema = this.typeToSchema({
-          itemType: requestTypeArguments[0],
+    const requestTypeArguments =
+      requestType.typeArguments || requestType.aliasTypeArguments
+    const shouldCheckTypeArgumentForQuery =
+      this.REQUEST_CHECK_QUERY_ARGS.includes(
+        node.parameters[0].type.typeName.getText()
+      )
+
+    if (
+      !requestTypeArguments ||
+      (requestTypeArguments.length < 2 && !shouldCheckTypeArgumentForQuery)
+    ) {
+      return {
+        queryParameters,
+        requestSchema,
+      }
+    }
+
+    const checkQueryIndex = requestTypeArguments.length >= 2 ? 1 : 0
+    // Not all routes support a second type argument yet,
+    // so the query param may be passed in the first type argument
+    const hasQueryParams =
+      requestTypeArguments[checkQueryIndex].getProperties().length > 0
+    // Not all routes support a second type argument yet,
+    // so we have to support routes that pass the query parameters type
+    // in the first type argument
+    const isQuery = methodName === "get"
+
+    const zodObjectRequestBodyTypeName = getCorrectZodTypeName({
+      typeReferenceNode: node.parameters[0].type,
+      itemType: requestTypeArguments[0],
+    })
+    const zodObjectQueryTypeName = getCorrectZodTypeName({
+      typeReferenceNode: node.parameters[0].type,
+      itemType: requestTypeArguments[checkQueryIndex],
+    })
+
+    const requestBodyParameterSchema = this.typeToSchema({
+      itemType: requestTypeArguments[0],
+      descriptionOptions: {
+        parentName: tagName,
+        rawParentName: this.checker.typeToString(requestTypeArguments[0]),
+      },
+      zodObjectTypeName: zodObjectRequestBodyTypeName,
+      context: isQuery ? "query" : "request",
+      saveSchema: !forUpdate,
+    })
+    const queryParameterSchema = hasQueryParams
+      ? this.typeToSchema({
+          itemType: requestTypeArguments[checkQueryIndex],
           descriptionOptions: {
             parentName: tagName,
-            rawParentName: this.checker.typeToString(requestTypeArguments[0]),
+            rawParentName: this.checker.typeToString(
+              requestTypeArguments[checkQueryIndex]
+            ),
           },
-          zodObjectTypeName: zodObjectTypeName,
-          context: isQuery ? "query" : "request",
+          zodObjectTypeName: zodObjectQueryTypeName,
+          context: "query",
           saveSchema: !forUpdate,
         })
+      : requestBodyParameterSchema
 
-        // If function is a GET function, add the type parameter to the
-        // query parameters instead of request parameters.
-        if (isQuery) {
-          if (parameterSchema.type === "object" && parameterSchema.properties) {
-            Object.entries(parameterSchema.properties).forEach(
-              ([key, propertySchema]) => {
-                if ("$ref" in propertySchema) {
-                  return
-                }
-
-                // check if parameter is already added
-                const isAdded = parameters.some((param) => param.name === key)
-
-                if (isAdded) {
-                  return
-                }
-
-                parameters.push(
-                  this.getParameterObject({
-                    name: key,
-                    type: "query",
-                    description: propertySchema.description,
-                    required: parameterSchema.required?.includes(key) || false,
-                    schema: propertySchema,
-                  })
-                )
-              }
-            )
+    // If function is a GET function, add the type parameter to the
+    // query parameters instead of request parameters.
+    if (
+      (isQuery || hasQueryParams) &&
+      queryParameterSchema.type === "object" &&
+      queryParameterSchema.properties
+    ) {
+      Object.entries(queryParameterSchema.properties).forEach(
+        ([key, propertySchema]) => {
+          if ("$ref" in propertySchema) {
+            return
           }
-        } else if (methodName !== "delete") {
-          requestSchema = parameterSchema
+
+          // check if parameter is already added
+          const isAdded = queryParameters.some((param) => param.name === key)
+
+          if (isAdded) {
+            return
+          }
+
+          queryParameters.push(
+            this.getParameterObject({
+              name: key,
+              type: "query",
+              description: propertySchema.description,
+              required: queryParameterSchema.required?.includes(key) || false,
+              schema: propertySchema,
+            })
+          )
         }
-      }
+      )
+    }
+
+    if (methodName !== "delete" && methodName !== "get") {
+      requestSchema = requestBodyParameterSchema
     }
 
     return {
-      queryParameters: parameters,
+      queryParameters,
       requestSchema,
     }
+  }
+
+  /**
+   * Retrieve the header parameters of the OAS route.
+   *
+   * @param oasPath - The OAS path.
+   * @returns The header parameters of the route.
+   */
+  getHeaderParameters(oasPath: string): OpenAPIV3.ParameterObject[] {
+    if (!oasPath.startsWith("store")) {
+      return []
+    }
+
+    return [
+      this.getParameterObject({
+        type: "header",
+        name: "x-publishable-api-key",
+        description: "Publishable API Key created in the Medusa Admin.",
+        required: true,
+        schema: {
+          type: "string",
+          externalDocs: {
+            url: "https://docs.medusajs.com/api/store#publishable-api-key",
+          },
+        },
+      }),
+    ]
   }
 
   /**
@@ -1836,9 +1931,13 @@ class OasKindGenerator extends FunctionKindGenerator {
     if (!oldParameters) {
       return newParameters || []
     }
-    const oppositeParamType = type === "query" ? "path" : "query"
+    const oppositeParamType = ["path", "query", "header"].filter(
+      (item) => item !== type
+    ) as ParameterType[]
     const oppositeParams: OpenAPIV3.ParameterObject[] =
-      oldParameters?.filter((param) => param.in === oppositeParamType) || []
+      oldParameters?.filter((param) =>
+        oppositeParamType.includes(param.in as ParameterType)
+      ) || []
     // check and update/add parameters if necessary
     const existingParams: OpenAPIV3.ParameterObject[] =
       oldParameters?.filter((param) => param.in === type) || []
@@ -1920,7 +2019,9 @@ class OasKindGenerator extends FunctionKindGenerator {
       ...oppositeParams,
       ...(existingParams?.filter(
         (parameter) =>
-          (parameter as OpenAPIV3.ParameterObject).in === oppositeParamType ||
+          oppositeParamType.includes(
+            (parameter as OpenAPIV3.ParameterObject).in as ParameterType
+          ) ||
           !paramsToRemove.has((parameter as OpenAPIV3.ParameterObject).name)
       ) || []),
     ]

@@ -1,5 +1,27 @@
 # @medusajs/tax
 
+## 2.1.3
+
+## 2.1.2
+
+### Patch Changes
+
+- [#10525](https://github.com/medusajs/medusa/pull/10525) [`e021c9258cd3bf7b92213b0bd2d529f72200142e`](https://github.com/medusajs/medusa/commit/e021c9258cd3bf7b92213b0bd2d529f72200142e) Thanks [@thetutlage](https://github.com/thetutlage)! - Feat/tax dml
+
+## 2.1.1
+
+## 2.1.0
+
+## 2.0.7
+
+## 2.0.6
+
+## 2.0.5
+
+### Patch Changes
+
+- [#10119](https://github.com/medusajs/medusa/pull/10119) [`2822972e04f12d2ca9378dd09529ab6ca308a286`](https://github.com/medusajs/medusa/commit/2822972e04f12d2ca9378dd09529ab6ca308a286) Thanks [@adrien2p](https://github.com/adrien2p)! - Fix/mikro orm cli wrapper
+
 ## 2.0.4
 
 ## 2.0.3

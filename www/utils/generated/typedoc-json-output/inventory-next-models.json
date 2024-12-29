@@ -1,1690 +1,1862 @@
 {
-	"id": 5231,
+	"id": 6253,
 	"name": "inventory-next-models",
 	"variant": "project",
 	"kind": 1,
 	"flags": {},
 	"children": [
 		{
-			"id": 5254,
+			"id": 6254,
 			"name": "InventoryItem",
 			"variant": "declaration",
-			"kind": 128,
-			"flags": {},
-			"children": [
-				{
-					"id": 5255,
-					"name": "constructor",
-					"variant": "declaration",
-					"kind": 512,
-					"flags": {},
-					"signatures": [
-						{
-							"id": 5256,
-							"name": "new InventoryItem",
-							"variant": "signature",
-							"kind": 16384,
-							"flags": {},
-							"type": {
-								"type": "reference",
-								"target": 5254,
-								"name": "InventoryItem",
-								"package": "@medusajs/inventory"
-							}
-						}
-					]
+			"kind": 32,
+			"flags": {
+				"isConst": true
+			},
+			"type": {
+				"type": "reference",
+				"target": {
+					"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
+					"qualifiedName": "DmlEntity"
 				},
-				{
-					"id": 5283,
-					"name": "[OptionalProps]",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
+				"typeArguments": [
+					{
 						"type": "reference",
 						"target": {
-							"sourceFileName": "../../../../packages/core/types/src/dal/entity.ts",
-							"qualifiedName": "SoftDeletableModelDateColumns"
-						},
-						"name": "SoftDeletableModelDateColumns",
-						"package": "@medusajs/types"
-					}
-				},
-				{
-					"id": 5257,
-					"name": "id",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "intrinsic",
-						"name": "string"
-					}
-				},
-				{
-					"id": 5258,
-					"name": "created_at",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "reference",
-						"target": {
-							"sourceFileName": "../../node_modules/typescript/lib/lib.es5.d.ts",
-							"qualifiedName": "Date"
-						},
-						"name": "Date",
-						"package": "typescript"
-					}
-				},
-				{
-					"id": 5259,
-					"name": "updated_at",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "reference",
-						"target": {
-							"sourceFileName": "../../node_modules/typescript/lib/lib.es5.d.ts",
-							"qualifiedName": "Date"
-						},
-						"name": "Date",
-						"package": "typescript"
-					}
-				},
-				{
-					"id": 5260,
-					"name": "deleted_at",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "union",
-						"types": [
-							{
-								"type": "literal",
-								"value": null
-							},
-							{
-								"type": "reference",
-								"target": {
-									"sourceFileName": "../../node_modules/typescript/lib/lib.es5.d.ts",
-									"qualifiedName": "Date"
-								},
-								"name": "Date",
-								"package": "typescript"
-							}
-						]
-					},
-					"defaultValue": "null"
-				},
-				{
-					"id": 5261,
-					"name": "sku",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "union",
-						"types": [
-							{
-								"type": "literal",
-								"value": null
-							},
-							{
-								"type": "intrinsic",
-								"name": "string"
-							}
-						]
-					},
-					"defaultValue": "null"
-				},
-				{
-					"id": 5262,
-					"name": "origin_country",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "union",
-						"types": [
-							{
-								"type": "literal",
-								"value": null
-							},
-							{
-								"type": "intrinsic",
-								"name": "string"
-							}
-						]
-					},
-					"defaultValue": "null"
-				},
-				{
-					"id": 5263,
-					"name": "hs_code",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "union",
-						"types": [
-							{
-								"type": "literal",
-								"value": null
-							},
-							{
-								"type": "intrinsic",
-								"name": "string"
-							}
-						]
-					},
-					"defaultValue": "null"
-				},
-				{
-					"id": 5264,
-					"name": "mid_code",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "union",
-						"types": [
-							{
-								"type": "literal",
-								"value": null
-							},
-							{
-								"type": "intrinsic",
-								"name": "string"
-							}
-						]
-					},
-					"defaultValue": "null"
-				},
-				{
-					"id": 5265,
-					"name": "material",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "union",
-						"types": [
-							{
-								"type": "literal",
-								"value": null
-							},
-							{
-								"type": "intrinsic",
-								"name": "string"
-							}
-						]
-					},
-					"defaultValue": "null"
-				},
-				{
-					"id": 5266,
-					"name": "weight",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "union",
-						"types": [
-							{
-								"type": "literal",
-								"value": null
-							},
-							{
-								"type": "intrinsic",
-								"name": "number"
-							}
-						]
-					},
-					"defaultValue": "null"
-				},
-				{
-					"id": 5267,
-					"name": "length",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "union",
-						"types": [
-							{
-								"type": "literal",
-								"value": null
-							},
-							{
-								"type": "intrinsic",
-								"name": "number"
-							}
-						]
-					},
-					"defaultValue": "null"
-				},
-				{
-					"id": 5268,
-					"name": "height",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "union",
-						"types": [
-							{
-								"type": "literal",
-								"value": null
-							},
-							{
-								"type": "intrinsic",
-								"name": "number"
-							}
-						]
-					},
-					"defaultValue": "null"
-				},
-				{
-					"id": 5269,
-					"name": "width",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "union",
-						"types": [
-							{
-								"type": "literal",
-								"value": null
-							},
-							{
-								"type": "intrinsic",
-								"name": "number"
-							}
-						]
-					},
-					"defaultValue": "null"
-				},
-				{
-					"id": 5270,
-					"name": "requires_shipping",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "intrinsic",
-						"name": "boolean"
-					},
-					"defaultValue": "true"
-				},
-				{
-					"id": 5271,
-					"name": "description",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "union",
-						"types": [
-							{
-								"type": "literal",
-								"value": null
-							},
-							{
-								"type": "intrinsic",
-								"name": "string"
-							}
-						]
-					},
-					"defaultValue": "null"
-				},
-				{
-					"id": 5272,
-					"name": "title",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "union",
-						"types": [
-							{
-								"type": "literal",
-								"value": null
-							},
-							{
-								"type": "intrinsic",
-								"name": "string"
-							}
-						]
-					},
-					"defaultValue": "null"
-				},
-				{
-					"id": 5273,
-					"name": "thumbnail",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "union",
-						"types": [
-							{
-								"type": "literal",
-								"value": null
-							},
-							{
-								"type": "intrinsic",
-								"name": "string"
-							}
-						]
-					},
-					"defaultValue": "null"
-				},
-				{
-					"id": 5274,
-					"name": "metadata",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "union",
-						"types": [
-							{
-								"type": "literal",
-								"value": null
-							},
-							{
-								"type": "reference",
-								"target": {
-									"sourceFileName": "../../node_modules/typescript/lib/lib.es5.d.ts",
-									"qualifiedName": "Record"
-								},
-								"typeArguments": [
-									{
-										"type": "intrinsic",
-										"name": "string"
-									},
-									{
-										"type": "intrinsic",
-										"name": "unknown"
-									}
-								],
-								"name": "Record",
-								"package": "typescript"
-							}
-						]
-					},
-					"defaultValue": "null"
-				},
-				{
-					"id": 5275,
-					"name": "location_levels",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "reference",
-						"target": {
-							"sourceFileName": "../../../../node_modules/@mikro-orm/core/entity/Collection.d.ts",
-							"qualifiedName": "Collection"
+							"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
+							"qualifiedName": "DMLEntitySchemaBuilder"
 						},
 						"typeArguments": [
 							{
-								"type": "reference",
-								"target": 5284,
-								"name": "InventoryLevel",
-								"package": "@medusajs/inventory"
-							},
-							{
-								"type": "intrinsic",
-								"name": "object"
+								"type": "reflection",
+								"declaration": {
+									"id": 6255,
+									"name": "__type",
+									"variant": "declaration",
+									"kind": 65536,
+									"flags": {},
+									"children": [
+										{
+											"id": 6256,
+											"name": "id",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The ID of the inventory item."
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/primary-key.ts",
+													"qualifiedName": "PrimaryKeyModifier"
+												},
+												"typeArguments": [
+													{
+														"type": "reference",
+														"target": {
+															"sourceFileName": "../../../../packages/core/utils/src/dml/properties/id.ts",
+															"qualifiedName": "IdProperty"
+														},
+														"name": "IdProperty",
+														"package": "@medusajs/utils"
+													}
+												],
+												"name": "PrimaryKeyModifier",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 6257,
+											"name": "sku",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The SKU of the inventory item"
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/text.ts",
+													"qualifiedName": "TextProperty"
+												},
+												"name": "TextProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 6258,
+											"name": "origin_country",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The origin country of the inventory item"
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/text.ts",
+													"qualifiedName": "TextProperty"
+												},
+												"name": "TextProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 6259,
+											"name": "hs_code",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The HS code of the inventory item"
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/text.ts",
+													"qualifiedName": "TextProperty"
+												},
+												"name": "TextProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 6260,
+											"name": "mid_code",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The MID code of the inventory item"
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/text.ts",
+													"qualifiedName": "TextProperty"
+												},
+												"name": "TextProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 6261,
+											"name": "material",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The material of the inventory item"
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/text.ts",
+													"qualifiedName": "TextProperty"
+												},
+												"name": "TextProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 6262,
+											"name": "weight",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The weight of the inventory item"
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/number.ts",
+													"qualifiedName": "NumberProperty"
+												},
+												"name": "NumberProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 6263,
+											"name": "length",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The length of the inventory item"
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/number.ts",
+													"qualifiedName": "NumberProperty"
+												},
+												"name": "NumberProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 6264,
+											"name": "height",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The height of the inventory item"
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/number.ts",
+													"qualifiedName": "NumberProperty"
+												},
+												"name": "NumberProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 6265,
+											"name": "width",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The width of the inventory item"
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/number.ts",
+													"qualifiedName": "NumberProperty"
+												},
+												"name": "NumberProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 6266,
+											"name": "requires_shipping",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "Whether the inventory item requires shipping."
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/boolean.ts",
+													"qualifiedName": "BooleanProperty"
+												},
+												"name": "BooleanProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 6267,
+											"name": "description",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The description of the inventory item"
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/text.ts",
+													"qualifiedName": "TextProperty"
+												},
+												"name": "TextProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 6268,
+											"name": "title",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The title of the inventory item"
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/text.ts",
+													"qualifiedName": "TextProperty"
+												},
+												"name": "TextProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 6269,
+											"name": "thumbnail",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The thumbnail URL of the inventory item"
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/text.ts",
+													"qualifiedName": "TextProperty"
+												},
+												"name": "TextProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 6270,
+											"name": "metadata",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "Holds custom data in key-value pairs."
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/json.ts",
+													"qualifiedName": "JSONProperty"
+												},
+												"name": "JSONProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 6271,
+											"name": "location_levels",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The associated location levels."
+													}
+												],
+												"modifierTags": [
+													"@expandable"
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/relations/has-many.ts",
+													"qualifiedName": "HasMany"
+												},
+												"typeArguments": [
+													{
+														"type": "reference",
+														"target": 6304,
+														"name": "InventoryLevel"
+													}
+												],
+												"name": "HasMany",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 6285,
+											"name": "reservation_items",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The associated reservation items."
+													}
+												],
+												"modifierTags": [
+													"@expandable"
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/relations/has-many.ts",
+													"qualifiedName": "HasMany"
+												},
+												"typeArguments": [
+													{
+														"type": "reference",
+														"target": 6340,
+														"name": "ReservationItem"
+													}
+												],
+												"name": "HasMany",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 6302,
+											"name": "reserved_quantity",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The reserved quantity of the inventory item"
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/computed.ts",
+													"qualifiedName": "ComputedProperty"
+												},
+												"typeArguments": [
+													{
+														"type": "union",
+														"types": [
+															{
+																"type": "literal",
+																"value": null
+															},
+															{
+																"type": "intrinsic",
+																"name": "number"
+															}
+														]
+													},
+													{
+														"type": "reference",
+														"target": {
+															"sourceFileName": "../../../../packages/core/utils/src/dml/properties/number.ts",
+															"qualifiedName": "NumberProperty"
+														},
+														"name": "NumberProperty",
+														"package": "@medusajs/utils"
+													}
+												],
+												"name": "ComputedProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 6303,
+											"name": "stocked_quantity",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The stocked quantity of the inventory item"
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/computed.ts",
+													"qualifiedName": "ComputedProperty"
+												},
+												"typeArguments": [
+													{
+														"type": "union",
+														"types": [
+															{
+																"type": "literal",
+																"value": null
+															},
+															{
+																"type": "intrinsic",
+																"name": "number"
+															}
+														]
+													},
+													{
+														"type": "reference",
+														"target": {
+															"sourceFileName": "../../../../packages/core/utils/src/dml/properties/number.ts",
+															"qualifiedName": "NumberProperty"
+														},
+														"name": "NumberProperty",
+														"package": "@medusajs/utils"
+													}
+												],
+												"name": "ComputedProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										}
+									],
+									"groups": [
+										{
+											"title": "Properties",
+											"children": [
+												6256,
+												6257,
+												6258,
+												6259,
+												6260,
+												6261,
+												6262,
+												6263,
+												6264,
+												6265,
+												6266,
+												6267,
+												6268,
+												6269,
+												6270,
+												6271,
+												6285,
+												6302,
+												6303
+											]
+										}
+									]
+								}
 							}
 						],
-						"name": "Collection",
-						"package": "@mikro-orm/core"
+						"name": "DMLEntitySchemaBuilder",
+						"package": "@medusajs/utils"
 					},
-					"defaultValue": "..."
-				},
-				{
-					"id": 5276,
-					"name": "reservation_items",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "reference",
-						"target": {
-							"sourceFileName": "../../../../node_modules/@mikro-orm/core/entity/Collection.d.ts",
-							"qualifiedName": "Collection"
-						},
-						"typeArguments": [
-							{
-								"type": "reference",
-								"target": 5232,
-								"name": "ReservationItem",
-								"package": "@medusajs/inventory"
-							},
-							{
-								"type": "intrinsic",
-								"name": "object"
-							}
-						],
-						"name": "Collection",
-						"package": "@mikro-orm/core"
-					},
-					"defaultValue": "..."
-				},
-				{
-					"id": 5277,
-					"name": "reserved_quantity",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "intrinsic",
-						"name": "number"
+					{
+						"type": "literal",
+						"value": "InventoryItem"
 					}
-				},
-				{
-					"id": 5278,
-					"name": "stocked_quantity",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "intrinsic",
-						"name": "number"
-					}
-				},
-				{
-					"id": 5279,
-					"name": "beforeCreate",
-					"variant": "declaration",
-					"kind": 2048,
-					"flags": {},
-					"signatures": [
-						{
-							"id": 5280,
-							"name": "beforeCreate",
-							"variant": "signature",
-							"kind": 4096,
-							"flags": {},
-							"type": {
-								"type": "intrinsic",
-								"name": "void"
-							}
-						}
-					]
-				},
-				{
-					"id": 5281,
-					"name": "onInit",
-					"variant": "declaration",
-					"kind": 2048,
-					"flags": {},
-					"signatures": [
-						{
-							"id": 5282,
-							"name": "onInit",
-							"variant": "signature",
-							"kind": 4096,
-							"flags": {},
-							"type": {
-								"type": "intrinsic",
-								"name": "void"
-							}
-						}
-					]
-				}
-			],
-			"groups": [
-				{
-					"title": "Constructors",
-					"children": [
-						5255
-					]
-				},
-				{
-					"title": "Properties",
-					"children": [
-						5283,
-						5257,
-						5258,
-						5259,
-						5260,
-						5261,
-						5262,
-						5263,
-						5264,
-						5265,
-						5266,
-						5267,
-						5268,
-						5269,
-						5270,
-						5271,
-						5272,
-						5273,
-						5274,
-						5275,
-						5276,
-						5277,
-						5278
-					]
-				},
-				{
-					"title": "Methods",
-					"children": [
-						5279,
-						5281
-					]
-				}
-			]
+				],
+				"name": "DmlEntity",
+				"package": "@medusajs/utils"
+			},
+			"defaultValue": "..."
 		},
 		{
-			"id": 5284,
+			"id": 6304,
 			"name": "InventoryLevel",
 			"variant": "declaration",
-			"kind": 128,
-			"flags": {},
-			"children": [
-				{
-					"id": 5285,
-					"name": "constructor",
-					"variant": "declaration",
-					"kind": 512,
-					"flags": {},
-					"signatures": [
-						{
-							"id": 5286,
-							"name": "new InventoryLevel",
-							"variant": "signature",
-							"kind": 16384,
-							"flags": {},
-							"type": {
-								"type": "reference",
-								"target": 5284,
-								"name": "InventoryLevel",
-								"package": "@medusajs/inventory"
-							}
-						}
-					]
+			"kind": 32,
+			"flags": {
+				"isConst": true
+			},
+			"type": {
+				"type": "reference",
+				"target": {
+					"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
+					"qualifiedName": "DmlEntity"
 				},
-				{
-					"id": 5287,
-					"name": "id",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "intrinsic",
-						"name": "string"
-					}
-				},
-				{
-					"id": 5288,
-					"name": "created_at",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
+				"typeArguments": [
+					{
 						"type": "reference",
 						"target": {
-							"sourceFileName": "../../node_modules/typescript/lib/lib.es5.d.ts",
-							"qualifiedName": "Date"
+							"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
+							"qualifiedName": "DMLEntitySchemaBuilder"
 						},
-						"name": "Date",
-						"package": "typescript"
-					}
-				},
-				{
-					"id": 5289,
-					"name": "updated_at",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "reference",
-						"target": {
-							"sourceFileName": "../../node_modules/typescript/lib/lib.es5.d.ts",
-							"qualifiedName": "Date"
-						},
-						"name": "Date",
-						"package": "typescript"
-					}
-				},
-				{
-					"id": 5290,
-					"name": "deleted_at",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "union",
-						"types": [
+						"typeArguments": [
 							{
-								"type": "literal",
-								"value": null
-							},
-							{
-								"type": "reference",
-								"target": {
-									"sourceFileName": "../../node_modules/typescript/lib/lib.es5.d.ts",
-									"qualifiedName": "Date"
-								},
-								"name": "Date",
-								"package": "typescript"
+								"type": "reflection",
+								"declaration": {
+									"id": 6305,
+									"name": "__type",
+									"variant": "declaration",
+									"kind": 65536,
+									"flags": {},
+									"children": [
+										{
+											"id": 6306,
+											"name": "id",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The ID of the inventory level."
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/primary-key.ts",
+													"qualifiedName": "PrimaryKeyModifier"
+												},
+												"typeArguments": [
+													{
+														"type": "reference",
+														"target": {
+															"sourceFileName": "../../../../packages/core/utils/src/dml/properties/id.ts",
+															"qualifiedName": "IdProperty"
+														},
+														"name": "IdProperty",
+														"package": "@medusajs/utils"
+													}
+												],
+												"name": "PrimaryKeyModifier",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 6307,
+											"name": "location_id",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The ID of the inventory level's location. When used with the [Stock Location Module](https://docs.medusajs.com/resources/commerce-modules/stock-location), the ID will be a `StockLocation`'s ID."
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/text.ts",
+													"qualifiedName": "TextProperty"
+												},
+												"name": "TextProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 6308,
+											"name": "stocked_quantity",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The stocked quantity of the inventory level"
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/big-number.ts",
+													"qualifiedName": "BigNumberProperty"
+												},
+												"name": "BigNumberProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 6309,
+											"name": "reserved_quantity",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The reserved quantity of the inventory level"
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/big-number.ts",
+													"qualifiedName": "BigNumberProperty"
+												},
+												"name": "BigNumberProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 6310,
+											"name": "incoming_quantity",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The incoming quantity of the inventory level"
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/big-number.ts",
+													"qualifiedName": "BigNumberProperty"
+												},
+												"name": "BigNumberProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 6311,
+											"name": "metadata",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "Holds custom data in key-value pairs."
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/json.ts",
+													"qualifiedName": "JSONProperty"
+												},
+												"name": "JSONProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 6312,
+											"name": "inventory_item",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The associated inventory item."
+													}
+												],
+												"modifierTags": [
+													"@expandable"
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/relations/belongs-to.ts",
+													"qualifiedName": "BelongsTo"
+												},
+												"typeArguments": [
+													{
+														"type": "reference",
+														"target": 6254,
+														"name": "InventoryItem"
+													}
+												],
+												"name": "BelongsTo",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 6339,
+											"name": "available_quantity",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The available quantity of the inventory level"
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/computed.ts",
+													"qualifiedName": "ComputedProperty"
+												},
+												"typeArguments": [
+													{
+														"type": "union",
+														"types": [
+															{
+																"type": "literal",
+																"value": null
+															},
+															{
+																"type": "intrinsic",
+																"name": "number"
+															}
+														]
+													},
+													{
+														"type": "reference",
+														"target": {
+															"sourceFileName": "../../../../packages/core/utils/src/dml/properties/big-number.ts",
+															"qualifiedName": "BigNumberProperty"
+														},
+														"name": "BigNumberProperty",
+														"package": "@medusajs/utils"
+													}
+												],
+												"name": "ComputedProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										}
+									],
+									"groups": [
+										{
+											"title": "Properties",
+											"children": [
+												6306,
+												6307,
+												6308,
+												6309,
+												6310,
+												6311,
+												6312,
+												6339
+											]
+										}
+									]
+								}
 							}
-						]
+						],
+						"name": "DMLEntitySchemaBuilder",
+						"package": "@medusajs/utils"
 					},
-					"defaultValue": "null"
-				},
-				{
-					"id": 5291,
-					"name": "inventory_item_id",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "intrinsic",
-						"name": "string"
+					{
+						"type": "literal",
+						"value": "InventoryLevel"
 					}
-				},
-				{
-					"id": 5292,
-					"name": "location_id",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "intrinsic",
-						"name": "string"
-					}
-				},
-				{
-					"id": 5293,
-					"name": "stocked_quantity",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "union",
-						"types": [
-							{
-								"type": "intrinsic",
-								"name": "number"
-							},
-							{
-								"type": "reference",
-								"target": {
-									"sourceFileName": "../../../../packages/core/utils/src/totals/big-number.ts",
-									"qualifiedName": "BigNumber"
-								},
-								"name": "BigNumber",
-								"package": "@medusajs/utils"
-							}
-						]
-					},
-					"defaultValue": "0"
-				},
-				{
-					"id": 5294,
-					"name": "raw_stocked_quantity",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "reference",
-						"target": {
-							"sourceFileName": "../../../../packages/core/types/src/totals/big-number.ts",
-							"qualifiedName": "BigNumberRawValue"
-						},
-						"name": "BigNumberRawValue",
-						"package": "@medusajs/types"
-					}
-				},
-				{
-					"id": 5295,
-					"name": "reserved_quantity",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "union",
-						"types": [
-							{
-								"type": "intrinsic",
-								"name": "number"
-							},
-							{
-								"type": "reference",
-								"target": {
-									"sourceFileName": "../../../../packages/core/utils/src/totals/big-number.ts",
-									"qualifiedName": "BigNumber"
-								},
-								"name": "BigNumber",
-								"package": "@medusajs/utils"
-							}
-						]
-					},
-					"defaultValue": "0"
-				},
-				{
-					"id": 5296,
-					"name": "raw_reserved_quantity",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "reference",
-						"target": {
-							"sourceFileName": "../../../../packages/core/types/src/totals/big-number.ts",
-							"qualifiedName": "BigNumberRawValue"
-						},
-						"name": "BigNumberRawValue",
-						"package": "@medusajs/types"
-					}
-				},
-				{
-					"id": 5297,
-					"name": "incoming_quantity",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "union",
-						"types": [
-							{
-								"type": "intrinsic",
-								"name": "number"
-							},
-							{
-								"type": "reference",
-								"target": {
-									"sourceFileName": "../../../../packages/core/utils/src/totals/big-number.ts",
-									"qualifiedName": "BigNumber"
-								},
-								"name": "BigNumber",
-								"package": "@medusajs/utils"
-							}
-						]
-					},
-					"defaultValue": "0"
-				},
-				{
-					"id": 5298,
-					"name": "raw_incoming_quantity",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "reference",
-						"target": {
-							"sourceFileName": "../../../../packages/core/types/src/totals/big-number.ts",
-							"qualifiedName": "BigNumberRawValue"
-						},
-						"name": "BigNumberRawValue",
-						"package": "@medusajs/types"
-					}
-				},
-				{
-					"id": 5299,
-					"name": "metadata",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "union",
-						"types": [
-							{
-								"type": "literal",
-								"value": null
-							},
-							{
-								"type": "reference",
-								"target": {
-									"sourceFileName": "../../node_modules/typescript/lib/lib.es5.d.ts",
-									"qualifiedName": "Record"
-								},
-								"typeArguments": [
-									{
-										"type": "intrinsic",
-										"name": "string"
-									},
-									{
-										"type": "intrinsic",
-										"name": "unknown"
-									}
-								],
-								"name": "Record",
-								"package": "typescript"
-							}
-						]
-					}
-				},
-				{
-					"id": 5300,
-					"name": "inventory_item",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "reference",
-						"target": 5254,
-						"name": "InventoryItem",
-						"package": "@medusajs/inventory"
-					}
-				},
-				{
-					"id": 5301,
-					"name": "available_quantity",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "union",
-						"types": [
-							{
-								"type": "literal",
-								"value": null
-							},
-							{
-								"type": "intrinsic",
-								"name": "number"
-							},
-							{
-								"type": "reference",
-								"target": {
-									"sourceFileName": "../../../../packages/core/utils/src/totals/big-number.ts",
-									"qualifiedName": "BigNumber"
-								},
-								"name": "BigNumber",
-								"package": "@medusajs/utils"
-							}
-						]
-					},
-					"defaultValue": "null"
-				},
-				{
-					"id": 5302,
-					"name": "beforeCreate",
-					"variant": "declaration",
-					"kind": 2048,
-					"flags": {},
-					"signatures": [
-						{
-							"id": 5303,
-							"name": "beforeCreate",
-							"variant": "signature",
-							"kind": 4096,
-							"flags": {},
-							"type": {
-								"type": "intrinsic",
-								"name": "void"
-							}
-						}
-					]
-				},
-				{
-					"id": 5304,
-					"name": "onInit",
-					"variant": "declaration",
-					"kind": 2048,
-					"flags": {},
-					"signatures": [
-						{
-							"id": 5305,
-							"name": "onInit",
-							"variant": "signature",
-							"kind": 4096,
-							"flags": {},
-							"type": {
-								"type": "intrinsic",
-								"name": "void"
-							}
-						}
-					]
-				},
-				{
-					"id": 5306,
-					"name": "onLoad",
-					"variant": "declaration",
-					"kind": 2048,
-					"flags": {},
-					"signatures": [
-						{
-							"id": 5307,
-							"name": "onLoad",
-							"variant": "signature",
-							"kind": 4096,
-							"flags": {},
-							"type": {
-								"type": "intrinsic",
-								"name": "void"
-							}
-						}
-					]
-				}
-			],
-			"groups": [
-				{
-					"title": "Constructors",
-					"children": [
-						5285
-					]
-				},
-				{
-					"title": "Properties",
-					"children": [
-						5287,
-						5288,
-						5289,
-						5290,
-						5291,
-						5292,
-						5293,
-						5294,
-						5295,
-						5296,
-						5297,
-						5298,
-						5299,
-						5300,
-						5301
-					]
-				},
-				{
-					"title": "Methods",
-					"children": [
-						5302,
-						5304,
-						5306
-					]
-				}
-			]
+				],
+				"name": "DmlEntity",
+				"package": "@medusajs/utils"
+			},
+			"defaultValue": "..."
 		},
 		{
-			"id": 5232,
+			"id": 6340,
 			"name": "ReservationItem",
 			"variant": "declaration",
-			"kind": 128,
-			"flags": {},
-			"children": [
-				{
-					"id": 5233,
-					"name": "constructor",
-					"variant": "declaration",
-					"kind": 512,
-					"flags": {},
-					"signatures": [
-						{
-							"id": 5234,
-							"name": "new ReservationItem",
-							"variant": "signature",
-							"kind": 16384,
-							"flags": {},
-							"type": {
-								"type": "reference",
-								"target": 5232,
-								"name": "ReservationItem",
-								"package": "@medusajs/inventory"
-							}
-						}
-					]
+			"kind": 32,
+			"flags": {
+				"isConst": true
+			},
+			"type": {
+				"type": "reference",
+				"target": {
+					"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
+					"qualifiedName": "DmlEntity"
 				},
-				{
-					"id": 5235,
-					"name": "id",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "intrinsic",
-						"name": "string"
-					}
-				},
-				{
-					"id": 5236,
-					"name": "created_at",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
+				"typeArguments": [
+					{
 						"type": "reference",
 						"target": {
-							"sourceFileName": "../../node_modules/typescript/lib/lib.es5.d.ts",
-							"qualifiedName": "Date"
+							"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
+							"qualifiedName": "DMLEntitySchemaBuilder"
 						},
-						"name": "Date",
-						"package": "typescript"
-					}
-				},
-				{
-					"id": 5237,
-					"name": "updated_at",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "reference",
-						"target": {
-							"sourceFileName": "../../node_modules/typescript/lib/lib.es5.d.ts",
-							"qualifiedName": "Date"
-						},
-						"name": "Date",
-						"package": "typescript"
-					}
-				},
-				{
-					"id": 5238,
-					"name": "deleted_at",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "union",
-						"types": [
+						"typeArguments": [
 							{
-								"type": "literal",
-								"value": null
-							},
-							{
-								"type": "reference",
-								"target": {
-									"sourceFileName": "../../node_modules/typescript/lib/lib.es5.d.ts",
-									"qualifiedName": "Date"
-								},
-								"name": "Date",
-								"package": "typescript"
+								"type": "reflection",
+								"declaration": {
+									"id": 6341,
+									"name": "__type",
+									"variant": "declaration",
+									"kind": 65536,
+									"flags": {},
+									"children": [
+										{
+											"id": 6342,
+											"name": "id",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The ID of the reservation item."
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/primary-key.ts",
+													"qualifiedName": "PrimaryKeyModifier"
+												},
+												"typeArguments": [
+													{
+														"type": "reference",
+														"target": {
+															"sourceFileName": "../../../../packages/core/utils/src/dml/properties/id.ts",
+															"qualifiedName": "IdProperty"
+														},
+														"name": "IdProperty",
+														"package": "@medusajs/utils"
+													}
+												],
+												"name": "PrimaryKeyModifier",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 6343,
+											"name": "line_item_id",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The ID of the reservation item's line item."
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/text.ts",
+													"qualifiedName": "TextProperty"
+												},
+												"name": "TextProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 6344,
+											"name": "allow_backorder",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "Whether the underlying item can still be ordered despite the reserved quantity."
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/boolean.ts",
+													"qualifiedName": "BooleanProperty"
+												},
+												"name": "BooleanProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 6345,
+											"name": "location_id",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The ID of the location that the quantity is reserved from. When used with the [Stock Location Module](https://docs.medusajs.com/resources/commerce-modules/stock-location), the ID will be a `StockLocation`'s ID."
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/text.ts",
+													"qualifiedName": "TextProperty"
+												},
+												"name": "TextProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 6346,
+											"name": "quantity",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The reserved quantity."
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/big-number.ts",
+													"qualifiedName": "BigNumberProperty"
+												},
+												"name": "BigNumberProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 6347,
+											"name": "raw_quantity",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The raw reserved quantity."
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/json.ts",
+													"qualifiedName": "JSONProperty"
+												},
+												"name": "JSONProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 6348,
+											"name": "external_id",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The external ID of the reservation item. Can store an ID from a third-party system."
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/text.ts",
+													"qualifiedName": "TextProperty"
+												},
+												"name": "TextProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 6349,
+											"name": "description",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The description of the reservation item"
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/text.ts",
+													"qualifiedName": "TextProperty"
+												},
+												"name": "TextProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 6350,
+											"name": "created_by",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The ID of the user that created the reservation item."
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/text.ts",
+													"qualifiedName": "TextProperty"
+												},
+												"name": "TextProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 6351,
+											"name": "metadata",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "Holds custom data in key-value pairs."
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/json.ts",
+													"qualifiedName": "JSONProperty"
+												},
+												"name": "JSONProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 6352,
+											"name": "inventory_item",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The associated inventory item."
+													}
+												],
+												"modifierTags": [
+													"@expandable"
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/relations/belongs-to.ts",
+													"qualifiedName": "BelongsTo"
+												},
+												"typeArguments": [
+													{
+														"type": "reference",
+														"target": 6254,
+														"name": "InventoryItem"
+													}
+												],
+												"name": "BelongsTo",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										}
+									],
+									"groups": [
+										{
+											"title": "Properties",
+											"children": [
+												6342,
+												6343,
+												6344,
+												6345,
+												6346,
+												6347,
+												6348,
+												6349,
+												6350,
+												6351,
+												6352
+											]
+										}
+									]
+								}
 							}
-						]
+						],
+						"name": "DMLEntitySchemaBuilder",
+						"package": "@medusajs/utils"
 					},
-					"defaultValue": "null"
-				},
-				{
-					"id": 5239,
-					"name": "line_item_id",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "union",
-						"types": [
-							{
-								"type": "literal",
-								"value": null
-							},
-							{
-								"type": "intrinsic",
-								"name": "string"
-							}
-						]
-					},
-					"defaultValue": "null"
-				},
-				{
-					"id": 5240,
-					"name": "allow_backorder",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "intrinsic",
-						"name": "boolean"
-					},
-					"defaultValue": "false"
-				},
-				{
-					"id": 5241,
-					"name": "location_id",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "intrinsic",
-						"name": "string"
+					{
+						"type": "literal",
+						"value": "ReservationItem"
 					}
-				},
-				{
-					"id": 5242,
-					"name": "quantity",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "union",
-						"types": [
-							{
-								"type": "intrinsic",
-								"name": "number"
-							},
-							{
-								"type": "reference",
-								"target": {
-									"sourceFileName": "../../../../packages/core/utils/src/totals/big-number.ts",
-									"qualifiedName": "BigNumber"
-								},
-								"name": "BigNumber",
-								"package": "@medusajs/utils"
-							}
-						]
-					}
-				},
-				{
-					"id": 5243,
-					"name": "raw_quantity",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "reference",
-						"target": {
-							"sourceFileName": "../../../../packages/core/types/src/totals/big-number.ts",
-							"qualifiedName": "BigNumberRawValue"
-						},
-						"name": "BigNumberRawValue",
-						"package": "@medusajs/types"
-					}
-				},
-				{
-					"id": 5244,
-					"name": "external_id",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "union",
-						"types": [
-							{
-								"type": "literal",
-								"value": null
-							},
-							{
-								"type": "intrinsic",
-								"name": "string"
-							}
-						]
-					},
-					"defaultValue": "null"
-				},
-				{
-					"id": 5245,
-					"name": "description",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "union",
-						"types": [
-							{
-								"type": "literal",
-								"value": null
-							},
-							{
-								"type": "intrinsic",
-								"name": "string"
-							}
-						]
-					},
-					"defaultValue": "null"
-				},
-				{
-					"id": 5246,
-					"name": "created_by",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "union",
-						"types": [
-							{
-								"type": "literal",
-								"value": null
-							},
-							{
-								"type": "intrinsic",
-								"name": "string"
-							}
-						]
-					},
-					"defaultValue": "null"
-				},
-				{
-					"id": 5247,
-					"name": "metadata",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "union",
-						"types": [
-							{
-								"type": "literal",
-								"value": null
-							},
-							{
-								"type": "reference",
-								"target": {
-									"sourceFileName": "../../node_modules/typescript/lib/lib.es5.d.ts",
-									"qualifiedName": "Record"
-								},
-								"typeArguments": [
-									{
-										"type": "intrinsic",
-										"name": "string"
-									},
-									{
-										"type": "intrinsic",
-										"name": "unknown"
-									}
-								],
-								"name": "Record",
-								"package": "typescript"
-							}
-						]
-					},
-					"defaultValue": "null"
-				},
-				{
-					"id": 5248,
-					"name": "inventory_item_id",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "intrinsic",
-						"name": "string"
-					}
-				},
-				{
-					"id": 5249,
-					"name": "inventory_item",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "reference",
-						"target": 5254,
-						"name": "InventoryItem",
-						"package": "@medusajs/inventory"
-					}
-				},
-				{
-					"id": 5250,
-					"name": "beforeCreate",
-					"variant": "declaration",
-					"kind": 2048,
-					"flags": {},
-					"signatures": [
-						{
-							"id": 5251,
-							"name": "beforeCreate",
-							"variant": "signature",
-							"kind": 4096,
-							"flags": {},
-							"type": {
-								"type": "intrinsic",
-								"name": "void"
-							}
-						}
-					]
-				},
-				{
-					"id": 5252,
-					"name": "onInit",
-					"variant": "declaration",
-					"kind": 2048,
-					"flags": {},
-					"signatures": [
-						{
-							"id": 5253,
-							"name": "onInit",
-							"variant": "signature",
-							"kind": 4096,
-							"flags": {},
-							"type": {
-								"type": "intrinsic",
-								"name": "void"
-							}
-						}
-					]
-				}
-			],
-			"groups": [
-				{
-					"title": "Constructors",
-					"children": [
-						5233
-					]
-				},
-				{
-					"title": "Properties",
-					"children": [
-						5235,
-						5236,
-						5237,
-						5238,
-						5239,
-						5240,
-						5241,
-						5242,
-						5243,
-						5244,
-						5245,
-						5246,
-						5247,
-						5248,
-						5249
-					]
-				},
-				{
-					"title": "Methods",
-					"children": [
-						5250,
-						5252
-					]
-				}
-			]
+				],
+				"name": "DmlEntity",
+				"package": "@medusajs/utils"
+			},
+			"defaultValue": "..."
 		}
 	],
 	"groups": [
 		{
-			"title": "Classes",
+			"title": "Variables",
 			"children": [
-				5254,
-				5284,
-				5232
+				6254,
+				6304,
+				6340
 			]
 		}
 	],
 	"packageName": "@medusajs/inventory",
 	"symbolIdMap": {
-		"5231": {
+		"6253": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/index.ts",
 			"qualifiedName": ""
 		},
-		"5232": {
-			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
-			"qualifiedName": "ReservationItem"
-		},
-		"5235": {
-			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
-			"qualifiedName": "ReservationItem.id"
-		},
-		"5236": {
-			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
-			"qualifiedName": "ReservationItem.created_at"
-		},
-		"5237": {
-			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
-			"qualifiedName": "ReservationItem.updated_at"
-		},
-		"5238": {
-			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
-			"qualifiedName": "ReservationItem.deleted_at"
-		},
-		"5239": {
-			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
-			"qualifiedName": "ReservationItem.line_item_id"
-		},
-		"5240": {
-			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
-			"qualifiedName": "ReservationItem.allow_backorder"
-		},
-		"5241": {
-			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
-			"qualifiedName": "ReservationItem.location_id"
-		},
-		"5242": {
-			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
-			"qualifiedName": "ReservationItem.quantity"
-		},
-		"5243": {
-			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
-			"qualifiedName": "ReservationItem.raw_quantity"
-		},
-		"5244": {
-			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
-			"qualifiedName": "ReservationItem.external_id"
-		},
-		"5245": {
-			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
-			"qualifiedName": "ReservationItem.description"
-		},
-		"5246": {
-			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
-			"qualifiedName": "ReservationItem.created_by"
-		},
-		"5247": {
-			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
-			"qualifiedName": "ReservationItem.metadata"
-		},
-		"5248": {
-			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
-			"qualifiedName": "ReservationItem.inventory_item_id"
-		},
-		"5249": {
-			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
-			"qualifiedName": "ReservationItem.inventory_item"
-		},
-		"5250": {
-			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
-			"qualifiedName": "ReservationItem.beforeCreate"
-		},
-		"5251": {
-			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
-			"qualifiedName": "ReservationItem.beforeCreate"
-		},
-		"5252": {
-			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
-			"qualifiedName": "ReservationItem.onInit"
-		},
-		"5253": {
-			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
-			"qualifiedName": "ReservationItem.onInit"
-		},
-		"5254": {
+		"6254": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
 			"qualifiedName": "InventoryItem"
 		},
-		"5257": {
+		"6255": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
-			"qualifiedName": "InventoryItem.id"
+			"qualifiedName": "__object"
 		},
-		"5258": {
+		"6256": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
-			"qualifiedName": "InventoryItem.created_at"
+			"qualifiedName": "__object.id"
 		},
-		"5259": {
+		"6257": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
-			"qualifiedName": "InventoryItem.updated_at"
+			"qualifiedName": "__object.sku"
 		},
-		"5260": {
+		"6258": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
-			"qualifiedName": "InventoryItem.deleted_at"
+			"qualifiedName": "__object.origin_country"
 		},
-		"5261": {
+		"6259": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
-			"qualifiedName": "InventoryItem.sku"
+			"qualifiedName": "__object.hs_code"
 		},
-		"5262": {
+		"6260": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
-			"qualifiedName": "InventoryItem.origin_country"
+			"qualifiedName": "__object.mid_code"
 		},
-		"5263": {
+		"6261": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
-			"qualifiedName": "InventoryItem.hs_code"
+			"qualifiedName": "__object.material"
 		},
-		"5264": {
+		"6262": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
-			"qualifiedName": "InventoryItem.mid_code"
+			"qualifiedName": "__object.weight"
 		},
-		"5265": {
+		"6263": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
-			"qualifiedName": "InventoryItem.material"
+			"qualifiedName": "__object.length"
 		},
-		"5266": {
+		"6264": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
-			"qualifiedName": "InventoryItem.weight"
+			"qualifiedName": "__object.height"
 		},
-		"5267": {
+		"6265": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
-			"qualifiedName": "InventoryItem.length"
+			"qualifiedName": "__object.width"
 		},
-		"5268": {
+		"6266": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
-			"qualifiedName": "InventoryItem.height"
+			"qualifiedName": "__object.requires_shipping"
 		},
-		"5269": {
+		"6267": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
-			"qualifiedName": "InventoryItem.width"
+			"qualifiedName": "__object.description"
 		},
-		"5270": {
+		"6268": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
-			"qualifiedName": "InventoryItem.requires_shipping"
+			"qualifiedName": "__object.title"
 		},
-		"5271": {
+		"6269": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
-			"qualifiedName": "InventoryItem.description"
+			"qualifiedName": "__object.thumbnail"
 		},
-		"5272": {
+		"6270": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
-			"qualifiedName": "InventoryItem.title"
+			"qualifiedName": "__object.metadata"
 		},
-		"5273": {
+		"6271": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
-			"qualifiedName": "InventoryItem.thumbnail"
+			"qualifiedName": "__object.location_levels"
 		},
-		"5274": {
+		"6272": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
-			"qualifiedName": "InventoryItem.metadata"
+			"qualifiedName": "__function"
 		},
-		"5275": {
+		"6273": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
-			"qualifiedName": "InventoryItem.location_levels"
+			"qualifiedName": "__function"
 		},
-		"5276": {
+		"6274": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-level.ts",
+			"qualifiedName": "__object"
+		},
+		"6275": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-level.ts",
+			"qualifiedName": "__object.id"
+		},
+		"6276": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-level.ts",
+			"qualifiedName": "__object.location_id"
+		},
+		"6277": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-level.ts",
+			"qualifiedName": "__object.stocked_quantity"
+		},
+		"6278": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-level.ts",
+			"qualifiedName": "__object.reserved_quantity"
+		},
+		"6279": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-level.ts",
+			"qualifiedName": "__object.incoming_quantity"
+		},
+		"6280": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-level.ts",
+			"qualifiedName": "__object.metadata"
+		},
+		"6281": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-level.ts",
+			"qualifiedName": "__object.inventory_item"
+		},
+		"6282": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-level.ts",
+			"qualifiedName": "__function"
+		},
+		"6283": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-level.ts",
+			"qualifiedName": "__function"
+		},
+		"6284": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-level.ts",
+			"qualifiedName": "__object.available_quantity"
+		},
+		"6285": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
-			"qualifiedName": "InventoryItem.reservation_items"
+			"qualifiedName": "__object.reservation_items"
 		},
-		"5277": {
+		"6286": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
-			"qualifiedName": "InventoryItem.reserved_quantity"
+			"qualifiedName": "__function"
 		},
-		"5278": {
+		"6287": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
-			"qualifiedName": "InventoryItem.stocked_quantity"
+			"qualifiedName": "__function"
 		},
-		"5279": {
+		"6288": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
+			"qualifiedName": "__object"
+		},
+		"6289": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
+			"qualifiedName": "__object.id"
+		},
+		"6290": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
+			"qualifiedName": "__object.line_item_id"
+		},
+		"6291": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
+			"qualifiedName": "__object.allow_backorder"
+		},
+		"6292": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
+			"qualifiedName": "__object.location_id"
+		},
+		"6293": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
+			"qualifiedName": "__object.quantity"
+		},
+		"6294": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
+			"qualifiedName": "__object.raw_quantity"
+		},
+		"6295": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
+			"qualifiedName": "__object.external_id"
+		},
+		"6296": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
+			"qualifiedName": "__object.description"
+		},
+		"6297": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
+			"qualifiedName": "__object.created_by"
+		},
+		"6298": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
+			"qualifiedName": "__object.metadata"
+		},
+		"6299": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
+			"qualifiedName": "__object.inventory_item"
+		},
+		"6300": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
+			"qualifiedName": "__function"
+		},
+		"6301": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
+			"qualifiedName": "__function"
+		},
+		"6302": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
-			"qualifiedName": "InventoryItem.beforeCreate"
+			"qualifiedName": "__object.reserved_quantity"
 		},
-		"5280": {
+		"6303": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
-			"qualifiedName": "InventoryItem.beforeCreate"
+			"qualifiedName": "__object.stocked_quantity"
 		},
-		"5281": {
-			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
-			"qualifiedName": "InventoryItem.onInit"
-		},
-		"5282": {
-			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
-			"qualifiedName": "InventoryItem.onInit"
-		},
-		"5283": {
-			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
-			"qualifiedName": "InventoryItem.[OptionalProps]"
-		},
-		"5284": {
+		"6304": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-level.ts",
 			"qualifiedName": "InventoryLevel"
 		},
-		"5287": {
+		"6305": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-level.ts",
-			"qualifiedName": "InventoryLevel.id"
+			"qualifiedName": "__object"
 		},
-		"5288": {
+		"6306": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-level.ts",
-			"qualifiedName": "InventoryLevel.created_at"
+			"qualifiedName": "__object.id"
 		},
-		"5289": {
+		"6307": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-level.ts",
-			"qualifiedName": "InventoryLevel.updated_at"
+			"qualifiedName": "__object.location_id"
 		},
-		"5290": {
+		"6308": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-level.ts",
-			"qualifiedName": "InventoryLevel.deleted_at"
+			"qualifiedName": "__object.stocked_quantity"
 		},
-		"5291": {
+		"6309": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-level.ts",
-			"qualifiedName": "InventoryLevel.inventory_item_id"
+			"qualifiedName": "__object.reserved_quantity"
 		},
-		"5292": {
+		"6310": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-level.ts",
-			"qualifiedName": "InventoryLevel.location_id"
+			"qualifiedName": "__object.incoming_quantity"
 		},
-		"5293": {
+		"6311": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-level.ts",
-			"qualifiedName": "InventoryLevel.stocked_quantity"
+			"qualifiedName": "__object.metadata"
 		},
-		"5294": {
+		"6312": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-level.ts",
-			"qualifiedName": "InventoryLevel.raw_stocked_quantity"
+			"qualifiedName": "__object.inventory_item"
 		},
-		"5295": {
+		"6313": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-level.ts",
-			"qualifiedName": "InventoryLevel.reserved_quantity"
+			"qualifiedName": "__function"
 		},
-		"5296": {
+		"6314": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-level.ts",
-			"qualifiedName": "InventoryLevel.raw_reserved_quantity"
+			"qualifiedName": "__function"
 		},
-		"5297": {
-			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-level.ts",
-			"qualifiedName": "InventoryLevel.incoming_quantity"
+		"6315": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object"
 		},
-		"5298": {
-			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-level.ts",
-			"qualifiedName": "InventoryLevel.raw_incoming_quantity"
+		"6316": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.id"
 		},
-		"5299": {
-			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-level.ts",
-			"qualifiedName": "InventoryLevel.metadata"
+		"6317": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.sku"
 		},
-		"5300": {
-			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-level.ts",
-			"qualifiedName": "InventoryLevel.inventory_item"
+		"6318": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.origin_country"
 		},
-		"5301": {
-			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-level.ts",
-			"qualifiedName": "InventoryLevel.available_quantity"
+		"6319": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.hs_code"
 		},
-		"5302": {
-			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-level.ts",
-			"qualifiedName": "InventoryLevel.beforeCreate"
+		"6320": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.mid_code"
 		},
-		"5303": {
-			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-level.ts",
-			"qualifiedName": "InventoryLevel.beforeCreate"
+		"6321": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.material"
 		},
-		"5304": {
-			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-level.ts",
-			"qualifiedName": "InventoryLevel.onInit"
+		"6322": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.weight"
 		},
-		"5305": {
-			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-level.ts",
-			"qualifiedName": "InventoryLevel.onInit"
+		"6323": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.length"
 		},
-		"5306": {
-			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-level.ts",
-			"qualifiedName": "InventoryLevel.onLoad"
+		"6324": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.height"
 		},
-		"5307": {
+		"6325": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.width"
+		},
+		"6326": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.requires_shipping"
+		},
+		"6327": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.description"
+		},
+		"6328": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.title"
+		},
+		"6329": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.thumbnail"
+		},
+		"6330": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.metadata"
+		},
+		"6331": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.location_levels"
+		},
+		"6332": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__function"
+		},
+		"6333": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__function"
+		},
+		"6334": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.reservation_items"
+		},
+		"6335": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__function"
+		},
+		"6336": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__function"
+		},
+		"6337": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.reserved_quantity"
+		},
+		"6338": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.stocked_quantity"
+		},
+		"6339": {
 			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-level.ts",
-			"qualifiedName": "InventoryLevel.onLoad"
+			"qualifiedName": "__object.available_quantity"
+		},
+		"6340": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
+			"qualifiedName": "ReservationItem"
+		},
+		"6341": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
+			"qualifiedName": "__object"
+		},
+		"6342": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
+			"qualifiedName": "__object.id"
+		},
+		"6343": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
+			"qualifiedName": "__object.line_item_id"
+		},
+		"6344": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
+			"qualifiedName": "__object.allow_backorder"
+		},
+		"6345": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
+			"qualifiedName": "__object.location_id"
+		},
+		"6346": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
+			"qualifiedName": "__object.quantity"
+		},
+		"6347": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
+			"qualifiedName": "__object.raw_quantity"
+		},
+		"6348": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
+			"qualifiedName": "__object.external_id"
+		},
+		"6349": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
+			"qualifiedName": "__object.description"
+		},
+		"6350": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
+			"qualifiedName": "__object.created_by"
+		},
+		"6351": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
+			"qualifiedName": "__object.metadata"
+		},
+		"6352": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
+			"qualifiedName": "__object.inventory_item"
+		},
+		"6353": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
+			"qualifiedName": "__function"
+		},
+		"6354": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/reservation-item.ts",
+			"qualifiedName": "__function"
+		},
+		"6355": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object"
+		},
+		"6356": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.id"
+		},
+		"6357": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.sku"
+		},
+		"6358": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.origin_country"
+		},
+		"6359": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.hs_code"
+		},
+		"6360": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.mid_code"
+		},
+		"6361": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.material"
+		},
+		"6362": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.weight"
+		},
+		"6363": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.length"
+		},
+		"6364": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.height"
+		},
+		"6365": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.width"
+		},
+		"6366": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.requires_shipping"
+		},
+		"6367": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.description"
+		},
+		"6368": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.title"
+		},
+		"6369": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.thumbnail"
+		},
+		"6370": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.metadata"
+		},
+		"6371": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.location_levels"
+		},
+		"6372": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__function"
+		},
+		"6373": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__function"
+		},
+		"6374": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.reservation_items"
+		},
+		"6375": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__function"
+		},
+		"6376": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__function"
+		},
+		"6377": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.reserved_quantity"
+		},
+		"6378": {
+			"sourceFileName": "../../../../packages/modules/inventory/src/models/inventory-item.ts",
+			"qualifiedName": "__object.stocked_quantity"
 		}
 	},
 	"files": {
@@ -1692,7 +1864,7 @@
 			"1": "../../../../packages/modules/inventory/src/models/index.ts"
 		},
 		"reflections": {
-			"1": 5231
+			"1": 6253
 		}
 	}
 }

@@ -15,6 +15,9 @@ export class Store {
     this.client = client
   }
 
+  /**
+   * @tags region
+   */
   public region = {
     /**
      * This method retrieves the paginated list of regions in the store. It sends a request to the
@@ -128,6 +131,9 @@ export class Store {
     },
   }
 
+  /**
+   * @tags product
+   */
   public collection = {
     /**
      * This method retrieves a paginated list of product collections. It sends a request to the
@@ -238,6 +244,9 @@ export class Store {
     },
   }
 
+  /**
+   * @tags product
+   */
   public category = {
     /**
      * This method retrieves a paginated list of product categories. It sends a request to the
@@ -348,6 +357,9 @@ export class Store {
     },
   }
 
+  /**
+   * @tags product
+   */
   public product = {
     /**
      * This method retrieves a list of products. It sends a request to the
@@ -401,7 +413,7 @@ export class Store {
      * Learn more about the `fields` property in the [API reference](https://docs.medusajs.com/api/store#select-fields-and-relations).
      */
     list: async (
-      query?: HttpTypes.StoreProductParams,
+      query?: HttpTypes.StoreProductListParams,
       headers?: ClientHeaders
     ) => {
       return this.client.fetch<HttpTypes.StoreProductListResponse>(
@@ -451,7 +463,7 @@ export class Store {
      */
     retrieve: async (
       id: string,
-      query?: SelectParams,
+      query?: HttpTypes.StoreProductParams,
       headers?: ClientHeaders
     ) => {
       return this.client.fetch<HttpTypes.StoreProductResponse>(
@@ -466,6 +478,8 @@ export class Store {
 
   /**
    * Related guides: [How to implement carts in the storefront](https://docs.medusajs.com/resources/storefront-development/cart).
+   * 
+   * @tags cart
    */
   public cart = {
     /**
@@ -771,8 +785,40 @@ export class Store {
         }
       )
     },
+
+    /**
+     * This method updates the customer of a cart.
+     *
+     * @param id - The cart's ID.
+     * @param query - Configure the fields to retrieve in the cart.
+     * @param headers - Headers to pass in the request.
+     * @returns The updated cart.
+     *
+     * @example
+     * sdk.store.cart.transferCart("cart_123")
+     * .then(({ cart }) => {
+     *   console.log(cart)
+     * })
+     */
+    transferCart: async (
+      id: string,
+      query?: SelectParams,
+      headers?: ClientHeaders
+    ) => {
+      return this.client.fetch<HttpTypes.StoreCartResponse>(
+        `/store/carts/${id}/customer`,
+        {
+          method: "POST",
+          headers,
+          query,
+        }
+      )
+    },
   }
 
+  /**
+   * @tags fulfillment
+   */
   public fulfillment = {
     /**
      * This method retrieves the list of shipping options for a cart. It sends a request to
@@ -805,8 +851,28 @@ export class Store {
         }
       )
     },
+
+    calculate: async (
+      id: string,
+      body: HttpTypes.StoreCalculateShippingOptionPrice,
+      query?: HttpTypes.SelectParams,
+      headers?: ClientHeaders
+    ) => {
+      return await this.client.fetch<HttpTypes.StoreShippingOptionResponse>(
+        `/store/shipping-options/${id}/calculate`,
+        {
+          method: "POST",
+          headers,
+          body,
+          query,
+        }
+      )
+    },
   }
 
+  /**
+   * @tags payment
+   */
   public payment = {
     /**
      * This method retrieves the payment providers available in a region, which is useful during checkout.
@@ -943,6 +1009,9 @@ export class Store {
     },
   }
 
+  /**
+   * @tags order
+   */
   public order = {
     /**
      * This method retrieves a paginated list of orders matching the specified filters. It
@@ -1048,8 +1117,167 @@ export class Store {
         }
       )
     },
+
+    /**
+     * This method requests a order transfer from a guest account to the current, logged in customer account.
+     *
+     * Customer requesting the transfer must be logged in.
+     *
+     * @param body - The transfer's details.
+     * @param query - Configure the fields to retrieve in the order.
+     * @param headers - Headers to pass in the request.
+     * @returns The order details.
+     *
+     * @example
+     * sdk.store.order.requestTransfer(
+     *   "order_123",
+     *   {
+     *     description: "I want to transfer this order to my friend."
+     *   },
+     *   {},
+     *   {
+     *     Authorization: `Bearer ${token}`
+     *   }
+     * )
+     * .then(({ order }) => {
+     *   console.log(order)
+     * })
+     */
+    requestTransfer: async (
+      id: string,
+      body: HttpTypes.StoreRequestOrderTransfer,
+      query?: SelectParams,
+      headers?: ClientHeaders
+    ) => {
+      return this.client.fetch<HttpTypes.StoreOrderResponse>(
+        `/store/orders/${id}/transfer/request`,
+        {
+          method: "POST",
+          headers,
+          body,
+          query,
+        }
+      )
+    },
+    /**
+     * This method cancels an order transfer request.
+     *
+     * Customer requesting the transfer must be logged in.
+     *
+     * @param id - The order's ID.
+     * @param query - Configure the fields to retrieve in the order.
+     * @param headers - Headers to pass in the request.
+     * @returns The order details.
+     *
+     * @example
+     * sdk.store.order.cancelTransfer(
+     *   "order_123",
+     *   {},
+     *   {
+     *     Authorization: `Bearer ${token}`
+     *   }
+     * )
+     * .then(({ order }) => {
+     *   console.log(order)
+     * })
+     */
+    cancelTransfer: async (
+      id: string,
+      query?: SelectParams,
+      headers?: ClientHeaders
+    ) => {
+      return this.client.fetch<HttpTypes.StoreOrderResponse>(
+        `/store/orders/${id}/transfer/cancel`,
+        {
+          method: "POST",
+          headers,
+          query,
+        }
+      )
+    },
+    /**
+     * The method called for the original owner to accept the order transfer to a new owner.
+     *
+     * @param id - The order's ID.
+     * @param body - The payload containing the transfer token.
+     * @param query - Configure the fields to retrieve in the order.
+     * @param headers - Headers to pass in the request.
+     * @returns The order details.
+     *
+     * @example
+     * sdk.store.order.acceptTransfer(
+     *   "order_123",
+     *   {
+     *     token: "transfer_token"
+     *   },
+     *   {
+     *     Authorization: `Bearer ${token}`
+     *   }
+     * )
+     * .then(({ order }) => {
+     *   console.log(order)
+     * })
+     */
+    acceptTransfer: async (
+      id: string,
+      body: HttpTypes.StoreAcceptOrderTransfer,
+      query?: SelectParams,
+      headers?: ClientHeaders
+    ) => {
+      return this.client.fetch<HttpTypes.StoreOrderResponse>(
+        `/store/orders/${id}/transfer/accept`,
+        {
+          method: "POST",
+          headers,
+          body,
+          query,
+        }
+      )
+    },
+    /**
+     * The method called for the original owner to decline the order transfer to a new owner.
+     *
+     * @param id - The order's ID.
+     * @param body - The payload containing the transfer token.
+     * @param query - Configure the fields to retrieve in the order.
+     * @param headers - Headers to pass in the request.
+     * @returns The order details.
+     *
+     * @example
+     * sdk.store.order.declineTransfer(
+     *   "order_123",
+     *   {
+     *     token: "transfer_token"
+     *   },
+     *   {
+     *     Authorization: `Bearer ${token}`
+     *   }
+     * )
+     * .then(({ order }) => {
+     *   console.log(order)
+     * })
+     */
+    declineTransfer: async (
+      id: string,
+      body: HttpTypes.StoreDeclineOrderTransfer,
+      query?: SelectParams,
+      headers?: ClientHeaders
+    ) => {
+      return this.client.fetch<HttpTypes.StoreOrderResponse>(
+        `/store/orders/${id}/transfer/decline`,
+        {
+          method: "POST",
+          headers,
+          body,
+          query,
+        }
+      )
+    },
   }
 
+  /**
+   * @tags customer
+   */
   public customer = {
     /**
      * This method registers a customer. It sends a request to the [Register Customer](https://docs.medusajs.com/api/store#customers_postcustomers)

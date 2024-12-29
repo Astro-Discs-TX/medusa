@@ -1,5 +1,5 @@
 {
-	"id": 13438,
+	"id": 15796,
 	"name": "store-models",
 	"variant": "project",
 	"kind": 1,
@@ -18,702 +18,665 @@
 	},
 	"children": [
 		{
-			"id": 13457,
+			"id": 15817,
 			"name": "StoreCurrency",
 			"variant": "declaration",
-			"kind": 128,
-			"flags": {},
-			"children": [
-				{
-					"id": 13458,
-					"name": "constructor",
-					"variant": "declaration",
-					"kind": 512,
-					"flags": {},
-					"signatures": [
-						{
-							"id": 13459,
-							"name": "new StoreCurrency",
-							"variant": "signature",
-							"kind": 16384,
-							"flags": {},
-							"type": {
-								"type": "reference",
-								"target": 13457,
-								"name": "StoreCurrency",
-								"package": "@medusajs/store",
-								"qualifiedName": "default"
-							}
-						}
-					]
+			"kind": 32,
+			"flags": {
+				"isConst": true
+			},
+			"type": {
+				"type": "reference",
+				"target": {
+					"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
+					"qualifiedName": "DmlEntity"
 				},
-				{
-					"id": 13460,
-					"name": "id",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "intrinsic",
-						"name": "string"
-					}
-				},
-				{
-					"id": 13461,
-					"name": "currency_code",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "intrinsic",
-						"name": "string"
-					}
-				},
-				{
-					"id": 13462,
-					"name": "is_default",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {
-						"isOptional": true
-					},
-					"type": {
-						"type": "intrinsic",
-						"name": "boolean"
-					}
-				},
-				{
-					"id": 13463,
-					"name": "store_id",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "union",
-						"types": [
-							{
-								"type": "literal",
-								"value": null
-							},
-							{
-								"type": "intrinsic",
-								"name": "string"
-							}
-						]
-					}
-				},
-				{
-					"id": 13464,
-					"name": "store",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "union",
-						"types": [
-							{
-								"type": "literal",
-								"value": null
-							},
-							{
-								"type": "reference",
-								"target": 13439,
-								"name": "Store",
-								"package": "@medusajs/store",
-								"qualifiedName": "default"
-							}
-						]
-					}
-				},
-				{
-					"id": 13465,
-					"name": "created_at",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
+				"typeArguments": [
+					{
 						"type": "reference",
 						"target": {
-							"sourceFileName": "../../node_modules/typescript/lib/lib.es5.d.ts",
-							"qualifiedName": "Date"
-						},
-						"name": "Date",
-						"package": "typescript"
-					}
-				},
-				{
-					"id": 13466,
-					"name": "updated_at",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "reference",
-						"target": {
-							"sourceFileName": "../../node_modules/typescript/lib/lib.es5.d.ts",
-							"qualifiedName": "Date"
-						},
-						"name": "Date",
-						"package": "typescript"
-					}
-				},
-				{
-					"id": 13467,
-					"name": "deleted_at",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "union",
-						"types": [
-							{
-								"type": "literal",
-								"value": null
-							},
-							{
-								"type": "reference",
-								"target": {
-									"sourceFileName": "../../node_modules/typescript/lib/lib.es5.d.ts",
-									"qualifiedName": "Date"
-								},
-								"name": "Date",
-								"package": "typescript"
-							}
-						]
-					},
-					"defaultValue": "null"
-				},
-				{
-					"id": 13468,
-					"name": "onCreate",
-					"variant": "declaration",
-					"kind": 2048,
-					"flags": {},
-					"signatures": [
-						{
-							"id": 13469,
-							"name": "onCreate",
-							"variant": "signature",
-							"kind": 4096,
-							"flags": {},
-							"type": {
-								"type": "intrinsic",
-								"name": "void"
-							}
-						}
-					]
-				},
-				{
-					"id": 13470,
-					"name": "onInit",
-					"variant": "declaration",
-					"kind": 2048,
-					"flags": {},
-					"signatures": [
-						{
-							"id": 13471,
-							"name": "onInit",
-							"variant": "signature",
-							"kind": 4096,
-							"flags": {},
-							"type": {
-								"type": "intrinsic",
-								"name": "void"
-							}
-						}
-					]
-				}
-			],
-			"groups": [
-				{
-					"title": "Constructors",
-					"children": [
-						13458
-					]
-				},
-				{
-					"title": "Properties",
-					"children": [
-						13460,
-						13461,
-						13462,
-						13463,
-						13464,
-						13465,
-						13466,
-						13467
-					]
-				},
-				{
-					"title": "Methods",
-					"children": [
-						13468,
-						13470
-					]
-				}
-			]
-		},
-		{
-			"id": 13439,
-			"name": "Store",
-			"variant": "declaration",
-			"kind": 128,
-			"flags": {},
-			"children": [
-				{
-					"id": 13440,
-					"name": "constructor",
-					"variant": "declaration",
-					"kind": 512,
-					"flags": {},
-					"signatures": [
-						{
-							"id": 13441,
-							"name": "new Store",
-							"variant": "signature",
-							"kind": 16384,
-							"flags": {},
-							"type": {
-								"type": "reference",
-								"target": 13439,
-								"name": "Store",
-								"package": "@medusajs/store",
-								"qualifiedName": "default"
-							}
-						}
-					]
-				},
-				{
-					"id": 13456,
-					"name": "[OptionalProps]",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {
-						"isOptional": true
-					},
-					"type": {
-						"type": "reference",
-						"target": {
-							"sourceFileName": "../../../../packages/core/types/src/dal/entity.ts",
-							"qualifiedName": "SoftDeletableModelDateColumns"
-						},
-						"name": "SoftDeletableModelDateColumns",
-						"package": "@medusajs/types"
-					}
-				},
-				{
-					"id": 13442,
-					"name": "id",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "intrinsic",
-						"name": "string"
-					}
-				},
-				{
-					"id": 13443,
-					"name": "name",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "intrinsic",
-						"name": "string"
-					}
-				},
-				{
-					"id": 13444,
-					"name": "supported_currencies",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "reference",
-						"target": {
-							"sourceFileName": "../../../../node_modules/@mikro-orm/core/entity/Collection.d.ts",
-							"qualifiedName": "Collection"
+							"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
+							"qualifiedName": "DMLEntitySchemaBuilder"
 						},
 						"typeArguments": [
 							{
-								"type": "reference",
-								"target": 13457,
-								"name": "StoreCurrency",
-								"package": "@medusajs/store",
-								"qualifiedName": "default"
-							},
-							{
-								"type": "intrinsic",
-								"name": "object"
+								"type": "reflection",
+								"declaration": {
+									"id": 15818,
+									"name": "__type",
+									"variant": "declaration",
+									"kind": 65536,
+									"flags": {},
+									"children": [
+										{
+											"id": 15819,
+											"name": "id",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The ID of the currency."
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/primary-key.ts",
+													"qualifiedName": "PrimaryKeyModifier"
+												},
+												"typeArguments": [
+													{
+														"type": "reference",
+														"target": {
+															"sourceFileName": "../../../../packages/core/utils/src/dml/properties/id.ts",
+															"qualifiedName": "IdProperty"
+														},
+														"name": "IdProperty",
+														"package": "@medusajs/utils"
+													}
+												],
+												"name": "PrimaryKeyModifier",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 15820,
+											"name": "currency_code",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The ISO 3 currency code. For example, `usd`."
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/text.ts",
+													"qualifiedName": "TextProperty"
+												},
+												"name": "TextProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 15821,
+											"name": "is_default",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "Whether the currency is the default in the store."
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/boolean.ts",
+													"qualifiedName": "BooleanProperty"
+												},
+												"name": "BooleanProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 15822,
+											"name": "store",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The store this currency belongs to."
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/relations/belongs-to.ts",
+													"qualifiedName": "BelongsTo"
+												},
+												"typeArguments": [
+													{
+														"type": "reference",
+														"target": 15797,
+														"name": "Store"
+													}
+												],
+												"name": "BelongsTo",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										}
+									],
+									"groups": [
+										{
+											"title": "Properties",
+											"children": [
+												15819,
+												15820,
+												15821,
+												15822
+											]
+										}
+									]
+								}
 							}
 						],
-						"name": "Collection",
-						"package": "@mikro-orm/core"
+						"name": "DMLEntitySchemaBuilder",
+						"package": "@medusajs/utils"
 					},
-					"defaultValue": "..."
+					{
+						"type": "literal",
+						"value": "StoreCurrency"
+					}
+				],
+				"name": "DmlEntity",
+				"package": "@medusajs/utils"
+			},
+			"defaultValue": "..."
+		},
+		{
+			"id": 15797,
+			"name": "Store",
+			"variant": "declaration",
+			"kind": 32,
+			"flags": {
+				"isConst": true
+			},
+			"type": {
+				"type": "reference",
+				"target": {
+					"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
+					"qualifiedName": "DmlEntity"
 				},
-				{
-					"id": 13445,
-					"name": "default_sales_channel_id",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "union",
-						"types": [
-							{
-								"type": "literal",
-								"value": null
-							},
-							{
-								"type": "intrinsic",
-								"name": "string"
-							}
-						]
-					},
-					"defaultValue": "null"
-				},
-				{
-					"id": 13446,
-					"name": "default_region_id",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "union",
-						"types": [
-							{
-								"type": "literal",
-								"value": null
-							},
-							{
-								"type": "intrinsic",
-								"name": "string"
-							}
-						]
-					},
-					"defaultValue": "null"
-				},
-				{
-					"id": 13447,
-					"name": "default_location_id",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "union",
-						"types": [
-							{
-								"type": "literal",
-								"value": null
-							},
-							{
-								"type": "intrinsic",
-								"name": "string"
-							}
-						]
-					},
-					"defaultValue": "null"
-				},
-				{
-					"id": 13448,
-					"name": "metadata",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "union",
-						"types": [
-							{
-								"type": "literal",
-								"value": null
-							},
-							{
-								"type": "reference",
-								"target": {
-									"sourceFileName": "../../node_modules/typescript/lib/lib.es5.d.ts",
-									"qualifiedName": "Record"
-								},
-								"typeArguments": [
-									{
-										"type": "intrinsic",
-										"name": "string"
-									},
-									{
-										"type": "intrinsic",
-										"name": "unknown"
-									}
-								],
-								"name": "Record",
-								"package": "typescript"
-							}
-						]
-					},
-					"defaultValue": "null"
-				},
-				{
-					"id": 13449,
-					"name": "created_at",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
+				"typeArguments": [
+					{
 						"type": "reference",
 						"target": {
-							"sourceFileName": "../../node_modules/typescript/lib/lib.es5.d.ts",
-							"qualifiedName": "Date"
+							"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
+							"qualifiedName": "DMLEntitySchemaBuilder"
 						},
-						"name": "Date",
-						"package": "typescript"
-					}
-				},
-				{
-					"id": 13450,
-					"name": "updated_at",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "reference",
-						"target": {
-							"sourceFileName": "../../node_modules/typescript/lib/lib.es5.d.ts",
-							"qualifiedName": "Date"
-						},
-						"name": "Date",
-						"package": "typescript"
-					}
-				},
-				{
-					"id": 13451,
-					"name": "deleted_at",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {},
-					"type": {
-						"type": "union",
-						"types": [
+						"typeArguments": [
 							{
-								"type": "literal",
-								"value": null
-							},
-							{
-								"type": "reference",
-								"target": {
-									"sourceFileName": "../../node_modules/typescript/lib/lib.es5.d.ts",
-									"qualifiedName": "Date"
-								},
-								"name": "Date",
-								"package": "typescript"
+								"type": "reflection",
+								"declaration": {
+									"id": 15798,
+									"name": "__type",
+									"variant": "declaration",
+									"kind": 65536,
+									"flags": {},
+									"children": [
+										{
+											"id": 15799,
+											"name": "id",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The ID of the store."
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/primary-key.ts",
+													"qualifiedName": "PrimaryKeyModifier"
+												},
+												"typeArguments": [
+													{
+														"type": "reference",
+														"target": {
+															"sourceFileName": "../../../../packages/core/utils/src/dml/properties/id.ts",
+															"qualifiedName": "IdProperty"
+														},
+														"name": "IdProperty",
+														"package": "@medusajs/utils"
+													}
+												],
+												"name": "PrimaryKeyModifier",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 15800,
+											"name": "name",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The name of the store"
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/text.ts",
+													"qualifiedName": "TextProperty"
+												},
+												"name": "TextProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 15801,
+											"name": "default_sales_channel_id",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The ID of the store's default sales channel."
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/text.ts",
+													"qualifiedName": "TextProperty"
+												},
+												"name": "TextProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 15802,
+											"name": "default_region_id",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The ID of the store's default region."
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/text.ts",
+													"qualifiedName": "TextProperty"
+												},
+												"name": "TextProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 15803,
+											"name": "default_location_id",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The ID of the store's default stock location."
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/text.ts",
+													"qualifiedName": "TextProperty"
+												},
+												"name": "TextProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 15804,
+											"name": "metadata",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "Holds custom data in key-value pairs."
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/json.ts",
+													"qualifiedName": "JSONProperty"
+												},
+												"name": "JSONProperty",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 15805,
+											"name": "supported_currencies",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The associated supported_currencies."
+													}
+												],
+												"modifierTags": [
+													"@expandable"
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/utils/src/dml/relations/has-many.ts",
+													"qualifiedName": "HasMany"
+												},
+												"typeArguments": [
+													{
+														"type": "reference",
+														"target": 15817,
+														"name": "StoreCurrency"
+													}
+												],
+												"name": "HasMany",
+												"package": "@medusajs/utils"
+											},
+											"defaultValue": "..."
+										}
+									],
+									"groups": [
+										{
+											"title": "Properties",
+											"children": [
+												15799,
+												15800,
+												15801,
+												15802,
+												15803,
+												15804,
+												15805
+											]
+										}
+									]
+								}
 							}
-						]
+						],
+						"name": "DMLEntitySchemaBuilder",
+						"package": "@medusajs/utils"
 					},
-					"defaultValue": "null"
-				},
-				{
-					"id": 13452,
-					"name": "onCreate",
-					"variant": "declaration",
-					"kind": 2048,
-					"flags": {},
-					"signatures": [
-						{
-							"id": 13453,
-							"name": "onCreate",
-							"variant": "signature",
-							"kind": 4096,
-							"flags": {},
-							"type": {
-								"type": "intrinsic",
-								"name": "void"
-							}
-						}
-					]
-				},
-				{
-					"id": 13454,
-					"name": "onInit",
-					"variant": "declaration",
-					"kind": 2048,
-					"flags": {},
-					"signatures": [
-						{
-							"id": 13455,
-							"name": "onInit",
-							"variant": "signature",
-							"kind": 4096,
-							"flags": {},
-							"type": {
-								"type": "intrinsic",
-								"name": "void"
-							}
-						}
-					]
-				}
-			],
-			"groups": [
-				{
-					"title": "Constructors",
-					"children": [
-						13440
-					]
-				},
-				{
-					"title": "Properties",
-					"children": [
-						13456,
-						13442,
-						13443,
-						13444,
-						13445,
-						13446,
-						13447,
-						13448,
-						13449,
-						13450,
-						13451
-					]
-				},
-				{
-					"title": "Methods",
-					"children": [
-						13452,
-						13454
-					]
-				}
-			]
+					{
+						"type": "literal",
+						"value": "Store"
+					}
+				],
+				"name": "DmlEntity",
+				"package": "@medusajs/utils"
+			},
+			"defaultValue": "..."
 		}
 	],
 	"groups": [
 		{
-			"title": "Classes",
+			"title": "Variables",
 			"children": [
-				13457,
-				13439
+				15817,
+				15797
 			]
 		}
 	],
 	"packageName": "@medusajs/store",
 	"symbolIdMap": {
-		"13438": {
+		"15796": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/index.ts",
 			"qualifiedName": ""
 		},
-		"13439": {
+		"15797": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
-			"qualifiedName": "default"
+			"qualifiedName": "Store"
 		},
-		"13442": {
+		"15798": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
-			"qualifiedName": "default.id"
+			"qualifiedName": "__object"
 		},
-		"13443": {
+		"15799": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
-			"qualifiedName": "default.name"
+			"qualifiedName": "__object.id"
 		},
-		"13444": {
+		"15800": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
-			"qualifiedName": "default.supported_currencies"
+			"qualifiedName": "__object.name"
 		},
-		"13445": {
+		"15801": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
-			"qualifiedName": "default.default_sales_channel_id"
+			"qualifiedName": "__object.default_sales_channel_id"
 		},
-		"13446": {
+		"15802": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
-			"qualifiedName": "default.default_region_id"
+			"qualifiedName": "__object.default_region_id"
 		},
-		"13447": {
+		"15803": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
-			"qualifiedName": "default.default_location_id"
+			"qualifiedName": "__object.default_location_id"
 		},
-		"13448": {
+		"15804": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
-			"qualifiedName": "default.metadata"
+			"qualifiedName": "__object.metadata"
 		},
-		"13449": {
+		"15805": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
-			"qualifiedName": "default.created_at"
+			"qualifiedName": "__object.supported_currencies"
 		},
-		"13450": {
+		"15806": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
-			"qualifiedName": "default.updated_at"
+			"qualifiedName": "__function"
 		},
-		"13451": {
+		"15807": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
-			"qualifiedName": "default.deleted_at"
+			"qualifiedName": "__function"
 		},
-		"13452": {
-			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
-			"qualifiedName": "default.onCreate"
-		},
-		"13453": {
-			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
-			"qualifiedName": "default.onCreate"
-		},
-		"13454": {
-			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
-			"qualifiedName": "default.onInit"
-		},
-		"13455": {
-			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
-			"qualifiedName": "default.onInit"
-		},
-		"13456": {
-			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
-			"qualifiedName": "default.[OptionalProps]"
-		},
-		"13457": {
+		"15808": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
-			"qualifiedName": "default"
+			"qualifiedName": "__object"
 		},
-		"13460": {
+		"15809": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
-			"qualifiedName": "default.id"
+			"qualifiedName": "__object.id"
 		},
-		"13461": {
+		"15810": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
-			"qualifiedName": "default.currency_code"
+			"qualifiedName": "__object.currency_code"
 		},
-		"13462": {
+		"15811": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
-			"qualifiedName": "default.is_default"
+			"qualifiedName": "__object.is_default"
 		},
-		"13463": {
+		"15812": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
-			"qualifiedName": "default.store_id"
+			"qualifiedName": "__object.store"
 		},
-		"13464": {
+		"15813": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
-			"qualifiedName": "default.store"
+			"qualifiedName": "__function"
 		},
-		"13465": {
+		"15814": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
-			"qualifiedName": "default.created_at"
+			"qualifiedName": "__function"
 		},
-		"13466": {
+		"15815": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
-			"qualifiedName": "default.updated_at"
+			"qualifiedName": "__function"
 		},
-		"13467": {
+		"15816": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
-			"qualifiedName": "default.deleted_at"
+			"qualifiedName": "__function"
 		},
-		"13468": {
+		"15817": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
-			"qualifiedName": "default.onCreate"
+			"qualifiedName": "StoreCurrency"
 		},
-		"13469": {
+		"15818": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
-			"qualifiedName": "default.onCreate"
+			"qualifiedName": "__object"
 		},
-		"13470": {
+		"15819": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
-			"qualifiedName": "default.onInit"
+			"qualifiedName": "__object.id"
 		},
-		"13471": {
+		"15820": {
 			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
-			"qualifiedName": "default.onInit"
+			"qualifiedName": "__object.currency_code"
+		},
+		"15821": {
+			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
+			"qualifiedName": "__object.is_default"
+		},
+		"15822": {
+			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
+			"qualifiedName": "__object.store"
+		},
+		"15823": {
+			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
+			"qualifiedName": "__function"
+		},
+		"15824": {
+			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
+			"qualifiedName": "__function"
+		},
+		"15825": {
+			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
+			"qualifiedName": "__object"
+		},
+		"15826": {
+			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
+			"qualifiedName": "__object.id"
+		},
+		"15827": {
+			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
+			"qualifiedName": "__object.name"
+		},
+		"15828": {
+			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
+			"qualifiedName": "__object.default_sales_channel_id"
+		},
+		"15829": {
+			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
+			"qualifiedName": "__object.default_region_id"
+		},
+		"15830": {
+			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
+			"qualifiedName": "__object.default_location_id"
+		},
+		"15831": {
+			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
+			"qualifiedName": "__object.metadata"
+		},
+		"15832": {
+			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
+			"qualifiedName": "__object.supported_currencies"
+		},
+		"15833": {
+			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
+			"qualifiedName": "__function"
+		},
+		"15834": {
+			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
+			"qualifiedName": "__function"
+		},
+		"15835": {
+			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
+			"qualifiedName": "__function"
+		},
+		"15836": {
+			"sourceFileName": "../../../../packages/modules/store/src/models/currency.ts",
+			"qualifiedName": "__function"
+		},
+		"15837": {
+			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
+			"qualifiedName": "__object"
+		},
+		"15838": {
+			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
+			"qualifiedName": "__object.id"
+		},
+		"15839": {
+			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
+			"qualifiedName": "__object.name"
+		},
+		"15840": {
+			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
+			"qualifiedName": "__object.default_sales_channel_id"
+		},
+		"15841": {
+			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
+			"qualifiedName": "__object.default_region_id"
+		},
+		"15842": {
+			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
+			"qualifiedName": "__object.default_location_id"
+		},
+		"15843": {
+			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
+			"qualifiedName": "__object.metadata"
+		},
+		"15844": {
+			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
+			"qualifiedName": "__object.supported_currencies"
+		},
+		"15845": {
+			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
+			"qualifiedName": "__function"
+		},
+		"15846": {
+			"sourceFileName": "../../../../packages/modules/store/src/models/store.ts",
+			"qualifiedName": "__function"
 		}
 	},
 	"files": {
@@ -721,7 +684,7 @@
 			"1": "../../../../packages/modules/store/src/models/index.ts"
 		},
 		"reflections": {
-			"1": 13438
+			"1": 15796
 		}
 	}
 }

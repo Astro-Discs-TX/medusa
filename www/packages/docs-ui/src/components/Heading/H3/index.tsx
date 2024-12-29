@@ -1,34 +1,20 @@
 "use client"
 
 import clsx from "clsx"
-import React, { useMemo } from "react"
+import React from "react"
 import { CopyButton, Link } from "@/components"
-import { useIsBrowser } from "../../../providers"
+import { useHeadingUrl } from "../../.."
 
 type H3Props = React.HTMLAttributes<HTMLHeadingElement> & {
   id?: string
 }
 
 export const H3 = ({ className, children, ...props }: H3Props) => {
-  const { isBrowser } = useIsBrowser()
-  const copyText = useMemo(() => {
-    const url = `#${props.id}`
-    if (!isBrowser) {
-      return url
-    }
-
-    const hashIndex = window.location.href.indexOf("#")
-    return (
-      window.location.href.substring(
-        0,
-        hashIndex !== -1 ? hashIndex : window.location.href.length
-      ) + url
-    )
-  }, [props.id, isBrowser])
+  const copyText = useHeadingUrl({ id: props.id || "" })
   return (
     <h3
       className={clsx(
-        "h3-docs [&_code]:!h3-docs [&_code]:!font-mono mb-docs_0.5 mt-docs_3 text-medusa-fg-base",
+        "h3-docs [&_code]:!h3-docs [&_code]:!font-mono my-docs_1 text-medusa-fg-base",
         props.id && "group/h3 scroll-m-56",
         className
       )}

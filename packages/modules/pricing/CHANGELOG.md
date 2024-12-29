@@ -1,5 +1,31 @@
 # @medusajs/pricing
 
+## 2.1.3
+
+## 2.1.2
+
+### Patch Changes
+
+- [#10579](https://github.com/medusajs/medusa/pull/10579) [`6367bccde88158d524dfa01e5a8123ffa3461c10`](https://github.com/medusajs/medusa/commit/6367bccde88158d524dfa01e5a8123ffa3461c10) Thanks [@riqwan](https://github.com/riqwan)! - feat(medusa, pricing): Cart workflows handle pricing context accurately
+
+## 2.1.1
+
+## 2.1.0
+
+### Patch Changes
+
+- [#10350](https://github.com/medusajs/medusa/pull/10350) [`324b4ab438662f44de495ffe4d9137677a032a00`](https://github.com/medusajs/medusa/commit/324b4ab438662f44de495ffe4d9137677a032a00) Thanks [@riqwan](https://github.com/riqwan)! - feat(pricing, types): add price rule operators to price calculations
+
+## 2.0.7
+
+## 2.0.6
+
+## 2.0.5
+
+### Patch Changes
+
+- [#10119](https://github.com/medusajs/medusa/pull/10119) [`2822972e04f12d2ca9378dd09529ab6ca308a286`](https://github.com/medusajs/medusa/commit/2822972e04f12d2ca9378dd09529ab6ca308a286) Thanks [@adrien2p](https://github.com/adrien2p)! - Fix/mikro orm cli wrapper
+
 ## 2.0.4
 
 ## 2.0.3

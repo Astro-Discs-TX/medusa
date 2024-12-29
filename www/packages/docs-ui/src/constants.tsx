@@ -1,8 +1,8 @@
 import { OptionType } from "@/hooks"
 import { NavigationItem } from "types"
 
-export const GITHUB_ISSUES_PREFIX = `https://github.com/medusajs/medusa/issues/new?assignees=&labels=type%3A+docs&template=docs.yml`
-export const GITHUB_UI_ISSUES_PREFIX = `https://github.com/medusajs/ui/issues/new?labels=documentation`
+export const GITHUB_ISSUES_LINK =
+  "https://github.com/medusajs/medusa/issues/new/choose"
 
 export const navDropdownItems: NavigationItem[] = [
   {
@@ -87,6 +87,11 @@ export const navDropdownItems: NavigationItem[] = [
         link: "/resources/nextjs-starter",
       },
       {
+        type: "link",
+        title: "create-medusa-app",
+        link: "/resources/create-medusa-app",
+      },
+      {
         type: "divider",
       },
       {
@@ -102,33 +107,43 @@ export const navDropdownItems: NavigationItem[] = [
     children: [
       {
         type: "link",
-        title: "API Routes",
-        link: "/learn/basics/api-routes",
+        title: "Modules",
+        link: "/learn/fundamentals/modules",
       },
       {
         type: "link",
-        title: "Modules",
-        link: "/learn/basics/modules",
+        title: "API Routes",
+        link: "/learn/fundamentals/api-routes",
+      },
+      {
+        type: "link",
+        title: "Workflows",
+        link: "/learn/fundamentals/workflows",
+      },
+      {
+        type: "link",
+        title: "Data Models",
+        link: "/learn/fundamentals/data-models",
       },
       {
         type: "link",
         title: "Subscribers",
-        link: "/learn/basics/events-and-subscribers",
+        link: "/learn/fundamentals/events-and-subscribers",
       },
       {
         type: "link",
         title: "Scheduled Jobs",
-        link: "/learn/basics/scheduled-jobs",
+        link: "/learn/fundamentals/scheduled-jobs",
       },
       {
         type: "link",
         title: "Loaders",
-        link: "/learn/basics/loaders",
+        link: "/learn/fundamentals/modules/loaders",
       },
       {
         type: "link",
         title: "Admin Customizations",
-        link: "/learn/basics/admin-customizations",
+        link: "/learn/fundamentals/admin",
       },
       {
         type: "divider",
@@ -136,22 +151,12 @@ export const navDropdownItems: NavigationItem[] = [
       {
         type: "link",
         title: "Links",
-        link: "/learn/advanced-development/module-links",
+        link: "/learn/fundamentals/module-links",
       },
       {
         type: "link",
         title: "Query",
-        link: "/learn/advanced-development/module-links/query",
-      },
-      {
-        type: "link",
-        title: "Data Models",
-        link: "/learn/advanced-development/data-models",
-      },
-      {
-        type: "link",
-        title: "Workflows",
-        link: "/learn/basics/workflows",
+        link: "/learn/fundamentals/module-links/query",
       },
     ],
   },
@@ -174,12 +179,12 @@ export const navDropdownItems: NavigationItem[] = [
       },
       {
         type: "link",
-        title: "Workflows",
+        title: "Core Workflows",
         link: "/resources/medusa-workflows-reference",
       },
       {
         type: "link",
-        title: "Data Model API",
+        title: "Data Model Language",
         link: "/resources/references/data-model",
       },
       {

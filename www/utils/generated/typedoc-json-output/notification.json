@@ -1,12 +1,12 @@
 {
-	"id": 37541,
+	"id": 41489,
 	"name": "notification",
 	"variant": "project",
 	"kind": 1,
 	"flags": {},
 	"children": [
 		{
-			"id": 37542,
+			"id": 41490,
 			"name": "AbstractNotificationProviderService",
 			"variant": "declaration",
 			"kind": 128,
@@ -25,7 +25,7 @@
 			},
 			"children": [
 				{
-					"id": 37543,
+					"id": 41491,
 					"name": "validateOptions",
 					"variant": "declaration",
 					"kind": 2048,
@@ -34,7 +34,7 @@
 					},
 					"signatures": [
 						{
-							"id": 37544,
+							"id": 41492,
 							"name": "validateOptions",
 							"variant": "signature",
 							"kind": 4096,
@@ -68,7 +68,7 @@
 							},
 							"parameters": [
 								{
-									"id": 37545,
+									"id": 41493,
 									"name": "options",
 									"variant": "param",
 									"kind": 32768,
@@ -110,21 +110,21 @@
 					]
 				},
 				{
-					"id": 37546,
+					"id": 41494,
 					"name": "constructor",
 					"variant": "declaration",
 					"kind": 512,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 37547,
-							"name": "new AbstractNotificationProviderService",
+							"id": 41495,
+							"name": "AbstractNotificationProviderService",
 							"variant": "signature",
 							"kind": 16384,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 37542,
+								"target": 41490,
 								"name": "AbstractNotificationProviderService",
 								"package": "@medusajs/utils"
 							}
@@ -132,14 +132,14 @@
 					]
 				},
 				{
-					"id": 37548,
+					"id": 41496,
 					"name": "send",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 37549,
+							"id": 41497,
 							"name": "send",
 							"variant": "signature",
 							"kind": 4096,
@@ -174,7 +174,7 @@
 							},
 							"parameters": [
 								{
-									"id": 37550,
+									"id": 41498,
 									"name": "notification",
 									"variant": "param",
 									"kind": 32768,
@@ -236,14 +236,14 @@
 				{
 					"title": "Constructors",
 					"children": [
-						37546
+						41494
 					]
 				},
 				{
 					"title": "Methods",
 					"children": [
-						37543,
-						37548
+						41491,
+						41496
 					]
 				}
 			],
@@ -264,41 +264,41 @@
 		{
 			"title": "Classes",
 			"children": [
-				37542
+				41490
 			]
 		}
 	],
 	"packageName": "@medusajs/utils",
 	"symbolIdMap": {
-		"37541": {
+		"41489": {
 			"sourceFileName": "../../../../packages/core/utils/src/notification/abstract-notification-provider.ts",
 			"qualifiedName": ""
 		},
-		"37542": {
+		"41490": {
 			"sourceFileName": "../../../../packages/core/utils/src/notification/abstract-notification-provider.ts",
 			"qualifiedName": "AbstractNotificationProviderService"
 		},
-		"37543": {
+		"41491": {
 			"sourceFileName": "../../../../packages/core/utils/src/notification/abstract-notification-provider.ts",
 			"qualifiedName": "AbstractNotificationProviderService.validateOptions"
 		},
-		"37544": {
+		"41492": {
 			"sourceFileName": "../../../../packages/core/utils/src/notification/abstract-notification-provider.ts",
 			"qualifiedName": "AbstractNotificationProviderService.validateOptions"
 		},
-		"37545": {
+		"41493": {
 			"sourceFileName": "../../../../packages/core/utils/src/notification/abstract-notification-provider.ts",
 			"qualifiedName": "options"
 		},
-		"37548": {
+		"41496": {
 			"sourceFileName": "../../../../packages/core/utils/src/notification/abstract-notification-provider.ts",
 			"qualifiedName": "AbstractNotificationProviderService.send"
 		},
-		"37549": {
+		"41497": {
 			"sourceFileName": "../../../../packages/core/utils/src/notification/abstract-notification-provider.ts",
 			"qualifiedName": "AbstractNotificationProviderService.send"
 		},
-		"37550": {
+		"41498": {
 			"sourceFileName": "../../../../packages/core/utils/src/notification/abstract-notification-provider.ts",
 			"qualifiedName": "notification"
 		}
@@ -308,7 +308,7 @@
 			"1": "../../../../packages/core/utils/src/notification/abstract-notification-provider.ts"
 		},
 		"reflections": {
-			"1": 37541
+			"1": 41489
 		}
 	}
 }
