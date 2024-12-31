@@ -1,5 +1,35 @@
 # @medusajs/inventory-next
 
+## 2.1.3
+
+## 2.1.2
+
+### Patch Changes
+
+- [#10569](https://github.com/medusajs/medusa/pull/10569) [`729eb5da7b6daf9781b8bdcbc2fab344e942d444`](https://github.com/medusajs/medusa/commit/729eb5da7b6daf9781b8bdcbc2fab344e942d444) Thanks [@carlos-r-l-rodrigues](https://github.com/carlos-r-l-rodrigues)! - chore: Inventory DML
+
+## 2.1.1
+
+## 2.1.0
+
+## 2.0.7
+
+## 2.0.6
+
+## 2.0.5
+
+### Patch Changes
+
+- [#10139](https://github.com/medusajs/medusa/pull/10139) [`47ca1d4b54de78fe952619a7d331ea4b0ab3d7a6`](https://github.com/medusajs/medusa/commit/47ca1d4b54de78fe952619a7d331ea4b0ab3d7a6) Thanks [@carlos-r-l-rodrigues](https://github.com/carlos-r-l-rodrigues)! - Update reservation quantity
+
+- [#10119](https://github.com/medusajs/medusa/pull/10119) [`2822972e04f12d2ca9378dd09529ab6ca308a286`](https://github.com/medusajs/medusa/commit/2822972e04f12d2ca9378dd09529ab6ca308a286) Thanks [@adrien2p](https://github.com/adrien2p)! - Fix/mikro orm cli wrapper
+
+## 2.0.4
+
+## 2.0.3
+
+## 2.0.2
+
 ## 2.0.1
 
 ## 2.0.0

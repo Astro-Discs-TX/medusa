@@ -4,7 +4,12 @@ import React, { useMemo } from "react"
 import clsx from "clsx"
 import Link from "next/link"
 import { SidebarItemLink } from "types"
-import { CurrentItemsState, useSidebar, useSiteConfig } from "../../providers"
+import {
+  CurrentItemsState,
+  isSidebarItemLink,
+  useSidebar,
+  useSiteConfig,
+} from "../../providers"
 import { Button } from "../Button"
 import { TriangleRightMini } from "@medusajs/icons"
 
@@ -29,18 +34,16 @@ export const Breadcrumbs = () => {
       tempBreadcrumbItems = getBreadcrumbsOfItem(item.previousSidebar)
     }
 
-    const parentPath =
-      item.parentItem?.type === "link"
-        ? getLinkPath(item.parentItem)
-        : (item.parentItem?.type === "category" &&
+    const parentPath = isSidebarItemLink(item.parentItem)
+      ? getLinkPath(item.parentItem)
+      : (item.parentItem?.type === "category" &&
             breadcrumbOptions?.showCategories) ||
           item.parentItem?.type === "sub-category"
         ? "#"
         : undefined
-    const firstItemPath =
-      item.default[0].type === "link"
-        ? getLinkPath(item.default[0])
-        : (item.default[0].type === "category" &&
+    const firstItemPath = isSidebarItemLink(item.default[0])
+      ? getLinkPath(item.default[0])
+      : (item.default[0].type === "category" &&
             breadcrumbOptions?.showCategories) ||
           item.default[0].type === "sub-category"
         ? "#"
@@ -50,7 +53,10 @@ export const Breadcrumbs = () => {
 
     tempBreadcrumbItems.set(
       breadcrumbPath,
-      item.parentItem?.childSidebarTitle || item.parentItem?.title || ""
+      item.parentItem?.childSidebarTitle ||
+        item.parentItem?.chapterTitle ||
+        item.parentItem?.title ||
+        ""
     )
 
     return tempBreadcrumbItems
@@ -73,15 +79,17 @@ export const Breadcrumbs = () => {
           breadcrumbOptions?.showCategories)
       ) {
         tempBreadcrumbItems.set(
-          sidebarActiveItem.parentItem.type === "link"
+          isSidebarItemLink(sidebarActiveItem.parentItem)
             ? getLinkPath(sidebarActiveItem.parentItem) || "#"
             : "#",
-          sidebarActiveItem.parentItem.title || ""
+          sidebarActiveItem.parentItem.chapterTitle ||
+            sidebarActiveItem.parentItem.title ||
+            ""
         )
       }
       tempBreadcrumbItems.set(
         getLinkPath(sidebarActiveItem) || "/",
-        sidebarActiveItem.title || ""
+        sidebarActiveItem.chapterTitle || sidebarActiveItem.title || ""
       )
     }
 

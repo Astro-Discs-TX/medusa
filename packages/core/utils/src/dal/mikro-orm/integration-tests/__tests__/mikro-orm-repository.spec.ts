@@ -120,9 +120,9 @@ class Entity3 {
   }
 }
 
-const Entity1Repository = mikroOrmBaseRepositoryFactory<Entity1>(Entity1)
-const Entity2Repository = mikroOrmBaseRepositoryFactory<Entity2>(Entity2)
-const Entity3Repository = mikroOrmBaseRepositoryFactory<Entity3>(Entity3)
+const Entity1Repository = mikroOrmBaseRepositoryFactory(Entity1)
+const Entity2Repository = mikroOrmBaseRepositoryFactory(Entity2)
+const Entity3Repository = mikroOrmBaseRepositoryFactory(Entity3)
 
 describe("mikroOrmRepository", () => {
   let orm!: MikroORM
@@ -160,6 +160,42 @@ describe("mikroOrmRepository", () => {
     const generator = orm.getSchemaGenerator()
     await generator.dropSchema()
     await orm.close(true)
+  })
+
+  it("should successfully update a many to many collection providing an empty array", async () => {
+    const entity1 = {
+      id: "1",
+      title: "en1",
+      entity3: [{ title: "en3-1" }, { title: "en3-2" }],
+    }
+
+    let manager = orm.em.fork()
+    await manager1().create([entity1], { transactionManager: manager })
+    await manager.flush()
+
+    const [createdEntity1] = await manager1().find({
+      where: { id: "1" },
+      options: { populate: ["entity3"] },
+    })
+
+    expect(createdEntity1.entity3.getItems()).toHaveLength(2)
+
+    manager = orm.em.fork()
+    await manager1().update(
+      [{ entity: createdEntity1, update: { entity3: [] } }],
+      {
+        transactionManager: manager,
+      }
+    )
+    await manager.flush()
+
+    const updatedEntity1 = await manager1().find({
+      where: { id: "1" },
+      options: { populate: ["entity3"] },
+    })
+
+    expect(updatedEntity1).toHaveLength(1)
+    expect(updatedEntity1[0].entity3.getItems()).toHaveLength(0)
   })
 
   describe("upsert with replace", () => {

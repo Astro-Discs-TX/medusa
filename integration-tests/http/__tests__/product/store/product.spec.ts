@@ -1,6 +1,13 @@
-import { IStoreModuleService } from "@medusajs/types"
-import { ApiKeyType, Modules, ProductStatus } from "@medusajs/utils"
 import { medusaIntegrationTestRunner } from "@medusajs/test-utils"
+import { IStoreModuleService } from "@medusajs/types"
+import {
+  ApiKeyType,
+  Modules,
+  PriceListStatus,
+  PriceListType,
+  ProductStatus,
+} from "@medusajs/utils"
+import qs from "qs"
 import {
   adminHeaders,
   createAdminUser,
@@ -8,7 +15,7 @@ import {
   generateStoreHeaders,
 } from "../../../../helpers/create-admin-user"
 import { getProductFixture } from "../../../../helpers/fixtures"
-import qs from "qs"
+import { createAuthenticatedCustomer } from "../../../../modules/helpers/create-authenticated-customer"
 
 jest.setTimeout(30000)
 
@@ -27,10 +34,13 @@ medusaIntegrationTestRunner({
     let variant2
     let variant3
     let variant4
+    let region
     let inventoryItem1
     let inventoryItem2
     let storeHeaders
     let publishableKey
+    let storeHeadersWithCustomer
+    let customer
 
     const createProducts = async (data) => {
       const response = await api.post(
@@ -86,6 +96,19 @@ medusaIntegrationTestRunner({
       publishableKey = await generatePublishableKey(appContainer)
       storeHeaders = generateStoreHeaders({ publishableKey })
       await createAdminUser(dbConnection, adminHeaders, appContainer)
+      const result = await createAuthenticatedCustomer(api, storeHeaders, {
+        first_name: "tony",
+        last_name: "stark",
+        email: "tony@stark-industries.com",
+      })
+
+      customer = result.customer
+      storeHeadersWithCustomer = {
+        headers: {
+          ...storeHeaders.headers,
+          authorization: `Bearer ${result.jwt}`,
+        },
+      }
 
       const storeModule: IStoreModuleService = appContainer.resolve(
         Modules.STORE
@@ -104,6 +127,14 @@ medusaIntegrationTestRunner({
           { currency_code: "dkk" },
         ],
       })
+
+      region = (
+        await api.post(
+          "/admin/regions",
+          { name: "Test Region", currency_code: "usd" },
+          adminHeaders
+        )
+      ).data.region
     })
 
     describe("Get products based on publishable key", () => {
@@ -495,6 +526,14 @@ medusaIntegrationTestRunner({
               prices: [{ amount: 3000, currency_code: "usd" }],
             },
           ],
+          images: [
+            {
+              url: "image-one",
+            },
+            {
+              url: "image-two",
+            },
+          ],
         })
         ;[product2, [variant2]] = await createProducts({
           title: "test product 2 uniquely",
@@ -587,6 +626,35 @@ medusaIntegrationTestRunner({
             id: product2.id,
           }),
         ])
+      })
+
+      it("should list all products with images ordered by rank", async () => {
+        const response = await api.get("/store/products", storeHeaders)
+
+        expect(response.data.products).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              id: product.id,
+              images: expect.arrayContaining([
+                expect.objectContaining({ url: "image-one", rank: 0 }),
+                expect.objectContaining({ url: "image-two", rank: 1 }),
+              ]),
+            }),
+          ])
+        )
+      })
+
+      it("should list all products excluding variants", async () => {
+        let response = await api.get(
+          `/admin/products?fields=-variants`,
+          adminHeaders
+        )
+
+        expect(response.data.count).toEqual(4)
+
+        for (let product of response.data.products) {
+          expect(product.variants).toBeUndefined()
+        }
       })
 
       it("should list all products for a sales channel", async () => {
@@ -941,14 +1009,6 @@ medusaIntegrationTestRunner({
       })
 
       it("should list products with prices when context is present", async () => {
-        const region = (
-          await api.post(
-            "/admin/regions",
-            { name: "Test Region", currency_code: "usd" },
-            adminHeaders
-          )
-        ).data.region
-
         let response = await api.get(
           `/store/products?fields=*variants.calculated_price&region_id=${region.id}`,
           storeHeaders
@@ -1008,6 +1068,192 @@ medusaIntegrationTestRunner({
 
         expect(response.status).toEqual(200)
         expect(response.data.products).toEqual(expectation)
+      })
+
+      describe("with price lists", () => {
+        let customerGroup
+
+        beforeEach(async () => {
+          customerGroup = (
+            await api.post(
+              "/admin/customer-groups",
+              { name: "VIP" },
+              adminHeaders
+            )
+          ).data.customer_group
+
+          await api.post(
+            `/admin/customer-groups/${customerGroup.id}/customers`,
+            { add: [customer.id] },
+            adminHeaders
+          )
+        })
+
+        it("should list products with prices with a sale price list price", async () => {
+          const priceList = (
+            await api.post(
+              `/admin/price-lists`,
+              {
+                title: "test price list",
+                description: "test",
+                status: PriceListStatus.ACTIVE,
+                type: PriceListType.SALE,
+                prices: [
+                  {
+                    amount: 350,
+                    currency_code: "usd",
+                    variant_id: product.variants[0].id,
+                  },
+                ],
+                rules: { "customer.groups.id": [customerGroup.id] },
+              },
+              adminHeaders
+            )
+          ).data.price_list
+
+          let response = await api.get(
+            `/store/products?fields=*variants.calculated_price&region_id=${region.id}`,
+            storeHeadersWithCustomer
+          )
+
+          const expectation = expect.arrayContaining([
+            expect.objectContaining({
+              id: product.id,
+              variants: [
+                expect.objectContaining({
+                  calculated_price: {
+                    id: expect.any(String),
+                    is_calculated_price_price_list: true,
+                    is_calculated_price_tax_inclusive: false,
+                    calculated_amount: 350,
+                    raw_calculated_amount: {
+                      value: "350",
+                      precision: 20,
+                    },
+                    is_original_price_price_list: false,
+                    is_original_price_tax_inclusive: false,
+                    original_amount: 3000,
+                    raw_original_amount: {
+                      value: "3000",
+                      precision: 20,
+                    },
+                    currency_code: "usd",
+                    calculated_price: {
+                      id: expect.any(String),
+                      price_list_id: priceList.id,
+                      price_list_type: "sale",
+                      min_quantity: null,
+                      max_quantity: null,
+                    },
+                    original_price: {
+                      id: expect.any(String),
+                      price_list_id: null,
+                      price_list_type: null,
+                      min_quantity: null,
+                      max_quantity: null,
+                    },
+                  },
+                }),
+              ],
+            }),
+          ])
+
+          expect(response.status).toEqual(200)
+          expect(response.data.count).toEqual(3)
+          expect(response.data.products).toEqual(expectation)
+
+          // with only region_id
+          response = await api.get(
+            `/store/products?region_id=${region.id}`,
+            storeHeadersWithCustomer
+          )
+
+          expect(response.status).toEqual(200)
+          expect(response.data.products).toEqual(expectation)
+        })
+
+        it("should list products with prices with a override price list price", async () => {
+          const priceList = (
+            await api.post(
+              `/admin/price-lists`,
+              {
+                title: "test price list",
+                description: "test",
+                status: PriceListStatus.ACTIVE,
+                type: PriceListType.OVERRIDE,
+                prices: [
+                  {
+                    amount: 350,
+                    currency_code: "usd",
+                    variant_id: product.variants[0].id,
+                  },
+                ],
+                rules: { "customer.groups.id": [customerGroup.id] },
+              },
+              adminHeaders
+            )
+          ).data.price_list
+
+          let response = await api.get(
+            `/store/products?fields=*variants.calculated_price&region_id=${region.id}`,
+            storeHeadersWithCustomer
+          )
+
+          const expectation = expect.arrayContaining([
+            expect.objectContaining({
+              id: product.id,
+              variants: [
+                expect.objectContaining({
+                  calculated_price: {
+                    id: expect.any(String),
+                    is_calculated_price_price_list: true,
+                    is_calculated_price_tax_inclusive: false,
+                    calculated_amount: 350,
+                    raw_calculated_amount: {
+                      value: "350",
+                      precision: 20,
+                    },
+                    is_original_price_price_list: true,
+                    is_original_price_tax_inclusive: false,
+                    original_amount: 350,
+                    raw_original_amount: {
+                      value: "350",
+                      precision: 20,
+                    },
+                    currency_code: "usd",
+                    calculated_price: {
+                      id: expect.any(String),
+                      price_list_id: priceList.id,
+                      price_list_type: "override",
+                      min_quantity: null,
+                      max_quantity: null,
+                    },
+                    original_price: {
+                      id: expect.any(String),
+                      price_list_id: priceList.id,
+                      price_list_type: "override",
+                      min_quantity: null,
+                      max_quantity: null,
+                    },
+                  },
+                }),
+              ],
+            }),
+          ])
+
+          expect(response.status).toEqual(200)
+          expect(response.data.count).toEqual(3)
+          expect(response.data.products).toEqual(expectation)
+
+          // with only region_id
+          response = await api.get(
+            `/store/products?region_id=${region.id}`,
+            storeHeadersWithCustomer
+          )
+
+          expect(response.status).toEqual(200)
+          expect(response.data.products).toEqual(expectation)
+        })
       })
 
       describe("with inventory items", () => {
@@ -1081,6 +1327,150 @@ medusaIntegrationTestRunner({
             { add: [salesChannel1.id] },
             adminHeaders
           )
+        })
+
+        it("should handle inventory items and location levels correctly", async () => {
+          const container = getContainer()
+          const channelService = container.resolve("sales_channel")
+          const locationService = container.resolve("stock_location")
+          const inventoryService = container.resolve("inventory")
+          const productService = container.resolve("product")
+          const pubKeyService = container.resolve("api_key")
+          const linkService = container.resolve("remoteLink")
+
+          const [channelOne, channelTwo] =
+            await channelService.createSalesChannels([
+              { name: "Sales Channel 1" },
+              { name: "Sales Channel 2" },
+            ])
+
+          const product = await productService.createProducts({
+            status: "published",
+            title: "my prod",
+            options: [{ title: "color", values: ["green", "blue"] }],
+            variants: [
+              { title: "variant one", options: { color: "green" } },
+              { title: "variant two", options: { color: "blue" } },
+            ],
+          })
+
+          const [variantOne, variantTwo] = product.variants
+
+          const [itemOne, itemTwo, itemThree] =
+            await inventoryService.createInventoryItems([
+              { sku: "sku-one" },
+              { sku: "sku-two" },
+              { sku: "sku-three" },
+            ])
+
+          const [locationOne, locationTwo] =
+            await locationService.createStockLocations([
+              { name: "Location One" },
+              { name: "Location Two" },
+            ])
+
+          await inventoryService.createInventoryLevels([
+            {
+              location_id: locationOne.id,
+              inventory_item_id: itemOne.id,
+              stocked_quantity: 23,
+            },
+            {
+              location_id: locationOne.id,
+              inventory_item_id: itemTwo.id,
+              stocked_quantity: 10,
+            },
+            {
+              location_id: locationTwo.id,
+              inventory_item_id: itemThree.id,
+              stocked_quantity: 5,
+            },
+          ])
+
+          const [pubKeyOne, pubKeyTwo] = await pubKeyService.createApiKeys([
+            { title: "pub key one", type: "publishable", created_by: "me" },
+            { title: "pub key two", type: "publishable", created_by: "me" },
+          ])
+
+          await linkService.create([
+            {
+              product: { product_id: product.id },
+              sales_channel: { sales_channel_id: channelOne.id },
+            },
+            {
+              product: { product_id: product.id },
+              sales_channel: { sales_channel_id: channelTwo.id },
+            },
+            {
+              product: { variant_id: variantOne.id },
+              inventory: { inventory_item_id: itemOne.id },
+            },
+            {
+              product: { variant_id: variantTwo.id },
+              inventory: { inventory_item_id: itemTwo.id },
+            },
+            {
+              product: { variant_id: variantTwo.id },
+              inventory: { inventory_item_id: itemThree.id },
+              data: { required_quantity: 2 },
+            },
+            {
+              sales_channel: { sales_channel_id: channelOne.id },
+              stock_location: { stock_location_id: locationOne.id },
+            },
+            {
+              sales_channel: { sales_channel_id: channelTwo.id },
+              stock_location: { stock_location_id: locationOne.id },
+            },
+            {
+              sales_channel: { sales_channel_id: channelTwo.id },
+              stock_location: { stock_location_id: locationTwo.id },
+            },
+            {
+              api_key: { publishable_key_id: pubKeyOne.id },
+              sales_channel: { sales_channel_id: channelOne.id },
+            },
+            {
+              api_key: { publishable_key_id: pubKeyTwo.id },
+              sales_channel: { sales_channel_id: channelTwo.id },
+            },
+          ])
+
+          let response = await api.get(
+            `/store/products?fields=+variants.inventory_quantity`,
+            { headers: { "x-publishable-api-key": pubKeyOne.token } }
+          )
+
+          expect(response.status).toEqual(200)
+          for (const variant of response.data.products
+            .map((p) => p.variants)
+            .flat()) {
+            if (variant.id === variantOne.id) {
+              expect(variant.inventory_quantity).toEqual(23)
+            } else if (variant.id === variantTwo.id) {
+              expect(variant.inventory_quantity).toEqual(0)
+            } else {
+              throw new Error("Unexpected variant")
+            }
+          }
+
+          response = await api.get(
+            `/store/products?fields=+variants.inventory_quantity`,
+            { headers: { "x-publishable-api-key": pubKeyTwo.token } }
+          )
+
+          expect(response.status).toEqual(200)
+          for (const variant of response.data.products
+            .map((p) => p.variants)
+            .flat()) {
+            if (variant.id === variantOne.id) {
+              expect(variant.inventory_quantity).toEqual(23)
+            } else if (variant.id === variantTwo.id) {
+              expect(variant.inventory_quantity).toEqual(2)
+            } else {
+              throw new Error("Unexpected variant")
+            }
+          }
         })
 
         it("should list all inventory items for a variant", async () => {
@@ -1184,6 +1574,14 @@ medusaIntegrationTestRunner({
               ],
             },
           ],
+          images: [
+            {
+              url: "image-one",
+            },
+            {
+              url: "image-two",
+            },
+          ],
         })
 
         const defaultSalesChannel = await createSalesChannel(
@@ -1229,6 +1627,20 @@ medusaIntegrationTestRunner({
               }),
             ],
           })
+        )
+      })
+
+      it("should retrieve product with images ordered by rank", async () => {
+        const response = await api.get(
+          `/store/products/${product.id}`,
+          storeHeaders
+        )
+
+        expect(response.data.product.images).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({ url: "image-one", rank: 0 }),
+            expect.objectContaining({ url: "image-two", rank: 1 }),
+          ])
         )
       })
 
@@ -1278,14 +1690,6 @@ medusaIntegrationTestRunner({
       })
 
       it("should get product with prices when context is present", async () => {
-        const region = (
-          await api.post(
-            "/admin/regions",
-            { name: "Test Region", currency_code: "usd" },
-            adminHeaders
-          )
-        ).data.region
-
         let response = await api.get(
           `/store/products/${product.id}?fields=*variants.calculated_price&region_id=${region.id}`,
           storeHeaders
@@ -1342,6 +1746,186 @@ medusaIntegrationTestRunner({
 
         expect(response.status).toEqual(200)
         expect(response.data.product).toEqual(expectation)
+      })
+
+      describe("with price lists", () => {
+        let customerGroup
+
+        beforeEach(async () => {
+          customerGroup = (
+            await api.post(
+              "/admin/customer-groups",
+              { name: "VIP" },
+              adminHeaders
+            )
+          ).data.customer_group
+
+          await api.post(
+            `/admin/customer-groups/${customerGroup.id}/customers`,
+            { add: [customer.id] },
+            adminHeaders
+          )
+        })
+
+        it("should return product with sale price list prices", async () => {
+          const priceList = (
+            await api.post(
+              `/admin/price-lists`,
+              {
+                title: "test price list",
+                description: "test",
+                status: PriceListStatus.ACTIVE,
+                type: PriceListType.SALE,
+                prices: [
+                  {
+                    amount: 350,
+                    currency_code: "usd",
+                    variant_id: product.variants[0].id,
+                  },
+                ],
+                rules: { "customer.groups.id": [customerGroup.id] },
+              },
+              adminHeaders
+            )
+          ).data.price_list
+
+          let response = await api.get(
+            `/store/products/${product.id}?fields=*variants.calculated_price&region_id=${region.id}`,
+            storeHeadersWithCustomer
+          )
+
+          const expectation = expect.objectContaining({
+            id: product.id,
+            variants: [
+              expect.objectContaining({
+                calculated_price: {
+                  id: expect.any(String),
+                  is_calculated_price_price_list: true,
+                  is_calculated_price_tax_inclusive: false,
+                  calculated_amount: 350,
+                  raw_calculated_amount: {
+                    value: "350",
+                    precision: 20,
+                  },
+                  is_original_price_price_list: false,
+                  is_original_price_tax_inclusive: false,
+                  original_amount: 3000,
+                  raw_original_amount: {
+                    value: "3000",
+                    precision: 20,
+                  },
+                  currency_code: "usd",
+                  calculated_price: {
+                    id: expect.any(String),
+                    price_list_id: priceList.id,
+                    price_list_type: "sale",
+                    min_quantity: null,
+                    max_quantity: null,
+                  },
+                  original_price: {
+                    id: expect.any(String),
+                    price_list_id: null,
+                    price_list_type: null,
+                    min_quantity: null,
+                    max_quantity: null,
+                  },
+                },
+              }),
+            ],
+          })
+
+          expect(response.status).toEqual(200)
+          expect(response.data.product).toEqual(expectation)
+
+          // with only region_id
+          response = await api.get(
+            `/store/products/${product.id}?region_id=${region.id}`,
+            storeHeadersWithCustomer
+          )
+
+          expect(response.status).toEqual(200)
+          expect(response.data.product).toEqual(expectation)
+        })
+
+        it("should list products with prices with a override price list price", async () => {
+          const priceList = (
+            await api.post(
+              `/admin/price-lists`,
+              {
+                title: "test price list",
+                description: "test",
+                status: PriceListStatus.ACTIVE,
+                type: PriceListType.OVERRIDE,
+                prices: [
+                  {
+                    amount: 350,
+                    currency_code: "usd",
+                    variant_id: product.variants[0].id,
+                  },
+                ],
+                rules: { "customer.groups.id": [customerGroup.id] },
+              },
+              adminHeaders
+            )
+          ).data.price_list
+
+          let response = await api.get(
+            `/store/products/${product.id}?fields=*variants.calculated_price&region_id=${region.id}`,
+            storeHeadersWithCustomer
+          )
+
+          const expectation = expect.objectContaining({
+            id: product.id,
+            variants: [
+              expect.objectContaining({
+                calculated_price: {
+                  id: expect.any(String),
+                  is_calculated_price_price_list: true,
+                  is_calculated_price_tax_inclusive: false,
+                  calculated_amount: 350,
+                  raw_calculated_amount: {
+                    value: "350",
+                    precision: 20,
+                  },
+                  is_original_price_price_list: true,
+                  is_original_price_tax_inclusive: false,
+                  original_amount: 350,
+                  raw_original_amount: {
+                    value: "350",
+                    precision: 20,
+                  },
+                  currency_code: "usd",
+                  calculated_price: {
+                    id: expect.any(String),
+                    price_list_id: priceList.id,
+                    price_list_type: "override",
+                    min_quantity: null,
+                    max_quantity: null,
+                  },
+                  original_price: {
+                    id: expect.any(String),
+                    price_list_id: priceList.id,
+                    price_list_type: "override",
+                    min_quantity: null,
+                    max_quantity: null,
+                  },
+                },
+              }),
+            ],
+          })
+
+          expect(response.status).toEqual(200)
+          expect(response.data.product).toEqual(expectation)
+
+          // with only region_id
+          response = await api.get(
+            `/store/products/${product.id}?region_id=${region.id}`,
+            storeHeadersWithCustomer
+          )
+
+          expect(response.status).toEqual(200)
+          expect(response.data.product).toEqual(expectation)
+        })
       })
     })
 

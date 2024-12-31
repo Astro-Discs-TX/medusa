@@ -224,7 +224,7 @@ export interface BaseOrderAddress {
   city?: string
   /**
    * The address's country code.
-   * 
+   *
    * @example us
    */
   country_code?: string
@@ -281,7 +281,7 @@ export interface BaseOrderShippingMethod {
   shipping_option_id: string | null
   /**
    * Data relevant for the fulfillment provider handling the shipping.
-   * 
+   *
    * Learn more in [this guide](https://docs.medusajs.com/resources/commerce-modules/fulfillment/shipping-option#data-property).
    */
   data: Record<string, unknown> | null
@@ -389,7 +389,11 @@ export interface BaseOrderLineItem {
    */
   product_subtitle: string | null
   /**
-   * The ID of the associated product's type.
+   * The ID of the associated product type.
+   */
+  product_type_id: string | null
+  /**
+   * The associated product type.
    */
   product_type: string | null
   /**
@@ -627,7 +631,7 @@ export interface BaseOrderTransaction {
   amount: number
   /**
    * The transaction's currency code.
-   * 
+   *
    * @example
    * usd
    */
@@ -685,7 +689,7 @@ export interface BaseOrderFulfillment {
   requires_shipping: boolean
   /**
    * Data necessary for the provider handling the fulfillment.
-   * 
+   *
    * Learn more in [this guide](https://docs.medusajs.com/resources/commerce-modules/fulfillment/shipping-option#data-property).
    */
   data: Record<string, unknown> | null
@@ -760,7 +764,7 @@ export interface BaseOrder {
   email: string | null
   /**
    * The order's currency code.
-   * 
+   *
    * @example
    * usd
    */
@@ -921,7 +925,10 @@ export interface BaseOrderFilters
   /**
    * Filter by status(es).
    */
-  status?: OrderStatus[] | OrderStatus | OperatorMap<OrderStatus | OrderStatus[]>
+  status?:
+    | OrderStatus[]
+    | OrderStatus
+    | OperatorMap<OrderStatus | OrderStatus[]>
 }
 
 export interface BaseOrderChangesFilters
@@ -954,7 +961,13 @@ export interface BaseOrderChange {
   /**
    * The type of the order change
    */
-  change_type?: "return" | "exchange" | "claim" | "edit" | "return_request"
+  change_type?:
+    | "return"
+    | "exchange"
+    | "claim"
+    | "edit"
+    | "return_request"
+    | "transfer"
 
   /**
    * The ID of the associated order

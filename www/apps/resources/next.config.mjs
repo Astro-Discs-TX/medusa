@@ -6,14 +6,29 @@ import {
   typeListLinkFixerPlugin,
   workflowDiagramLinkFixerPlugin,
 } from "remark-rehype-plugins"
+import bundleAnalyzer from "@next/bundle-analyzer"
 import mdxPluginOptions from "./mdx-options.mjs"
+import path from "node:path"
 
 const withMDX = mdx({
   extension: /\.mdx?$/,
   options: {
     rehypePlugins: [
+      [
+        brokenLinkCheckerPlugin,
+        {
+          crossProjects: {
+            docs: {
+              projectPath: path.resolve("..", "book"),
+            },
+            ui: {
+              projectPath: path.resolve("..", "ui"),
+              contentPath: "src/content/docs",
+            },
+          },
+        },
+      ],
       ...mdxPluginOptions.options.rehypePlugins,
-      [brokenLinkCheckerPlugin],
       [localLinksRehypePlugin],
       [typeListLinkFixerPlugin],
       [
@@ -104,18 +119,23 @@ const nextConfig = {
         destination: "/commerce-modules/promotion/links-to-other-modules",
         permanent: true,
       },
+      {
+        source: "/deployment/admin/vercel",
+        destination: "/deployment",
+        permanent: true,
+      },
     ]
   },
-  // Redirects shouldn't be necessary anymore since we have remark / rehype
-  // plugins that fix links. But leaving this here in case we need it again.
-  // async redirects() {
-  //   // redirect original file paths to the rewrite
-  //   return slugChanges.map((item) => ({
-  //     source: item.origSlug,
-  //     destination: item.newSlug,
-  //     permanent: true,
-  //   }))
-  // },
+  outputFileTracingExcludes: {
+    "*": ["node_modules/@medusajs/icons"],
+  },
+  experimental: {
+    optimizePackageImports: ["@medusajs/icons", "@medusajs/ui"],
+  },
 }
 
-export default withMDX(nextConfig)
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === "true",
+})
+
+export default withMDX(withBundleAnalyzer(nextConfig))

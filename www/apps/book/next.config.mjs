@@ -9,11 +9,28 @@ import {
   crossProjectLinksPlugin,
 } from "remark-rehype-plugins"
 import { sidebar } from "./sidebar.mjs"
+import path from "path"
+import redirects from "./utils/redirects.mjs"
 
 const withMDX = mdx({
   extension: /\.mdx?$/,
   options: {
     rehypePlugins: [
+      [
+        brokenLinkCheckerPlugin,
+        {
+          crossProjects: {
+            resources: {
+              projectPath: path.resolve("..", "resources"),
+              hasGeneratedSlugs: true,
+            },
+            ui: {
+              projectPath: path.resolve("..", "ui"),
+              contentPath: "src/content/docs",
+            },
+          },
+        },
+      ],
       [
         crossProjectLinksPlugin,
         {
@@ -37,7 +54,6 @@ const withMDX = mdx({
             process.env.VERCEL_ENV === "production",
         },
       ],
-      [brokenLinkCheckerPlugin],
       [localLinksRehypePlugin],
       [
         rehypeMdxCodeProps,
@@ -150,14 +166,12 @@ const nextConfig = {
       ],
     }
   },
-  async redirects() {
-    return [
-      {
-        source: "/v2/:path*",
-        destination: "/:path*",
-        permanent: true,
-      },
-    ]
+  redirects,
+  outputFileTracingExcludes: {
+    "*": ["node_modules/@medusajs/icons"],
+  },
+  experimental: {
+    optimizePackageImports: ["@medusajs/icons", "@medusajs/ui"],
   },
 }
 

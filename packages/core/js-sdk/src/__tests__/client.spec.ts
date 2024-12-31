@@ -12,6 +12,11 @@ const server = setupServer(
       test: "test",
     })
   }),
+  http.get(`${baseUrl}/some/path/test`, ({ request, params, cookies }) => {
+    return HttpResponse.json({
+      test: "test",
+    })
+  }),
   http.get(`${baseUrl}/throw`, ({ request, params, cookies }) => {
     return new HttpResponse(null, {
       status: 500,
@@ -94,6 +99,11 @@ const server = setupServer(
       statusText: "Internal Server Error",
     })
   }),
+  http.get(`https://test.com/baseUrl`, ({ request, params, cookies }) => {
+    return HttpResponse.json({
+      test: "test",
+    })
+  }),
   http.all("*", ({ request, params, cookies }) => {
     return new HttpResponse(null, {
       status: 404,
@@ -114,7 +124,7 @@ describe("Client", () => {
   afterEach(() => server.resetHandlers())
   afterAll(() => server.close())
 
-  describe("header configuration", () => {
+  describe("configuration", () => {
     it("should allow passing custom request headers while the defaults are preserved", async () => {
       const resp = await client.fetch<any>("header", {
         headers: { "X-custom-header": "test" },
@@ -160,6 +170,59 @@ describe("Client", () => {
       })
 
       const resp = await pubClient.fetch<any>("pubkey")
+      expect(resp).toEqual({ test: "test" })
+    })
+
+    it("should gracefully handle a root base URL", async () => {
+      global.window = {
+        location: {
+          origin: "https://test.com",
+        },
+      } as any
+
+      const pubClient = new Client({
+        baseUrl: "/",
+      })
+
+      const resp = await pubClient.fetch<any>("baseUrl")
+      expect(resp).toEqual({ test: "test" })
+
+      global.window = undefined as any
+    })
+
+    it("should handle baseUrl with path correctly", async () => {
+      const pathClient = new Client({
+        baseUrl: `${baseUrl}/some/path`,
+      })
+
+      const resp = await pathClient.fetch<any>("test")
+      expect(resp).toEqual({ test: "test" })
+    })
+
+    it("should handle baseUrl with trailing slash path correctly", async () => {
+      const pathClient = new Client({
+        baseUrl: `${baseUrl}/some/path/`,
+      })
+
+      const resp = await pathClient.fetch<any>("test")
+      expect(resp).toEqual({ test: "test" })
+    })
+
+    it("should handle baseUrl with just origin", async () => {
+      const originClient = new Client({
+        baseUrl,
+      })
+
+      const resp = await originClient.fetch<any>("test")
+      expect(resp).toEqual({ test: "test" })
+    })
+
+    it("should handle baseUrl with just origin and trailing slash", async () => {
+      const originClient = new Client({
+        baseUrl: `${baseUrl}/`,
+      })
+
+      const resp = await originClient.fetch<any>("test")
       expect(resp).toEqual({ test: "test" })
     })
   })
@@ -225,4 +288,6 @@ describe("Client", () => {
       global.window = undefined as any
     })
   })
+
+  
 })

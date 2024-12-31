@@ -4,6 +4,7 @@ x-schemaName: Order
 required:
   - id
   - version
+  - display_id
   - status
   - currency_code
   - created_at
@@ -206,3 +207,14 @@ properties:
     type: number
     title: original_shipping_tax_total
     description: The total taxes of the order's shipping excluding promotions.
+  display_id:
+    type: number
+    title: display_id
+    description: The order's display ID.
+  credit_lines:
+    type: array
+    description: >-
+      The order's credit lines, useful to add additional payment amounts for an
+      order.
+    items:
+      $ref: ./OrderCreditLine.yaml

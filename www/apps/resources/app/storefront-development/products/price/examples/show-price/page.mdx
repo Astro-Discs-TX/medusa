@@ -1,6 +1,10 @@
 ---
 sidebar_position: 1
 sidebar_label: "Example: Show Variant's Price"
+tags:
+  - product
+  - storefront
+  - pricing
 ---
 
 export const metadata = {
@@ -100,7 +104,7 @@ export default function Product({ params: { id } }: Params) {
     fetch(`http://localhost:9000/store/products/${id}?${queryParams.toString()}`, {
       credentials: "include",
       headers: {
-        "x-publishable-api-key": process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY,
+        "x-publishable-api-key": process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || "temp",
       },
     })
     .then((res) => res.json())

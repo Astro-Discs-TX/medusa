@@ -596,6 +596,10 @@ export interface ProductImageDTO {
    */
   url: string
   /**
+   * The rank of the product image.
+   */
+  rank: number
+  /**
    * Holds custom data in key-value pairs.
    */
   metadata?: MetadataType
@@ -697,6 +701,10 @@ export interface FilterableProductProps
    * The IDs to filter products by.
    */
   id?: string | string[]
+  /**
+   * The external IDs to filter products by.
+   */
+  external_id?: string | string[]
   /**
    * Filters only or excluding gift card products
    */

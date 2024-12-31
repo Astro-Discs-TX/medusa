@@ -3,6 +3,7 @@ import {
   CreatePaymentProviderSession,
   DAL,
   IPaymentProvider,
+  Logger,
   PaymentProviderAuthorizeResponse,
   PaymentProviderDataInput,
   PaymentProviderError,
@@ -21,6 +22,7 @@ import { PaymentProvider } from "@models"
 import { EOL } from "os"
 
 type InjectedDependencies = {
+  logger?: Logger
   paymentProviderRepository: DAL.RepositoryService
   [key: `pp_${string}`]: IPaymentProvider
 }
@@ -28,14 +30,28 @@ type InjectedDependencies = {
 export default class PaymentProviderService extends ModulesSdkUtils.MedusaInternalService<InjectedDependencies>(
   PaymentProvider
 ) {
+  #logger: Logger
+
+  constructor(container: InjectedDependencies) {
+    super(container)
+    this.#logger = container["logger"]
+      ? container.logger
+      : (console as unknown as Logger)
+  }
+
   retrieveProvider(providerId: string): IPaymentProvider {
     try {
       return this.__container__[providerId] as IPaymentProvider
     } catch (e) {
-      throw new MedusaError(
-        MedusaError.Types.NOT_FOUND,
-        `Could not find a payment provider with id: ${providerId}`
-      )
+      const errMessage = `
+      Unable to retrieve the payment provider with id: ${providerId}
+      Please make sure that the provider is registered in the container and it is configured correctly in your project configuration file.
+      `
+
+      // Ensure that the logger captures the actual error
+      this.#logger.error(e)
+
+      throw new Error(errMessage)
     }
   }
 

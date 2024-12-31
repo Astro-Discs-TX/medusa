@@ -24,6 +24,9 @@ export type ChangeActionType =
   | "SHIP_ITEM"
   | "WRITE_OFF_ITEM"
   | "REINSTATE_ITEM"
+  | "TRANSFER_CUSTOMER"
+  | "UPDATE_ORDER_PROPERTIES"
+  | "CREDIT_LINE_ADD"
 
 export type OrderChangeStatus =
   | "confirmed"
@@ -806,6 +809,11 @@ export interface OrderLineItemDTO extends OrderLineItemTotalsDTO {
   product_subtitle?: string | null
 
   /**
+   * The ID of the type of the product associated with the line item.
+   */
+  product_type_id?: string | null
+
+  /**
    * The type of the product associated with the line item.
    */
   product_type?: string | null
@@ -1085,6 +1093,11 @@ export interface OrderDTO {
   version: number
 
   /**
+   * The order's display ID.
+   */
+  display_id: number
+
+  /**
    * The active order change, if any.
    *
    * @expandable
@@ -1155,6 +1168,13 @@ export interface OrderDTO {
    * @expandable
    */
   transactions?: OrderTransactionDTO[]
+
+  /**
+   * The credit lines for an order
+   *
+   * @expandable
+   */
+  credit_lines?: OrderCreditLineDTO[]
 
   /**
    * The summary of the order totals.
@@ -2106,7 +2126,7 @@ export interface OrderChangeDTO {
   /**
    * The type of the order change
    */
-  change_type?: "return" | "exchange" | "claim" | "edit"
+  change_type?: "return" | "exchange" | "claim" | "edit" | "transfer"
 
   /**
    * The ID of the associated order
@@ -3010,4 +3030,51 @@ export interface OrderPreviewDTO
     actions?: OrderChangeActionDTO[]
   })[]
   return_requested_total: number
+}
+
+/**
+ * The order credit line details.
+ */
+export interface OrderCreditLineDTO {
+  /**
+   * The ID of the order credit line.
+   */
+  id: string
+
+  /**
+   * The ID of the order that the credit line belongs to.
+   */
+  order_id: string
+
+  /**
+   * The associated order
+   *
+   * @expandable
+   */
+  order: OrderDTO
+
+  /**
+   * The reference model name that the credit line is generated from
+   */
+  reference: string | null
+
+  /**
+   * The reference model id that the credit line is generated from
+   */
+  reference_id: string | null
+
+  /**
+   * The metadata of the order detail
+   */
+  metadata: Record<string, unknown> | null
+
+  /**
+   * The date when the order credit line was created.
+   */
+  created_at: Date
+
+  /**
+   * The date when the order credit line was last updated.
+   */
+  updated_at: Date
 }

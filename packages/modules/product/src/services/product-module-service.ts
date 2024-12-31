@@ -1,17 +1,19 @@
 import {
   Context,
   DAL,
+  FindConfig,
   IEventBusModuleService,
+  InferEntityType,
   InternalModuleDeclaration,
   ModuleJoinerConfig,
   ModulesSdkTypes,
   ProductTypes,
 } from "@medusajs/framework/types"
 import {
-  Image as ProductImage,
   Product,
   ProductCategory,
   ProductCollection,
+  ProductImage,
   ProductOption,
   ProductOptionValue,
   ProductTag,
@@ -25,6 +27,7 @@ import {
   EmitEvents,
   InjectManager,
   InjectTransactionManager,
+  isDefined,
   isPresent,
   isString,
   isValidHandle,
@@ -58,6 +61,7 @@ type InjectedDependencies = {
   productCategoryService: ProductCategoryService
   productCollectionService: ModulesSdkTypes.IMedusaInternalService<any>
   productImageService: ModulesSdkTypes.IMedusaInternalService<any>
+  productImageProductService: ModulesSdkTypes.IMedusaInternalService<any>
   productTypeService: ModulesSdkTypes.IMedusaInternalService<any>
   productOptionService: ModulesSdkTypes.IMedusaInternalService<any>
   productOptionValueService: ModulesSdkTypes.IMedusaInternalService<any>
@@ -103,15 +107,31 @@ export default class ProductModuleService
   implements ProductTypes.IProductModuleService
 {
   protected baseRepository_: DAL.RepositoryService
-  protected readonly productService_: ModulesSdkTypes.IMedusaInternalService<Product>
-  protected readonly productVariantService_: ModulesSdkTypes.IMedusaInternalService<ProductVariant>
+  protected readonly productService_: ModulesSdkTypes.IMedusaInternalService<
+    InferEntityType<typeof Product>
+  >
+  protected readonly productVariantService_: ModulesSdkTypes.IMedusaInternalService<
+    InferEntityType<typeof ProductVariant>
+  >
   protected readonly productCategoryService_: ProductCategoryService
-  protected readonly productTagService_: ModulesSdkTypes.IMedusaInternalService<ProductTag>
-  protected readonly productCollectionService_: ModulesSdkTypes.IMedusaInternalService<ProductCollection>
-  protected readonly productImageService_: ModulesSdkTypes.IMedusaInternalService<ProductImage>
-  protected readonly productTypeService_: ModulesSdkTypes.IMedusaInternalService<ProductType>
-  protected readonly productOptionService_: ModulesSdkTypes.IMedusaInternalService<ProductOption>
-  protected readonly productOptionValueService_: ModulesSdkTypes.IMedusaInternalService<ProductOptionValue>
+  protected readonly productTagService_: ModulesSdkTypes.IMedusaInternalService<
+    InferEntityType<typeof ProductTag>
+  >
+  protected readonly productCollectionService_: ModulesSdkTypes.IMedusaInternalService<
+    InferEntityType<typeof ProductCollection>
+  >
+  protected readonly productImageService_: ModulesSdkTypes.IMedusaInternalService<
+    InferEntityType<typeof ProductImage>
+  >
+  protected readonly productTypeService_: ModulesSdkTypes.IMedusaInternalService<
+    InferEntityType<typeof ProductType>
+  >
+  protected readonly productOptionService_: ModulesSdkTypes.IMedusaInternalService<
+    InferEntityType<typeof ProductOption>
+  >
+  protected readonly productOptionValueService_: ModulesSdkTypes.IMedusaInternalService<
+    InferEntityType<typeof ProductOptionValue>
+  >
   protected readonly eventBusModuleService_?: IEventBusModuleService
 
   constructor(
@@ -151,6 +171,77 @@ export default class ProductModuleService
     return joinerConfig
   }
 
+  @InjectManager()
+  // @ts-ignore
+  async retrieveProduct(
+    productId: string,
+    config?: FindConfig<ProductTypes.ProductDTO>,
+    @MedusaContext() sharedContext?: Context
+  ): Promise<ProductTypes.ProductDTO> {
+    const product = await this.productService_.retrieve(
+      productId,
+      this.getProductFindConfig_(config),
+      sharedContext
+    )
+
+    return this.baseRepository_.serialize<ProductTypes.ProductDTO>(product)
+  }
+
+  @InjectManager()
+  // @ts-ignore
+  async listProducts(
+    filters?: ProductTypes.FilterableProductProps,
+    config?: FindConfig<ProductTypes.ProductDTO>,
+    sharedContext?: Context
+  ): Promise<ProductTypes.ProductDTO[]> {
+    const products = await this.productService_.list(
+      filters,
+      this.getProductFindConfig_(config),
+      sharedContext
+    )
+
+    return this.baseRepository_.serialize<ProductTypes.ProductDTO[]>(products)
+  }
+
+  @InjectManager()
+  // @ts-ignore
+  async listAndCountProducts(
+    filters?: ProductTypes.FilterableProductProps,
+    config?: FindConfig<ProductTypes.ProductDTO>,
+    sharedContext?: Context
+  ): Promise<[ProductTypes.ProductDTO[], number]> {
+    const [products, count] = await this.productService_.listAndCount(
+      filters,
+      this.getProductFindConfig_(config),
+      sharedContext
+    )
+    const serializedProducts = await this.baseRepository_.serialize<
+      ProductTypes.ProductDTO[]
+    >(products)
+    return [serializedProducts, count]
+  }
+
+  protected getProductFindConfig_(
+    config?: FindConfig<ProductTypes.ProductDTO>
+  ): FindConfig<ProductTypes.ProductDTO> {
+    const hasImagesRelation = config?.relations?.includes("images")
+
+    return {
+      ...config,
+      order: {
+        ...(config?.order ?? { id: "ASC" }),
+        ...(hasImagesRelation
+          ? {
+              images: {
+                rank: "ASC",
+                ...((config?.order?.images as object) ?? {}),
+              },
+            }
+          : {}),
+      },
+    }
+  }
+
   // @ts-ignore
   createProductVariants(
     data: ProductTypes.CreateProductVariantDTO[],
@@ -186,7 +277,7 @@ export default class ProductModuleService
   protected async createVariants_(
     data: ProductTypes.CreateProductVariantDTO[],
     @MedusaContext() sharedContext: Context = {}
-  ): Promise<ProductVariant[]> {
+  ): Promise<InferEntityType<typeof ProductVariant>[]> {
     if (data.some((v) => !v.product_id)) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
@@ -262,8 +353,8 @@ export default class ProductModuleService
       (variant): variant is ProductTypes.CreateProductVariantDTO => !variant.id
     )
 
-    let created: ProductVariant[] = []
-    let updated: ProductVariant[] = []
+    let created: InferEntityType<typeof ProductVariant>[] = []
+    let updated: InferEntityType<typeof ProductVariant>[] = []
 
     if (forCreate.length) {
       created = await this.createVariants_(forCreate, sharedContext)
@@ -330,7 +421,7 @@ export default class ProductModuleService
   protected async updateVariants_(
     data: UpdateProductVariantInput[],
     @MedusaContext() sharedContext: Context = {}
-  ): Promise<ProductVariant[]> {
+  ): Promise<InferEntityType<typeof ProductVariant>[]> {
     // Validation step
     const variantIdsToUpdate = data.map(({ id }) => id)
     const variants = await this.productVariantService_.list(
@@ -465,8 +556,8 @@ export default class ProductModuleService
       (tag): tag is ProductTypes.CreateProductTagDTO => !tag.id
     )
 
-    let created: ProductTag[] = []
-    let updated: ProductTag[] = []
+    let created: InferEntityType<typeof ProductTag>[] = []
+    let updated: InferEntityType<typeof ProductTag>[] = []
 
     if (forCreate.length) {
       created = await this.productTagService_.create(forCreate, sharedContext)
@@ -595,8 +686,8 @@ export default class ProductModuleService
       (type): type is ProductTypes.CreateProductTypeDTO => !type.id
     )
 
-    let created: ProductType[] = []
-    let updated: ProductType[] = []
+    let created: InferEntityType<typeof ProductType>[] = []
+    let updated: InferEntityType<typeof ProductType>[] = []
 
     if (forCreate.length) {
       created = await this.productTypeService_.create(forCreate, sharedContext)
@@ -693,7 +784,7 @@ export default class ProductModuleService
   protected async createOptions_(
     data: ProductTypes.CreateProductOptionDTO[],
     @MedusaContext() sharedContext: Context = {}
-  ): Promise<ProductOption[]> {
+  ): Promise<InferEntityType<typeof ProductOption>[]> {
     if (data.some((v) => !v.product_id)) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
@@ -740,8 +831,8 @@ export default class ProductModuleService
       (option): option is ProductTypes.CreateProductOptionDTO => !option.id
     )
 
-    let created: ProductOption[] = []
-    let updated: ProductOption[] = []
+    let created: InferEntityType<typeof ProductOption>[] = []
+    let updated: InferEntityType<typeof ProductOption>[] = []
 
     if (forCreate.length) {
       created = await this.createOptions_(forCreate, sharedContext)
@@ -806,7 +897,7 @@ export default class ProductModuleService
   protected async updateOptions_(
     data: UpdateProductOptionInput[],
     @MedusaContext() sharedContext: Context = {}
-  ): Promise<ProductOption[]> {
+  ): Promise<InferEntityType<typeof ProductOption>[]> {
     // Validation step
     if (data.some((option) => !option.id)) {
       throw new MedusaError(
@@ -915,7 +1006,7 @@ export default class ProductModuleService
   async createCollections_(
     data: ProductTypes.CreateProductCollectionDTO[],
     @MedusaContext() sharedContext: Context = {}
-  ): Promise<ProductCollection[]> {
+  ): Promise<InferEntityType<typeof ProductCollection>[]> {
     const normalizedInput = data.map(
       ProductModuleService.normalizeCreateProductCollectionInput
     )
@@ -960,12 +1051,13 @@ export default class ProductModuleService
         !collection.id
     )
 
-    let created: ProductCollection[] = []
-    let updated: ProductCollection[] = []
+    let created: InferEntityType<typeof ProductCollection>[] = []
+    let updated: InferEntityType<typeof ProductCollection>[] = []
 
     if (forCreate.length) {
       created = await this.createCollections_(forCreate, sharedContext)
     }
+
     if (forUpdate.length) {
       updated = await this.updateCollections_(forUpdate, sharedContext)
     }
@@ -1055,7 +1147,7 @@ export default class ProductModuleService
   protected async updateCollections_(
     data: UpdateCollectionInput[],
     @MedusaContext() sharedContext: Context = {}
-  ): Promise<ProductCollection[]> {
+  ): Promise<InferEntityType<typeof ProductCollection>[]> {
     const normalizedInput = data.map(
       ProductModuleService.normalizeUpdateProductCollectionInput
     ) as UpdateCollectionInput[]
@@ -1069,7 +1161,7 @@ export default class ProductModuleService
       sharedContext
     )
 
-    const collections: ProductCollection[] = []
+    const collections: InferEntityType<typeof ProductCollection>[] = []
 
     const updateSelectorAndData = updatedCollections.flatMap(
       (collectionData) => {
@@ -1083,8 +1175,11 @@ export default class ProductModuleService
 
         if (!!productsToUpdate?.length) {
           const productIds = productsToUpdate.map((p) => p.id)
+
           dissociateSelector["id"] = { $nin: productIds }
           associateSelector["id"] = { $in: productIds }
+        } else if (!isDefined(productsToUpdate)) {
+          return []
         }
 
         const result: Record<string, any>[] = [
@@ -1108,13 +1203,16 @@ export default class ProductModuleService
         collections.push({
           ...collectionData,
           products: productsToUpdate ?? [],
-        } as ProductCollection)
+        } as InferEntityType<typeof ProductCollection>)
 
         return result
       }
     )
 
-    await this.productService_.update(updateSelectorAndData, sharedContext)
+    if (updateSelectorAndData.length) {
+      await this.productService_.update(updateSelectorAndData, sharedContext)
+    }
+
     return collections
   }
 
@@ -1138,7 +1236,12 @@ export default class ProductModuleService
   ): Promise<
     ProductTypes.ProductCategoryDTO[] | ProductTypes.ProductCategoryDTO
   > {
-    const input = Array.isArray(data) ? data : [data]
+    const input = (Array.isArray(data) ? data : [data]).map(
+      (productCategory) => {
+        productCategory.handle ??= kebabCase(productCategory.name)
+        return productCategory
+      }
+    )
 
     const categories = await this.productCategoryService_.create(
       input,
@@ -1185,8 +1288,8 @@ export default class ProductModuleService
         !category.id
     )
 
-    let created: ProductCategory[] = []
-    let updated: ProductCategory[] = []
+    let created: InferEntityType<typeof ProductCategory>[] = []
+    let updated: InferEntityType<typeof ProductCategory>[] = []
 
     if (forCreate.length) {
       created = await this.productCategoryService_.create(
@@ -1336,8 +1439,8 @@ export default class ProductModuleService
       (product): product is ProductTypes.CreateProductDTO => !product.id
     )
 
-    let created: Product[] = []
-    let updated: Product[] = []
+    let created: InferEntityType<typeof Product>[] = []
+    let updated: InferEntityType<typeof Product>[] = []
 
     if (forCreate.length) {
       created = await this.createProducts_(forCreate, sharedContext)
@@ -1424,7 +1527,7 @@ export default class ProductModuleService
   protected async createProducts_(
     data: ProductTypes.CreateProductDTO[],
     @MedusaContext() sharedContext: Context = {}
-  ): Promise<Product[]> {
+  ): Promise<InferEntityType<typeof Product>[]> {
     const normalizedInput = await promiseAll(
       data.map(async (d) => {
         const normalized = await this.normalizeCreateProductInput(
@@ -1440,7 +1543,7 @@ export default class ProductModuleService
       await this.productService_.upsertWithReplace(
         normalizedInput,
         {
-          relations: ["images", "tags", "categories"],
+          relations: ["tags", "categories"],
         },
         sharedContext
       )
@@ -1480,6 +1583,27 @@ export default class ProductModuleService
             )
           upsertedProduct.variants = productVariants
         }
+
+        if (Array.isArray(product.images)) {
+          if (product.images.length) {
+            const { entities: productImages } =
+              await this.productImageService_.upsertWithReplace(
+                product.images.map((image, rank) => ({
+                  ...image,
+                  product_id: upsertedProduct.id,
+                  rank,
+                })),
+                {},
+                sharedContext
+              )
+            upsertedProduct.images = productImages
+          } else {
+            await this.productImageService_.delete(
+              { product_id: upsertedProduct.id },
+              sharedContext
+            )
+          }
+        }
       })
     )
 
@@ -1490,7 +1614,7 @@ export default class ProductModuleService
   protected async updateProducts_(
     data: UpdateProductInput[],
     @MedusaContext() sharedContext: Context = {}
-  ): Promise<Product[]> {
+  ): Promise<InferEntityType<typeof Product>[]> {
     const normalizedInput = await promiseAll(
       data.map(async (d) => {
         const normalized = await this.normalizeUpdateProductInput(
@@ -1506,7 +1630,7 @@ export default class ProductModuleService
       await this.productService_.upsertWithReplace(
         normalizedInput,
         {
-          relations: ["images", "tags", "categories"],
+          relations: ["tags", "categories"],
         },
         sharedContext
       )
@@ -1585,6 +1709,37 @@ export default class ProductModuleService
             sharedContext
           )
         }
+
+        if (Array.isArray(product.images)) {
+          if (product.images.length) {
+            const { entities: productImages } =
+              await this.productImageService_.upsertWithReplace(
+                product.images.map((image, rank) => ({
+                  ...image,
+                  product_id: upsertedProduct.id,
+                  rank,
+                })),
+                {},
+                sharedContext
+              )
+            upsertedProduct.images = productImages
+
+            await this.productImageService_.delete(
+              {
+                product_id: upsertedProduct.id,
+                id: {
+                  $nin: productImages.map(({ id }) => id),
+                },
+              },
+              sharedContext
+            )
+          } else {
+            await this.productImageService_.delete(
+              { product_id: upsertedProduct.id },
+              sharedContext
+            )
+          }
+        }
       })
     )
 
@@ -1610,6 +1765,13 @@ export default class ProductModuleService
     productData: ProductTypes.CreateProductDTO
   ) {
     this.validateProductPayload(productData)
+
+    if (!productData.title) {
+      throw new MedusaError(
+        MedusaError.Types.INVALID_DATA,
+        `Product title is required`
+      )
+    }
 
     const options = productData.options
     const missingOptionsVariants: string[] = []
@@ -1734,12 +1896,11 @@ export default class ProductModuleService
     collection: ProductTypes.CreateProductCollectionDTO | UpdateCollectionInput
   ): ProductTypes.CreateProductCollectionDTO | UpdateCollectionInput {
     const collectionData = { ...collection }
-    if (collectionData.product_ids?.length) {
+    if (Array.isArray(collectionData.product_ids)) {
       ;(collectionData as any).products = collectionData.product_ids.map(
-        (pid) => ({
-          id: pid,
-        })
+        (pid) => ({ id: pid })
       )
+
       delete collectionData.product_ids
     }
 
@@ -1750,7 +1911,7 @@ export default class ProductModuleService
     variants:
       | ProductTypes.CreateProductVariantDTO[]
       | ProductTypes.UpdateProductVariantDTO[],
-    options: ProductOption[]
+    options: InferEntityType<typeof ProductOption>[]
   ):
     | ProductTypes.CreateProductVariantDTO[]
     | ProductTypes.UpdateProductVariantDTO[] {
@@ -1823,7 +1984,7 @@ export default class ProductModuleService
       | ProductTypes.CreateProductVariantDTO
       | UpdateProductVariantInput
     ) & { options: { id: string }[]; product_id: string })[],
-    variants: ProductVariant[]
+    variants: InferEntityType<typeof ProductVariant>[]
   ) {
     for (const variantData of data) {
       const existingVariant = variants.find((v) => {

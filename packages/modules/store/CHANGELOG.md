@@ -1,5 +1,33 @@
 # @medusajs/store
 
+## 2.1.3
+
+## 2.1.2
+
+## 2.1.1
+
+### Patch Changes
+
+- [#10467](https://github.com/medusajs/medusa/pull/10467) [`f3c91c908a1c8d38eb31c21dbd94d4ad6cea9688`](https://github.com/medusajs/medusa/commit/f3c91c908a1c8d38eb31c21dbd94d4ad6cea9688) Thanks [@thetutlage](https://github.com/thetutlage)! - refactor: migrate store module to DML
+
+## 2.1.0
+
+## 2.0.7
+
+## 2.0.6
+
+## 2.0.5
+
+### Patch Changes
+
+- [#10119](https://github.com/medusajs/medusa/pull/10119) [`2822972e04f12d2ca9378dd09529ab6ca308a286`](https://github.com/medusajs/medusa/commit/2822972e04f12d2ca9378dd09529ab6ca308a286) Thanks [@adrien2p](https://github.com/adrien2p)! - Fix/mikro orm cli wrapper
+
+## 2.0.4
+
+## 2.0.3
+
+## 2.0.2
+
 ## 2.0.1
 
 ## 2.0.0

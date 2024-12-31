@@ -18,9 +18,9 @@ import {
 import {
   createRemoteLinkStep,
   emitEventStep,
+  useQueryGraphStep,
   useRemoteQueryStep,
 } from "../../common"
-import { useQueryStep } from "../../common/steps/use-query"
 import { createOrdersStep } from "../../order/steps/create-orders"
 import { authorizePaymentSessionStep } from "../../payment/steps/authorize-payment-session"
 import { registerUsageStep } from "../../promotion/steps/register-usage"
@@ -31,6 +31,7 @@ import { prepareConfirmInventoryInput } from "../utils/prepare-confirm-inventory
 import {
   prepareAdjustmentsData,
   prepareLineItemData,
+  PrepareLineItemDataInput,
   prepareTaxLinesData,
 } from "../utils/prepare-line-item-data"
 
@@ -54,7 +55,7 @@ export const completeCartWorkflow = createWorkflow(
   (
     input: WorkflowData<CompleteCartWorkflowInput>
   ): WorkflowResponse<{ id: string }> => {
-    const orderCart = useQueryStep({
+    const orderCart = useQueryGraphStep({
       entity: "order_cart",
       fields: ["cart_id", "order_id"],
       filters: { cart_id: input.id },
@@ -65,7 +66,7 @@ export const completeCartWorkflow = createWorkflow(
     })
 
     // If order ID does not exist, we are completing the cart for the first time
-    const order = when({ orderId }, ({ orderId }) => {
+    const order = when("create-order", { orderId }, ({ orderId }) => {
       return !orderId
     }).then(() => {
       const cart = useRemoteQueryStep({
@@ -77,7 +78,7 @@ export const completeCartWorkflow = createWorkflow(
 
       const paymentSessions = validateCartPaymentsStep({ cart })
 
-      authorizePaymentSessionStep({
+      const payment = authorizePaymentSessionStep({
         // We choose the first payment session, as there will only be one active payment session
         // This might change in the future.
         id: paymentSessions[0].id,
@@ -103,20 +104,29 @@ export const completeCartWorkflow = createWorkflow(
         }
       })
 
-      const cartToOrder = transform({ cart }, ({ cart }) => {
+      const cartToOrder = transform({ cart, payment }, ({ cart, payment }) => {
+        const transactions =
+          payment?.captures?.map((capture) => {
+            return {
+              amount: capture.raw_amount ?? capture.amount,
+              currency_code: payment.currency_code,
+              reference: "capture",
+              reference_id: capture.id,
+            }
+          }) ?? []
+
         const allItems = (cart.items ?? []).map((item) => {
-          return prepareLineItemData({
+          const input: PrepareLineItemDataInput = {
             item,
             variant: item.variant,
-            unitPrice: item.raw_unit_price ?? item.unit_price,
-            compareAtUnitPrice:
-              item.raw_compare_at_unit_price ?? item.compare_at_unit_price,
+            cartId: cart.id,
+            unitPrice: item.unit_price,
             isTaxInclusive: item.is_tax_inclusive,
-            quantity: item.raw_quantity ?? item.quantity,
-            metadata: item?.metadata,
             taxLines: item.tax_lines ?? [],
             adjustments: item.adjustments ?? [],
-          })
+          }
+
+          return prepareLineItemData(input)
         })
 
         const shippingMethods = (cart.shipping_methods ?? []).map((sm) => {
@@ -158,6 +168,7 @@ export const completeCartWorkflow = createWorkflow(
           shipping_methods: shippingMethods,
           metadata: cart.metadata,
           promo_codes: promoCodes,
+          transactions,
         }
       })
 

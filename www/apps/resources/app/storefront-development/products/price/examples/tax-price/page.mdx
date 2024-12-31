@@ -1,6 +1,11 @@
 ---
 sidebar_position: 3
 sidebar_label: "Example: Show Price with Taxes"
+tags:
+  - product
+  - storefront
+  - pricing
+  - tax
 ---
 
 export const metadata = {
@@ -31,7 +36,7 @@ const queryParams = new URLSearchParams({
 fetch(`http://localhost:9000/store/products/${id}?${queryParams.toString()}`, {
   credentials: "include",
   headers: {
-    "x-publishable-api-key": process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY,
+    "x-publishable-api-key": process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || "temp",
   },
 })
 .then((res) => res.json())
@@ -141,7 +146,7 @@ export default function Product({ params: { id } }: Params) {
     fetch(`http://localhost:9000/store/products/${id}?${queryParams.toString()}`, {
       credentials: "include",
       headers: {
-        "x-publishable-api-key": process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY,
+        "x-publishable-api-key": process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || "temp",
       },
     })
     .then((res) => res.json())

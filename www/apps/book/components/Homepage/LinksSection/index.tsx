@@ -7,7 +7,7 @@ const HomepageLinksSection = () => {
       title: "Customize Medusa Application",
       links: [
         {
-          href: "/learn",
+          href: "/learn/installation",
           text: "Create your first application",
         },
         {
@@ -24,11 +24,11 @@ const HomepageLinksSection = () => {
       title: "Admin Development",
       links: [
         {
-          href: "/learn/basics/admin-customizations",
+          href: "/learn/fundamentals/admin/widgets",
           text: "Build a UI Widget",
         },
         {
-          href: "/learn/advanced-development/admin/ui-routes",
+          href: "/learn/fundamentals/admin/ui-routes",
           text: "Add a UI Route",
         },
         {
@@ -84,7 +84,12 @@ const Section = ({ title, links }: SectionProps) => {
     <div className="flex flex-col gap-0.5 flex-1">
       <h3 className="text-h3 text-medusa-fg-base">{title}</h3>
       {links.map((link, index) => (
-        <Link key={index} className="text-compact-small-plus" href={link.href}>
+        <Link
+          key={index}
+          className="text-compact-small-plus"
+          href={link.href}
+          prefetch={false}
+        >
           {link.text}
         </Link>
       ))}

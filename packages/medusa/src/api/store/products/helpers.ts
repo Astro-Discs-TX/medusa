@@ -1,3 +1,4 @@
+import { MedusaStoreRequest, refetchEntity } from "@medusajs/framework/http"
 import {
   HttpTypes,
   ItemTaxLineDTO,
@@ -5,22 +6,18 @@ import {
   TaxableItemDTO,
   TaxCalculationContext,
 } from "@medusajs/framework/types"
-import {
-  MedusaRequest,
-  refetchEntities,
-  refetchEntity,
-} from "@medusajs/framework/http"
 import { calculateAmountsWithTax, Modules } from "@medusajs/framework/utils"
 import { TaxModuleService } from "@medusajs/tax/dist/services"
 
-export type RequestWithContext<T> = MedusaRequest<T> & {
-  taxContext: {
-    taxLineContext?: TaxCalculationContext
-    taxInclusivityContext?: {
-      automaticTaxes: boolean
+export type RequestWithContext<Body, QueryFields = Record<string, unknown>> = 
+  MedusaStoreRequest<Body, QueryFields> & {
+    taxContext: {
+      taxLineContext?: TaxCalculationContext
+      taxInclusivityContext?: {
+        automaticTaxes: boolean
+      }
     }
   }
-}
 
 export const refetchProduct = async (
   idOrFilter: string | object,
@@ -28,27 +25,6 @@ export const refetchProduct = async (
   fields: string[]
 ) => {
   return await refetchEntity("product", idOrFilter, scope, fields)
-}
-
-export const maybeApplyStockLocationId = async (req: MedusaRequest, ctx) => {
-  const withInventoryQuantity = req.remoteQueryConfig.fields.some((field) =>
-    field.includes("variants.inventory_quantity")
-  )
-
-  if (!withInventoryQuantity) {
-    return
-  }
-
-  const salesChannelId = req.filterableFields.sales_channel_id || []
-
-  const entities = await refetchEntities(
-    "sales_channel_location",
-    { sales_channel_id: salesChannelId },
-    req.scope,
-    ["stock_location_id"]
-  )
-
-  return entities.map((entity) => entity.stock_location_id)
 }
 
 export const wrapProductsWithTaxPrices = async <T>(
@@ -114,12 +90,6 @@ const asTaxItem = (product: HttpTypes.StoreProduct): TaxableItemDTO[] => {
       return {
         id: variant.id,
         product_id: product.id,
-        product_name: product.title,
-        product_categories: product.categories?.map((c) => c.name),
-        // TODO: It is strange that we only accept a single category, revisit the tax module implementation
-        product_category_id: product.categories?.[0]?.id,
-        product_sku: variant.sku,
-        product_type: product.type,
         product_type_id: product.type_id,
         quantity: 1,
         unit_price: variant.calculated_price.calculated_amount,

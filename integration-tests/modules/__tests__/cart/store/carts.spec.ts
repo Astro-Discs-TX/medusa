@@ -1,4 +1,5 @@
 import { RemoteLink } from "@medusajs/modules-sdk"
+import { medusaIntegrationTestRunner } from "@medusajs/test-utils"
 import {
   IApiKeyModuleService,
   ICartModuleService,
@@ -19,9 +20,7 @@ import {
   Modules,
   ProductStatus,
   PromotionType,
-  RuleOperator,
 } from "@medusajs/utils"
-import { medusaIntegrationTestRunner } from "@medusajs/test-utils"
 import {
   createAdminUser,
   generatePublishableKey,
@@ -417,7 +416,8 @@ medusaIntegrationTestRunner({
 
         it("should create cart with logged-in customer", async () => {
           const { customer, jwt } = await createAuthenticatedCustomer(
-            appContainer
+            api,
+            storeHeaders
           )
 
           const response = await api.post(
@@ -714,214 +714,6 @@ medusaIntegrationTestRunner({
           })
         })
 
-        it("should add item to cart", async () => {
-          const customer = await customerModule.createCustomers({
-            email: "tony@stark-industries.com",
-          })
-
-          const salesChannel = await scModule.createSalesChannels({
-            name: "Webshop",
-          })
-
-          const [productWithSpecialTax] = await productModule.createProducts([
-            {
-              // This product ID is setup in the tax structure fixture (setupTaxStructure)
-              id: "product_id_1",
-              title: "Test product",
-              variants: [{ title: "Test variant", manage_inventory: false }],
-            } as any,
-          ])
-
-          const [productWithDefaultTax] = await productModule.createProducts([
-            {
-              title: "Test product default tax",
-              variants: [
-                { title: "Test variant default tax", manage_inventory: false },
-              ],
-            },
-          ])
-
-          await api.post(
-            "/admin/price-preferences",
-            {
-              attribute: "currency_code",
-              value: "usd",
-              is_tax_inclusive: true,
-            },
-            adminHeaders
-          )
-
-          const cart = await cartModule.createCarts({
-            currency_code: "usd",
-            customer_id: customer.id,
-            sales_channel_id: salesChannel.id,
-            region_id: region.id,
-            shipping_address: {
-              customer_id: customer.id,
-              address_1: "test address 1",
-              address_2: "test address 2",
-              city: "SF",
-              country_code: "US",
-              province: "CA",
-              postal_code: "94016",
-            },
-            items: [
-              {
-                id: "item-1",
-                unit_price: 2000,
-                quantity: 1,
-                title: "Test item",
-                product_id: "prod_mat",
-              } as any,
-            ],
-          })
-
-          const appliedPromotion = await promotionModule.createPromotions({
-            code: "PROMOTION_APPLIED",
-            type: PromotionType.STANDARD,
-            application_method: {
-              type: "fixed",
-              target_type: "items",
-              allocation: "across",
-              value: 300,
-              apply_to_quantity: 2,
-              currency_code: "usd",
-              target_rules: [
-                {
-                  attribute: "product_id",
-                  operator: "in",
-                  values: ["prod_mat", productWithSpecialTax.id],
-                },
-              ],
-            },
-          })
-
-          const [lineItemAdjustment] = await cartModule.addLineItemAdjustments([
-            {
-              code: appliedPromotion.code!,
-              amount: 300,
-              item_id: "item-1",
-              promotion_id: appliedPromotion.id,
-            },
-          ])
-
-          const [priceSet, priceSetDefaultTax] =
-            await pricingModule.createPriceSets([
-              {
-                prices: [{ amount: 3000, currency_code: "usd" }],
-              },
-              {
-                prices: [{ amount: 2000, currency_code: "usd" }],
-              },
-            ])
-
-          await remoteLink.create([
-            {
-              [Modules.PRODUCT]: {
-                variant_id: productWithSpecialTax.variants[0].id,
-              },
-              [Modules.PRICING]: { price_set_id: priceSet.id },
-            },
-            {
-              [Modules.PRODUCT]: {
-                variant_id: productWithDefaultTax.variants[0].id,
-              },
-              [Modules.PRICING]: { price_set_id: priceSetDefaultTax.id },
-            },
-            {
-              [Modules.CART]: { cart_id: cart.id },
-              [Modules.PROMOTION]: { promotion_id: appliedPromotion.id },
-            },
-          ])
-
-          let response = await api.post(
-            `/store/carts/${cart.id}/line-items`,
-            {
-              variant_id: productWithSpecialTax.variants[0].id,
-              quantity: 1,
-            },
-            storeHeaders
-          )
-
-          expect(response.status).toEqual(200)
-
-          expect(response.data.cart).toEqual(
-            expect.objectContaining({
-              id: cart.id,
-              currency_code: "usd",
-              items: expect.arrayContaining([
-                expect.objectContaining({
-                  unit_price: 3000,
-                  is_tax_inclusive: true,
-                  quantity: 1,
-                  title: "Test variant",
-                  tax_lines: [
-                    expect.objectContaining({
-                      description: "CA Reduced Rate for Products",
-                      code: "CAREDUCE_PROD",
-                      rate: 3,
-                      provider_id: "system",
-                    }),
-                  ],
-                  adjustments: [
-                    expect.objectContaining({
-                      code: "PROMOTION_APPLIED",
-                      amount: 177.86561264822134,
-                    }),
-                  ],
-                }),
-                expect.objectContaining({
-                  unit_price: 2000,
-                  is_tax_inclusive: false,
-                  quantity: 1,
-                  title: "Test item",
-                  tax_lines: [],
-                  adjustments: [
-                    expect.objectContaining({
-                      id: expect.not.stringContaining(lineItemAdjustment.id),
-                      code: "PROMOTION_APPLIED",
-                      amount: 122.13438735177866,
-                    }),
-                  ],
-                }),
-              ]),
-            })
-          )
-
-          response = await api.post(
-            `/store/carts/${cart.id}/line-items`,
-            {
-              variant_id: productWithDefaultTax.variants[0].id,
-              quantity: 1,
-            },
-            storeHeaders
-          )
-
-          expect(response.data.cart).toEqual(
-            expect.objectContaining({
-              id: cart.id,
-              currency_code: "usd",
-              items: expect.arrayContaining([
-                expect.objectContaining({
-                  unit_price: 2000,
-                  is_tax_inclusive: true,
-                  quantity: 1,
-                  title: "Test variant default tax",
-                  tax_lines: [
-                    // Uses the california default rate
-                    expect.objectContaining({
-                      description: "CA Default Rate",
-                      code: "CADEFAULT",
-                      rate: 5,
-                      provider_id: "system",
-                    }),
-                  ],
-                }),
-              ]),
-            })
-          )
-        })
-
         it("adding an existing variant should update or create line item depending on metadata", async () => {
           const product = (
             await api.post(`/admin/products`, productData, adminHeaders)
@@ -1178,6 +970,89 @@ medusaIntegrationTestRunner({
           )
         })
 
+        it("should update a carts tax lines with a reduced product type rate", async () => {
+          await setupTaxStructure(taxModule)
+
+          const region = await regionModule.createRegions({
+            name: "US",
+            currency_code: "usd",
+            automatic_taxes: false,
+            countries: ["ca"],
+          })
+
+          const cart = await cartModule.createCarts({
+            currency_code: "usd",
+            region_id: region.id,
+            shipping_address: {
+              address_1: "test address 1",
+              address_2: "test address 2",
+              city: "CA",
+              country_code: "CA",
+              province: "QC",
+              postal_code: "94016",
+            },
+            items: [
+              {
+                id: "item-1",
+                unit_price: 2000,
+                quantity: 1,
+                title: "Test item",
+                product_id: "prod_tshirt_reduced_tax",
+                product_type_id: "product_type_id_3",
+              } as any,
+              {
+                id: "item-2",
+                unit_price: 1000,
+                quantity: 1,
+                title: "Test item two",
+                product_id: "prod_tshirt",
+              } as any,
+            ],
+          })
+
+          let updated = await api.post(
+            `/store/carts/${cart.id}/taxes`,
+            {},
+            storeHeaders
+          )
+
+          expect(updated.status).toEqual(200)
+
+          expect(updated.data.cart).toEqual(
+            expect.objectContaining({
+              id: cart.id,
+              items: expect.arrayContaining([
+                expect.objectContaining({
+                  id: "item-2",
+                  tax_lines: expect.arrayContaining([
+                    // Regional rate for Quebec, Canada
+                    expect.objectContaining({
+                      description: "QC Default Rate",
+                      code: "QCDEFAULT",
+                      rate: 2,
+                      provider_id: "system",
+                    }),
+                  ]),
+                  adjustments: [],
+                }),
+                expect.objectContaining({
+                  id: "item-1",
+                  tax_lines: expect.arrayContaining([
+                    // Reduced rate for product types in Quebec, Canada
+                    expect.objectContaining({
+                      description: "QC Reduced Rate for Product Type",
+                      code: "QCREDUCE_TYPE",
+                      rate: 1,
+                      provider_id: "system",
+                    }),
+                  ]),
+                  adjustments: [],
+                }),
+              ]),
+            })
+          )
+        })
+
         it("should throw error when shipping is not present", async () => {
           await setupTaxStructure(taxModule)
 
@@ -1213,102 +1088,6 @@ medusaIntegrationTestRunner({
         })
       })
 
-      describe("POST /store/carts/:id/shipping-methods", () => {
-        it("should add a shipping methods to a cart", async () => {
-          const cart = await cartModule.createCarts({
-            currency_code: "usd",
-            shipping_address: { country_code: "us" },
-            items: [],
-          })
-
-          const shippingProfile =
-            await fulfillmentModule.createShippingProfiles({
-              name: "Test",
-              type: "default",
-            })
-
-          const fulfillmentSet = await fulfillmentModule.createFulfillmentSets({
-            name: "Test",
-            type: "test-type",
-            service_zones: [
-              {
-                name: "Test",
-                geo_zones: [{ type: "country", country_code: "us" }],
-              },
-            ],
-          })
-
-          await api.post(
-            "/admin/price-preferences",
-            {
-              attribute: "currency_code",
-              value: "usd",
-              is_tax_inclusive: true,
-            },
-            adminHeaders
-          )
-
-          const priceSet = await pricingModule.createPriceSets({
-            prices: [{ amount: 3000, currency_code: "usd" }],
-          })
-
-          const shippingOption = await fulfillmentModule.createShippingOptions({
-            name: "Test shipping option",
-            service_zone_id: fulfillmentSet.service_zones[0].id,
-            shipping_profile_id: shippingProfile.id,
-            provider_id: "manual_test-provider",
-            price_type: "flat",
-            type: {
-              label: "Test type",
-              description: "Test description",
-              code: "test-code",
-            },
-            rules: [
-              {
-                operator: RuleOperator.EQ,
-                attribute: "is_return",
-                value: "false",
-              },
-              {
-                operator: RuleOperator.EQ,
-                attribute: "enabled_in_store",
-                value: "true",
-              },
-            ],
-          })
-
-          await remoteLink.create([
-            {
-              [Modules.FULFILLMENT]: { shipping_option_id: shippingOption.id },
-              [Modules.PRICING]: { price_set_id: priceSet.id },
-            },
-          ])
-
-          let response = await api.post(
-            `/store/carts/${cart.id}/shipping-methods`,
-            { option_id: shippingOption.id },
-            storeHeaders
-          )
-
-          expect(response.status).toEqual(200)
-          expect(response.data.cart).toEqual(
-            expect.objectContaining({
-              id: cart.id,
-              shipping_methods: [
-                {
-                  shipping_option_id: shippingOption.id,
-                  amount: 3000,
-                  is_tax_inclusive: true,
-                  id: expect.any(String),
-                  tax_lines: [],
-                  adjustments: [],
-                },
-              ],
-            })
-          )
-        })
-      })
-
       describe("POST /store/carts/:id/complete", () => {
         let salesChannel
         let product
@@ -1338,10 +1117,26 @@ medusaIntegrationTestRunner({
             )
           ).data.sales_channel
 
+          const salesChannel2 = (
+            await api.post(
+              "/admin/sales-channels",
+              { name: "second channel", description: "channel" },
+              adminHeaders
+            )
+          ).data.sales_channel
+
           stockLocation = (
             await api.post(
               `/admin/stock-locations`,
               { name: "test location" },
+              adminHeaders
+            )
+          ).data.stock_location
+
+          const stockLocation2 = (
+            await api.post(
+              `/admin/stock-locations`,
+              { name: "test location 2" },
               adminHeaders
             )
           ).data.stock_location
@@ -1366,8 +1161,23 @@ medusaIntegrationTestRunner({
           )
 
           await api.post(
+            `/admin/inventory-items/${inventoryItem.id}/location-levels`,
+            {
+              location_id: stockLocation2.id,
+              stocked_quantity: 10,
+            },
+            adminHeaders
+          )
+
+          await api.post(
             `/admin/stock-locations/${stockLocation.id}/sales-channels`,
             { add: [salesChannel.id] },
+            adminHeaders
+          )
+
+          await api.post(
+            `/admin/stock-locations/${stockLocation2.id}/sales-channels`,
+            { add: [salesChannel2.id] },
             adminHeaders
           )
 
@@ -1429,6 +1239,23 @@ medusaIntegrationTestRunner({
               },
               [Modules.FULFILLMENT]: {
                 fulfillment_set_id: fulfillmentSet.id,
+              },
+            },
+            {
+              [Modules.PRODUCT]: {
+                product_id: product.id,
+              },
+              [Modules.SALES_CHANNEL]: {
+                sales_channel_id: salesChannel2.id,
+              },
+            },
+            // Add product to 2 sales channels to test that the right stock location is selected for reservations
+            {
+              [Modules.PRODUCT]: {
+                product_id: product.id,
+              },
+              [Modules.SALES_CHANNEL]: {
+                sales_channel_id: salesChannel.id,
               },
             },
           ])
@@ -1796,6 +1623,192 @@ medusaIntegrationTestRunner({
           expect(error.response.data).toEqual({
             type: "invalid_data",
             message: `Cart ${cart.id} is already completed.`,
+          })
+        })
+
+        it("should create another guest customer and update the cart email when an different email is provided", async () => {
+          const cart = (
+            await api.post(
+              `/store/carts`,
+              {
+                currency_code: "usd",
+                email: "tony@stark-industries.com",
+                shipping_address: {
+                  address_1: "test address 1",
+                  address_2: "test address 2",
+                  city: "ny",
+                  country_code: "us",
+                  province: "ny",
+                  postal_code: "94016",
+                },
+                sales_channel_id: salesChannel.id,
+              },
+              storeHeaders
+            )
+          ).data.cart
+
+          const originalCartCustomer = cart.customer
+
+          // update the cart without providing an email
+          await api.post(
+            `/store/carts/${cart.id}`,
+            {
+              metadata: {
+                test: "test updated",
+              },
+            },
+            storeHeaders
+          )
+
+          let currentCart = await api.get(
+            `/store/carts/${cart.id}`,
+            storeHeaders
+          )
+          let currentCartCustomer = currentCart.data.cart.customer
+
+          let customerData = (
+            await api.get(
+              `/admin/customers/${currentCart.data.cart.customer_id}`,
+              adminHeaders
+            )
+          ).data.customer
+
+          expect(currentCartCustomer).toEqual(originalCartCustomer)
+          expect(customerData.email).toEqual(currentCart.data.cart.email)
+          expect(currentCart.data.cart.email).toEqual(
+            "tony@stark-industries.com"
+          )
+          expect(currentCart.data.cart.metadata).toEqual({
+            test: "test updated",
+          })
+
+          // update the cart providing an email
+          await api.post(
+            `/store/carts/${cart.id}`,
+            {
+              email: "foo@bar.com",
+              metadata: {
+                test: "test updated 2, new customer",
+              },
+            },
+            storeHeaders
+          )
+
+          currentCart = await api.get(`/store/carts/${cart.id}`, storeHeaders)
+
+          customerData = (
+            await api.get(
+              `/admin/customers/${currentCart.data.cart.customer_id}`,
+              adminHeaders
+            )
+          ).data.customer
+
+          currentCartCustomer = currentCart.data.cart.customer
+
+          expect(currentCartCustomer).not.toEqual(originalCartCustomer)
+          expect(currentCart.data.cart.customer_id).not.toEqual(
+            originalCartCustomer.id
+          )
+          expect(customerData.email).toEqual(currentCart.data.cart.email)
+          expect(currentCart.data.cart.email).toEqual("foo@bar.com")
+          expect(currentCart.data.cart.metadata).toEqual({
+            test: "test updated 2, new customer",
+          })
+        })
+
+        it("should keep the same customer when updating the customer cart and update Cart's email if provided", async () => {
+          // create a customer
+          const mainEmail = "jhon.doe@acme.com"
+          await customerModule.createCustomers({
+            email: mainEmail,
+            has_account: true,
+          })
+
+          const cart = (
+            await api.post(
+              `/store/carts`,
+              {
+                currency_code: "usd",
+                email: mainEmail,
+                shipping_address: {
+                  address_1: "test address 1",
+                  address_2: "test address 2",
+                  city: "ny",
+                  country_code: "us",
+                  province: "ny",
+                  postal_code: "94016",
+                },
+                sales_channel_id: salesChannel.id,
+              },
+              storeHeaders
+            )
+          ).data.cart
+
+          const originalCartCustomer = cart.customer
+
+          // update the cart without providing an email
+          await api.post(
+            `/store/carts/${cart.id}`,
+            {
+              metadata: {
+                test: "test updated",
+              },
+            },
+            storeHeaders
+          )
+
+          let currentCart = await api.get(
+            `/store/carts/${cart.id}`,
+            storeHeaders
+          )
+          let currentCartCustomer = currentCart.data.cart.customer
+
+          let customerData = (
+            await api.get(
+              `/admin/customers/${currentCart.data.cart.customer_id}`,
+              adminHeaders
+            )
+          ).data.customer
+
+          expect(currentCartCustomer).toEqual(originalCartCustomer)
+          expect(customerData.email).toEqual(currentCart.data.cart.email)
+          expect(currentCart.data.cart.email).toEqual(mainEmail)
+          expect(currentCart.data.cart.metadata).toEqual({
+            test: "test updated",
+          })
+
+          // update the cart providing an email
+          await api.post(
+            `/store/carts/${cart.id}`,
+            {
+              email: "foo@bar.com",
+              metadata: {
+                test: "test updated 2, new customer",
+              },
+            },
+            storeHeaders
+          )
+
+          currentCart = await api.get(`/store/carts/${cart.id}`, storeHeaders)
+
+          customerData = (
+            await api.get(
+              `/admin/customers/${currentCart.data.cart.customer_id}`,
+              adminHeaders
+            )
+          ).data.customer
+
+          currentCartCustomer = currentCart.data.cart.customer
+
+          expect(currentCartCustomer).toEqual(originalCartCustomer)
+          expect(currentCart.data.cart.customer_id).toEqual(
+            originalCartCustomer.id
+          )
+          expect(customerData.email).not.toEqual(currentCart.data.cart.email)
+          expect(customerData.email).toEqual(mainEmail)
+          expect(currentCart.data.cart.email).toEqual("foo@bar.com")
+          expect(currentCart.data.cart.metadata).toEqual({
+            test: "test updated 2, new customer",
           })
         })
 

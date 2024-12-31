@@ -26,8 +26,9 @@ const jsSdkOptions: FormattingOptionsType = {
   },
   "^js_sdk/store/Store/properties/": {
     frontmatterData: {
-      slug: "/references/js-sdk/admin/{{alias}}",
+      slug: "/references/js-sdk/store/{{alias}}",
       sidebar_label: "{{alias}}",
+      tags: ["js sdk", "storefront"],
     },
     reflectionTitle: {
       kind: false,
@@ -36,6 +37,11 @@ const jsSdkOptions: FormattingOptionsType = {
     },
     reflectionDescription:
       "This documentation provides a reference to the `sdk.store.{{alias}}` set of methods used to send requests to Medusa's Store API routes.",
+    sections: {
+      ...baseSectionsOptions,
+      member_declaration_title: false,
+      member_declaration_children: false,
+    },
   },
   "^js_sdk/admin/classes/.*Admin": {
     frontmatterData: {
@@ -51,6 +57,7 @@ const jsSdkOptions: FormattingOptionsType = {
     frontmatterData: {
       slug: "/references/js-sdk/admin/{{alias}}",
       sidebar_label: "{{alias}}",
+      tags: ["js sdk", "admin"],
     },
     reflectionTitle: {
       kind: false,
@@ -69,6 +76,7 @@ const jsSdkOptions: FormattingOptionsType = {
   "^js_sdk/auth/classes/.*Auth": {
     frontmatterData: {
       slug: "/references/js-sdk/auth",
+      tags: ["js sdk"],
     },
     reflectionDescription:
       "The `sdk.auth` class provides methods to send requests to manage a user or customer's authentication",
@@ -80,6 +88,7 @@ const jsSdkOptions: FormattingOptionsType = {
     frontmatterData: {
       slug: "/references/js-sdk/auth/{{alias}}",
       sidebar_label: "{{alias}}",
+      tags: ["js sdk"],
     },
     reflectionTitle: {
       kind: false,

@@ -1,5 +1,33 @@
 # @medusajs/stock-location
 
+## 2.1.3
+
+## 2.1.2
+
+### Patch Changes
+
+- [#10471](https://github.com/medusajs/medusa/pull/10471) [`4ad9ac1e5f3b583514015ffd35b88d0f60b2b38a`](https://github.com/medusajs/medusa/commit/4ad9ac1e5f3b583514015ffd35b88d0f60b2b38a) Thanks [@thetutlage](https://github.com/thetutlage)! - refactor: migration stock location module
+
+## 2.1.1
+
+## 2.1.0
+
+## 2.0.7
+
+## 2.0.6
+
+## 2.0.5
+
+### Patch Changes
+
+- [#10119](https://github.com/medusajs/medusa/pull/10119) [`2822972e04f12d2ca9378dd09529ab6ca308a286`](https://github.com/medusajs/medusa/commit/2822972e04f12d2ca9378dd09529ab6ca308a286) Thanks [@adrien2p](https://github.com/adrien2p)! - Fix/mikro orm cli wrapper
+
+## 2.0.4
+
+## 2.0.3
+
+## 2.0.2
+
 ## 2.0.1
 
 ## 2.0.0

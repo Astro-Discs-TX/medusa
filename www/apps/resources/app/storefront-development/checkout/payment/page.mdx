@@ -1,3 +1,10 @@
+---
+tags:
+  - cart
+  - storefront
+  - payment
+---
+
 import { CodeTabs, CodeTab } from "docs-ui"
 
 export const metadata = {
@@ -60,7 +67,7 @@ const retrievePaymentProviders = async () => {
     }`, {
       credentials: "include",
       headers: {
-        "x-publishable-api-key": process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY,
+        "x-publishable-api-key": process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || "temp",
       },
     })
     .then((res) => res.json())
@@ -82,7 +89,7 @@ const selectPaymentProvider = async (
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-publishable-api-key": process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY,
+          "x-publishable-api-key": process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || "temp",
         },
         body: JSON.stringify({
           cart_id: cart.id,
@@ -103,7 +110,7 @@ const selectPaymentProvider = async (
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "x-publishable-api-key": process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY,
+      "x-publishable-api-key": process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || "temp",
     },
     body: JSON.stringify({
       provider_id: selectedPaymentProviderId,
@@ -119,7 +126,7 @@ const selectPaymentProvider = async (
     {
       credentials: "include",
       headers: {
-        "x-publishable-api-key": process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY,
+        "x-publishable-api-key": process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || "temp",
       },
     }
   )
@@ -209,7 +216,7 @@ export default function CheckoutPaymentStep() {
     }`, {
       credentials: "include",
       headers: {
-        "x-publishable-api-key": process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY,
+        "x-publishable-api-key": process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || "temp",
       },
     })
     .then((res) => res.json())
@@ -242,7 +249,7 @@ export default function CheckoutPaymentStep() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "x-publishable-api-key": process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY,
+            "x-publishable-api-key": process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || "temp",
           },
           body: JSON.stringify({
             cart_id: cart.id,
@@ -263,7 +270,7 @@ export default function CheckoutPaymentStep() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-publishable-api-key": process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY,
+        "x-publishable-api-key": process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || "temp",
       },
       body: JSON.stringify({
         provider_id: selectedPaymentProvider,
@@ -279,7 +286,7 @@ export default function CheckoutPaymentStep() {
       {
         credentials: "include",
         headers: {
-          "x-publishable-api-key": process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY,
+          "x-publishable-api-key": process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || "temp",
         },
       }
     )

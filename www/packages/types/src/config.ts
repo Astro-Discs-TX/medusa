@@ -19,5 +19,8 @@ export declare type DocsConfig = {
   version: {
     number: string
     releaseUrl: string
+    hide?: boolean
   }
+  reportIssueLink?: string
+  logo: string
 }

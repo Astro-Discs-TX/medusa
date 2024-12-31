@@ -50,6 +50,13 @@ export interface SoftDeletableEntity extends BaseEntity {
 }
 
 /**
+ * Temporary type fixing to allow any level of orders until we get to properly clean all the types
+ */
+export type FindConfigOrder = {
+  [Key: string]: "ASC" | "DESC" | (string & {}) | FindConfigOrder
+}
+
+/**
  * @interface
  *
  * An object that is used to configure how an entity is retrieved from the database. It accepts as a typed parameter an `Entity` class,
@@ -80,7 +87,7 @@ export interface FindConfig<Entity> {
    * An object used to specify how to sort the returned records. Its keys are the names of attributes of the entity, and a key's value can either be `ASC`
    * to sort retrieved records in an ascending order, or `DESC` to sort retrieved records in a descending order.
    */
-  order?: Record<string, "ASC" | "DESC" | (string & {})>
+  order?: FindConfigOrder
 
   /**
    * A boolean indicating whether deleted records should also be retrieved as part of the result. This only works if the entity extends the
@@ -241,38 +248,161 @@ export interface NumericalComparisonOperator {
 }
 
 /**
+ * The keywords that does not have a plural form
+ */
+type UncountableRules =
+  | "adulthood"
+  | "advice"
+  | "agenda"
+  | "aid"
+  | "aircraft"
+  | "alcohol"
+  | "ammo"
+  | "analytics"
+  | "anime"
+  | "athletics"
+  | "audio"
+  | "bison"
+  | "blood"
+  | "bream"
+  | "buffalo"
+  | "butter"
+  | "carp"
+  | "cash"
+  | "chassis"
+  | "chess"
+  | "clothing"
+  | "cod"
+  | "commerce"
+  | "cooperation"
+  | "corps"
+  | "debris"
+  | "diabetes"
+  | "digestion"
+  | "elk"
+  | "energy"
+  | "equipment"
+  | "excretion"
+  | "expertise"
+  | "firmware"
+  | "flounder"
+  | "fun"
+  | "gallows"
+  | "garbage"
+  | "graffiti"
+  | "hardware"
+  | "headquarters"
+  | "health"
+  | "herpes"
+  | "highjinks"
+  | "homework"
+  | "housework"
+  | "information"
+  | "jeans"
+  | "justice"
+  | "kudos"
+  | "labour"
+  | "literature"
+  | "machinery"
+  | "mackerel"
+  | "mail"
+  | "media"
+  | "mews"
+  | "moose"
+  | "music"
+  | "mud"
+  | "manga"
+  | "news"
+  | "only"
+  | "personnel"
+  | "pike"
+  | "plankton"
+  | "pliers"
+  | "police"
+  | "pollution"
+  | "premises"
+  | "rain"
+  | "research"
+  | "rice"
+  | "salmon"
+  | "scissors"
+  | "series"
+  | "sewage"
+  | "shambles"
+  | "shrimp"
+  | "software"
+  | "staff"
+  | "swine"
+  | "tennis"
+  | "traffic"
+  | "transportation"
+  | "trout"
+  | "tuna"
+  | "wealth"
+  | "welfare"
+  | "whiting"
+  | "wildebeest"
+  | "wildlife"
+  | "you"
+  | "deer"
+  | "sheep"
+  | "info"
+
+type PluralizationSpecialRules = {
+  person: "people"
+  child: "children"
+  man: "men"
+  criterion: "criteria"
+  tooth: "teeth"
+  foot: "feet"
+}
+
+/**
  * @ignore
  */
-export type Pluralize<Singular extends string> = Singular extends `${infer R}ss`
-  ? `${Singular}es`
-  : Singular extends `${infer R}sis`
-  ? `${R}ses`
-  : Singular extends `${infer R}is`
-  ? `${R}ises`
-  : Singular extends `${infer R}s`
-  ? `${Singular}`
-  : Singular extends `${infer R}ey`
-  ? `${R}eys`
-  : Singular extends `${infer R}y`
-  ? `${R}ies`
-  : Singular extends `${infer R}es`
-  ? `${Singular}`
-  : Singular extends
-      | `${infer R}sh`
-      | `${infer R}ch`
-      | `${infer R}x`
-      | `${infer R}z`
-      | `${infer R}o`
-  ? `${Singular}es`
-  : Singular extends `${infer R}fe`
-  ? `${R}ves`
-  : Singular extends `${infer R}ex` | `${infer R}ix`
-  ? `${R}ices`
-  : Singular extends `${infer R}eau`
-  ? `${R}eaux`
-  : Singular extends `${infer R}ieu`
-  ? `${R}ieux`
-  : `${Singular}s`
+export type Pluralize<Singular extends string> =
+  Lowercase<Singular> extends keyof PluralizationSpecialRules
+    ? PluralizationSpecialRules[Lowercase<Singular>]
+    : Lowercase<Singular> extends UncountableRules
+    ? Singular
+    : Singular extends `${string}ss`
+    ? `${Singular}es`
+    : Singular extends `${infer R}sis`
+    ? `${R}ses`
+    : Singular extends `${infer R}is`
+    ? `${R}ises`
+    : Singular extends `${string}s`
+    ? `${Singular}`
+    : Singular extends `${infer R}ay`
+    ? `${R}ays`
+    : Singular extends `${infer R}ey`
+    ? `${R}eys`
+    : Singular extends `${infer R}iy`
+    ? `${R}iys`
+    : Singular extends `${infer R}oy`
+    ? `${R}oys`
+    : Singular extends `${infer R}uy`
+    ? `${R}uys`
+    : Singular extends `${infer R}y`
+    ? `${R}ies`
+    : Singular extends `${string}es`
+    ? `${Singular}`
+    : Singular extends
+        | `${string}sh`
+        | `${string}ch`
+        | `${string}x`
+        | `${string}z`
+        | `${string}o`
+    ? `${Singular}es`
+    : Singular extends `${infer R}fe`
+    ? `${R}ves`
+    : Singular extends `${infer R}ex` | `${infer R}ix`
+    ? `${R}ices`
+    : Singular extends `${infer R}eau`
+    ? `${R}eaux`
+    : Singular extends `${infer R}ieu`
+    ? `${R}ieux`
+    : `${Singular}s`
 
 export type SnakeCase<S extends string> =
   S extends `${infer T}${infer U}${infer V}`
