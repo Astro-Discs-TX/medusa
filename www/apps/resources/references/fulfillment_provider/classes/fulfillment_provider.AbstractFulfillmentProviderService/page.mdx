@@ -242,9 +242,9 @@ you can retrieve the calculated price of the shipping method.
 class MyFulfillmentProviderService extends AbstractFulfillmentProviderService {
   // ...
   async calculatePrice(
-    optionData: Record<string, unknown>,
-    data: Record<string, unknown>,
-    context: any
+    optionData: CalculateShippingOptionPriceDTO["optionData"],
+    data: CalculateShippingOptionPriceDTO["data"],
+    context: CalculateShippingOptionPriceDTO["context"]
   ): Promise<CalculatedShippingOptionPrice> {
     // assuming the client can calculate the price using
     // the third-party service
