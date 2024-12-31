@@ -251,8 +251,8 @@ class MyFulfillmentProviderService extends AbstractFulfillmentProviderService {
     const price = await this.client.calculate(data)
     return {
       calculated_amount: price,
-      is_calculated_price_tax_inclusive: true
       // update this boolean value based on your logic
+      is_calculated_price_tax_inclusive: true
     }
   }
 }
