@@ -33,13 +33,17 @@ export const AdminGetProductVariantsParamsFields = z.object({
 export type AdminGetProductVariantsParamsType = z.infer<
   typeof AdminGetProductVariantsParams
 >
-export const AdminGetProductVariantsParams =
-  AdminGetProductVariantsParamsFields.merge(
-    applyAndAndOrOperators(AdminGetProductVariantsParamsFields)
-  )
+export const AdminGetProductVariantsParams = createFindParams({
+  offset: 0,
+  limit: 50,
+})
+  .merge(AdminGetProductVariantsParamsFields)
+  .merge(applyAndAndOrOperators(AdminGetProductVariantsParamsFields))
 
 export const AdminGetProductsParamsDirectFields = z.object({
-  variants: AdminGetProductVariantsParams.optional(),
+  variants: AdminGetProductVariantsParamsFields.merge(
+    applyAndAndOrOperators(AdminGetProductVariantsParamsFields)
+  ).optional(),
   status: statusEnum.array().optional(),
 })
 
