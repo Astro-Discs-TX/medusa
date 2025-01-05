@@ -1,5 +1,17 @@
 # @medusajs/cart
 
+## 2.1.3
+
+### Patch Changes
+
+- [#10408](https://github.com/medusajs/medusa/pull/10408) [`c9b8db04c1b35f1cf129bb9ad74789fbc2881815`](https://github.com/medusajs/medusa/commit/c9b8db04c1b35f1cf129bb9ad74789fbc2881815) Thanks [@olivermrbl](https://github.com/olivermrbl)! - chore: Support custom line items
+
+## 2.1.2
+
+### Patch Changes
+
+- [#10626](https://github.com/medusajs/medusa/pull/10626) [`95baacfd00f54de028226731b016917caacde5af`](https://github.com/medusajs/medusa/commit/95baacfd00f54de028226731b016917caacde5af) Thanks [@carlos-r-l-rodrigues](https://github.com/carlos-r-l-rodrigues)! - fix: Cart tax rate data type
+
 ## 2.1.1
 
 ### Patch Changes

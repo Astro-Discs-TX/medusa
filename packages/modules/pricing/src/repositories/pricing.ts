@@ -1,7 +1,10 @@
 import {
+  flattenObjectToKeyValuePairs,
+  isPresent,
   MedusaError,
   MikroOrmBase,
   PriceListStatus,
+  promiseAll,
 } from "@medusajs/framework/utils"
 
 import {
@@ -57,6 +60,40 @@ export class PricingRepository
     if (!isContextPresent) {
       return []
     }
+
+    // We query the rule tables to get all whitelisted rule attributes
+    // This will help cleanup the query and do a db query on only necessary rule attributes.
+    const priceRuleAttributesQuery = knex("price_rule")
+      .distinct("attribute")
+      .pluck("attribute")
+
+    const priceListRuleAttributesQuery = knex("price_list_rule")
+      .distinct("attribute")
+      .pluck("attribute")
+
+    const [ruleAttributes, priceListRuleAttributes] = await promiseAll([
+      priceRuleAttributesQuery,
+      priceListRuleAttributesQuery,
+    ])
+
+    const allowedRuleAttributes = [
+      ...ruleAttributes,
+      ...priceListRuleAttributes,
+    ]
+
+    const flattenedKeyValuePairs = flattenObjectToKeyValuePairs(context)
+
+    const flattenedContext = Object.entries(flattenedKeyValuePairs).filter(
+      ([key, value]) => {
+        const isValuePresent = !Array.isArray(value) && isPresent(value)
+        const isArrayPresent = Array.isArray(value) && value.flat(1).length
+
+        return (
+          allowedRuleAttributes.includes(key) &&
+          (isValuePresent || isArrayPresent)
+        )
+      }
+    )
 
     // Gets all the prices where rules match for each of the contexts
     // that the price set is configured for
@@ -135,19 +172,20 @@ export class PricingRepository
       priceBuilder
         .whereNull("price.price_list_id")
         .andWhere((withoutPriceListBuilder) => {
-          for (const [key, value] of Object.entries(context)) {
+          for (const [key, value] of flattenedContext) {
             withoutPriceListBuilder.orWhere((orBuilder) => {
               orBuilder.where("pr.attribute", key)
 
               if (typeof value === "number") {
-                orBuilder.where((operatorGroupBuilder) => {
-                  buildOperatorQueries(operatorGroupBuilder, value)
-                })
+                buildOperatorQueries(orBuilder, value)
               } else {
-                orBuilder.where({ "pr.value": value })
+                const normalizeValue = Array.isArray(value) ? value : [value]
+
+                orBuilder.whereIn("pr.value", normalizeValue)
               }
             })
           }
+
           withoutPriceListBuilder.orWhere("price.rules_count", "=", 0)
         })
     })
@@ -171,7 +209,7 @@ export class PricingRepository
         })
         .andWhere(function () {
           this.andWhere(function () {
-            for (const [key, value] of Object.entries(context)) {
+            for (const [key, value] of flattenedContext) {
               this.orWhere({ "plr.attribute": key })
               this.where(
                 "plr.value",
@@ -185,14 +223,18 @@ export class PricingRepository
 
           this.andWhere(function () {
             this.andWhere((contextBuilder) => {
-              for (const [key, value] of Object.entries(context)) {
+              for (const [key, value] of flattenedContext) {
                 contextBuilder.orWhere((orBuilder) => {
                   orBuilder.where("pr.attribute", key)
 
                   if (typeof value === "number") {
                     buildOperatorQueries(orBuilder, value)
                   } else {
-                    orBuilder.where({ "pr.value": value })
+                    const normalizeValue = Array.isArray(value)
+                      ? value
+                      : [value]
+
+                    orBuilder.whereIn("pr.value", normalizeValue)
                   }
                 })
               }
