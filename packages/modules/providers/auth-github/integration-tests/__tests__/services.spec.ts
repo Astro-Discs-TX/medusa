@@ -1,4 +1,4 @@
-import { generateJwtToken, MedusaError } from "@medusajs/framework/utils"
+import { MedusaError } from "@medusajs/framework/utils"
 import { GithubAuthService } from "../../src/services/github"
 import { http, HttpResponse } from "msw"
 import { setupServer } from "msw/node"
@@ -20,7 +20,9 @@ const sampleIdPayload = {
 }
 
 const baseUrl = "https://someurl.com"
-const callbackUrl = "https%3A%2F%2Fsomeurl.com%2Fauth%2Fgithub%2Fcallback"
+const callbackUrl = encodeURIComponent(
+  "https://someurl.com/auth/github/callback"
+)
 
 let state = {}
 const defaultSpies = {

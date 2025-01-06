@@ -28,7 +28,9 @@ const encodedIdToken = generateJwtToken(sampleIdPayload, {
 })
 
 const baseUrl = "https://someurl.com"
-const callbackUrl = "https%3A%2F%2Fsomeurl.com%2Fauth%2Fgoogle%2Fcallback"
+const callbackUrl = encodeURIComponent(
+  "https://someurl.com/auth/google/callback"
+)
 
 let state = {}
 const defaultSpies = {

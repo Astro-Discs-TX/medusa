@@ -59,16 +59,19 @@ export class GoogleAuthService extends AbstractAuthModuleProvider {
     req: AuthenticationInput,
     authIdentityService: AuthIdentityProviderService
   ): Promise<AuthenticationResponse> {
-    if (req.query?.error) {
+    const query: Record<string, string> = req.query ?? {}
+    const body: Record<string, string> = req.body ?? {}
+
+    if (query.error) {
       return {
         success: false,
-        error: `${req.query.error_description}, read more at: ${req.query.error_uri}`,
+        error: `${query.error_description}, read more at: ${query.error_uri}`,
       }
     }
 
     const stateKey = crypto.randomBytes(32).toString("hex")
     const state = {
-      callback_url: req.body?.callback_url ?? this.config_.callbackUrl,
+      callback_url: body?.callback_url ?? this.config_.callbackUrl,
     }
 
     await authIdentityService.setState(stateKey, state)
@@ -79,19 +82,22 @@ export class GoogleAuthService extends AbstractAuthModuleProvider {
     req: AuthenticationInput,
     authIdentityService: AuthIdentityProviderService
   ): Promise<AuthenticationResponse> {
-    if (req.query && req.query.error) {
+    const query: Record<string, string> = req.query ?? {}
+    const body: Record<string, string> = req.body ?? {}
+
+    if (query.error) {
       return {
         success: false,
-        error: `${req.query.error_description}, read more at: ${req.query.error_uri}`,
+        error: `${query.error_description}, read more at: ${query.error_uri}`,
       }
     }
 
-    const code = req.query?.code ?? req.body?.code
+    const code = query?.code ?? body?.code
     if (!code) {
       return { success: false, error: "No code provided" }
     }
 
-    const state = await authIdentityService.getState(req.query?.state as string)
+    const state = await authIdentityService.getState(query?.state as string)
     if (!state) {
       return { success: false, error: "No state provided, or session expired" }
     }
@@ -183,21 +189,12 @@ export class GoogleAuthService extends AbstractAuthModuleProvider {
   }
 
   private getRedirect(clientId: string, callbackUrl: string, stateKey: string) {
-    const redirectUrlParam = `redirect_uri=${encodeURIComponent(callbackUrl)}`
-    const clientIdParam = `client_id=${clientId}`
-    const responseTypeParam = "response_type=code"
-    const scopeParam = "scope=email+profile+openid"
-    const stateKeyParam = `state=${stateKey}`
-
-    const authUrl = new URL(
-      `https://accounts.google.com/o/oauth2/v2/auth?${[
-        redirectUrlParam,
-        clientIdParam,
-        responseTypeParam,
-        scopeParam,
-        stateKeyParam,
-      ].join("&")}`
-    )
+    const authUrl = new URL(`https://accounts.google.com/o/oauth2/v2/auth`)
+    authUrl.searchParams.set("redirect_uri", callbackUrl)
+    authUrl.searchParams.set("client_id", clientId)
+    authUrl.searchParams.set("response_type", "code")
+    authUrl.searchParams.set("scope", "email profile openid")
+    authUrl.searchParams.set("state", stateKey)
 
     return { success: true, location: authUrl.toString() }
   }
