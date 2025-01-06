@@ -108,18 +108,22 @@ function findexpressRoutePath({
   stack: ExpressStack[]
   url: string
 }): string | void {
-  const boundDispatchTarget = stack.find(
-    (layer) => layer.name === "bound dispatch" && layer.match(url)
-  )
+  const stackToProcess = [...stack]
 
-  if (boundDispatchTarget) {
-    return boundDispatchTarget.route.path
+  while (stackToProcess.length > 0) {
+    const layer = stackToProcess.pop()!
+
+    if (layer.name === "bound dispatch" && layer.match(url)) {
+      return layer.route.path
+    }
+
+    // Add nested stack items to be processed if they exist
+    if (layer.handle?.stack?.length) {
+      stackToProcess.push(...layer.handle.stack)
+    }
   }
 
-  return findexpressRoutePath({
-    stack: stack.flatMap((layer) => layer.handle.stack).filter(Boolean),
-    url,
-  })
+  return undefined
 }
 
 async function start(args: {
