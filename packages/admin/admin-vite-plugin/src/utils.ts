@@ -48,7 +48,7 @@ export function generateModule(code: string) {
   }
 }
 
-const VALID_FILE_EXTENSIONS = [".tsx", ".jsx"]
+const VALID_FILE_EXTENSIONS = [".tsx", ".jsx", ".js"]
 
 /**
  * Crawls a directory and returns all files that match the criteria.
@@ -125,6 +125,30 @@ export async function hasDefaultExport(
   traverse(ast, {
     ExportDefaultDeclaration() {
       hasDefaultExport = true
+    },
+    AssignmentExpression(path) {
+      if (
+        path.node.left.type === "MemberExpression" &&
+        path.node.left.object.type === "Identifier" &&
+        path.node.left.object.name === "exports" &&
+        path.node.left.property.type === "Identifier" &&
+        path.node.left.property.name === "default"
+      ) {
+        hasDefaultExport = true
+      }
+    },
+    ExportNamedDeclaration(path) {
+      const specifiers = path.node.specifiers
+      if (
+        specifiers?.some(
+          (s) =>
+            s.type === "ExportSpecifier" &&
+            s.exported.type === "Identifier" &&
+            s.exported.name === "default"
+        )
+      ) {
+        hasDefaultExport = true
+      }
     },
   })
   return hasDefaultExport
