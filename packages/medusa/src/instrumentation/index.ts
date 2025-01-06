@@ -38,10 +38,10 @@ export function instrumentHttpLayer() {
       return await requestHandler()
     }
 
-    const traceName = `${req.method} ${req.url}`
+    const traceName = handlerPath ?? `${req.method} ${req.url}`
     await HTTPTracer.trace(traceName, async (span) => {
       span.setAttributes({
-        handler: handlerPath,
+        route: handlerPath,
         "http.url": req.url,
         "http.method": req.method,
         ...req.headers,
