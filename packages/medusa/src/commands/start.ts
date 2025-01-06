@@ -19,6 +19,7 @@ import { logger } from "@medusajs/framework/logger"
 import loaders from "../loaders"
 import { MedusaModule } from "@medusajs/framework/modules-sdk"
 import { MedusaContainer } from "@medusajs/framework/types"
+import { parse } from "url"
 
 const EVERY_SIXTH_HOUR = "0 */6 * * *"
 const CRON_SCHEDULE = EVERY_SIXTH_HOUR
@@ -148,7 +149,7 @@ async function start(args: {
         if (traceRequestHandler) {
           const expressHandlerPath = findExpressRoutePath({
             stack,
-            url: req.url!,
+            url: parse(req.url!, false).pathname!,
           })
           void traceRequestHandler(
             async () => {
