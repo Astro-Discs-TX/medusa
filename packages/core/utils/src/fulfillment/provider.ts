@@ -54,6 +54,8 @@ import {
  *
  *     this.logger_ = logger
  *     this.options_ = options
+ * 
+ *     // TODO initialize your client
  *   }
  * }
  *
@@ -233,13 +235,22 @@ export class AbstractFulfillmentProviderService
    * @returns The calculated price's details.
    *
    * @example
+   * import { CalculateShippingOptionPriceDTO } from "@medusajs/framework/types"
    * class MyFulfillmentProviderService extends AbstractFulfillmentProviderService {
    *   // ...
-   *   async calculatePrice(optionData: any, data: any, context: any): Promise<number> {
+   *   async calculatePrice(
+   *     optionData: CalculateShippingOptionPriceDTO["optionData"],
+   *     data: CalculateShippingOptionPriceDTO["data"],
+   *     context: CalculateShippingOptionPriceDTO["context"]
+   *   ): Promise<CalculatedShippingOptionPrice> {
    *     // assuming the client can calculate the price using
    *     // the third-party service
    *     const price = await this.client.calculate(data)
-   *     return price
+   *     return {
+   *       calculated_amount: price,
+   *       // Update this boolean value based on your logic
+   *       is_calculated_price_tax_inclusive: true,
+   *     }
    *   }
    * }
    */
