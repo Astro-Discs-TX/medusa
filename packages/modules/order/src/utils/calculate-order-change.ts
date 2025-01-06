@@ -84,6 +84,7 @@ export class OrderChangeProcessing {
       paid_total: paid,
       refunded_total: refunded,
       credit_line_total: creditLineTotal,
+      accounting_total: MathBN.sub(this.order.total ?? 0, creditLineTotal),
     }
   }
 
@@ -149,6 +150,10 @@ export class OrderChangeProcessing {
     const groupSum = MathBN.add(...Object.values(this.groupTotal))
     summary.difference_sum = MathBN.add(summary.difference_sum, groupSum)
     summary.credit_line_total = creditLineTotal
+    summary.accounting_total = MathBN.sub(
+      summary.current_order_total,
+      creditLineTotal
+    )
 
     summary.transaction_total = MathBN.sum(
       ...this.transactions.map((tr) => tr.amount)
@@ -223,6 +228,7 @@ export class OrderChangeProcessing {
       paid_total: new BigNumber(summary.paid_total),
       refunded_total: new BigNumber(summary.refunded_total),
       credit_line_total: new BigNumber(summary.credit_line_total),
+      accounting_total: new BigNumber(summary.accounting_total),
     } as unknown as OrderSummaryDTO
 
     return orderSummary

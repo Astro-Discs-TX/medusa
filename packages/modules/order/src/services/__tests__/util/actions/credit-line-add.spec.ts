@@ -85,6 +85,7 @@ describe("Action: Credit Line Add", function () {
       paid_total: 0,
       refunded_total: 0,
       credit_line_total: 0,
+      accounting_total: 30,
     })
 
     const actions = [
@@ -113,6 +114,7 @@ describe("Action: Credit Line Add", function () {
       paid_total: 0,
       refunded_total: 0,
       credit_line_total: 30,
+      accounting_total: 0,
     })
 
     originalOrder.credit_lines.push({
@@ -149,6 +151,7 @@ describe("Action: Credit Line Add", function () {
       paid_total: 0,
       refunded_total: 0,
       credit_line_total: 40,
+      accounting_total: -10,
     })
   })
 })
