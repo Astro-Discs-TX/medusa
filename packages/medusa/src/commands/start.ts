@@ -101,7 +101,7 @@ type ExpressStack = {
  * @param url - The input url
  * @returns The route path
  */
-function findexpressRoutePath({
+function findExpressRoutePath({
   stack,
   url,
 }: {
@@ -143,7 +143,7 @@ async function start(args: {
 
     const http_ = http.createServer(async (req, res) => {
       const stack = app._router.stack
-      const expressHandlerPath = findexpressRoutePath({ stack, url: req.url! })
+      const expressHandlerPath = findExpressRoutePath({ stack, url: req.url! })
 
       await new Promise((resolve) => {
         res.on("finish", resolve)
