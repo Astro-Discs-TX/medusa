@@ -143,11 +143,13 @@ async function start(args: {
 
     const http_ = http.createServer(async (req, res) => {
       const stack = app._router.stack
-      const expressHandlerPath = findExpressRoutePath({ stack, url: req.url! })
-
       await new Promise((resolve) => {
         res.on("finish", resolve)
         if (traceRequestHandler) {
+          const expressHandlerPath = findExpressRoutePath({
+            stack,
+            url: req.url!,
+          })
           void traceRequestHandler(
             async () => {
               app(req, res)
