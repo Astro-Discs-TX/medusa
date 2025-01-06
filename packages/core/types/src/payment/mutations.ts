@@ -1,4 +1,5 @@
 import { BigNumberInput } from "../totals"
+import { PaymentCollectionStatus } from "./common"
 import { PaymentProviderContext } from "./provider"
 
 /**
@@ -80,6 +81,11 @@ export interface PaymentCollectionUpdatableFields {
    * {The ISO 3 character currency code of the payment collection.
    */
   currency_code?: string
+
+  /**
+   * {The ISO 3 character currency code of the payment collection.
+   */
+  status?: PaymentCollectionStatus
 
   /**
    * The amount of the payment collection.

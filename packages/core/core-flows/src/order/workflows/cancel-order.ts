@@ -8,6 +8,7 @@ import {
   MathBN,
   MedusaError,
   OrderWorkflowEvents,
+  PaymentCollectionStatus,
   deepFlatMap,
 } from "@medusajs/framework/utils"
 import {
@@ -18,8 +19,10 @@ import {
   createWorkflow,
   parallelize,
   transform,
+  when,
 } from "@medusajs/framework/workflows-sdk"
 import { emitEventStep, useQueryGraphStep } from "../../common"
+import { updatePaymentCollectionStep } from "../../payment-collection"
 import { cancelPaymentStep } from "../../payment/steps"
 import { deleteReservationsByLineItemsStep } from "../../reservation/steps"
 import { cancelOrdersStep } from "../steps/cancel-orders"
@@ -79,6 +82,7 @@ export const cancelOrderWorkflow = createWorkflow(
         "items.id",
         "fulfillments.canceled_at",
         "payment_collections.payments.id",
+        "payment_collections.payments.amount",
         "payment_collections.payments.refunds.id",
         "payment_collections.payments.refunds.amount",
         "payment_collections.payments.captures.id",
@@ -88,55 +92,38 @@ export const cancelOrderWorkflow = createWorkflow(
       options: { throwIfKeyNotFound: true },
     }).config({ name: "get-cart" })
 
-    const order = transform({ orderQuery }, ({ orderQuery }) => {
-      return orderQuery.data[0]
-    })
+    const order = transform(
+      { orderQuery },
+      ({ orderQuery }) => orderQuery.data[0]
+    )
 
     cancelValidateOrder({ order, input })
 
-    const payments = transform({ order }, ({ order }) => {
+    const uncapturedPaymentIds = transform({ order }, ({ order }) => {
       const payments = deepFlatMap(
         order,
         "payment_collections.payments",
         ({ payments }) => payments
       )
 
-      const capturedPayments = payments.filter(
-        (payment) => payment.captures.length > 0
-      )
-
       const uncapturedPayments = payments.filter(
         (payment) => payment.captures.length === 0
       )
 
-      return {
-        capturedPayments,
-        uncapturedPayments,
-      }
+      return uncapturedPayments.map((payment) => payment.id)
     })
 
-    const totalCaptured = transform({ payments }, ({ payments }) => {
-      const paymentCaptures = deepFlatMap(
-        payments.capturedPayments,
-        "captures",
-        ({ captures }) => captures
+    const creditLineAmount = transform({ order }, ({ order }) => {
+      const payments = deepFlatMap(
+        order,
+        "payment_collections.payments",
+        ({ payments }) => payments
       )
 
-      return paymentCaptures.reduce(
-        (acc, capturedPayment) => MathBN.sum(acc, capturedPayment.amount),
+      return payments.reduce(
+        (acc, payment) => MathBN.sum(acc, payment.amount),
         MathBN.convert(0)
       )
-    })
-
-    createOrderRefundCreditLinesWorkflow.runAsStep({
-      input: {
-        order_id: order.id,
-        amount: totalCaptured,
-      },
-    })
-
-    const uncapturedPaymentIds = transform({ payments }, ({ payments }) => {
-      return payments.uncapturedPayments.map((payment) => payment.id)
     })
 
     const lineItemIds = transform({ order }, ({ order }) => {
@@ -144,6 +131,12 @@ export const cancelOrderWorkflow = createWorkflow(
     })
 
     parallelize(
+      createOrderRefundCreditLinesWorkflow.runAsStep({
+        input: {
+          order_id: order.id,
+          amount: creditLineAmount,
+        },
+      }),
       deleteReservationsByLineItemsStep(lineItemIds),
       cancelPaymentStep({ paymentIds: uncapturedPaymentIds }),
       refundCapturedPaymentsWorkflow.runAsStep({
@@ -155,6 +148,19 @@ export const cancelOrderWorkflow = createWorkflow(
         data: { id: order.id },
       })
     )
+
+    const paymentCollectionids = transform({ order }, ({ order }) =>
+      order.payment_collections?.map((pc) => pc.id)
+    )
+
+    when({ paymentCollectionids }, ({ paymentCollectionids }) => {
+      return !!paymentCollectionids?.length
+    }).then(() => {
+      updatePaymentCollectionStep({
+        selector: { id: paymentCollectionids },
+        update: { status: PaymentCollectionStatus.CANCELED },
+      })
+    })
 
     const orderCanceled = createHook("orderCanceled", {
       order,

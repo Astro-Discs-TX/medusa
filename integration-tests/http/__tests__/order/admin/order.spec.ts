@@ -367,10 +367,15 @@ medusaIntegrationTestRunner({
           expect.objectContaining({
             id: order.id,
             status: "canceled",
+
+            summary: expect.objectContaining({
+              credit_line_total: 106,
+              current_order_total: 0,
+            }),
+
             payment_collections: [
               expect.objectContaining({
-                // TODO: This should be changed to canceled
-                status: "authorized",
+                status: "canceled",
                 captured_amount: 0,
                 refunded_amount: 0,
                 amount: 106,
@@ -422,10 +427,15 @@ medusaIntegrationTestRunner({
           expect.objectContaining({
             id: order.id,
             status: "canceled",
+
+            summary: expect.objectContaining({
+              credit_line_total: 106,
+              current_order_total: 0,
+            }),
+
             payment_collections: [
               expect.objectContaining({
-                // TODO: This should be changed to canceled
-                status: "authorized",
+                status: "canceled",
                 captured_amount: 106,
                 refunded_amount: 106,
                 amount: 106,
@@ -487,10 +497,15 @@ medusaIntegrationTestRunner({
           expect.objectContaining({
             id: order.id,
             status: "canceled",
+
+            summary: expect.objectContaining({
+              credit_line_total: 106,
+              current_order_total: 0,
+            }),
+
             payment_collections: [
               expect.objectContaining({
-                // TODO: This should be changed to canceled
-                status: "authorized",
+                status: "canceled",
                 captured_amount: 50,
                 refunded_amount: 50,
                 amount: 106,
