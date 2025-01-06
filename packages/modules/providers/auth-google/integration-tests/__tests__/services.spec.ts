@@ -117,6 +117,17 @@ describe("Google auth provider", () => {
     })
   })
 
+  it("returns a custom redirect_uri on authenticate", async () => {
+    const res = await googleService.authenticate({
+      body: { callback_url: "https://someotherurl.com" },
+    })
+    expect(res).toEqual({
+      success: true,
+      location:
+        "https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=https%3A%2F%2Fsomeotherurl.com&client_id=test&response_type=code&scope=email+profile+openid",
+    })
+  })
+
   it("validate callback should return an error on empty code", async () => {
     const res = await googleService.validateCallback(
       {

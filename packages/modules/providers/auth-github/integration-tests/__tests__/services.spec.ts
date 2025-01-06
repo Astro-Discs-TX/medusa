@@ -118,6 +118,17 @@ describe("Github auth provider", () => {
     })
   })
 
+  it("returns a custom redirect_uri on authenticate", async () => {
+    const res = await githubService.authenticate({
+      body: { callback_url: "https://someotherurl.com" },
+    })
+    expect(res).toEqual({
+      success: true,
+      location:
+        "https://github.com/login/oauth/authorize?redirect_uri=https%3A%2F%2Fsomeotherurl.com&client_id=test&response_type=code",
+    })
+  })
+
   it("validate callback should return an error on empty code", async () => {
     const res = await githubService.validateCallback(
       {

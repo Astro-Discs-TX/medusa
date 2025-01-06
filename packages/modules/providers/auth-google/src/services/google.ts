@@ -66,7 +66,10 @@ export class GoogleAuthService extends AbstractAuthModuleProvider {
       }
     }
 
-    return this.getRedirect(this.config_)
+    return this.getRedirect(
+      this.config_.clientId,
+      req.body?.callback_url ?? this.config_.callbackUrl
+    )
   }
 
   async validateCallback(
@@ -85,11 +88,9 @@ export class GoogleAuthService extends AbstractAuthModuleProvider {
       return { success: false, error: "No code provided" }
     }
 
-    const params = `client_id=${this.config_.clientId}&client_secret=${
-      this.config_.clientSecret
-    }&code=${code}&redirect_uri=${encodeURIComponent(
-      this.config_.callbackUrl
-    )}&grant_type=authorization_code`
+    // We can add redirect_uri=${encodeURIComponent(this.config_.callbackUrl)} here as well for enhanced security, although effect is minimal due to having to preconfigure allowed redirect URLs in Google.
+    // We need to store state in Redis to enable that first, see TODO above.
+    const params = `client_id=${this.config_.clientId}&client_secret=${this.config_.clientSecret}&code=${code}&grant_type=authorization_code`
     const exchangeTokenUrl = new URL(
       `https://oauth2.googleapis.com/token?${params}`
     )
@@ -175,7 +176,7 @@ export class GoogleAuthService extends AbstractAuthModuleProvider {
     }
   }
 
-  private getRedirect({ clientId, callbackUrl }: LocalServiceConfig) {
+  private getRedirect(clientId: string, callbackUrl: string) {
     const redirectUrlParam = `redirect_uri=${encodeURIComponent(callbackUrl)}`
     const clientIdParam = `client_id=${clientId}`
     const responseTypeParam = "response_type=code"
