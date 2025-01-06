@@ -42,10 +42,10 @@ export const createOrderRefundCreditLinesWorkflow = createWorkflow(
   ) {
     const orderQuery = useQueryGraphStep({
       entity: "orders",
-      fields: ["id", "status", "summary"],
+      fields: ["id", "status", "summary", "payment_collections.id"],
       filters: { id: input.order_id },
       options: { throwIfKeyNotFound: true },
-    }).config({ name: "get-cart" })
+    }).config({ name: "get-order" })
 
     const order = transform(
       { orderQuery },
@@ -70,7 +70,7 @@ export const createOrderRefundCreditLinesWorkflow = createWorkflow(
         version: orderChange.version,
         action: ChangeActionType.CREDIT_LINE_ADD,
         reference: "payment_collection",
-        reference_id: "test",
+        reference_id: order.payment_collections[0]?.id,
         amount: input.amount,
       })
     )

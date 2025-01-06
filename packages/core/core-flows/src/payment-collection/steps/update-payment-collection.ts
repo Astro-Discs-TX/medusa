@@ -22,11 +22,7 @@ export const updatePaymentCollectionStepId = "update-payment-collection"
 export const updatePaymentCollectionStep = createStep(
   updatePaymentCollectionStepId,
   async (data: UpdatePaymentCollectionStepInput, { container }) => {
-    if (
-      !isPresent(data) ||
-      !isPresent(data.selector) ||
-      !isPresent(data.selector.id)
-    ) {
+    if (!isPresent(data) || !isPresent(data.selector)) {
       return new StepResponse([], [])
     }
 

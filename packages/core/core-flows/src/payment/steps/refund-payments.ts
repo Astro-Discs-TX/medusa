@@ -14,7 +14,7 @@ import { createStep, StepResponse } from "@medusajs/framework/workflows-sdk"
 
 export const refundPaymentsStepId = "refund-payments-step"
 /**
- * This step cancels one or more payments.
+ * This step refunds one or more payments.
  */
 export const refundPaymentsStep = createStep(
   refundPaymentsStepId,

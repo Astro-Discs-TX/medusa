@@ -1,7 +1,6 @@
-import { BigNumberInput, OrderDTO, PaymentDTO } from "@medusajs/framework/types"
+import { PaymentDTO } from "@medusajs/framework/types"
 import { deepFlatMap, MathBN } from "@medusajs/framework/utils"
 import {
-  createStep,
   createWorkflow,
   transform,
   when,
@@ -9,35 +8,6 @@ import {
 } from "@medusajs/framework/workflows-sdk"
 import { useQueryGraphStep } from "../../../common"
 import { refundPaymentsWorkflow } from "../../../payment"
-
-/**
- * This step validates that the refund is valid for the order
- */
-export const validateOrderRefundStep = createStep(
-  "validate-refund-step",
-  async function ({
-    order,
-    totalCaptured,
-  }: {
-    order: OrderDTO
-    totalCaptured: BigNumberInput
-  }) {
-    // TODO: Add validations here
-    // const currentOrderTotal = (order.summary as any)?.current_order_total!
-    // const originalOrderTotal = (order.summary as any)?.current_order_total!
-    // const postRefundAmount = MathBN.sum(currentOrderTotal, totalCaptured)
-    // console.log("order.summary -- ", order.summary)
-    // console.log("totalCaptured -- ", totalCaptured)
-    // console.log("currentOrderTotal -- ", currentOrderTotal)
-    // console.log("postRefundAmount -- ", postRefundAmount)
-    // if (!MathBN.eq(postRefundAmount, 0)) {
-    //   throw new MedusaError(
-    //     MedusaError.Types.INVALID_DATA,
-    //     `Refund amount does not match the difference`
-    //   )
-    // }
-  }
-)
 
 export const refundCapturedPaymentsWorkflowId =
   "refund-captured-payments-workflow"
@@ -67,7 +37,7 @@ export const refundCapturedPaymentsWorkflow = createWorkflow(
       ],
       filters: { id: input.order_id },
       options: { throwIfKeyNotFound: true },
-    }).config({ name: "get-cart" })
+    }).config({ name: "get-order" })
 
     const order = transform(
       { orderQuery },
@@ -122,8 +92,6 @@ export const refundCapturedPaymentsWorkflow = createWorkflow(
     when({ totalCaptured }, ({ totalCaptured }) => {
       return !!MathBN.gt(totalCaptured, 0)
     }).then(() => {
-      validateOrderRefundStep({ order, totalCaptured })
-
       refundPaymentsWorkflow.runAsStep({ input: refundPaymentsData })
     })
   }

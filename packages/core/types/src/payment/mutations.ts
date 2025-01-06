@@ -78,12 +78,12 @@ export interface PaymentCollectionUpdatableFields {
   region_id?: string
 
   /**
-   * {The ISO 3 character currency code of the payment collection.
+   * The ISO 3 character currency code of the payment collection.
    */
   currency_code?: string
 
   /**
-   * {The ISO 3 character currency code of the payment collection.
+   * The status of the payment collection
    */
   status?: PaymentCollectionStatus
 
