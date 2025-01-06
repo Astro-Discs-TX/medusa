@@ -28,7 +28,12 @@ export function instrumentHttpLayer() {
   const HTTPTracer = new Tracer("@medusajs/http", "2.0.0")
   const { SpanStatusCode } = require("@opentelemetry/api")
 
-  startCommand.traceRequestHandler = async (requestHandler, req, res) => {
+  startCommand.traceRequestHandler = async (
+    requestHandler,
+    req,
+    res,
+    handlerPath
+  ) => {
     if (shouldExcludeResource(req.url!)) {
       return await requestHandler()
     }
@@ -36,6 +41,7 @@ export function instrumentHttpLayer() {
     const traceName = `${req.method} ${req.url}`
     await HTTPTracer.trace(traceName, async (span) => {
       span.setAttributes({
+        handler: handlerPath,
         "http.url": req.url,
         "http.method": req.method,
         ...req.headers,

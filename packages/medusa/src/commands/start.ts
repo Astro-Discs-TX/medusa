@@ -88,6 +88,40 @@ function displayAdminUrl({
   logger.info(`Admin URL → http://${host || "localhost"}:${port}${adminPath}`)
 }
 
+type ExpressStack = {
+  name: string
+  match: (url: string) => boolean
+  route: { path: string }
+  handle: { stack: ExpressStack[] }
+}
+
+/**
+ * Retrieve the route path from the express stack based on the input url
+ * @param stack - The express stack
+ * @param url - The input url
+ * @returns The route path
+ */
+function findexpressRoutePath({
+  stack,
+  url,
+}: {
+  stack: ExpressStack[]
+  url: string
+}): string | void {
+  const boundDispatchTarget = stack.find(
+    (layer) => layer.name === "bound dispatch" && layer.match(url)
+  )
+
+  if (boundDispatchTarget) {
+    return boundDispatchTarget.route.path
+  }
+
+  return findexpressRoutePath({
+    stack: stack.flatMap((layer) => layer.handle.stack).filter(Boolean),
+    url,
+  })
+}
+
 async function start(args: {
   directory: string
   host?: string
@@ -104,6 +138,9 @@ async function start(args: {
     const app = express()
 
     const http_ = http.createServer(async (req, res) => {
+      const stack = app._router.stack
+      const expressHandlerPath = findexpressRoutePath({ stack, url: req.url! })
+
       await new Promise((resolve) => {
         res.on("finish", resolve)
         if (traceRequestHandler) {
@@ -112,7 +149,8 @@ async function start(args: {
               app(req, res)
             },
             req,
-            res
+            res,
+            expressHandlerPath
           )
         } else {
           app(req, res)
