@@ -1,9 +1,9 @@
-import { OrderDTO } from "../order"
 import { StockLocationDTO } from "../stock-location"
 import {
   CartPropsForFulfillment,
   FulfillmentDTO,
   FulfillmentItemDTO,
+  FulfillmentOrderDTO,
 } from "./common"
 import {
   CalculateShippingOptionPriceContext,
@@ -93,8 +93,6 @@ export interface IFulfillmentProvider {
   /**
    *
    * Validate the given option.
-   *
-   * TODO: seems not to be used, called from `fulfillmentModuleService.validateFulfillmentOption`?
    */
   validateOption(data: Record<string, unknown>): Promise<boolean>
   /**
@@ -118,7 +116,7 @@ export interface IFulfillmentProvider {
   createFulfillment(
     data: Record<string, unknown>,
     items: Partial<Omit<FulfillmentItemDTO, "fulfillment">>[],
-    order: Partial<OrderDTO> | undefined,
+    order: Partial<FulfillmentOrderDTO> | undefined,
     fulfillment: Partial<Omit<FulfillmentDTO, "provider_id" | "data" | "items">>
   ): Promise<CreateFulfillmentResult>
   /**
