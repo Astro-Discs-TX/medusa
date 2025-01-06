@@ -1,3 +1,4 @@
+import crypto from "crypto"
 import {
   AuthenticationInput,
   AuthenticationResponse,
@@ -16,7 +17,6 @@ type InjectedDependencies = {
 
 interface LocalServiceConfig extends GithubAuthProviderOptions {}
 
-// TODO: Add state param that is stored in Redis, to prevent CSRF attacks
 export class GithubAuthService extends AbstractAuthModuleProvider {
   static identifier = "github"
   static DISPLAY_NAME = "Github Authentication"
@@ -56,7 +56,8 @@ export class GithubAuthService extends AbstractAuthModuleProvider {
   }
 
   async authenticate(
-    req: AuthenticationInput
+    req: AuthenticationInput,
+    authIdentityService: AuthIdentityProviderService
   ): Promise<AuthenticationResponse> {
     if (req.query?.error) {
       return {
@@ -65,10 +66,13 @@ export class GithubAuthService extends AbstractAuthModuleProvider {
       }
     }
 
-    return this.getRedirect(
-      this.config_.clientId,
-      req.body?.callback_url ?? this.config_.callbackUrl
-    )
+    const stateKey = crypto.randomBytes(32).toString("hex")
+    const state = {
+      callback_url: req.body?.callback_url ?? this.config_.callbackUrl,
+    }
+
+    await authIdentityService.setState(stateKey, state)
+    return this.getRedirect(this.config_.clientId, state.callback_url, stateKey)
   }
 
   async validateCallback(
@@ -87,9 +91,12 @@ export class GithubAuthService extends AbstractAuthModuleProvider {
       return { success: false, error: "No code provided" }
     }
 
-    // We can add redirect_uri=${encodeURIComponent(this.config_.callbackUrl)} here as well for enhanced security, although effect is minimal due to having to preconfigure allowed redirect URLs in Github.
-    // We need to store state in Redis to enable that first, see TODO above.
-    const params = `client_id=${this.config_.clientId}&client_secret=${this.config_.clientSecret}&code=${code}`
+    const state = await authIdentityService.getState(req.query?.state as string)
+    if (!state) {
+      return { success: false, error: "No state provided, or session expired" }
+    }
+
+    const params = `client_id=${this.config_.clientId}&client_secret=${this.config_.clientSecret}&code=${code}&redirect_uri=${state.callback_url}`
 
     const exchangeTokenUrl = new URL(
       `https://github.com/login/oauth/access_token?${params}`
@@ -195,16 +202,17 @@ export class GithubAuthService extends AbstractAuthModuleProvider {
     }
   }
 
-  private getRedirect(clientId: string, callbackUrl: string) {
+  private getRedirect(clientId: string, callbackUrl: string, stateKey: string) {
     const redirectUrlParam = `redirect_uri=${encodeURIComponent(callbackUrl)}`
     const clientIdParam = `client_id=${clientId}`
     const responseTypeParam = "response_type=code"
-
+    const stateKeyParam = `state=${stateKey}`
     const authUrl = new URL(
       `https://github.com/login/oauth/authorize?${[
         redirectUrlParam,
         clientIdParam,
         responseTypeParam,
+        stateKeyParam,
       ].join("&")}`
     )
 

@@ -20,6 +20,20 @@ const sampleIdPayload = {
 }
 
 const baseUrl = "https://someurl.com"
+const callbackUrl = "https%3A%2F%2Fsomeurl.com%2Fauth%2Fgithub%2Fcallback"
+
+let state = {}
+const defaultSpies = {
+  retrieve: jest.fn(),
+  create: jest.fn(),
+  update: jest.fn(),
+  setState: jest.fn().mockImplementation((key, value) => {
+    state[key] = value
+  }),
+  getState: jest.fn().mockImplementation((key) => {
+    return Promise.resolve(state[key])
+  }),
+}
 
 // This is just a network-layer mocking, it doesn't start an actual server
 const server = setupServer(
@@ -29,7 +43,7 @@ const server = setupServer(
       const url = request.url
       if (
         url ===
-        "https://github.com/login/oauth/access_token?client_id=test&client_secret=test&code=invalid-code&redirect_uri=https%3A%2F%2Fsomeurl.com%2Fauth%2Fgithub%2Fcallback"
+        `https://github.com/login/oauth/access_token?client_id=test&client_secret=test&code=invalid-code&redirect_uri=${callbackUrl}`
       ) {
         return new HttpResponse(null, {
           status: 401,
@@ -39,7 +53,7 @@ const server = setupServer(
 
       if (
         url ===
-        "https://github.com/login/oauth/access_token?client_id=test&client_secret=test&code=valid-code&redirect_uri=https%3A%2F%2Fsomeurl.com%2Fauth%2Fgithub%2Fcallback"
+        `https://github.com/login/oauth/access_token?client_id=test&client_secret=test&code=valid-code&redirect_uri=${callbackUrl}`
       ) {
         return new HttpResponse(
           JSON.stringify({
@@ -91,6 +105,7 @@ describe("Github auth provider", () => {
   afterEach(() => {
     server.resetHandlers()
     jest.restoreAllMocks()
+    state = {}
   })
 
   afterAll(() => server.close())
@@ -110,22 +125,27 @@ describe("Github auth provider", () => {
   })
 
   it("returns a redirect URL on authenticate", async () => {
-    const res = await githubService.authenticate({})
+    const res = await githubService.authenticate({}, defaultSpies)
     expect(res).toEqual({
       success: true,
-      location:
-        "https://github.com/login/oauth/authorize?redirect_uri=https%3A%2F%2Fsomeurl.com%2Fauth%2Fgithub%2Fcallback&client_id=test&response_type=code",
+      location: `https://github.com/login/oauth/authorize?redirect_uri=${callbackUrl}&client_id=test&response_type=code&state=${
+        Object.keys(state)[0]
+      }`,
     })
   })
 
   it("returns a custom redirect_uri on authenticate", async () => {
-    const res = await githubService.authenticate({
-      body: { callback_url: "https://someotherurl.com" },
-    })
+    const res = await githubService.authenticate(
+      {
+        body: { callback_url: "https://someotherurl.com" },
+      },
+      defaultSpies
+    )
     expect(res).toEqual({
       success: true,
-      location:
-        "https://github.com/login/oauth/authorize?redirect_uri=https%3A%2F%2Fsomeotherurl.com&client_id=test&response_type=code",
+      location: `https://github.com/login/oauth/authorize?redirect_uri=https%3A%2F%2Fsomeotherurl.com&client_id=test&response_type=code&state=${
+        Object.keys(state)[0]
+      }`,
     })
   })
 
@@ -134,7 +154,7 @@ describe("Github auth provider", () => {
       {
         query: {},
       },
-      {} as any
+      defaultSpies
     )
     expect(res).toEqual({
       success: false,
@@ -142,14 +162,51 @@ describe("Github auth provider", () => {
     })
   })
 
+  it("validate callback should return an error on missing state", async () => {
+    const res = await githubService.validateCallback(
+      {
+        query: {
+          code: "valid-code",
+        },
+      },
+      defaultSpies
+    )
+    expect(res).toEqual({
+      success: false,
+      error: "No state provided, or session expired",
+    })
+  })
+
+  it("validate callback should return an error on expired/invalid state", async () => {
+    const res = await githubService.validateCallback(
+      {
+        query: {
+          code: "valid-code",
+          state: "somekey",
+        },
+      },
+      defaultSpies
+    )
+    expect(res).toEqual({
+      success: false,
+      error: "No state provided, or session expired",
+    })
+  })
+
   it("validate callback should return on a missing access token for code", async () => {
+    state = {
+      somekey: {
+        callback_url: callbackUrl,
+      },
+    }
     const res = await githubService.validateCallback(
       {
         query: {
           code: "invalid-code",
+          state: "somekey",
         },
       },
-      {} as any
+      defaultSpies
     )
 
     expect(res).toEqual({
@@ -160,6 +217,7 @@ describe("Github auth provider", () => {
 
   it("validate callback should return successfully on a correct code for a new user", async () => {
     const authServiceSpies = {
+      ...defaultSpies,
       retrieve: jest.fn().mockImplementation(() => {
         throw new MedusaError(MedusaError.Types.NOT_FOUND, "Not found")
       }),
@@ -178,10 +236,17 @@ describe("Github auth provider", () => {
       }),
     }
 
+    state = {
+      somekey: {
+        callback_url: callbackUrl,
+      },
+    }
+
     const res = await githubService.validateCallback(
       {
         query: {
           code: "valid-code",
+          state: "somekey",
         },
       },
       authServiceSpies
@@ -202,6 +267,7 @@ describe("Github auth provider", () => {
 
   it("validate callback should return successfully on a correct code for an existing user", async () => {
     const authServiceSpies = {
+      ...defaultSpies,
       retrieve: jest.fn().mockImplementation(() => {
         return {
           provider_identities: [
@@ -230,10 +296,17 @@ describe("Github auth provider", () => {
       }),
     }
 
+    state = {
+      somekey: {
+        callback_url: callbackUrl,
+      },
+    }
+
     const res = await githubService.validateCallback(
       {
         query: {
           code: "valid-code",
+          state: "somekey",
         },
       },
       authServiceSpies
