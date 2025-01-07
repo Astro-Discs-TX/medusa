@@ -46,7 +46,7 @@ export const OrderGeneralSection = ({ order }: OrderGeneralSectionProps) => {
 
     await cancelOrder(undefined, {
       onSuccess: () => {
-        toast.success(t("orders.orderCancelled"))
+        toast.success(t("orders.orderCanceled"))
       },
       onError: (e) => {
         toast.error(e.message)

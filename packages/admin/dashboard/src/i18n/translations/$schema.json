@@ -3783,7 +3783,7 @@
         "cancelWarning": {
           "type": "string"
         },
-        "orderCancelled": {
+        "orderCanceled": {
           "type": "string"
         },
         "onDateFromSalesChannel": {
@@ -5539,7 +5539,7 @@
         "exchange",
         "return",
         "cancelWarning",
-        "orderCancelled",
+        "orderCanceled",
         "onDateFromSalesChannel",
         "list",
         "status",
