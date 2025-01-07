@@ -8,10 +8,11 @@ import ProcessManager from "./process-manager.js"
 import type { Client } from "pg"
 
 const ADMIN_EMAIL = "admin@medusa-test.com"
-const STORE_CORS = "http://localhost:8000,https://docs.medusajs.com"
+const STORE_CORS = "http://localhost:8000"
 const ADMIN_CORS =
-  "http://localhost:5173,http://localhost:9000,https://docs.medusajs.com"
-const AUTH_CORS = ADMIN_CORS
+  "http://localhost:5173,http://localhost:9000"
+const DOCS_CORS = "https://docs.medusajs.com"
+const AUTH_CORS = [ADMIN_CORS, STORE_CORS, DOCS_CORS].join(",")
 const DEFAULT_REDIS_URL = "redis://localhost:6379"
 
 type PrepareOptions = {
