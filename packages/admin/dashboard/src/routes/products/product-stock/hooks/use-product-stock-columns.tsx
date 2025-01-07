@@ -82,7 +82,7 @@ export const useProductStockColumns = (
                 <div className="flex size-full items-center justify-between gap-x-2">
                   <span
                     title={item.inventory.title || undefined}
-                    className="opacity-30"
+                    className="text-ui-fg-disabled"
                   >
                     {item.inventory.title || "-"}
                   </span>
@@ -133,7 +133,9 @@ export const useProductStockColumns = (
           if (isDisabled) {
             return (
               <DataGridReadOnlyCell context={context} color="normal">
-                <span className="opacity-30">{item.inventory.sku || "-"}</span>
+                <span className="text-ui-fg-disabled">
+                  {item.inventory.sku || "-"}
+                </span>
               </DataGridReadOnlyCell>
             )
           }
@@ -188,14 +190,15 @@ export const useProductStockColumns = (
                     }
 
                     return (
-                      <div className="flex size-full items-center gap-x-2 opacity-30">
+                      <div className="flex size-full items-center gap-x-2">
                         <Switch
                           className="shrink-0 cursor-not-allowed"
                           tabIndex={-1}
                           size="small"
                           checked={checked}
+                          disabled
                         />
-                        <span className="flex size-full items-center justify-end">
+                        <span className="text-ui-fg-disabled flex size-full items-center justify-end">
                           {quantity}
                         </span>
                       </div>

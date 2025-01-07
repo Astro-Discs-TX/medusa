@@ -1,56 +1,91 @@
-import { Spinner } from "@medusajs/icons"
-import { Text } from "@medusajs/ui"
-import { ColumnDef } from "@tanstack/react-table"
+import { HttpTypes } from "@medusajs/types"
+import { AnimatePresence } from "motion/react"
+import { Suspense, useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { useParams, useSearchParams } from "react-router-dom"
+import { Await, useLoaderData } from "react-router-dom"
+
+import { ColumnDef } from "@tanstack/react-table"
+import { ProgressBar } from "../../../components/common/progress-bar"
 import { Skeleton } from "../../../components/common/skeleton"
 import { DataGridSkeleton } from "../../../components/data-grid/components"
 import { RouteFocusModal } from "../../../components/modals"
-import { PRODUCT_VARIANT_IDS_KEY } from "../common/constants"
 import { ProductStockForm } from "./components/product-stock-form"
-import { useProductInventoryData } from "./hooks/use-product-inventory-data"
+import { productStockLoader } from "./loader"
 
 export const ProductStock = () => {
   const { t } = useTranslation()
-  const { id } = useParams<{ id: string }>()
-  const [searchParams] = useSearchParams()
+  const data = useLoaderData() as Awaited<ReturnType<typeof productStockLoader>>
 
-  const productVariantIds =
-    searchParams.get(PRODUCT_VARIANT_IDS_KEY)?.split(",") || undefined
+  /**
+   * We render a local ProgressBar, as we cannot rely on the global NavigationBar.
+   * This is because we are deferring the data, meaning that the navigation is
+   * instant, and the data is loaded in parallel with the navigation. This will
+   * result in the data loading after the navigation has completed most of the
+   * time for this route, as we chunk the data into multiple queries.
+   *
+   * Here we instead render a local ProgressBar, which is animated, and exit
+   * the animation when the data is loaded, and the form is rendered.
+   */
+  const [isLoading, setIsLoading] = useState(false)
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>()
 
-  const { variants, locations, isLoaded } = useProductInventoryData(
-    id!,
-    productVariantIds
-  )
+  useEffect(() => {
+    timeoutRef.current = setTimeout(() => {
+      setIsLoading(true)
+    }, 200)
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+    }
+  }, [])
+
+  const onLoaded = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+    setIsLoading(false)
+  }
 
   return (
-    <RouteFocusModal>
-      <RouteFocusModal.Title asChild>
-        <span className="sr-only">{t("products.stock.heading")}</span>
-      </RouteFocusModal.Title>
-      <RouteFocusModal.Description asChild>
-        <span className="sr-only">{t("products.stock.description")}</span>
-      </RouteFocusModal.Description>
-      {isLoaded ? (
-        <ProductStockForm variants={variants} locations={locations} />
-      ) : (
-        <ProductStockSkeleton />
-      )}
-    </RouteFocusModal>
+    <div>
+      <div className="fixed inset-x-0 top-0 z-50 h-1">
+        <AnimatePresence>
+          {isLoading ? <ProgressBar duration={5} /> : null}
+        </AnimatePresence>
+      </div>
+      <RouteFocusModal>
+        <RouteFocusModal.Title asChild>
+          <span className="sr-only">{t("products.stock.heading")}</span>
+        </RouteFocusModal.Title>
+        <RouteFocusModal.Description asChild>
+          <span className="sr-only">{t("products.stock.description")}</span>
+        </RouteFocusModal.Description>
+        <Suspense fallback={<ProductStockFallback />}>
+          <Await resolve={data.data}>
+            {(data: {
+              variants: HttpTypes.AdminProductVariant[]
+              locations: HttpTypes.AdminStockLocation[]
+            }) => {
+              return (
+                <ProductStockForm
+                  variants={data.variants}
+                  locations={data.locations}
+                  onLoaded={onLoaded}
+                />
+              )
+            }}
+          </Await>
+        </Suspense>
+      </RouteFocusModal>
+    </div>
   )
 }
 
-const ProductStockSkeleton = () => {
-  const { t } = useTranslation()
-
+const ProductStockFallback = () => {
   return (
     <div className="relative flex size-full flex-col items-center justify-center divide-y">
-      <div className="absolute inset-0 z-10 flex size-full flex-col items-center justify-center gap-y-2">
-        <Spinner className="text-ui-fg-interactive animate-spin" />
-        <Text size="small" className="text-ui-fg-muted">
-          {t("products.stock.loading")}
-        </Text>
-      </div>
       <div className="flex size-full flex-col divide-y">
         <div className="px-4 py-2">
           <Skeleton className="h-7 w-7" />

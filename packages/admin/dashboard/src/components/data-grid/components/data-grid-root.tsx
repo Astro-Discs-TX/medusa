@@ -58,6 +58,7 @@ export interface DataGridRootProps<
   getSubRows?: (row: TData) => TData[] | undefined
   onEditingChange?: (isEditing: boolean) => void
   disableInteractions?: boolean
+  multiColumnSelection?: boolean
 }
 
 const ROW_HEIGHT = 40
@@ -103,6 +104,7 @@ export const DataGridRoot = <
   getSubRows,
   onEditingChange,
   disableInteractions,
+  multiColumnSelection = false,
 }: DataGridRootProps<TData, TFieldValues>) => {
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -230,8 +232,13 @@ export const DataGridRoot = <
   }
 
   const matrix = useMemo(
-    () => new DataGridMatrix<TData, TFieldValues>(flatRows, columns),
-    [flatRows, columns]
+    () =>
+      new DataGridMatrix<TData, TFieldValues>(
+        flatRows,
+        columns,
+        multiColumnSelection
+      ),
+    [flatRows, columns, multiColumnSelection]
   )
   const queryTool = useDataGridQueryTool(containerRef)
 
@@ -390,6 +397,7 @@ export const DataGridRoot = <
     setDragEnd,
     setValue,
     execute,
+    multiColumnSelection,
   })
 
   const { getCellErrorMetadata, getCellMetadata } = useDataGridCellMetadata<

@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { HttpTypes } from "@medusajs/types"
 import { Button, toast, usePrompt } from "@medusajs/ui"
-import { useMemo, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { DefaultValues, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { DataGrid } from "../../../../../components/data-grid"
@@ -28,16 +28,21 @@ import {
 type ProductStockFormProps = {
   variants: HttpTypes.AdminProductVariant[]
   locations: HttpTypes.AdminStockLocation[]
+  onLoaded: () => void
 }
 
 export const ProductStockForm = ({
   variants,
   locations,
+  onLoaded,
 }: ProductStockFormProps) => {
   const { t } = useTranslation()
-  const { setCloseOnEscape } = useRouteModal()
-  const { handleSuccess } = useRouteModal()
+  const { handleSuccess, setCloseOnEscape } = useRouteModal()
   const prompt = usePrompt()
+
+  useEffect(() => {
+    onLoaded()
+  }, [onLoaded])
 
   const [isPromptOpen, setIsPromptOpen] = useState(false)
 
@@ -148,6 +153,7 @@ export const ProductStockForm = ({
             getSubRows={getSubRows}
             onEditingChange={(editing) => setCloseOnEscape(!editing)}
             disableInteractions={isPending || isPromptOpen}
+            multiColumnSelection={true}
           />
         </RouteFocusModal.Body>
         <RouteFocusModal.Footer>
