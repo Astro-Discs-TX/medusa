@@ -62,6 +62,8 @@ This exports the module's definition, indicating that the \`MyAuthProviderServic
 To use your Auth Module Provider, add it to the \`providers\` array of the Auth Module in \`medusa-config.ts\`:
 
 \`\`\`ts title="medusa-config.ts"
+import { Modules, ContainerRegistrationKeys } from "@medusajs/framework/utils"
+
 module.exports = defineConfig({
   // ...
   modules: [
