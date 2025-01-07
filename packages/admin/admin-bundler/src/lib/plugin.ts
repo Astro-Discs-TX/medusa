@@ -20,7 +20,7 @@ export async function plugin() {
     build: {
       lib: {
         entry: entryPoints,
-        formats: ["es"],
+        formats: ["cjs"],
       },
       minify: false,
       outDir: path.resolve(process.cwd(), "dist/admin"),

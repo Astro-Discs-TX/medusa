@@ -6,6 +6,7 @@ import {
   isArrayExpression,
   isStringLiteral,
   isTemplateLiteral,
+  Node,
   parse,
   ParseResult,
   traverse,
@@ -26,7 +27,6 @@ type ParsedWidgetConfig = {
 
 export async function generateWidgets(sources: Set<string>) {
   const files = await getWidgetFilesFromSources(sources)
-  console.log("Found widget files", files)
   const results = await getWidgetResults(files)
 
   const imports = results.map((r) => r.import)
@@ -92,8 +92,6 @@ async function parseFile(
     return null
   }
 
-  console.log(`file ${file} has default export`, fileHasDefaultExport)
-
   if (!fileHasDefaultExport) {
     return null
   }
@@ -152,9 +150,24 @@ async function getWidgetZone(
 ): Promise<InjectionZone[] | null> {
   const zones: string[] = []
 
+  /**
+   * We need to keep track of whether we have found a zone in the file.
+   * This is to avoid processing the same config both using the `ExportNamedDeclaration`
+   * and `VariableDeclarator` paths, which would be the case for the unbundled files.
+   */
+  let zoneFound = false
+
   traverse(ast, {
-    // Handle bundled variable declarations
+    /**
+     * In case we are processing a bundled file, the `config` will most likely
+     * not be a named export. Instead we look for a `VariableDeclaration` named
+     * `config` and extract the `zone` property from it.
+     */
     VariableDeclarator(path) {
+      if (zoneFound) {
+        return
+      }
+
       if (
         path.node.id.type === "Identifier" &&
         path.node.id.name === "config" &&
@@ -167,12 +180,19 @@ async function getWidgetZone(
           )
           if (zoneProperty?.type === "ObjectProperty") {
             extractZoneValues(zoneProperty.value, zones, file)
+            zoneFound = true
           }
         }
       }
     },
-    // Handle unbundled export declarations
+    /**
+     * For unbundled files, the `config` will always be a named export.
+     */
     ExportNamedDeclaration(path) {
+      if (zoneFound) {
+        return
+      }
+
       const declaration = path.node.declaration
       if (
         declaration?.type === "VariableDeclaration" &&
@@ -188,6 +208,7 @@ async function getWidgetZone(
           )
           if (zoneProperty?.type === "ObjectProperty") {
             extractZoneValues(zoneProperty.value, zones, file)
+            zoneFound = true
           }
         }
       }
@@ -198,7 +219,7 @@ async function getWidgetZone(
   return validatedZones.length > 0 ? validatedZones : null
 }
 
-function extractZoneValues(value: any, zones: string[], file: string) {
+function extractZoneValues(value: Node, zones: string[], file: string) {
   if (isTemplateLiteral(value)) {
     logger.warn(
       `'zone' property cannot be a template literal (e.g. \`product.details.after\`).`,
@@ -214,5 +235,8 @@ function extractZoneValues(value: any, zones: string[], file: string) {
       .filter((e) => isStringLiteral(e))
       .map((e) => e.value)
     zones.push(...values)
+  } else {
+    logger.warn(`'zone' property is not a string or array.`, { file })
+    return
   }
 }
