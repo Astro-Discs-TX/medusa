@@ -144,6 +144,14 @@ GITHUB_CALLBACK_URL=<YOUR_GITHUB_CALLBACK_URL>
 
 ---
 
+## Override Callback URL During Authentication
+
+In many cases, you may have different callback URL for actor types. For example, you may redirect admin users to a different URL than customers after authentication.
+
+The [Authenticate or Login API Route](../../authentication-route/page.mdx#login-route) can accept a `callback_url` body parameter to override the provider's `callbackUrl` option. Learn more in [this documentation](../../authentication-route/page.mdx#login-route).
+
+---
+
 ## Examples
 
 - [How to implement third-party / social login in the storefront.](../../../../storefront-development/customers/third-party-login/page.mdx).
