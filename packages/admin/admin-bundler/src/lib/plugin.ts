@@ -20,19 +20,24 @@ export async function plugin() {
     build: {
       lib: {
         entry: entryPoints,
-        formats: ["cjs"],
+        formats: ["es"],
       },
       minify: false,
-      outDir: path.resolve(process.cwd(), "dist/admin"),
+      outDir: path.resolve(process.cwd(), "dist"),
       rollupOptions: {
         external: [
           "react",
-          "react/jsx-runtime",
           "react-dom",
+          "react/jsx-runtime",
           "react-router-dom",
           "@medusajs/admin-sdk",
         ],
         output: {
+          globals: {
+            react: "React",
+            "react-dom": "React-dom",
+            "react/jsx-runtime": "react/jsx-runtime",
+          },
           preserveModules: true,
           entryFileNames: `[name].js`,
         },
