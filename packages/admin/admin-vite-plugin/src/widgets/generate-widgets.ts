@@ -215,8 +215,21 @@ async function getWidgetZone(
     },
   })
 
+  if (!zoneFound) {
+    logger.warn(`'zone' property is missing from the widget config.`, { file })
+    return null
+  }
+
   const validatedZones = zones.filter(isValidInjectionZone)
-  return validatedZones.length > 0 ? validatedZones : null
+
+  if (validatedZones.length === 0) {
+    logger.warn(`'zone' property is not a valid injection zone.`, {
+      file,
+    })
+    return null
+  }
+
+  return validatedZones
 }
 
 function extractZoneValues(value: Node, zones: string[], file: string) {
