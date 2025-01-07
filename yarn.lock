@@ -5617,7 +5617,6 @@ __metadata:
     autoprefixer: ^10.4.17
     cmdk: ^0.2.0
     date-fns: ^3.6.0
-    framer-motion: ^11.0.3
     i18next: 23.7.11
     i18next-browser-languagedetector: 7.2.0
     i18next-http-backend: 2.4.2
@@ -20710,26 +20709,6 @@ __metadata:
   version: 4.3.7
   resolution: "fraction.js@npm:4.3.7"
   checksum: df291391beea9ab4c263487ffd9d17fed162dbb736982dee1379b2a8cc94e4e24e46ed508c6d278aded9080ba51872f1bc5f3a5fd8d7c74e5f105b508ac28711
-  languageName: node
-  linkType: hard
-
-"framer-motion@npm:^11.0.3":
-  version: 11.1.8
-  resolution: "framer-motion@npm:11.1.8"
-  dependencies:
-    tslib: ^2.4.0
-  peerDependencies:
-    "@emotion/is-prop-valid": "*"
-    react: ^18.0.0
-    react-dom: ^18.0.0
-  peerDependenciesMeta:
-    "@emotion/is-prop-valid":
-      optional: true
-    react:
-      optional: true
-    react-dom:
-      optional: true
-  checksum: ff7073ca011936fcf0e4af54ff93824609cf03b556def5a69d21f44674c44ec0429a450b419bb4ae89d5b7af9d7b0e88ed57d3eff1ff668ed2a52b42a60375dd
   languageName: node
   linkType: hard
 
