@@ -117,22 +117,11 @@ The S3 File Module Provider integrates Amazon S3 and services following a compat
        - [Go to API tokens page](https://dash.cloudflare.com/?to=/:account/r2/api-tokens):
          - Select "Create API token"
          - Edit the "R2 Token" name
-         - Under **Permissions**, select appropriate permission types
+         - Under Permissions, select Object Read & Write permission types
          - You can optionally specify the buckets that this API token has access to under the "Specify bucket(s)" section.
          - Once done, click the "Create API Token" button.
          - You'll receive an access key ID and a secret access key. Save them to use them later for the `S3_ACCESS_KEY_ID` and `S3_SECRET_ACCESS_KEY` environment variables.
-       - Record your bucket name for configuration
-       - Save your public bucket URL for reference
-    
-       ```scheme
-       S3_FILE_URL="https://<Public-R2.dev-Bucket-URL-Generated-on-step-3"
-       S3_ACCESS_KEY_ID="generated-on-step-4"
-       S3_SECRET_ACCESS_KEY="generated-on-step-4"
-       S3_REGION="auto"
-       S3_BUCKET="your-bucket-name"
-       S3_ENDPOINT="https://<your-account-id>.r2.cloudflarestorage.com"
-       ```
-    
+
     </TabsContent>
   </TabsContentWrapper>
 </Tabs>
