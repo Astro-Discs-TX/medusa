@@ -26,7 +26,7 @@ const Checkbox = React.forwardRef<
       <div
         className={clx(
           "text-ui-fg-on-inverted bg-ui-bg-base shadow-borders-base [&_path]:shadow-details-contrast-on-bg-interactive transition-fg h-[14px] w-[14px] rounded-[3px]",
-          "group-disabled:opacity-50 group-disabled:cursor-not-allowed",
+          "group-disabled:cursor-not-allowed group-disabled:opacity-50",
           "group-focus-visible:!shadow-borders-interactive-with-focus",
           "group-hover:group-enabled:group-data-[state=unchecked]:bg-ui-bg-base-hover",
           "group-data-[state=checked]:bg-ui-bg-interactive group-data-[state=checked]:shadow-borders-interactive-with-shadow",
