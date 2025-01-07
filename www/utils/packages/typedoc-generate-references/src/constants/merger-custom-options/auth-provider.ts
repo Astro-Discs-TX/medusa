@@ -72,11 +72,13 @@ module.exports = defineConfig({
           // default provider
           {
             resolve: "@medusajs/medusa/auth-emailpass",
+            dependencies: [Modules.CACHE, ContainerRegistrationKeys.LOGGER],
             id: "emailpass",
           },
           {
             resolve: "./src/modules/my-auth",
             id: "my-auth",
+            dependencies: [Modules.CACHE, ContainerRegistrationKeys.LOGGER],
             options: {
               // provider options...
             },

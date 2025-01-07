@@ -44,6 +44,7 @@ const modules = {
   // ...
   [Modules.AUTH]: {
     resolve: "@medusajs/medusa/auth",
+    dependencies: [Modules.CACHE, ContainerRegistrationKeys.LOGGER],
     options: {
       providers: [
         // other providers...
