@@ -118,9 +118,9 @@ export const ProductVariantSection = ({
           {
             action: async (selection) => {
               navigate(
-                `inventory?${PRODUCT_VARIANT_IDS_KEY}=${Object.keys(
-                  selection
-                ).join(",")}`
+                `stock?${PRODUCT_VARIANT_IDS_KEY}=${Object.keys(selection).join(
+                  ","
+                )}`
               )
             },
             label: t("inventory.stock.action"),
