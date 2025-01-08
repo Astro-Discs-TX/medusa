@@ -303,20 +303,11 @@ export default class PricingModuleService
             case PriceListType.SALE: {
               let lowestPrice = priceListPrice
 
-              const defaultPriceAmount = defaultPrice?.amount
-                ? MathBN.convert(defaultPrice.amount)
-                : null
-              const priceListPriceAmount = priceListPrice.amount
-                ? MathBN.convert(priceListPrice.amount)
-                : null
-
-              if (
-                defaultPriceAmount &&
-                priceListPriceAmount &&
-                defaultPrice &&
-                priceListPrice
-              ) {
-                lowestPrice = priceListPriceAmount.lte(defaultPriceAmount)
+              if (defaultPrice?.amount && priceListPrice.amount) {
+                lowestPrice = MathBN.lte(
+                  priceListPrice.amount,
+                  defaultPrice.amount
+                )
                   ? priceListPrice
                   : defaultPrice
               }
