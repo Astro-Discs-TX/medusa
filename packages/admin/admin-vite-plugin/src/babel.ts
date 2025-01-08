@@ -23,6 +23,7 @@ import {
   ObjectProperty,
   SpreadElement,
   StringLiteral,
+  VariableDeclarator,
 } from "@babel/types"
 
 /**
@@ -68,4 +69,5 @@ export type {
   ParserOptions,
   SpreadElement,
   StringLiteral,
+  VariableDeclarator,
 }
