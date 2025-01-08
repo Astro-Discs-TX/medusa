@@ -31,6 +31,7 @@ import {
   InjectTransactionManager,
   isPresent,
   isString,
+  MathBN,
   MedusaContext,
   MedusaError,
   ModulesSdkUtils,
@@ -50,10 +51,10 @@ import {
   PriceSet,
 } from "@models"
 
+import { Collection } from "@mikro-orm/core"
 import { ServiceTypes } from "@types"
 import { eventBuilders, validatePriceListDates } from "@utils"
 import { joinerConfig } from "../joiner-config"
-import { Collection } from "@mikro-orm/core"
 
 type InjectedDependencies = {
   baseRepository: DAL.RepositoryService
@@ -288,11 +289,41 @@ export default class PricingModuleService
         let originalPrice: PricingTypes.CalculatedPriceSetDTO | undefined =
           defaultPrice
 
+        /**
+         * When deciding which price to use we follow the following logic:
+         * - If the price list is of type OVERRIDE, we always use the price list price.
+         * - If the price list is of type SALE, we use the lowest price between the price list price and the default price
+         */
         if (priceListPrice) {
-          calculatedPrice = priceListPrice
+          switch (priceListPrice.price_list_type) {
+            case PriceListType.OVERRIDE:
+              calculatedPrice = priceListPrice
+              originalPrice = priceListPrice
+              break
+            case PriceListType.SALE: {
+              let lowestPrice = priceListPrice
 
-          if (priceListPrice.price_list_type === PriceListType.OVERRIDE) {
-            originalPrice = priceListPrice
+              const defaultPriceAmount = defaultPrice?.amount
+                ? MathBN.convert(defaultPrice.amount)
+                : null
+              const priceListPriceAmount = priceListPrice.amount
+                ? MathBN.convert(priceListPrice.amount)
+                : null
+
+              if (
+                defaultPriceAmount &&
+                priceListPriceAmount &&
+                defaultPrice &&
+                priceListPrice
+              ) {
+                lowestPrice = priceListPriceAmount.lte(defaultPriceAmount)
+                  ? priceListPrice
+                  : defaultPrice
+              }
+
+              calculatedPrice = lowestPrice
+              break
+            }
           }
         }
 
