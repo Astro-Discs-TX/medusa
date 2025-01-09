@@ -1,6 +1,7 @@
 import {
   ConfigModule,
   InputConfig,
+  InputConfigModules,
   InternalModuleDeclaration,
 } from "@medusajs/types"
 import {
@@ -112,8 +113,8 @@ export function defineConfig(config: InputConfig = {}): ConfigModule {
  * take precedence in case of duplicate modules
  */
 export function transformModules(
-  modules: Exclude<InputConfig["modules"], ConfigModule["modules"]>
-) {
+  modules: InputConfigModules
+): Exclude<ConfigModule["modules"], undefined> {
   const remappedModules = modules.reduce((acc, moduleConfig) => {
     if (moduleConfig.scope === "external" && !moduleConfig.key) {
       throw new Error(
@@ -176,7 +177,7 @@ export function transformModules(
     }
   })
 
-  return remappedModules as ConfigModule["modules"]
+  return remappedModules as Exclude<ConfigModule["modules"], undefined>
 }
 
 /**
@@ -187,7 +188,7 @@ export function transformModules(
  */
 function resolveModules(
   configModules: InputConfig["modules"]
-): ConfigModule["modules"] {
+): Exclude<ConfigModule["modules"], undefined> {
   /**
    * The default set of modules to always use. The end user can swap
    * the modules by providing an alternate implementation via their
