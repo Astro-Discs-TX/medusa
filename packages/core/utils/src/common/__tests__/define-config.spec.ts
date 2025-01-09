@@ -135,12 +135,14 @@ describe("defineConfig", function () {
             "jwtSecret": "supersecret",
             "restrictedFields": {
               "store": [
-                ${DEFAULT_STORE_RESTRICTED_FIELDS.map((v) => `"${v}"`).join(
-                  ",\n                "
-                )},
+                "order",
+                "orders",
               ],
             },
             "storeCors": "http://localhost:8000",
+          },
+          "redisOptions": {
+            "retryStrategy": [Function],
           },
         },
       }
@@ -291,12 +293,14 @@ describe("defineConfig", function () {
             "jwtSecret": "supersecret",
             "restrictedFields": {
               "store": [
-                ${DEFAULT_STORE_RESTRICTED_FIELDS.map((v) => `"${v}"`).join(
-                  ",\n                "
-                )},
+                "order",
+                "orders",
               ],
             },
             "storeCors": "http://localhost:8000",
+          },
+          "redisOptions": {
+            "retryStrategy": [Function],
           },
         },
       }
@@ -327,9 +331,7 @@ describe("defineConfig", function () {
             "options": {
               "apiKey": "test",
             },
-            "resolve": "${require.resolve(
-              "../__fixtures__/define-config/github"
-            )}",
+            "resolve": "/Users/virk/code/medusa/medusa/packages/core/utils/src/common/__fixtures__/define-config/github/index.ts",
           },
           "api_key": {
             "resolve": "@medusajs/medusa/api-key",
@@ -455,12 +457,14 @@ describe("defineConfig", function () {
             "jwtSecret": "supersecret",
             "restrictedFields": {
               "store": [
-                ${DEFAULT_STORE_RESTRICTED_FIELDS.map((v) => `"${v}"`).join(
-                  ",\n                "
-                )},
+                "order",
+                "orders",
               ],
             },
             "storeCors": "http://localhost:8000",
+          },
+          "redisOptions": {
+            "retryStrategy": [Function],
           },
         },
       }
@@ -492,9 +496,7 @@ describe("defineConfig", function () {
             "options": {
               "apiKey": "test",
             },
-            "resolve": "${require.resolve(
-              "../__fixtures__/define-config/github"
-            )}",
+            "resolve": "/Users/virk/code/medusa/medusa/packages/core/utils/src/common/__fixtures__/define-config/github/index.ts",
           },
           "api_key": {
             "resolve": "@medusajs/medusa/api-key",
@@ -620,12 +622,14 @@ describe("defineConfig", function () {
             "jwtSecret": "supersecret",
             "restrictedFields": {
               "store": [
-                ${DEFAULT_STORE_RESTRICTED_FIELDS.map((v) => `"${v}"`).join(
-                  ",\n                "
-                )},
+                "order",
+                "orders",
               ],
             },
             "storeCors": "http://localhost:8000",
+          },
+          "redisOptions": {
+            "retryStrategy": [Function],
           },
         },
       }
@@ -773,12 +777,14 @@ describe("defineConfig", function () {
             "jwtSecret": "supersecret",
             "restrictedFields": {
               "store": [
-                ${DEFAULT_STORE_RESTRICTED_FIELDS.map((v) => `"${v}"`).join(
-                  ",\n                "
-                )},
+                "order",
+                "orders",
               ],
             },
             "storeCors": "http://localhost:8000",
+          },
+          "redisOptions": {
+            "retryStrategy": [Function],
           },
         },
       }
@@ -926,12 +932,14 @@ describe("defineConfig", function () {
             "jwtSecret": "supersecret",
             "restrictedFields": {
               "store": [
-                ${DEFAULT_STORE_RESTRICTED_FIELDS.map((v) => `"${v}"`).join(
-                  ",\n                "
-                )},
+                "order",
+                "orders",
               ],
             },
             "storeCors": "http://localhost:8000",
+          },
+          "redisOptions": {
+            "retryStrategy": [Function],
           },
         },
       }
