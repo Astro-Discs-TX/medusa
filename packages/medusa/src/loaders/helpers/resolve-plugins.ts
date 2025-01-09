@@ -59,7 +59,7 @@ async function resolvePlugin(
   const name = pkgJSON.contents.name || pluginPath
   const srcDir = pkgJSON.contents.main
     ? path.dirname(pkgJSON.contents.main)
-    : "build"
+    : ".medusa/server/src"
 
   const resolve = path.join(resolvedPath, srcDir)
   const modules = await readDir(path.join(resolve, "modules"), {
