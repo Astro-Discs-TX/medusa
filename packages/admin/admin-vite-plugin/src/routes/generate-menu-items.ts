@@ -219,11 +219,11 @@ function processConfigProperties(
   const nested = properties.find(
     (prop) =>
       isObjectProperty(prop) && isIdentifier(prop.key, { name: "nested" })
-  ) as ObjectProperty
+  ) as ObjectProperty | undefined
 
   let nestedValue: string | undefined = undefined
 
-  if (isStringLiteral(nested.value)) {
+  if (isStringLiteral(nested?.value)) {
     nestedValue = nested.value.value
   }
 

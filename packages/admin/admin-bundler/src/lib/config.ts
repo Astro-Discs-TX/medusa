@@ -1,8 +1,8 @@
 import { VIRTUAL_MODULES } from "@medusajs/admin-shared"
+import fs from "fs"
 import path from "path"
 import { Config } from "tailwindcss"
 import type { InlineConfig } from "vite"
-
 import { BundlerOptions } from "../types"
 
 export async function getViteConfig(
@@ -103,6 +103,24 @@ function createTailwindConfig(entry: string, sources: string[] = []) {
   }
 
   const extensions = sources.map((s) => path.join(s, "**/*.{js,ts,jsx,tsx}"))
+
+  const presets: string[] = [require("@medusajs/ui-preset")]
+
+  /**
+   * Look for a preset.{ts,js} file in each of the sources. If it exists, we should push it to the presets array.
+   */
+  for (const source of sources) {
+    const tsPreset = path.join(source, `preset.ts`)
+    if (fs.existsSync(tsPreset)) {
+      presets.push(tsPreset)
+      continue
+    }
+
+    const jsPreset = path.join(source, `preset.js`)
+    if (fs.existsSync(jsPreset)) {
+      presets.push(jsPreset)
+    }
+  }
 
   const config: Config = {
     presets: [require("@medusajs/ui-preset")],

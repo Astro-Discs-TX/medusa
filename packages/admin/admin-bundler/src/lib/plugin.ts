@@ -1,3 +1,4 @@
+import { readFileSync } from "fs"
 import { glob } from "glob"
 import path from "path"
 import { UserConfig } from "vite"
@@ -16,6 +17,19 @@ export async function plugin() {
     return acc
   }, {} as Record<string, string>)
 
+  const pkg = JSON.parse(
+    readFileSync(path.resolve(process.cwd(), "package.json"), "utf-8")
+  )
+  const external = new Set([
+    ...Object.keys(pkg.dependencies || {}),
+    ...Object.keys(pkg.peerDependencies || {}),
+    "react",
+    "react-dom",
+    "react/jsx-runtime",
+    "react-router-dom",
+    "@medusajs/admin-sdk",
+  ])
+
   const pluginConfig: UserConfig = {
     build: {
       lib: {
@@ -25,13 +39,7 @@ export async function plugin() {
       minify: false,
       outDir: path.resolve(process.cwd(), "dist"),
       rollupOptions: {
-        external: [
-          "react",
-          "react-dom",
-          "react/jsx-runtime",
-          "react-router-dom",
-          "@medusajs/admin-sdk",
-        ],
+        external: [...external],
         output: {
           globals: {
             react: "React",
