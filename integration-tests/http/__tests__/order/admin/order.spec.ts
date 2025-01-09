@@ -448,6 +448,7 @@ medusaIntegrationTestRunner({
                       expect.objectContaining({
                         id: expect.any(String),
                         amount: 106,
+                        canceled_by: expect.any(String),
                       }),
                     ],
                     captures: [
@@ -519,6 +520,7 @@ medusaIntegrationTestRunner({
                       expect.objectContaining({
                         id: expect.any(String),
                         amount: 50,
+                        canceled_by: expect.any(String),
                       }),
                     ],
                     captures: [
