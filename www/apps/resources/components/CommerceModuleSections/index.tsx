@@ -59,7 +59,6 @@ export const CommerceModuleSections = () => {
     <>
       {guideComponents.map((component, i) => (
         <React.Fragment key={i}>
-          {/* @ts-expect-error React 19 not recognizing this as an element. */}
           <>
             {i !== 0 && <Hr />}
             {component}
@@ -69,7 +68,6 @@ export const CommerceModuleSections = () => {
       {guideComponents.length > 0 && referenceComponents.length > 0 && <Hr />}
       {referenceComponents.map((component, i) => (
         <React.Fragment key={i}>
-          {/* @ts-expect-error React 19 not recognizing this as an element. */}
           <>
             {i !== 0 && <Hr />}
             {component}
