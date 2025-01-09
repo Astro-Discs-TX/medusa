@@ -1,5 +1,5 @@
 import { Modules } from "../../modules-sdk"
-import { defineConfig } from "../define-config"
+import { DEFAULT_STORE_RESTRICTED_FIELDS, defineConfig } from "../define-config"
 
 describe("defineConfig", function () {
   it("should merge empty config with the defaults", function () {
@@ -135,8 +135,9 @@ describe("defineConfig", function () {
             "jwtSecret": "supersecret",
             "restrictedFields": {
               "store": [
-                "order",
-                "orders",
+                ${DEFAULT_STORE_RESTRICTED_FIELDS.map((v) => `"${v}"`).join(
+                  ",\n                "
+                )},
               ],
             },
             "storeCors": "http://localhost:8000",
@@ -293,8 +294,9 @@ describe("defineConfig", function () {
             "jwtSecret": "supersecret",
             "restrictedFields": {
               "store": [
-                "order",
-                "orders",
+                ${DEFAULT_STORE_RESTRICTED_FIELDS.map((v) => `"${v}"`).join(
+                  ",\n                "
+                )},
               ],
             },
             "storeCors": "http://localhost:8000",
@@ -331,7 +333,9 @@ describe("defineConfig", function () {
             "options": {
               "apiKey": "test",
             },
-            "resolve": "/Users/virk/code/medusa/medusa/packages/core/utils/src/common/__fixtures__/define-config/github/index.ts",
+            "resolve": "${require.resolve(
+              "../__fixtures__/define-config/github"
+            )}",
           },
           "api_key": {
             "resolve": "@medusajs/medusa/api-key",
@@ -457,8 +461,9 @@ describe("defineConfig", function () {
             "jwtSecret": "supersecret",
             "restrictedFields": {
               "store": [
-                "order",
-                "orders",
+                ${DEFAULT_STORE_RESTRICTED_FIELDS.map((v) => `"${v}"`).join(
+                  ",\n                "
+                )},
               ],
             },
             "storeCors": "http://localhost:8000",
@@ -496,7 +501,9 @@ describe("defineConfig", function () {
             "options": {
               "apiKey": "test",
             },
-            "resolve": "/Users/virk/code/medusa/medusa/packages/core/utils/src/common/__fixtures__/define-config/github/index.ts",
+            "resolve": "${require.resolve(
+              "../__fixtures__/define-config/github"
+            )}",
           },
           "api_key": {
             "resolve": "@medusajs/medusa/api-key",
@@ -622,8 +629,9 @@ describe("defineConfig", function () {
             "jwtSecret": "supersecret",
             "restrictedFields": {
               "store": [
-                "order",
-                "orders",
+                ${DEFAULT_STORE_RESTRICTED_FIELDS.map((v) => `"${v}"`).join(
+                  ",\n                "
+                )},
               ],
             },
             "storeCors": "http://localhost:8000",
@@ -777,8 +785,9 @@ describe("defineConfig", function () {
             "jwtSecret": "supersecret",
             "restrictedFields": {
               "store": [
-                "order",
-                "orders",
+                ${DEFAULT_STORE_RESTRICTED_FIELDS.map((v) => `"${v}"`).join(
+                  ",\n                "
+                )},
               ],
             },
             "storeCors": "http://localhost:8000",
@@ -932,8 +941,9 @@ describe("defineConfig", function () {
             "jwtSecret": "supersecret",
             "restrictedFields": {
               "store": [
-                "order",
-                "orders",
+                ${DEFAULT_STORE_RESTRICTED_FIELDS.map((v) => `"${v}"`).join(
+                  ",\n                "
+                )},
               ],
             },
             "storeCors": "http://localhost:8000",
