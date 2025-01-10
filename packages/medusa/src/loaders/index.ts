@@ -16,6 +16,7 @@ import {
 import {
   ContainerRegistrationKeys,
   GraphQLSchema,
+  mergePluginModules,
   promiseAll,
 } from "@medusajs/framework/utils"
 import { WorkflowLoader } from "@medusajs/framework/workflows"
@@ -147,6 +148,8 @@ export default async ({
   )
 
   const plugins = await getResolvedPlugins(rootDirectory, configModule, true)
+  mergePluginModules(configModule, plugins)
+
   const linksSourcePaths = plugins.map((plugin) =>
     join(plugin.resolve, "links")
   )
