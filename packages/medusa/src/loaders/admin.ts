@@ -35,9 +35,7 @@ export default async function adminLoader({
   const sources: string[] = []
 
   for (const plugin of plugins) {
-    const pluginSource = plugin.resolve.endsWith("/src")
-      ? path.join(plugin.resolve, "admin")
-      : path.join(plugin.resolve, "src", "admin")
+    const pluginSource = path.join(plugin.resolve, "admin")
 
     if (fs.existsSync(pluginSource)) {
       sources.push(pluginSource)
