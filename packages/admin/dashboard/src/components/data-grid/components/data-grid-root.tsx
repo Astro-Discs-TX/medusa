@@ -663,6 +663,7 @@ export const DataGridRoot = <
                       virtualPaddingLeft={virtualPaddingLeft}
                       virtualPaddingRight={virtualPaddingRight}
                       onDragToFillStart={onDragToFillStart}
+                      multiColumnSelection={multiColumnSelection}
                     />
                   )
                 })}
@@ -795,6 +796,7 @@ type DataGridCellProps<TData> = {
   rowIndex: number
   anchor: DataGridCoordinates | null
   onDragToFillStart: (e: React.MouseEvent<HTMLElement>) => void
+  multiColumnSelection: boolean
 }
 
 const DataGridCell = <TData,>({
@@ -803,6 +805,7 @@ const DataGridCell = <TData,>({
   rowIndex,
   anchor,
   onDragToFillStart,
+  multiColumnSelection,
 }: DataGridCellProps<TData>) => {
   const coords: DataGridCoordinates = {
     row: rowIndex,
@@ -836,7 +839,12 @@ const DataGridCell = <TData,>({
         {isAnchor && (
           <div
             onMouseDown={onDragToFillStart}
-            className="bg-ui-fg-interactive absolute bottom-0 right-0 z-[3] size-1.5 cursor-ns-resize"
+            className={clx(
+              "bg-ui-fg-interactive absolute bottom-0 right-0 z-[3] size-1.5 cursor-ns-resize",
+              {
+                "cursor-nwse-resize": multiColumnSelection,
+              }
+            )}
           />
         )}
       </div>
@@ -854,6 +862,7 @@ type DataGridRowProps<TData> = {
   flatColumns: Column<TData, unknown>[]
   anchor: DataGridCoordinates | null
   onDragToFillStart: (e: React.MouseEvent<HTMLElement>) => void
+  multiColumnSelection: boolean
 }
 
 const DataGridRow = <TData,>({
@@ -866,6 +875,7 @@ const DataGridRow = <TData,>({
   flatColumns,
   anchor,
   onDragToFillStart,
+  multiColumnSelection,
 }: DataGridRowProps<TData>) => {
   const visibleCells = row.getVisibleCells()
 
@@ -912,6 +922,7 @@ const DataGridRow = <TData,>({
             rowIndex={rowIndex}
             anchor={anchor}
             onDragToFillStart={onDragToFillStart}
+            multiColumnSelection={multiColumnSelection}
           />
         )
 
