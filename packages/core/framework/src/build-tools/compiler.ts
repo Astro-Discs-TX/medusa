@@ -23,22 +23,15 @@ import type { AdminOptions, ConfigModule, Logger } from "@medusajs/types"
 export class Compiler {
   #logger: Logger
   #projectRoot: string
-  #appDistFolder: string
   #adminSourceFolder: string
   #adminOnlyDistFolder: string
-  #adminBundledDistFolder: string
   #tsCompiler?: typeof tsStatic
 
   constructor(projectRoot: string, logger: Logger) {
     this.#projectRoot = projectRoot
     this.#logger = logger
-    this.#appDistFolder = path.join(this.#projectRoot, ".medusa/server")
     this.#adminSourceFolder = path.join(this.#projectRoot, "src/admin")
     this.#adminOnlyDistFolder = path.join(this.#projectRoot, ".medusa/admin")
-    this.#adminBundledDistFolder = path.join(
-      this.#projectRoot,
-      ".medusa/server/public/admin"
-    )
   }
 
   /**
@@ -52,6 +45,17 @@ export class Compiler {
         return (duration[0] + duration[1] / 1e9).toFixed(2)
       },
     }
+  }
+
+  /**
+   * Returns the dist folder from the tsconfig.outDir property
+   * or uses the ".medusa/server" folder
+   */
+  #computeDist(tsConfig: { options: { outDir?: string } }): string {
+    const distFolder = tsConfig.options.outDir ?? ".medusa/server"
+    return path.isAbsolute(distFolder)
+      ? distFolder
+      : path.join(this.#projectRoot, distFolder)
   }
 
   /**
@@ -151,7 +155,7 @@ export class Compiler {
   }> {
     const ts = await this.#loadTSCompiler()
     const filesToCompile = tsConfig.fileNames.filter((fileName) => {
-      return chunksToIgnore.some((chunk) => !fileName.includes(chunk))
+      return !chunksToIgnore.some((chunk) => fileName.includes(`${chunk}/`))
     })
 
     /**
@@ -242,18 +246,16 @@ export class Compiler {
     tsConfig: tsStatic.ParsedCommandLine
   ): Promise<boolean> {
     const tracker = this.#trackDuration()
+    const dist = this.#computeDist(tsConfig)
     this.#logger.info("Compiling backend source...")
 
     /**
      * Step 1: Cleanup existing build output
      */
     this.#logger.info(
-      `Removing existing "${path.relative(
-        this.#projectRoot,
-        this.#appDistFolder
-      )}" folder`
+      `Removing existing "${path.relative(this.#projectRoot, dist)}" folder`
     )
-    await this.#clean(this.#appDistFolder)
+    await this.#clean(dist)
 
     /**
      * Step 2: Compile TypeScript source code
@@ -261,7 +263,7 @@ export class Compiler {
     const { emitResult, diagnostics } = await this.#emitBuildOutput(
       tsConfig,
       ["integration-tests", "test", "unit-tests", "src/admin"],
-      this.#appDistFolder
+      dist
     )
 
     /**
@@ -275,7 +277,7 @@ export class Compiler {
     /**
      * Step 3: Copy package manager files to the output folder
      */
-    await this.#copyPkgManagerFiles(this.#appDistFolder)
+    await this.#copyPkgManagerFiles(dist)
 
     /**
      * Notify about the state of build
@@ -299,6 +301,7 @@ export class Compiler {
    */
   async buildAppFrontend(
     adminOnly: boolean,
+    tsConfig: tsStatic.ParsedCommandLine,
     adminBundler: {
       build: (
         options: AdminOptions & {
@@ -348,7 +351,7 @@ export class Compiler {
         ...configFile.configModule.admin,
         outDir: adminOnly
           ? this.#adminOnlyDistFolder
-          : this.#adminBundledDistFolder,
+          : path.join(this.#computeDist(tsConfig), "./public/admin"),
       })
 
       this.#logger.info(

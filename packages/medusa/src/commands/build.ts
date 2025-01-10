@@ -23,7 +23,7 @@ export default async function build({
   }
 
   const bundler = await import("@medusajs/admin-bundler")
-  promises.push(compiler.buildAppFrontend(adminOnly, bundler))
+  promises.push(compiler.buildAppFrontend(adminOnly, tsConfig, bundler))
   await Promise.all(promises)
   return true
 }
