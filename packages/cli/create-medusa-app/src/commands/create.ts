@@ -210,7 +210,7 @@ async function createPluginProject(
     return
   }
 
-  spinner.succeed(chalk.green("Project Prepared"))
+  spinner.succeed(chalk.green("Plugin Prepared"))
 
   showPluginSuccessMessage(projectPath)
   process.exit()
