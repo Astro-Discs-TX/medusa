@@ -45,7 +45,7 @@ export type CreateOptions = {
 }
 
 export default async (
-  args: string[], 
+  args: string[],
   {
     repoUrl = "",
     seed,
@@ -58,6 +58,12 @@ export default async (
     verbose = false,
   }: CreateOptions
 ) => {
+  let isPlugin = false
+  if (args.indexOf("--plugin") !== -1) {
+    isPlugin = true
+    args.splice(args.indexOf("--plugin"), 1)
+  }
+
   const nodeVersion = getNodeVersion()
   if (nodeVersion < MIN_SUPPORTED_NODE_VERSION) {
     logMessage({
@@ -65,6 +71,165 @@ export default async (
       type: "error",
     })
   }
+
+  if (isPlugin) {
+    createPluginProject(args, {
+      verbose,
+      directoryPath,
+      repoUrl,
+    })
+  } else {
+    createMedusaProject(args, {
+      repoUrl,
+      seed,
+      skipDb,
+      dbUrl,
+      browser,
+      migrations,
+      directoryPath,
+      withNextjsStarter,
+      verbose,
+    })
+  }
+}
+
+async function createPluginProject(
+  args: string[],
+  {
+    verbose = false,
+    directoryPath,
+    repoUrl = "",
+  }: {
+    verbose?: boolean
+    directoryPath?: string
+    repoUrl?: string
+  }
+) {
+  track("CREATE_CLI_CMP")
+
+  const spinner: Ora = ora()
+  const processManager = new ProcessManager()
+  const abortController = createAbortController(processManager)
+  const factBoxOptions: FactBoxOptions = {
+    interval: null,
+    spinner,
+    processManager,
+    message: "",
+    title: "",
+    verbose,
+  }
+  let isProjectCreated = false
+  let printedMessage = false
+
+  processManager.onTerminated(async () => {
+    spinner.stop()
+
+    // this ensures that the message isn't printed twice to the user
+    if (!printedMessage && isProjectCreated) {
+      printedMessage = true
+      showPluginSuccessMessage(projectName)
+    }
+
+    return
+  })
+
+  let askProjectName = args.length === 0
+  if (args.length > 0) {
+    // check if plugin directory already exists
+    const projectPath = getProjectPath(args[0], directoryPath)
+    if (fs.existsSync(projectPath) && fs.lstatSync(projectPath).isDirectory()) {
+      logMessage({
+        message: `A directory already exists with the name ${args[0]}. Please enter a different plugin name.`,
+        type: "warn",
+      })
+      askProjectName = true
+    }
+  }
+
+  const projectName = askProjectName
+    ? await askForProjectName(directoryPath)
+    : args[0]
+  const projectPath = getProjectPath(projectName, directoryPath)
+
+  track("CMP_OPTIONS", {
+    verbose,
+  })
+
+  logMessage({
+    message: `${emojify(
+      ":rocket:"
+    )} Starting plugin setup, this may take a few minutes.`,
+  })
+
+  spinner.start()
+
+  factBoxOptions.interval = displayFactBox({
+    ...factBoxOptions,
+    title: "Setting up plugin...",
+  })
+
+  try {
+    await runCloneRepo({
+      projectName: projectPath,
+      repoUrl,
+      abortController,
+      spinner,
+      verbose,
+    })
+  } catch {
+    return
+  }
+
+  factBoxOptions.interval = displayFactBox({
+    ...factBoxOptions,
+    message: "Created plugin directory",
+  })
+
+  // prepare plugin
+  try {
+    await prepareProject({
+      isPlugin: true,
+      directory: projectPath,
+      projectName,
+      spinner,
+      processManager,
+      abortController,
+      verbose,
+    })
+  } catch (e: any) {
+    if (isAbortError(e)) {
+      process.exit()
+    }
+
+    spinner.stop()
+    logMessage({
+      message: `An error occurred while preparing plugin: ${e}`,
+      type: "error",
+    })
+
+    return
+  }
+
+  spinner.succeed(chalk.green("Project Prepared"))
+
+  showPluginSuccessMessage(projectPath)
+  process.exit()
+}
+
+async function createMedusaProject(
+  args: string[],
+  {
+    repoUrl = "",
+    seed,
+    skipDb,
+    dbUrl,
+    browser,
+    migrations,
+    directoryPath,
+    withNextjsStarter = false,
+    verbose = false,
+  }: CreateOptions
+) {
   track("CREATE_CLI_CMA")
 
   const spinner: Ora = ora()
@@ -114,7 +279,9 @@ export default async (
     }
   }
 
-  const projectName = askProjectName ? await askForProjectName(directoryPath) : args[0]
+  const projectName = askProjectName
+    ? await askForProjectName(directoryPath)
+    : args[0]
   const projectPath = getProjectPath(projectName, directoryPath)
   const installNextjs = withNextjsStarter || (await askForNextjsStarter())
 
@@ -199,6 +366,7 @@ export default async (
   let inviteToken: string | undefined = undefined
   try {
     inviteToken = await prepareProject({
+      isPlugin: false,
       directory: projectPath,
       dbName,
       dbConnectionString,
@@ -326,6 +494,23 @@ function showSuccessMessage(
             ? `The Next.js Starter storefront was installed in the \`${nextjsDirectory}\` directory. Change to that directory and start it with the following command:${EOL}${EOL}npm run dev${EOL}${EOL}`
             : ""
         }Check out the Medusa documentation to start your development:${EOL}${EOL}https://docs.medusajs.com/${EOL}${EOL}Star us on GitHub if you like what we're building:${EOL}${EOL}https://github.com/medusajs/medusa/stargazers`
+      ),
+      {
+        titleAlignment: "center",
+        textAlignment: "center",
+        padding: 1,
+        margin: 1,
+        float: "center",
+      }
+    ),
+  })
+}
+
+function showPluginSuccessMessage(projectName: string) {
+  logMessage({
+    message: boxen(
+      chalk.green(
+        `Change to the \`${projectName}\` directory to explore your Medusa plugin.${EOL}${EOL}Check out the Medusa plugin documentation to start your development:${EOL}${EOL}https://docs.medusajs.com/${EOL}${EOL}Star us on GitHub if you like what we're building:${EOL}${EOL}https://github.com/medusajs/medusa/stargazers`
       ),
       {
         titleAlignment: "center",

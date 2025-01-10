@@ -9,15 +9,25 @@ import type { Client } from "pg"
 
 const ADMIN_EMAIL = "admin@medusa-test.com"
 let STORE_CORS = "http://localhost:8000"
-let ADMIN_CORS =
-  "http://localhost:5173,http://localhost:9000"
+let ADMIN_CORS = "http://localhost:5173,http://localhost:9000"
 const DOCS_CORS = "https://docs.medusajs.com"
 const AUTH_CORS = [ADMIN_CORS, STORE_CORS, DOCS_CORS].join(",")
 STORE_CORS += `,${DOCS_CORS}`
 ADMIN_CORS += `,${DOCS_CORS}`
 const DEFAULT_REDIS_URL = "redis://localhost:6379"
 
-type PrepareOptions = {
+type PreparePluginOptions = {
+  isPlugin: true
+  directory: string
+  projectName: string
+  spinner: Ora
+  processManager: ProcessManager
+  abortController?: AbortController
+  verbose?: boolean
+}
+
+type PrepareProjectOptions = {
+  isPlugin: false
   directory: string
   dbName?: string
   dbConnectionString: string
@@ -33,7 +43,123 @@ type PrepareOptions = {
   verbose?: boolean
 }
 
-export default async ({
+type PrepareOptions = PreparePluginOptions | PrepareProjectOptions
+
+export default async (prepareOptions: PrepareOptions) => {
+  if (prepareOptions.isPlugin) {
+    return preparePlugin(prepareOptions)
+  }
+
+  return prepareProject(prepareOptions)
+}
+
+async function preparePlugin({
+  directory,
+  projectName,
+  spinner,
+  processManager,
+  abortController,
+  verbose = false,
+}: PreparePluginOptions) {
+  // initialize execution options
+  const execOptions = {
+    cwd: directory,
+    signal: abortController?.signal,
+  }
+
+  const factBoxOptions: FactBoxOptions = {
+    interval: null,
+    spinner,
+    processManager,
+    message: "",
+    title: "",
+    verbose,
+  }
+
+  // Update package.json
+  const packageJsonPath = path.join(directory, "package.json")
+  const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"))
+
+  // TODO: update scripts to use the plugin commands
+
+  // Update name
+  packageJson.name = projectName
+
+  // Remove @medusajs/medusa dependency if it exists
+  if (packageJson.dependencies?.["@medusajs/medusa"]) {
+    delete packageJson.dependencies["@medusajs/medusa"]
+  }
+
+  fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2))
+
+  // Remote unwanted files
+  const filesToRemove = [
+    path.join(directory, "instrumentation.ts"),
+    path.join(directory, "medusa-config.ts"),
+    path.join(directory, "integration-tests"),
+  ]
+
+  filesToRemove.forEach((file) => {
+    if (fs.existsSync(file)) {
+      if (fs.lstatSync(file).isDirectory()) {
+        fs.rmSync(file, { recursive: true })
+      } else {
+        fs.unlinkSync(file)
+      }
+    }
+  })
+
+  factBoxOptions.interval = displayFactBox({
+    ...factBoxOptions,
+    spinner,
+    title: "Installing dependencies...",
+    processManager,
+  })
+
+  await processManager.runProcess({
+    process: async () => {
+      try {
+        await execute([`yarn`, execOptions], { verbose })
+      } catch (e) {
+        // yarn isn't available
+        // use npm
+        await execute([`npm install --legacy-peer-deps`, execOptions], {
+          verbose,
+        })
+      }
+    },
+    ignoreERESOLVE: true,
+  })
+
+  factBoxOptions.interval = displayFactBox({
+    ...factBoxOptions,
+    message: "Installed Dependencies",
+  })
+
+  factBoxOptions.interval = displayFactBox({
+    ...factBoxOptions,
+    title: "Building Plugin...",
+  })
+
+  await processManager.runProcess({
+    process: async () => {
+      try {
+        await execute([`yarn build`, execOptions], { verbose })
+      } catch (e) {
+        // yarn isn't available
+        // use npm
+        await execute([`npm run build`, execOptions], { verbose })
+      }
+    },
+    ignoreERESOLVE: true,
+  })
+
+  displayFactBox({ ...factBoxOptions, message: "Plugin Built" })
+
+  displayFactBox({ ...factBoxOptions, message: "Finished Preparation" })
+}
+
+async function prepareProject({
   directory,
   dbName,
   dbConnectionString,
@@ -47,7 +173,7 @@ export default async ({
   nextjsDirectory = "",
   client,
   verbose = false,
-}: PrepareOptions) => {
+}: PrepareProjectOptions) {
   // initialize execution options
   const execOptions = {
     cwd: directory,
@@ -80,7 +206,7 @@ export default async ({
   if (!skipDb) {
     if (dbName) {
       env += `${EOL}DB_NAME=${dbName}`
-      dbConnectionString = dbConnectionString.replace(dbName, "$DB_NAME")
+      dbConnectionString = dbConnectionString!.replace(dbName, "$DB_NAME")
     }
     env += `${EOL}DATABASE_URL=${dbConnectionString}`
   }
@@ -147,10 +273,10 @@ export default async ({
     // run migrations
     await processManager.runProcess({
       process: async () => {
-        const proc = await execute(
-          ["npx medusa db:migrate", npxOptions],
-          { verbose, needOutput: true }
-        )
+        const proc = await execute(["npx medusa db:migrate", npxOptions], {
+          verbose,
+          needOutput: true,
+        })
 
         if (client) {
           // check the migrations table is in the database
