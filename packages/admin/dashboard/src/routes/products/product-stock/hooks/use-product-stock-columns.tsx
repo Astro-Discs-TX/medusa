@@ -10,11 +10,11 @@ import { DataGridReadOnlyCell } from "../../../../components/data-grid/component
 import { DataGridDuplicateCell } from "../../../../components/data-grid/components/data-grid-duplicate-cell"
 import { DataGridTogglableNumberCell } from "../../../../components/data-grid/components/data-grid-toggleable-number-cell"
 import { ProductStockSchema } from "../schema"
-import { ProductVariantInventoryItemLink } from "../types"
 import { isProductVariant } from "../utils"
 
 const helper = createDataGridHelper<
-  HttpTypes.AdminProductVariant | ProductVariantInventoryItemLink,
+  | HttpTypes.AdminProductVariant
+  | HttpTypes.AdminProductVariantInventoryItemLink,
   ProductStockSchema
 >()
 
@@ -35,7 +35,7 @@ export const useProductStockColumns = (
 ) => {
   const { t } = useTranslation()
   const getIsDisabled = useCallback(
-    (item: ProductVariantInventoryItemLink): DisabledResult => {
+    (item: HttpTypes.AdminProductVariantInventoryItemLink): DisabledResult => {
       const disabledItem = disabled[item.inventory_item_id]
       const isDisabled = !!disabledItem && disabledItem.id !== item.variant_id
 
@@ -81,10 +81,10 @@ export const useProductStockColumns = (
               <DataGridReadOnlyCell context={context} color="normal">
                 <div className="flex size-full items-center justify-between gap-x-2">
                   <span
-                    title={item.inventory.title || undefined}
+                    title={item.inventory?.title || undefined}
                     className="text-ui-fg-disabled"
                   >
-                    {item.inventory.title || "-"}
+                    {item.inventory?.title || "-"}
                   </span>
                   <Tooltip
                     content={
@@ -107,7 +107,7 @@ export const useProductStockColumns = (
 
           return (
             <DataGridReadOnlyCell context={context} color="normal">
-              {item.inventory.title || "-"}
+              {item.inventory?.title || "-"}
             </DataGridReadOnlyCell>
           )
         },
@@ -134,7 +134,7 @@ export const useProductStockColumns = (
             return (
               <DataGridReadOnlyCell context={context} color="normal">
                 <span className="text-ui-fg-disabled">
-                  {item.inventory.sku || "-"}
+                  {item.inventory?.sku || "-"}
                 </span>
               </DataGridReadOnlyCell>
             )
@@ -142,7 +142,7 @@ export const useProductStockColumns = (
 
           return (
             <DataGridReadOnlyCell context={context} color="normal">
-              {item.inventory.sku || "-"}
+              {item.inventory?.sku || "-"}
             </DataGridReadOnlyCell>
           )
         },

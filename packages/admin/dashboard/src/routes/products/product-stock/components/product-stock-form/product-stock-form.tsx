@@ -4,6 +4,7 @@ import { Button, toast, usePrompt } from "@medusajs/ui"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { DefaultValues, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
+
 import { DataGrid } from "../../../../../components/data-grid"
 import {
   RouteFocusModal,
@@ -19,7 +20,6 @@ import {
   ProductStockSchema,
   ProductStockVariantSchema,
 } from "../../schema"
-import { ProductVariantInventoryItemLink } from "../../types"
 import {
   getDisabledInventoryRows,
   isProductVariantWithInventoryPivot,
@@ -47,16 +47,13 @@ export const ProductStockForm = ({
   const [isPromptOpen, setIsPromptOpen] = useState(false)
 
   const form = useForm<ProductStockSchema>({
-    defaultValues: getDefaultValue(variants as any, locations),
+    defaultValues: getDefaultValue(variants, locations),
     resolver: zodResolver(ProductStockSchema),
   })
 
-  const initialValues = useRef(getDefaultValue(variants as any, locations))
+  const initialValues = useRef(getDefaultValue(variants, locations))
 
-  const disabled = useMemo(
-    () => getDisabledInventoryRows(variants as any),
-    [variants]
-  )
+  const disabled = useMemo(() => getDisabledInventoryRows(variants), [variants])
   const columns = useProductStockColumns(locations, disabled)
 
   const { mutateAsync, isPending } = useBatchInventoryItemsLocationLevels()
@@ -174,46 +171,49 @@ export const ProductStockForm = ({
 }
 
 function getSubRows(
-  row: HttpTypes.AdminProductVariant | ProductVariantInventoryItemLink
-): ProductVariantInventoryItemLink[] | undefined {
+  row:
+    | HttpTypes.AdminProductVariant
+    | HttpTypes.AdminProductVariantInventoryItemLink
+): HttpTypes.AdminProductVariantInventoryItemLink[] | undefined {
   if (isProductVariantWithInventoryPivot(row)) {
     return row.inventory_items
   }
 }
 
 function getDefaultValue(
-  variants: (HttpTypes.AdminProductVariant & {
-    inventory_items: ProductVariantInventoryItemLink[]
-  })[],
+  variants: HttpTypes.AdminProductVariant[],
   locations: HttpTypes.AdminStockLocation[]
 ): DefaultValues<ProductStockSchema> {
   return {
     variants: variants.reduce((variantAcc, variant) => {
-      const inventoryItems = variant.inventory_items.reduce((itemAcc, item) => {
-        const locationsMap = locations.reduce((locationAcc, location) => {
-          const level = item.inventory.location_levels?.find(
-            (level) => level.location_id === location.id
-          )
+      const inventoryItems = variant.inventory_items?.reduce(
+        (itemAcc, item) => {
+          const locationsMap = locations.reduce((locationAcc, location) => {
+            const level = item.inventory?.location_levels?.find(
+              (level) => level.location_id === location.id
+            )
 
-          locationAcc[location.id] = {
-            id: level?.id,
-            quantity:
-              level?.stocked_quantity !== undefined
-                ? level?.stocked_quantity
-                : "",
-            checked: !!level,
-            disabledToggle:
-              (level?.incoming_quantity || 0) > 0 ||
-              (level?.reserved_quantity || 0) > 0,
-          }
-          return locationAcc
-        }, {} as ProductStockLocationSchema)
+            locationAcc[location.id] = {
+              id: level?.id,
+              quantity:
+                level?.stocked_quantity !== undefined
+                  ? level?.stocked_quantity
+                  : "",
+              checked: !!level,
+              disabledToggle:
+                (level?.incoming_quantity || 0) > 0 ||
+                (level?.reserved_quantity || 0) > 0,
+            }
+            return locationAcc
+          }, {} as ProductStockLocationSchema)
 
-        itemAcc[item.inventory_item_id] = { locations: locationsMap }
-        return itemAcc
-      }, {} as Record<string, ProductStockInventoryItemSchema>)
+          itemAcc[item.inventory_item_id] = { locations: locationsMap }
+          return itemAcc
+        },
+        {} as Record<string, ProductStockInventoryItemSchema>
+      )
 
-      variantAcc[variant.id] = { inventory_items: inventoryItems }
+      variantAcc[variant.id] = { inventory_items: inventoryItems || {} }
       return variantAcc
     }, {} as Record<string, ProductStockVariantSchema>),
   }

@@ -19,9 +19,10 @@ export const ProductStock = () => {
   /**
    * We render a local ProgressBar, as we cannot rely on the global NavigationBar.
    * This is because we are deferring the data, meaning that the navigation is
-   * instant, and the data is loaded in parallel with the navigation. This will
-   * result in the data loading after the navigation has completed most of the
-   * time for this route, as we chunk the data into multiple queries.
+   * instant, and the data is loaded in parallel with the navigation, but may resolve
+   * after the navigation has completed. This will result in the data loading after the
+   * navigation has completed most of the time for this route, as we chunk the data into
+   * multiple queries.
    *
    * Here we instead render a local ProgressBar, which is animated, and exit
    * the animation when the data is loaded, and the form is rendered.
