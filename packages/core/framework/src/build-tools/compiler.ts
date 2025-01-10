@@ -1,8 +1,8 @@
 import path from "path"
 import type tsStatic from "typescript"
 import { getConfigFile } from "@medusajs/utils"
-import type { ConfigModule, Logger } from "@medusajs/types"
 import { access, constants, copyFile, rm } from "fs/promises"
+import type { AdminOptions, ConfigModule, Logger } from "@medusajs/types"
 
 /**
  * The compiler exposes the opinionated APIs for compiling Medusa
@@ -299,7 +299,14 @@ export class Compiler {
    */
   async buildAppFrontend(
     adminOnly: boolean,
-    tsConfig: tsStatic.ParsedCommandLine
+    adminBundler: {
+      build: (
+        options: AdminOptions & {
+          sources: string[]
+          outDir: string
+        }
+      ) => Promise<void>
+    }
   ): Promise<boolean> {
     const tracker = this.#trackDuration()
 
@@ -335,10 +342,7 @@ export class Compiler {
 
     try {
       this.#logger.info("Compiling frontend source...")
-      const { build: buildProductionBuild } = await import(
-        "@medusajs/admin-bundler"
-      )
-      await buildProductionBuild({
+      await adminBundler.build({
         disable: false,
         sources: [this.#adminSourceFolder],
         ...configFile.configModule.admin,
