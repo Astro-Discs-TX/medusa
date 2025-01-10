@@ -147,7 +147,7 @@ async function createPluginProject(
   }
 
   const projectName = askProjectName
-    ? await askForProjectName(directoryPath)
+    ? await askForProjectName(directoryPath, true)
     : args[0]
   const projectPath = getProjectPath(projectName, directoryPath)
 
@@ -280,7 +280,7 @@ async function createMedusaProject(
   }
 
   const projectName = askProjectName
-    ? await askForProjectName(directoryPath)
+    ? await askForProjectName(directoryPath, false)
     : args[0]
   const projectPath = getProjectPath(projectName, directoryPath)
   const installNextjs = withNextjsStarter || (await askForNextjsStarter())
@@ -449,24 +449,29 @@ async function createMedusaProject(
   })
 }
 
-async function askForProjectName(directoryPath?: string): Promise<string> {
+async function askForProjectName(
+  directoryPath?: string,
+  isPlugin?: boolean
+): Promise<string> {
   const { projectName } = await inquirer.prompt([
     {
       type: "input",
       name: "projectName",
-      message: "What's the name of your project?",
+      message: `What's the name of your ${isPlugin ? "plugin" : "project"}?`,
       default: "my-medusa-store",
       filter: (input) => {
         return slugify(input).toLowerCase()
       },
       validate: (input) => {
         if (!input.length) {
-          return "Please enter a project name"
+          return `Please enter a ${isPlugin ? "plugin" : "project"} name`
         }
         const projectPath = getProjectPath(input, directoryPath)
         return fs.existsSync(projectPath) &&
           fs.lstatSync(projectPath).isDirectory()
-          ? "A directory already exists with the same name. Please enter a different project name."
+          ? `A directory already exists with the same name. Please enter a different ${
+              isPlugin ? "plugin" : "project"
+            } name.`
           : true
       },
     },

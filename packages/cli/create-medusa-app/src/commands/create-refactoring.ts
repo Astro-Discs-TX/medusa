@@ -438,8 +438,8 @@ class ProjectCreatorFactory {
 
     const projectName = await ProjectCreatorFactory.getProjectName(
       args,
-      options.directoryPath
-      isPlugin,
+      options.directoryPath,
+      isPlugin
     )
 
     return isPlugin
@@ -470,36 +470,44 @@ class ProjectCreatorFactory {
         fs.lstatSync(projectPath).isDirectory()
       ) {
         logMessage({
-          message: `A directory already exists with the name ${args[0]}. Please enter a different ${isPlugin ? "plugin" : "project"} name.`,
+          message: `A directory already exists with the name ${
+            args[0]
+          }. Please enter a different ${isPlugin ? "plugin" : "project"} name.`,
           type: "warn",
         })
         askProjectName = true
       }
     }
 
-    return askProjectName ? await askForProjectName(directoryPath) : args[0]
+    return askProjectName
+      ? await askForProjectName(directoryPath, isPlugin)
+      : args[0]
   }
 }
 
-// User Input Handler
-async function askForProjectName(directoryPath?: string): Promise<string> {
+async function askForProjectName(
+  directoryPath?: string,
+  isPlugin?: boolean
+): Promise<string> {
   const { projectName } = await inquirer.prompt([
     {
       type: "input",
       name: "projectName",
-      message: "What's the name of your project?",
+      message: `What's the name of your ${isPlugin ? "plugin" : "project"}?`,
       default: "my-medusa-store",
       filter: (input) => {
         return slugify(input).toLowerCase()
       },
       validate: (input) => {
         if (!input.length) {
-          return "Please enter a project name"
+          return `Please enter a ${isPlugin ? "plugin" : "project"} name`
         }
         const projectPath = path.join(directoryPath || "", input)
         return fs.existsSync(projectPath) &&
           fs.lstatSync(projectPath).isDirectory()
-          ? "A directory already exists with the same name. Please enter a different project name."
+          ? `A directory already exists with the same name. Please enter a different ${
+              isPlugin ? "plugin" : "project"
+            } name.`
           : true
       },
     },
