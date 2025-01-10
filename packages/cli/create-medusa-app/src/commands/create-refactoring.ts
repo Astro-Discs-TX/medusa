@@ -439,6 +439,7 @@ class ProjectCreatorFactory {
     const projectName = await ProjectCreatorFactory.getProjectName(
       args,
       options.directoryPath
+      isPlugin,
     )
 
     return isPlugin
@@ -458,7 +459,8 @@ class ProjectCreatorFactory {
 
   private static async getProjectName(
     args: string[],
-    directoryPath?: string
+    directoryPath?: string,
+    isPlugin?: boolean
   ): Promise<string> {
     let askProjectName = args.length === 0
     if (args.length > 0) {
@@ -468,7 +470,7 @@ class ProjectCreatorFactory {
         fs.lstatSync(projectPath).isDirectory()
       ) {
         logMessage({
-          message: `A directory already exists with the name ${args[0]}. Please enter a different project name.`,
+          message: `A directory already exists with the name ${args[0]}. Please enter a different ${isPlugin ? "plugin" : "project"} name.`,
           type: "warn",
         })
         askProjectName = true
