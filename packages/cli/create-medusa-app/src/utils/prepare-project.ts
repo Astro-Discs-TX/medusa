@@ -45,7 +45,9 @@ type PrepareProjectOptions = {
 
 type PrepareOptions = PreparePluginOptions | PrepareProjectOptions
 
-export default async (prepareOptions: PrepareOptions) => {
+export default async <T extends PrepareOptions>(
+  prepareOptions: T
+): Promise<T extends { isPlugin: true } ? void : string | undefined> => {
   if (prepareOptions.isPlugin) {
     return preparePlugin(prepareOptions)
   }
