@@ -357,7 +357,7 @@ export class Compiler {
       return true
     } catch (error) {
       this.#logger.error("Unable to compile frontend source")
-      console.error(error)
+      this.#logger.error(error)
       return false
     }
   }
