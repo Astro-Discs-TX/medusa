@@ -2,6 +2,7 @@ import { ApiKeyDTO, CreateApiKeyDTO } from "@medusajs/framework/types"
 import {
   WorkflowData,
   WorkflowResponse,
+  createHook,
   createWorkflow,
 } from "@medusajs/framework/workflows-sdk"
 import { createApiKeysStep } from "../steps"
@@ -17,6 +18,15 @@ export const createApiKeysWorkflow = createWorkflow(
   (
     input: WorkflowData<CreateApiKeysWorkflowInput>
   ): WorkflowResponse<ApiKeyDTO[]> => {
-    return new WorkflowResponse(createApiKeysStep(input))
+    const apiKeys = createApiKeysStep(input)
+
+    const apiKeysCreated = createHook("apiKeysCreated", {
+      apiKeys,
+      additional_data: input.additional_data,
+    })
+
+    return new WorkflowResponse(apiKeys, {
+      hooks: [apiKeysCreated],
+    })
   }
 )
