@@ -36,7 +36,7 @@ describe("transformModules", () => {
     })
   })
 
-  test("remove module when its disabled at a later stage in the array", () => {
+  test("should manage loading priority of modules when its disabled at a later stage in the array", () => {
     const modules = transformModules([
       {
         resolve: MODULE_PACKAGE_NAMES[Modules.CACHE],
@@ -47,6 +47,29 @@ describe("transformModules", () => {
       },
     ])
 
-    expect(modules).toEqual({})
+    expect(modules).toEqual({
+      cache: {
+        resolve: MODULE_PACKAGE_NAMES[Modules.CACHE],
+        disable: true,
+      },
+    })
+  })
+
+  test("should manage loading priority of modules when its not disabled at a later stage in the array", () => {
+    const modules = transformModules([
+      {
+        resolve: MODULE_PACKAGE_NAMES[Modules.CACHE],
+        disable: true,
+      },
+      {
+        resolve: MODULE_PACKAGE_NAMES[Modules.CACHE],
+      },
+    ])
+
+    expect(modules).toEqual({
+      cache: {
+        resolve: MODULE_PACKAGE_NAMES[Modules.CACHE],
+      },
+    })
   })
 })

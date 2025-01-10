@@ -170,13 +170,6 @@ export function transformModules(
     return acc
   }, {})
 
-  // Remove any modules set to false
-  Object.keys(remappedModules).forEach((key) => {
-    if (remappedModules[key].disable) {
-      delete remappedModules[key]
-    }
-  })
-
   return remappedModules as Exclude<ConfigModule["modules"], undefined>
 }
 
