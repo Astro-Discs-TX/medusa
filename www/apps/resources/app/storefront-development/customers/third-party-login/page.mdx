@@ -248,15 +248,13 @@ export default function GoogleCallback() {
   const [loading, setLoading] = useState(true)
   const [customer, setCustomer] = useState<HttpTypes.StoreCustomer>()
   // for other than Next.js
-  const code = useMemo(() => {
-    const queryParams = new URLSearchParams(window.location.search)
-    return queryParams.get("code")
-  }, [])
-
-  const state = useMemo(() => {
-    const queryParams = new URLSearchParams(window.location.search)
-    return queryParams.get("state")
-  }, [])
+  const { code, state } = useMemo(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    return {
+      code: queryParams.get("code"),
+      state: queryParams.get("state"),
+    };
+  }, []);
 
   const sendCallback = async () => {
     const { token } = await fetch(
@@ -565,15 +563,13 @@ export default function GoogleCallback() {
   const [loading, setLoading] = useState(true)
   const [customer, setCustomer] = useState<HttpTypes.StoreCustomer>()
   // for other than Next.js
-  const code = useMemo(() => {
-    const queryParams = new URLSearchParams(window.location.search)
-    return queryParams.get("code")
-  }, [])
-
-  const state = useMemo(() => {
-    const queryParams = new URLSearchParams(window.location.search)
-    return queryParams.get("state")
-  }, [])
+  const { code, state } = useMemo(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    return {
+      code: queryParams.get("code"),
+      state: queryParams.get("state"),
+    };
+  }, []);
 
   const sendCallback = async () => {
     const { token } = await fetch(
