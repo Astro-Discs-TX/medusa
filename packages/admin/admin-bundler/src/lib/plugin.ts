@@ -14,6 +14,13 @@ export async function plugin(options: PluginOptions) {
   const vite = await import("vite")
   const entries = await glob(`${options.root}/src/admin/**/*.{ts,tsx,js,jsx}`)
 
+  /**
+   * If there is no entry point, we can skip the build
+   */
+  if (entries.length === 0) {
+    return
+  }
+
   const entryPoints = entries.reduce((acc, entry) => {
     // Convert src/admin/routes/brands/page.tsx -> admin/routes/brands/page
     const outPath = entry
