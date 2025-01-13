@@ -254,7 +254,7 @@ export default function GoogleCallback() {
   }, [])
 
   const state = useMemo(() => {
-    const queryParams = new URLSearchParams(window.location.state)
+    const queryParams = new URLSearchParams(window.location.search)
     return queryParams.get("state")
   }, [])
 
@@ -571,7 +571,7 @@ export default function GoogleCallback() {
   }, [])
 
   const state = useMemo(() => {
-    const queryParams = new URLSearchParams(window.location.state)
+    const queryParams = new URLSearchParams(window.location.search)
     return queryParams.get("state")
   }, [])
 
