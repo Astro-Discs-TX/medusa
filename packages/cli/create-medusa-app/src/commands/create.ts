@@ -32,7 +32,7 @@ import {
 
 const slugify = slugifyType.default
 
-export type CreateOptions = {
+interface ProjectOptions {
   repoUrl?: string
   seed?: boolean
   skipDb?: boolean
@@ -42,411 +42,444 @@ export type CreateOptions = {
   directoryPath?: string
   withNextjsStarter?: boolean
   verbose?: boolean
+  plugin?: boolean
 }
 
-export default async (
-  args: string[],
-  {
-    repoUrl = "",
-    seed,
-    skipDb,
-    dbUrl,
-    browser,
-    migrations,
-    directoryPath,
-    withNextjsStarter = false,
-    verbose = false,
-  }: CreateOptions
-) => {
-  let isPlugin = false
-  if (args.indexOf("--plugin") !== -1) {
-    isPlugin = true
-    args.splice(args.indexOf("--plugin"), 1)
+interface ProjectCreator {
+  create(): Promise<void>
+}
+
+// Base class for common project functionality
+abstract class BaseProjectCreator {
+  protected spinner: Ora
+  protected processManager: ProcessManager
+  protected abortController: AbortController
+  protected factBoxOptions: FactBoxOptions
+  protected projectName: string
+  protected projectPath: string
+  protected isProjectCreated: boolean = false
+  protected printedMessage: boolean = false
+
+  constructor(
+    projectName: string,
+    protected options: ProjectOptions,
+    protected args: string[]
+  ) {
+    this.spinner = ora()
+    this.processManager = new ProcessManager()
+    this.abortController = createAbortController(this.processManager)
+    this.projectName = projectName
+    const basePath =
+      typeof options.directoryPath === "string" ? options.directoryPath : ""
+    this.projectPath = path.join(basePath, projectName)
+
+    this.factBoxOptions = {
+      interval: null,
+      spinner: this.spinner,
+      processManager: this.processManager,
+      message: "",
+      title: "",
+      verbose: options.verbose || false,
+    }
   }
 
-  const nodeVersion = getNodeVersion()
-  if (nodeVersion < MIN_SUPPORTED_NODE_VERSION) {
+  protected getProjectPath(projectName: string): string {
+    return path.join(this.options.directoryPath ?? "", projectName)
+  }
+
+  protected abstract showSuccessMessage(): void
+
+  protected abstract setupProcessManager(): void
+}
+
+// Plugin Project Creator
+class PluginProjectCreator
+  extends BaseProjectCreator
+  implements ProjectCreator
+{
+  constructor(projectName: string, options: ProjectOptions, args: string[]) {
+    super(projectName, options, args)
+    this.setupProcessManager()
+  }
+
+  async create(): Promise<void> {
+    track("CREATE_CLI_CMP")
+
     logMessage({
-      message: `Medusa requires at least v20 of Node.js. You're using v${nodeVersion}. Please install at least v20 and try again: https://nodejs.org/en/download`,
-      type: "error",
+      message: `${emojify(
+        ":rocket:"
+      )} Starting plugin setup, this may take a few minutes.`,
     })
-  }
 
-  if (isPlugin) {
-    createPluginProject(args, {
-      verbose,
-      directoryPath,
-      repoUrl,
+    this.spinner.start()
+    this.factBoxOptions.interval = displayFactBox({
+      ...this.factBoxOptions,
+      title: "Setting up plugin...",
     })
-  } else {
-    createMedusaProject(args, {
-      repoUrl,
-      seed,
-      skipDb,
-      dbUrl,
-      browser,
-      migrations,
-      directoryPath,
-      withNextjsStarter,
-      verbose,
-    })
-  }
-}
 
-async function createPluginProject(
-  args: string[],
-  {
-    verbose = false,
-    directoryPath,
-    repoUrl = "",
-  }: {
-    verbose?: boolean
-    directoryPath?: string
-    repoUrl?: string
-  }
-) {
-  track("CREATE_CLI_CMP")
-
-  const spinner: Ora = ora()
-  const processManager = new ProcessManager()
-  const abortController = createAbortController(processManager)
-  const factBoxOptions: FactBoxOptions = {
-    interval: null,
-    spinner,
-    processManager,
-    message: "",
-    title: "",
-    verbose,
-  }
-  let isProjectCreated = false
-  let printedMessage = false
-
-  processManager.onTerminated(async () => {
-    spinner.stop()
-
-    // this ensures that the message isn't printed twice to the user
-    if (!printedMessage && isProjectCreated) {
-      printedMessage = true
-      showPluginSuccessMessage(projectName)
-    }
-
-    return
-  })
-
-  let askProjectName = args.length === 0
-  if (args.length > 0) {
-    // check if plugin directory already exists
-    const projectPath = getProjectPath(args[0], directoryPath)
-    if (fs.existsSync(projectPath) && fs.lstatSync(projectPath).isDirectory()) {
-      logMessage({
-        message: `A directory already exists with the name ${args[0]}. Please enter a different plugin name.`,
-        type: "warn",
-      })
-      askProjectName = true
+    try {
+      await this.cloneAndPreparePlugin()
+      this.spinner.succeed(chalk.green("Plugin Prepared"))
+      this.showSuccessMessage()
+    } catch (e: any) {
+      this.handleError(e)
     }
   }
 
-  const projectName = askProjectName
-    ? await askForProjectName(directoryPath, true)
-    : args[0]
-  const projectPath = getProjectPath(projectName, directoryPath)
-
-  track("CMP_OPTIONS", {
-    verbose,
-  })
-
-  logMessage({
-    message: `${emojify(
-      ":rocket:"
-    )} Starting plugin setup, this may take a few minutes.`,
-  })
-
-  spinner.start()
-
-  factBoxOptions.interval = displayFactBox({
-    ...factBoxOptions,
-    title: "Setting up plugin...",
-  })
-
-  try {
+  private async cloneAndPreparePlugin(): Promise<void> {
     await runCloneRepo({
-      projectName: projectPath,
-      repoUrl,
-      abortController,
-      spinner,
-      verbose,
+      projectName: this.projectPath,
+      repoUrl: this.options.repoUrl ?? "",
+      abortController: this.abortController,
+      spinner: this.spinner,
+      verbose: this.options.verbose,
+      isPlugin: true,
     })
-  } catch {
-    return
-  }
 
-  factBoxOptions.interval = displayFactBox({
-    ...factBoxOptions,
-    message: "Created plugin directory",
-  })
+    this.factBoxOptions.interval = displayFactBox({
+      ...this.factBoxOptions,
+      message: "Created plugin directory",
+    })
 
-  // prepare plugin
-  try {
     await prepareProject({
       isPlugin: true,
-      directory: projectPath,
-      projectName,
-      spinner,
-      processManager,
-      abortController,
-      verbose,
+      directory: this.projectPath,
+      projectName: this.projectName,
+      spinner: this.spinner,
+      processManager: this.processManager,
+      abortController: this.abortController,
+      verbose: this.options.verbose,
     })
-  } catch (e: any) {
+  }
+
+  private handleError(e: any): void {
     if (isAbortError(e)) {
       process.exit()
     }
 
-    spinner.stop()
+    this.spinner.stop()
     logMessage({
       message: `An error occurred while preparing plugin: ${e}`,
       type: "error",
     })
-
-    return
   }
 
-  spinner.succeed(chalk.green("Plugin Prepared"))
+  protected showSuccessMessage(): void {
+    logMessage({
+      message: boxen(
+        chalk.green(
+          `Change to the \`${this.projectName}\` directory to explore your Medusa plugin.${EOL}${EOL}Check out the Medusa plugin documentation to start your development:${EOL}${EOL}https://docs.medusajs.com/${EOL}${EOL}Star us on GitHub if you like what we're building:${EOL}${EOL}https://github.com/medusajs/medusa/stargazers`
+        ),
+        {
+          titleAlignment: "center",
+          textAlignment: "center",
+          padding: 1,
+          margin: 1,
+          float: "center",
+        }
+      ),
+    })
+  }
 
-  showPluginSuccessMessage(projectPath)
-  process.exit()
+  protected setupProcessManager(): void {
+    this.processManager.onTerminated(async () => {
+      this.spinner.stop()
+
+      if (!this.printedMessage && this.isProjectCreated) {
+        this.printedMessage = true
+        this.showSuccessMessage()
+      }
+      return
+    })
+  }
 }
 
-async function createMedusaProject(
-  args: string[],
-  {
-    repoUrl = "",
-    seed,
-    skipDb,
-    dbUrl,
-    browser,
-    migrations,
-    directoryPath,
-    withNextjsStarter = false,
-    verbose = false,
-  }: CreateOptions
-) {
-  track("CREATE_CLI_CMA")
+// Medusa Project Creator
+class MedusaProjectCreator
+  extends BaseProjectCreator
+  implements ProjectCreator
+{
+  private client: any = null
+  private dbConnectionString: string = ""
+  private isDbInitialized: boolean = false
+  private nextjsDirectory: string = ""
+  private inviteToken?: string
 
-  const spinner: Ora = ora()
-  const processManager = new ProcessManager()
-  const abortController = createAbortController(processManager)
-  const factBoxOptions: FactBoxOptions = {
-    interval: null,
-    spinner,
-    processManager,
-    message: "",
-    title: "",
-    verbose,
+  constructor(projectName: string, options: ProjectOptions, args: string[]) {
+    super(projectName, options, args)
+    this.setupProcessManager()
   }
-  let isProjectCreated = false
-  let isDbInitialized = false
-  let printedMessage = false
-  let nextjsDirectory = ""
 
-  processManager.onTerminated(async () => {
-    spinner.stop()
-    // prevent an error from occurring if
-    // client hasn't been declared yet
-    if (isDbInitialized && client) {
-      await client.end()
+  async create(): Promise<void> {
+    track("CREATE_CLI_CMA")
+
+    try {
+      await this.initializeProject()
+      await this.setupProject()
+      await this.startServices()
+    } catch (e: any) {
+      this.handleError(e)
+    }
+  }
+
+  private async initializeProject(): Promise<void> {
+    const installNextjs =
+      this.options.withNextjsStarter || (await askForNextjsStarter())
+
+    if (!this.options.skipDb) {
+      await this.setupDatabase()
     }
 
-    // the SIGINT event is triggered twice once the backend runs
-    // this ensures that the message isn't printed twice to the user
-    if (!printedMessage && isProjectCreated) {
-      printedMessage = true
-      showSuccessMessage(projectName, undefined, nextjsDirectory)
-    }
+    logMessage({
+      message: `${emojify(
+        ":rocket:"
+      )} Starting project setup, this may take a few minutes.`,
+    })
 
-    return
-  })
+    this.spinner.start()
 
-  let askProjectName = args.length === 0
-  if (args.length > 0) {
-    // check if project directory already exists
-    const projectPath = getProjectPath(args[0], directoryPath)
-    if (fs.existsSync(projectPath) && fs.lstatSync(projectPath).isDirectory()) {
-      logMessage({
-        message: `A directory already exists with the name ${args[0]}. Please enter a different project name.`,
-        type: "warn",
+    this.factBoxOptions.interval = displayFactBox({
+      ...this.factBoxOptions,
+      title: "Setting up project...",
+    })
+
+    try {
+      await runCloneRepo({
+        projectName: this.projectPath,
+        repoUrl: this.options.repoUrl ?? "",
+        abortController: this.abortController,
+        spinner: this.spinner,
+        verbose: this.options.verbose,
       })
-      askProjectName = true
+
+      this.factBoxOptions.interval = displayFactBox({
+        ...this.factBoxOptions,
+        message: "Created project directory",
+      })
+
+      if (installNextjs) {
+        this.nextjsDirectory = await installNextjsStarter({
+          directoryName: this.projectPath,
+          abortController: this.abortController,
+          factBoxOptions: this.factBoxOptions,
+          verbose: this.options.verbose,
+          processManager: this.processManager,
+        })
+      }
+    } catch (e) {
+      throw e
     }
   }
 
-  const projectName = askProjectName
-    ? await askForProjectName(directoryPath, false)
-    : args[0]
-  const projectPath = getProjectPath(projectName, directoryPath)
-  const installNextjs = withNextjsStarter || (await askForNextjsStarter())
-
-  let dbName = !skipDb && !dbUrl ? `medusa-${slugify(projectName)}` : ""
-
-  let { client, dbConnectionString, ...rest } = !skipDb
-    ? await getDbClientAndCredentials({
+  private async setupDatabase(): Promise<void> {
+    const dbName = `medusa-${slugify(this.projectName)}`
+    const { client, dbConnectionString, ...rest } =
+      await getDbClientAndCredentials({
         dbName,
-        dbUrl,
-        verbose,
+        dbUrl: this.options.dbUrl,
+        verbose: this.options.verbose,
       })
-    : { client: null, dbConnectionString: "" }
-  if ("dbName" in rest) {
-    dbName = rest.dbName as string
-  }
-  isDbInitialized = true
 
-  track("CMA_OPTIONS", {
-    repoUrl,
-    seed,
-    skipDb,
-    browser,
-    migrations,
-    installNextjs,
-    verbose,
-  })
+    this.client = client
+    this.dbConnectionString = dbConnectionString
+    this.isDbInitialized = true
 
-  logMessage({
-    message: `${emojify(
-      ":rocket:"
-    )} Starting project setup, this may take a few minutes.`,
-  })
-
-  spinner.start()
-
-  factBoxOptions.interval = displayFactBox({
-    ...factBoxOptions,
-    title: "Setting up project...",
-  })
-
-  try {
-    await runCloneRepo({
-      projectName: projectPath,
-      repoUrl,
-      abortController,
-      spinner,
-      verbose,
-    })
-  } catch {
-    return
-  }
-
-  factBoxOptions.interval = displayFactBox({
-    ...factBoxOptions,
-    message: "Created project directory",
-  })
-
-  nextjsDirectory = installNextjs
-    ? await installNextjsStarter({
-        directoryName: projectPath,
-        abortController,
-        factBoxOptions,
-        verbose,
-        processManager,
+    if (!this.options.dbUrl) {
+      this.factBoxOptions.interval = displayFactBox({
+        ...this.factBoxOptions,
+        title: "Creating database...",
       })
-    : ""
 
-  if (client && !dbUrl) {
-    factBoxOptions.interval = displayFactBox({
-      ...factBoxOptions,
-      title: "Creating database...",
-    })
-    client = await runCreateDb({ client, dbName, spinner })
+      this.client = await runCreateDb({
+        client: this.client,
+        dbName,
+        spinner: this.spinner,
+      })
 
-    factBoxOptions.interval = displayFactBox({
-      ...factBoxOptions,
-      message: `Database ${dbName} created`,
-    })
+      this.factBoxOptions.interval = displayFactBox({
+        ...this.factBoxOptions,
+        message: `Database ${dbName} created`,
+      })
+    }
   }
 
-  // prepare project
-  let inviteToken: string | undefined = undefined
-  try {
-    inviteToken = await prepareProject({
-      isPlugin: false,
-      directory: projectPath,
-      dbName,
-      dbConnectionString,
-      seed,
-      spinner,
-      processManager,
-      abortController,
-      skipDb,
-      migrations,
-      onboardingType: installNextjs ? "nextjs" : "default",
-      nextjsDirectory,
-      client,
-      verbose,
-    })
-  } catch (e: any) {
-    if (isAbortError(e)) {
+  private async setupProject(): Promise<void> {
+    try {
+      this.inviteToken = await prepareProject({
+        isPlugin: false,
+        directory: this.projectPath,
+        dbConnectionString: this.dbConnectionString,
+        seed: this.options.seed,
+        spinner: this.spinner,
+        processManager: this.processManager,
+        abortController: this.abortController,
+        skipDb: this.options.skipDb,
+        migrations: this.options.migrations,
+        onboardingType: this.nextjsDirectory ? "nextjs" : "default",
+        nextjsDirectory: this.nextjsDirectory,
+        client: this.client,
+        verbose: this.options.verbose,
+      })
+    } finally {
+      await this.client?.end()
+    }
+
+    this.spinner.succeed(chalk.green("Project Prepared"))
+  }
+
+  private async startServices(): Promise<void> {
+    if (this.options.skipDb || !this.options.browser) {
+      this.showSuccessMessage()
       process.exit()
     }
 
-    spinner.stop()
     logMessage({
-      message: `An error occurred while preparing project: ${e}`,
-      type: "error",
+      message: "Starting Medusa...",
     })
 
-    return
-  } finally {
-    // close db connection
-    await client?.end()
-  }
-
-  spinner.succeed(chalk.green("Project Prepared"))
-
-  if (skipDb || !browser) {
-    showSuccessMessage(projectPath, inviteToken, nextjsDirectory)
-    process.exit()
-  }
-
-  // start backend
-  logMessage({
-    message: "Starting Medusa...",
-  })
-
-  try {
     startMedusa({
-      directory: projectPath,
-      abortController,
+      directory: this.projectPath,
+      abortController: this.abortController,
     })
 
-    if (installNextjs && nextjsDirectory) {
+    if (this.nextjsDirectory) {
       startNextjsStarter({
-        directory: nextjsDirectory,
-        abortController,
-        verbose,
+        directory: this.nextjsDirectory,
+        abortController: this.abortController,
+        verbose: this.options.verbose,
       })
     }
-  } catch (e) {
+
+    this.isProjectCreated = true
+
+    await this.openBrowser()
+  }
+
+  private async openBrowser(): Promise<void> {
+    await waitOn({
+      resources: ["http://localhost:9000/health"],
+    }).then(async () => {
+      open(
+        this.inviteToken
+          ? `http://localhost:9000/app/invite?token=${this.inviteToken}&first_run=true`
+          : "http://localhost:9000/app"
+      )
+    })
+  }
+
+  private handleError(e: any): void {
     if (isAbortError(e)) {
       process.exit()
     }
 
+    this.spinner.stop()
     logMessage({
-      message: `An error occurred while starting Medusa`,
+      message: `An error occurred: ${e}`,
       type: "error",
     })
-
-    return
   }
 
-  isProjectCreated = true
+  protected showSuccessMessage(): void {
+    logMessage({
+      message: boxen(
+        chalk.green(
+          `Change to the \`${
+            this.projectName
+          }\` directory to explore your Medusa project.${EOL}${EOL}Start your Medusa app again with the following command:${EOL}${EOL}yarn dev${EOL}${EOL}${
+            this.inviteToken
+              ? `After you start the Medusa app, you can set a password for your admin user with the URL http://localhost:7001/invite?token=${this.inviteToken}&first_run=true${EOL}${EOL}`
+              : ""
+          }${
+            this.nextjsDirectory?.length
+              ? `The Next.js Starter storefront was installed in the \`${this.nextjsDirectory}\` directory. Change to that directory and start it with the following command:${EOL}${EOL}npm run dev${EOL}${EOL}`
+              : ""
+          }Check out the Medusa documentation to start your development:${EOL}${EOL}https://docs.medusajs.com/${EOL}${EOL}Star us on GitHub if you like what we're building:${EOL}${EOL}https://github.com/medusajs/medusa/stargazers`
+        ),
+        {
+          titleAlignment: "center",
+          textAlignment: "center",
+          padding: 1,
+          margin: 1,
+          float: "center",
+        }
+      ),
+    })
+  }
 
-  await waitOn({
-    resources: ["http://localhost:9000/health"],
-  }).then(async () => {
-    open(
-      inviteToken
-        ? `http://localhost:9000/app/invite?token=${inviteToken}&first_run=true`
-        : "http://localhost:9000/app"
+  protected setupProcessManager(): void {
+    this.processManager.onTerminated(async () => {
+      this.spinner.stop()
+
+      // prevent an error from occurring if
+      // client hasn't been declared yet
+      if (this.isDbInitialized && this.client) {
+        await this.client.end()
+      }
+
+      if (!this.printedMessage && this.isProjectCreated) {
+        this.printedMessage = true
+        this.showSuccessMessage()
+      }
+      return
+    })
+  }
+}
+
+// Project Factory
+class ProjectCreatorFactory {
+  static async create(
+    args: string[],
+    options: ProjectOptions
+  ): Promise<ProjectCreator> {
+    ProjectCreatorFactory.validateNodeVersion()
+
+    const projectName = await ProjectCreatorFactory.getProjectName(
+      args,
+      options.directoryPath,
+      options.plugin
     )
-  })
+
+    return options.plugin
+      ? new PluginProjectCreator(projectName, options, args)
+      : new MedusaProjectCreator(projectName, options, args)
+  }
+
+  private static validateNodeVersion(): void {
+    const nodeVersion = getNodeVersion()
+    if (nodeVersion < MIN_SUPPORTED_NODE_VERSION) {
+      logMessage({
+        message: `Medusa requires at least v20 of Node.js. You're using v${nodeVersion}. Please install at least v20 and try again: https://nodejs.org/en/download`,
+        type: "error",
+      })
+    }
+  }
+
+  private static async getProjectName(
+    args: string[],
+    directoryPath?: string,
+    isPlugin?: boolean
+  ): Promise<string> {
+    let askProjectName = args.length === 0
+    if (args.length > 0) {
+      const projectPath = path.join(directoryPath || "", args[0])
+      if (
+        fs.existsSync(projectPath) &&
+        fs.lstatSync(projectPath).isDirectory()
+      ) {
+        logMessage({
+          message: `A directory already exists with the name ${
+            args[0]
+          }. Please enter a different ${isPlugin ? "plugin" : "project"} name.`,
+          type: "warn",
+        })
+        askProjectName = true
+      }
+    }
+
+    return askProjectName
+      ? await askForProjectName(directoryPath, isPlugin)
+      : args[0]
+  }
 }
 
 async function askForProjectName(
@@ -458,7 +491,7 @@ async function askForProjectName(
       type: "input",
       name: "projectName",
       message: `What's the name of your ${isPlugin ? "plugin" : "project"}?`,
-      default: "my-medusa-store",
+      default: isPlugin ? "my-medusa-plugin" : "my-medusa-store",
       filter: (input) => {
         return slugify(input).toLowerCase()
       },
@@ -466,7 +499,7 @@ async function askForProjectName(
         if (!input.length) {
           return `Please enter a ${isPlugin ? "plugin" : "project"} name`
         }
-        const projectPath = getProjectPath(input, directoryPath)
+        const projectPath = path.join(directoryPath || "", input)
         return fs.existsSync(projectPath) &&
           fs.lstatSync(projectPath).isDirectory()
           ? `A directory already exists with the same name. Please enter a different ${
@@ -479,59 +512,7 @@ async function askForProjectName(
   return projectName
 }
 
-function showSuccessMessage(
-  projectName: string,
-  inviteToken?: string,
-  nextjsDirectory?: string
-) {
-  logMessage({
-    message: boxen(
-      chalk.green(
-        // eslint-disable-next-line prettier/prettier
-        `Change to the \`${projectName}\` directory to explore your Medusa project.${EOL}${EOL}Start your Medusa app again with the following command:${EOL}${EOL}yarn dev${EOL}${EOL}${
-          inviteToken
-            ? `After you start the Medusa app, you can set a password for your admin user with the URL ${getInviteUrl(
-                inviteToken
-              )}${EOL}${EOL}`
-            : ""
-        }${
-          nextjsDirectory?.length
-            ? `The Next.js Starter storefront was installed in the \`${nextjsDirectory}\` directory. Change to that directory and start it with the following command:${EOL}${EOL}npm run dev${EOL}${EOL}`
-            : ""
-        }Check out the Medusa documentation to start your development:${EOL}${EOL}https://docs.medusajs.com/${EOL}${EOL}Star us on GitHub if you like what we're building:${EOL}${EOL}https://github.com/medusajs/medusa/stargazers`
-      ),
-      {
-        titleAlignment: "center",
-        textAlignment: "center",
-        padding: 1,
-        margin: 1,
-        float: "center",
-      }
-    ),
-  })
-}
-
-function showPluginSuccessMessage(projectName: string) {
-  logMessage({
-    message: boxen(
-      chalk.green(
-        `Change to the \`${projectName}\` directory to explore your Medusa plugin.${EOL}${EOL}Check out the Medusa plugin documentation to start your development:${EOL}${EOL}https://docs.medusajs.com/${EOL}${EOL}Star us on GitHub if you like what we're building:${EOL}${EOL}https://github.com/medusajs/medusa/stargazers`
-      ),
-      {
-        titleAlignment: "center",
-        textAlignment: "center",
-        padding: 1,
-        margin: 1,
-        float: "center",
-      }
-    ),
-  })
-}
-
-function getProjectPath(projectName: string, directoryPath?: string) {
-  return path.join(directoryPath || "", projectName)
-}
-
-function getInviteUrl(inviteToken: string) {
-  return `http://localhost:7001/invite?token=${inviteToken}&first_run=true`
+export default async (args: string[], options: ProjectOptions) => {
+  const projectCreator = await ProjectCreatorFactory.create(args, options)
+  await projectCreator.create()
 }

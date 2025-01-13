@@ -85,34 +85,10 @@ async function preparePlugin({
   const packageJsonPath = path.join(directory, "package.json")
   const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"))
 
-  // TODO: update scripts to use the plugin commands
-
   // Update name
   packageJson.name = projectName
 
-  // Remove @medusajs/medusa dependency if it exists
-  if (packageJson.dependencies?.["@medusajs/medusa"]) {
-    delete packageJson.dependencies["@medusajs/medusa"]
-  }
-
   fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2))
-
-  // Remote unwanted files
-  const filesToRemove = [
-    path.join(directory, "instrumentation.ts"),
-    path.join(directory, "medusa-config.ts"),
-    path.join(directory, "integration-tests"),
-  ]
-
-  filesToRemove.forEach((file) => {
-    if (fs.existsSync(file)) {
-      if (fs.lstatSync(file).isDirectory()) {
-        fs.rmSync(file, { recursive: true })
-      } else {
-        fs.unlinkSync(file)
-      }
-    }
-  })
 
   factBoxOptions.interval = displayFactBox({
     ...factBoxOptions,
@@ -140,26 +116,6 @@ async function preparePlugin({
     ...factBoxOptions,
     message: "Installed Dependencies",
   })
-
-  factBoxOptions.interval = displayFactBox({
-    ...factBoxOptions,
-    title: "Building Plugin...",
-  })
-
-  await processManager.runProcess({
-    process: async () => {
-      try {
-        await execute([`yarn build`, execOptions], { verbose })
-      } catch (e) {
-        // yarn isn't available
-        // use npm
-        await execute([`npm run build`, execOptions], { verbose })
-      }
-    },
-    ignoreERESOLVE: true,
-  })
-
-  displayFactBox({ ...factBoxOptions, message: "Plugin Built" })
 
   displayFactBox({ ...factBoxOptions, message: "Finished Preparation" })
 }
