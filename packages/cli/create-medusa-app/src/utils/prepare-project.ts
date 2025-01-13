@@ -31,6 +31,7 @@ type PrepareProjectOptions = {
   directory: string
   dbName?: string
   dbConnectionString: string
+  projectName: string
   seed?: boolean
   spinner: Ora
   processManager: ProcessManager
@@ -122,6 +123,7 @@ async function preparePlugin({
 
 async function prepareProject({
   directory,
+  projectName,
   dbName,
   dbConnectionString,
   seed,
@@ -157,6 +159,15 @@ async function prepareProject({
     title: "",
     verbose,
   }
+
+  // Update package.json
+  const packageJsonPath = path.join(directory, "package.json")
+  const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"))
+
+  // Update name
+  packageJson.name = projectName
+
+  fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2))
 
   // initialize the invite token to return
   let inviteToken: string | undefined = undefined
@@ -204,26 +215,6 @@ async function prepareProject({
     ...factBoxOptions,
     message: "Installed Dependencies",
   })
-
-  factBoxOptions.interval = displayFactBox({
-    ...factBoxOptions,
-    title: "Building Project...",
-  })
-
-  await processManager.runProcess({
-    process: async () => {
-      try {
-        await execute([`yarn build`, execOptions], { verbose })
-      } catch (e) {
-        // yarn isn't available
-        // use npm
-        await execute([`npm run build`, execOptions], { verbose })
-      }
-    },
-    ignoreERESOLVE: true,
-  })
-
-  displayFactBox({ ...factBoxOptions, message: "Project Built" })
 
   if (!skipDb && migrations) {
     factBoxOptions.interval = displayFactBox({

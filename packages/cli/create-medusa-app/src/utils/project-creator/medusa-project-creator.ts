@@ -139,6 +139,7 @@ export class MedusaProjectCreator
     try {
       this.inviteToken = await prepareProject({
         isPlugin: false,
+        projectName: this.projectName,
         directory: this.projectPath,
         dbConnectionString: this.dbConnectionString,
         seed: this.options.seed,
