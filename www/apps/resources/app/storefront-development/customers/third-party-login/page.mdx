@@ -206,10 +206,11 @@ import { decodeToken } from "react-jwt"
 
 const queryParams = new URLSearchParams(window.location.search)
 const code = queryParams.get("code")
+const state = queryParams.get("state")
 
 const sendCallback = async () => {
   const { token } = await fetch(
-    `http://localhost:9000/auth/customer/google/callback?code=${code}`, 
+    `http://localhost:9000/auth/customer/google/callback?code=${code}&state=${state}`, 
     {
       credentials: "include",
       method: "POST",
@@ -249,13 +250,17 @@ export default function GoogleCallback() {
   // for other than Next.js
   const code = useMemo(() => {
     const queryParams = new URLSearchParams(window.location.search)
-
     return queryParams.get("code")
+  }, [])
+
+  const state = useMemo(() => {
+    const queryParams = new URLSearchParams(window.location.state)
+    return queryParams.get("state")
   }, [])
 
   const sendCallback = async () => {
     const { token } = await fetch(
-      `http://localhost:9000/auth/customer/google/callback?code=${code}`, 
+      `http://localhost:9000/auth/customer/google/callback?code=${code}&state=${state}`, 
       {
         credentials: "include",
         method: "POST",
@@ -467,11 +472,12 @@ import { decodeToken } from "react-jwt"
 
 const queryParams = new URLSearchParams(window.location.search)
 const code = queryParams.get("code")
+const state = queryParams.get("state")
 
 
 const sendCallback = async () => {
   const { token } = await fetch(
-    `http://localhost:9000/auth/customer/google/callback?code=${code}`, 
+    `http://localhost:9000/auth/customer/google/callback?code=${code}&state=${state}`, 
     {
       credentials: "include",
       method: "POST",
@@ -561,13 +567,17 @@ export default function GoogleCallback() {
   // for other than Next.js
   const code = useMemo(() => {
     const queryParams = new URLSearchParams(window.location.search)
-
     return queryParams.get("code")
+  }, [])
+
+  const state = useMemo(() => {
+    const queryParams = new URLSearchParams(window.location.state)
+    return queryParams.get("state")
   }, [])
 
   const sendCallback = async () => {
     const { token } = await fetch(
-      `http://localhost:9000/auth/customer/google/callback?code=${code}`, 
+      `http://localhost:9000/auth/customer/google/callback?code=${code}&state=${state}`, 
       {
         credentials: "include",
         method: "POST",
