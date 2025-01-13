@@ -256,7 +256,7 @@ function buildLocalCommands(cli, isLocalProject) {
     })
     .command({
       command: "plugin:develop",
-      desc: "Start plugin development process in watch mode. Changes will be re-published to the local packages directory",
+      desc: "Start plugin development process in watch mode. Changes will be re-published to the local packages registry",
       builder: (builder) => {},
       handler: handlerP(
         getCommandHandler("plugin/develop", (args, cmd) => {
