@@ -266,6 +266,17 @@ function buildLocalCommands(cli, isLocalProject) {
       ),
     })
     .command({
+      command: "plugin:develop",
+      desc: "Start plugin development process in watch mode. Changes will be re-published to the local packages registry",
+      handler: handlerP(
+        getCommandHandler("plugin/develop", (args, cmd) => {
+          process.env.NODE_ENV = process.env.NODE_ENV || `development`
+          cmd(args)
+          return new Promise(() => {})
+        })
+      ),
+    })
+    .command({
       command: `telemetry`,
       describe: `Enable or disable collection of anonymous usage data.`,
       builder: (yargs) =>
@@ -321,7 +332,7 @@ function buildLocalCommands(cli, isLocalProject) {
           // Return an empty promise to prevent handlerP from exiting early.
           // The development server shouldn't ever exit until the user directly
           // kills it so this is fine.
-          return new Promise((resolve) => {})
+          return new Promise(() => {})
         })
       ),
     })
