@@ -22,7 +22,6 @@ export async function plugin(options: PluginOptions) {
   }
 
   const entryPoints = entries.reduce((acc, entry) => {
-    // Convert src/admin/routes/brands/page.tsx -> admin/routes/brands/page
     const outPath = entry
       .replace(/^src\//, "")
       .replace(/\.(ts|tsx|js|jsx)$/, "")
