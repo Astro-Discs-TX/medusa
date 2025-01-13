@@ -381,10 +381,6 @@ const validateCallback = async () => {
         "Authorization": `Bearer ${token}`,
         "x-publishable-api-key": process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || "temp",
       },
-      body: JSON.stringify({
-        // TODO show form to retrieve email from customer
-        email: "example@medusajs.com",
-      }),
     }
   ).then((res) => res.json())
 }
@@ -424,10 +420,6 @@ const validateCallback = async () => {
         "Authorization": `Bearer ${token}`,
         "x-publishable-api-key": process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || "temp",
       },
-      body: JSON.stringify({
-        // TODO show form to retrieve email from customer
-        email: "example@medusajs.com",
-      }),
     }
   ).then((res) => res.json())
 
@@ -542,10 +534,6 @@ const validateCallback = async () => {
         "Authorization": `Bearer ${token}`,
         "x-publishable-api-key": process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || "temp",
       },
-      body: JSON.stringify({
-        // TODO show form to retrieve email from customer
-        email: "example@medusajs.com",
-      }),
     }
   ).then((res) => res.json())
 }
@@ -640,10 +628,6 @@ export default function GoogleCallback() {
           "Authorization": `Bearer ${token}`,
           "x-publishable-api-key": process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || "temp",
         },
-        body: JSON.stringify({
-          // TODO show form to retrieve email from customer
-          email: "example@medusajs.com",
-        }),
       }
     ).then((res) => res.json())
 
