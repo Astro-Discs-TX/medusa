@@ -366,8 +366,53 @@ export class Compiler {
   }
 
   /**
-   * @todo. To be implemented
+   * Compiles the plugin source code to JavaScript using the
+   * TypeScript's official compiler
    */
-  buildPluginBackend() {}
+  async buildPluginBackend(tsConfig: tsStatic.ParsedCommandLine) {
+    const tracker = this.#trackDuration()
+    const dist = ".medusa/server"
+    this.#logger.info("Compiling plugin source...")
+
+    /**
+     * Step 1: Cleanup existing build output
+     */
+    this.#logger.info(
+      `Removing existing "${path.relative(this.#projectRoot, dist)}" folder`
+    )
+    await this.#clean(dist)
+
+    /**
+     * Step 2: Compile TypeScript source code
+     */
+    const { emitResult, diagnostics } = await this.#emitBuildOutput(
+      tsConfig,
+      ["integration-tests", "test", "unit-tests", "src/admin"],
+      dist
+    )
+
+    /**
+     * Exit early if no output is written to the disk
+     */
+    if (emitResult.emitSkipped) {
+      this.#logger.warn("Plgugin build completed without emitting any output")
+      return false
+    }
+
+    /**
+     * Notify about the state of build
+     */
+    if (diagnostics.length) {
+      this.#logger.warn(
+        `Plugin build completed with errors (${tracker.getSeconds()}s)`
+      )
+    } else {
+      this.#logger.info(
+        `Plugin build completed successfully (${tracker.getSeconds()}s)`
+      )
+    }
+
+    return true
+  }
   developPluginBacked() {}
 }
