@@ -3,4 +3,4 @@
 "@medusajs/cli": patch
 ---
 
-feat(cli): Add plug:publish and plugin:add commands support
+feat(cli): Add plugin:publish and plugin:add commands support
