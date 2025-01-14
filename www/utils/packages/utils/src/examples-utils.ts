@@ -266,6 +266,10 @@ export function getFakeStrValue({
           `id_${faker.string.alphanumeric({
             length: { min: 10, max: 20 },
           })}`,
+        region_id: "reg_123",
+        product_id: "prod_123",
+        cart_id: "cart_123",
+        order_id: "order_123",
         name: () => faker.person.firstName(),
         email: () => faker.internet.email(),
         password: () => faker.internet.password({ length: 8 }),
