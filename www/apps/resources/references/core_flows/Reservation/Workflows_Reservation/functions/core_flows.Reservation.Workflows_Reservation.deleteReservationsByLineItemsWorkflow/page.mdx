@@ -34,35 +34,13 @@ export async function POST(
     .run({
       input: {
         "ids": [
-          "id_3uZFGxqM1JoA6CGKyvw"
+          "id_DdjgwLU2H6v"
         ]
       }
     })
 
   res.send(result)
 }
-```
-
-    </CodeTab>
-    <CodeTab label="Another Workflow" value="another-workflow">
-    
-```ts title="src/workflows/my-workflow.ts"
-import { createWorkflow } from "@medusajs/framework/workflows-sdk"
-import { deleteReservationsByLineItemsWorkflow } from "@medusajs/medusa/core-flows"
-
-const myWorkflow = createWorkflow(
-  "my-workflow",
-  () => {
-    const result = deleteReservationsByLineItemsWorkflow
-      .runAsStep({
-        input: {
-          "ids": [
-            "id_3uZFGxqM1JoA6CGKyvw"
-          ]
-        }
-      })
-  }
-)
 ```
 
     </CodeTab>
@@ -83,7 +61,7 @@ export default async function handleOrderPlaced({
     .run({
       input: {
         "ids": [
-          "id_3uZFGxqM1JoA6CGKyvw"
+          "id_DdjgwLU2H6v"
         ]
       }
     })
@@ -110,7 +88,7 @@ export default async function myCustomJob(
     .run({
       input: {
         "ids": [
-          "id_3uZFGxqM1JoA6CGKyvw"
+          "id_DdjgwLU2H6v"
         ]
       }
     })
@@ -122,6 +100,28 @@ export const config = {
   name: "run-once-a-day",
   schedule: "0 0 * * *",
 }
+```
+
+    </CodeTab>
+    <CodeTab label="Another Workflow" value="another-workflow">
+    
+```ts title="src/workflows/my-workflow.ts"
+import { createWorkflow } from "@medusajs/framework/workflows-sdk"
+import { deleteReservationsByLineItemsWorkflow } from "@medusajs/medusa/core-flows"
+
+const myWorkflow = createWorkflow(
+  "my-workflow",
+  () => {
+    const result = deleteReservationsByLineItemsWorkflow
+      .runAsStep({
+        input: {
+          "ids": [
+            "id_DdjgwLU2H6v"
+          ]
+        }
+      })
+  }
+)
 ```
 
     </CodeTab>

@@ -23,32 +23,32 @@ const myWorkflow = createWorkflow(
   () => {
     const data = setTaxLinesForItemsStep({
       "cart": {
-        "id": "id_gcJ9iUnKMfAEQsQyF",
+        "id": "id_3U3P6K4R2H2i5haI1Hb",
         "payment_collection": {
-          "id": "id_gLvc6YqWI9BCbzUYcf",
+          "id": "id_ui2YCYprm81B3iva",
           "currency_code": "{value}",
           "region_id": "{value}",
           "amount": {
-            "numeric": 21
+            "numeric": 22
           },
-          "status": "awaiting",
+          "status": "partially_authorized",
           "payment_providers": [{
-            "id": "id_0iZYBqjzSHgc6",
-            "is_enabled": false
+            "id": "id_J8iKmeqjzXyR4H",
+            "is_enabled": true
           }]
         }
       },
       "item_tax_lines": [{
-        "rate": 13,
+        "rate": 2,
         "code": {},
-        "name": "Zelma",
+        "name": "Newton",
         "provider_id": "{value}",
         "line_item_id": "{value}"
       }],
       "shipping_tax_lines": [{
-        "rate": 17,
+        "rate": 29,
         "code": {},
-        "name": "Adriana",
+        "name": "Cletus",
         "provider_id": "{value}",
         "shipping_line_id": "{value}"
       }]

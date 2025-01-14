@@ -37,39 +37,14 @@ export async function POST(
         "return_id": "{value}",
         "exchange_id": "{value}",
         "items": [{
-          "id": "id_J1BuyILj1zb",
-          "quantity": 16
+          "id": "id_V1a8umDXVxH",
+          "quantity": 13
         }]
       }
     })
 
   res.send(result)
 }
-```
-
-    </CodeTab>
-    <CodeTab label="Another Workflow" value="another-workflow">
-    
-```ts title="src/workflows/my-workflow.ts"
-import { createWorkflow } from "@medusajs/framework/workflows-sdk"
-import { orderExchangeRequestItemReturnWorkflow } from "@medusajs/medusa/core-flows"
-
-const myWorkflow = createWorkflow(
-  "my-workflow",
-  () => {
-    const result = orderExchangeRequestItemReturnWorkflow
-      .runAsStep({
-        input: {
-          "return_id": "{value}",
-          "exchange_id": "{value}",
-          "items": [{
-            "id": "id_J1BuyILj1zb",
-            "quantity": 16
-          }]
-        }
-      })
-  }
-)
 ```
 
     </CodeTab>
@@ -92,8 +67,8 @@ export default async function handleOrderPlaced({
         "return_id": "{value}",
         "exchange_id": "{value}",
         "items": [{
-          "id": "id_J1BuyILj1zb",
-          "quantity": 16
+          "id": "id_V1a8umDXVxH",
+          "quantity": 13
         }]
       }
     })
@@ -122,8 +97,8 @@ export default async function myCustomJob(
         "return_id": "{value}",
         "exchange_id": "{value}",
         "items": [{
-          "id": "id_J1BuyILj1zb",
-          "quantity": 16
+          "id": "id_V1a8umDXVxH",
+          "quantity": 13
         }]
       }
     })
@@ -135,6 +110,31 @@ export const config = {
   name: "run-once-a-day",
   schedule: "0 0 * * *",
 }
+```
+
+    </CodeTab>
+    <CodeTab label="Another Workflow" value="another-workflow">
+    
+```ts title="src/workflows/my-workflow.ts"
+import { createWorkflow } from "@medusajs/framework/workflows-sdk"
+import { orderExchangeRequestItemReturnWorkflow } from "@medusajs/medusa/core-flows"
+
+const myWorkflow = createWorkflow(
+  "my-workflow",
+  () => {
+    const result = orderExchangeRequestItemReturnWorkflow
+      .runAsStep({
+        input: {
+          "return_id": "{value}",
+          "exchange_id": "{value}",
+          "items": [{
+            "id": "id_V1a8umDXVxH",
+            "quantity": 13
+          }]
+        }
+      })
+  }
+)
 ```
 
     </CodeTab>

@@ -39,36 +39,13 @@ export async function POST(
       input: {
         "cart_id": "{value}",
         "options": [{
-          "id": "id_qYTGdSRsw0t8Osb3C"
+          "id": "id_acMKJUV70mcLaom1gtWw"
         }]
       }
     })
 
   res.send(result)
 }
-```
-
-    </CodeTab>
-    <CodeTab label="Another Workflow" value="another-workflow">
-    
-```ts title="src/workflows/my-workflow.ts"
-import { createWorkflow } from "@medusajs/framework/workflows-sdk"
-import { addShippingMethodToCartWorkflow } from "@medusajs/medusa/core-flows"
-
-const myWorkflow = createWorkflow(
-  "my-workflow",
-  () => {
-    const result = addShippingMethodToCartWorkflow
-      .runAsStep({
-        input: {
-          "cart_id": "{value}",
-          "options": [{
-            "id": "id_qYTGdSRsw0t8Osb3C"
-          }]
-        }
-      })
-  }
-)
 ```
 
     </CodeTab>
@@ -90,7 +67,7 @@ export default async function handleOrderPlaced({
       input: {
         "cart_id": "{value}",
         "options": [{
-          "id": "id_qYTGdSRsw0t8Osb3C"
+          "id": "id_acMKJUV70mcLaom1gtWw"
         }]
       }
     })
@@ -118,7 +95,7 @@ export default async function myCustomJob(
       input: {
         "cart_id": "{value}",
         "options": [{
-          "id": "id_qYTGdSRsw0t8Osb3C"
+          "id": "id_acMKJUV70mcLaom1gtWw"
         }]
       }
     })
@@ -130,6 +107,29 @@ export const config = {
   name: "run-once-a-day",
   schedule: "0 0 * * *",
 }
+```
+
+    </CodeTab>
+    <CodeTab label="Another Workflow" value="another-workflow">
+    
+```ts title="src/workflows/my-workflow.ts"
+import { createWorkflow } from "@medusajs/framework/workflows-sdk"
+import { addShippingMethodToCartWorkflow } from "@medusajs/medusa/core-flows"
+
+const myWorkflow = createWorkflow(
+  "my-workflow",
+  () => {
+    const result = addShippingMethodToCartWorkflow
+      .runAsStep({
+        input: {
+          "cart_id": "{value}",
+          "options": [{
+            "id": "id_acMKJUV70mcLaom1gtWw"
+          }]
+        }
+      })
+  }
+)
 ```
 
     </CodeTab>

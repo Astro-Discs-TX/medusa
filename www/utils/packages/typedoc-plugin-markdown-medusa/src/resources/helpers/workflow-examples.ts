@@ -75,25 +75,6 @@ export async function POST(
 \`\`\`
 
     </CodeTab>
-    <CodeTab label="Another Workflow" value="another-workflow">
-    
-\`\`\`ts title="src/workflows/my-workflow.ts"
-${beautifyCode(`import { createWorkflow } from "@medusajs/framework/workflows-sdk"
-import { ${workflowName} } from "@medusajs/medusa/core-flows"
-
-const myWorkflow = createWorkflow(
-  "my-workflow",
-  () => {
-    ${exampleCode
-      .replace(`{ result }`, "result")
-      .replace(`await `, "")
-      .replace(`(container)`, "")
-      .replace(".run(", ".runAsStep(")}
-  }
-)`)}
-\`\`\`
-
-    </CodeTab>
     <CodeTab label="Subscriber" value="subscriber">
     
 \`\`\`ts title="src/subscribers/order-placed.ts"
@@ -136,6 +117,25 @@ export const config = {
   name: "run-once-a-day",
   schedule: "0 0 * * *",
 }`)}
+\`\`\`
+
+    </CodeTab>
+    <CodeTab label="Another Workflow" value="another-workflow">
+    
+\`\`\`ts title="src/workflows/my-workflow.ts"
+${beautifyCode(`import { createWorkflow } from "@medusajs/framework/workflows-sdk"
+import { ${workflowName} } from "@medusajs/medusa/core-flows"
+
+const myWorkflow = createWorkflow(
+  "my-workflow",
+  () => {
+    ${exampleCode
+      .replace(`{ result }`, "result")
+      .replace(`await `, "")
+      .replace(`(container)`, "")
+      .replace(".run(", ".runAsStep(")}
+  }
+)`)}
 \`\`\`
 
     </CodeTab>
