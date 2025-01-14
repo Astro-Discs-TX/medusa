@@ -16,26 +16,6 @@ This workflow creates links between product and category records.
 <SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/product/workflows/batch-products-in-category.ts#L10" />
 
 <CodeTabs group="workflow-exection">
-    <CodeTab label="Another Workflow" value="another-workflow">
-    
-```ts title="src/workflows/my-workflow.ts"
-import { createWorkflow } from "@medusajs/framework/workflows-sdk"
-import { batchLinkProductsToCategoryWorkflow } from "@medusajs/medusa/core-flows"
-
-const myWorkflow = createWorkflow(
-  "my-workflow",
-  () => {
-    const result = batchLinkProductsToCategoryWorkflow
-      .runAsStep({
-        input: {
-          "id": "id_59HgTAclZ35Lt"
-        }
-      })
-  }
-)
-```
-
-    </CodeTab>
     <CodeTab label="API Route" value="api-route">
     
 ```ts title="src/api/workflow/route.ts"
@@ -52,12 +32,32 @@ export async function POST(
   const { result } = await batchLinkProductsToCategoryWorkflow(req.scope)
     .run({
       input: {
-        "id": "id_59HgTAclZ35Lt"
+        "id": "id_GfIYWNA2HjFEK8lXP"
       }
     })
 
   res.send(result)
 }
+```
+
+    </CodeTab>
+    <CodeTab label="Another Workflow" value="another-workflow">
+    
+```ts title="src/workflows/my-workflow.ts"
+import { createWorkflow } from "@medusajs/framework/workflows-sdk"
+import { batchLinkProductsToCategoryWorkflow } from "@medusajs/medusa/core-flows"
+
+const myWorkflow = createWorkflow(
+  "my-workflow",
+  () => {
+    const result = batchLinkProductsToCategoryWorkflow
+      .runAsStep({
+        input: {
+          "id": "id_GfIYWNA2HjFEK8lXP"
+        }
+      })
+  }
+)
 ```
 
     </CodeTab>
@@ -77,7 +77,7 @@ export default async function handleOrderPlaced({
   const { result } = await batchLinkProductsToCategoryWorkflow(container)
     .run({
       input: {
-        "id": "id_59HgTAclZ35Lt"
+        "id": "id_GfIYWNA2HjFEK8lXP"
       }
     })
 
@@ -102,7 +102,7 @@ export default async function myCustomJob(
   const { result } = await batchLinkProductsToCategoryWorkflow(container)
     .run({
       input: {
-        "id": "id_59HgTAclZ35Lt"
+        "id": "id_GfIYWNA2HjFEK8lXP"
       }
     })
 

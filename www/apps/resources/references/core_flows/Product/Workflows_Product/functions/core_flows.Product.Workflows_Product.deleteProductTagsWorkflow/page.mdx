@@ -18,28 +18,6 @@ This workflow deletes one or more product tags.
 <SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/product/workflows/delete-product-tags.ts#L18" />
 
 <CodeTabs group="workflow-exection">
-    <CodeTab label="Another Workflow" value="another-workflow">
-    
-```ts title="src/workflows/my-workflow.ts"
-import { createWorkflow } from "@medusajs/framework/workflows-sdk"
-import { deleteProductTagsWorkflow } from "@medusajs/medusa/core-flows"
-
-const myWorkflow = createWorkflow(
-  "my-workflow",
-  () => {
-    const result = deleteProductTagsWorkflow
-      .runAsStep({
-        input: {
-          "ids": [
-            "id_neJm17VINMOVa"
-          ]
-        }
-      })
-  }
-)
-```
-
-    </CodeTab>
     <CodeTab label="API Route" value="api-route">
     
 ```ts title="src/api/workflow/route.ts"
@@ -57,13 +35,35 @@ export async function POST(
     .run({
       input: {
         "ids": [
-          "id_neJm17VINMOVa"
+          "id_i1Yaa72j9B7Y"
         ]
       }
     })
 
   res.send(result)
 }
+```
+
+    </CodeTab>
+    <CodeTab label="Another Workflow" value="another-workflow">
+    
+```ts title="src/workflows/my-workflow.ts"
+import { createWorkflow } from "@medusajs/framework/workflows-sdk"
+import { deleteProductTagsWorkflow } from "@medusajs/medusa/core-flows"
+
+const myWorkflow = createWorkflow(
+  "my-workflow",
+  () => {
+    const result = deleteProductTagsWorkflow
+      .runAsStep({
+        input: {
+          "ids": [
+            "id_i1Yaa72j9B7Y"
+          ]
+        }
+      })
+  }
+)
 ```
 
     </CodeTab>
@@ -84,7 +84,7 @@ export default async function handleOrderPlaced({
     .run({
       input: {
         "ids": [
-          "id_neJm17VINMOVa"
+          "id_i1Yaa72j9B7Y"
         ]
       }
     })
@@ -111,7 +111,7 @@ export default async function myCustomJob(
     .run({
       input: {
         "ids": [
-          "id_neJm17VINMOVa"
+          "id_i1Yaa72j9B7Y"
         ]
       }
     })

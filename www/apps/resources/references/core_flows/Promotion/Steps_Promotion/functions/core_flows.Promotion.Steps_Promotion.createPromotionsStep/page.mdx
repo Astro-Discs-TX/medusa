@@ -23,10 +23,10 @@ const myWorkflow = createWorkflow(
   () => {
     const data = createPromotionsStep([{
       "code": "{value}",
-      "type": "standard",
+      "type": "buyget",
       "application_method": {
-        "type": "fixed",
-        "target_type": "items"
+        "type": "percentage",
+        "target_type": "shipping_methods"
       }
     }])
   }

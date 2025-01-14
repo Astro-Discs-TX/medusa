@@ -28,42 +28,6 @@ You can also use this workflow within your own custom workflows, allowing you to
 To update products by their IDs:
 
 <CodeTabs group="workflow-exection">
-    <CodeTab label="Another Workflow" value="another-workflow">
-    
-```ts title="src/workflows/my-workflow.ts"
-import { createWorkflow } from "@medusajs/framework/workflows-sdk"
-import { updateProductsWorkflow } from "@medusajs/medusa/core-flows"
-
-const myWorkflow = createWorkflow(
-  "my-workflow",
-  () => {
-    const result = updateProductsWorkflow
-      .runAsStep({
-        input: {
-          products: [{
-              id: "prod_123",
-              title: "Shirts"
-            },
-            {
-              id: "prod_321",
-              variants: [{
-                id: "variant_123",
-                options: {
-                  Size: "S"
-                }
-              }]
-            }
-          ],
-          additional_data: {
-            erp_id: "erp_123"
-          }
-        }
-      })
-  }
-)
-```
-
-    </CodeTab>
     <CodeTab label="API Route" value="api-route">
     
 ```ts title="src/api/workflow/route.ts"
@@ -102,6 +66,42 @@ export async function POST(
 
   res.send(result)
 }
+```
+
+    </CodeTab>
+    <CodeTab label="Another Workflow" value="another-workflow">
+    
+```ts title="src/workflows/my-workflow.ts"
+import { createWorkflow } from "@medusajs/framework/workflows-sdk"
+import { updateProductsWorkflow } from "@medusajs/medusa/core-flows"
+
+const myWorkflow = createWorkflow(
+  "my-workflow",
+  () => {
+    const result = updateProductsWorkflow
+      .runAsStep({
+        input: {
+          products: [{
+              id: "prod_123",
+              title: "Shirts"
+            },
+            {
+              id: "prod_321",
+              variants: [{
+                id: "variant_123",
+                options: {
+                  Size: "S"
+                }
+              }]
+            }
+          ],
+          additional_data: {
+            erp_id: "erp_123"
+          }
+        }
+      })
+  }
+)
 ```
 
     </CodeTab>
@@ -197,34 +197,6 @@ export const config = {
 You can also update products by a selector:
 
 <CodeTabs group="workflow-exection">
-    <CodeTab label="Another Workflow" value="another-workflow">
-    
-```ts title="src/workflows/my-workflow.ts"
-import { createWorkflow } from "@medusajs/framework/workflows-sdk"
-import { updateProductsWorkflow } from "@medusajs/medusa/core-flows"
-
-const myWorkflow = createWorkflow(
-  "my-workflow",
-  () => {
-    const result = updateProductsWorkflow
-      .runAsStep({
-        input: {
-          selector: {
-            type_id: ["ptyp_123"]
-          },
-          update: {
-            description: "This is a shirt product"
-          },
-          additional_data: {
-            erp_id: "erp_123"
-          }
-        }
-      })
-  }
-)
-```
-
-    </CodeTab>
     <CodeTab label="API Route" value="api-route">
     
 ```ts title="src/api/workflow/route.ts"
@@ -255,6 +227,34 @@ export async function POST(
 
   res.send(result)
 }
+```
+
+    </CodeTab>
+    <CodeTab label="Another Workflow" value="another-workflow">
+    
+```ts title="src/workflows/my-workflow.ts"
+import { createWorkflow } from "@medusajs/framework/workflows-sdk"
+import { updateProductsWorkflow } from "@medusajs/medusa/core-flows"
+
+const myWorkflow = createWorkflow(
+  "my-workflow",
+  () => {
+    const result = updateProductsWorkflow
+      .runAsStep({
+        input: {
+          selector: {
+            type_id: ["ptyp_123"]
+          },
+          update: {
+            description: "This is a shirt product"
+          },
+          additional_data: {
+            erp_id: "erp_123"
+          }
+        }
+      })
+  }
+)
 ```
 
     </CodeTab>

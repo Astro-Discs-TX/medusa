@@ -26,40 +26,6 @@ You can also use this workflow within your own custom workflows, allowing you to
 To update product variants by their IDs:
 
 <CodeTabs group="workflow-exection">
-    <CodeTab label="Another Workflow" value="another-workflow">
-    
-```ts title="src/workflows/my-workflow.ts"
-import { createWorkflow } from "@medusajs/framework/workflows-sdk"
-import { updateProductVariantsWorkflow } from "@medusajs/medusa/core-flows"
-
-const myWorkflow = createWorkflow(
-  "my-workflow",
-  () => {
-    const result = updateProductVariantsWorkflow
-      .runAsStep({
-        input: {
-          product_variants: [{
-              id: "variant_123",
-              prices: [{
-                amount: 10,
-                currency_code: "usd",
-              }]
-            },
-            {
-              id: "variant_321",
-              title: "Small Shirt",
-            },
-          ],
-          additional_data: {
-            erp_id: "123"
-          }
-        }
-      })
-  }
-)
-```
-
-    </CodeTab>
     <CodeTab label="API Route" value="api-route">
     
 ```ts title="src/api/workflow/route.ts"
@@ -96,6 +62,40 @@ export async function POST(
 
   res.send(result)
 }
+```
+
+    </CodeTab>
+    <CodeTab label="Another Workflow" value="another-workflow">
+    
+```ts title="src/workflows/my-workflow.ts"
+import { createWorkflow } from "@medusajs/framework/workflows-sdk"
+import { updateProductVariantsWorkflow } from "@medusajs/medusa/core-flows"
+
+const myWorkflow = createWorkflow(
+  "my-workflow",
+  () => {
+    const result = updateProductVariantsWorkflow
+      .runAsStep({
+        input: {
+          product_variants: [{
+              id: "variant_123",
+              prices: [{
+                amount: 10,
+                currency_code: "usd",
+              }]
+            },
+            {
+              id: "variant_321",
+              title: "Small Shirt",
+            },
+          ],
+          additional_data: {
+            erp_id: "123"
+          }
+        }
+      })
+  }
+)
 ```
 
     </CodeTab>
@@ -187,37 +187,6 @@ export const config = {
 You can also update product variants by a selector:
 
 <CodeTabs group="workflow-exection">
-    <CodeTab label="Another Workflow" value="another-workflow">
-    
-```ts title="src/workflows/my-workflow.ts"
-import { createWorkflow } from "@medusajs/framework/workflows-sdk"
-import { updateProductVariantsWorkflow } from "@medusajs/medusa/core-flows"
-
-const myWorkflow = createWorkflow(
-  "my-workflow",
-  () => {
-    const result = updateProductVariantsWorkflow
-      .runAsStep({
-        input: {
-          selector: {
-            product_id: "prod_123"
-          },
-          update: {
-            prices: [{
-              amount: 10,
-              currency_code: "usd"
-            }]
-          },
-          additional_data: {
-            erp_id: "123"
-          }
-        }
-      })
-  }
-)
-```
-
-    </CodeTab>
     <CodeTab label="API Route" value="api-route">
     
 ```ts title="src/api/workflow/route.ts"
@@ -251,6 +220,37 @@ export async function POST(
 
   res.send(result)
 }
+```
+
+    </CodeTab>
+    <CodeTab label="Another Workflow" value="another-workflow">
+    
+```ts title="src/workflows/my-workflow.ts"
+import { createWorkflow } from "@medusajs/framework/workflows-sdk"
+import { updateProductVariantsWorkflow } from "@medusajs/medusa/core-flows"
+
+const myWorkflow = createWorkflow(
+  "my-workflow",
+  () => {
+    const result = updateProductVariantsWorkflow
+      .runAsStep({
+        input: {
+          selector: {
+            product_id: "prod_123"
+          },
+          update: {
+            prices: [{
+              amount: 10,
+              currency_code: "usd"
+            }]
+          },
+          additional_data: {
+            erp_id: "123"
+          }
+        }
+      })
+  }
+)
 ```
 
     </CodeTab>

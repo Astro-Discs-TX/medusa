@@ -18,33 +18,6 @@ This workflow creates prices in price lists.
 <SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/price-list/workflows/create-price-list-prices.ts#L19" />
 
 <CodeTabs group="workflow-exection">
-    <CodeTab label="Another Workflow" value="another-workflow">
-    
-```ts title="src/workflows/my-workflow.ts"
-import { createWorkflow } from "@medusajs/framework/workflows-sdk"
-import { createPriceListPricesWorkflow } from "@medusajs/medusa/core-flows"
-
-const myWorkflow = createWorkflow(
-  "my-workflow",
-  () => {
-    const result = createPriceListPricesWorkflow
-      .runAsStep({
-        input: {
-          "data": [{
-            "id": "id_zXurVk5yn6QDucPnh",
-            "prices": [{
-              "amount": 9,
-              "currency_code": "{value}",
-              "variant_id": "{value}"
-            }]
-          }]
-        }
-      })
-  }
-)
-```
-
-    </CodeTab>
     <CodeTab label="API Route" value="api-route">
     
 ```ts title="src/api/workflow/route.ts"
@@ -62,9 +35,9 @@ export async function POST(
     .run({
       input: {
         "data": [{
-          "id": "id_zXurVk5yn6QDucPnh",
+          "id": "id_MHfvECbvcF",
           "prices": [{
-            "amount": 9,
+            "amount": 41,
             "currency_code": "{value}",
             "variant_id": "{value}"
           }]
@@ -74,6 +47,33 @@ export async function POST(
 
   res.send(result)
 }
+```
+
+    </CodeTab>
+    <CodeTab label="Another Workflow" value="another-workflow">
+    
+```ts title="src/workflows/my-workflow.ts"
+import { createWorkflow } from "@medusajs/framework/workflows-sdk"
+import { createPriceListPricesWorkflow } from "@medusajs/medusa/core-flows"
+
+const myWorkflow = createWorkflow(
+  "my-workflow",
+  () => {
+    const result = createPriceListPricesWorkflow
+      .runAsStep({
+        input: {
+          "data": [{
+            "id": "id_MHfvECbvcF",
+            "prices": [{
+              "amount": 41,
+              "currency_code": "{value}",
+              "variant_id": "{value}"
+            }]
+          }]
+        }
+      })
+  }
+)
 ```
 
     </CodeTab>
@@ -94,9 +94,9 @@ export default async function handleOrderPlaced({
     .run({
       input: {
         "data": [{
-          "id": "id_zXurVk5yn6QDucPnh",
+          "id": "id_MHfvECbvcF",
           "prices": [{
-            "amount": 9,
+            "amount": 41,
             "currency_code": "{value}",
             "variant_id": "{value}"
           }]
@@ -126,9 +126,9 @@ export default async function myCustomJob(
     .run({
       input: {
         "data": [{
-          "id": "id_zXurVk5yn6QDucPnh",
+          "id": "id_MHfvECbvcF",
           "prices": [{
-            "amount": 9,
+            "amount": 41,
             "currency_code": "{value}",
             "variant_id": "{value}"
           }]

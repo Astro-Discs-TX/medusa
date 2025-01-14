@@ -21,29 +21,6 @@ This workflow adds shipping methods to a cart.
 <SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/cart/workflows/add-shipping-method-to-cart.ts#L34" />
 
 <CodeTabs group="workflow-exection">
-    <CodeTab label="Another Workflow" value="another-workflow">
-    
-```ts title="src/workflows/my-workflow.ts"
-import { createWorkflow } from "@medusajs/framework/workflows-sdk"
-import { addShippingMethodToCartWorkflow } from "@medusajs/medusa/core-flows"
-
-const myWorkflow = createWorkflow(
-  "my-workflow",
-  () => {
-    const result = addShippingMethodToCartWorkflow
-      .runAsStep({
-        input: {
-          "cart_id": "{value}",
-          "options": [{
-            "id": "id_KDqNxUUvYbyo"
-          }]
-        }
-      })
-  }
-)
-```
-
-    </CodeTab>
     <CodeTab label="API Route" value="api-route">
     
 ```ts title="src/api/workflow/route.ts"
@@ -62,13 +39,36 @@ export async function POST(
       input: {
         "cart_id": "{value}",
         "options": [{
-          "id": "id_KDqNxUUvYbyo"
+          "id": "id_qYTGdSRsw0t8Osb3C"
         }]
       }
     })
 
   res.send(result)
 }
+```
+
+    </CodeTab>
+    <CodeTab label="Another Workflow" value="another-workflow">
+    
+```ts title="src/workflows/my-workflow.ts"
+import { createWorkflow } from "@medusajs/framework/workflows-sdk"
+import { addShippingMethodToCartWorkflow } from "@medusajs/medusa/core-flows"
+
+const myWorkflow = createWorkflow(
+  "my-workflow",
+  () => {
+    const result = addShippingMethodToCartWorkflow
+      .runAsStep({
+        input: {
+          "cart_id": "{value}",
+          "options": [{
+            "id": "id_qYTGdSRsw0t8Osb3C"
+          }]
+        }
+      })
+  }
+)
 ```
 
     </CodeTab>
@@ -90,7 +90,7 @@ export default async function handleOrderPlaced({
       input: {
         "cart_id": "{value}",
         "options": [{
-          "id": "id_KDqNxUUvYbyo"
+          "id": "id_qYTGdSRsw0t8Osb3C"
         }]
       }
     })
@@ -118,7 +118,7 @@ export default async function myCustomJob(
       input: {
         "cart_id": "{value}",
         "options": [{
-          "id": "id_KDqNxUUvYbyo"
+          "id": "id_qYTGdSRsw0t8Osb3C"
         }]
       }
     })

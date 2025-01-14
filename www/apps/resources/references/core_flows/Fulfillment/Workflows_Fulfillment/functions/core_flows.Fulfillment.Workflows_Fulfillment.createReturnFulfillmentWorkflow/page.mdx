@@ -18,34 +18,6 @@ This workflow creates a fulfillment for a return.
 <SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/fulfillment/workflows/create-return-fulfillment.ts#L20" />
 
 <CodeTabs group="workflow-exection">
-    <CodeTab label="Another Workflow" value="another-workflow">
-    
-```ts title="src/workflows/my-workflow.ts"
-import { createWorkflow } from "@medusajs/framework/workflows-sdk"
-import { createReturnFulfillmentWorkflow } from "@medusajs/medusa/core-flows"
-
-const myWorkflow = createWorkflow(
-  "my-workflow",
-  () => {
-    const result = createReturnFulfillmentWorkflow
-      .runAsStep({
-        input: {
-          "location_id": "{value}",
-          "provider_id": "{value}",
-          "delivery_address": {},
-          "items": [{
-            "title": "alias",
-            "sku": "{value}",
-            "quantity": 1,
-            "barcode": "{value}"
-          }]
-        }
-      })
-  }
-)
-```
-
-    </CodeTab>
     <CodeTab label="API Route" value="api-route">
     
 ```ts title="src/api/workflow/route.ts"
@@ -66,9 +38,9 @@ export async function POST(
         "provider_id": "{value}",
         "delivery_address": {},
         "items": [{
-          "title": "alias",
+          "title": "vetus",
           "sku": "{value}",
-          "quantity": 1,
+          "quantity": 17,
           "barcode": "{value}"
         }]
       }
@@ -76,6 +48,34 @@ export async function POST(
 
   res.send(result)
 }
+```
+
+    </CodeTab>
+    <CodeTab label="Another Workflow" value="another-workflow">
+    
+```ts title="src/workflows/my-workflow.ts"
+import { createWorkflow } from "@medusajs/framework/workflows-sdk"
+import { createReturnFulfillmentWorkflow } from "@medusajs/medusa/core-flows"
+
+const myWorkflow = createWorkflow(
+  "my-workflow",
+  () => {
+    const result = createReturnFulfillmentWorkflow
+      .runAsStep({
+        input: {
+          "location_id": "{value}",
+          "provider_id": "{value}",
+          "delivery_address": {},
+          "items": [{
+            "title": "vetus",
+            "sku": "{value}",
+            "quantity": 17,
+            "barcode": "{value}"
+          }]
+        }
+      })
+  }
+)
 ```
 
     </CodeTab>
@@ -99,9 +99,9 @@ export default async function handleOrderPlaced({
         "provider_id": "{value}",
         "delivery_address": {},
         "items": [{
-          "title": "alias",
+          "title": "vetus",
           "sku": "{value}",
-          "quantity": 1,
+          "quantity": 17,
           "barcode": "{value}"
         }]
       }
@@ -132,9 +132,9 @@ export default async function myCustomJob(
         "provider_id": "{value}",
         "delivery_address": {},
         "items": [{
-          "title": "alias",
+          "title": "vetus",
           "sku": "{value}",
-          "quantity": 1,
+          "quantity": 17,
           "barcode": "{value}"
         }]
       }

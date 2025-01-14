@@ -54,25 +54,6 @@ function getExecutionCodeTabs({
   exampleCode = exampleCode.replace("```ts\n", "").replace("\n```", "")
 
   return `<CodeTabs group="workflow-exection">
-    <CodeTab label="Another Workflow" value="another-workflow">
-    
-\`\`\`ts title="src/workflows/my-workflow.ts"
-${beautifyCode(`import { createWorkflow } from "@medusajs/framework/workflows-sdk"
-import { ${workflowName} } from "@medusajs/medusa/core-flows"
-
-const myWorkflow = createWorkflow(
-  "my-workflow",
-  () => {
-    ${exampleCode
-      .replace(`{ result }`, "result")
-      .replace(`await `, "")
-      .replace(`(container)`, "")
-      .replace(".run(", ".runAsStep(")}
-  }
-)`)}
-\`\`\`
-
-    </CodeTab>
     <CodeTab label="API Route" value="api-route">
     
 \`\`\`ts title="src/api/workflow/route.ts"
@@ -91,6 +72,25 @@ export async function POST(
   res.send(result)
 }
 `)}
+\`\`\`
+
+    </CodeTab>
+    <CodeTab label="Another Workflow" value="another-workflow">
+    
+\`\`\`ts title="src/workflows/my-workflow.ts"
+${beautifyCode(`import { createWorkflow } from "@medusajs/framework/workflows-sdk"
+import { ${workflowName} } from "@medusajs/medusa/core-flows"
+
+const myWorkflow = createWorkflow(
+  "my-workflow",
+  () => {
+    ${exampleCode
+      .replace(`{ result }`, "result")
+      .replace(`await `, "")
+      .replace(`(container)`, "")
+      .replace(".run(", ".runAsStep(")}
+  }
+)`)}
 \`\`\`
 
     </CodeTab>

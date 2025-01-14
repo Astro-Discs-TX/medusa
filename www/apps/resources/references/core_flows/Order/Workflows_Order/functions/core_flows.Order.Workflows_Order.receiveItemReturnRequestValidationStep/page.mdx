@@ -23,134 +23,134 @@ const myWorkflow = createWorkflow(
     const data = receiveItemReturnRequestValidationStep({
       "order": "{value}",
       "orderReturn": {
-        "id": "id_ebZCxZs41g8t3F1WHQoV",
-        "status": "partially_received",
+        "id": "id_aa9A1lgd7SUfVujz",
+        "status": "received",
         "order_id": "{value}",
         "items": [{
-          "id": "id_0GLv4GNyiS6hBaSbzj0V",
+          "id": "id_oMsaT1gQ60z",
           "return_id": "{value}",
           "order_id": "{value}",
           "item_id": "{value}",
-          "quantity": 41
+          "quantity": 40
         }],
-        "display_id": 23,
+        "display_id": 0,
         "metadata": {}
       },
       "orderChange": {
-        "id": "id_sxmL6WGN6kIkQ23",
-        "version": 14,
+        "id": "id_uCCLvjgl4y",
+        "version": 48,
         "order_id": "{value}",
         "return_id": "{value}",
         "exchange_id": "{value}",
         "claim_id": "{value}",
         "order": {
-          "id": "id_Ow8q1MWLb2XA9",
-          "version": 6,
-          "display_id": 44,
-          "status": "draft",
+          "id": "id_2EWp3Xauq2mM2ST",
+          "version": 30,
+          "display_id": 50,
+          "status": "canceled",
           "currency_code": "{value}",
-          "created_at": "2025-04-21T19:40:02.234Z",
-          "updated_at": "2025-06-11T16:48:37.092Z",
+          "created_at": "2025-04-06T01:12:55.065Z",
+          "updated_at": "2025-06-07T12:06:07.552Z",
           "original_item_total": {
-            "numeric": 50
+            "numeric": 31
           },
           "original_item_subtotal": {
-            "numeric": 41
-          },
-          "original_item_tax_total": {
-            "numeric": 28
-          },
-          "item_total": {
-            "numeric": 42
-          },
-          "item_subtotal": {
-            "numeric": 0
-          },
-          "item_tax_total": {
             "numeric": 11
           },
-          "original_total": {
-            "numeric": 34
+          "original_item_tax_total": {
+            "numeric": 21
           },
-          "original_subtotal": {
-            "numeric": 47
-          },
-          "original_tax_total": {
-            "numeric": 35
-          },
-          "total": {
-            "numeric": 32
-          },
-          "subtotal": {
-            "numeric": 9
-          },
-          "tax_total": {
-            "numeric": 42
-          },
-          "discount_subtotal": {
-            "numeric": 37
-          },
-          "discount_total": {
+          "item_total": {
             "numeric": 49
           },
-          "discount_tax_total": {
-            "numeric": 34
+          "item_subtotal": {
+            "numeric": 35
           },
-          "gift_card_total": {
+          "item_tax_total": {
+            "numeric": 44
+          },
+          "original_total": {
+            "numeric": 50
+          },
+          "original_subtotal": {
+            "numeric": 30
+          },
+          "original_tax_total": {
+            "numeric": 49
+          },
+          "total": {
             "numeric": 23
           },
-          "gift_card_tax_total": {
+          "subtotal": {
+            "numeric": 15
+          },
+          "tax_total": {
+            "numeric": 43
+          },
+          "discount_subtotal": {
+            "numeric": 45
+          },
+          "discount_total": {
+            "numeric": 40
+          },
+          "discount_tax_total": {
             "numeric": 7
           },
-          "shipping_total": {
+          "gift_card_total": {
             "numeric": 20
           },
+          "gift_card_tax_total": {
+            "numeric": 15
+          },
+          "shipping_total": {
+            "numeric": 5
+          },
           "shipping_subtotal": {
-            "numeric": 9
+            "numeric": 25
           },
           "shipping_tax_total": {
-            "numeric": 41
+            "numeric": 28
           },
           "original_shipping_total": {
-            "numeric": 26
+            "numeric": 45
           },
           "original_shipping_subtotal": {
-            "numeric": 41
+            "numeric": 34
           },
           "original_shipping_tax_total": {
-            "numeric": 47
+            "numeric": 15
           }
         },
         "return_order": {
-          "id": "id_orGy41V9hE",
-          "status": "received",
+          "id": "id_7OZ9kyOP3ASIThEvO",
+          "status": "partially_received",
           "order_id": "{value}",
           "items": [{
-            "id": "id_pO5wUCOJCKwDF",
+            "id": "id_vjSDvN56jIpJETGf4Y",
             "return_id": "{value}",
             "order_id": "{value}",
             "item_id": "{value}",
-            "quantity": 29
+            "quantity": 20
           }],
-          "display_id": 46,
+          "display_id": 14,
           "metadata": {}
         },
         "exchange": {
-          "id": "id_yLELthr9MWT33",
+          "id": "id_3q0ErRA3PWmnyfSHPPaM",
           "order_id": "{value}",
-          "order_version": 33,
-          "display_id": 11,
+          "order_version": 49,
+          "display_id": 6,
           "additional_items": [
             "{value}"
           ],
           "metadata": {}
         },
         "claim": {
-          "id": "id_FhTTZX4vu8IrfkxexC2X",
-          "type": "replace",
+          "id": "id_omLpyQ2JqlcrX",
+          "type": "refund",
           "order_id": "{value}",
-          "order_version": 0,
-          "display_id": 9,
+          "order_version": 30,
+          "display_id": 43,
           "claim_items": [
             "{value}"
           ],
@@ -160,7 +160,7 @@ const myWorkflow = createWorkflow(
           "metadata": {}
         },
         "actions": [{
-          "id": "id_i08OQurHoif",
+          "id": "id_6jxXNpwfVFWcvWcnoH",
           "order_change_id": {},
           "order_change": {},
           "order_id": {},
@@ -170,11 +170,11 @@ const myWorkflow = createWorkflow(
           "order": {},
           "reference": "{value}",
           "reference_id": "{value}",
-          "action": "SHIP_ITEM",
+          "action": "ITEM_REMOVE",
           "details": {},
           "internal_note": {},
-          "created_at": "2025-10-26T20:43:53.361Z",
-          "updated_at": "2025-02-26T08:26:58.712Z"
+          "created_at": "2025-11-11T09:16:59.659Z",
+          "updated_at": "2025-05-27T10:51:08.785Z"
         }],
         "status": "confirmed",
         "requested_by": {},
@@ -187,12 +187,12 @@ const myWorkflow = createWorkflow(
         "declined_at": {},
         "canceled_by": {},
         "canceled_at": {},
-        "created_at": "2025-05-08T17:45:49.954Z",
-        "updated_at": "2025-05-31T13:13:43.491Z"
+        "created_at": "2025-03-07T11:16:08.449Z",
+        "updated_at": "2025-09-11T07:29:08.019Z"
       },
       "items": [{
-        "id": "id_450bECdjIu",
-        "quantity": 30
+        "id": "id_sPeVP4G26oakZ",
+        "quantity": 5
       }]
     })
   }
