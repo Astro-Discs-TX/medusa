@@ -17,6 +17,8 @@ This workflow updates one or more users.
 
 <SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/user/workflows/update-users.ts#L16" />
 
+## Examples
+
 <CodeTabs group="workflow-exection">
     <CodeTab label="API Route" value="api-route">
     
@@ -35,7 +37,7 @@ export async function POST(
     .run({
       input: {
         "updates": [{
-          "id": "id_8rUaFdWPxqAdQ95ij"
+          "id": "id_Ps27IEZ6hUFL8v"
         }]
       }
     })
@@ -62,7 +64,7 @@ export default async function handleOrderPlaced({
     .run({
       input: {
         "updates": [{
-          "id": "id_8rUaFdWPxqAdQ95ij"
+          "id": "id_Ps27IEZ6hUFL8v"
         }]
       }
     })
@@ -89,7 +91,7 @@ export default async function myCustomJob(
     .run({
       input: {
         "updates": [{
-          "id": "id_8rUaFdWPxqAdQ95ij"
+          "id": "id_Ps27IEZ6hUFL8v"
         }]
       }
     })
@@ -117,7 +119,7 @@ const myWorkflow = createWorkflow(
       .runAsStep({
         input: {
           "updates": [{
-            "id": "id_8rUaFdWPxqAdQ95ij"
+            "id": "id_Ps27IEZ6hUFL8v"
           }]
         }
       })

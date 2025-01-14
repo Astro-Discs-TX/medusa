@@ -17,6 +17,8 @@ This workflow deletes one or more fulfillment sets.
 
 <SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/fulfillment/workflows/delete-fulfillment-sets.ts#L11" />
 
+## Examples
+
 <CodeTabs group="workflow-exection">
     <CodeTab label="API Route" value="api-route">
     
@@ -35,7 +37,7 @@ export async function POST(
     .run({
       input: {
         "ids": [
-          "id_Aw6aGiy2vxUY7H"
+          "id_9LYG9saNaInAMo2jl"
         ]
       }
     })
@@ -62,7 +64,7 @@ export default async function handleOrderPlaced({
     .run({
       input: {
         "ids": [
-          "id_Aw6aGiy2vxUY7H"
+          "id_9LYG9saNaInAMo2jl"
         ]
       }
     })
@@ -89,7 +91,7 @@ export default async function myCustomJob(
     .run({
       input: {
         "ids": [
-          "id_Aw6aGiy2vxUY7H"
+          "id_9LYG9saNaInAMo2jl"
         ]
       }
     })
@@ -117,7 +119,7 @@ const myWorkflow = createWorkflow(
       .runAsStep({
         input: {
           "ids": [
-            "id_Aw6aGiy2vxUY7H"
+            "id_9LYG9saNaInAMo2jl"
           ]
         }
       })

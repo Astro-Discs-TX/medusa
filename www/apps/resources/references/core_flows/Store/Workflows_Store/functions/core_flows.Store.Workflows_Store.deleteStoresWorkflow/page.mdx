@@ -16,6 +16,8 @@ This workflow deletes one or more stores.
 
 <SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/store/workflows/delete-stores.ts#L10" />
 
+## Examples
+
 <CodeTabs group="workflow-exection">
     <CodeTab label="API Route" value="api-route">
     
@@ -34,7 +36,7 @@ export async function POST(
     .run({
       input: {
         "ids": [
-          "id_2lLFxz87M0qe"
+          "id_2XRbDyO8WP"
         ]
       }
     })
@@ -61,7 +63,7 @@ export default async function handleOrderPlaced({
     .run({
       input: {
         "ids": [
-          "id_2lLFxz87M0qe"
+          "id_2XRbDyO8WP"
         ]
       }
     })
@@ -88,7 +90,7 @@ export default async function myCustomJob(
     .run({
       input: {
         "ids": [
-          "id_2lLFxz87M0qe"
+          "id_2XRbDyO8WP"
         ]
       }
     })
@@ -116,7 +118,7 @@ const myWorkflow = createWorkflow(
       .runAsStep({
         input: {
           "ids": [
-            "id_2lLFxz87M0qe"
+            "id_2XRbDyO8WP"
           ]
         }
       })

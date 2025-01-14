@@ -16,6 +16,8 @@ This workflow updates one or more promotion rules.
 
 <SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/promotion/workflows/update-promotion-rules.ts#L16" />
 
+## Examples
+
 <CodeTabs group="workflow-exection">
     <CodeTab label="API Route" value="api-route">
     
@@ -34,7 +36,7 @@ export async function POST(
     .run({
       input: {
         "data": [{
-          "id": "id_807qjQgmiKtV8"
+          "id": "id_YEB9k1J7eGtSqpAYCzn"
         }]
       }
     })
@@ -61,7 +63,7 @@ export default async function handleOrderPlaced({
     .run({
       input: {
         "data": [{
-          "id": "id_807qjQgmiKtV8"
+          "id": "id_YEB9k1J7eGtSqpAYCzn"
         }]
       }
     })
@@ -88,7 +90,7 @@ export default async function myCustomJob(
     .run({
       input: {
         "data": [{
-          "id": "id_807qjQgmiKtV8"
+          "id": "id_YEB9k1J7eGtSqpAYCzn"
         }]
       }
     })
@@ -116,7 +118,7 @@ const myWorkflow = createWorkflow(
       .runAsStep({
         input: {
           "data": [{
-            "id": "id_807qjQgmiKtV8"
+            "id": "id_YEB9k1J7eGtSqpAYCzn"
           }]
         }
       })

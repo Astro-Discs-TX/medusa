@@ -17,6 +17,8 @@ This workflow creates one or more invites.
 
 <SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/invite/workflows/create-invites.ts#L15" />
 
+## Examples
+
 <CodeTabs group="workflow-exection">
     <CodeTab label="API Route" value="api-route">
     
@@ -35,7 +37,7 @@ export async function POST(
     .run({
       input: {
         "invites": [{
-          "email": "Lola.Padberg82@yahoo.com"
+          "email": "Emanuel.Beahan@gmail.com"
         }]
       }
     })
@@ -62,7 +64,7 @@ export default async function handleOrderPlaced({
     .run({
       input: {
         "invites": [{
-          "email": "Lola.Padberg82@yahoo.com"
+          "email": "Emanuel.Beahan@gmail.com"
         }]
       }
     })
@@ -89,7 +91,7 @@ export default async function myCustomJob(
     .run({
       input: {
         "invites": [{
-          "email": "Lola.Padberg82@yahoo.com"
+          "email": "Emanuel.Beahan@gmail.com"
         }]
       }
     })
@@ -117,7 +119,7 @@ const myWorkflow = createWorkflow(
       .runAsStep({
         input: {
           "invites": [{
-            "email": "Lola.Padberg82@yahoo.com"
+            "email": "Emanuel.Beahan@gmail.com"
           }]
         }
       })

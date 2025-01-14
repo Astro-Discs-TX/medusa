@@ -39,7 +39,9 @@ export default function () {
         })
       }
 
-      return exampleStr.join("\n")
+      return `${Handlebars.helpers.titleLevel()} Examples\n\n${exampleStr.join(
+        "\n"
+      )}`
     }
   )
 }

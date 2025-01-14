@@ -20,6 +20,8 @@ This workflow adds shipping methods to a cart.
 
 <SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/cart/workflows/add-shipping-method-to-cart.ts#L34" />
 
+## Examples
+
 <CodeTabs group="workflow-exection">
     <CodeTab label="API Route" value="api-route">
     
@@ -39,7 +41,7 @@ export async function POST(
       input: {
         "cart_id": "{value}",
         "options": [{
-          "id": "id_acMKJUV70mcLaom1gtWw"
+          "id": "id_qChCECxNY9vE"
         }]
       }
     })
@@ -67,7 +69,7 @@ export default async function handleOrderPlaced({
       input: {
         "cart_id": "{value}",
         "options": [{
-          "id": "id_acMKJUV70mcLaom1gtWw"
+          "id": "id_qChCECxNY9vE"
         }]
       }
     })
@@ -95,7 +97,7 @@ export default async function myCustomJob(
       input: {
         "cart_id": "{value}",
         "options": [{
-          "id": "id_acMKJUV70mcLaom1gtWw"
+          "id": "id_qChCECxNY9vE"
         }]
       }
     })
@@ -124,7 +126,7 @@ const myWorkflow = createWorkflow(
         input: {
           "cart_id": "{value}",
           "options": [{
-            "id": "id_acMKJUV70mcLaom1gtWw"
+            "id": "id_qChCECxNY9vE"
           }]
         }
       })

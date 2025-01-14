@@ -17,6 +17,8 @@ This workflow links sales channels to API keys.
 
 <SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/api-key/workflows/link-sales-channels-to-publishable-key.ts#L13" />
 
+## Examples
+
 <CodeTabs group="workflow-exection">
     <CodeTab label="API Route" value="api-route">
     
@@ -34,7 +36,7 @@ export async function POST(
   const { result } = await linkSalesChannelsToApiKeyWorkflow(req.scope)
     .run({
       input: {
-        "id": "id_fuY0mfyWTP6hwNOd"
+        "id": "id_ho4tqCcF0SooZ"
       }
     })
 
@@ -59,7 +61,7 @@ export default async function handleOrderPlaced({
   const { result } = await linkSalesChannelsToApiKeyWorkflow(container)
     .run({
       input: {
-        "id": "id_fuY0mfyWTP6hwNOd"
+        "id": "id_ho4tqCcF0SooZ"
       }
     })
 
@@ -84,7 +86,7 @@ export default async function myCustomJob(
   const { result } = await linkSalesChannelsToApiKeyWorkflow(container)
     .run({
       input: {
-        "id": "id_fuY0mfyWTP6hwNOd"
+        "id": "id_ho4tqCcF0SooZ"
       }
     })
 
@@ -110,7 +112,7 @@ const myWorkflow = createWorkflow(
     const result = linkSalesChannelsToApiKeyWorkflow
       .runAsStep({
         input: {
-          "id": "id_fuY0mfyWTP6hwNOd"
+          "id": "id_ho4tqCcF0SooZ"
         }
       })
   }

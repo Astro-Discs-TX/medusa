@@ -23,6 +23,8 @@ This workflow adds new items to an exchange.
 
 <SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/order/workflows/exchange/exchange-add-new-item.ts#L50" />
 
+## Examples
+
 <CodeTabs group="workflow-exection">
     <CodeTab label="API Route" value="api-route">
     
@@ -43,7 +45,7 @@ export async function POST(
         "exchange_id": "{value}",
         "items": [{
           "variant_id": "{value}",
-          "quantity": 12
+          "quantity": 27
         }]
       }
     })
@@ -72,7 +74,7 @@ export default async function handleOrderPlaced({
         "exchange_id": "{value}",
         "items": [{
           "variant_id": "{value}",
-          "quantity": 12
+          "quantity": 27
         }]
       }
     })
@@ -101,7 +103,7 @@ export default async function myCustomJob(
         "exchange_id": "{value}",
         "items": [{
           "variant_id": "{value}",
-          "quantity": 12
+          "quantity": 27
         }]
       }
     })
@@ -131,7 +133,7 @@ const myWorkflow = createWorkflow(
           "exchange_id": "{value}",
           "items": [{
             "variant_id": "{value}",
-            "quantity": 12
+            "quantity": 27
           }]
         }
       })

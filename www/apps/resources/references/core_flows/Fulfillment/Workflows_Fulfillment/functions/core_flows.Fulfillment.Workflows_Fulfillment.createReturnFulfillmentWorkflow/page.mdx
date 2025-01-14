@@ -17,6 +17,8 @@ This workflow creates a fulfillment for a return.
 
 <SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/fulfillment/workflows/create-return-fulfillment.ts#L20" />
 
+## Examples
+
 <CodeTabs group="workflow-exection">
     <CodeTab label="API Route" value="api-route">
     
@@ -38,9 +40,9 @@ export async function POST(
         "provider_id": "{value}",
         "delivery_address": {},
         "items": [{
-          "title": "atavus",
+          "title": "quidem",
           "sku": "{value}",
-          "quantity": 8,
+          "quantity": 21,
           "barcode": "{value}"
         }]
       }
@@ -71,9 +73,9 @@ export default async function handleOrderPlaced({
         "provider_id": "{value}",
         "delivery_address": {},
         "items": [{
-          "title": "atavus",
+          "title": "quidem",
           "sku": "{value}",
-          "quantity": 8,
+          "quantity": 21,
           "barcode": "{value}"
         }]
       }
@@ -104,9 +106,9 @@ export default async function myCustomJob(
         "provider_id": "{value}",
         "delivery_address": {},
         "items": [{
-          "title": "atavus",
+          "title": "quidem",
           "sku": "{value}",
-          "quantity": 8,
+          "quantity": 21,
           "barcode": "{value}"
         }]
       }
@@ -138,9 +140,9 @@ const myWorkflow = createWorkflow(
           "provider_id": "{value}",
           "delivery_address": {},
           "items": [{
-            "title": "atavus",
+            "title": "quidem",
             "sku": "{value}",
-            "quantity": 8,
+            "quantity": 21,
             "barcode": "{value}"
           }]
         }

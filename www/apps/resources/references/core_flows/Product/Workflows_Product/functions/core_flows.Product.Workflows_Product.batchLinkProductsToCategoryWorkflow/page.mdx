@@ -15,6 +15,8 @@ This workflow creates links between product and category records.
 
 <SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/product/workflows/batch-products-in-category.ts#L10" />
 
+## Examples
+
 <CodeTabs group="workflow-exection">
     <CodeTab label="API Route" value="api-route">
     
@@ -32,7 +34,7 @@ export async function POST(
   const { result } = await batchLinkProductsToCategoryWorkflow(req.scope)
     .run({
       input: {
-        "id": "id_6jyjZFTd4v"
+        "id": "id_CF7CqwJw4Kl5y5C2TYFF"
       }
     })
 
@@ -57,7 +59,7 @@ export default async function handleOrderPlaced({
   const { result } = await batchLinkProductsToCategoryWorkflow(container)
     .run({
       input: {
-        "id": "id_6jyjZFTd4v"
+        "id": "id_CF7CqwJw4Kl5y5C2TYFF"
       }
     })
 
@@ -82,7 +84,7 @@ export default async function myCustomJob(
   const { result } = await batchLinkProductsToCategoryWorkflow(container)
     .run({
       input: {
-        "id": "id_6jyjZFTd4v"
+        "id": "id_CF7CqwJw4Kl5y5C2TYFF"
       }
     })
 
@@ -108,7 +110,7 @@ const myWorkflow = createWorkflow(
     const result = batchLinkProductsToCategoryWorkflow
       .runAsStep({
         input: {
-          "id": "id_6jyjZFTd4v"
+          "id": "id_CF7CqwJw4Kl5y5C2TYFF"
         }
       })
   }

@@ -16,6 +16,8 @@ This workflow creates and dismisses links between location and sales channel rec
 
 <SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/stock-location/workflows/link-sales-channels-to-stock-location.ts#L14" />
 
+## Examples
+
 <CodeTabs group="workflow-exection">
     <CodeTab label="API Route" value="api-route">
     
@@ -33,7 +35,7 @@ export async function POST(
   const { result } = await linkSalesChannelsToStockLocationWorkflow(req.scope)
     .run({
       input: {
-        "id": "id_A1i5Jptl4vRmhXAME"
+        "id": "id_3qzgHt0VY2qaJV"
       }
     })
 
@@ -58,7 +60,7 @@ export default async function handleOrderPlaced({
   const { result } = await linkSalesChannelsToStockLocationWorkflow(container)
     .run({
       input: {
-        "id": "id_A1i5Jptl4vRmhXAME"
+        "id": "id_3qzgHt0VY2qaJV"
       }
     })
 
@@ -83,7 +85,7 @@ export default async function myCustomJob(
   const { result } = await linkSalesChannelsToStockLocationWorkflow(container)
     .run({
       input: {
-        "id": "id_A1i5Jptl4vRmhXAME"
+        "id": "id_3qzgHt0VY2qaJV"
       }
     })
 
@@ -109,7 +111,7 @@ const myWorkflow = createWorkflow(
     const result = linkSalesChannelsToStockLocationWorkflow
       .runAsStep({
         input: {
-          "id": "id_A1i5Jptl4vRmhXAME"
+          "id": "id_3qzgHt0VY2qaJV"
         }
       })
   }

@@ -18,6 +18,8 @@ Update order workflow.
 
 <SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/order/workflows/update-order.ts#L74" />
 
+## Examples
+
 <CodeTabs group="workflow-exection">
     <CodeTab label="API Route" value="api-route">
     
@@ -35,7 +37,7 @@ export async function POST(
   const { result } = await updateOrderWorkflow(req.scope)
     .run({
       input: {
-        "id": "id_xOIOyBUX3n5exb0QmNZm",
+        "id": "id_2MmlXYBnn0",
         "user_id": "{value}"
       }
     })
@@ -61,7 +63,7 @@ export default async function handleOrderPlaced({
   const { result } = await updateOrderWorkflow(container)
     .run({
       input: {
-        "id": "id_xOIOyBUX3n5exb0QmNZm",
+        "id": "id_2MmlXYBnn0",
         "user_id": "{value}"
       }
     })
@@ -87,7 +89,7 @@ export default async function myCustomJob(
   const { result } = await updateOrderWorkflow(container)
     .run({
       input: {
-        "id": "id_xOIOyBUX3n5exb0QmNZm",
+        "id": "id_2MmlXYBnn0",
         "user_id": "{value}"
       }
     })
@@ -114,7 +116,7 @@ const myWorkflow = createWorkflow(
     const result = updateOrderWorkflow
       .runAsStep({
         input: {
-          "id": "id_xOIOyBUX3n5exb0QmNZm",
+          "id": "id_2MmlXYBnn0",
           "user_id": "{value}"
         }
       })

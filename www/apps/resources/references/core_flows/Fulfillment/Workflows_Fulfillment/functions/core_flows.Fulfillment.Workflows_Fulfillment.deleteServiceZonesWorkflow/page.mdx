@@ -16,6 +16,8 @@ This workflow deletes one or more service zones.
 
 <SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/fulfillment/workflows/delete-service-zones.ts#L8" />
 
+## Examples
+
 <CodeTabs group="workflow-exection">
     <CodeTab label="API Route" value="api-route">
     
@@ -34,7 +36,7 @@ export async function POST(
     .run({
       input: {
         "ids": [
-          "id_s3g5H6AjLhHP4QS"
+          "id_Knqn6UBPOVEcr5lujDNj"
         ]
       }
     })
@@ -61,7 +63,7 @@ export default async function handleOrderPlaced({
     .run({
       input: {
         "ids": [
-          "id_s3g5H6AjLhHP4QS"
+          "id_Knqn6UBPOVEcr5lujDNj"
         ]
       }
     })
@@ -88,7 +90,7 @@ export default async function myCustomJob(
     .run({
       input: {
         "ids": [
-          "id_s3g5H6AjLhHP4QS"
+          "id_Knqn6UBPOVEcr5lujDNj"
         ]
       }
     })
@@ -116,7 +118,7 @@ const myWorkflow = createWorkflow(
       .runAsStep({
         input: {
           "ids": [
-            "id_s3g5H6AjLhHP4QS"
+            "id_Knqn6UBPOVEcr5lujDNj"
           ]
         }
       })

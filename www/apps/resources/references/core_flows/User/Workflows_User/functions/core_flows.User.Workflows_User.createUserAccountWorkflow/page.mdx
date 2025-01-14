@@ -18,6 +18,8 @@ This workflow creates an authentication identity for a user.
 
 <SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/user/workflows/create-user-account.ts#L20" />
 
+## Examples
+
 <CodeTabs group="workflow-exection">
     <CodeTab label="API Route" value="api-route">
     
@@ -37,7 +39,7 @@ export async function POST(
       input: {
         "authIdentityId": "{value}",
         "userData": {
-          "email": "Durward_Reichert@hotmail.com"
+          "email": "Asha19@hotmail.com"
         }
       }
     })
@@ -65,7 +67,7 @@ export default async function handleOrderPlaced({
       input: {
         "authIdentityId": "{value}",
         "userData": {
-          "email": "Durward_Reichert@hotmail.com"
+          "email": "Asha19@hotmail.com"
         }
       }
     })
@@ -93,7 +95,7 @@ export default async function myCustomJob(
       input: {
         "authIdentityId": "{value}",
         "userData": {
-          "email": "Durward_Reichert@hotmail.com"
+          "email": "Asha19@hotmail.com"
         }
       }
     })
@@ -122,7 +124,7 @@ const myWorkflow = createWorkflow(
         input: {
           "authIdentityId": "{value}",
           "userData": {
-            "email": "Durward_Reichert@hotmail.com"
+            "email": "Asha19@hotmail.com"
           }
         }
       })

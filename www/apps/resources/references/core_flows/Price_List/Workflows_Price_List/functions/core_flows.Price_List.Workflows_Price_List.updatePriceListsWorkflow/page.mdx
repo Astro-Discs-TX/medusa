@@ -16,6 +16,8 @@ This workflow updates one or more price lists.
 
 <SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/price-list/workflows/update-price-lists.ts#L9" />
 
+## Examples
+
 <CodeTabs group="workflow-exection">
     <CodeTab label="API Route" value="api-route">
     
@@ -34,7 +36,7 @@ export async function POST(
     .run({
       input: {
         "price_lists_data": [{
-          "id": "id_BGcvMHqIylJsfB"
+          "id": "id_DmfYTffz5doptrEWLOeR"
         }]
       }
     })
@@ -61,7 +63,7 @@ export default async function handleOrderPlaced({
     .run({
       input: {
         "price_lists_data": [{
-          "id": "id_BGcvMHqIylJsfB"
+          "id": "id_DmfYTffz5doptrEWLOeR"
         }]
       }
     })
@@ -88,7 +90,7 @@ export default async function myCustomJob(
     .run({
       input: {
         "price_lists_data": [{
-          "id": "id_BGcvMHqIylJsfB"
+          "id": "id_DmfYTffz5doptrEWLOeR"
         }]
       }
     })
@@ -116,7 +118,7 @@ const myWorkflow = createWorkflow(
       .runAsStep({
         input: {
           "price_lists_data": [{
-            "id": "id_BGcvMHqIylJsfB"
+            "id": "id_DmfYTffz5doptrEWLOeR"
           }]
         }
       })

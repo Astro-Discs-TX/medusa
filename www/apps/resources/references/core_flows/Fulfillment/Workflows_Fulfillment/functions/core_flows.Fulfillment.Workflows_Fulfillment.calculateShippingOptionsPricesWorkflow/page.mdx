@@ -17,6 +17,8 @@ This workflow calculates the prices for one or more shipping options.
 
 <SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/fulfillment/workflows/calculate-shipping-options-prices.ts#L17" />
 
+## Examples
+
 <CodeTabs group="workflow-exection">
     <CodeTab label="API Route" value="api-route">
     
@@ -36,7 +38,7 @@ export async function POST(
       input: {
         "cart_id": "{value}",
         "shipping_options": [{
-          "id": "id_5USYzNOnJN1c9Az36il"
+          "id": "id_8GxyUDoXJE"
         }]
       }
     })
@@ -64,7 +66,7 @@ export default async function handleOrderPlaced({
       input: {
         "cart_id": "{value}",
         "shipping_options": [{
-          "id": "id_5USYzNOnJN1c9Az36il"
+          "id": "id_8GxyUDoXJE"
         }]
       }
     })
@@ -92,7 +94,7 @@ export default async function myCustomJob(
       input: {
         "cart_id": "{value}",
         "shipping_options": [{
-          "id": "id_5USYzNOnJN1c9Az36il"
+          "id": "id_8GxyUDoXJE"
         }]
       }
     })
@@ -121,7 +123,7 @@ const myWorkflow = createWorkflow(
         input: {
           "cart_id": "{value}",
           "shipping_options": [{
-            "id": "id_5USYzNOnJN1c9Az36il"
+            "id": "id_8GxyUDoXJE"
           }]
         }
       })

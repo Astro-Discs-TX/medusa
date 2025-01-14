@@ -17,6 +17,8 @@ This workflow creates one or more shipping options.
 
 <SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/fulfillment/workflows/create-shipping-options.ts#L22" />
 
+## Examples
+
 <CodeTabs group="workflow-exection">
     <CodeTab label="API Route" value="api-route">
     
@@ -34,19 +36,19 @@ export async function POST(
   const { result } = await createShippingOptionsWorkflow(req.scope)
     .run({
       input: [{
-        "name": "Theron",
+        "name": "Dahlia",
         "service_zone_id": "{value}",
         "shipping_profile_id": "{value}",
         "provider_id": "{value}",
         "type": {
           "label": "{value}",
-          "description": "Thesaurus vinum suus ago canto perferendis sonitus perspiciatis commemoro traho.",
+          "description": "Defero arbustum cerno urbs callide cernuus aggredior caste urbs.",
           "code": "{value}"
         },
         "price_type": "{value}",
         "prices": [{
           "currency_code": "{value}",
-          "amount": 38,
+          "amount": 14,
           "region_id": "{value}"
         }]
       }]
@@ -73,19 +75,19 @@ export default async function handleOrderPlaced({
   const { result } = await createShippingOptionsWorkflow(container)
     .run({
       input: [{
-        "name": "Theron",
+        "name": "Dahlia",
         "service_zone_id": "{value}",
         "shipping_profile_id": "{value}",
         "provider_id": "{value}",
         "type": {
           "label": "{value}",
-          "description": "Thesaurus vinum suus ago canto perferendis sonitus perspiciatis commemoro traho.",
+          "description": "Defero arbustum cerno urbs callide cernuus aggredior caste urbs.",
           "code": "{value}"
         },
         "price_type": "{value}",
         "prices": [{
           "currency_code": "{value}",
-          "amount": 38,
+          "amount": 14,
           "region_id": "{value}"
         }]
       }]
@@ -112,19 +114,19 @@ export default async function myCustomJob(
   const { result } = await createShippingOptionsWorkflow(container)
     .run({
       input: [{
-        "name": "Theron",
+        "name": "Dahlia",
         "service_zone_id": "{value}",
         "shipping_profile_id": "{value}",
         "provider_id": "{value}",
         "type": {
           "label": "{value}",
-          "description": "Thesaurus vinum suus ago canto perferendis sonitus perspiciatis commemoro traho.",
+          "description": "Defero arbustum cerno urbs callide cernuus aggredior caste urbs.",
           "code": "{value}"
         },
         "price_type": "{value}",
         "prices": [{
           "currency_code": "{value}",
-          "amount": 38,
+          "amount": 14,
           "region_id": "{value}"
         }]
       }]
@@ -152,19 +154,19 @@ const myWorkflow = createWorkflow(
     const result = createShippingOptionsWorkflow
       .runAsStep({
         input: [{
-          "name": "Theron",
+          "name": "Dahlia",
           "service_zone_id": "{value}",
           "shipping_profile_id": "{value}",
           "provider_id": "{value}",
           "type": {
             "label": "{value}",
-            "description": "Thesaurus vinum suus ago canto perferendis sonitus perspiciatis commemoro traho.",
+            "description": "Defero arbustum cerno urbs callide cernuus aggredior caste urbs.",
             "code": "{value}"
           },
           "price_type": "{value}",
           "prices": [{
             "currency_code": "{value}",
-            "amount": 38,
+            "amount": 14,
             "region_id": "{value}"
           }]
         }]

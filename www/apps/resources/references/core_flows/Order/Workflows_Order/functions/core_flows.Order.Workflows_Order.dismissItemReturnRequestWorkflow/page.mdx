@@ -17,6 +17,8 @@ This workflow dismisses items from a return request.
 
 <SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/order/workflows/return/dismiss-item-return-request.ts#L55" />
 
+## Examples
+
 <CodeTabs group="workflow-exection">
     <CodeTab label="API Route" value="api-route">
     
@@ -36,8 +38,8 @@ export async function POST(
       input: {
         "return_id": "{value}",
         "items": [{
-          "id": "id_V0QLCzr8kTO",
-          "quantity": 44
+          "id": "id_ONXyR3NZnM4yQ30QLgQY",
+          "quantity": 38
         }]
       }
     })
@@ -65,8 +67,8 @@ export default async function handleOrderPlaced({
       input: {
         "return_id": "{value}",
         "items": [{
-          "id": "id_V0QLCzr8kTO",
-          "quantity": 44
+          "id": "id_ONXyR3NZnM4yQ30QLgQY",
+          "quantity": 38
         }]
       }
     })
@@ -94,8 +96,8 @@ export default async function myCustomJob(
       input: {
         "return_id": "{value}",
         "items": [{
-          "id": "id_V0QLCzr8kTO",
-          "quantity": 44
+          "id": "id_ONXyR3NZnM4yQ30QLgQY",
+          "quantity": 38
         }]
       }
     })
@@ -124,8 +126,8 @@ const myWorkflow = createWorkflow(
         input: {
           "return_id": "{value}",
           "items": [{
-            "id": "id_V0QLCzr8kTO",
-            "quantity": 44
+            "id": "id_ONXyR3NZnM4yQ30QLgQY",
+            "quantity": 38
           }]
         }
       })

@@ -18,6 +18,8 @@ This workflow updates one or more shipping options.
 
 <SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/fulfillment/workflows/update-shipping-options.ts#L22" />
 
+## Examples
+
 <CodeTabs group="workflow-exection">
     <CodeTab label="API Route" value="api-route">
     
@@ -35,7 +37,7 @@ export async function POST(
   const { result } = await updateShippingOptionsWorkflow(req.scope)
     .run({
       input: [{
-        "id": "id_wOBMREad3wkQjUPvrS2G"
+        "id": "id_99ZBSJCJJWoPWPatn"
       }]
     })
 
@@ -60,7 +62,7 @@ export default async function handleOrderPlaced({
   const { result } = await updateShippingOptionsWorkflow(container)
     .run({
       input: [{
-        "id": "id_wOBMREad3wkQjUPvrS2G"
+        "id": "id_99ZBSJCJJWoPWPatn"
       }]
     })
 
@@ -85,7 +87,7 @@ export default async function myCustomJob(
   const { result } = await updateShippingOptionsWorkflow(container)
     .run({
       input: [{
-        "id": "id_wOBMREad3wkQjUPvrS2G"
+        "id": "id_99ZBSJCJJWoPWPatn"
       }]
     })
 
@@ -111,7 +113,7 @@ const myWorkflow = createWorkflow(
     const result = updateShippingOptionsWorkflow
       .runAsStep({
         input: [{
-          "id": "id_wOBMREad3wkQjUPvrS2G"
+          "id": "id_99ZBSJCJJWoPWPatn"
         }]
       })
   }

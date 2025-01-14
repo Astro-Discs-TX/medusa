@@ -17,6 +17,8 @@ This workflow adds items to be retuned as part of the exchange.
 
 <SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/order/workflows/exchange/exchange-request-item-return.ts#L61" />
 
+## Examples
+
 <CodeTabs group="workflow-exection">
     <CodeTab label="API Route" value="api-route">
     
@@ -37,8 +39,8 @@ export async function POST(
         "return_id": "{value}",
         "exchange_id": "{value}",
         "items": [{
-          "id": "id_V1a8umDXVxH",
-          "quantity": 13
+          "id": "id_wiLfughGN4Ji8onYD",
+          "quantity": 38
         }]
       }
     })
@@ -67,8 +69,8 @@ export default async function handleOrderPlaced({
         "return_id": "{value}",
         "exchange_id": "{value}",
         "items": [{
-          "id": "id_V1a8umDXVxH",
-          "quantity": 13
+          "id": "id_wiLfughGN4Ji8onYD",
+          "quantity": 38
         }]
       }
     })
@@ -97,8 +99,8 @@ export default async function myCustomJob(
         "return_id": "{value}",
         "exchange_id": "{value}",
         "items": [{
-          "id": "id_V1a8umDXVxH",
-          "quantity": 13
+          "id": "id_wiLfughGN4Ji8onYD",
+          "quantity": 38
         }]
       }
     })
@@ -128,8 +130,8 @@ const myWorkflow = createWorkflow(
           "return_id": "{value}",
           "exchange_id": "{value}",
           "items": [{
-            "id": "id_V1a8umDXVxH",
-            "quantity": 13
+            "id": "id_wiLfughGN4Ji8onYD",
+            "quantity": 38
           }]
         }
       })

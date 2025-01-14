@@ -17,6 +17,8 @@ This workflow adds items to a return.
 
 <SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/order/workflows/return/request-item-return.ts#L61" />
 
+## Examples
+
 <CodeTabs group="workflow-exection">
     <CodeTab label="API Route" value="api-route">
     
@@ -36,8 +38,8 @@ export async function POST(
       input: {
         "return_id": "{value}",
         "items": [{
-          "id": "id_YTBR2TXRwJBi",
-          "quantity": 23
+          "id": "id_quXDXun9HNHDqD",
+          "quantity": 2
         }]
       }
     })
@@ -65,8 +67,8 @@ export default async function handleOrderPlaced({
       input: {
         "return_id": "{value}",
         "items": [{
-          "id": "id_YTBR2TXRwJBi",
-          "quantity": 23
+          "id": "id_quXDXun9HNHDqD",
+          "quantity": 2
         }]
       }
     })
@@ -94,8 +96,8 @@ export default async function myCustomJob(
       input: {
         "return_id": "{value}",
         "items": [{
-          "id": "id_YTBR2TXRwJBi",
-          "quantity": 23
+          "id": "id_quXDXun9HNHDqD",
+          "quantity": 2
         }]
       }
     })
@@ -124,8 +126,8 @@ const myWorkflow = createWorkflow(
         input: {
           "return_id": "{value}",
           "items": [{
-            "id": "id_YTBR2TXRwJBi",
-            "quantity": 23
+            "id": "id_quXDXun9HNHDqD",
+            "quantity": 2
           }]
         }
       })

@@ -17,6 +17,8 @@ This workflow deletes one or more invites.
 
 <SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/order/workflows/delete-order-payment-collection.ts#L34" />
 
+## Examples
+
 <CodeTabs group="workflow-exection">
     <CodeTab label="API Route" value="api-route">
     
@@ -34,7 +36,7 @@ export async function POST(
   const { result } = await deleteOrderPaymentCollections(req.scope)
     .run({
       input: {
-        "id": "id_l9fFk7VfhqoI"
+        "id": "id_twUPZp16G714n"
       }
     })
 
@@ -59,7 +61,7 @@ export default async function handleOrderPlaced({
   const { result } = await deleteOrderPaymentCollections(container)
     .run({
       input: {
-        "id": "id_l9fFk7VfhqoI"
+        "id": "id_twUPZp16G714n"
       }
     })
 
@@ -84,7 +86,7 @@ export default async function myCustomJob(
   const { result } = await deleteOrderPaymentCollections(container)
     .run({
       input: {
-        "id": "id_l9fFk7VfhqoI"
+        "id": "id_twUPZp16G714n"
       }
     })
 
@@ -110,7 +112,7 @@ const myWorkflow = createWorkflow(
     const result = deleteOrderPaymentCollections
       .runAsStep({
         input: {
-          "id": "id_l9fFk7VfhqoI"
+          "id": "id_twUPZp16G714n"
         }
       })
   }

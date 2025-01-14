@@ -17,6 +17,8 @@ This workflow transfers cart's customer.
 
 <SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/cart/workflows/transfer-cart-customer.ts#L15" />
 
+## Examples
+
 <CodeTabs group="workflow-exection">
     <CodeTab label="API Route" value="api-route">
     
@@ -34,7 +36,7 @@ export async function POST(
   const { result } = await transferCartCustomerWorkflow(req.scope)
     .run({
       input: {
-        "id": "id_Uzb8CFuBZcgbBQCGg",
+        "id": "id_2QsAtdSaG9b4ARfkN",
         "customer_id": "{value}"
       }
     })
@@ -60,7 +62,7 @@ export default async function handleOrderPlaced({
   const { result } = await transferCartCustomerWorkflow(container)
     .run({
       input: {
-        "id": "id_Uzb8CFuBZcgbBQCGg",
+        "id": "id_2QsAtdSaG9b4ARfkN",
         "customer_id": "{value}"
       }
     })
@@ -86,7 +88,7 @@ export default async function myCustomJob(
   const { result } = await transferCartCustomerWorkflow(container)
     .run({
       input: {
-        "id": "id_Uzb8CFuBZcgbBQCGg",
+        "id": "id_2QsAtdSaG9b4ARfkN",
         "customer_id": "{value}"
       }
     })
@@ -113,7 +115,7 @@ const myWorkflow = createWorkflow(
     const result = transferCartCustomerWorkflow
       .runAsStep({
         input: {
-          "id": "id_Uzb8CFuBZcgbBQCGg",
+          "id": "id_2QsAtdSaG9b4ARfkN",
           "customer_id": "{value}"
         }
       })

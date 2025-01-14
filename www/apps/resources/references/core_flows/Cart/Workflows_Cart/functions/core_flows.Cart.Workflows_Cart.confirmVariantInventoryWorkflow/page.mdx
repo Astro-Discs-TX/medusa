@@ -16,6 +16,8 @@ This workflow confirms for one or more variants that their inventory has a requi
 
 <SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/cart/workflows/confirm-variant-inventory.ts#L27" />
 
+## Examples
+
 <CodeTabs group="workflow-exection">
     <CodeTab label="API Route" value="api-route">
     
@@ -35,19 +37,19 @@ export async function POST(
       input: {
         "sales_channel_id": "{value}",
         "variants": [{
-          "id": "id_DJtsdfB9WYcQ2Y2bAhX",
-          "manage_inventory": false,
+          "id": "id_KTOvaT83mYSDyTJ7qdw",
+          "manage_inventory": true,
           "inventory_items": [{
             "inventory_item_id": "{value}",
             "variant_id": "{value}",
-            "required_quantity": 29,
+            "required_quantity": 16,
             "inventory": [{
               "location_levels": {}
             }]
           }]
         }],
         "items": [{
-          "quantity": 16
+          "quantity": 47
         }]
       }
     })
@@ -75,19 +77,19 @@ export default async function handleOrderPlaced({
       input: {
         "sales_channel_id": "{value}",
         "variants": [{
-          "id": "id_DJtsdfB9WYcQ2Y2bAhX",
-          "manage_inventory": false,
+          "id": "id_KTOvaT83mYSDyTJ7qdw",
+          "manage_inventory": true,
           "inventory_items": [{
             "inventory_item_id": "{value}",
             "variant_id": "{value}",
-            "required_quantity": 29,
+            "required_quantity": 16,
             "inventory": [{
               "location_levels": {}
             }]
           }]
         }],
         "items": [{
-          "quantity": 16
+          "quantity": 47
         }]
       }
     })
@@ -115,19 +117,19 @@ export default async function myCustomJob(
       input: {
         "sales_channel_id": "{value}",
         "variants": [{
-          "id": "id_DJtsdfB9WYcQ2Y2bAhX",
-          "manage_inventory": false,
+          "id": "id_KTOvaT83mYSDyTJ7qdw",
+          "manage_inventory": true,
           "inventory_items": [{
             "inventory_item_id": "{value}",
             "variant_id": "{value}",
-            "required_quantity": 29,
+            "required_quantity": 16,
             "inventory": [{
               "location_levels": {}
             }]
           }]
         }],
         "items": [{
-          "quantity": 16
+          "quantity": 47
         }]
       }
     })
@@ -156,19 +158,19 @@ const myWorkflow = createWorkflow(
         input: {
           "sales_channel_id": "{value}",
           "variants": [{
-            "id": "id_DJtsdfB9WYcQ2Y2bAhX",
-            "manage_inventory": false,
+            "id": "id_KTOvaT83mYSDyTJ7qdw",
+            "manage_inventory": true,
             "inventory_items": [{
               "inventory_item_id": "{value}",
               "variant_id": "{value}",
-              "required_quantity": 29,
+              "required_quantity": 16,
               "inventory": [{
                 "location_levels": {}
               }]
             }]
           }],
           "items": [{
-            "quantity": 16
+            "quantity": 47
           }]
         }
       })
