@@ -56,23 +56,37 @@ abstract class StripeBase extends AbstractPaymentProvider<StripeOptions> {
     return this.options_
   }
 
-  getPaymentIntentOptions(): PaymentIntentOptions {
-    const options: PaymentIntentOptions = {}
+  normalizePaymentIntentParameters(
+    extra?: Record<string, unknown>
+  ): Partial<Stripe.PaymentIntentCreateParams> {
+    const res = {} as Partial<Stripe.PaymentIntentCreateParams>
 
-    if (this?.paymentIntentOptions?.capture_method) {
-      options.capture_method = this.paymentIntentOptions.capture_method
-    }
+    res.description = (extra?.payment_description ??
+      this.options_?.paymentDescription) as string
 
-    if (this?.paymentIntentOptions?.setup_future_usage) {
-      options.setup_future_usage = this.paymentIntentOptions.setup_future_usage
-    }
+    res.capture_method =
+      (extra?.capture_method as "automatic" | "manual") ??
+      this.paymentIntentOptions.capture_method ??
+      (this.options_.capture ? "automatic" : "manual")
 
-    if (this?.paymentIntentOptions?.payment_method_types) {
-      options.payment_method_types =
-        this.paymentIntentOptions.payment_method_types
-    }
+    res.setup_future_usage =
+      (extra?.setup_future_usage as "off_session" | "on_session" | undefined) ??
+      this.paymentIntentOptions.setup_future_usage
 
-    return options
+    res.payment_method_types = this.paymentIntentOptions
+      .payment_method_types as string[]
+
+    res.automatic_payment_methods =
+      (extra?.automatic_payment_methods as { enabled: true } | undefined) ??
+      (this.options_?.automaticPaymentMethods ? { enabled: true } : undefined)
+
+    res.off_session = extra?.off_session as boolean | undefined
+
+    res.confirm = extra?.confirm as boolean | undefined
+
+    res.payment_method = extra?.payment_method as string | undefined
+
+    return res
   }
 
   async getPaymentStatus(
@@ -102,24 +116,16 @@ abstract class StripeBase extends AbstractPaymentProvider<StripeOptions> {
   async initiatePayment(
     input: CreatePaymentProviderSession
   ): Promise<PaymentProviderError | PaymentProviderSessionResponse> {
-    const intentRequestData = this.getPaymentIntentOptions()
     const { email, extra, session_id, customer } = input.context
     const { currency_code, amount } = input
 
-    const description = (extra?.payment_description ??
-      this.options_?.paymentDescription) as string
+    const additionalParameters = this.normalizePaymentIntentParameters(extra)
 
     const intentRequest: Stripe.PaymentIntentCreateParams = {
-      description,
       amount: getSmallestUnit(amount, currency_code),
       currency: currency_code,
       metadata: { session_id: session_id! },
-      capture_method: this.options_.capture ? "automatic" : "manual",
-      ...intentRequestData,
-    }
-
-    if (this.options_?.automaticPaymentMethods) {
-      intentRequest.automatic_payment_methods = { enabled: true }
+      ...additionalParameters,
     }
 
     if (customer?.metadata?.stripe_id) {
