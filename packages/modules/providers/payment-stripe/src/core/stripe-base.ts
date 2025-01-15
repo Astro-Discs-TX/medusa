@@ -13,9 +13,7 @@ import {
 import {
   AbstractPaymentProvider,
   isDefined,
-  isPaymentProviderError,
   isPresent,
-  MedusaError,
   PaymentActions,
   PaymentSessionStatus,
 } from "@medusajs/framework/utils"
@@ -273,15 +271,7 @@ abstract class StripeBase extends AbstractPaymentProvider<StripeOptions> {
     const stripeId = context.customer?.metadata?.stripe_id
 
     if (stripeId !== data.customer) {
-      const result = await this.initiatePayment(input)
-      if (isPaymentProviderError(result)) {
-        return this.buildError(
-          "An error occurred in updatePayment during the initiate of the new payment for the new customer",
-          result
-        )
-      }
-
-      return result
+      return await this.initiatePayment(input)
     } else {
       if (isPresent(amount) && data.amount === amountNumeric) {
         return { data }
@@ -297,25 +287,6 @@ abstract class StripeBase extends AbstractPaymentProvider<StripeOptions> {
       } catch (e) {
         return this.buildError("An error occurred in updatePayment", e)
       }
-    }
-  }
-
-  async updatePaymentData(sessionId: string, data: Record<string, unknown>) {
-    try {
-      // Prevent from updating the amount from here as it should go through
-      // the updatePayment method to perform the correct logic
-      if (isPresent(data.amount)) {
-        throw new MedusaError(
-          MedusaError.Types.INVALID_DATA,
-          "Cannot update amount, use updatePayment instead"
-        )
-      }
-
-      return (await this.stripe_.paymentIntents.update(sessionId, {
-        ...data,
-      })) as unknown as PaymentProviderSessionResponse["data"]
-    } catch (e) {
-      return this.buildError("An error occurred in updatePaymentData", e)
     }
   }
 
@@ -374,18 +345,17 @@ abstract class StripeBase extends AbstractPaymentProvider<StripeOptions> {
       this.options_.webhookSecret
     )
   }
-  protected buildError(
-    message: string,
-    error: Stripe.StripeRawError | PaymentProviderError | Error
-  ): PaymentProviderError {
+  protected buildError(message: string, error: Error): PaymentProviderError {
+    const errorDetails =
+      "raw" in error ? (error.raw as Stripe.StripeRawError) : error
+
     return {
-      error: message,
-      code: "code" in error ? error.code : "unknown",
-      detail: isPaymentProviderError(error)
-        ? `${error.error}${EOL}${error.detail ?? ""}`
-        : "detail" in error
-        ? error.detail
-        : error.message ?? "",
+      error: `${message}: ${error.message}`,
+      code: "code" in errorDetails ? errorDetails.code : "unknown",
+      detail:
+        "detail" in errorDetails
+          ? `${error.message}: ${errorDetails.detail}`
+          : error.message,
     }
   }
 }
