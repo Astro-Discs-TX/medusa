@@ -844,7 +844,7 @@ medusaIntegrationTestRunner({
       })
 
       describe("UpdateCartWorkflow", () => {
-        it.only("should remove item with custom price when region is updated", async () => {
+        it("should remove item with custom price when region is updated", async () => {
           const hookCallback = jest.fn()
           addToCartWorkflow.hooks.validate((data) => {
             hookCallback(data)
