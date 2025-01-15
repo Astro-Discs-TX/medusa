@@ -1,15 +1,15 @@
 import type {
 	AdditionalData,
 	CreatePromotionDTO,
-} from "@medusajs/framework/types";
+} from '@medusajs/framework/types';
 import {
 	WorkflowResponse,
 	createHook,
 	createWorkflow,
 	transform,
-} from "@medusajs/framework/workflows-sdk";
-import { createPromotionsStep } from "../steps";
-import { emitEventStep } from "../../common";
+} from '@medusajs/framework/workflows-sdk';
+import { createPromotionsStep } from '../steps';
+import { emitEventStep } from '../../common';
 
 /**
  * The data to create one or more promotions, along with custom data that's passed to the workflow's hooks.
@@ -21,7 +21,7 @@ export type CreatePromotionsWorkflowInput = {
 	promotionsData: CreatePromotionDTO[];
 } & AdditionalData;
 
-export const createPromotionsWorkflowId = "create-promotions";
+export const createPromotionsWorkflowId = 'create-promotions';
 /**
  * This workflow creates one or more promotions. It's used by the [Create Promotion Admin API Route](https://docs.medusajs.com/api/admin#promotions_postpromotions).
  *
@@ -74,11 +74,11 @@ export const createPromotionsWorkflow = createWorkflow(
 		);
 
 		emitEventStep({
-			eventName: "promotion_created",
+			eventName: 'promotion.created',
 			data: promotionIdEvents,
 		});
 
-		const promotionsCreated = createHook("promotionsCreated", {
+		const promotionsCreated = createHook('promotionsCreated', {
 			promotions: createdPromotions,
 			additional_data: input.additional_data,
 		});
