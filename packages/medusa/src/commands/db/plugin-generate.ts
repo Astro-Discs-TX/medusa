@@ -4,17 +4,17 @@ import {
   DmlEntity,
   dynamicImport,
 } from "@medusajs/framework/utils"
-import { join, dirname } from "path"
+import { dirname, join } from "path"
 
-import { glob } from "glob"
 import { MetadataStorage } from "@mikro-orm/core"
 import { MikroORM } from "@mikro-orm/postgresql"
+import { glob } from "glob"
 
 const TERMINAL_SIZE = process.stdout.columns
 
 const main = async function ({ directory, modules }) {
   try {
-    const modules = [] as {
+    const moduleDescriptors = [] as {
       serviceName: string
       migrationsPath: string
       entities: any[]
@@ -26,40 +26,14 @@ const main = async function ({ directory, modules }) {
 
     for (const path of modulePath) {
       const moduleDirname = dirname(path)
-      const moduleDescriptor = {
-        serviceName: "",
+      const serviceName = await getModuleServiceName(path)
+      const entities = await getEntitiesForModule(moduleDirname)
+
+      moduleDescriptors.push({
+        serviceName,
         migrationsPath: join(moduleDirname, "migrations"),
-        entities: [] as any[],
-      }
-
-      const moduleExport = await dynamicImport(path)
-      if (!moduleExport.default) {
-        throw new Error("The module should default export the `Module()`")
-      }
-      moduleDescriptor.serviceName = (
-        moduleExport.default.service as any
-      ).prototype.__joinerConfig().serviceName
-
-      const entityPaths = glob.sync(join(moduleDirname, "models", "*.ts"))
-
-      for (const entityPath of entityPaths) {
-        if (entityPath.includes("index.ts")) {
-          continue
-        }
-
-        const entityExports = await dynamicImport(entityPath)
-        const entities = Object.values(entityExports).filter(
-          (potentialEntity) => {
-            return (
-              DmlEntity.isDmlEntity(potentialEntity) ||
-              !!MetadataStorage.getMetadataFromDecorator(potentialEntity as any)
-            )
-          }
-        )
-        moduleDescriptor.entities.push(...entities)
-      }
-
-      modules.push(moduleDescriptor)
+        entities,
+      })
     }
 
     /**
@@ -67,31 +41,7 @@ const main = async function ({ directory, modules }) {
      */
     logger.info("Generating migrations...")
 
-    for (const moduleDescriptor of modules) {
-      logger.info(
-        `Generating migrations for module ${moduleDescriptor.serviceName}...`
-      )
-
-      const mikroOrmConfig = defineMikroOrmCliConfig(
-        moduleDescriptor.serviceName,
-        {
-          entities: moduleDescriptor.entities,
-          migrations: {
-            path: moduleDescriptor.migrationsPath,
-          },
-        }
-      )
-
-      const orm = await MikroORM.init(mikroOrmConfig)
-      const migrator = orm.getMigrator()
-      const result = await migrator.createMigration()
-
-      if (result.fileName) {
-        logger.info(`Migration created: ${result.fileName}`)
-      } else {
-        logger.info(`No migration created`)
-      }
-    }
+    await generateMigrations(modules)
 
     console.log(new Array(TERMINAL_SIZE).join("-"))
     logger.info("Migrations generated")
@@ -102,6 +52,72 @@ const main = async function ({ directory, modules }) {
 
     logger.error(error.message, error)
     process.exit(1)
+  }
+}
+
+async function getEntitiesForModule(path: string) {
+  const entities = [] as any[]
+
+  const entityPaths = glob.sync(join(path, "models", "*.ts"))
+
+  for (const entityPath of entityPaths) {
+    if (entityPath.includes("index.ts")) {
+      continue
+    }
+
+    const entityExports = await dynamicImport(entityPath)
+    const entities = Object.values(entityExports).filter((potentialEntity) => {
+      return (
+        DmlEntity.isDmlEntity(potentialEntity) ||
+        !!MetadataStorage.getMetadataFromDecorator(potentialEntity as any)
+      )
+    })
+    entities.push(...entities)
+  }
+
+  return entities
+}
+
+async function getModuleServiceName(path: string) {
+  const moduleExport = await dynamicImport(path)
+  if (!moduleExport.default) {
+    throw new Error("The module should default export the `Module()`")
+  }
+  return (moduleExport.default.service as any).prototype.__joinerConfig()
+    .serviceName
+}
+
+async function generateMigrations(
+  moduleDescriptors: {
+    serviceName: string
+    migrationsPath: string
+    entities: any[]
+  }[] = []
+) {
+  for (const moduleDescriptor of moduleDescriptors) {
+    logger.info(
+      `Generating migrations for module ${moduleDescriptor.serviceName}...`
+    )
+
+    const mikroOrmConfig = defineMikroOrmCliConfig(
+      moduleDescriptor.serviceName,
+      {
+        entities: moduleDescriptor.entities,
+        migrations: {
+          path: moduleDescriptor.migrationsPath,
+        },
+      }
+    )
+
+    const orm = await MikroORM.init(mikroOrmConfig)
+    const migrator = orm.getMigrator()
+    const result = await migrator.createMigration()
+
+    if (result.fileName) {
+      logger.info(`Migration created: ${result.fileName}`)
+    } else {
+      logger.info(`No migration created`)
+    }
   }
 }
 
