@@ -12,8 +12,8 @@ export enum PromotionStatus {
 export type StatusColors = "grey" | "orange" | "green" | "red" | "grey"
 export type StatusMap = Record<string, [StatusColors, string]>
 export const promotionStatusMap: StatusMap = {
-  [PromotionStatus.ACTIVE]: ["orange", i18n.t("statuses.active")],
-  [PromotionStatus.INACTIVE]: ["orange", i18n.t("statuses.inactive")],
+  [PromotionStatus.ACTIVE]: ["green", i18n.t("statuses.active")],
+  [PromotionStatus.INACTIVE]: ["red", i18n.t("statuses.inactive")],
   [PromotionStatus.DRAFT]: ["grey", i18n.t("statuses.draft")],
   [PromotionStatus.SCHEDULED]: [
     "orange",
