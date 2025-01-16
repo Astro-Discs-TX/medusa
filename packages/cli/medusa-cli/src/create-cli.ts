@@ -239,6 +239,23 @@ function buildLocalCommands(cli, isLocalProject) {
       ),
     })
     .command({
+      command: "plugin:db:generate [modules...]",
+      desc: "Generate migrations for a given module",
+      builder: {
+        modules: {
+          type: "array",
+          description: "Modules for which to generate migration files",
+          demand: true,
+        },
+      },
+      handler: handlerP(
+        getCommandHandler("db/plugin-generate", (args, cmd) => {
+          process.env.NODE_ENV = process.env.NODE_ENV || `development`
+          return cmd(args)
+        })
+      ),
+    })
+    .command({
       command: "db:sync-links",
       desc: "Sync database schema with the links defined by your application and Medusa core",
       builder: (builder) => {
