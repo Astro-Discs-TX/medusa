@@ -1,14 +1,11 @@
 import { logger } from "@medusajs/framework/logger"
 import { FileSystem } from "@medusajs/framework/utils"
-import { glob } from "glob"
 import { join } from "path"
 import main from "../plugin-generate"
 
 jest.mock("@medusajs/framework/logger")
 
 describe("plugin-generate", () => {
-  const mockModules = []
-
   beforeEach(() => {
     jest.clearAllMocks()
     jest
