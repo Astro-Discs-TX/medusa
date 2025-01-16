@@ -379,6 +379,10 @@ export interface BaseProductListParams
    */
   is_giftcard?: boolean
   /**
+   * Filter by external id(s).
+   */
+  external_id?: string | string[]
+  /**
    * Filter by the product's tag(s).
    */
   tags?: string | string[]
