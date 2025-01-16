@@ -46,6 +46,13 @@ export type CompleteCartWorkflowInput = {
   id: string
 }
 
+export type CompleteCartWorkflowOutput = {
+  /**
+   * The ID of the order that was created.
+   */
+  id: string
+}
+
 export const THREE_DAYS = 60 * 60 * 24 * 3
 
 export const completeCartWorkflowId = "complete-cart"
@@ -291,7 +298,7 @@ export const completeCartWorkflow = createWorkflow(
     })
 
     const result = transform({ order, orderId }, ({ order, orderId }) => {
-      return { id: order?.id ?? orderId }
+      return { id: order?.id ?? orderId } as CompleteCartWorkflowOutput
     })
 
     return new WorkflowResponse(result, {

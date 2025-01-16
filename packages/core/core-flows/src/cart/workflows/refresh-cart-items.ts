@@ -27,7 +27,6 @@ import { refreshCartShippingMethodsWorkflow } from "./refresh-cart-shipping-meth
 import { refreshPaymentCollectionForCartWorkflow } from "./refresh-payment-collection"
 import { updateCartPromotionsWorkflow } from "./update-cart-promotions"
 import { updateTaxLinesWorkflow } from "./update-tax-lines"
-import { CartDTO } from "@medusajs/types"
 
 /**
  * The details of the cart to refresh.
@@ -71,7 +70,7 @@ export const refreshCartItemsWorkflow = createWorkflow(
   refreshCartItemsWorkflowId,
   (
     input: WorkflowData<RefreshCartItemsWorkflowInput>
-  ): WorkflowResponse<CartDTO> => {
+  ) => {
     const cart = useRemoteQueryStep({
       entry_point: "cart",
       fields: cartFieldsForRefreshSteps,
