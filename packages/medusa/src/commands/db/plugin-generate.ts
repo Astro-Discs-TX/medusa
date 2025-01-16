@@ -58,13 +58,11 @@ const main = async function ({ directory, modules }) {
 async function getEntitiesForModule(path: string) {
   const entities = [] as any[]
 
-  const entityPaths = glob.sync(join(path, "models", "*.ts"))
+  const entityPaths = glob.sync(join(path, "models", "*.ts"), {
+    ignore: ["**/index.{js,ts}"],
+  })
 
   for (const entityPath of entityPaths) {
-    if (entityPath.includes("index.ts")) {
-      continue
-    }
-
     const entityExports = await dynamicImport(entityPath)
     const entities = Object.values(entityExports).filter((potentialEntity) => {
       return (
