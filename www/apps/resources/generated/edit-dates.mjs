@@ -100,7 +100,7 @@ export const generatedEditDates = {
   "app/commerce-modules/user/page.mdx": "2025-01-09T13:41:05.543Z",
   "app/commerce-modules/page.mdx": "2024-12-23T14:38:21.064Z",
   "app/contribution-guidelines/docs/page.mdx": "2024-12-12T11:06:12.250Z",
-  "app/create-medusa-app/page.mdx": "2025-01-06T09:14:55.483Z",
+  "app/create-medusa-app/page.mdx": "2025-01-16T10:00:25.975Z",
   "app/deployment/admin/vercel/page.mdx": "2024-10-16T08:10:29.377Z",
   "app/deployment/medusa-application/railway/page.mdx": "2024-11-11T11:50:10.517Z",
   "app/deployment/storefront/vercel/page.mdx": "2025-01-06T12:19:31.142Z",
@@ -593,11 +593,11 @@ export const generatedEditDates = {
   "references/types/types.NotificationTypes/page.mdx": "2024-11-25T17:49:28.027Z",
   "app/medusa-cli/commands/db/page.mdx": "2024-08-28T11:26:33.889Z",
   "app/medusa-cli/commands/develop/page.mdx": "2024-08-28T10:43:45.452Z",
-  "app/medusa-cli/commands/exec/page.mdx": "2024-08-28T10:45:31.229Z",
+  "app/medusa-cli/commands/exec/page.mdx": "2025-01-16T09:51:17.050Z",
   "app/medusa-cli/commands/new/page.mdx": "2024-08-28T10:43:34.110Z",
-  "app/medusa-cli/commands/start-cluster/page.mdx": "2024-08-28T11:25:05.257Z",
+  "app/medusa-cli/commands/start-cluster/page.mdx": "2025-01-16T09:51:19.838Z",
   "app/medusa-cli/commands/start/page.mdx": "2024-08-28T10:44:19.952Z",
-  "app/medusa-cli/commands/telemtry/page.mdx": "2024-08-28T11:25:08.553Z",
+  "app/medusa-cli/commands/telemtry/page.mdx": "2025-01-16T09:51:24.323Z",
   "app/medusa-cli/commands/user/page.mdx": "2024-08-28T10:44:52.489Z",
   "app/recipes/marketplace/examples/restaurant-delivery/page.mdx": "2024-12-11T10:05:52.851Z",
   "references/types/HttpTypes/interfaces/types.HttpTypes.AdminCreateCustomerGroup/page.mdx": "2024-12-09T13:21:33.569Z",
@@ -5866,5 +5866,6 @@ export const generatedEditDates = {
   "references/types/InventoryTypes/types/types.InventoryTypes.BulkAdjustInventoryLevelInput/page.mdx": "2025-01-13T17:30:28.853Z",
   "references/types/types/types.CreateProductVariantWorkflowInputDTO/page.mdx": "2025-01-13T17:30:29.301Z",
   "references/types/types/types.CreateProductWorkflowInputDTO/page.mdx": "2025-01-13T17:30:29.302Z",
-  "references/types/types/types.UpdateProductVariantWorkflowInputDTO/page.mdx": "2025-01-13T17:30:29.302Z"
+  "references/types/types/types.UpdateProductVariantWorkflowInputDTO/page.mdx": "2025-01-13T17:30:29.302Z",
+  "app/medusa-cli/commands/plugin/page.mdx": "2025-01-16T09:58:16.179Z"
 }

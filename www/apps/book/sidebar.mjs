@@ -457,6 +457,18 @@ export const sidebar = numberSidebarItems(
         },
         {
           type: "link",
+          path: "/learn/fundamentals/plugins",
+          title: "Plugins",
+          children: [
+            {
+              type: "link",
+              path: "/learn/fundamentals/plugins/create",
+              title: "Create Plugin",
+            },
+          ],
+        },
+        {
+          type: "link",
           path: "/learn/fundamentals/custom-cli-scripts",
           title: "Custom CLI Scripts",
           children: [

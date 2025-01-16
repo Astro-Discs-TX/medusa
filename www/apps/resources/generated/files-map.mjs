@@ -820,6 +820,10 @@ export const filesMap = [
     "pathname": "/medusa-cli/commands/new"
   },
   {
+    "filePath": "/www/apps/resources/app/medusa-cli/commands/plugin/page.mdx",
+    "pathname": "/medusa-cli/commands/plugin"
+  },
+  {
     "filePath": "/www/apps/resources/app/medusa-cli/commands/start/page.mdx",
     "pathname": "/medusa-cli/commands/start"
   },

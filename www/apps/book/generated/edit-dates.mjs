@@ -40,7 +40,7 @@ export const generatedEditDates = {
   "app/learn/fundamentals/data-models/write-migration/page.mdx": "2024-11-11T15:27:59.794Z",
   "app/learn/fundamentals/data-models/manage-relationships/page.mdx": "2024-12-12T14:23:26.254Z",
   "app/learn/fundamentals/modules/remote-query/page.mdx": "2024-07-21T21:20:24+02:00",
-  "app/learn/fundamentals/modules/options/page.mdx": "2024-11-19T16:37:47.253Z",
+  "app/learn/fundamentals/modules/options/page.mdx": "2025-01-16T09:21:38.244Z",
   "app/learn/fundamentals/data-models/relationships/page.mdx": "2024-12-12T14:08:50.686Z",
   "app/learn/fundamentals/workflows/compensation-function/page.mdx": "2024-12-06T14:34:50.384Z",
   "app/learn/fundamentals/modules/service-factory/page.mdx": "2024-10-21T13:30:21.371Z",
@@ -78,7 +78,7 @@ export const generatedEditDates = {
   "app/learn/fundamentals/module-links/query/page.mdx": "2024-12-09T15:54:44.798Z",
   "app/learn/fundamentals/modules/db-operations/page.mdx": "2024-12-09T14:40:50.581Z",
   "app/learn/fundamentals/modules/multiple-services/page.mdx": "2024-10-21T13:30:21.370Z",
-  "app/learn/fundamentals/modules/page.mdx": "2024-12-09T15:55:25.858Z",
+  "app/learn/fundamentals/modules/page.mdx": "2025-01-16T08:34:28.947Z",
   "app/learn/debugging-and-testing/instrumentation/page.mdx": "2024-12-09T15:33:05.121Z",
   "app/learn/fundamentals/api-routes/additional-data/page.mdx": "2024-12-09T13:04:04.995Z",
   "app/learn/fundamentals/workflows/variable-manipulation/page.mdx": "2024-12-09T15:57:54.506Z",
@@ -108,5 +108,7 @@ export const generatedEditDates = {
   "app/learn/fundamentals/workflows/multiple-step-usage/page.mdx": "2024-11-25T16:19:32.169Z",
   "app/learn/installation/page.mdx": "2025-01-06T09:12:48.690Z",
   "app/learn/fundamentals/data-models/check-constraints/page.mdx": "2024-12-06T14:34:50.384Z",
-  "app/learn/fundamentals/module-links/link/page.mdx": "2025-01-06T09:27:25.604Z"
+  "app/learn/fundamentals/module-links/link/page.mdx": "2025-01-06T09:27:25.604Z",
+  "app/learn/fundamentals/plugins/create/page.mdx": "2025-01-16T09:25:12.123Z",
+  "app/learn/fundamentals/plugins/page.mdx": "2025-01-16T08:47:40.217Z"
 }

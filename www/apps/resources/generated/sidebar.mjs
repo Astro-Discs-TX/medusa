@@ -15322,6 +15322,14 @@ export const generatedSidebar = [
                 "loaded": true,
                 "isPathHref": true,
                 "type": "link",
+                "path": "/medusa-cli/commands/plugin",
+                "title": "plugin",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
                 "path": "/medusa-cli/commands/exec",
                 "title": "exec",
                 "children": []
