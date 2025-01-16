@@ -1,9 +1,11 @@
 import { CartWorkflowEvents, MedusaError } from "@medusajs/framework/utils"
 import {
+  createHook,
   createWorkflow,
   parallelize,
   transform,
   WorkflowData,
+  WorkflowResponse,
 } from "@medusajs/framework/workflows-sdk"
 import { emitEventStep } from "../../common/steps/emit-event"
 import { useRemoteQueryStep } from "../../common/steps/use-remote-query"
@@ -76,17 +78,21 @@ export const addShippingMethodToCartWorkflowId = "add-shipping-method-to-cart"
  */
 export const addShippingMethodToCartWorkflow = createWorkflow(
   addShippingMethodToCartWorkflowId,
-  (
-    input: WorkflowData<AddShippingMethodToCartWorkflowInput>
-  ): WorkflowData<void> => {
+  (input: WorkflowData<AddShippingMethodToCartWorkflowInput>) => {
     const cart = useRemoteQueryStep({
       entry_point: "cart",
       fields: cartFieldsForRefreshSteps,
       variables: { id: input.cart_id },
       list: false,
+      throw_if_key_not_found: true,
     })
 
     validateCartStep({ cart })
+
+    const validate = createHook("validate", {
+      input,
+      cart,
+    })
 
     const optionIds = transform({ input }, (data) => {
       return (data.input.options ?? []).map((i) => i.id)
@@ -193,6 +199,10 @@ export const addShippingMethodToCartWorkflow = createWorkflow(
 
     refreshCartItemsWorkflow.runAsStep({
       input: { cart_id: cart.id },
+    })
+
+    return new WorkflowResponse(void 0, {
+      hooks: [validate],
     })
   }
 )

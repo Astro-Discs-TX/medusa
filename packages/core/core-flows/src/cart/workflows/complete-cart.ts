@@ -8,6 +8,7 @@ import {
   OrderWorkflowEvents,
 } from "@medusajs/framework/utils"
 import {
+  createHook,
   createWorkflow,
   parallelize,
   transform,
@@ -75,14 +76,7 @@ export const completeCartWorkflow = createWorkflow(
     idempotent: true,
     retentionTime: THREE_DAYS,
   },
-  (
-    input: WorkflowData<CompleteCartWorkflowInput>
-  ): WorkflowResponse<{ 
-    /**
-     * The ID of the created order.
-     */
-    id: string 
-  }> => {
+  (input: WorkflowData<CompleteCartWorkflowInput>) => {
     const orderCart = useQueryGraphStep({
       entity: "order_cart",
       fields: ["cart_id", "order_id"],
@@ -93,17 +87,22 @@ export const completeCartWorkflow = createWorkflow(
       return orderCart.data[0]?.order_id
     })
 
+    const cart = useRemoteQueryStep({
+      entry_point: "cart",
+      fields: completeCartFields,
+      variables: { id: input.id },
+      list: false,
+    })
+
+    const validate = createHook("validate", {
+      input,
+      cart,
+    })
+
     // If order ID does not exist, we are completing the cart for the first time
     const order = when("create-order", { orderId }, ({ orderId }) => {
       return !orderId
     }).then(() => {
-      const cart = useRemoteQueryStep({
-        entry_point: "cart",
-        fields: completeCartFields,
-        variables: { id: input.id },
-        list: false,
-      })
-
       const paymentSessions = validateCartPaymentsStep({ cart })
 
       const payment = authorizePaymentSessionStep({
@@ -295,6 +294,8 @@ export const completeCartWorkflow = createWorkflow(
       return { id: order?.id ?? orderId }
     })
 
-    return new WorkflowResponse(result)
+    return new WorkflowResponse(result, {
+      hooks: [validate],
+    })
   }
 )

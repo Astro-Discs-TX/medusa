@@ -1,10 +1,12 @@
 import { isDefined, isPresent } from "@medusajs/framework/utils"
 import {
+  createHook,
   createWorkflow,
   parallelize,
   transform,
   when,
   WorkflowData,
+  WorkflowResponse,
 } from "@medusajs/framework/workflows-sdk"
 import { useQueryGraphStep } from "../../common"
 import { removeShippingMethodFromCartStep } from "../steps"
@@ -72,6 +74,11 @@ export const refreshCartShippingMethodsWorkflow = createWorkflow(
         }))
         .filter(Boolean)
     )
+
+    const validate = createHook("validate", {
+      input,
+      cart,
+    })
 
     when({ listShippingOptionsInput }, ({ listShippingOptionsInput }) => {
       return !!listShippingOptionsInput?.length
@@ -150,6 +157,10 @@ export const refreshCartShippingMethodsWorkflow = createWorkflow(
         }),
         updateShippingMethodsStep(shippingMethodsData.shippingMethodsToUpdate)
       )
+    })
+
+    return new WorkflowResponse(void 0, {
+      hooks: [validate],
     })
   }
 )
