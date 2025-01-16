@@ -1,7 +1,7 @@
 import { logger } from "@medusajs/framework/logger"
 import { FileSystem } from "@medusajs/framework/utils"
 import { join } from "path"
-import main from "../plugin-generate"
+import main from "../generate"
 
 jest.mock("@medusajs/framework/logger")
 

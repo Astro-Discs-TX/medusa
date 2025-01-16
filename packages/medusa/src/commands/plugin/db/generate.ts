@@ -12,6 +12,9 @@ import { glob } from "glob"
 
 const TERMINAL_SIZE = process.stdout.columns
 
+/**
+ * Generate migrations for all scanned modules in a plugin
+ */
 const main = async function ({ directory }) {
   try {
     const moduleDescriptors = [] as {

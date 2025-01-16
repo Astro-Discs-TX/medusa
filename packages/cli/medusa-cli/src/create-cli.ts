@@ -242,7 +242,7 @@ function buildLocalCommands(cli, isLocalProject) {
       command: "plugin:db:generate",
       desc: "Generate migrations for a given module",
       handler: handlerP(
-        getCommandHandler("db/plugin-generate", (args, cmd) => {
+        getCommandHandler("plugin/db/generate", (args, cmd) => {
           process.env.NODE_ENV = process.env.NODE_ENV || `development`
           return cmd(args)
         })
