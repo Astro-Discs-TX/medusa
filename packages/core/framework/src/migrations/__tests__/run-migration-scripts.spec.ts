@@ -68,7 +68,7 @@ describe("MigrationScriptsMigrator", () => {
         [path.basename(scriptPath)]
       )
       expect(migrator["insertMigration"]).toHaveBeenCalledWith([
-        { script_name: `'${path.basename(scriptPath)}'` },
+        { script_name: path.basename(scriptPath) },
       ])
     })
 
