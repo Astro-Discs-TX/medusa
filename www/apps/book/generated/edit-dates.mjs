@@ -99,7 +99,7 @@ export const generatedEditDates = {
   "app/learn/customization/integrate-systems/service/page.mdx": "2024-12-09T11:02:39.594Z",
   "app/learn/customization/next-steps/page.mdx": "2024-12-06T14:34:53.356Z",
   "app/learn/fundamentals/modules/architectural-modules/page.mdx": "2024-10-21T13:30:21.367Z",
-  "app/learn/introduction/architecture/page.mdx": "2024-10-21T13:30:21.368Z",
+  "app/learn/introduction/architecture/page.mdx": "2025-01-16T10:25:10.780Z",
   "app/learn/fundamentals/data-models/infer-type/page.mdx": "2024-12-09T15:54:08.713Z",
   "app/learn/fundamentals/custom-cli-scripts/seed-data/page.mdx": "2024-12-09T14:38:06.385Z",
   "app/learn/fundamentals/environment-variables/page.mdx": "2024-12-09T11:00:57.428Z",

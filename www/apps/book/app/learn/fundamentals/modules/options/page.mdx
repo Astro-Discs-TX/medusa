@@ -41,16 +41,16 @@ If your module is part of a plugin, you can pass options to the module in the pl
 For example:
 
 ```ts title="medusa-config.ts"
-import { defineConfig } from '@medusajs/framework/utils'
+import { defineConfig } from "@medusajs/framework/utils"
 module.exports = defineConfig({
   plugins: [
     {
-      resolve: '@myorg/plugin-name',
+      resolve: "@myorg/plugin-name",
       options: {
         capitalize: true,
       },
-    }
-  ]
+    },
+  ],
 })
 ```
 
