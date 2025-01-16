@@ -12,7 +12,7 @@ import { glob } from "glob"
 
 const TERMINAL_SIZE = process.stdout.columns
 
-const main = async function ({ directory, modules }) {
+const main = async function ({ directory }) {
   try {
     const moduleDescriptors = [] as {
       serviceName: string
@@ -20,11 +20,11 @@ const main = async function ({ directory, modules }) {
       entities: any[]
     }[]
 
-    const modulePath = glob.sync(
+    const modulePaths = glob.sync(
       join(directory, "src", "modules", "*", "index.ts")
     )
 
-    for (const path of modulePath) {
+    for (const path of modulePaths) {
       const moduleDirname = dirname(path)
       const serviceName = await getModuleServiceName(path)
       const entities = await getEntitiesForModule(moduleDirname)
@@ -41,7 +41,7 @@ const main = async function ({ directory, modules }) {
      */
     logger.info("Generating migrations...")
 
-    await generateMigrations(modules)
+    await generateMigrations(moduleDescriptors)
 
     console.log(new Array(TERMINAL_SIZE).join("-"))
     logger.info("Migrations generated")
@@ -64,13 +64,16 @@ async function getEntitiesForModule(path: string) {
 
   for (const entityPath of entityPaths) {
     const entityExports = await dynamicImport(entityPath)
-    const entities = Object.values(entityExports).filter((potentialEntity) => {
-      return (
-        DmlEntity.isDmlEntity(potentialEntity) ||
-        !!MetadataStorage.getMetadataFromDecorator(potentialEntity as any)
-      )
-    })
-    entities.push(...entities)
+
+    const validEntities = Object.values(entityExports).filter(
+      (potentialEntity) => {
+        return (
+          DmlEntity.isDmlEntity(potentialEntity) ||
+          !!MetadataStorage.getMetadataFromDecorator(potentialEntity as any)
+        )
+      }
+    )
+    entities.push(...validEntities)
   }
 
   return entities
@@ -78,6 +81,7 @@ async function getEntitiesForModule(path: string) {
 
 async function getModuleServiceName(path: string) {
   const moduleExport = await dynamicImport(path)
+  console.log({ path, moduleExport, default: moduleExport.default })
   if (!moduleExport.default) {
     throw new Error("The module should default export the `Module()`")
   }
