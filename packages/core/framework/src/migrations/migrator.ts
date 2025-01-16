@@ -130,7 +130,7 @@ export abstract class Migrator {
       }
 
       try {
-        const scriptFiles = glob.sync("*.{js,ts}", {
+        const scriptFiles = glob.sync("*.{js,(!d.)ts}", {
           cwd: basePath,
           ignore: ["**/index.{js,ts}"],
         })
