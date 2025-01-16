@@ -11,8 +11,8 @@ import {
   DataTableActionColumnDef,
   DataTableColumnHelper,
   DataTableSelectColumnDef,
-  SortableColumnDef,
-  SortableColumnDefMeta,
+  DataTableSortableColumnDef,
+  DataTableSortableColumnDefMeta,
 } from "../types"
 
 const createDataTableColumnHelper = <
@@ -30,9 +30,9 @@ const createDataTableColumnHelper = <
         meta,
         enableSorting,
         ...rest
-      } = column as any & SortableColumnDef
+      } = column as any & DataTableSortableColumnDef
 
-      const extendedMeta: SortableColumnDefMeta = {
+      const extendedMeta: DataTableSortableColumnDefMeta = {
         ___sortMetaData: { sortLabel, sortAscLabel, sortDescLabel },
         ...(meta || {}),
       }

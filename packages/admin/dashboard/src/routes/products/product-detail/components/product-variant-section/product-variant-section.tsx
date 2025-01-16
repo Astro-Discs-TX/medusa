@@ -246,8 +246,14 @@ const useColumns = (product: HttpTypes.AdminProduct) => {
           break
         }
         default: {
+          const ids = variant.inventory_items?.map((i) => i.inventory?.id)
+
+          if (!ids || ids.length === 0) {
+            break
+          }
+
           const inventoryKitLink = `/inventory?${new URLSearchParams({
-            id: variant.inventory_items!.map((i) => i.inventory.id).join(","),
+            id: ids.join(","),
           }).toString()}`
 
           mainActions.push({
@@ -272,9 +278,9 @@ const useColumns = (product: HttpTypes.AdminProduct) => {
       }
       const quantity = variant.inventory_quantity
 
-      const inventoryItems = castVariant.inventory_items?.map(
-        (i) => i.inventory
-      )
+      const inventoryItems = castVariant.inventory_items
+        ?.map((i) => i.inventory)
+        .filter(Boolean) as HttpTypes.AdminInventoryItem[]
 
       const hasInventoryKit = inventoryItems.length > 1
 

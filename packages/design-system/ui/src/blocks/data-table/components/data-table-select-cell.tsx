@@ -1,19 +1,17 @@
 "use client"
 
+import type { DataTableCellContext, DataTableHeaderContext } from "@/blocks/data-table/types"
 import { Checkbox } from "@/components/checkbox"
 import { CheckedState } from "@radix-ui/react-checkbox"
-import { CellContext, HeaderContext } from "@tanstack/react-table"
 import * as React from "react"
 
 interface DataTableSelectCellProps<TData> {
-  ctx: CellContext<TData, unknown>
+  ctx: DataTableCellContext<TData, unknown>
 }
 
-const DataTableSelectCell = <TData,>({
-  ctx,
-}: DataTableSelectCellProps<TData>) => {
-  const checked = ctx.row.getIsSelected()
-  const onChange = ctx.row.getToggleSelectedHandler()
+const DataTableSelectCell = <TData,>(props: DataTableSelectCellProps<TData>) => {
+  const checked = props.ctx.row.getIsSelected()
+  const onChange = props.ctx.row.getToggleSelectedHandler()
 
   return (
     <Checkbox
@@ -25,18 +23,16 @@ const DataTableSelectCell = <TData,>({
 }
 
 interface DataTableSelectHeaderProps<TData> {
-  ctx: HeaderContext<TData, unknown>
+  ctx: DataTableHeaderContext<TData, unknown>
 }
 
-const DataTableSelectHeader = <TData,>({
-  ctx,
-}: DataTableSelectHeaderProps<TData>) => {
-  const checked = ctx.table.getIsSomePageRowsSelected()
+const DataTableSelectHeader = <TData,>(props: DataTableSelectHeaderProps<TData>) => {
+  const checked = props.ctx.table.getIsSomePageRowsSelected()
     ? "indeterminate"
-    : ctx.table.getIsAllPageRowsSelected()
+    : props.ctx.table.getIsAllPageRowsSelected()
 
   const onChange = (checked: CheckedState) => {
-    ctx.table.toggleAllPageRowsSelected(!!checked)
+    props.ctx.table.toggleAllPageRowsSelected(!!checked)
   }
 
   return (
@@ -50,3 +46,4 @@ const DataTableSelectHeader = <TData,>({
 
 export { DataTableSelectCell, DataTableSelectHeader }
 export type { DataTableSelectCellProps, DataTableSelectHeaderProps }
+

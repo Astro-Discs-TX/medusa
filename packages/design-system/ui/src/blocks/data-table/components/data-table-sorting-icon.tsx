@@ -1,16 +1,16 @@
 "use client"
 
+import { DataTableSortDirection } from "@/blocks/data-table/types"
 import { clx } from "@/utils/clx"
-import type { SortDirection } from "@tanstack/react-table"
 import * as React from "react"
 
 interface SortingIconProps {
-  direction: SortDirection | false
+  direction: DataTableSortDirection | false
 }
 
-const DataTableSortingIcon = ({ direction }: SortingIconProps) => {
-  const isAscending = direction === "asc"
-  const isDescending = direction === "desc"
+const DataTableSortingIcon = (props: SortingIconProps) => {
+  const isAscending = props.direction === "asc"
+  const isDescending = props.direction === "desc"
 
   const isSorted = isAscending || isDescending
 
@@ -43,3 +43,4 @@ const DataTableSortingIcon = ({ direction }: SortingIconProps) => {
 
 export { DataTableSortingIcon }
 export type { SortingIconProps }
+

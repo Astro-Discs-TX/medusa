@@ -5,10 +5,10 @@ import * as React from "react"
 import { Table } from "@/components/table"
 import { flexRender } from "@tanstack/react-table"
 
-import { Skeleton } from "../../../components/skeleton"
-import { Text } from "../../../components/text"
-import { clx } from "../../../utils/clx"
-import { useDataTableContext } from "../context/use-data-table-context"
+import { useDataTableContext } from "@/blocks/data-table/context/use-data-table-context"
+import { Skeleton } from "@/components/skeleton"
+import { Text } from "@/components/text"
+import { clx } from "@/utils/clx"
 import {
   DataTableEmptyState,
   DataTableEmptyStateContent,
@@ -17,10 +17,13 @@ import {
 import { DataTableSortingIcon } from "./data-table-sorting-icon"
 
 interface DataTableTableProps {
+  /**
+   * The empty state to display when the table is empty.
+   */
   emptyState?: DataTableEmptyStateProps
 }
 
-const DataTableTable = ({ emptyState }: DataTableTableProps) => {
+const DataTableTable = (props: DataTableTableProps) => {
   const [hoveredRowId, setHoveredRowId] = React.useState<string | null>(null)
   const isKeyDown = React.useRef(false)
 
@@ -246,7 +249,7 @@ const DataTableTable = ({ emptyState }: DataTableTableProps) => {
       )}
       <DataTableEmptyStateDisplay
         state={instance.emptyState}
-        props={emptyState}
+        props={props.emptyState}
       />
     </div>
   )

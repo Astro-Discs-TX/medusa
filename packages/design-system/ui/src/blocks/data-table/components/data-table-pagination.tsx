@@ -2,16 +2,15 @@
 
 import * as React from "react"
 
+import { useDataTableContext } from "@/blocks/data-table/context/use-data-table-context"
+import { Skeleton } from "@/components/skeleton"
 import { Table } from "@/components/table"
-
-import { Skeleton } from "../../../components/skeleton"
-import { useDataTableContext } from "../context/use-data-table-context"
 
 interface DataTablePaginationProps {
   translations?: React.ComponentProps<typeof Table.Pagination>["translations"]
 }
 
-const DataTablePagination = ({ translations }: DataTablePaginationProps) => {
+const DataTablePagination = (props: DataTablePaginationProps) => {
   const { instance } = useDataTableContext()
 
   if (!instance.enablePagination) {
@@ -26,7 +25,7 @@ const DataTablePagination = ({ translations }: DataTablePaginationProps) => {
 
   return (
     <Table.Pagination
-      translations={translations}
+      translations={props.translations}
       className="flex-shrink-0"
       canNextPage={instance.getCanNextPage()}
       canPreviousPage={instance.getCanPreviousPage()}
@@ -57,3 +56,4 @@ const DataTablePaginationSkeleton = () => {
 
 export { DataTablePagination }
 export type { DataTablePaginationProps }
+

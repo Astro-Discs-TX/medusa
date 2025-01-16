@@ -1,10 +1,11 @@
 "use client"
 
 import { Input } from "@/components/input"
+import { Skeleton } from "@/components/skeleton"
+import { clx } from "@/utils/clx"
 import * as React from "react"
-import { Skeleton } from "../../../components/skeleton"
-import { clx } from "../../../utils/clx"
-import { useDataTableContext } from "../context/use-data-table-context"
+
+import { useDataTableContext } from "@/blocks/data-table/context/use-data-table-context"
 
 interface DataTableSearchProps {
   autoFocus?: boolean
@@ -12,7 +13,8 @@ interface DataTableSearchProps {
   placeholder?: string
 }
 
-const DataTableSearch = ({ className, ...props }: DataTableSearchProps) => {
+const DataTableSearch = (props: DataTableSearchProps) => {
+  const { className, ...rest } = props
   const { instance } = useDataTableContext()
 
   if (!instance.enableSearch) {
@@ -37,7 +39,7 @@ const DataTableSearch = ({ className, ...props }: DataTableSearchProps) => {
         },
         className
       )}
-      {...props}
+      {...rest}
     />
   )
 }
@@ -48,3 +50,4 @@ const DataTableSearchSkeleton = () => {
 
 export { DataTableSearch }
 export type { DataTableSearchProps }
+

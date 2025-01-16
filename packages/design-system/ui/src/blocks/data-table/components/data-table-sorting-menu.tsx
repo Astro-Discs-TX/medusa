@@ -1,22 +1,19 @@
 "use client"
 
-import { ArrowDownMini, ArrowUpMini, DescendingSorting } from "@medusajs/icons"
-import type { Column } from "@tanstack/react-table"
-import * as React from "react"
-
+import { useDataTableContext } from "@/blocks/data-table/context/use-data-table-context"
+import { DataTableColumn, DataTableSortableColumnDefMeta } from "@/blocks/data-table/types"
 import { DropdownMenu } from "@/components/dropdown-menu"
-
-import { IconButton } from "../../../components/icon-button"
-import { Skeleton } from "../../../components/skeleton"
-import { Tooltip } from "../../../components/tooltip"
-import { useDataTableContext } from "../context/use-data-table-context"
-import { SortableColumnDefMeta } from "../types"
+import { IconButton } from "@/components/icon-button"
+import { Skeleton } from "@/components/skeleton"
+import { Tooltip } from "@/components/tooltip"
+import { ArrowDownMini, ArrowUpMini, DescendingSorting } from "@medusajs/icons"
+import * as React from "react"
 
 interface DataTableSortingMenuProps {
   tooltip?: string
 }
 
-const DataTableSortingMenu = ({ tooltip }: DataTableSortingMenuProps) => {
+const DataTableSortingMenu = (props: DataTableSortingMenuProps) => {
   const { instance } = useDataTableContext()
 
   const sortableColumns = instance
@@ -62,11 +59,11 @@ const DataTableSortingMenu = ({ tooltip }: DataTableSortingMenuProps) => {
     return <DataTableSortingMenuSkeleton />
   }
 
-  const Wrapper = tooltip ? Tooltip : React.Fragment
+  const Wrapper = props.tooltip ? Tooltip : React.Fragment
 
   return (
     <DropdownMenu>
-      <Wrapper content={tooltip}>
+      <Wrapper content={props.tooltip}>
         <DropdownMenu.Trigger asChild>
           <IconButton size="small">
             <DescendingSorting />
@@ -118,8 +115,8 @@ const DataTableSortingMenu = ({ tooltip }: DataTableSortingMenuProps) => {
   )
 }
 
-function getSortLabel(column: Column<any, unknown>) {
-  const meta = column.columnDef.meta as SortableColumnDefMeta | undefined
+function getSortLabel(column: DataTableColumn<any, unknown>) {
+  const meta = column.columnDef.meta as DataTableSortableColumnDefMeta | undefined
   let headerValue: string | undefined = undefined
 
   if (typeof column.columnDef.header === "string") {
@@ -131,13 +128,13 @@ function getSortLabel(column: Column<any, unknown>) {
 
 function getSortDescriptor(
   direction: "asc" | "desc",
-  column?: Column<any, unknown>
+  column?: DataTableColumn<any, unknown>
 ) {
   if (!column) {
     return null
   }
 
-  const meta = column.columnDef.meta as SortableColumnDefMeta | undefined
+  const meta = column.columnDef.meta as DataTableSortableColumnDefMeta | undefined
 
   switch (direction) {
     case "asc":
@@ -153,3 +150,4 @@ const DataTableSortingMenuSkeleton = () => {
 
 export { DataTableSortingMenu }
 export type { DataTableSortingMenuProps }
+

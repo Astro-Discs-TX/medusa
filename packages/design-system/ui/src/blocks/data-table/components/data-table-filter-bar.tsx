@@ -2,10 +2,10 @@
 
 import * as React from "react"
 
+import { DataTableFilter } from "@/blocks/data-table/components/data-table-filter"
+import { useDataTableContext } from "@/blocks/data-table/context/use-data-table-context"
 import { Button } from "@/components/button"
 import { Skeleton } from "@/components/skeleton"
-import { useDataTableContext } from "../context/use-data-table-context"
-import { DataTableFilter } from "./data-table-filter"
 
 interface DataTableFilterBarProps {
   clearAllFiltersLabel?: string
@@ -69,3 +69,4 @@ const DataTableFilterBarSkeleton = ({
 
 export { DataTableFilterBar }
 export type { DataTableFilterBarProps }
+

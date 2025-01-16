@@ -3,18 +3,17 @@
 import { CheckMini, EllipseMiniSolid, XMark } from "@medusajs/icons"
 import * as React from "react"
 
+import { useDataTableContext } from "@/blocks/data-table/context/use-data-table-context"
+import type {
+  DataTableDateComparisonOperator,
+  DataTableDateFilterProps,
+  DataTableFilterOption,
+} from "@/blocks/data-table/types"
+import { isDateComparisonOperator } from "@/blocks/data-table/utils/is-date-comparison-operator"
+import { DatePicker } from "@/components/date-picker"
+import { Label } from "@/components/label"
 import { Popover } from "@/components/popover"
 import { clx } from "@/utils/clx"
-
-import { DatePicker } from "../../../components/date-picker"
-import { Label } from "../../../components/label"
-import { useDataTableContext } from "../context/use-data-table-context"
-import {
-  DataTableDateComparisonOperator,
-  DateFilterProps,
-  FilterOption,
-} from "../types"
-import { isDateComparisonOperator } from "../utils/is-date-comparison-operator"
 
 interface DataTableFilterProps {
   id: string
@@ -180,7 +179,7 @@ const DataTableFilter = ({ id, filter }: DataTableFilterProps) => {
                 <DataTableFilterSelectContent
                   id={id}
                   filter={filter as string[] | undefined}
-                  options={options as FilterOption<string>[]}
+                  options={options as DataTableFilterOption<string>[]}
                 />
               )
             case "radio":
@@ -188,7 +187,7 @@ const DataTableFilter = ({ id, filter }: DataTableFilterProps) => {
                 <DataTableFilterRadioContent
                   id={id}
                   filter={filter}
-                  options={options as FilterOption<string>[]}
+                  options={options as DataTableFilterOption<string>[]}
                 />
               )
             case "date":
@@ -197,7 +196,7 @@ const DataTableFilter = ({ id, filter }: DataTableFilterProps) => {
                   id={id}
                   filter={filter}
                   options={
-                    options as FilterOption<DataTableDateComparisonOperator>[]
+                    options as DataTableFilterOption<DataTableDateComparisonOperator>[]
                   }
                   isCustom={isCustom}
                   setIsCustom={setIsCustom}
@@ -216,11 +215,11 @@ const DataTableFilter = ({ id, filter }: DataTableFilterProps) => {
 type DataTableFilterDateContentProps = {
   id: string
   filter: unknown
-  options: FilterOption<DataTableDateComparisonOperator>[]
+  options: DataTableFilterOption<DataTableDateComparisonOperator>[]
   isCustom: boolean
   setIsCustom: (isCustom: boolean) => void
 } & Pick<
-  DateFilterProps,
+  DataTableDateFilterProps,
   | "format"
   | "rangeOptionLabel"
   | "disableRangeOption"
@@ -391,7 +390,7 @@ const DataTableFilterDateContent = ({
 type DataTableFilterSelectContentProps = {
   id: string
   filter?: string[]
-  options: FilterOption<string>[]
+  options: DataTableFilterOption<string>[]
 }
 
 const DataTableFilterSelectContent = ({
@@ -461,7 +460,7 @@ const DataTableFilterSelectContent = ({
 type DataTableFilterRadioContentProps = {
   id: string
   filter: unknown
-  options: FilterOption<string>[]
+  options: DataTableFilterOption<string>[]
 }
 
 const DataTableFilterRadioContent = ({
@@ -517,17 +516,17 @@ const DataTableFilterRadioContent = ({
   )
 }
 
-function isDateFilterProps(props?: unknown | null): props is DateFilterProps {
+function isDateFilterProps(props?: unknown | null): props is DataTableDateFilterProps {
   if (!props) {
     return false
   }
 
-  return (props as DateFilterProps).type === "date"
+  return (props as DataTableDateFilterProps).type === "date"
 }
 
 type OptionButtonProps = {
   index: number
-  option: FilterOption<string | DataTableDateComparisonOperator>
+  option: DataTableFilterOption<string | DataTableDateComparisonOperator>
   isSelected: boolean
   isFocused: boolean
   onClick: () => void
@@ -614,3 +613,4 @@ function useKeyboardNavigation(
 
 export { DataTableFilter }
 export type { DataTableFilterProps }
+

@@ -6,7 +6,7 @@ import { EllipsisHorizontal } from "@medusajs/icons"
 import { CellContext } from "@tanstack/react-table"
 import { DropdownMenu } from "../../../components/dropdown-menu"
 import { IconButton } from "../../../components/icon-button"
-import { ActionColumnDefMeta } from "../types"
+import { DataTableActionColumnDefMeta } from "../types"
 
 interface DataTableActionCellProps<TData> {
   ctx: CellContext<TData, unknown>
@@ -16,7 +16,7 @@ const DataTableActionCell = <TData,>({
   ctx,
 }: DataTableActionCellProps<TData>) => {
   const meta = ctx.column.columnDef.meta as
-    | ActionColumnDefMeta<TData>
+    | DataTableActionColumnDefMeta<TData>
     | undefined
   const actions = meta?.___actions
 

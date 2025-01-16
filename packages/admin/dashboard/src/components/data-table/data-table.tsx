@@ -1,5 +1,6 @@
 import {
   Button,
+  DataTableColumnDef,
   DataTableCommand,
   DataTableEmptyStateProps,
   DataTableFilter,
@@ -11,7 +12,6 @@ import {
   DataTable as Primitive,
   useDataTable,
 } from "@medusajs/ui"
-import { ColumnDef } from "@tanstack/react-table"
 import React, { ReactNode, useCallback, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link, useNavigate, useSearchParams } from "react-router-dom"
@@ -54,7 +54,7 @@ type DataTableActionMenuProps = {
 
 interface DataTableProps<TData> {
   data?: TData[]
-  columns: ColumnDef<TData, any>[]
+  columns: DataTableColumnDef<TData, any>[]
   filters?: DataTableFilter[]
   commands?: DataTableCommand[]
   action?: DataTableActionProps

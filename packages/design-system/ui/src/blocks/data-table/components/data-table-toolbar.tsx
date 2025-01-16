@@ -1,7 +1,6 @@
+import { DataTableFilterBar } from "@/blocks/data-table/components/data-table-filter-bar"
 import { clx } from "@/utils/clx"
 import * as React from "react"
-
-import { DataTableFilterBar } from "./data-table-filter-bar"
 
 interface DataTableToolbarTranslations {
   /**
@@ -17,20 +16,19 @@ interface DataTableToolbarProps {
   translations?: DataTableToolbarTranslations
 }
 
-const DataTableToolbar = ({
-  children,
-  className,
-  translations,
-}: DataTableToolbarProps) => {
+const DataTableToolbar = (props: DataTableToolbarProps) => {
   return (
     <div className="flex flex-col divide-y">
-      <div className={clx("flex items-center px-6 py-4", className)}>
-        {children}
+      <div className={clx("flex items-center px-6 py-4", props.className)}>
+        {props.children}
       </div>
-      <DataTableFilterBar clearAllFiltersLabel={translations?.clearAll} />
+      <DataTableFilterBar
+        clearAllFiltersLabel={props.translations?.clearAll}
+      />
     </div>
   )
 }
 
 export { DataTableToolbar }
 export type { DataTableToolbarProps, DataTableToolbarTranslations }
+

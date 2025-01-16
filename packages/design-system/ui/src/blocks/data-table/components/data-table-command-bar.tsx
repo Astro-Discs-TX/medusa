@@ -2,14 +2,14 @@
 
 import * as React from "react"
 
+import { useDataTableContext } from "@/blocks/data-table/context/use-data-table-context"
 import { CommandBar } from "@/components/command-bar"
-import { useDataTableContext } from "../context/use-data-table-context"
 
 interface DataTableCommandBarProps {
   selectedLabel?: ((count: number) => string) | string
 }
 
-const DataTableCommandBar = ({ selectedLabel }: DataTableCommandBarProps) => {
+const DataTableCommandBar = (props: DataTableCommandBarProps) => {
   const { instance } = useDataTableContext()
 
   const commands = instance.getCommands()
@@ -20,11 +20,11 @@ const DataTableCommandBar = ({ selectedLabel }: DataTableCommandBarProps) => {
   const open = commands && commands.length > 0 && count > 0
 
   function getSelectedLabel(count: number) {
-    if (typeof selectedLabel === "function") {
-      return selectedLabel(count)
+    if (typeof props.selectedLabel === "function") {
+      return props.selectedLabel(count)
     }
 
-    return selectedLabel
+    return props.selectedLabel
   }
 
   if (!commands || commands.length === 0) {
@@ -34,7 +34,7 @@ const DataTableCommandBar = ({ selectedLabel }: DataTableCommandBarProps) => {
   return (
     <CommandBar open={open}>
       <CommandBar.Bar>
-        {selectedLabel && (
+        {props.selectedLabel && (
           <React.Fragment>
             <CommandBar.Value>{getSelectedLabel(count)}</CommandBar.Value>
             <CommandBar.Seperator />
@@ -58,3 +58,4 @@ const DataTableCommandBar = ({ selectedLabel }: DataTableCommandBarProps) => {
 
 export { DataTableCommandBar }
 export type { DataTableCommandBarProps }
+

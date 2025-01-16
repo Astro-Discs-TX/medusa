@@ -9,22 +9,28 @@ import {
   type TableOptions,
   type Updater,
   useReactTable,
-} from "@tanstack/react-table"
-import * as React from "react"
+} from "@tanstack/react-table";
+import * as React from "react";
 import {
+  DataTableColumnDef,
+  DataTableColumnFilter,
   DataTableCommand,
   DataTableDateComparisonOperator,
   DataTableEmptyState,
   DataTableFilter,
   DataTableFilteringState,
+  DataTableFilterOption,
   DataTablePaginationState,
   DataTableRowSelectionState,
   DataTableSortingState,
-  FilterOption,
-} from "./types"
+} from "./types";
 
 interface DataTableOptions<TData>
-  extends Pick<TableOptions<TData>, "data" | "columns" | "getRowId"> {
+  extends Pick<TableOptions<TData>, "data"  | "getRowId"> {
+  /**
+   * The columns to use for the table.
+   */
+  columns: DataTableColumnDef<TData, any>[];
   /**
    * The filters which the user can apply to the table.
    */
@@ -120,13 +126,13 @@ interface UseDataTableReturn<TData>
     T extends string | string[] | DataTableDateComparisonOperator
   >(
     id: string
-  ) => FilterOption<T>[] | null
+  ) => DataTableFilterOption<T>[] | null
   getFilterMeta: (id: string) => DataTableFilter | null
   getFiltering: () => DataTableFilteringState
-  addFilter: (filter: ColumnFilter) => void
+  addFilter: (filter: DataTableColumnFilter) => void
   removeFilter: (id: string) => void
   clearFilters: () => void
-  updateFilter: (filter: ColumnFilter) => void
+  updateFilter: (filter: DataTableColumnFilter) => void
   getSearch: () => string
   onSearchChange: (search: string) => void
   getCommands: () => DataTableCommand[]
@@ -274,7 +280,7 @@ const useDataTable = <TData,>({
         return null
       }
 
-      return filter.options as FilterOption<T>[]
+      return filter.options as DataTableFilterOption<T>[]
     },
     [getFilters]
   )
@@ -522,5 +528,6 @@ function onPaginationChangeTransformer(
   }
 }
 
-export { useDataTable }
-export type { DataTableOptions, UseDataTableReturn }
+export { useDataTable };
+export type { DataTableOptions, UseDataTableReturn };
+

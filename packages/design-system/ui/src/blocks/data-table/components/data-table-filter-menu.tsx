@@ -1,17 +1,17 @@
 import * as React from "react"
 
+import { useDataTableContext } from "@/blocks/data-table/context/use-data-table-context"
+import { DropdownMenu } from "@/components/dropdown-menu"
+import { IconButton } from "@/components/icon-button"
+import { Skeleton } from "@/components/skeleton"
+import { Tooltip } from "@/components/tooltip"
 import { Funnel } from "@medusajs/icons"
-import { DropdownMenu } from "../../../components/dropdown-menu"
-import { IconButton } from "../../../components/icon-button"
-import { Skeleton } from "../../../components/skeleton"
-import { Tooltip } from "../../../components/tooltip"
-import { useDataTableContext } from "../context/use-data-table-context"
 
 interface DataTableFilterMenuProps {
   tooltip?: string
 }
 
-const DataTableFilterMenu = ({ tooltip }: DataTableFilterMenuProps) => {
+const DataTableFilterMenu = (props: DataTableFilterMenuProps) => {
   const { instance } = useDataTableContext()
 
   const enabledFilters = Object.keys(instance.getFiltering())
@@ -26,7 +26,7 @@ const DataTableFilterMenu = ({ tooltip }: DataTableFilterMenuProps) => {
     )
   }
 
-  const Wrapper = tooltip ? Tooltip : React.Fragment
+  const Wrapper = props.tooltip ? Tooltip : React.Fragment
 
   if (instance.showSkeleton) {
     return <DataTableFilterMenuSkeleton />
@@ -34,7 +34,7 @@ const DataTableFilterMenu = ({ tooltip }: DataTableFilterMenuProps) => {
 
   return (
     <DropdownMenu>
-      <Wrapper content={tooltip} hidden={filterOptions.length === 0}>
+      <Wrapper content={props.tooltip} hidden={filterOptions.length === 0}>
         <DropdownMenu.Trigger asChild disabled={filterOptions.length === 0}>
           <IconButton size="small">
             <Funnel />
@@ -63,3 +63,4 @@ const DataTableFilterMenuSkeleton = () => {
 
 export { DataTableFilterMenu }
 export type { DataTableFilterMenuProps }
+
