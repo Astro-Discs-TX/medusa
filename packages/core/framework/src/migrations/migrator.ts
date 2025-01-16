@@ -91,7 +91,7 @@ export abstract class Migrator {
 
   async insertMigration(records: Record<string, any>[]): Promise<void> {
     try {
-      const values = records.map((record) => Object.values(record))
+      const values = records.flatMap((record) => Object.values(record))
       const columns = Object.keys(records[0])
 
       await this.pgConnection.raw(
