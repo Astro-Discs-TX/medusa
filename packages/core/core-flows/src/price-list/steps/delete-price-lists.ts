@@ -5,7 +5,7 @@ import { StepResponse, createStep } from "@medusajs/framework/workflows-sdk"
 /**
  * The IDs of price lists to delete.
  */
-export type DeletePriceListsWorkflowInput = string[]
+export type DeletePriceListsStepInput = string[]
 
 export const deletePriceListsStepId = "delete-price-lists"
 /**
@@ -13,7 +13,7 @@ export const deletePriceListsStepId = "delete-price-lists"
  */
 export const deletePriceListsStep = createStep(
   deletePriceListsStepId,
-  async (ids: DeletePriceListsWorkflowInput, { container }) => {
+  async (ids: DeletePriceListsStepInput, { container }) => {
     const pricingModule = container.resolve<IPricingModuleService>(
       Modules.PRICING
     )

@@ -5,7 +5,7 @@ import { StepResponse, createStep } from "@medusajs/framework/workflows-sdk"
 /**
  * The IDs of price preferences to delete.
  */
-export type DeletePricePreferencesWorkflowInput = string[]
+export type DeletePricePreferencesStepInput = string[]
 
 export const deletePricePreferencesStepId = "delete-price-preferences"
 /**
@@ -13,7 +13,7 @@ export const deletePricePreferencesStepId = "delete-price-preferences"
  */
 export const deletePricePreferencesStep = createStep(
   deletePricePreferencesStepId,
-  async (ids: DeletePricePreferencesWorkflowInput, { container }) => {
+  async (ids: DeletePricePreferencesStepInput, { container }) => {
     const service = container.resolve<IPricingModuleService>(Modules.PRICING)
 
     await service.softDeletePricePreferences(ids)
