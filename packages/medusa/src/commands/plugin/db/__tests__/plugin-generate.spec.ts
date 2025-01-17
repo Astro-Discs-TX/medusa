@@ -21,7 +21,7 @@ describe("plugin-generate", () => {
         __dirname,
         "..",
         "__fixtures__",
-        "module-1",
+        "plugins-1",
         "src",
         "modules",
         "module-1"
@@ -33,7 +33,7 @@ describe("plugin-generate", () => {
   describe("main function", () => {
     it("should successfully generate migrations when valid modules are found", async () => {
       await main({
-        directory: join(__dirname, "..", "__fixtures__", "module-1"),
+        directory: join(__dirname, "..", "__fixtures__", "plugins-1"),
       })
 
       expect(logger.info).toHaveBeenNthCalledWith(1, "Generating migrations...")
@@ -51,13 +51,13 @@ describe("plugin-generate", () => {
 
     it("should handle case when no migrations are needed", async () => {
       await main({
-        directory: join(__dirname, "..", "__fixtures__", "module-1"),
+        directory: join(__dirname, "..", "__fixtures__", "plugins-1"),
       })
 
       jest.clearAllMocks()
 
       await main({
-        directory: join(__dirname, "..", "__fixtures__", "module-1"),
+        directory: join(__dirname, "..", "__fixtures__", "plugins-1"),
       })
 
       expect(logger.info).toHaveBeenNthCalledWith(1, "Generating migrations...")
@@ -75,7 +75,12 @@ describe("plugin-generate", () => {
 
     it("should handle error when module has no default export", async () => {
       await main({
-        directory: join(__dirname, "..", "__fixtures__", "module-1-no-default"),
+        directory: join(
+          __dirname,
+          "..",
+          "__fixtures__",
+          "plugins-1-no-default"
+        ),
       })
       expect(logger.error).toHaveBeenCalledWith(
         "The module should default export the `Module()`",

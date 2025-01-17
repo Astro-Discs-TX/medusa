@@ -84,7 +84,6 @@ async function getEntitiesForModule(path: string) {
 
 async function getModuleServiceName(path: string) {
   const moduleExport = await dynamicImport(path)
-  console.log({ path, moduleExport, default: moduleExport.default })
   if (!moduleExport.default) {
     throw new Error("The module should default export the `Module()`")
   }
