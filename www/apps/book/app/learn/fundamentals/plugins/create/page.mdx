@@ -153,7 +153,7 @@ While developing your plugin, you can watch for changes in the plugin and automa
 
 To do that, run the following command in your plugin project:
 
-```bash
+```bash title="Plugin project"
 npx medusa plugin:develop
 ```
 
@@ -166,7 +166,7 @@ This command will:
 
 You can start your Medusa application's development server to test out your plugin:
 
-```bash npm2yarn
+```bash npm2yarn title="Medusa application"
 npm run dev
 ```
 
@@ -221,6 +221,20 @@ You can now build your plugin's customizations. The following guide explains how
 />
 
 While building those customizations, you can test them in your Medusa application by [watching the plugin changes](#watch-plugin-changes-during-development) and [starting the Medusa application](#start-medusa-application).
+
+### Generating Migrations for Modules
+
+During your development, you may need to generate migrations for modules in your plugin. To do that, use the `plugin:db:generate` command:
+
+```bash title="Plugin project"
+npx medusa plugin:db:generate
+```
+
+This command generates migrations for all modules in the plugin. You can then run these migrations on the Medusa application that the plugin is installed in using the `db:migrate` command:
+
+```bash title="Medusa application"
+npx medusa db:migrate
+```
 
 ---
 
