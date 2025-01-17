@@ -4,7 +4,9 @@ import {
   DAL,
   IPaymentProvider,
   Logger,
+  PaymentMethodResponse,
   PaymentProviderAuthorizeResponse,
+  PaymentProviderContext,
   PaymentProviderDataInput,
   PaymentProviderError,
   PaymentProviderSessionResponse,
@@ -13,11 +15,7 @@ import {
   UpdatePaymentProviderSession,
   WebhookActionResult,
 } from "@medusajs/framework/types"
-import {
-  isPaymentProviderError,
-  MedusaError,
-  ModulesSdkUtils,
-} from "@medusajs/framework/utils"
+import { MedusaError, ModulesSdkUtils } from "@medusajs/framework/utils"
 import { PaymentProvider } from "@models"
 import { EOL } from "os"
 
@@ -42,14 +40,16 @@ export default class PaymentProviderService extends ModulesSdkUtils.MedusaIntern
   retrieveProvider(providerId: string): IPaymentProvider {
     try {
       return this.__container__[providerId] as IPaymentProvider
-    } catch (e) {
-      const errMessage = `
-      Unable to retrieve the payment provider with id: ${providerId}
-      Please make sure that the provider is registered in the container and it is configured correctly in your project configuration file.
-      `
+    } catch (err) {
+      if (err.name === "AwilixResolutionError") {
+        const errMessage = `
+Unable to retrieve the payment provider with id: ${providerId}
+Please make sure that the provider is registered in the container and it is configured correctly in your project configuration file.`
+        throw new Error(errMessage)
+      }
 
-      // Ensure that the logger captures the actual error
-      this.#logger.error(e)
+      const errMessage = `Unable to retrieve the payment provider with id: ${providerId}, the following error occurred: ${err.message}`
+      this.#logger.error(errMessage)
 
       throw new Error(errMessage)
     }
@@ -152,6 +152,14 @@ export default class PaymentProviderService extends ModulesSdkUtils.MedusaIntern
     return res as Record<string, unknown>
   }
 
+  async listPaymentMethods(
+    providerId: string,
+    context: PaymentProviderContext
+  ): Promise<PaymentMethodResponse[]> {
+    const provider = this.retrieveProvider(providerId)
+    return await provider.listPaymentMethods(context)
+  }
+
   async getWebhookActionAndData(
     providerId: string,
     data: ProviderWebhookPayload["payload"]
@@ -168,4 +176,14 @@ export default class PaymentProviderService extends ModulesSdkUtils.MedusaIntern
       errObj.code
     )
   }
+}
+
+function isPaymentProviderError(obj: any): obj is PaymentProviderError {
+  return (
+    obj &&
+    typeof obj === "object" &&
+    "error" in obj &&
+    "code" in obj &&
+    "detail" in obj
+  )
 }
