@@ -36,6 +36,7 @@ describe("plugin-generate", () => {
         directory: join(__dirname, "..", "__fixtures__", "plugins-1"),
       })
 
+      console.log(logger.info["mock"])
       expect(logger.info).toHaveBeenNthCalledWith(1, "Generating migrations...")
       expect(logger.info).toHaveBeenNthCalledWith(
         2,
@@ -60,6 +61,7 @@ describe("plugin-generate", () => {
         directory: join(__dirname, "..", "__fixtures__", "plugins-1"),
       })
 
+      console.log(logger.info["mock"])
       expect(logger.info).toHaveBeenNthCalledWith(1, "Generating migrations...")
       expect(logger.info).toHaveBeenNthCalledWith(
         2,
