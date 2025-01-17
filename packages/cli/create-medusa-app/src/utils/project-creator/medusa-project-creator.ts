@@ -44,7 +44,6 @@ export class MedusaProjectCreator
 
   async create(): Promise<void> {
     track("CREATE_CLI_CMA")
-
     try {
       await this.initializeProject()
       await this.setupProject()
@@ -111,6 +110,8 @@ export class MedusaProjectCreator
         dbUrl: this.options.dbUrl,
         verbose: this.options.verbose,
       })
+    
+    
 
     this.client = client
     this.dbConnectionString = dbConnectionString
