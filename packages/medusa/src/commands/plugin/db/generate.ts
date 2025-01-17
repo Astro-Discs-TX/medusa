@@ -51,6 +51,7 @@ const main = async function ({ directory }) {
 
     process.exit()
   } catch (error) {
+    console.log({ error })
     console.log(new Array(TERMINAL_SIZE).join("-"))
 
     logger.error(error.message, error)
@@ -84,7 +85,6 @@ async function getEntitiesForModule(path: string) {
 
 async function getModuleServiceName(path: string) {
   const moduleExport = await dynamicImport(path)
-  console.log({ path, moduleExport, default: moduleExport.default })
   if (!moduleExport.default) {
     throw new Error("The module should default export the `Module()`")
   }
@@ -116,8 +116,11 @@ async function generateMigrations(
     )
 
     const orm = await MikroORM.init(mikroOrmConfig)
+    console.log("initiated orm")
     const migrator = orm.getMigrator()
+    console.log("initiated migrator")
     const result = await migrator.createMigration()
+    console.log("created migrations")
 
     if (result.fileName) {
       logger.info(`Migration created: ${result.fileName}`)
