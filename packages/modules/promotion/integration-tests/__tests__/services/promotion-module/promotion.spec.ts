@@ -6,8 +6,8 @@ import {
   Modules,
   PromotionType,
 } from "@medusajs/framework/utils"
-import { PromotionModuleService } from "@services"
 import { SuiteOptions, moduleIntegrationTestRunner } from "@medusajs/test-utils"
+import { PromotionModuleService } from "@services"
 import { createCampaigns } from "../../../__fixtures__/campaigns"
 import {
   createDefaultPromotion,
@@ -24,6 +24,15 @@ moduleIntegrationTestRunner({
     service,
   }: SuiteOptions<IPromotionModuleService>) => {
     describe("Promotion Service", () => {
+      beforeAll(() => {
+        jest.useFakeTimers()
+        jest.setSystemTime(new Date("02/02/2023"))
+      })
+
+      afterAll(() => {
+        jest.useRealTimers()
+      })
+
       beforeEach(async () => {
         await createCampaigns(MikroOrmWrapper.forkManager())
       })
@@ -508,7 +517,7 @@ moduleIntegrationTestRunner({
           )
         })
 
-        it("should create a buyget promotion with rules successfully", async () => {
+        it("should create a budget promotion with rules successfully", async () => {
           const createdPromotion = await createDefaultPromotion(service, {
             type: PromotionType.BUYGET,
             application_method: {
@@ -638,7 +647,7 @@ moduleIntegrationTestRunner({
               application_method: expect.objectContaining({
                 target_type: "order",
                 allocation: "across",
-                max_quantity: 0,
+                max_quantity: null,
               }),
             })
           )
@@ -809,30 +818,32 @@ moduleIntegrationTestRunner({
 
           expect(count).toEqual(2)
           expect(promotions).toEqual([
-            {
+            expect.objectContaining({
               id: "promotion-id-1",
               code: "PROMOTION_1",
               campaign_id: null,
               campaign: null,
+              status: "draft",
               is_automatic: false,
               type: "standard",
               application_method: expect.any(Object),
               created_at: expect.any(Date),
               updated_at: expect.any(Date),
               deleted_at: null,
-            },
-            {
+            }),
+            expect.objectContaining({
               id: "promotion-id-2",
               code: "PROMOTION_2",
               campaign_id: null,
               campaign: null,
+              status: "draft",
               is_automatic: false,
               type: "standard",
               application_method: null,
               created_at: expect.any(Date),
               updated_at: expect.any(Date),
               deleted_at: null,
-            },
+            }),
           ])
         })
 
@@ -854,6 +865,7 @@ moduleIntegrationTestRunner({
               code: "PROMOTION_1",
               application_method: {
                 id: expect.any(String),
+                promotion_id: expect.any(String),
                 type: "fixed",
               },
             },

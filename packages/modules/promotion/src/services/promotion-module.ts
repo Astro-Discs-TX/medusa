@@ -2,9 +2,13 @@ import {
   CampaignBudgetTypeValues,
   Context,
   DAL,
+  FilterablePromotionProps,
+  FindConfig,
+  InferEntityType,
   InternalModuleDeclaration,
   ModuleJoinerConfig,
   ModulesSdkTypes,
+  PromotionDTO,
   PromotionTypes,
 } from "@medusajs/framework/types"
 import {
@@ -23,7 +27,9 @@ import {
   MedusaContext,
   MedusaError,
   MedusaService,
+  PromotionStatus,
   PromotionType,
+  toMikroORMEntity,
   transformPropertiesToBigNumber,
 } from "@medusajs/framework/utils"
 import {
@@ -85,12 +91,24 @@ export default class PromotionModuleService
   implements PromotionTypes.IPromotionModuleService
 {
   protected baseRepository_: DAL.RepositoryService
-  protected promotionService_: ModulesSdkTypes.IMedusaInternalService<Promotion>
-  protected applicationMethodService_: ModulesSdkTypes.IMedusaInternalService<ApplicationMethod>
-  protected promotionRuleService_: ModulesSdkTypes.IMedusaInternalService<PromotionRule>
-  protected promotionRuleValueService_: ModulesSdkTypes.IMedusaInternalService<PromotionRuleValue>
-  protected campaignService_: ModulesSdkTypes.IMedusaInternalService<Campaign>
-  protected campaignBudgetService_: ModulesSdkTypes.IMedusaInternalService<CampaignBudget>
+  protected promotionService_: ModulesSdkTypes.IMedusaInternalService<
+    InferEntityType<typeof Promotion>
+  >
+  protected applicationMethodService_: ModulesSdkTypes.IMedusaInternalService<
+    InferEntityType<typeof ApplicationMethod>
+  >
+  protected promotionRuleService_: ModulesSdkTypes.IMedusaInternalService<
+    InferEntityType<typeof PromotionRule>
+  >
+  protected promotionRuleValueService_: ModulesSdkTypes.IMedusaInternalService<
+    InferEntityType<typeof PromotionRuleValue>
+  >
+  protected campaignService_: ModulesSdkTypes.IMedusaInternalService<
+    InferEntityType<typeof Campaign>
+  >
+  protected campaignBudgetService_: ModulesSdkTypes.IMedusaInternalService<
+    InferEntityType<typeof CampaignBudget>
+  >
 
   constructor(
     {
@@ -121,6 +139,40 @@ export default class PromotionModuleService
   }
 
   @InjectManager()
+  listActivePromotions(
+    filters?: FilterablePromotionProps,
+    config?: FindConfig<PromotionDTO>,
+    sharedContext?: Context
+  ): Promise<PromotionDTO[]> {
+    const activeFilters = {
+      $or: [
+        {
+          status: PromotionStatus.ACTIVE,
+          campaign_id: null,
+          ...filters,
+        },
+        {
+          status: PromotionStatus.ACTIVE,
+          ...filters,
+          campaign: {
+            ...filters?.campaign,
+            $and: [
+              {
+                $or: [{ starts_at: null }, { starts_at: { $lte: new Date() } }],
+              },
+              {
+                $or: [{ ends_at: null }, { ends_at: { $gt: new Date() } }],
+              },
+            ],
+          },
+        },
+      ],
+    }
+
+    return this.listPromotions(activeFilters, config, sharedContext)
+  }
+
+  @InjectManager()
   async registerUsage(
     computedActions: PromotionTypes.UsageComputedActions[],
     @MedusaContext()
@@ -134,11 +186,9 @@ export default class PromotionModuleService
     const campaignBudgetMap = new Map<string, UpdateCampaignBudgetDTO>()
     const promotionCodeUsageMap = new Map<string, boolean>()
 
-    const existingPromotions = await this.listPromotions(
+    const existingPromotions = await this.listActivePromotions(
       { code: promotionCodes },
-      {
-        relations: ["campaign", "campaign.budget"],
-      },
+      { relations: ["campaign", "campaign.budget"] },
       sharedContext
     )
 
@@ -236,15 +286,13 @@ export default class PromotionModuleService
     const promotionCodeUsageMap = new Map<string, boolean>()
     const campaignBudgetMap = new Map<string, UpdateCampaignBudgetDTO>()
 
-    const existingPromotions = await this.listPromotions(
+    const existingPromotions = await this.listActivePromotions(
       {
         code: computedActions
           .map((computedAction) => computedAction.code)
           .filter(Boolean),
       },
-      {
-        relations: ["campaign", "campaign.budget"],
-      },
+      { relations: ["campaign", "campaign.budget"] },
       sharedContext
     )
 
@@ -348,7 +396,7 @@ export default class PromotionModuleService
     >()
     const automaticPromotions = preventAutoPromotions
       ? []
-      : await this.listPromotions(
+      : await this.listActivePromotions(
           { is_automatic: true },
           { select: ["code"] },
           sharedContext
@@ -388,7 +436,7 @@ export default class PromotionModuleService
       })
     })
 
-    const promotions = await this.listPromotions(
+    const promotions = await this.listActivePromotions(
       {
         code: [
           ...promotionCodesToApply,
@@ -398,6 +446,7 @@ export default class PromotionModuleService
       },
       {
         take: null,
+        order: { application_method: { value: "DESC" } },
         relations: [
           "application_method",
           "application_method.target_rules",
@@ -841,9 +890,10 @@ export default class PromotionModuleService
       { relations: ["budget"] }
     )
 
-    const existingPromotionsMap = new Map<string, Promotion>(
-      existingPromotions.map((promotion) => [promotion.id, promotion])
-    )
+    const existingPromotionsMap = new Map<
+      string,
+      InferEntityType<typeof Promotion>
+    >(existingPromotions.map((promotion) => [promotion.id, promotion]))
 
     const promotionsData: UpdatePromotionDTO[] = []
     const applicationMethodsData: UpdateApplicationMethodDTO[] = []
@@ -1099,12 +1149,17 @@ export default class PromotionModuleService
   protected async createPromotionRulesAndValues_(
     rulesData: PromotionTypes.CreatePromotionRuleDTO[],
     relationName: "promotions" | "method_target_rules" | "method_buy_rules",
-    relation: Promotion | ApplicationMethod,
+    relation:
+      | InferEntityType<typeof Promotion>
+      | InferEntityType<typeof ApplicationMethod>,
     @MedusaContext() sharedContext: Context = {}
-  ): Promise<PromotionRule[]> {
-    const createdPromotionRules: PromotionRule[] = []
+  ): Promise<InferEntityType<typeof PromotionRule>[]> {
+    const MikroORMApplicationMethod = toMikroORMEntity(ApplicationMethod)
+    const createdPromotionRules: InferEntityType<typeof PromotionRule>[] = []
     const promotion =
-      relation instanceof ApplicationMethod ? relation.promotion : relation
+      relation instanceof MikroORMApplicationMethod
+        ? relation.promotion
+        : relation
 
     if (!rulesData.length) {
       return []

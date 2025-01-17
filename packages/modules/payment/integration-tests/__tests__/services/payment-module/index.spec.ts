@@ -1,7 +1,7 @@
 import { IPaymentModuleService } from "@medusajs/framework/types"
 import { Module, Modules, promiseAll } from "@medusajs/framework/utils"
-import { PaymentModuleService } from "@services"
 import { moduleIntegrationTestRunner } from "@medusajs/test-utils"
+import { PaymentModuleService } from "@services"
 import {
   createPaymentCollections,
   createPayments,
@@ -23,12 +23,13 @@ moduleIntegrationTestRunner<IPaymentModuleService>({
           service: PaymentModuleService,
         }).linkable
 
+        expect(Object.keys(linkable)).toHaveLength(5)
         expect(Object.keys(linkable)).toEqual([
-          "payment",
           "paymentCollection",
-          "paymentProvider",
           "paymentSession",
+          "payment",
           "refundReason",
+          "paymentProvider",
         ])
 
         Object.keys(linkable).forEach((key) => {
@@ -54,15 +55,6 @@ moduleIntegrationTestRunner<IPaymentModuleService>({
               field: "paymentCollection",
             },
           },
-          paymentProvider: {
-            id: {
-              linkable: "payment_provider_id",
-              entity: "PaymentProvider",
-              primaryKey: "id",
-              serviceName: "payment",
-              field: "paymentProvider",
-            },
-          },
           paymentSession: {
             id: {
               field: "paymentSession",
@@ -81,6 +73,15 @@ moduleIntegrationTestRunner<IPaymentModuleService>({
               field: "refundReason",
             },
           },
+          paymentProvider: {
+            id: {
+              linkable: "payment_provider_id",
+              entity: "PaymentProvider",
+              primaryKey: "id",
+              serviceName: "payment",
+              field: "paymentProvider",
+            },
+          },
         })
       })
 
@@ -89,7 +90,6 @@ moduleIntegrationTestRunner<IPaymentModuleService>({
           let paymentCollection = await service.createPaymentCollections({
             currency_code: "usd",
             amount: 200,
-            region_id: "reg_123",
           })
 
           const paymentSession = await service.createPaymentSession(
@@ -133,7 +133,6 @@ moduleIntegrationTestRunner<IPaymentModuleService>({
               authorized_amount: 200,
               captured_amount: 200,
               status: "authorized",
-              region_id: "reg_123",
               deleted_at: null,
               completed_at: expect.any(Date),
               payment_sessions: [
@@ -179,7 +178,6 @@ moduleIntegrationTestRunner<IPaymentModuleService>({
               .createPaymentCollections([
                 {
                   amount: 200,
-                  region_id: "req_123",
                 } as any,
               ])
               .catch((e) => e)
@@ -192,7 +190,6 @@ moduleIntegrationTestRunner<IPaymentModuleService>({
               .createPaymentCollections([
                 {
                   currency_code: "USD",
-                  region_id: "req_123",
                 } as any,
               ])
               .catch((e) => e)
@@ -201,25 +198,12 @@ moduleIntegrationTestRunner<IPaymentModuleService>({
             expect(error.message).toContain(
               "Value for PaymentCollection.amount is required, 'undefined' found"
             )
-
-            error = await service
-              .createPaymentCollections([
-                {
-                  currency_code: "USD",
-                  amount: 200,
-                } as any,
-              ])
-              .catch((e) => e)
-
-            expect(error.message).toContain(
-              "Value for PaymentCollection.region_id is required, 'undefined' found"
-            )
           })
 
           it("should create a payment collection successfully", async () => {
             const [createdPaymentCollection] =
               await service.createPaymentCollections([
-                { currency_code: "USD", amount: 200, region_id: "reg_123" },
+                { currency_code: "USD", amount: 200 },
               ])
 
             expect(createdPaymentCollection).toEqual(
@@ -264,7 +248,6 @@ moduleIntegrationTestRunner<IPaymentModuleService>({
               expect.objectContaining({
                 id: "pay-col-id-2",
                 amount: 200,
-                region_id: "region-id-1",
                 currency_code: "usd",
               })
             )
@@ -293,46 +276,17 @@ moduleIntegrationTestRunner<IPaymentModuleService>({
                 expect.objectContaining({
                   id: "pay-col-id-1",
                   amount: 100,
-                  region_id: "region-id-1",
                   currency_code: "usd",
                 }),
                 expect.objectContaining({
                   id: "pay-col-id-2",
                   amount: 200,
-                  region_id: "region-id-1",
                   currency_code: "usd",
                 }),
                 expect.objectContaining({
                   id: "pay-col-id-3",
                   amount: 300,
-                  region_id: "region-id-2",
                   currency_code: "usd",
-                }),
-              ])
-            )
-          })
-
-          it("should list Payment Collections by region_id", async () => {
-            let collections = await service.listPaymentCollections(
-              {
-                region_id: "region-id-1",
-              },
-              { select: ["id", "amount", "region_id"] }
-            )
-
-            expect(collections.length).toEqual(2)
-
-            expect(collections).toEqual(
-              expect.arrayContaining([
-                expect.objectContaining({
-                  id: "pay-col-id-1",
-                  amount: 100,
-                  region_id: "region-id-1",
-                }),
-                expect.objectContaining({
-                  id: "pay-col-id-2",
-                  amount: 200,
-                  region_id: "region-id-1",
                 }),
               ])
             )
@@ -343,7 +297,6 @@ moduleIntegrationTestRunner<IPaymentModuleService>({
           it("should update a Payment Collection", async () => {
             await service.updatePaymentCollections("pay-col-id-2", {
               currency_code: "eur",
-              region_id: "reg-2",
             })
 
             const collection = await service.retrievePaymentCollection(
@@ -353,7 +306,6 @@ moduleIntegrationTestRunner<IPaymentModuleService>({
             expect(collection).toEqual(
               expect.objectContaining({
                 id: "pay-col-id-2",
-                region_id: "reg-2",
                 currency_code: "eur",
               })
             )
@@ -544,7 +496,6 @@ moduleIntegrationTestRunner<IPaymentModuleService>({
           it("should authorize a payment session", async () => {
             const collection = await service.createPaymentCollections({
               amount: 200,
-              region_id: "test-region",
               currency_code: "usd",
             })
 
@@ -555,7 +506,6 @@ moduleIntegrationTestRunner<IPaymentModuleService>({
               data: {},
               context: {
                 extra: {},
-                resource_id: "test",
                 email: "test@test.com",
                 billing_address: {},
                 customer: {},
@@ -576,9 +526,6 @@ moduleIntegrationTestRunner<IPaymentModuleService>({
                 refunds: [],
                 captures: [],
                 data: {},
-                cart_id: null,
-                order_id: null,
-                customer_id: null,
                 deleted_at: null,
                 captured_at: null,
                 canceled_at: null,
@@ -615,13 +562,11 @@ moduleIntegrationTestRunner<IPaymentModuleService>({
           it("should update a payment successfully", async () => {
             const updatedPayment = await service.updatePayment({
               id: "pay-id-1",
-              cart_id: "new-cart",
             })
 
             expect(updatedPayment).toEqual(
               expect.objectContaining({
                 id: "pay-id-1",
-                cart_id: "new-cart",
               })
             )
           })
@@ -908,7 +853,6 @@ moduleIntegrationTestRunner<IPaymentModuleService>({
           it("should authorize, capture and refund multiple payment sessions", async () => {
             const collection = await service.createPaymentCollections({
               amount: 500,
-              region_id: "test-region",
               currency_code: "usd",
             })
 

@@ -1,28 +1,107 @@
 import { Modules, promiseAll } from "@medusajs/framework/utils"
-import { IFulfillmentModuleService } from "@medusajs/types"
+import {
+  IFulfillmentModuleService,
+  ValidateFulfillmentDataContext,
+} from "@medusajs/types"
 import { createStep, StepResponse } from "@medusajs/workflows-sdk"
 
-export interface ValidateShippingMethodsDataInput {
-  context: Record<string, unknown>
-  options_to_validate: {
-    id: string
-    provider_id: string
-    option_data: Record<string, unknown>
-    method_data: Record<string, unknown>
-  }[]
-}
+/**
+ * The details of the shipping methods to validate.
+ */
+export type ValidateShippingMethodsDataInput = {
+  /**
+   * The shipping method's ID.
+   */
+  id: string
+  /**
+   * The fulfillment provider ID that associated with the shipping option
+   * that the method was created from.
+   */
+  provider_id: string
+  /**
+   * The `data` property of the shipping option that the shipping method was 
+   * created from.
+   */
+  option_data: Record<string, unknown>
+  /**
+   * The `data` property of the shipping method.
+   */
+  method_data: Record<string, unknown>
+  /**
+   * The context to validate the shipping method.
+   */
+  context: ValidateFulfillmentDataContext
+}[]
+
+/**
+ * The validated data of the shipping methods.
+ */
+export type ValidateShippingMethodsDataOutput = void | {
+  [x: string]: Record<string, unknown>;
+}[]
 
 export const validateAndReturnShippingMethodsDataStepId =
   "validate-and-return-shipping-methods-data"
 /**
  * This step validates shipping options to ensure they can be applied on a cart.
+ * The step either returns the validated data or void.
+ * 
+ * @example
+ * const data = validateAndReturnShippingMethodsDataStep({
+ *   id: "sm_123",
+ *   provider_id: "my_provider",
+ *   option_data: {},
+ *   method_data: {},
+ *   context: {
+ *     id: "cart_123",
+ *     shipping_address: {
+ *       id: "saddr_123",
+ *       first_name: "Jane",
+ *       last_name: "Smith",
+ *       address_1: "456 Elm St",
+ *       city: "Shelbyville",
+ *       country_code: "us",
+ *       postal_code: "67890",
+ *     },
+ *     items: [
+ *       {
+ *         variant: {
+ *           id: "variant_123",
+ *           weight: 1,
+ *           length: 1,
+ *           height: 1,
+ *           width: 1,
+ *           material: "wood",
+ *           product: {
+ *             id: "prod_123"
+ *           }
+ *         }
+ *       }
+ *     ],
+ *     product: {
+ *       id: "prod_123",
+ *       collection_id: "pcol_123",
+ *       categories: [],
+ *       tags: []
+ *     },
+ *     from_location: {
+ *       id: "sloc_123",
+ *       first_name: "John",
+ *       last_name: "Doe",
+ *       address_1: "123 Main St",
+ *       city: "Springfield",
+ *       country_code: "us",
+ *       postal_code: "12345",
+ *     },
+ *   }
+ * })
  */
 export const validateAndReturnShippingMethodsDataStep = createStep(
   validateAndReturnShippingMethodsDataStepId,
   async (data: ValidateShippingMethodsDataInput, { container }) => {
-    const { options_to_validate = [] } = data
+    const optionsToValidate = data ?? []
 
-    if (!options_to_validate.length) {
+    if (!optionsToValidate.length) {
       return new StepResponse(void 0)
     }
 
@@ -31,12 +110,12 @@ export const validateAndReturnShippingMethodsDataStep = createStep(
     )
 
     const validatedData = await promiseAll(
-      options_to_validate.map(async (option) => {
+      optionsToValidate.map(async (option) => {
         const validated = await fulfillmentModule.validateFulfillmentData(
           option.provider_id,
           option.option_data,
           option.method_data,
-          data.context
+          option.context as ValidateFulfillmentDataContext
         )
 
         return {
