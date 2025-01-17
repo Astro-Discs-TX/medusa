@@ -823,7 +823,7 @@ export type ConfigModule = {
 
   /**
    * On your Medusa server, you can use [Plugins](https://docs.medusajs.com/learn/fundamentals/plugins) to add re-usable Medusa customizations. Plugins
-   * can include modules, workflows, API Routes, and other customizations. Plugins are available starting from [Medusa v2.2.1](https://github.com/medusajs/medusa/releases/tag/v2.2.1).
+   * can include modules, workflows, API Routes, and other customizations. Plugins are available starting from [Medusa v2.3.0](https://github.com/medusajs/medusa/releases/tag/v2.3.0).
    *
    * Aside from installing the plugin with NPM, you need to pass the plugin you installed into the `plugins` array defined in `medusa-config.ts`.
    *
