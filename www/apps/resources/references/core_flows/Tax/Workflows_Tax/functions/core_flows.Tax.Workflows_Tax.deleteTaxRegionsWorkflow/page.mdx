@@ -14,7 +14,7 @@ This documentation provides a reference to the `deleteTaxRegionsWorkflow`. It be
 
 This workflow deletes one or more tax regions.
 
-<SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/tax/workflows/delete-tax-regions.ts#L14" />
+<SourceCodeLink link="https://github.com/medusajs/medusa/blob/911eefadbd8280509f7bf89c1fa2e1b083c1d219/packages/core/core-flows/src/tax/workflows/delete-tax-regions.ts#L14" />
 
 ## Examples
 
@@ -36,7 +36,7 @@ export async function POST(
     .run({
       input: {
         "ids": [
-          "id_zqqkozLS333"
+          "id_BaygwYjMhL"
         ]
       }
     })
@@ -63,7 +63,7 @@ export default async function handleOrderPlaced({
     .run({
       input: {
         "ids": [
-          "id_zqqkozLS333"
+          "id_BaygwYjMhL"
         ]
       }
     })
@@ -90,7 +90,7 @@ export default async function myCustomJob(
     .run({
       input: {
         "ids": [
-          "id_zqqkozLS333"
+          "id_BaygwYjMhL"
         ]
       }
     })
@@ -118,7 +118,7 @@ const myWorkflow = createWorkflow(
       .runAsStep({
         input: {
           "ids": [
-            "id_zqqkozLS333"
+            "id_BaygwYjMhL"
           ]
         }
       })
@@ -131,7 +131,7 @@ const myWorkflow = createWorkflow(
 
 ## Steps
 
-<WorkflowDiagram workflow={{"name":"deleteTaxRegionsWorkflow","steps":[{"type":"step","name":"deleteTaxRegionsStep","description":"This step deletes one or more tax regions.\n\n","link":"../../../Steps_Tax/functions/core_flows.Tax.Steps_Tax.deleteTaxRegionsStep/page.mdx","depth":1}]}} />
+<WorkflowDiagram workflow={{"name":"deleteTaxRegionsWorkflow","steps":[{"type":"step","name":"deleteTaxRegionsStep","description":"This step deletes one or more tax regions.","link":"../../../Steps_Tax/functions/core_flows.Tax.Steps_Tax.deleteTaxRegionsStep/page.mdx","depth":1}]}} />
 
 ## Input
 

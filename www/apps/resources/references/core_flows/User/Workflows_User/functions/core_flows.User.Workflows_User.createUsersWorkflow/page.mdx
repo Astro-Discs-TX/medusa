@@ -15,7 +15,7 @@ This documentation provides a reference to the `createUsersWorkflow`. It belongs
 
 This workflow creates one or more users.
 
-<SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/user/workflows/create-users.ts#L16" />
+<SourceCodeLink link="https://github.com/medusajs/medusa/blob/911eefadbd8280509f7bf89c1fa2e1b083c1d219/packages/core/core-flows/src/user/workflows/create-users.ts#L16" />
 
 ## Examples
 
@@ -37,7 +37,7 @@ export async function POST(
     .run({
       input: {
         "users": [{
-          "email": "Ari.Terry62@hotmail.com"
+          "email": "Rosamond.Klein0@gmail.com"
         }]
       }
     })
@@ -64,7 +64,7 @@ export default async function handleOrderPlaced({
     .run({
       input: {
         "users": [{
-          "email": "Ari.Terry62@hotmail.com"
+          "email": "Rosamond.Klein0@gmail.com"
         }]
       }
     })
@@ -91,7 +91,7 @@ export default async function myCustomJob(
     .run({
       input: {
         "users": [{
-          "email": "Ari.Terry62@hotmail.com"
+          "email": "Rosamond.Klein0@gmail.com"
         }]
       }
     })
@@ -119,7 +119,7 @@ const myWorkflow = createWorkflow(
       .runAsStep({
         input: {
           "users": [{
-            "email": "Ari.Terry62@hotmail.com"
+            "email": "Rosamond.Klein0@gmail.com"
           }]
         }
       })
@@ -132,7 +132,7 @@ const myWorkflow = createWorkflow(
 
 ## Steps
 
-<WorkflowDiagram workflow={{"name":"createUsersWorkflow","steps":[{"type":"step","name":"createUsersStep","description":"This step creates one or more users.\n\n","link":"../../../Steps_User/functions/core_flows.User.Steps_User.createUsersStep/page.mdx","depth":1},{"type":"step","name":"emitEventStep","description":"Emit an event.\n\n","link":"../../../../Common/Steps_Common/functions/core_flows.Common.Steps_Common.emitEventStep/page.mdx","depth":2}]}} />
+<WorkflowDiagram workflow={{"name":"createUsersWorkflow","steps":[{"type":"step","name":"createUsersStep","description":"This step creates one or more users.","link":"../../../Steps_User/functions/core_flows.User.Steps_User.createUsersStep/page.mdx","depth":1},{"type":"step","name":"emitEventStep","description":"Emit an event.","link":"../../../../Common/Steps_Common/functions/core_flows.Common.Steps_Common.emitEventStep/page.mdx","depth":2}]}} />
 
 ## Input
 

@@ -14,7 +14,7 @@ This documentation provides a reference to the `deletePromotionRulesWorkflow`. I
 
 This workflow deletes one or more promotion rules.
 
-<SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/promotion/workflows/delete-promotion-rules.ts#L9" />
+<SourceCodeLink link="https://github.com/medusajs/medusa/blob/911eefadbd8280509f7bf89c1fa2e1b083c1d219/packages/core/core-flows/src/promotion/workflows/delete-promotion-rules.ts#L9" />
 
 ## Examples
 
@@ -37,7 +37,7 @@ export async function POST(
       input: {
         "rule_type": "{value}",
         "data": {
-          "id": "id_Mh1PFA8giy1m",
+          "id": "id_apCfh0hF3pssniqq",
           "rule_ids": [
             "{value}"
           ]
@@ -68,7 +68,7 @@ export default async function handleOrderPlaced({
       input: {
         "rule_type": "{value}",
         "data": {
-          "id": "id_Mh1PFA8giy1m",
+          "id": "id_apCfh0hF3pssniqq",
           "rule_ids": [
             "{value}"
           ]
@@ -99,7 +99,7 @@ export default async function myCustomJob(
       input: {
         "rule_type": "{value}",
         "data": {
-          "id": "id_Mh1PFA8giy1m",
+          "id": "id_apCfh0hF3pssniqq",
           "rule_ids": [
             "{value}"
           ]
@@ -131,7 +131,7 @@ const myWorkflow = createWorkflow(
         input: {
           "rule_type": "{value}",
           "data": {
-            "id": "id_Mh1PFA8giy1m",
+            "id": "id_apCfh0hF3pssniqq",
             "rule_ids": [
               "{value}"
             ]
@@ -147,7 +147,7 @@ const myWorkflow = createWorkflow(
 
 ## Steps
 
-<WorkflowDiagram workflow={{"name":"deletePromotionRulesWorkflow","steps":[{"type":"step","name":"removeRulesFromPromotionsStep","description":"This step removes rules from a promotion.\n\n","link":"../../../Steps_Promotion/functions/core_flows.Promotion.Steps_Promotion.removeRulesFromPromotionsStep/page.mdx","depth":1}]}} />
+<WorkflowDiagram workflow={{"name":"deletePromotionRulesWorkflow","steps":[{"type":"step","name":"removeRulesFromPromotionsStep","description":"This step removes rules from a promotion.","link":"../../../Steps_Promotion/functions/core_flows.Promotion.Steps_Promotion.removeRulesFromPromotionsStep/page.mdx","depth":1}]}} />
 
 ## Input
 

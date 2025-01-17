@@ -4422,6 +4422,14 @@ export const generatedSidebar = [
                         "loaded": true,
                         "isPathHref": true,
                         "type": "ref",
+                        "title": "batchInventoryItemLevelsWorkflow",
+                        "path": "/references/medusa-workflows/batchInventoryItemLevelsWorkflow",
+                        "children": []
+                      },
+                      {
+                        "loaded": true,
+                        "isPathHref": true,
+                        "type": "ref",
                         "title": "bulkCreateDeleteLevelsWorkflow",
                         "path": "/references/medusa-workflows/bulkCreateDeleteLevelsWorkflow",
                         "children": []
@@ -16954,6 +16962,22 @@ export const generatedSidebar = [
                     "loaded": true,
                     "isPathHref": true,
                     "type": "link",
+                    "path": "/references/medusa-workflows/refreshCartItemsWorkflow",
+                    "title": "refreshCartItemsWorkflow",
+                    "children": []
+                  },
+                  {
+                    "loaded": true,
+                    "isPathHref": true,
+                    "type": "link",
+                    "path": "/references/medusa-workflows/refreshCartShippingMethodsWorkflow",
+                    "title": "refreshCartShippingMethodsWorkflow",
+                    "children": []
+                  },
+                  {
+                    "loaded": true,
+                    "isPathHref": true,
+                    "type": "link",
                     "path": "/references/medusa-workflows/refreshPaymentCollectionForCartWorkflow",
                     "title": "refreshPaymentCollectionForCartWorkflow",
                     "children": []
@@ -17209,6 +17233,22 @@ export const generatedSidebar = [
                     "loaded": true,
                     "isPathHref": true,
                     "type": "link",
+                    "path": "/references/medusa-workflows/steps/updateShippingMethodsStep",
+                    "title": "updateShippingMethodsStep",
+                    "children": []
+                  },
+                  {
+                    "loaded": true,
+                    "isPathHref": true,
+                    "type": "link",
+                    "path": "/references/medusa-workflows/steps/validateAndReturnShippingMethodsDataStep",
+                    "title": "validateAndReturnShippingMethodsDataStep",
+                    "children": []
+                  },
+                  {
+                    "loaded": true,
+                    "isPathHref": true,
+                    "type": "link",
                     "path": "/references/medusa-workflows/steps/validateCartPaymentsStep",
                     "title": "validateCartPaymentsStep",
                     "children": []
@@ -17217,8 +17257,32 @@ export const generatedSidebar = [
                     "loaded": true,
                     "isPathHref": true,
                     "type": "link",
+                    "path": "/references/medusa-workflows/steps/validateCartShippingOptionsPriceStep",
+                    "title": "validateCartShippingOptionsPriceStep",
+                    "children": []
+                  },
+                  {
+                    "loaded": true,
+                    "isPathHref": true,
+                    "type": "link",
                     "path": "/references/medusa-workflows/steps/validateCartShippingOptionsStep",
                     "title": "validateCartShippingOptionsStep",
+                    "children": []
+                  },
+                  {
+                    "loaded": true,
+                    "isPathHref": true,
+                    "type": "link",
+                    "path": "/references/medusa-workflows/steps/validateCartStep",
+                    "title": "validateCartStep",
+                    "children": []
+                  },
+                  {
+                    "loaded": true,
+                    "isPathHref": true,
+                    "type": "link",
+                    "path": "/references/medusa-workflows/steps/validateLineItemPricesStep",
+                    "title": "validateLineItemPricesStep",
                     "children": []
                   },
                   {
@@ -17503,6 +17567,14 @@ export const generatedSidebar = [
                     "type": "link",
                     "path": "/references/medusa-workflows/steps/updateCustomersStep",
                     "title": "updateCustomersStep",
+                    "children": []
+                  },
+                  {
+                    "loaded": true,
+                    "isPathHref": true,
+                    "type": "link",
+                    "path": "/references/medusa-workflows/steps/validateCustomerAccountCreation",
+                    "title": "validateCustomerAccountCreation",
                     "children": []
                   }
                 ],
@@ -17989,6 +18061,22 @@ export const generatedSidebar = [
                     "loaded": true,
                     "isPathHref": true,
                     "type": "link",
+                    "path": "/references/medusa-workflows/steps/updateServiceZonesStep",
+                    "title": "updateServiceZonesStep",
+                    "children": []
+                  },
+                  {
+                    "loaded": true,
+                    "isPathHref": true,
+                    "type": "link",
+                    "path": "/references/medusa-workflows/steps/updateShippingOptionRulesStep",
+                    "title": "updateShippingOptionRulesStep",
+                    "children": []
+                  },
+                  {
+                    "loaded": true,
+                    "isPathHref": true,
+                    "type": "link",
                     "path": "/references/medusa-workflows/steps/updateShippingProfilesStep",
                     "title": "updateShippingProfilesStep",
                     "children": []
@@ -18007,6 +18095,14 @@ export const generatedSidebar = [
                     "type": "link",
                     "path": "/references/medusa-workflows/steps/validateShipmentStep",
                     "title": "validateShipmentStep",
+                    "children": []
+                  },
+                  {
+                    "loaded": true,
+                    "isPathHref": true,
+                    "type": "link",
+                    "path": "/references/medusa-workflows/steps/validateShippingOptionPricesStep",
+                    "title": "validateShippingOptionPricesStep",
                     "children": []
                   },
                   {
@@ -18584,6 +18680,14 @@ export const generatedSidebar = [
                     "type": "link",
                     "path": "/references/medusa-workflows/createExchangeShippingMethodWorkflow",
                     "title": "createExchangeShippingMethodWorkflow",
+                    "children": []
+                  },
+                  {
+                    "loaded": true,
+                    "isPathHref": true,
+                    "type": "link",
+                    "path": "/references/medusa-workflows/createOrUpdateOrderPaymentCollectionWorkflow",
+                    "title": "createOrUpdateOrderPaymentCollectionWorkflow",
                     "children": []
                   },
                   {
@@ -20595,6 +20699,14 @@ export const generatedSidebar = [
                     "loaded": true,
                     "isPathHref": true,
                     "type": "link",
+                    "path": "/references/medusa-workflows/steps/batchLinkProductsToCategoryStep",
+                    "title": "batchLinkProductsToCategoryStep",
+                    "children": []
+                  },
+                  {
+                    "loaded": true,
+                    "isPathHref": true,
+                    "type": "link",
                     "path": "/references/medusa-workflows/steps/batchLinkProductsToCollectionStep",
                     "title": "batchLinkProductsToCollectionStep",
                     "children": []
@@ -20725,6 +20837,14 @@ export const generatedSidebar = [
                     "type": "link",
                     "path": "/references/medusa-workflows/steps/getProductsStep",
                     "title": "getProductsStep",
+                    "children": []
+                  },
+                  {
+                    "loaded": true,
+                    "isPathHref": true,
+                    "type": "link",
+                    "path": "/references/medusa-workflows/steps/getVariantAvailabilityStep",
+                    "title": "getVariantAvailabilityStep",
                     "children": []
                   },
                   {
@@ -20976,6 +21096,14 @@ export const generatedSidebar = [
                     "loaded": true,
                     "isPathHref": true,
                     "type": "link",
+                    "path": "/references/medusa-workflows/updatePromotionsStatusWorkflow",
+                    "title": "updatePromotionsStatusWorkflow",
+                    "children": []
+                  },
+                  {
+                    "loaded": true,
+                    "isPathHref": true,
+                    "type": "link",
                     "path": "/references/medusa-workflows/updatePromotionsWorkflow",
                     "title": "updatePromotionsWorkflow",
                     "children": []
@@ -21073,6 +21201,14 @@ export const generatedSidebar = [
                     "type": "link",
                     "path": "/references/medusa-workflows/steps/updatePromotionsStep",
                     "title": "updatePromotionsStep",
+                    "children": []
+                  },
+                  {
+                    "loaded": true,
+                    "isPathHref": true,
+                    "type": "link",
+                    "path": "/references/medusa-workflows/updatePromotionsValidationStep",
+                    "title": "updatePromotionsValidationStep",
                     "children": []
                   }
                 ],

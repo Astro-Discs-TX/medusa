@@ -15,7 +15,7 @@ This documentation provides a reference to the `createReservationsWorkflow`. It 
 
 This workflow creates one or more reservations.
 
-<SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/reservation/workflows/create-reservations.ts#L14" />
+<SourceCodeLink link="https://github.com/medusajs/medusa/blob/911eefadbd8280509f7bf89c1fa2e1b083c1d219/packages/core/core-flows/src/reservation/workflows/create-reservations.ts#L14" />
 
 ## Examples
 
@@ -39,7 +39,7 @@ export async function POST(
         "reservations": [{
           "inventory_item_id": "{value}",
           "location_id": "{value}",
-          "quantity": 6
+          "quantity": 48
         }]
       }
     })
@@ -68,7 +68,7 @@ export default async function handleOrderPlaced({
         "reservations": [{
           "inventory_item_id": "{value}",
           "location_id": "{value}",
-          "quantity": 6
+          "quantity": 48
         }]
       }
     })
@@ -97,7 +97,7 @@ export default async function myCustomJob(
         "reservations": [{
           "inventory_item_id": "{value}",
           "location_id": "{value}",
-          "quantity": 6
+          "quantity": 48
         }]
       }
     })
@@ -127,7 +127,7 @@ const myWorkflow = createWorkflow(
           "reservations": [{
             "inventory_item_id": "{value}",
             "location_id": "{value}",
-            "quantity": 6
+            "quantity": 48
           }]
         }
       })
@@ -140,7 +140,7 @@ const myWorkflow = createWorkflow(
 
 ## Steps
 
-<WorkflowDiagram workflow={{"name":"createReservationsWorkflow","steps":[{"type":"step","name":"createReservationsStep","description":"This step creates one or more reservations.\n\n","link":"../../../Steps_Reservation/functions/core_flows.Reservation.Steps_Reservation.createReservationsStep/page.mdx","depth":1}]}} />
+<WorkflowDiagram workflow={{"name":"createReservationsWorkflow","steps":[{"type":"step","name":"createReservationsStep","description":"This step creates one or more reservations.","link":"../../../Steps_Reservation/functions/core_flows.Reservation.Steps_Reservation.createReservationsStep/page.mdx","depth":1}]}} />
 
 ## Input
 

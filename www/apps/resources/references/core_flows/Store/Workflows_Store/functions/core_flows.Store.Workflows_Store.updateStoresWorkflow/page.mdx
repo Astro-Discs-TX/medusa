@@ -15,7 +15,7 @@ This documentation provides a reference to the `updateStoresWorkflow`. It belong
 
 This workflow updates stores matching the specified filters.
 
-<SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/store/workflows/update-stores.ts#L16" />
+<SourceCodeLink link="https://github.com/medusajs/medusa/blob/911eefadbd8280509f7bf89c1fa2e1b083c1d219/packages/core/core-flows/src/store/workflows/update-stores.ts#L16" />
 
 ## Examples
 
@@ -128,7 +128,7 @@ const myWorkflow = createWorkflow(
 
 ## Steps
 
-<WorkflowDiagram workflow={{"name":"updateStoresWorkflow","steps":[{"type":"step","name":"updateStoresStep","description":"This step updates stores matching the specified filters.\n\n","link":"../../../Steps_Store/functions/core_flows.Store.Steps_Store.updateStoresStep/page.mdx","depth":1},{"type":"when","condition":"{\n      return !!data.input.update.supported_currencies?.length\n    }","depth":"2","steps":[{"type":"step","name":"updatePricePreferencesAsArrayStep","description":"This step updates price preferences.\n\n","link":"../../../../Pricing/Steps_Pricing/functions/core_flows.Pricing.Steps_Pricing.updatePricePreferencesAsArrayStep/page.mdx","depth":2}]}]}} />
+<WorkflowDiagram workflow={{"name":"updateStoresWorkflow","steps":[{"type":"step","name":"updateStoresStep","description":"This step updates stores matching the specified filters.","link":"../../../Steps_Store/functions/core_flows.Store.Steps_Store.updateStoresStep/page.mdx","depth":1},{"type":"when","condition":"{\n      return !!data.input.update.supported_currencies?.length\n    }","depth":"2","steps":[{"type":"step","name":"updatePricePreferencesAsArrayStep","description":"This step creates or updates price preferences.","link":"../../../../Pricing/Steps_Pricing/functions/core_flows.Pricing.Steps_Pricing.updatePricePreferencesAsArrayStep/page.mdx","depth":2}]}]}} />
 
 ## Input
 

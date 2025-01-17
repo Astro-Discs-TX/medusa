@@ -15,7 +15,7 @@ This documentation provides a reference to the `createProductCategoriesWorkflow`
 
 This workflow creates one or more product categories.
 
-<SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/product-category/workflows/create-product-categories.ts#L16" />
+<SourceCodeLink link="https://github.com/medusajs/medusa/blob/911eefadbd8280509f7bf89c1fa2e1b083c1d219/packages/core/core-flows/src/product-category/workflows/create-product-categories.ts#L16" />
 
 ## Examples
 
@@ -37,7 +37,7 @@ export async function POST(
     .run({
       input: {
         "product_categories": [{
-          "name": "Johnathan"
+          "name": "Guillermo"
         }]
       }
     })
@@ -64,7 +64,7 @@ export default async function handleOrderPlaced({
     .run({
       input: {
         "product_categories": [{
-          "name": "Johnathan"
+          "name": "Guillermo"
         }]
       }
     })
@@ -91,7 +91,7 @@ export default async function myCustomJob(
     .run({
       input: {
         "product_categories": [{
-          "name": "Johnathan"
+          "name": "Guillermo"
         }]
       }
     })
@@ -119,7 +119,7 @@ const myWorkflow = createWorkflow(
       .runAsStep({
         input: {
           "product_categories": [{
-            "name": "Johnathan"
+            "name": "Guillermo"
           }]
         }
       })
@@ -132,7 +132,7 @@ const myWorkflow = createWorkflow(
 
 ## Steps
 
-<WorkflowDiagram workflow={{"name":"createProductCategoriesWorkflow","steps":[{"type":"step","name":"createProductCategoriesStep","description":"This step creates one or more product categories.\n\n","link":"../../../Steps_Product_Category/functions/core_flows.Product_Category.Steps_Product_Category.createProductCategoriesStep/page.mdx","depth":1},{"type":"step","name":"emitEventStep","description":"Emit an event.\n\n","link":"../../../../Common/Steps_Common/functions/core_flows.Common.Steps_Common.emitEventStep/page.mdx","depth":2}]}} />
+<WorkflowDiagram workflow={{"name":"createProductCategoriesWorkflow","steps":[{"type":"step","name":"createProductCategoriesStep","description":"This step creates one or more product categories.","link":"../../../Steps_Product_Category/functions/core_flows.Product_Category.Steps_Product_Category.createProductCategoriesStep/page.mdx","depth":1},{"type":"step","name":"emitEventStep","description":"Emit an event.","link":"../../../../Common/Steps_Common/functions/core_flows.Common.Steps_Common.emitEventStep/page.mdx","depth":2}]}} />
 
 ## Input
 

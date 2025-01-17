@@ -14,7 +14,7 @@ This documentation provides a reference to the `updatePromotionRulesWorkflow`. I
 
 This workflow updates one or more promotion rules.
 
-<SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/promotion/workflows/update-promotion-rules.ts#L16" />
+<SourceCodeLink link="https://github.com/medusajs/medusa/blob/911eefadbd8280509f7bf89c1fa2e1b083c1d219/packages/core/core-flows/src/promotion/workflows/update-promotion-rules.ts#L16" />
 
 ## Examples
 
@@ -36,7 +36,7 @@ export async function POST(
     .run({
       input: {
         "data": [{
-          "id": "id_YEB9k1J7eGtSqpAYCzn"
+          "id": "id_gHiv6CSeiZ6NWor1N6A"
         }]
       }
     })
@@ -63,7 +63,7 @@ export default async function handleOrderPlaced({
     .run({
       input: {
         "data": [{
-          "id": "id_YEB9k1J7eGtSqpAYCzn"
+          "id": "id_gHiv6CSeiZ6NWor1N6A"
         }]
       }
     })
@@ -90,7 +90,7 @@ export default async function myCustomJob(
     .run({
       input: {
         "data": [{
-          "id": "id_YEB9k1J7eGtSqpAYCzn"
+          "id": "id_gHiv6CSeiZ6NWor1N6A"
         }]
       }
     })
@@ -118,7 +118,7 @@ const myWorkflow = createWorkflow(
       .runAsStep({
         input: {
           "data": [{
-            "id": "id_YEB9k1J7eGtSqpAYCzn"
+            "id": "id_gHiv6CSeiZ6NWor1N6A"
           }]
         }
       })
@@ -131,7 +131,7 @@ const myWorkflow = createWorkflow(
 
 ## Steps
 
-<WorkflowDiagram workflow={{"name":"updatePromotionRulesWorkflow","steps":[{"type":"step","name":"updatePromotionRulesStep","description":"This step updates one or more promotion rules.\n\n","link":"../../../Steps_Promotion/functions/core_flows.Promotion.Steps_Promotion.updatePromotionRulesStep/page.mdx","depth":1}]}} />
+<WorkflowDiagram workflow={{"name":"updatePromotionRulesWorkflow","steps":[{"type":"step","name":"updatePromotionRulesStep","description":"This step updates one or more promotion rules.","link":"../../../Steps_Promotion/functions/core_flows.Promotion.Steps_Promotion.updatePromotionRulesStep/page.mdx","depth":1}]}} />
 
 ## Input
 

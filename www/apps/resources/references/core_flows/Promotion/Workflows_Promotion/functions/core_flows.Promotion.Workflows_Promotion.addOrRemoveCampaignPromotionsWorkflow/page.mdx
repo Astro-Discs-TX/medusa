@@ -14,7 +14,7 @@ This documentation provides a reference to the `addOrRemoveCampaignPromotionsWor
 
 This workflow adds or removes promotions from campaigns.
 
-<SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/promotion/workflows/add-or-remove-campaign-promotions.ts#L17" />
+<SourceCodeLink link="https://github.com/medusajs/medusa/blob/911eefadbd8280509f7bf89c1fa2e1b083c1d219/packages/core/core-flows/src/promotion/workflows/add-or-remove-campaign-promotions.ts#L17" />
 
 ## Examples
 
@@ -35,7 +35,7 @@ export async function POST(
   const { result } = await addOrRemoveCampaignPromotionsWorkflow(req.scope)
     .run({
       input: {
-        "id": "id_5qPiyzauVZ4hN7tCOUw"
+        "id": "id_gpc4ITXSM06fMc44M"
       }
     })
 
@@ -60,7 +60,7 @@ export default async function handleOrderPlaced({
   const { result } = await addOrRemoveCampaignPromotionsWorkflow(container)
     .run({
       input: {
-        "id": "id_5qPiyzauVZ4hN7tCOUw"
+        "id": "id_gpc4ITXSM06fMc44M"
       }
     })
 
@@ -85,7 +85,7 @@ export default async function myCustomJob(
   const { result } = await addOrRemoveCampaignPromotionsWorkflow(container)
     .run({
       input: {
-        "id": "id_5qPiyzauVZ4hN7tCOUw"
+        "id": "id_gpc4ITXSM06fMc44M"
       }
     })
 
@@ -111,7 +111,7 @@ const myWorkflow = createWorkflow(
     const result = addOrRemoveCampaignPromotionsWorkflow
       .runAsStep({
         input: {
-          "id": "id_5qPiyzauVZ4hN7tCOUw"
+          "id": "id_gpc4ITXSM06fMc44M"
         }
       })
   }
@@ -123,8 +123,8 @@ const myWorkflow = createWorkflow(
 
 ## Steps
 
-<WorkflowDiagram workflow={{"name":"addOrRemoveCampaignPromotionsWorkflow","steps":[{"type":"step","name":"addCampaignPromotionsStep","description":"This step adds promotions to a campaign.\n\n","link":"../../../Steps_Promotion/functions/core_flows.Promotion.Steps_Promotion.addCampaignPromotionsStep/page.mdx","depth":1},{"type":"step","name":"removeCampaignPromotionsStep","description":"This step removes promotions from a campaigns.\n\n","link":"../../../Steps_Promotion/functions/core_flows.Promotion.Steps_Promotion.removeCampaignPromotionsStep/page.mdx","depth":1}]}} />
+<WorkflowDiagram workflow={{"name":"addOrRemoveCampaignPromotionsWorkflow","steps":[{"type":"step","name":"addCampaignPromotionsStep","description":"This step adds promotions to a campaign.","link":"../../../Steps_Promotion/functions/core_flows.Promotion.Steps_Promotion.addCampaignPromotionsStep/page.mdx","depth":1},{"type":"step","name":"removeCampaignPromotionsStep","description":"This step removes promotions from a campaigns.","link":"../../../Steps_Promotion/functions/core_flows.Promotion.Steps_Promotion.removeCampaignPromotionsStep/page.mdx","depth":1}]}} />
 
 ## Input
 
-<TypeList types={[{"name":"LinkWorkflowInput","type":"[LinkWorkflowInput](../../../../../types/CommonTypes/types/types.CommonTypes.LinkWorkflowInput/page.mdx)","optional":false,"defaultValue":"","description":"","expandable":false,"children":[{"name":"id","type":"`string`","description":"","optional":false,"defaultValue":"","expandable":false,"children":[]},{"name":"add","type":"`string`[]","description":"","optional":true,"defaultValue":"","expandable":false,"children":[]},{"name":"remove","type":"`string`[]","description":"","optional":true,"defaultValue":"","expandable":false,"children":[]}]}]} expandUrl="https://docs.medusajs.com/learn/fundamentals/data-models/manage-relationships#retrieve-records-of-relation" openedLevel={1} sectionTitle="addOrRemoveCampaignPromotionsWorkflow"/>
+<TypeList types={[{"name":"LinkWorkflowInput","type":"[LinkWorkflowInput](../../../../../types/CommonTypes/types/types.CommonTypes.LinkWorkflowInput/page.mdx)","optional":false,"defaultValue":"","description":"","expandable":false,"children":[{"name":"id","type":"`string`","description":"The ID of the data model to create links to or remove links from.","optional":false,"defaultValue":"","expandable":false,"children":[]},{"name":"add","type":"`string`[]","description":"The IDs of the other data models to create links to the record specified in `id`.","optional":true,"defaultValue":"","expandable":false,"children":[]},{"name":"remove","type":"`string`[]","description":"The IDs of the other data models to remove links from the record specified in `id`.","optional":true,"defaultValue":"","expandable":false,"children":[]}]}]} expandUrl="https://docs.medusajs.com/learn/fundamentals/data-models/manage-relationships#retrieve-records-of-relation" openedLevel={1} sectionTitle="addOrRemoveCampaignPromotionsWorkflow"/>

@@ -15,7 +15,7 @@ This documentation provides a reference to the `createSalesChannelsWorkflow`. It
 
 This workflow creates one or more sales channels.
 
-<SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/sales-channel/workflows/create-sales-channels.ts#L23" />
+<SourceCodeLink link="https://github.com/medusajs/medusa/blob/911eefadbd8280509f7bf89c1fa2e1b083c1d219/packages/core/core-flows/src/sales-channel/workflows/create-sales-channels.ts#L23" />
 
 ## Examples
 
@@ -37,7 +37,7 @@ export async function POST(
     .run({
       input: {
         "salesChannelsData": [{
-          "name": "Daija"
+          "name": "Ashley"
         }]
       }
     })
@@ -64,7 +64,7 @@ export default async function handleOrderPlaced({
     .run({
       input: {
         "salesChannelsData": [{
-          "name": "Daija"
+          "name": "Ashley"
         }]
       }
     })
@@ -91,7 +91,7 @@ export default async function myCustomJob(
     .run({
       input: {
         "salesChannelsData": [{
-          "name": "Daija"
+          "name": "Ashley"
         }]
       }
     })
@@ -119,7 +119,7 @@ const myWorkflow = createWorkflow(
       .runAsStep({
         input: {
           "salesChannelsData": [{
-            "name": "Daija"
+            "name": "Ashley"
           }]
         }
       })
@@ -132,7 +132,7 @@ const myWorkflow = createWorkflow(
 
 ## Steps
 
-<WorkflowDiagram workflow={{"name":"createSalesChannelsWorkflow","steps":[{"type":"step","name":"createSalesChannelsStep","description":"This step creates one or more sales channels.\n\n","link":"../../../Steps_Sales_Channel/functions/core_flows.Sales_Channel.Steps_Sales_Channel.createSalesChannelsStep/page.mdx","depth":1},{"type":"step","name":"emitEventStep","description":"Emit an event.\n\n","link":"../../../../Common/Steps_Common/functions/core_flows.Common.Steps_Common.emitEventStep/page.mdx","depth":2}]}} />
+<WorkflowDiagram workflow={{"name":"createSalesChannelsWorkflow","steps":[{"type":"step","name":"createSalesChannelsStep","description":"This step creates one or more sales channels.","link":"../../../Steps_Sales_Channel/functions/core_flows.Sales_Channel.Steps_Sales_Channel.createSalesChannelsStep/page.mdx","depth":1},{"type":"step","name":"emitEventStep","description":"Emit an event.","link":"../../../../Common/Steps_Common/functions/core_flows.Common.Steps_Common.emitEventStep/page.mdx","depth":2}]}} />
 
 ## Input
 

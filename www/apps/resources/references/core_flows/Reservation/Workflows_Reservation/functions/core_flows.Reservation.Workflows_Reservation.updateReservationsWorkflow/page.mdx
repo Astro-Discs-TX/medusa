@@ -14,7 +14,7 @@ This documentation provides a reference to the `updateReservationsWorkflow`. It 
 
 This workflow updates one or more reservations.
 
-<SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/reservation/workflows/update-reservations.ts#L14" />
+<SourceCodeLink link="https://github.com/medusajs/medusa/blob/911eefadbd8280509f7bf89c1fa2e1b083c1d219/packages/core/core-flows/src/reservation/workflows/update-reservations.ts#L14" />
 
 ## Examples
 
@@ -36,7 +36,7 @@ export async function POST(
     .run({
       input: {
         "updates": [{
-          "id": "id_CM0xNtYFVGsndigtxzs"
+          "id": "id_YkFClPnk1CFiDUJ6Vcr"
         }]
       }
     })
@@ -63,7 +63,7 @@ export default async function handleOrderPlaced({
     .run({
       input: {
         "updates": [{
-          "id": "id_CM0xNtYFVGsndigtxzs"
+          "id": "id_YkFClPnk1CFiDUJ6Vcr"
         }]
       }
     })
@@ -90,7 +90,7 @@ export default async function myCustomJob(
     .run({
       input: {
         "updates": [{
-          "id": "id_CM0xNtYFVGsndigtxzs"
+          "id": "id_YkFClPnk1CFiDUJ6Vcr"
         }]
       }
     })
@@ -118,7 +118,7 @@ const myWorkflow = createWorkflow(
       .runAsStep({
         input: {
           "updates": [{
-            "id": "id_CM0xNtYFVGsndigtxzs"
+            "id": "id_YkFClPnk1CFiDUJ6Vcr"
           }]
         }
       })
@@ -131,7 +131,7 @@ const myWorkflow = createWorkflow(
 
 ## Steps
 
-<WorkflowDiagram workflow={{"name":"updateReservationsWorkflow","steps":[{"type":"step","name":"updateReservationsStep","description":"This step updates one or more reservations.\n\n","link":"../../../Steps_Reservation/functions/core_flows.Reservation.Steps_Reservation.updateReservationsStep/page.mdx","depth":1}]}} />
+<WorkflowDiagram workflow={{"name":"updateReservationsWorkflow","steps":[{"type":"step","name":"updateReservationsStep","description":"This step updates one or more reservations.","link":"../../../Steps_Reservation/functions/core_flows.Reservation.Steps_Reservation.updateReservationsStep/page.mdx","depth":1}]}} />
 
 ## Input
 

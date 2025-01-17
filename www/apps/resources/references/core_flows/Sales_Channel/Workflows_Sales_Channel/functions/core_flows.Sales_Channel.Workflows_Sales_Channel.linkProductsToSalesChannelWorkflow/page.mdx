@@ -14,7 +14,7 @@ This documentation provides a reference to the `linkProductsToSalesChannelWorkfl
 
 This workflow creates or dismisses links between product and sales channel records.
 
-<SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/sales-channel/workflows/link-products-to-sales-channel.ts#L12" />
+<SourceCodeLink link="https://github.com/medusajs/medusa/blob/911eefadbd8280509f7bf89c1fa2e1b083c1d219/packages/core/core-flows/src/sales-channel/workflows/link-products-to-sales-channel.ts#L12" />
 
 ## Examples
 
@@ -35,7 +35,7 @@ export async function POST(
   const { result } = await linkProductsToSalesChannelWorkflow(req.scope)
     .run({
       input: {
-        "id": "id_GtsUa6ZhGNwsYtS7fjxJ"
+        "id": "id_kTfDhFRdBxSth"
       }
     })
 
@@ -60,7 +60,7 @@ export default async function handleOrderPlaced({
   const { result } = await linkProductsToSalesChannelWorkflow(container)
     .run({
       input: {
-        "id": "id_GtsUa6ZhGNwsYtS7fjxJ"
+        "id": "id_kTfDhFRdBxSth"
       }
     })
 
@@ -85,7 +85,7 @@ export default async function myCustomJob(
   const { result } = await linkProductsToSalesChannelWorkflow(container)
     .run({
       input: {
-        "id": "id_GtsUa6ZhGNwsYtS7fjxJ"
+        "id": "id_kTfDhFRdBxSth"
       }
     })
 
@@ -111,7 +111,7 @@ const myWorkflow = createWorkflow(
     const result = linkProductsToSalesChannelWorkflow
       .runAsStep({
         input: {
-          "id": "id_GtsUa6ZhGNwsYtS7fjxJ"
+          "id": "id_kTfDhFRdBxSth"
         }
       })
   }
@@ -123,8 +123,8 @@ const myWorkflow = createWorkflow(
 
 ## Steps
 
-<WorkflowDiagram workflow={{"name":"linkProductsToSalesChannelWorkflow","steps":[{"type":"step","name":"associateProductsWithSalesChannelsStep","description":"This step creates links between products and sales channel records.\n\n","link":"../../../Steps_Sales_Channel/functions/core_flows.Sales_Channel.Steps_Sales_Channel.associateProductsWithSalesChannelsStep/page.mdx","depth":1},{"type":"step","name":"detachProductsFromSalesChannelsStep","description":"This step dismisses links between product and sales channel records.\n\n","link":"../../../Steps_Sales_Channel/functions/core_flows.Sales_Channel.Steps_Sales_Channel.detachProductsFromSalesChannelsStep/page.mdx","depth":2}]}} />
+<WorkflowDiagram workflow={{"name":"linkProductsToSalesChannelWorkflow","steps":[{"type":"step","name":"associateProductsWithSalesChannelsStep","description":"This step creates links between products and sales channel records.","link":"../../../Steps_Sales_Channel/functions/core_flows.Sales_Channel.Steps_Sales_Channel.associateProductsWithSalesChannelsStep/page.mdx","depth":1},{"type":"step","name":"detachProductsFromSalesChannelsStep","description":"This step dismisses links between product and sales channel records.","link":"../../../Steps_Sales_Channel/functions/core_flows.Sales_Channel.Steps_Sales_Channel.detachProductsFromSalesChannelsStep/page.mdx","depth":2}]}} />
 
 ## Input
 
-<TypeList types={[{"name":"LinkWorkflowInput","type":"[LinkWorkflowInput](../../../../../types/CommonTypes/types/types.CommonTypes.LinkWorkflowInput/page.mdx)","optional":false,"defaultValue":"","description":"","expandable":false,"children":[{"name":"id","type":"`string`","description":"","optional":false,"defaultValue":"","expandable":false,"children":[]},{"name":"add","type":"`string`[]","description":"","optional":true,"defaultValue":"","expandable":false,"children":[]},{"name":"remove","type":"`string`[]","description":"","optional":true,"defaultValue":"","expandable":false,"children":[]}]}]} expandUrl="https://docs.medusajs.com/learn/fundamentals/data-models/manage-relationships#retrieve-records-of-relation" openedLevel={1} sectionTitle="linkProductsToSalesChannelWorkflow"/>
+<TypeList types={[{"name":"LinkWorkflowInput","type":"[LinkWorkflowInput](../../../../../types/CommonTypes/types/types.CommonTypes.LinkWorkflowInput/page.mdx)","optional":false,"defaultValue":"","description":"","expandable":false,"children":[{"name":"id","type":"`string`","description":"The ID of the data model to create links to or remove links from.","optional":false,"defaultValue":"","expandable":false,"children":[]},{"name":"add","type":"`string`[]","description":"The IDs of the other data models to create links to the record specified in `id`.","optional":true,"defaultValue":"","expandable":false,"children":[]},{"name":"remove","type":"`string`[]","description":"The IDs of the other data models to remove links from the record specified in `id`.","optional":true,"defaultValue":"","expandable":false,"children":[]}]}]} expandUrl="https://docs.medusajs.com/learn/fundamentals/data-models/manage-relationships#retrieve-records-of-relation" openedLevel={1} sectionTitle="linkProductsToSalesChannelWorkflow"/>

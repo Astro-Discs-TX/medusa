@@ -15,7 +15,7 @@ This documentation provides a reference to the `deleteApiKeysWorkflow`. It belon
 
 This workflow deletes one or more API keys.
 
-<SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/api-key/workflows/delete-api-keys.ts#L12" />
+<SourceCodeLink link="https://github.com/medusajs/medusa/blob/911eefadbd8280509f7bf89c1fa2e1b083c1d219/packages/core/core-flows/src/api-key/workflows/delete-api-keys.ts#L12" />
 
 ## Examples
 
@@ -37,7 +37,7 @@ export async function POST(
     .run({
       input: {
         "ids": [
-          "id_iMZLYsRAs2bbPci"
+          "id_y5MxcnZ1S6yjo"
         ]
       }
     })
@@ -64,7 +64,7 @@ export default async function handleOrderPlaced({
     .run({
       input: {
         "ids": [
-          "id_iMZLYsRAs2bbPci"
+          "id_y5MxcnZ1S6yjo"
         ]
       }
     })
@@ -91,7 +91,7 @@ export default async function myCustomJob(
     .run({
       input: {
         "ids": [
-          "id_iMZLYsRAs2bbPci"
+          "id_y5MxcnZ1S6yjo"
         ]
       }
     })
@@ -119,7 +119,7 @@ const myWorkflow = createWorkflow(
       .runAsStep({
         input: {
           "ids": [
-            "id_iMZLYsRAs2bbPci"
+            "id_y5MxcnZ1S6yjo"
           ]
         }
       })
@@ -132,7 +132,7 @@ const myWorkflow = createWorkflow(
 
 ## Steps
 
-<WorkflowDiagram workflow={{"name":"deleteApiKeysWorkflow","steps":[{"type":"step","name":"deleteApiKeysStep","description":"This step deletes one or more API keys.\n\n","link":"../../../Steps_Api_Key/functions/core_flows.Api_Key.Steps_Api_Key.deleteApiKeysStep/page.mdx","depth":1},{"type":"step","name":"removeRemoteLinkStep","description":"This step deletes linked records of a record.\n\nLearn more in the [Remote Link documentation](https://docs.medusajs.com/learn/fundamentals/module-links/remote-link#cascade-delete-linked-records)\n\n","link":"../../../../Common/Steps_Common/functions/core_flows.Common.Steps_Common.removeRemoteLinkStep/page.mdx","depth":2}]}} />
+<WorkflowDiagram workflow={{"name":"deleteApiKeysWorkflow","steps":[{"type":"step","name":"deleteApiKeysStep","description":"This step deletes one or more API keys.","link":"../../../Steps_Api_Key/functions/core_flows.Api_Key.Steps_Api_Key.deleteApiKeysStep/page.mdx","depth":1},{"type":"step","name":"removeRemoteLinkStep","description":"This step deletes linked records of a record.\n\nLearn more in the [Remote Link documentation](https://docs.medusajs.com/learn/fundamentals/module-links/remote-link#cascade-delete-linked-records)","link":"../../../../Common/Steps_Common/functions/core_flows.Common.Steps_Common.removeRemoteLinkStep/page.mdx","depth":2}]}} />
 
 ## Input
 

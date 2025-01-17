@@ -15,7 +15,7 @@ This documentation provides a reference to the `linkSalesChannelsToApiKeyWorkflo
 
 This workflow links sales channels to API keys.
 
-<SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/api-key/workflows/link-sales-channels-to-publishable-key.ts#L13" />
+<SourceCodeLink link="https://github.com/medusajs/medusa/blob/911eefadbd8280509f7bf89c1fa2e1b083c1d219/packages/core/core-flows/src/api-key/workflows/link-sales-channels-to-publishable-key.ts#L13" />
 
 ## Examples
 
@@ -36,7 +36,7 @@ export async function POST(
   const { result } = await linkSalesChannelsToApiKeyWorkflow(req.scope)
     .run({
       input: {
-        "id": "id_ho4tqCcF0SooZ"
+        "id": "id_gSqcW0BXwMiBl8C"
       }
     })
 
@@ -61,7 +61,7 @@ export default async function handleOrderPlaced({
   const { result } = await linkSalesChannelsToApiKeyWorkflow(container)
     .run({
       input: {
-        "id": "id_ho4tqCcF0SooZ"
+        "id": "id_gSqcW0BXwMiBl8C"
       }
     })
 
@@ -86,7 +86,7 @@ export default async function myCustomJob(
   const { result } = await linkSalesChannelsToApiKeyWorkflow(container)
     .run({
       input: {
-        "id": "id_ho4tqCcF0SooZ"
+        "id": "id_gSqcW0BXwMiBl8C"
       }
     })
 
@@ -112,7 +112,7 @@ const myWorkflow = createWorkflow(
     const result = linkSalesChannelsToApiKeyWorkflow
       .runAsStep({
         input: {
-          "id": "id_ho4tqCcF0SooZ"
+          "id": "id_gSqcW0BXwMiBl8C"
         }
       })
   }
@@ -124,8 +124,8 @@ const myWorkflow = createWorkflow(
 
 ## Steps
 
-<WorkflowDiagram workflow={{"name":"linkSalesChannelsToApiKeyWorkflow","steps":[{"type":"step","name":"validateSalesChannelsExistStep","description":"This step validates that a sales channel exists before linking it to an API key.\n\n","link":"../../../Steps_Api_Key/functions/core_flows.Api_Key.Steps_Api_Key.validateSalesChannelsExistStep/page.mdx","depth":1},{"type":"step","name":"linkSalesChannelsToApiKeyStep","description":"This step links sales channels to API keys.\n\n","link":"../../../Steps_Api_Key/functions/core_flows.Api_Key.Steps_Api_Key.linkSalesChannelsToApiKeyStep/page.mdx","depth":2}]}} />
+<WorkflowDiagram workflow={{"name":"linkSalesChannelsToApiKeyWorkflow","steps":[{"type":"step","name":"validateSalesChannelsExistStep","description":"This step validates that a sales channel exists before linking it to an API key.","link":"../../../Steps_Api_Key/functions/core_flows.Api_Key.Steps_Api_Key.validateSalesChannelsExistStep/page.mdx","depth":1},{"type":"step","name":"linkSalesChannelsToApiKeyStep","description":"This step links sales channels to API keys.","link":"../../../Steps_Api_Key/functions/core_flows.Api_Key.Steps_Api_Key.linkSalesChannelsToApiKeyStep/page.mdx","depth":2}]}} />
 
 ## Input
 
-<TypeList types={[{"name":"LinkWorkflowInput","type":"[LinkWorkflowInput](../../../../../types/CommonTypes/types/types.CommonTypes.LinkWorkflowInput/page.mdx)","optional":false,"defaultValue":"","description":"","expandable":false,"children":[{"name":"id","type":"`string`","description":"","optional":false,"defaultValue":"","expandable":false,"children":[]},{"name":"add","type":"`string`[]","description":"","optional":true,"defaultValue":"","expandable":false,"children":[]},{"name":"remove","type":"`string`[]","description":"","optional":true,"defaultValue":"","expandable":false,"children":[]}]}]} expandUrl="https://docs.medusajs.com/learn/fundamentals/data-models/manage-relationships#retrieve-records-of-relation" openedLevel={1} sectionTitle="linkSalesChannelsToApiKeyWorkflow"/>
+<TypeList types={[{"name":"LinkWorkflowInput","type":"[LinkWorkflowInput](../../../../../types/CommonTypes/types/types.CommonTypes.LinkWorkflowInput/page.mdx)","optional":false,"defaultValue":"","description":"","expandable":false,"children":[{"name":"id","type":"`string`","description":"The ID of the data model to create links to or remove links from.","optional":false,"defaultValue":"","expandable":false,"children":[]},{"name":"add","type":"`string`[]","description":"The IDs of the other data models to create links to the record specified in `id`.","optional":true,"defaultValue":"","expandable":false,"children":[]},{"name":"remove","type":"`string`[]","description":"The IDs of the other data models to remove links from the record specified in `id`.","optional":true,"defaultValue":"","expandable":false,"children":[]}]}]} expandUrl="https://docs.medusajs.com/learn/fundamentals/data-models/manage-relationships#retrieve-records-of-relation" openedLevel={1} sectionTitle="linkSalesChannelsToApiKeyWorkflow"/>

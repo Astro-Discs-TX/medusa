@@ -14,7 +14,7 @@ This documentation provides a reference to the `createPromotionRulesWorkflow`. I
 
 This workflow creates one or more promotion rules.
 
-<SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/promotion/workflows/create-promotion-rules.ts#L16" />
+<SourceCodeLink link="https://github.com/medusajs/medusa/blob/911eefadbd8280509f7bf89c1fa2e1b083c1d219/packages/core/core-flows/src/promotion/workflows/create-promotion-rules.ts#L16" />
 
 ## Examples
 
@@ -37,7 +37,7 @@ export async function POST(
       input: {
         "rule_type": "{value}",
         "data": {
-          "id": "id_dgeazdtUx23V",
+          "id": "id_DkqeHGYFnlPyRNNgSQS",
           "rules": [{
             "attribute": "{value}",
             "operator": "ne",
@@ -70,7 +70,7 @@ export default async function handleOrderPlaced({
       input: {
         "rule_type": "{value}",
         "data": {
-          "id": "id_dgeazdtUx23V",
+          "id": "id_DkqeHGYFnlPyRNNgSQS",
           "rules": [{
             "attribute": "{value}",
             "operator": "ne",
@@ -103,7 +103,7 @@ export default async function myCustomJob(
       input: {
         "rule_type": "{value}",
         "data": {
-          "id": "id_dgeazdtUx23V",
+          "id": "id_DkqeHGYFnlPyRNNgSQS",
           "rules": [{
             "attribute": "{value}",
             "operator": "ne",
@@ -137,7 +137,7 @@ const myWorkflow = createWorkflow(
         input: {
           "rule_type": "{value}",
           "data": {
-            "id": "id_dgeazdtUx23V",
+            "id": "id_DkqeHGYFnlPyRNNgSQS",
             "rules": [{
               "attribute": "{value}",
               "operator": "ne",
@@ -155,7 +155,7 @@ const myWorkflow = createWorkflow(
 
 ## Steps
 
-<WorkflowDiagram workflow={{"name":"createPromotionRulesWorkflow","steps":[{"type":"step","name":"addRulesToPromotionsStep","description":"This step adds rules to a promotion.\n\n","link":"../../../Steps_Promotion/functions/core_flows.Promotion.Steps_Promotion.addRulesToPromotionsStep/page.mdx","depth":1}]}} />
+<WorkflowDiagram workflow={{"name":"createPromotionRulesWorkflow","steps":[{"type":"step","name":"addRulesToPromotionsStep","description":"This step adds rules to a promotion.","link":"../../../Steps_Promotion/functions/core_flows.Promotion.Steps_Promotion.addRulesToPromotionsStep/page.mdx","depth":1}]}} />
 
 ## Input
 

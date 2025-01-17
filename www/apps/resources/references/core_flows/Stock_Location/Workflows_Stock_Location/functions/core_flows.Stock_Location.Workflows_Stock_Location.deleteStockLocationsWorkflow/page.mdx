@@ -15,7 +15,7 @@ This documentation provides a reference to the `deleteStockLocationsWorkflow`. I
 
 This workflow deletes one or more stock locations.
 
-<SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/stock-location/workflows/delete-stock-locations.ts#L14" />
+<SourceCodeLink link="https://github.com/medusajs/medusa/blob/911eefadbd8280509f7bf89c1fa2e1b083c1d219/packages/core/core-flows/src/stock-location/workflows/delete-stock-locations.ts#L14" />
 
 ## Examples
 
@@ -37,7 +37,7 @@ export async function POST(
     .run({
       input: {
         "ids": [
-          "id_6RqCuCxIQHywGiW0mm"
+          "id_Tf84psWLIzl12yrq"
         ]
       }
     })
@@ -64,7 +64,7 @@ export default async function handleOrderPlaced({
     .run({
       input: {
         "ids": [
-          "id_6RqCuCxIQHywGiW0mm"
+          "id_Tf84psWLIzl12yrq"
         ]
       }
     })
@@ -91,7 +91,7 @@ export default async function myCustomJob(
     .run({
       input: {
         "ids": [
-          "id_6RqCuCxIQHywGiW0mm"
+          "id_Tf84psWLIzl12yrq"
         ]
       }
     })
@@ -119,7 +119,7 @@ const myWorkflow = createWorkflow(
       .runAsStep({
         input: {
           "ids": [
-            "id_6RqCuCxIQHywGiW0mm"
+            "id_Tf84psWLIzl12yrq"
           ]
         }
       })
@@ -132,7 +132,7 @@ const myWorkflow = createWorkflow(
 
 ## Steps
 
-<WorkflowDiagram workflow={{"name":"deleteStockLocationsWorkflow","steps":[{"type":"step","name":"deleteStockLocationsStep","description":"This step deletes one or more stock locations.\n\n","link":"../../../Steps_Stock_Location/functions/core_flows.Stock_Location.Steps_Stock_Location.deleteStockLocationsStep/page.mdx","depth":1},{"type":"step","name":"removeRemoteLinkStep","description":"This step deletes linked records of a record.\n\nLearn more in the [Remote Link documentation](https://docs.medusajs.com/learn/fundamentals/module-links/remote-link#cascade-delete-linked-records)\n\n","link":"../../../../Common/Steps_Common/functions/core_flows.Common.Steps_Common.removeRemoteLinkStep/page.mdx","depth":2}]}} />
+<WorkflowDiagram workflow={{"name":"deleteStockLocationsWorkflow","steps":[{"type":"step","name":"deleteStockLocationsStep","description":"This step deletes one or more stock locations.","link":"../../../Steps_Stock_Location/functions/core_flows.Stock_Location.Steps_Stock_Location.deleteStockLocationsStep/page.mdx","depth":1},{"type":"step","name":"removeRemoteLinkStep","description":"This step deletes linked records of a record.\n\nLearn more in the [Remote Link documentation](https://docs.medusajs.com/learn/fundamentals/module-links/remote-link#cascade-delete-linked-records)","link":"../../../../Common/Steps_Common/functions/core_flows.Common.Steps_Common.removeRemoteLinkStep/page.mdx","depth":2}]}} />
 
 ## Input
 

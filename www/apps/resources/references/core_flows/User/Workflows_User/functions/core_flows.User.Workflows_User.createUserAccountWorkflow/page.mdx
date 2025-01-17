@@ -16,7 +16,7 @@ This documentation provides a reference to the `createUserAccountWorkflow`. It b
 
 This workflow creates an authentication identity for a user.
 
-<SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/user/workflows/create-user-account.ts#L20" />
+<SourceCodeLink link="https://github.com/medusajs/medusa/blob/911eefadbd8280509f7bf89c1fa2e1b083c1d219/packages/core/core-flows/src/user/workflows/create-user-account.ts#L20" />
 
 ## Examples
 
@@ -39,7 +39,7 @@ export async function POST(
       input: {
         "authIdentityId": "{value}",
         "userData": {
-          "email": "Asha19@hotmail.com"
+          "email": "Daphne_Greenholt@gmail.com"
         }
       }
     })
@@ -67,7 +67,7 @@ export default async function handleOrderPlaced({
       input: {
         "authIdentityId": "{value}",
         "userData": {
-          "email": "Asha19@hotmail.com"
+          "email": "Daphne_Greenholt@gmail.com"
         }
       }
     })
@@ -95,7 +95,7 @@ export default async function myCustomJob(
       input: {
         "authIdentityId": "{value}",
         "userData": {
-          "email": "Asha19@hotmail.com"
+          "email": "Daphne_Greenholt@gmail.com"
         }
       }
     })
@@ -124,7 +124,7 @@ const myWorkflow = createWorkflow(
         input: {
           "authIdentityId": "{value}",
           "userData": {
-            "email": "Asha19@hotmail.com"
+            "email": "Daphne_Greenholt@gmail.com"
           }
         }
       })
@@ -137,7 +137,7 @@ const myWorkflow = createWorkflow(
 
 ## Steps
 
-<WorkflowDiagram workflow={{"name":"createUserAccountWorkflow","steps":[{"type":"workflow","name":"createUsersWorkflow","description":"This workflow creates one or more users.\n\n","link":"../core_flows.User.Workflows_User.createUsersWorkflow/page.mdx","depth":1},{"type":"step","name":"setAuthAppMetadataStep","description":"This step sets the `app_metadata` property of an auth identity.\n\n","link":"../../../../Auth/Steps_Auth/functions/core_flows.Auth.Steps_Auth.setAuthAppMetadataStep/page.mdx","depth":2}]}} />
+<WorkflowDiagram workflow={{"name":"createUserAccountWorkflow","steps":[{"type":"workflow","name":"createUsersWorkflow","description":"This workflow creates one or more users.","link":"../core_flows.User.Workflows_User.createUsersWorkflow/page.mdx","depth":1},{"type":"step","name":"setAuthAppMetadataStep","description":"This step sets the `app_metadata` property of an auth identity.","link":"../../../../Auth/Steps_Auth/functions/core_flows.Auth.Steps_Auth.setAuthAppMetadataStep/page.mdx","depth":2}]}} />
 
 ## Input
 

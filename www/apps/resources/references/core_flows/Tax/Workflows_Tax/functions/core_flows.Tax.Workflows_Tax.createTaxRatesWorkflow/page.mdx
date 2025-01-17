@@ -14,7 +14,7 @@ This documentation provides a reference to the `createTaxRatesWorkflow`. It belo
 
 This workflow creates one or more tax rates.
 
-<SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/tax/workflows/create-tax-rates.ts#L13" />
+<SourceCodeLink link="https://github.com/medusajs/medusa/blob/911eefadbd8280509f7bf89c1fa2e1b083c1d219/packages/core/core-flows/src/tax/workflows/create-tax-rates.ts#L13" />
 
 ## Examples
 
@@ -36,7 +36,7 @@ export async function POST(
     .run({
       input: [{
         "tax_region_id": "{value}",
-        "name": "Sterling"
+        "name": "Myrl"
       }]
     })
 
@@ -62,7 +62,7 @@ export default async function handleOrderPlaced({
     .run({
       input: [{
         "tax_region_id": "{value}",
-        "name": "Sterling"
+        "name": "Myrl"
       }]
     })
 
@@ -88,7 +88,7 @@ export default async function myCustomJob(
     .run({
       input: [{
         "tax_region_id": "{value}",
-        "name": "Sterling"
+        "name": "Myrl"
       }]
     })
 
@@ -115,7 +115,7 @@ const myWorkflow = createWorkflow(
       .runAsStep({
         input: [{
           "tax_region_id": "{value}",
-          "name": "Sterling"
+          "name": "Myrl"
         }]
       })
   }
@@ -127,7 +127,7 @@ const myWorkflow = createWorkflow(
 
 ## Steps
 
-<WorkflowDiagram workflow={{"name":"createTaxRatesWorkflow","steps":[{"type":"step","name":"createTaxRatesStep","description":"This step creates one or more tax rates.\n\n","link":"../../../Steps_Tax/functions/core_flows.Tax.Steps_Tax.createTaxRatesStep/page.mdx","depth":1}]}} />
+<WorkflowDiagram workflow={{"name":"createTaxRatesWorkflow","steps":[{"type":"step","name":"createTaxRatesStep","description":"This step creates one or more tax rates.","link":"../../../Steps_Tax/functions/core_flows.Tax.Steps_Tax.createTaxRatesStep/page.mdx","depth":1}]}} />
 
 ## Input
 

@@ -14,7 +14,7 @@ This documentation provides a reference to the `deletePromotionsWorkflow`. It be
 
 This workflow deletes one or more promotions.
 
-<SourceCodeLink link="https://github.com/medusajs/medusa/blob/1b86c17b7293f3b810c062d78ec6ef563f968366/packages/core/core-flows/src/promotion/workflows/delete-promotions.ts#L15" />
+<SourceCodeLink link="https://github.com/medusajs/medusa/blob/911eefadbd8280509f7bf89c1fa2e1b083c1d219/packages/core/core-flows/src/promotion/workflows/delete-promotions.ts#L15" />
 
 ## Examples
 
@@ -36,7 +36,7 @@ export async function POST(
     .run({
       input: {
         "ids": [
-          "id_PXFIgp3nxIZtixB7yb"
+          "id_klJ9FlBrTL"
         ]
       }
     })
@@ -63,7 +63,7 @@ export default async function handleOrderPlaced({
     .run({
       input: {
         "ids": [
-          "id_PXFIgp3nxIZtixB7yb"
+          "id_klJ9FlBrTL"
         ]
       }
     })
@@ -90,7 +90,7 @@ export default async function myCustomJob(
     .run({
       input: {
         "ids": [
-          "id_PXFIgp3nxIZtixB7yb"
+          "id_klJ9FlBrTL"
         ]
       }
     })
@@ -118,7 +118,7 @@ const myWorkflow = createWorkflow(
       .runAsStep({
         input: {
           "ids": [
-            "id_PXFIgp3nxIZtixB7yb"
+            "id_klJ9FlBrTL"
           ]
         }
       })
@@ -131,7 +131,7 @@ const myWorkflow = createWorkflow(
 
 ## Steps
 
-<WorkflowDiagram workflow={{"name":"deletePromotionsWorkflow","steps":[{"type":"step","name":"deletePromotionsStep","description":"This step deletes one or more promotions.\n\n","link":"../../../Steps_Promotion/functions/core_flows.Promotion.Steps_Promotion.deletePromotionsStep/page.mdx","depth":1},{"type":"hook","name":"promotionsDeleted","description":"This step is a hook that you can inject custom functionality into.\n\n","link":"#promotionsDeleted","depth":2}]}} />
+<WorkflowDiagram workflow={{"name":"deletePromotionsWorkflow","steps":[{"type":"step","name":"deletePromotionsStep","description":"This step deletes one or more promotions.","link":"../../../Steps_Promotion/functions/core_flows.Promotion.Steps_Promotion.deletePromotionsStep/page.mdx","depth":1},{"type":"hook","name":"promotionsDeleted","description":"This step is a hook that you can inject custom functionality into.","link":"#promotionsDeleted","depth":2}]}} />
 
 ## Input
 
