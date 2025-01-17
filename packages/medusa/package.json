@@ -41,7 +41,7 @@
     "build": "rimraf dist && tsc --build",
     "serve": "node dist/app.js",
     "test": "jest --runInBand --bail --forceExit -- src/**/__tests__/**/*.ts",
-    "test:integration": "jest --forceExit -- src/**/integration-tests/**/__tests__/**/*.ts",
+    "test:integration": "jest --forceExit -- src/**/integration-tests/**/__tests__/**/*.ts"
   },
   "devDependencies": {
     "@medusajs/framework": "^2.2.0",
