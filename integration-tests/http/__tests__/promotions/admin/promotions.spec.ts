@@ -1,5 +1,5 @@
 import { medusaIntegrationTestRunner } from "@medusajs/test-utils"
-import { PromotionType } from "@medusajs/utils"
+import { PromotionStatus, PromotionType } from "@medusajs/utils"
 import {
   createAdminUser,
   generatePublishableKey,
@@ -11,6 +11,43 @@ jest.setTimeout(50000)
 
 const adminHeaders = {
   headers: { "x-medusa-access-token": "test_token" },
+}
+
+const standardPromotionPayload = {
+  code: "TEST",
+  type: PromotionType.STANDARD,
+  status: PromotionStatus.ACTIVE,
+  is_automatic: true,
+  campaign: {
+    name: "test",
+    campaign_identifier: "test-1",
+    budget: {
+      type: "usage",
+      limit: 100,
+    },
+  },
+  application_method: {
+    target_type: "items",
+    type: "fixed",
+    allocation: "each",
+    currency_code: "USD",
+    value: 100,
+    max_quantity: 100,
+    target_rules: [
+      {
+        attribute: "test.test",
+        operator: "eq",
+        values: ["test1", "test2"],
+      },
+    ],
+  },
+  rules: [
+    {
+      attribute: "test.test",
+      operator: "eq",
+      values: ["test1", "test2"],
+    },
+  ],
 }
 
 medusaIntegrationTestRunner({
@@ -39,6 +76,7 @@ medusaIntegrationTestRunner({
             {
               code: "TEST_ACROSS",
               type: PromotionType.STANDARD,
+              status: PromotionStatus.ACTIVE,
               application_method: {
                 type: "fixed",
                 allocation: "across",
@@ -125,6 +163,7 @@ medusaIntegrationTestRunner({
             {
               code: "first",
               type: PromotionType.STANDARD,
+              status: PromotionStatus.ACTIVE,
               application_method: {
                 type: "fixed",
                 target_type: "order",
@@ -185,44 +224,27 @@ medusaIntegrationTestRunner({
           )
         })
 
+        it("should throw error when an incorrect status is passed", async () => {
+          const { response } = await api
+            .post(
+              `/admin/promotions`,
+              { ...standardPromotionPayload, status: "does-not-exist" },
+              adminHeaders
+            )
+            .catch((e) => e)
+
+          expect(response.status).toEqual(400)
+          expect(response.data).toEqual({
+            type: "invalid_data",
+            message:
+              "Invalid request: Expected: 'draft, active, inactive' for field 'status', but got: 'does-not-exist'",
+          })
+        })
+
         it("should create a standard promotion successfully", async () => {
           const response = await api.post(
             `/admin/promotions`,
-            {
-              code: "TEST",
-              type: PromotionType.STANDARD,
-              is_automatic: true,
-              campaign: {
-                name: "test",
-                campaign_identifier: "test-1",
-                budget: {
-                  type: "usage",
-                  limit: 100,
-                },
-              },
-              application_method: {
-                target_type: "items",
-                type: "fixed",
-                allocation: "each",
-                currency_code: "USD",
-                value: 100,
-                max_quantity: 100,
-                target_rules: [
-                  {
-                    attribute: "test.test",
-                    operator: "eq",
-                    values: ["test1", "test2"],
-                  },
-                ],
-              },
-              rules: [
-                {
-                  attribute: "test.test",
-                  operator: "eq",
-                  values: ["test1", "test2"],
-                },
-              ],
-            },
+            standardPromotionPayload,
             adminHeaders
           )
 
@@ -280,6 +302,7 @@ medusaIntegrationTestRunner({
               {
                 code: "TEST",
                 type: PromotionType.BUYGET,
+                status: PromotionStatus.ACTIVE,
                 is_automatic: true,
                 application_method: {
                   target_type: "items",
@@ -321,6 +344,7 @@ medusaIntegrationTestRunner({
               {
                 code: "TEST",
                 type: PromotionType.BUYGET,
+                status: PromotionStatus.ACTIVE,
                 is_automatic: true,
                 application_method: {
                   target_type: "items",
@@ -361,6 +385,7 @@ medusaIntegrationTestRunner({
             {
               code: "TEST",
               type: PromotionType.BUYGET,
+              status: PromotionStatus.ACTIVE,
               is_automatic: true,
               campaign: {
                 name: "test",
@@ -625,7 +650,7 @@ medusaIntegrationTestRunner({
 
           expect(response.status).toEqual(404)
           expect(response.data.message).toEqual(
-            `Promotion with id "does-not-exist" not found`
+            `Promotion id not found: does-not-exist`
           )
         })
 
