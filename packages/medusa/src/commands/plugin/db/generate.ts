@@ -51,6 +51,7 @@ const main = async function ({ directory }) {
 
     process.exit()
   } catch (error) {
+    console.log({ error })
     console.log(new Array(TERMINAL_SIZE).join("-"))
 
     logger.error(error.message, error)
@@ -114,8 +115,11 @@ async function generateMigrations(
     )
 
     const orm = await MikroORM.init(mikroOrmConfig)
+    console.log("initiated orm")
     const migrator = orm.getMigrator()
+    console.log("initiated migrator")
     const result = await migrator.createMigration()
+    console.log("created migrations")
 
     if (result.fileName) {
       logger.info(`Migration created: ${result.fileName}`)
