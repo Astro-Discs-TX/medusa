@@ -108,7 +108,6 @@ async function generateMigrations(
       moduleDescriptor.serviceName,
       {
         entities: moduleDescriptor.entities,
-        connect: false,
         migrations: {
           path: moduleDescriptor.migrationsPath,
         },
