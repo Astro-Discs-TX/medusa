@@ -2,7 +2,7 @@
  * @oas [post] /admin/customers/{id}/customer-groups
  * operationId: PostCustomersIdCustomerGroups
  * x-sidebar-summary: Manage Customer Groups
- * summar: Manage Customer Groups of Customer
+ * summary: Manage Customer Groups of Customer
  * description: Manage the customer groups of a customer, adding or removing the customer from those groups.
  * x-authenticated: true
  * parameters:
