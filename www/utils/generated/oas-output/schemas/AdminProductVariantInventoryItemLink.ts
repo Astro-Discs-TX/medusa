@@ -1,7 +1,7 @@
 /**
  * @schema AdminProductVariantInventoryItemLink
  * type: object
- * description: The inventory item's inventory items.
+ * description: An association between a product variant and an inventory item.
  * x-schemaName: AdminProductVariantInventoryItemLink
  * required:
  *   - id
@@ -11,17 +11,17 @@
  *   id:
  *     type: string
  *     title: id
- *     description: The inventory item's ID.
+ *     description: The ID of the association.
  *   variant_id:
  *     type: string
  *     title: variant_id
- *     description: The inventory item's variant id.
+ *     description: The associated product variant's ID.
  *   variant:
  *     $ref: "#/components/schemas/AdminProductVariant"
  *   inventory_item_id:
  *     type: string
  *     title: inventory_item_id
- *     description: The inventory item's inventory item id.
+ *     description: The associated inventory item's ID.
  *   inventory:
  *     $ref: "#/components/schemas/AdminInventoryItem"
  * 

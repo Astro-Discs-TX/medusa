@@ -28,16 +28,8 @@
  *     description: The shipping option rule's operator.
  *     example: eq
  *   value:
- *     oneOf:
- *       - type: string
- *         title: value
- *         description: The rule's value.
- *       - type: array
- *         description: The rule's value.
- *         items:
- *           type: string
- *           title: value
- *           description: The value's details.
+ *     type: string
+ *     title: value
  *   shipping_option_id:
  *     type: string
  *     title: shipping_option_id

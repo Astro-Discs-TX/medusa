@@ -1,8 +1,8 @@
 /**
  * @oas [post] /admin/inventory-items/location-levels/batch
  * operationId: PostInventoryItemsLocationLevelsBatch
- * summary: Create Inventory Item
- * description: Create a inventory item.
+ * summary: Manage Inventory Levels
+ * description: Manage inventory levels to create, update, or delete them.
  * x-authenticated: true
  * parameters: []
  * security:
@@ -14,14 +14,14 @@
  *     application/json:
  *       schema:
  *         type: object
- *         description: SUMMARY
+ *         description: The inventory levels to manage.
  *         properties:
  *           create:
  *             type: array
- *             description: The inventory item's create.
+ *             description: The inventory levels to create.
  *             items:
  *               type: object
- *               description: The create's details.
+ *               description: The details of an inventory level to create.
  *               required:
  *                 - location_id
  *                 - inventory_item_id
@@ -29,25 +29,25 @@
  *                 location_id:
  *                   type: string
  *                   title: location_id
- *                   description: The create's location id.
+ *                   description: The ID of the associated stock location.
  *                 inventory_item_id:
  *                   type: string
  *                   title: inventory_item_id
- *                   description: The create's inventory item id.
+ *                   description: The ID of the associated inventory item.
  *                 stocked_quantity:
  *                   type: number
  *                   title: stocked_quantity
- *                   description: The create's stocked quantity.
+ *                   description: The stocked quantity.
  *                 incoming_quantity:
  *                   type: number
  *                   title: incoming_quantity
- *                   description: The create's incoming quantity.
+ *                   description: The incoming quantity to be added to stock.
  *           update:
  *             type: array
- *             description: The inventory item's update.
+ *             description: The inventory levels to update.
  *             items:
  *               type: object
- *               description: The update's details.
+ *               description: The details of an inventory level to update.
  *               required:
  *                 - location_id
  *                 - inventory_item_id
@@ -55,36 +55,58 @@
  *                 location_id:
  *                   type: string
  *                   title: location_id
- *                   description: The update's location id.
+ *                   description: The ID of the associated stock location.
  *                 inventory_item_id:
  *                   type: string
  *                   title: inventory_item_id
- *                   description: The update's inventory item id.
+ *                   description: The ID of the associated inventory item.
  *                 stocked_quantity:
  *                   type: number
  *                   title: stocked_quantity
- *                   description: The update's stocked quantity.
+ *                   description: The stocked quantity.
  *                 incoming_quantity:
  *                   type: number
  *                   title: incoming_quantity
- *                   description: The update's incoming quantity.
+ *                   description: The incoming quantity to be added to stock.
  *           delete:
  *             type: array
- *             description: The inventory item's delete.
+ *             description: The IDs of the inventory levels to delete.
  *             items:
  *               type: string
  *               title: delete
- *               description: The delete's details.
+ *               description: The ID of the inventory level to delete.
  *           force:
  *             type: boolean
  *             title: force
- *             description: The inventory item's force.
+ *             description: Whether to delete specified inventory levels even if they have a non-zero stocked quantity.
  * x-codeSamples:
  *   - lang: Shell
  *     label: cURL
  *     source: |-
  *       curl -X POST '{backend_url}/admin/inventory-items/location-levels/batch' \
- *       -H 'Authorization: Bearer {access_token}'
+ *       -H 'Authorization: Bearer {access_token}' \
+ *       -H 'Content-Type: application/json' \
+ *       --data-raw '{
+ *         "create": [
+ *           {
+ *             "location_id": "sloc_123",
+ *             "inventory_item_id": "iitem_123",
+ *             "stocked_quantity": 100,
+ *             "incoming_quantity": 50
+ *           }
+ *         ],
+ *         "update": [
+ *           {
+ *             "location_id": "sloc_456",
+ *             "inventory_item_id": "iitem_456",
+ *             "stocked_quantity": 200,
+ *             "incoming_quantity": 75
+ *           }
+ *         ],
+ *         "delete": [
+ *           "iilev_123"
+ *         ]
+ *       }'
  * tags:
  *   - Inventory Items
  * responses:

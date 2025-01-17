@@ -1,7 +1,7 @@
 /**
  * @schema AdminBatchInventoryItemLocationsLevel
  * type: object
- * description: The inventory levels to create or delete.
+ * description: The inventory levels to create, update, or delete.
  * properties:
  *   create:
  *     type: array
@@ -42,11 +42,11 @@
  *         location_id:
  *           type: string
  *           title: location_id
- *           description: The update's location id.
+ *           description: The associated stock location's ID.
  *         id:
  *           type: string
  *           title: id
- *           description: The update's ID.
+ *           description: The ID of the location level.
  *       required:
  *         - location_id
  *   delete:
@@ -59,7 +59,7 @@
  *   force:
  *     type: boolean
  *     title: force
- *     description: The inventory item's force.
+ *     description: Whether to delete specified inventory levels even if they have a non-zero stocked quantity.
  * x-schemaName: AdminBatchInventoryItemLocationsLevel
  * 
 */

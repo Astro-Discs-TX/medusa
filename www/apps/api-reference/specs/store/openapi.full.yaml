@@ -6375,7 +6375,7 @@ components:
           description: The quantity that results from matching the `buyget` promotion's condition. For example, if the promotion is a "Buy 2 shirts get 1 free", the value of this attribute is `1`.
     AdminBatchInventoryItemLocationsLevel:
       type: object
-      description: The inventory levels to create or delete.
+      description: The inventory levels to create, update, or delete.
       properties:
         create:
           type: array
@@ -6416,11 +6416,11 @@ components:
               location_id:
                 type: string
                 title: location_id
-                description: The update's location id.
+                description: The associated stock location's ID.
               id:
                 type: string
                 title: id
-                description: The update's ID.
+                description: The ID of the location level.
             required:
               - location_id
         delete:
@@ -6433,7 +6433,7 @@ components:
         force:
           type: boolean
           title: force
-          description: The inventory item's force.
+          description: Whether to delete specified inventory levels even if they have a non-zero stocked quantity.
       x-schemaName: AdminBatchInventoryItemLocationsLevel
     AdminBatchProductRequest:
       type: object
@@ -10268,7 +10268,7 @@ components:
               description: The number of products that will be updated by this import.
     AdminInventoryItem:
       type: object
-      description: The inventory item's inventory.
+      description: The inventory item's details.
       x-schemaName: AdminInventoryItem
       required:
         - id
@@ -10277,65 +10277,65 @@ components:
         id:
           type: string
           title: id
-          description: The inventory's ID.
+          description: The inventory item's ID.
         sku:
           type: string
           title: sku
-          description: The inventory's sku.
+          description: The inventory item's sku.
         origin_country:
           type: string
           title: origin_country
-          description: The inventory's origin country.
+          description: The inventory item's origin country.
         hs_code:
           type: string
           title: hs_code
-          description: The inventory's hs code.
+          description: The inventory item's HS code.
         requires_shipping:
           type: boolean
           title: requires_shipping
-          description: The inventory's requires shipping.
+          description: Whether the inventory item requires shipping.
         mid_code:
           type: string
           title: mid_code
-          description: The inventory's mid code.
+          description: The inventory item's MID code.
         material:
           type: string
           title: material
-          description: The inventory's material.
+          description: The inventory item's material.
         weight:
           type: number
           title: weight
-          description: The inventory's weight.
+          description: The inventory item's weight.
         length:
           type: number
           title: length
-          description: The inventory's length.
+          description: The inventory item's length.
         height:
           type: number
           title: height
-          description: The inventory's height.
+          description: The inventory item's height.
         width:
           type: number
           title: width
-          description: The inventory's width.
+          description: The inventory item's width.
         title:
           type: string
           title: title
-          description: The inventory's title.
+          description: The inventory item's title.
         description:
           type: string
           title: description
-          description: The inventory's description.
+          description: The inventory item's description.
         thumbnail:
           type: string
           title: thumbnail
-          description: The inventory's thumbnail.
+          description: The thumbnail URL of the inventory item.
         metadata:
           type: object
-          description: The inventory's metadata.
+          description: Custom key-value pairs, used to store additional information about the inventory item.
         location_levels:
           type: array
-          description: The inventory's location levels.
+          description: The inventory item's location levels.
           items:
             $ref: '#/components/schemas/AdminInventoryLevel'
     AdminInventoryItemResponse:
@@ -14641,7 +14641,7 @@ components:
                         description: The ID of the inventory item.
     AdminProductVariantInventoryItemLink:
       type: object
-      description: The inventory item's inventory items.
+      description: An association between a product variant and an inventory item.
       x-schemaName: AdminProductVariantInventoryItemLink
       required:
         - id
@@ -14651,17 +14651,17 @@ components:
         id:
           type: string
           title: id
-          description: The inventory item's ID.
+          description: The ID of the association.
         variant_id:
           type: string
           title: variant_id
-          description: The inventory item's variant id.
+          description: The associated product variant's ID.
         variant:
           type: object
         inventory_item_id:
           type: string
           title: inventory_item_id
-          description: The inventory item's inventory item id.
+          description: The associated inventory item's ID.
         inventory:
           $ref: '#/components/schemas/AdminInventoryItem'
     AdminProductVariantInventoryLink:
@@ -15840,16 +15840,8 @@ components:
           description: The shipping option rule's operator.
           example: eq
         value:
-          oneOf:
-            - type: string
-              title: value
-              description: The rule's value.
-            - type: array
-              description: The rule's value.
-              items:
-                type: string
-                title: value
-                description: The value's details.
+          type: string
+          title: value
         shipping_option_id:
           type: string
           title: shipping_option_id
