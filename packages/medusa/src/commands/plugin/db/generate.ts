@@ -98,6 +98,10 @@ async function generateMigrations(
     entities: any[]
   }[] = []
 ) {
+  const DB_HOST = process.env.DB_HOST ?? "localhost"
+  const DB_USERNAME = process.env.DB_USERNAME ?? ""
+  const DB_PASSWORD = process.env.DB_PASSWORD ?? ""
+
   for (const moduleDescriptor of moduleDescriptors) {
     logger.info(
       `Generating migrations for module ${moduleDescriptor.serviceName}...`
@@ -107,6 +111,9 @@ async function generateMigrations(
       moduleDescriptor.serviceName,
       {
         entities: moduleDescriptor.entities,
+        host: DB_HOST,
+        user: DB_USERNAME,
+        password: DB_PASSWORD,
         migrations: {
           path: moduleDescriptor.migrationsPath,
         },
