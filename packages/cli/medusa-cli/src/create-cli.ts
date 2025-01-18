@@ -178,6 +178,10 @@ function buildLocalCommands(cli, isLocalProject) {
       command: "db:migrate",
       desc: "Migrate the database by executing pending migrations",
       builder: (builder) => {
+        builder.option("skip-scripts", {
+          type: "boolean",
+          describe: "Do not run migration scripts",
+        })
         builder.option("skip-links", {
           type: "boolean",
           describe: "Do not sync links",
@@ -229,6 +233,16 @@ function buildLocalCommands(cli, isLocalProject) {
       },
       handler: handlerP(
         getCommandHandler("db/generate", (args, cmd) => {
+          process.env.NODE_ENV = process.env.NODE_ENV || `development`
+          return cmd(args)
+        })
+      ),
+    })
+    .command({
+      command: "plugin:db:generate",
+      desc: "Generate migrations for modules in a plugin",
+      handler: handlerP(
+        getCommandHandler("plugin/db/generate", (args, cmd) => {
           process.env.NODE_ENV = process.env.NODE_ENV || `development`
           return cmd(args)
         })
