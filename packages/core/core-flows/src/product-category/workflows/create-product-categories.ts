@@ -1,18 +1,46 @@
-import { ProductCategoryWorkflow } from "@medusajs/framework/types"
+import {
+  ProductCategoryDTO,
+  ProductCategoryWorkflow,
+} from "@medusajs/framework/types"
 import { ProductCategoryWorkflowEvents } from "@medusajs/framework/utils"
 import {
   WorkflowData,
   WorkflowResponse,
+  createHook,
   createWorkflow,
   transform,
-  createHook,
 } from "@medusajs/framework/workflows-sdk"
 import { emitEventStep } from "../../common"
 import { createProductCategoriesStep } from "../steps"
 
+/**
+ * The created product categories.
+ */
+export type CreateProductCategoriesWorkflowOutput = ProductCategoryDTO[]
+
 export const createProductCategoriesWorkflowId = "create-product-categories"
 /**
- * This workflow creates one or more product categories.
+ * This workflow creates one or more product categories. It's used by the
+ * [Create Product Category Admin API Route](https://docs.medusajs.com/api/admin#product-categories_postproductcategories).
+ *
+ * You can use this workflow within your customizations or your own custom workflows, allowing you to
+ * create product categories within your custom flows.
+ *
+ * @example
+ * const { result } = await createProductCategoriesWorkflow(container)
+ * .run({
+ *   input: {
+ *     product_categories: [
+ *       {
+ *         name: "Shoes",
+ *       }
+ *     ]
+ *   }
+ * })
+ *
+ * @summary
+ *
+ * Create product categories.
  */
 export const createProductCategoriesWorkflow = createWorkflow(
   createProductCategoriesWorkflowId,
@@ -21,19 +49,10 @@ export const createProductCategoriesWorkflow = createWorkflow(
   ) => {
     const createdProductCategories = createProductCategoriesStep(input)
 
-    const response = transform({ createdProductCategories, input }, (data) => {
-      return data.createdProductCategories
-    })
-
-    const productCategoriesCreated = createHook("productCategoriesCreated", {
-      products: response,
-      additional_data: input.additional_data,
-    })
-
     const productCategoryIdEvents = transform(
-      { productCategoriesCreated },
-      ({ createdProducts }) => {
-        return createdProducts.map((v) => {
+      { createdProductCategories },
+      ({ createdProductCategories }) => {
+        return createdProductCategories.map((v) => {
           return { id: v.id }
         })
       }
@@ -44,8 +63,12 @@ export const createProductCategoriesWorkflow = createWorkflow(
       data: productCategoryIdEvents,
     })
 
-    return new WorkflowResponse(response, {
-      hooks: [productCategoriesCreated],
+    const collectionsCreated = createHook("categoriesCreated", {
+      createdProductCategories,
+    })
+
+    return new WorkflowResponse(createdProductCategories, {
+      hooks: [collectionsCreated],
     })
   }
 )
