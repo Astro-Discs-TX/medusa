@@ -5,6 +5,7 @@ import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 
+import { PencilSquare } from "@medusajs/icons"
 import { DataTable } from "../../../../../components/data-table"
 import { useDataTableDateFilters } from "../../../../../components/data-table/hooks/general/use-data-table-date-filters"
 import { useUsers } from "../../../../../hooks/api/users"
@@ -125,6 +126,7 @@ const useColumns = () => {
         actions: [
           {
             label: t("actions.edit"),
+            icon: <PencilSquare />,
             onClick: (ctx) => {
               navigate(`${ctx.row.original.id}/edit`)
             },
