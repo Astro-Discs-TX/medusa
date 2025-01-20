@@ -199,9 +199,6 @@ export function defineHasOneWithFKRelationship(
     fieldName: foreignKeyName,
     ...(relationship.nullable ? { nullable: relationship.nullable } : {}),
     ...(mappedBy ? { mappedBy } : {}),
-    /**
-     * If we decide to support non soft deletable then this should be true and the unique index id should be removed
-     */
     unique: false,
     //orphanRemoval: true,
   } as OneToOneOptions<any, any>
@@ -221,15 +218,6 @@ export function defineHasOneWithFKRelationship(
       return alias + "." + foreignKeyName
     },
   })(MikroORMEntity.prototype, foreignKeyName)
-
-  const tableName = entity.parse().tableName
-  applyEntityIndexes(MikroORMEntity, tableName, [
-    {
-      on: [foreignKeyName],
-      where: "deleted_at IS NULL",
-      unique: true,
-    },
-  ])
 
   const hookFactory = function (
     name: string,

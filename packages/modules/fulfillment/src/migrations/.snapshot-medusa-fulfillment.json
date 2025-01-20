@@ -1008,14 +1008,6 @@
           "expression": "CREATE INDEX IF NOT EXISTS \"IDX_shipping_option_provider_id\" ON \"shipping_option\" (provider_id) WHERE deleted_at IS NULL"
         },
         {
-          "keyName": "IDX_shipping_option_shipping_option_type_id_unique",
-          "columnNames": [],
-          "composite": false,
-          "primary": false,
-          "unique": false,
-          "expression": "CREATE UNIQUE INDEX IF NOT EXISTS \"IDX_shipping_option_shipping_option_type_id_unique\" ON \"shipping_option\" (shipping_option_type_id) WHERE deleted_at IS NULL"
-        },
-        {
           "keyName": "IDX_shipping_option_deleted_at",
           "columnNames": [],
           "composite": false,
@@ -1394,28 +1386,12 @@
       "schema": "public",
       "indexes": [
         {
-          "keyName": "IDX_fulfillment_provider_id_unique",
-          "columnNames": [],
-          "composite": false,
-          "primary": false,
-          "unique": false,
-          "expression": "CREATE UNIQUE INDEX IF NOT EXISTS \"IDX_fulfillment_provider_id_unique\" ON \"fulfillment\" (provider_id) WHERE deleted_at IS NULL"
-        },
-        {
           "keyName": "IDX_fulfillment_shipping_option_id",
           "columnNames": [],
           "composite": false,
           "primary": false,
           "unique": false,
           "expression": "CREATE INDEX IF NOT EXISTS \"IDX_fulfillment_shipping_option_id\" ON \"fulfillment\" (shipping_option_id) WHERE deleted_at IS NULL"
-        },
-        {
-          "keyName": "IDX_fulfillment_delivery_address_id_unique",
-          "columnNames": [],
-          "composite": false,
-          "primary": false,
-          "unique": false,
-          "expression": "CREATE UNIQUE INDEX IF NOT EXISTS \"IDX_fulfillment_delivery_address_id_unique\" ON \"fulfillment\" (delivery_address_id) WHERE deleted_at IS NULL"
         },
         {
           "keyName": "IDX_fulfillment_deleted_at",
