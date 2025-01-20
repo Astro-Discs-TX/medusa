@@ -89,6 +89,9 @@
     "express-session": "^1.17.3",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.9.1",
+    "compression": "1.7.4",
+    "lodash": "4.17.21",
+    "glob": "7.2.3",
     "tsconfig-paths": "^4.2.0",
     "zod": "3.22.4"
   },
