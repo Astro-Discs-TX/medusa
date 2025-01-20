@@ -21,7 +21,9 @@ import { removePriceListPricesStep } from "@medusajs/medusa/core-flows"
 const myWorkflow = createWorkflow(
   "my-workflow",
   () => {
-    const data = removePriceListPricesStep({})
+    const data = removePriceListPricesStep([
+      "{value}"
+    ])
   }
 )
 ```

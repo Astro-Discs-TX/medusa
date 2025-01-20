@@ -21,7 +21,9 @@ import { deletePromotionsStep } from "@medusajs/medusa/core-flows"
 const myWorkflow = createWorkflow(
   "my-workflow",
   () => {
-    const data = deletePromotionsStep({})
+    const data = deletePromotionsStep([
+      "{value}"
+    ])
   }
 )
 ```

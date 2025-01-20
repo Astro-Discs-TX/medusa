@@ -21,7 +21,9 @@ import { deleteApiKeysStep } from "@medusajs/medusa/core-flows"
 const myWorkflow = createWorkflow(
   "my-workflow",
   () => {
-    const data = deleteApiKeysStep({})
+    const data = deleteApiKeysStep([
+      "{value}"
+    ])
   }
 )
 ```

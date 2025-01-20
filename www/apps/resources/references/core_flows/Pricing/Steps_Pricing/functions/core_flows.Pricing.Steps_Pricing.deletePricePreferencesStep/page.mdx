@@ -21,7 +21,9 @@ import { deletePricePreferencesStep } from "@medusajs/medusa/core-flows"
 const myWorkflow = createWorkflow(
   "my-workflow",
   () => {
-    const data = deletePricePreferencesStep({})
+    const data = deletePricePreferencesStep([
+      "{value}"
+    ])
   }
 )
 ```

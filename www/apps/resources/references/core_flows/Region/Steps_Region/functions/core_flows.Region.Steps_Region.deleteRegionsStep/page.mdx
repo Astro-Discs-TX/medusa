@@ -21,7 +21,9 @@ import { deleteRegionsStep } from "@medusajs/medusa/core-flows"
 const myWorkflow = createWorkflow(
   "my-workflow",
   () => {
-    const data = deleteRegionsStep({})
+    const data = deleteRegionsStep([
+      "{value}"
+    ])
   }
 )
 ```

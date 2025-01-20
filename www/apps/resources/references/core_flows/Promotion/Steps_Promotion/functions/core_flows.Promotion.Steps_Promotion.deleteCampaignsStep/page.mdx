@@ -21,7 +21,9 @@ import { deleteCampaignsStep } from "@medusajs/medusa/core-flows"
 const myWorkflow = createWorkflow(
   "my-workflow",
   () => {
-    const data = deleteCampaignsStep({})
+    const data = deleteCampaignsStep([
+      "{value}"
+    ])
   }
 )
 ```

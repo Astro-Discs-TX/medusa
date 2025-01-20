@@ -21,7 +21,9 @@ import { deleteTaxRatesStep } from "@medusajs/medusa/core-flows"
 const myWorkflow = createWorkflow(
   "my-workflow",
   () => {
-    const data = deleteTaxRatesStep({})
+    const data = deleteTaxRatesStep([
+      "{value}"
+    ])
   }
 )
 ```

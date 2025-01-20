@@ -18,7 +18,9 @@ import { deleteInventoryLevelsStep } from "@medusajs/medusa/core-flows"
 const myWorkflow = createWorkflow(
   "my-workflow",
   () => {
-    const data = deleteInventoryLevelsStep({})
+    const data = deleteInventoryLevelsStep([
+      "{value}"
+    ])
   }
 )
 ```
