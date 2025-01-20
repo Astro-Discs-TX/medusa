@@ -645,6 +645,15 @@
         }
       }
     },
+    "stock": {
+      "heading": "管理产品库存数量和库存地点",
+      "description": "更新所有产品变体的库存数量。",
+      "loading": "请稍候,这可能需要一点时间...",
+      "tooltips": {
+        "alreadyManaged": "此库存项目已可在 {{title}} 下编辑。",
+        "alreadyManagedWithSku": "此库存项目已可在 {{title}} ({{sku}}) 下编辑。"
+      }
+    },
     "toasts": {
       "delete": {
         "success": {
@@ -799,6 +808,16 @@
       "updateLocations": "位置更新成功。",
       "updateLevel": "库存水平更新成功。",
       "updateItem": "库存项目更新成功。"
+    },
+    "stock": {
+      "title": "更新库存数量",
+      "description": "更新所选库存项目的库存数量。",
+      "action": "编辑库存数量",
+      "placeholder": "未启用",
+      "disablePrompt_one": "您即将禁用 {{count}} 个库存地点。此操作无法撤消。",
+      "disablePrompt_other": "您即将禁用 {{count}} 个库存地点。此操作无法撤消。",
+      "disabledToggleTooltip": "无法禁用：禁用前请先清除在途和/或预留数量。",
+      "successToast": "库存数量更新成功。"
     }
   },
   "giftCards": {
@@ -912,9 +931,19 @@
     "exchange": "换货",
     "return": "退货",
     "cancelWarning": "您即将取消订单 {{id}}。此操作无法撤消。",
+    "orderCanceled": "订单取消成功！",
     "onDateFromSalesChannel": "{{date}} 来自 {{salesChannel}}",
     "list": {
       "noRecordsMessage": "您的订单将显示在这里。"
+    },
+    "status": {
+      "not_paid": "未支付",
+      "pending": "处理中",
+      "completed": "已完成",
+      "draft": "草稿",
+      "archived": "已归档",
+      "canceled": "已取消",
+      "requires_action": "需要处理"
     },
     "summary": {
       "requestReturn": "申请退货",
