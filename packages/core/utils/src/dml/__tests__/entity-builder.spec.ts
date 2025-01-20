@@ -3011,6 +3011,7 @@ describe("Entity builder", () => {
           owner: true,
           reference: "1:1",
           cascade: ["persist", "soft-remove"],
+          unique: false,
         },
         user_id: {
           columnType: "text",
@@ -3125,6 +3126,7 @@ describe("Entity builder", () => {
           name: "email",
           entity: "Email",
           fieldName: "email_id",
+          unique: false,
         },
         email_id: {
           columnType: "text",
@@ -3237,6 +3239,7 @@ describe("Entity builder", () => {
           entity: "Email",
           nullable: true,
           fieldName: "emails_id",
+          unique: false,
         },
         emails_id: {
           columnType: "text",
@@ -3340,6 +3343,7 @@ describe("Entity builder", () => {
           entity: "Email",
           mappedBy: "owner",
           fieldName: "email_id",
+          unique: false,
         },
         email_id: {
           columnType: "text",
@@ -3447,6 +3451,7 @@ describe("Entity builder", () => {
           cascade: ["persist", "soft-remove"],
           mappedBy: "user",
           fieldName: "email_id",
+          unique: false,
         },
         email_id: {
           columnType: "text",
@@ -3624,6 +3629,7 @@ describe("Entity builder", () => {
           cascade: ["persist", "soft-remove"],
           mappedBy: "user",
           fieldName: "email_id",
+          unique: false,
         },
         email_id: {
           columnType: "text",
@@ -3708,6 +3714,7 @@ describe("Entity builder", () => {
           reference: "1:1",
           cascade: ["persist", "soft-remove"],
           fieldName: "user_id",
+          unique: false,
         },
         user_id: {
           columnType: "text",
@@ -4042,8 +4049,8 @@ describe("Entity builder", () => {
       expect(settingMetadata.indexes).toEqual([
         {
           expression:
-            'CREATE INDEX IF NOT EXISTS "IDX_setting_user_id" ON "setting" (user_id) WHERE deleted_at IS NULL',
-          name: "IDX_setting_user_id",
+            'CREATE UNIQUE INDEX IF NOT EXISTS "IDX_setting_user_id_unique" ON "setting" (user_id) WHERE deleted_at IS NULL',
+          name: "IDX_setting_user_id_unique",
         },
         {
           expression:
@@ -4656,6 +4663,7 @@ describe("Entity builder", () => {
           mappedBy: "email",
           onDelete: undefined,
           owner: true,
+          unique: false,
         },
         user_id: {
           reference: "scalar",
@@ -4854,6 +4862,7 @@ describe("Entity builder", () => {
           onDelete: undefined,
           mappedBy: "email",
           owner: true,
+          unique: false,
         },
         user_id: {
           reference: "scalar",
@@ -5473,6 +5482,7 @@ describe("Entity builder", () => {
           mappedBy: "email",
           onDelete: undefined,
           owner: true,
+          unique: false,
         },
         user_id: {
           reference: "scalar",
@@ -5673,6 +5683,7 @@ describe("Entity builder", () => {
           mappedBy: "email",
           onDelete: undefined,
           owner: true,
+          unique: false,
         },
         user_id: {
           reference: "scalar",
@@ -5896,6 +5907,7 @@ describe("Entity builder", () => {
           nullable: false,
           onDelete: undefined,
           owner: true,
+          unique: false,
         },
         parent_id: {
           name: "parent_id",

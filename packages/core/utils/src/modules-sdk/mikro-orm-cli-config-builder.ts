@@ -60,7 +60,7 @@ export function defineMikroOrmCliConfig(
     user: "postgres",
     password: "",
     ...options,
-    entities,
+    entities: entities.filter(Boolean),
     migrations: {
       generator: CustomTsMigrationGenerator,
       ...options.migrations,
