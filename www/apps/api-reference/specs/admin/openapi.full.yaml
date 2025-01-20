@@ -16701,7 +16701,6 @@ paths:
       summary: Manage Inventory Levels
       description: Manage inventory levels to create, update, or delete them.
       x-authenticated: true
-      parameters: []
       security:
         - api_token: []
         - cookie_auth: []
@@ -16807,8 +16806,6 @@ paths:
       tags:
         - Inventory Items
       responses:
-        '200':
-          description: OK
         '400':
           $ref: '#/components/responses/400_error'
         '401':
@@ -53290,8 +53287,16 @@ components:
           description: The shipping option rule's operator.
           example: eq
         value:
-          type: string
-          title: value
+          oneOf:
+            - type: string
+              title: value
+              description: The rule's value.
+            - type: array
+              description: The rule's value.
+              items:
+                type: string
+                title: value
+                description: The value's details.
         shipping_option_id:
           type: string
           title: shipping_option_id
