@@ -114,6 +114,7 @@ module.exports = defineConfig({
   plugins: [
     {
       resolve: "@myorg/plugin-name",
+      options: {}
     },
   ],
 })
@@ -123,7 +124,7 @@ The `plugins` configuration is an array of objects where each object has a `reso
 
 #### Pass Module Options through Plugin
 
-If your plugin has modules that expect options, you can pass the options through the plugin configuration in the `medusa-config.ts` file.
+Each plugin configuration also accepts an `options` property, whose value is an object of options to pass to the plugin's modules.
 
 For example:
 
