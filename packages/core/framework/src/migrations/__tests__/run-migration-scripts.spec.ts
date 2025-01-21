@@ -171,4 +171,29 @@ describe("MigrationScriptsMigrator", () => {
       )
     })
   })
+
+  describe("loadMigrationFiles", () => {
+    it("should load migration files correctly", async () => {
+      const result = await (migrator as any).loadMigrationFiles([
+        path.join(
+          __dirname,
+          "..",
+          "__fixtures__",
+          "project",
+          "migration-scripts"
+        ),
+      ])
+      expect(result).toHaveLength(1)
+      expect(result[0]).toEqual(
+        path.join(
+          __dirname,
+          "..",
+          "__fixtures__",
+          "project",
+          "migration-scripts",
+          "test.ts"
+        )
+      )
+    })
+  })
 })
