@@ -87,16 +87,27 @@ npx medusa plugin:publish
 
 This command uses [Yalc](https://github.com/wclr/yalc) under the hood to publish the plugin to a local package registry. The plugin is published locally under the name you specified in `package.json`.
 
-Next, navigate to your Medusa application and run the following Medusa CLI command to install the plugin:
+Next, navigate to your Medusa application:
 
 ```bash title="Medusa application"
 cd ~/path/to/medusa-app
+```
+
+Make sure to replace `~/path/to/medusa-app` with the path to your Medusa application.
+
+Then, if your project was created before v2.3.1 of Medusa, make sure to install `yalc` as a development dependency:
+
+```bash npm2yarn title="Medusa application"
+npm install --save-dev yalc
+```
+
+After that, run the following Medusa CLI command to install the plugin:
+
+```bash title="Medusa application"
 npx medusa plugin:add @myorg/plugin-name
 ```
 
-Make sure to replace `~/path/to/medusa-app` with the path to your Medusa application and `@myorg/plugin-name` with the name of your plugin as specified in `package.json`.
-
-Your plugin will be installed from the local package registry into your Medusa application.
+Make sure to replace `@myorg/plugin-name` with the name of your plugin as specified in `package.json`. Your plugin will be installed from the local package registry into your Medusa application.
 
 ### Register Plugin in Medusa Application
 
