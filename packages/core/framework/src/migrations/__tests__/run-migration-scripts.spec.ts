@@ -174,7 +174,7 @@ describe("MigrationScriptsMigrator", () => {
 
   describe("loadMigrationFiles", () => {
     it("should load migration files correctly", async () => {
-      const result = await (migrator as any).loadMigrationFiles([
+      const result = await migrator.loadMigrationFiles([
         path.join(
           __dirname,
           "..",
