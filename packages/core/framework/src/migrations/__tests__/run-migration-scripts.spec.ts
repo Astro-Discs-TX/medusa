@@ -1,8 +1,8 @@
-import { MedusaContainer } from "@medusajs/types"
-import { MigrationScriptsMigrator } from "../run-migration-scripts"
 import { jest } from "@jest/globals"
-import path from "path"
+import { MedusaContainer } from "@medusajs/types"
 import { ContainerRegistrationKeys, Modules } from "@medusajs/utils"
+import path from "path"
+import { MigrationScriptsMigrator } from "../run-migration-scripts"
 
 const mockPgConnection = {
   raw: jest.fn(),

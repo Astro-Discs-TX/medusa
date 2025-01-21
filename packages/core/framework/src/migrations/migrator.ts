@@ -1,9 +1,9 @@
-import { join } from "path"
-import { glob } from "glob"
-import { logger } from "../logger"
 import { MedusaContainer } from "@medusajs/types"
-import { ContainerRegistrationKeys } from "../utils"
 import { Knex } from "@mikro-orm/knex"
+import { glob } from "glob"
+import { join } from "path"
+import { logger } from "../logger"
+import { ContainerRegistrationKeys } from "../utils"
 
 export abstract class Migrator {
   protected abstract migration_table_name: string
