@@ -278,11 +278,11 @@ export interface IPaymentProvider {
     paymentSessionData: Record<string, unknown>
   ): Promise<PaymentProviderError | PaymentProviderSessionResponse["data"]>
 
-  listPaymentMethods(
+  listPaymentMethods?(
     context: PaymentProviderContext
   ): Promise<PaymentMethodResponse[]>
 
-  savePaymentMethod(
+  savePaymentMethod?(
     input: SavePaymentMethod
   ): Promise<PaymentProviderError | SavePaymentMethodResponse>
 

@@ -1,14 +1,10 @@
 import {
   CreatePaymentProviderSession,
   IPaymentProvider,
-  PaymentMethodResponse,
-  PaymentProviderContext,
   PaymentProviderError,
   PaymentProviderSessionResponse,
   PaymentSessionStatus,
   ProviderWebhookPayload,
-  SavePaymentMethod,
-  SavePaymentMethodResponse,
   UpdatePaymentProviderSession,
   WebhookActionResult,
 } from "@medusajs/types"
@@ -626,105 +622,6 @@ export abstract class AbstractPaymentProvider<TConfig = Record<string, unknown>>
   abstract updatePayment(
     context: UpdatePaymentProviderSession
   ): Promise<PaymentProviderError | PaymentProviderSessionResponse>
-
-  /**
-   * List the payment methods associated with the context (eg. customer) of the payment provider, if any.
-   *
-   * @param context - The context for which the payment methods are listed. Usually the customer should be provided.
-   * @returns An object whose `payment_methods` property is set to the data returned by the payment provider.
-   *
-   * @example
-   * // other imports...
-   * import {
-   *   PaymentProviderContext,
-   *   PaymentProviderError,
-   *   PaymentMethodResponse
-   *   PaymentProviderSessionResponse,
-   * } from "@medusajs/framework/types"
-   *
-   *
-   * class MyPaymentProviderService extends AbstractPaymentProvider<
-   *   Options
-   * > {
-   *   async listPaymentMethods(
-   *     context: PaymentProviderContext
-   *   ): Promise<PaymentMethodResponse> {
-   *     const {
-   *       customer,
-   *     } = context
-   *     const externalCustomerId = customer.metadata.stripe_id
-   *
-   *     try {
-   *       // assuming you have a client that updates the payment
-   *       const response = await this.client.listPaymentMethods(
-   *         {customer: externalCustomerId}
-   *       )
-   *
-   *       return response.map((method) => ({
-   *         id: method.id,
-   *         data: method
-   *       }))
-   *     } catch (e) {
-   *       return {
-   *         error: e,
-   *         code: "unknown",
-   *         detail: e
-   *       }
-   *     }
-   *   }
-   *
-   *   // ...
-   * }
-   */
-  abstract listPaymentMethods(
-    context: PaymentProviderContext
-  ): Promise<PaymentMethodResponse[]>
-
-  /**
-   * Saves a payment method associated with the context (eg. customer) of the payment provider.
-   *
-   * @param input -The data for the request and context for which the payment method is saved. Usually the customer should be provided.
-   * @returns An object whose `data` property is set to the data returned by the payment provider.
-   *
-   * @example
-   * // other imports...
-   * import {
-   *   SavePaymentMethod,
-   *   PaymentProviderError,
-   *   SavePaymentMethodResponse
-   * } from "@medusajs/framework/types"
-   *
-   *
-   * class MyPaymentProviderService extends AbstractPaymentProvider<
-   *   Options
-   * > {
-   *   async savePaymentMethod(
-   *     input: SavePaymentMethod
-   *   ): Promise<PaymentProviderError | SavePaymentMethodResponse> {
-   *     const {context, data } = input
-   *     const externalCustomerId = context.customer.metadata.stripe_id
-   *
-   *     if(!externalCustomerId) {
-   *       return {
-   *         error: new Error("Customer ID is required"),
-   *         code: "unknown",
-   *         detail: "Customer ID is required"
-   *       }
-   *     }
-   *
-   *     const response = await this.client.savePaymentMethod(
-   *       {customer: externalCustomerId, ...data}
-   *     )
-   *
-   *     return response
-   *   }
-   *
-   *   // ...
-   * }
-   */
-  abstract savePaymentMethod(
-    input: SavePaymentMethod
-  ): Promise<PaymentProviderError | SavePaymentMethodResponse>
 
   /**
    * This method is executed when a webhook event is received from the third-party payment provider. Use it

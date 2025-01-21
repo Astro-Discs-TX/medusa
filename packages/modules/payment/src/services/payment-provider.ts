@@ -159,6 +159,13 @@ Please make sure that the provider is registered in the container and it is conf
     context: PaymentProviderContext
   ): Promise<PaymentMethodResponse[]> {
     const provider = this.retrieveProvider(providerId)
+    if (!provider.listPaymentMethods) {
+      throw new MedusaError(
+        MedusaError.Types.INVALID_DATA,
+        `Provider ${providerId} does not support listing payment methods`
+      )
+    }
+
     return await provider.listPaymentMethods(context)
   }
 
@@ -167,6 +174,13 @@ Please make sure that the provider is registered in the container and it is conf
     input: SavePaymentMethod
   ): Promise<SavePaymentMethodResponse> {
     const provider = this.retrieveProvider(providerId)
+    if (!provider.savePaymentMethod) {
+      throw new MedusaError(
+        MedusaError.Types.INVALID_DATA,
+        `Provider ${providerId} does not support saving payment methods`
+      )
+    }
+
     const res = await provider.savePaymentMethod(input)
 
     if (isPaymentProviderError(res)) {

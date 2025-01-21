@@ -965,17 +965,20 @@ export default class PaymentModuleService
   ): Promise<PaymentMethodDTO | PaymentMethodDTO[]> {
     const input = Array.isArray(data) ? data : [data]
 
-    const result = await Promise.all(
+    const result = await promiseAll(
       input.map((item) =>
         this.paymentProviderService_.savePaymentMethod(item.provider_id, item)
-      )
+      ),
+      { aggregateErrors: true }
     )
 
-    const normalizedResponse = result.map((item, i) => ({
-      id: item.id,
-      data: item.data,
-      provider_id: input[i].provider_id,
-    }))
+    const normalizedResponse = result.map((item, i) => {
+      return {
+        id: item.id,
+        data: item.data,
+        provider_id: input[i].provider_id,
+      }
+    })
 
     return Array.isArray(data) ? normalizedResponse : normalizedResponse[0]
   }
