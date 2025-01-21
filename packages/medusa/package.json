@@ -127,7 +127,7 @@
     "zod": "3.22.4"
   },
   "peerDependencies": {
-    "@medusajs/framework": "^2.0.0",
+    "@medusajs/framework": "~2.0.0",
     "@mikro-orm/core": "6.4.3",
     "@mikro-orm/knex": "6.4.3",
     "@mikro-orm/migrations": "6.4.3",
