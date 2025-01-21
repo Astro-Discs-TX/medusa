@@ -536,6 +536,7 @@ medusaIntegrationTestRunner({
               {
                 code: "TEST",
                 type: PromotionType.STANDARD,
+                status: PromotionStatus.ACTIVE,
                 is_automatic: true,
                 application_method: {
                   target_type: "items",
@@ -600,11 +601,11 @@ medusaIntegrationTestRunner({
             const cartWithPromotion2 = (
               await api.post(
                 `/store/carts/${cart.id}/line-items`,
-                { variant_id: product.variants[0].id, quantity: 4 },
+                { variant_id: product.variants[0].id, quantity: 40 },
                 storeHeaders
               )
             ).data.cart
-
+            console.log("cartWithPromotion2 -- ", cartWithPromotion2.promotions)
             expect(cartWithPromotion2).toEqual(
               expect.objectContaining({
                 promotions: [
