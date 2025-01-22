@@ -11,6 +11,7 @@ import tr from "./tr.json"
 import uk from "./uk.json"
 import mk from "./mk.json"
 import mn from "./mn.json"
+import ar from "./ar.json"
 import zhCN from "./zhCN.json"
 
 export default {
@@ -53,7 +54,10 @@ export default {
   mn: {
     translation: mn,
   },
+  ar: {
+    translation: ar,
+  },
   zhCN: {
     translation: zhCN,
-  }
+  },
 }

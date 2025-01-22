@@ -12,6 +12,7 @@ import {
   uk,
   mk,
   mn,
+  ar,
   zhCN
 } from "date-fns/locale"
 
@@ -103,9 +104,15 @@ export const languages: Language[] = [
     date_locale: mn,
   },
   {
+    code: "ar",
+    display_name: "العربية",
+    ltr: false,
+    date_locale: ar,
+  },
+  {
     code: "zhCN",
     display_name: "简体中文",
     ltr: true,
     date_locale: zhCN,
-  }
+  },
 ]
