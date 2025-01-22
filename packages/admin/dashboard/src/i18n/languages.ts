@@ -10,6 +10,7 @@ import {
   th,
   tr,
   uk,
+  ro,
   mk,
   nl,
   mn,
@@ -83,6 +84,12 @@ export const languages: Language[] = [
     display_name: "Українська",
     ltr: true,
     date_locale: uk,
+  },
+  {
+    code: "ro",
+    display_name: "Română",
+    ltr: true,
+    date_locale: ro,
   },
   {
     code: "mk",
