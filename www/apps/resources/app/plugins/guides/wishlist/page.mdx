@@ -169,7 +169,7 @@ module.exports = defineConfig({
   plugins: [
     {
       resolve: "medusa-plugin-wishlist",
-      options: {}
+      options: {},
     },
   ],
 })
@@ -232,8 +232,8 @@ export const Wishlist = model.define("wishlist", {
 .indexes([
   {
     on: ["customer_id", "sales_channel_id"],
-    unique: true
-  }
+    unique: true,
+  },
 ])
 ```
 
@@ -270,14 +270,14 @@ export const WishlistItem = model.define("wishlist_item", {
   id: model.id().primaryKey(),
   variant_id: model.text(),
   wishlist: model.belongsTo(() => Wishlist, {
-    mappedBy: "items"
-  })
+    mappedBy: "items",
+  }),
 })
 .indexes([
   {
     on: ["id", "variant_id"],
-    unique: true
-  }
+    unique: true,
+  },
 ])
 ```
 
@@ -305,12 +305,12 @@ In this section, you'll create the Wishlist Module's service that's used to mana
 
 ```ts title="src/modules/wishlist/service.ts"
 import { MedusaService } from "@medusajs/framework/utils"
-import { Wishlist } from "./models/wishlist";
-import { WishlistItem } from "./models/wishlist-item";
+import { Wishlist } from "./models/wishlist"
+import { WishlistItem } from "./models/wishlist-item"
 
 export default class WishlistModuleService extends MedusaService({
   Wishlist,
-  WishlistItem
+  WishlistItem,
 }) {}
 ```
 
@@ -431,7 +431,7 @@ import SalesChannelModule from "@medusajs/medusa/sales-channel"
 
 export default defineLink(
   WishlistModule.linkable.wishlist,
-  SalesChannelModule.linkable.salesChannel,
+  SalesChannelModule.linkable.salesChannel
 )
 ```
 
@@ -451,7 +451,7 @@ export default defineLink(
     linkable: WishlistModule.linkable.wishlistItem,
     isList: true,
   },
-  ProductModule.linkable.productVariant,
+  ProductModule.linkable.productVariant
 )
 ```
 
@@ -557,24 +557,24 @@ export const validateCustomerCreateWishlistStep = createStep(
       entity: "customer",
       fields: ["wishlist.*"],
       filters: {
-        id: customer_id
-      }
+        id: customer_id,
+      },
     })
 
     if (!data.length) {
       throw new MedusaError(
         MedusaError.Types.NOT_FOUND,
-        "Specified customer was not found",
+        "Specified customer was not found"
       )
     }
 
     if (data[0].wishlist) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
-        "Customer already has a wishlist",
+        "Customer already has a wishlist"
       )
     }
-  },
+  }
 )
 ```
 
@@ -679,39 +679,39 @@ export const createWishlistWorkflow = createWorkflow(
   "create-wishlist",
   (input: CreateWishlistWorkflowInput) => {
     validateCustomerCreateWishlistStep({
-      customer_id: input.customer_id
+      customer_id: input.customer_id,
     })
 
     const wishlist = createWishlistStep(input)
 
     const linkDefs = transform({
       input,
-      wishlist
+      wishlist,
     }, (data) => {
       return [
         {
           [WISHLIST_MODULE]: {
-            wishlist_id: data.wishlist.id
+            wishlist_id: data.wishlist.id,
           },
           [Modules.CUSTOMER]: {
-            customer_id: data.input.customer_id
-          }
+            customer_id: data.input.customer_id,
+          },
         },
         {
           [WISHLIST_MODULE]: {
-            wishlist_id: data.wishlist.id
+            wishlist_id: data.wishlist.id,
           },
           [Modules.SALES_CHANNEL]: {
-            sales_channel_id: data.input.sales_channel_id
-          }
-        }
+            sales_channel_id: data.input.sales_channel_id,
+          },
+        },
       ] as LinkDefinition[]
     })
 
     createRemoteLinkStep(linkDefs)
 
     return new WorkflowResponse({
-      wishlist
+      wishlist,
     })
   }
 )
@@ -763,9 +763,9 @@ So, to create the `/store/customers/me/wishlists` API route, create the file `sr
 ![Directory structure after adding the route file](https://res.cloudinary.com/dza7lstvk/image/upload/v1737468859/Medusa%20Resources/wishlist-12_gvvb9z.jpg)
 
 ```ts title="src/api/store/customers/me/wishlists/route.ts"
-import { AuthenticatedMedusaRequest, MedusaResponse } from "@medusajs/framework/http";
-import { createWishlistWorkflow } from "../../../../../workflows/create-wishlist";
-import { MedusaError } from "@medusajs/framework/utils";
+import { AuthenticatedMedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { createWishlistWorkflow } from "../../../../../workflows/create-wishlist"
+import { MedusaError } from "@medusajs/framework/utils"
 
 export async function POST(
   req: AuthenticatedMedusaRequest,
@@ -781,12 +781,12 @@ export async function POST(
     .run({
       input: {
         customer_id: req.auth_context.actor_id,
-        sales_channel_id: req.publishable_key_context?.sales_channel_ids[0]
-      }
+        sales_channel_id: req.publishable_key_context?.sales_channel_ids[0],
+      },
     })
 
   res.json({
-    wishlist: result.wishlist
+    wishlist: result.wishlist,
   })
 }
 ```
@@ -907,11 +907,11 @@ export async function GET(
     fields: [
       "wishlist.*", 
       "wishlist.items.*", 
-      "wishlist.items.product_variant.*"
+      "wishlist.items.product_variant.*",
     ],
     filters: {
-      customer_id: req.auth_context.actor_id
-    }
+      customer_id: req.auth_context.actor_id,
+    },
   })
 
   if (!data.length) {
@@ -922,7 +922,7 @@ export async function GET(
   }
 
   return res.json({
-    wishlist: data[0].wishlist
+    wishlist: data[0].wishlist,
   })
 }
 ```
@@ -1085,7 +1085,7 @@ export const validateVariantWishlistStep = createStep(
   async ({ 
     variant_id, 
     sales_channel_id,
-    wishlist
+    wishlist,
   }: ValidateVariantWishlistStepInput, { container }) => {
     // validate whether variant is in wishlist
     const isInWishlist = wishlist.items?.some(
@@ -1095,7 +1095,7 @@ export const validateVariantWishlistStep = createStep(
     if (isInWishlist) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
-        "Variant is already in wishlist",
+        "Variant is already in wishlist"
       )
     }
 
@@ -1105,8 +1105,8 @@ export const validateVariantWishlistStep = createStep(
       entity: "variant",
       fields: ["product.sales_channels.*"],
       filters: {
-        id: variant_id
-      }
+        id: variant_id,
+      },
     })
 
     const variantInSalesChannel = data[0].product.sales_channels.some(
@@ -1116,7 +1116,7 @@ export const validateVariantWishlistStep = createStep(
     if (!variantInSalesChannel) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
-        "Variant is not available in the specified sales channel",
+        "Variant is not available in the specified sales channel"
       )
     }
   }
@@ -1217,24 +1217,24 @@ export const createWishlistItemWorkflow = createWorkflow(
       },
       options: {
         throwIfKeyNotFound: true,
-      }
+      },
     })
 
     validateWishlistSalesChannelStep({
       wishlist: wishlistCustomerLinks[0].wishlist,
-      sales_channel_id: input.sales_channel_id
+      sales_channel_id: input.sales_channel_id,
     })
 
 
     validateVariantWishlistStep({
       variant_id: input.variant_id,
       sales_channel_id: input.sales_channel_id,
-      wishlist: wishlistCustomerLinks[0].wishlist
+      wishlist: wishlistCustomerLinks[0].wishlist,
     })
 
     const wishlistItem = createWishlistItemStep({
       variant_id: input.variant_id,
-      wishlist_id: wishlistCustomerLinks[0].wishlist.id
+      wishlist_id: wishlistCustomerLinks[0].wishlist.id,
     })
 
     createRemoteLinkStep([{
@@ -1242,8 +1242,8 @@ export const createWishlistItemWorkflow = createWorkflow(
         wishlist_item_id: wishlistItem.id,
       },
       [Modules.PRODUCT]: {
-        product_variant_id: input.variant_id
-      }
+        product_variant_id: input.variant_id,
+      },
     }])
 
     // refetch wishlist
@@ -1251,7 +1251,7 @@ export const createWishlistItemWorkflow = createWorkflow(
       entity: "wishlist",
       fields: ["*", "items.*", "items.product_variant.*"],
       filters: {
-        id: wishlistCustomerLinks[0].wishlist.id
+        id: wishlistCustomerLinks[0].wishlist.id,
       },
     }).config({ name: "refetch-wishlist" })
 
@@ -1290,7 +1290,7 @@ type PostStoreCreateWishlistItemType = {
   variant_id: string
 }
 
-export async function POST (
+export async function POST(
   req: AuthenticatedMedusaRequest<PostStoreCreateWishlistItemType>,
   res: MedusaResponse
 ) {
@@ -1305,12 +1305,12 @@ export async function POST (
       input: {
         variant_id: req.validatedBody.variant_id,
         customer_id: req.auth_context.actor_id,
-        sales_channel_id: req.publishable_key_context?.sales_channel_ids[0]
-      }
+        sales_channel_id: req.publishable_key_context?.sales_channel_ids[0],
+      },
     })
 
   res.json({
-    wishlist: result.wishlist
+    wishlist: result.wishlist,
   })
 }
 ```
@@ -1375,7 +1375,7 @@ import {
   validateAndTransformBody,
 } from "@medusajs/framework/http"
 import { 
-  PostStoreCreateWishlistItem
+  PostStoreCreateWishlistItem,
 } from "./store/customers/me/wishlists/items/validators"
 
 export default defineMiddlewares({
@@ -1517,14 +1517,14 @@ export const validateItemInWishlistStep = createStep(
   "validate-item-in-wishlist",
   async ({ 
     wishlist, 
-    wishlist_item_id
+    wishlist_item_id,
   }: ValidateItemInWishlistStepInput, { container }) => {
     const item = wishlist.items.find((item) => item.id === wishlist_item_id)
 
     if (!item) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
-        "Item does not exist in customer's wishlist",
+        "Item does not exist in customer's wishlist"
       )
     }
   }
@@ -1616,12 +1616,12 @@ export const deleteWishlistItemWorkflow = createWorkflow(
       },
       options: {
         throwIfKeyNotFound: true,
-      }
+      },
     })
 
     validateItemInWishlistStep({
       wishlist: wishlistCustomerLinks[0].wishlist,
-      wishlist_item_id: input.wishlist_item_id
+      wishlist_item_id: input.wishlist_item_id,
     })
 
     deleteWishlistItemStep(input)
@@ -1631,12 +1631,12 @@ export const deleteWishlistItemWorkflow = createWorkflow(
       entity: "wishlist",
       fields: ["*", "items.*", "items.product_variant.*"],
       filters: {
-        id: wishlistCustomerLinks[0].wishlist.id
-      }
+        id: wishlistCustomerLinks[0].wishlist.id,
+      },
     }).config({ name: "refetch-wishlist" })
 
     return new WorkflowResponse({
-      wishlist: wishlists[0]
+      wishlist: wishlists[0],
     })
   }
 )
@@ -1660,8 +1660,8 @@ Create the file `src/api/store/customers/me/wishlists/items/[id]/route.ts` with 
 ![Directory structure after adding the route file](https://res.cloudinary.com/dza7lstvk/image/upload/v1737475074/Medusa%20Resources/wishlist-23_qatcia.jpg)
 
 ```ts title="src/api/store/customers/me/wishlists/items/[id]/route.ts"
-import { AuthenticatedMedusaRequest, MedusaResponse } from "@medusajs/framework";
-import { deleteWishlistItemWorkflow } from "../../../../../../../workflows/delete-wishlist-item";
+import { AuthenticatedMedusaRequest, MedusaResponse } from "@medusajs/framework"
+import { deleteWishlistItemWorkflow } from "../../../../../../../workflows/delete-wishlist-item"
 
 export async function DELETE(
   req: AuthenticatedMedusaRequest,
@@ -1671,12 +1671,12 @@ export async function DELETE(
     .run({
       input: {
         wishlist_item_id: req.params.id,
-        customer_id: req.auth_context.actor_id
-      }
+        customer_id: req.auth_context.actor_id,
+      },
     })
 
   res.json({
-    wishlist: result.wishlist
+    wishlist: result.wishlist,
   })
 }
 ```
@@ -1747,8 +1747,8 @@ Then, to create the API route, create the file `src/api/store/customers/me/wishl
 ![Directory structure after adding the route file](https://res.cloudinary.com/dza7lstvk/image/upload/v1737475331/Medusa%20Resources/wishlist-24_tiwjpr.jpg)
 
 ```ts title="src/api/store/customers/me/wishlists/share/route.ts"
-import { AuthenticatedMedusaRequest, MedusaResponse } from "@medusajs/framework";
-import { MedusaError } from "@medusajs/framework/utils";
+import { AuthenticatedMedusaRequest, MedusaResponse } from "@medusajs/framework"
+import { MedusaError } from "@medusajs/framework/utils"
 import WishlistCustomerLink from "../../../../../../links/wishlist-customer"
 import jwt from "jsonwebtoken"
 
@@ -1770,7 +1770,7 @@ export async function POST(
     fields: ["wishlist.*"],
     filters: {
       customer_id: req.auth_context.actor_id,
-    }
+    },
   })
 
   if (!data.length) {
@@ -1799,13 +1799,13 @@ You'll now generate a token that contains the wishlist ID. To do this, replace t
 const { http } = req.scope.resolve("configModule").projectConfig
 
 const wishlistToken = jwt.sign({
-  wishlist_id: data[0].wishlist.id
+  wishlist_id: data[0].wishlist.id,
 }, http.jwtSecret!, {
-  expiresIn: http.jwtExpiresIn
+  expiresIn: http.jwtExpiresIn,
 })
 
 return res.json({
-  token: wishlistToken
+  token: wishlistToken,
 })
 ```
 
@@ -1847,8 +1847,8 @@ Create the file `src/api/store/wishlists/[token]/route.ts` with the following co
 ![Directory structure after adding the route file](https://res.cloudinary.com/dza7lstvk/image/upload/v1737475795/Medusa%20Resources/wishlist-25_sodzsr.jpg)
 
 ```ts title="src/api/store/wishlists/[token]/route.ts"
-import { MedusaResponse, MedusaStoreRequest } from "@medusajs/framework";
-import { MedusaError } from "@medusajs/framework/utils";
+import { MedusaResponse, MedusaStoreRequest } from "@medusajs/framework"
+import { MedusaError } from "@medusajs/framework/utils"
 import { decode, JwtPayload } from "jsonwebtoken"
 
 export async function GET(
@@ -1877,8 +1877,8 @@ export async function GET(
     entity: "wishlist",
     fields: ["*", "items.*", "items.product_variant.*"],
     filters: {
-      id: decodedToken.wishlist_id
-    }
+      id: decodedToken.wishlist_id,
+    },
   })
 
   if (!data.length) {
@@ -1896,7 +1896,7 @@ export async function GET(
   }
 
   res.json({
-    wishlist: data[0]
+    wishlist: data[0],
   })
 }
 ```
