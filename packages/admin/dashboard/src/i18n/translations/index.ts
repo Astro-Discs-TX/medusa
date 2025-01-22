@@ -15,6 +15,8 @@ import nl from "./nl.json"
 import mn from "./mn.json"
 import ar from "./ar.json"
 import zhCN from "./zhCN.json"
+import nl from "./nl.json"
+
 
 export default {
   de: {
@@ -67,5 +69,8 @@ export default {
   },
   zhCN: {
     translation: zhCN,
-  },
+    nl: {
+      translation: nl,
+    },
+  }
 }

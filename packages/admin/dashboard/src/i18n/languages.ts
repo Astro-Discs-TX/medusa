@@ -16,6 +16,7 @@ import {
   mn,
   ar,
   zhCN
+  nl,
 } from "date-fns/locale"
 
 import { Language } from "./types"
@@ -122,5 +123,11 @@ export const languages: Language[] = [
     display_name: "简体中文",
     ltr: true,
     date_locale: zhCN,
+  },
+  {
+    code: "nl",
+    display_name: "Dutch",
+    ltr: true,
+    date_locale: nl,
   },
 ]
