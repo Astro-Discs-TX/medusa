@@ -1,6 +1,8 @@
 import { createDataTableFilterHelper } from "@medusajs/ui"
+import { subDays, subMonths } from "date-fns"
 import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
+
 import { useDate } from "../../../../hooks/use-date"
 
 const filterHelper = createDataTableFilterHelper<any>()
@@ -25,33 +27,25 @@ const useDateFilterOptions = () => {
       {
         label: t("filters.date.lastSevenDays"),
         value: {
-          $gte: new Date(
-            today.getTime() - 7 * 24 * 60 * 60 * 1000
-          ).toISOString(), // 7 days ago
+          $gte: subDays(today, 7).toISOString(), // 7 days ago
         },
       },
       {
         label: t("filters.date.lastThirtyDays"),
         value: {
-          $gte: new Date(
-            today.getTime() - 30 * 24 * 60 * 60 * 1000
-          ).toISOString(), // 30 days ago
+          $gte: subDays(today, 30).toISOString(), // 30 days ago
         },
       },
       {
         label: t("filters.date.lastNinetyDays"),
         value: {
-          $gte: new Date(
-            today.getTime() - 90 * 24 * 60 * 60 * 1000
-          ).toISOString(), // 90 days ago
+          $gte: subDays(today, 90).toISOString(), // 90 days ago
         },
       },
       {
         label: t("filters.date.lastTwelveMonths"),
         value: {
-          $gte: new Date(
-            today.getTime() - 365 * 24 * 60 * 60 * 1000
-          ).toISOString(), // 365 days ago
+          $gte: subMonths(today, 12).toISOString(), // 12 months ago
         },
       },
     ]
