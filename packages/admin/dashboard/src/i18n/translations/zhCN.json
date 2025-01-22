@@ -298,6 +298,9 @@
     }
   },
   "filters": {
+    "sortLabel": "排序",
+    "filterLabel": "过滤",
+    "searchLabel": "搜索",
     "date": {
       "today": "今天",
       "lastSevenDays": "最近7天",
@@ -306,7 +309,9 @@
       "lastTwelveMonths": "最近12个月",
       "custom": "自定义",
       "from": "从",
-      "to": "至"
+      "to": "至",
+      "starting": "开始于",
+      "ending": "结束于"
     },
     "compare": {
       "lessThan": "小于",
@@ -316,6 +321,18 @@
       "lessThanLabel": "小于 {{value}}",
       "greaterThanLabel": "大于 {{value}}",
       "andLabel": "和"
+    },
+    "sorting": {
+      "alphabeticallyAsc": "A to Z",
+      "alphabeticallyDesc": "Z to A",
+      "dateAsc": "按最新的",
+      "dateDesc": "按最旧的"
+    },
+    "radio": {
+      "yes": "Yes",
+      "no": "No",
+      "true": "True",
+      "false": "False"
     },
     "addFilter": "添加筛选"
   },
@@ -468,7 +485,17 @@
       }
     },
     "deleteWarning": "您即将删除产品 {{title}}。此操作无法撤销。",
-    "variants": "变体",
+    "variants": {
+      "header": "变体",
+      "empty": {
+        "heading": "没有变体",
+        "description": "这里没有变体可显示。"
+      },
+      "filtered": {
+        "heading": "无结果",
+        "description": "没有变体符合当前过滤条件。"
+      }
+    },
     "attributes": "属性",
     "editAttributes": "编辑属性",
     "editOptions": "编辑选项",
@@ -891,6 +918,16 @@
   "customerGroups": {
     "domain": "客户群组",
     "subtitle": "将客户组织成群组。群组可以有不同的促销和价格。",
+   "list": {
+      "empty": {
+        "heading": "暂无客户组",
+        "description": "当前没有可显示的客户组。"
+      },
+      "filtered": {
+        "heading": "无搜索结果",
+        "description": "没有符合当前筛选条件的客户组。"
+      }
+    },
     "create": {
       "header": "创建客户群组",
       "hint": "创建新的客户群组以细分您的客户。",
@@ -1933,7 +1970,19 @@
         }
       },
       "status": {
-        "title": "状态"
+        "label": "状态",
+        "draft": {
+          "title": "草稿",
+          "description": "客户暂时无法使用此优惠码"
+        },
+        "active": {
+          "title": "启用",
+          "description": "客户可以使用此优惠码"
+        },
+        "inactive": {
+          "title": "停用",
+          "description": "客户将无法使用此优惠码"
+        }
       },
       "method": {
         "label": "方式",
@@ -2230,7 +2279,18 @@
       "developer": "开发者",
       "member": "成员"
     },
+    "list": {
+      "empty": {
+        "heading": "暂无用户",
+        "description": "邀请用户后，他们将会显示在这里。"
+      },
+      "filtered": {
+        "heading": "无搜索结果",
+        "description": "没有符合当前筛选条件的用户。"
+      }
+    },
     "deleteUserWarning": "您即将删除用户 {{name}}。此操作无法撤销。",
+    "deleteUserSuccess": "用户 {{name}} 删除成功。",
     "invite": "邀请"
   },
   "store": {
@@ -2676,6 +2736,8 @@
     "scheduled": "已计划",
     "expired": "已过期",
     "active": "活跃",
+    "inactive": "不活跃",
+    "draft": "草稿",
     "enabled": "已启用",
     "disabled": "已禁用"
   },
