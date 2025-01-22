@@ -19,10 +19,10 @@ export const createProductCategoriesWorkflowId = "create-product-categories"
 /**
  * This workflow creates one or more product categories. It's used by the
  * [Create Product Category Admin API Route](https://docs.medusajs.com/api/admin#product-categories_postproductcategories).
- *
+ * 
  * You can use this workflow within your customizations or your own custom workflows, allowing you to
  * create product categories within your custom flows.
- *
+ * 
  * @example
  * const { result } = await createProductCategoriesWorkflow(container)
  * .run({
@@ -34,9 +34,9 @@ export const createProductCategoriesWorkflowId = "create-product-categories"
  *     ]
  *   }
  * })
- *
+ * 
  * @summary
- *
+ * 
  * Create product categories.
  */
 export const createProductCategoriesWorkflow = createWorkflow(
@@ -44,7 +44,7 @@ export const createProductCategoriesWorkflow = createWorkflow(
   (
     input: WorkflowData<ProductCategoryWorkflow.CreateProductCategoriesWorkflowInput>
   ): WorkflowResponse<CreateProductCategoriesWorkflowOutput> => {
-    
+
     const createdCategories = createProductCategoriesStep(input)
 
     const productCategoryIdEvents = transform(
