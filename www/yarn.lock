@@ -1707,14 +1707,14 @@ __metadata:
   linkType: hard
 
 "@medusajs/ui-preset@npm:^1.1.3":
-  version: 1.1.3
-  resolution: "@medusajs/ui-preset@npm:1.1.3"
+  version: 1.1.4
+  resolution: "@medusajs/ui-preset@npm:1.1.4"
   dependencies:
     "@tailwindcss/forms": ^0.5.3
     tailwindcss-animate: ^1.0.6
   peerDependencies:
     tailwindcss: ">=3.0.0"
-  checksum: 36b3cbe3d1b3ab2666abe84499dc19a57fe88e886704ca82b42105b5ba078638c6af8d2032d09da12d2324c485966ef2840f6a06192690b986b3c5f025308c68
+  checksum: 49ffcecc49c9971fe4e195b46fde3da9c3c0e8e12c7cbf0ab6186ffd71a4027019603e72496288d32742add61905e621318d379ac2dcaea6ed2d0330efecbe3c
   languageName: node
   linkType: hard
 
