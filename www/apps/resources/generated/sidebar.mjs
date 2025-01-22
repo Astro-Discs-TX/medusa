@@ -15945,6 +15945,41 @@ export const generatedSidebar = [
   {
     "loaded": true,
     "isPathHref": true,
+    "type": "ref",
+    "path": "/plugins",
+    "title": "Plugins",
+    "isChildSidebar": true,
+    "children": [
+      {
+        "loaded": true,
+        "isPathHref": true,
+        "type": "link",
+        "title": "Overview",
+        "path": "/plugins",
+        "children": []
+      },
+      {
+        "loaded": true,
+        "isPathHref": true,
+        "type": "category",
+        "title": "Guides",
+        "children": [
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "link",
+            "title": "Wishlist",
+            "path": "/plugins/guides/wishlist",
+            "description": "Learn how to build a wishlist plugin.",
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "loaded": true,
+    "isPathHref": true,
     "type": "link",
     "path": "/storefront-development",
     "title": "Storefront Development",
@@ -16462,6 +16497,7 @@ export const generatedSidebar = [
                 "type": "link",
                 "path": "/medusa-cli/commands/plugin",
                 "title": "plugin",
+                "description": "",
                 "children": []
               },
               {

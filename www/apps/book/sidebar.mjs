@@ -110,6 +110,11 @@ export const sidebar = numberSidebarItems(
         },
         {
           type: "link",
+          title: "Re-Use Customizations",
+          path: "/learn/customization/reuse-customizations",
+        },
+        {
+          type: "link",
           title: "Next Steps",
           path: "/learn/customization/next-steps",
         },

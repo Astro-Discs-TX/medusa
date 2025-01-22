@@ -864,6 +864,14 @@ export const filesMap = [
     "pathname": "/"
   },
   {
+    "filePath": "/www/apps/resources/app/plugins/guides/wishlist/page.mdx",
+    "pathname": "/plugins/guides/wishlist"
+  },
+  {
+    "filePath": "/www/apps/resources/app/plugins/page.mdx",
+    "pathname": "/plugins"
+  },
+  {
     "filePath": "/www/apps/resources/app/recipes/b2b/page.mdx",
     "pathname": "/recipes/b2b"
   },
