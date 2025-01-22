@@ -99,12 +99,6 @@ export const languages: Language[] = [
     date_locale: mk,
   },
   {
-    code: "zhCN",
-    display_name: "简体中文",
-    ltr: true,
-    date_locale: zhCN,
-  },
-  {
     code: "mn",
     display_name: "Монгол",
     ltr: true,
