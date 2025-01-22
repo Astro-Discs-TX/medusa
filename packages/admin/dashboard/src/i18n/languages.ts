@@ -11,6 +11,7 @@ import {
   tr,
   uk,
   mk,
+  nl,
 } from "date-fns/locale"
 import { Language } from "./types"
 
@@ -86,5 +87,11 @@ export const languages: Language[] = [
     display_name: "Македонски",
     ltr: true,
     date_locale: mk,
+  },
+  {
+    code: "nl",
+    display_name: "Dutch",
+    ltr: true,
+    date_locale: nl,
   },
 ]

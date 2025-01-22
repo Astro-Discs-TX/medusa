@@ -10,6 +10,8 @@ import th from "./th.json"
 import tr from "./tr.json"
 import uk from "./uk.json"
 import mk from "./mk.json"
+import nl from "./nl.json"
+
 
 export default {
   de: {
@@ -47,5 +49,8 @@ export default {
   },
   mk: {
     translation: mk,
+  },
+  nl: {
+    translation: nl,
   },
 }
