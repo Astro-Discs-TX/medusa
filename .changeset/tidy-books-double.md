@@ -2,4 +2,4 @@
 "@medusajs/admin-bundler": patch
 ---
 
-fix(ui): Fix Vite imports to prevent deprecation warnings
+fix(admin-bundler): Fix Vite imports to prevent deprecation warnings
