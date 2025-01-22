@@ -1,6 +1,7 @@
 import { BaseFilterable } from "../dal"
 import { OperatorMap } from "../dal/utils"
 import { BigNumberValue } from "../totals"
+import { PaymentProviderContext } from "./provider"
 /* ********** PAYMENT COLLECTION ********** */
 
 export type PaymentCollectionStatus =
@@ -245,6 +246,22 @@ export interface FilterableRefundProps extends BaseFilterable<RefundDTO> {
    */
   deleted_at?: OperatorMap<string>
 }
+
+/**
+ * The filters to apply on the retrieved payment sessions.
+ */
+export interface FilterablePaymentMethodProps {
+  /**
+   * Filter the payment methods by provider.
+   */
+  provider_id: string
+
+  /**
+   * Filter the payment methods by the context of their associated payment provider.
+   */
+  context: PaymentProviderContext
+}
+
 /* ********** PAYMENT ********** */
 export interface PaymentDTO {
   /**
@@ -627,4 +644,21 @@ export interface RefundReasonDTO {
    * When the refund reason was updated
    */
   updated_at: Date | string
+}
+
+export interface PaymentMethodDTO {
+  /**
+   * The ID of the payment method.
+   */
+  id: string
+
+  /**
+   * The data of the payment method, as returned by the payment provider.
+   */
+  data: Record<string, unknown>
+
+  /**
+   * The ID of the associated payment provider.
+   */
+  provider_id: string
 }
