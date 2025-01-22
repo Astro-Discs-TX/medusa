@@ -10,6 +10,7 @@ import th from "./th.json"
 import tr from "./tr.json"
 import uk from "./uk.json"
 import mk from "./mk.json"
+import mn from "./mn.json"
 import zhCN from "./zhCN.json"
 
 export default {
@@ -48,6 +49,9 @@ export default {
   },
   mk: {
     translation: mk,
+  },
+  mn: {
+    translation: mn,
   },
   zhCN: {
     translation: zhCN,

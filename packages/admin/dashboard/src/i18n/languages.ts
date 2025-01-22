@@ -11,6 +11,7 @@ import {
   tr,
   uk,
   mk,
+  mn,
   zhCN
 } from "date-fns/locale"
 
@@ -88,6 +89,18 @@ export const languages: Language[] = [
     display_name: "Македонски",
     ltr: true,
     date_locale: mk,
+  },
+  {
+    code: "zhCN",
+    display_name: "简体中文",
+    ltr: true,
+    date_locale: zhCN,
+  },
+  {
+    code: "mn",
+    display_name: "Монгол",
+    ltr: true,
+    date_locale: mn,
   },
   {
     code: "zhCN",
