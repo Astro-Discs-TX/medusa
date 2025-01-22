@@ -153,8 +153,6 @@ export const DataTable = <TData,>({
     parseFilterState(filterIds, filterParams)
   )
 
-  console.log(filtering, "filtering")
-
   const handleFilteringChange = (value: DataTableFilteringState) => {
     setFiltering(value)
 
