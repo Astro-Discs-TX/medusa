@@ -10,6 +10,7 @@ import {
   th,
   tr,
   uk,
+  ro,
   mk,
   mn
 } from "date-fns/locale"
@@ -81,6 +82,12 @@ export const languages: Language[] = [
     display_name: "Українська",
     ltr: true,
     date_locale: uk,
+  },
+  {
+    code: "ro",
+    display_name: "Română",
+    ltr: true,
+    date_locale: ro,
   },
   {
     code: "mk",
