@@ -10,7 +10,7 @@ post:
     `/admin/workflows-executions/export-products/:transaction-id`.
 
     Once the execution finishes successfully, a notification is created for the
-    export. You can retrieve the notifications using the `/admin/notification`
+    export. You can retrieve the notifications using the `/admin/notifications`
     API route to retrieve the file's download URL.
   x-authenticated: true
   parameters:
