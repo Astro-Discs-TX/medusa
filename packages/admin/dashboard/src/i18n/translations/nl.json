@@ -2279,6 +2279,16 @@
             "developer": "Ontwikkelaar",
             "member": "Lid"
         },
+        "list": {
+            "empty": {
+              "heading": "Geen gebruikers gevonden",
+              "description": "Zodra een gebruiker is uitgenodigd, zal deze hier verschijnen."
+            },
+            "filtered": {
+              "heading": "Geen resultaten",
+              "description": "Geen gebruikers voldoen aan de huidige filtercriteria."
+            }
+          },
         "deleteUserWarning": "U staat op het punt de gebruiker {{name}} te verwijderen. Deze actie kan niet ongedaan worden gemaakt.",
         "deleteUserSuccess": "Gebruiker {{name}} succesvol verwijderd",
         "invite": "Uitnodigen"

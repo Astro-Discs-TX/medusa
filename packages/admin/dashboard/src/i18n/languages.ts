@@ -12,10 +12,9 @@ import {
   uk,
   ro,
   mk,
-  nl,
   mn,
   ar,
-  zhCN
+  zhCN,
   nl,
 } from "date-fns/locale"
 
