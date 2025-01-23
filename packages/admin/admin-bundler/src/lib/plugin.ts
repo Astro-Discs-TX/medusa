@@ -12,6 +12,7 @@ interface PluginOptions {
 export async function plugin(options: PluginOptions) {
   const vite = await import("vite")
   const react = (await import("@vitejs/plugin-react")).default
+  const { nodeResolve } = await import("@rollup/plugin-node-resolve")
   const entries = await glob(`${options.root}/src/admin/**/*.{ts,tsx,js,jsx}`)
 
   /**
@@ -62,7 +63,8 @@ export async function plugin(options: PluginOptions) {
       minify: false,
       outDir: path.resolve(options.root, options.outDir),
       rollupOptions: {
-        external: [...external, /^node_modules/, /^@?[A-Za-z].*/],
+        plugins: [nodeResolve() as any],
+        external: [...external, /node_modules/],
         output: {
           globals: {
             react: "React",

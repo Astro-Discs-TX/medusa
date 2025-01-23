@@ -5253,6 +5253,7 @@ __metadata:
     "@medusajs/admin-vite-plugin": 2.3.1
     "@medusajs/dashboard": 2.3.1
     "@medusajs/types": ~2.3.1
+    "@rollup/plugin-node-resolve": ^16.0.0
     "@types/compression": ^1.7.5
     "@vitejs/plugin-react": ^4.2.1
     autoprefixer: ^10.4.16
@@ -10928,6 +10929,24 @@ __metadata:
     rollup:
       optional: true
   checksum: 598c15615086f26e28c4b3dbf966682af7fb0e5bc277cc4e57f559668a3be675a63ab261eb34729ce9569c3a51342c48863e50b5efe02e0fc1571828f0113f9d
+  languageName: node
+  linkType: hard
+
+"@rollup/plugin-node-resolve@npm:^16.0.0":
+  version: 16.0.0
+  resolution: "@rollup/plugin-node-resolve@npm:16.0.0"
+  dependencies:
+    "@rollup/pluginutils": ^5.0.1
+    "@types/resolve": 1.20.2
+    deepmerge: ^4.2.2
+    is-module: ^1.0.0
+    resolve: ^1.22.1
+  peerDependencies:
+    rollup: ^2.78.0||^3.0.0||^4.0.0
+  peerDependenciesMeta:
+    rollup:
+      optional: true
+  checksum: b63deb6fc14b37070ccaffacc8c10c9720f28ce7632f4fe2ee77064c0c79bcc3fe060fb77160e673c9fd847307252f25a2983030bd54f1888324063c69ae1399
   languageName: node
   linkType: hard
 
