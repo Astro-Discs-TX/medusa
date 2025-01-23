@@ -268,14 +268,14 @@ import { Wishlist } from "./wishlist"
 
 export const WishlistItem = model.define("wishlist_item", {
   id: model.id().primaryKey(),
-  variant_id: model.text(),
+  product_variant_id: model.text(),
   wishlist: model.belongsTo(() => Wishlist, {
     mappedBy: "items",
   }),
 })
 .indexes([
   {
-    on: ["id", "variant_id"],
+    on: ["product_variant_id", "wishlist_id"],
     unique: true,
   },
 ])
@@ -284,10 +284,10 @@ export const WishlistItem = model.define("wishlist_item", {
 The `WishlistItem` model has the following properties:
 
 - `id`: A unique identifier for the wishlist item.
-- `variant_id`: The ID of the product variant in the wishlist.
+- `product_variant_id`: The ID of the product variant in the wishlist.
 - `wishlist`: A relation to the `Wishlist` model, representing the wishlist the item belongs to.
 
-You also define a unique index on the `id` and `variant_id` columns to ensure a product variant is added to the wishlist only once.
+You also define a unique index on the `product_variant_id` and `wishlist_id` columns to ensure a product variant is added to the wishlist only once. The `wishlist_id` column is available as a by-product of the `belongsTo` relation.
 
 ### Create Service
 
@@ -410,15 +410,22 @@ import WishlistModule from "../modules/wishlist"
 import CustomerModule from "@medusajs/medusa/customer"
 
 export default defineLink(
-  WishlistModule.linkable.wishlist,
-  CustomerModule.linkable.customer
+  {
+    ...WishlistModule.linkable.wishlist.id,
+    field: "customer_id",
+  },
+  CustomerModule.linkable.customer.id,
+  {
+    readOnly: true,
+  }
 )
 ```
 
-You define a link using `defineLink` from the Modules SDK. It accepts two parameters:
+You define a link using `defineLink` from the Modules SDK. It accepts three parameters:
 
-1. The first data model part of the link, which is the Wishlist Module's `wishlist` data model. A module has a special `linkable` property that contain link configurations for its data models.
+1. The first data model part of the link, which is the Wishlist Module's `wishlist` data model. A module has a special `linkable` property that contain link configurations for its data models. You also specify the field that points to the customer.
 1. The second data model part of the link, which is the Customer Module's `customer` data model.
+3. An object of configurations for the module link. By default, Medusa creates a table in the database to represent the link you define. However, in this guide, you only want this link to retrieve the customer associated with a wishlist. So, you enable `readOnly` telling Medusa not to create a table for this link.
 
 Next, to create the link between the `Wishlist` data model and the `SalesChannel` data model, create the file `src/modules/wishlist/links/wishlist-sales-channel.ts` with the following content:
 
@@ -430,8 +437,14 @@ import WishlistModule from "../modules/wishlist"
 import SalesChannelModule from "@medusajs/medusa/sales-channel"
 
 export default defineLink(
-  WishlistModule.linkable.wishlist,
-  SalesChannelModule.linkable.salesChannel
+  {
+    ...WishlistModule.linkable.wishlist.id,
+    field: "sales_channel_id",
+  },
+  SalesChannelModule.linkable.salesChannel,
+  {
+    readOnly: true,
+  }
 )
 ```
 
@@ -448,35 +461,19 @@ import ProductModule from "@medusajs/medusa/product"
 
 export default defineLink(
   {
-    linkable: WishlistModule.linkable.wishlistItem,
-    isList: true,
+    ...WishlistModule.linkable.wishlistItem.id,
+    field: "product_variant_id",
   },
-  ProductModule.linkable.productVariant
+  ProductModule.linkable.productVariant,
+  {
+    readOnly: true,
+  }
 )
 ```
 
-You define a link between the `WishlistItem` data model and the `ProductVariant` data model. Instead of passing the `WishlistItem` data model's link configuration as a parameter similar to previous links, you pass an object having the following properties:
+You define a link between the `WishlistItem` data model and the `ProductVariant` data model in the same way as the previous links.
 
-- `linkable`: The `WishlistItem` data model's link configuration. This is the link configuration you previously passed as a parameter.
-- `isList`: A boolean indicating whether the link is a list. By enabling this property, you indicate that a product variant can be added as a wishlist item to multiple wishlists.
-
-### Run Migrations to Sync Links
-
-Links are created in the database as tables that store the associations between data models. To reflect these links on the database of the Medusa application, run the following command:
-
-<Note>
-
-Make sure that `npx medusa plugin:develop` is running in the plugin project to publish the changes to the local registry.
-
-</Note>
-
-```bash title="Medusa application"
-npx medusa db:migrate
-```
-
-This will run any migration changes and sync any new links to the database.
-
-In the next steps, you'll see how these links allow you to manage the associations between wishlists and customers, sales channels, and products.
+In the next steps, you'll see how these links allow you to retrieve the resources associated with a wishlist or wishlist item.
 
 ---
 
@@ -512,19 +509,12 @@ The workflow has the following steps:
         description: "Create a wishlist for the customer.",
         depth: 1
       },
-      {
-        type: "step",
-        name: "createRemoteLinkStep",
-        description: "Create a link between the wishlist and its customer and sales channel.",
-        depth: 1,
-        link: "/references/helper-steps/createRemoteLinkStep"
-      }
     ]
   }}
   hideLegend
 />
 
-The `createRemoteLinkStep` is from Medusa's workflows package. So, you'll only implement the first two steps.
+You'll implement the steps before implementing the workflow.
 
 ### validateCustomerCreateWishlistStep
 
@@ -535,9 +525,10 @@ To create the step, create the file `src/workflows/steps/validate-customer-creat
 ![Directory structure after adding the step file](https://res.cloudinary.com/dza7lstvk/image/upload/v1737467678/Medusa%20Resources/wishlist-9_lzlifn.jpg)
 
 export const validateCustomerWishlistHighlights = [
-  ["13", "graph", "Retrieve the customer and its wishlist from the database"],
-  ["21", "", "Throw an error if the customer doesn't exist"],
-  ["28", "", "Throw an error if the customer already has a wishlist"],
+  ["13", "graph", "Retrieve the wishlist based on the specified customer ID."],
+  ["21", "", "Throw an error if the customer already has a wishlist."],
+  ["29", "graph", "Retrieve the customer based on the specified customer ID."],
+  ["28", "", "Throw an error if the customer doesn't exist."],
 ]
 
 ```ts title="src/workflows/steps/validate-customer-create-wishlist.ts" highlights={validateCustomerWishlistHighlights}
@@ -554,24 +545,33 @@ export const validateCustomerCreateWishlistStep = createStep(
     const query = container.resolve("query")
 
     const { data } = await query.graph({
+      entity: "wishlist",
+      fields: ["*"],
+      filters: {
+        customer_id: customer_id,
+      },
+    })
+
+    if (data.length) {
+      throw new MedusaError(
+        MedusaError.Types.NOT_FOUND,
+        "Customer already has a wishlist"
+      )
+    }
+
+    // check that customer exists
+    const { data: customers } = await query.graph({
       entity: "customer",
-      fields: ["wishlist.*"],
+      fields: ["*"],
       filters: {
         id: customer_id,
       },
     })
 
-    if (!data.length) {
-      throw new MedusaError(
-        MedusaError.Types.NOT_FOUND,
-        "Specified customer was not found"
-      )
-    }
-
-    if (data[0].wishlist) {
+    if (customers.length === 0) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
-        "Customer already has a wishlist"
+        "Specified customer was not found"
       )
     }
   }
@@ -585,7 +585,9 @@ You create a step using `createStep` from the Workflows SDK. It accepts two para
    - The input data for the step, which in this case is an object having a `customer_id` property.
    - An object holding the workflow's context, including the [Medusa Container](!docs!learn/fundamentals/medusa-container) that allows you to resolve framework and commerce tools.
 
-In the step function, you use [Query](!docs!/learn/fundamentals/module-links/query) to retrieve the customer and its wishlist from the database. You throw an error if the customer doesn't exist, or if the customer already has a wishlist.
+In the step function, you use [Query](!docs!/learn/fundamentals/module-links/query) to retrieve the wishlist based on the specified customer ID. If a wishlist exists, you throw an error, stopping the workflow's execution.
+
+You also try to retrieve the customer, and if they don't exist, you throw an error.
 
 ### createWishlistStep
 
@@ -654,21 +656,15 @@ You can now add the `createWishlistWorkflow` to the plugin. Create the file `src
 ![Directory structure after adding the workflow file](https://res.cloudinary.com/dza7lstvk/image/upload/v1737468333/Medusa%20Resources/wishlist-11_absftb.jpg)
 
 export const createWishlistWorkflowHighlights = [
-  ["17", "validateCustomerCreateWishlistStep", "Validate that the customer doesn't already have a wishlist."],
-  ["21", "createWishlistStep", "Create the wishlist."],
-  ["23", "transform", "Create an array of links to create between the wishlist and the customer and sales channel."],
-  ["47", "createRemoteLinkStep", "Create the links."],
-  ["50", "wishlist", "Return the wishlist."]
+  ["13", "validateCustomerCreateWishlistStep", "Validate that the customer doesn't already have a wishlist."],
+  ["17", "createWishlistStep", "Create the wishlist."],
+  ["20", "wishlist", "Return the wishlist."]
 ]
 
 ```ts title="src/workflows/create-wishlist.ts" highlights={createWishlistWorkflowHighlights}
-import { createWorkflow, transform, WorkflowResponse } from "@medusajs/framework/workflows-sdk"
+import { createWorkflow, WorkflowResponse } from "@medusajs/framework/workflows-sdk"
 import { validateCustomerCreateWishlistStep } from "./steps/validate-customer-create-wishlist"
 import { createWishlistStep } from "./steps/create-wishlist"
-import { WISHLIST_MODULE } from "../modules/wishlist"
-import { Modules } from "@medusajs/framework/utils"
-import { createRemoteLinkStep } from "@medusajs/medusa/core-flows"
-import { LinkDefinition } from "@medusajs/framework/types"
 
 type CreateWishlistWorkflowInput = {
   customer_id: string
@@ -684,32 +680,6 @@ export const createWishlistWorkflow = createWorkflow(
 
     const wishlist = createWishlistStep(input)
 
-    const linkDefs = transform({
-      input,
-      wishlist,
-    }, (data) => {
-      return [
-        {
-          [WISHLIST_MODULE]: {
-            wishlist_id: data.wishlist.id,
-          },
-          [Modules.CUSTOMER]: {
-            customer_id: data.input.customer_id,
-          },
-        },
-        {
-          [WISHLIST_MODULE]: {
-            wishlist_id: data.wishlist.id,
-          },
-          [Modules.SALES_CHANNEL]: {
-            sales_channel_id: data.input.sales_channel_id,
-          },
-        },
-      ] as LinkDefinition[]
-    })
-
-    createRemoteLinkStep(linkDefs)
-
     return new WorkflowResponse({
       wishlist,
     })
@@ -723,18 +693,10 @@ It accepts as a second parameter a constructor function, which is the workflow's
 
 - Execute the `validateCustomerCreateWishlistStep` step to validate that the customer doesn't have an existing wishlist.
 - Execute the `createWishlistStep` step to create the wishlist.
-- Use [transform](!docs!/learn/fundamentals/workflows/variable-manipulation) from the Workflows SDK to create an array of links to create between the wishlist and the customer and sales channel.
-- Use the [createRemoteLinkStep](/references/helper-steps/createRemoteLinkStep) to create the links.
 
 <Note title="Tip">
 
 A workflow's constructor function has some constraints in implementation, which is why you need to use `transform` for variable manipulation. Learn more about these constraints in [this documentation](!docs!/learn/fundamentals/workflows/constructor-constraints).
-
-</Note>
-
-<Note>
-
-Learn more about creating links between records in [this documentation](!docs!/learn/fundamentals/module-links/link).
 
 </Note>
 
@@ -891,11 +853,6 @@ In this step, you'll add an API route to retrieve a customer's wishlist. You'll 
 So, add to the `src/api/store/customers/me/wishlists/route.ts` the following:
 
 ```ts title="src/api/store/customers/me/wishlists/route.ts"
-// other imports...
-import WishlistCustomerLink from "../../../../../links/wishlist-customer"
-
-// POST route...
-
 export async function GET(
   req: AuthenticatedMedusaRequest,
   res: MedusaResponse
@@ -903,12 +860,8 @@ export async function GET(
   const query = req.scope.resolve("query")
 
   const { data } = await query.graph({
-    entity: WishlistCustomerLink.entryPoint,
-    fields: [
-      "wishlist.*", 
-      "wishlist.items.*", 
-      "wishlist.items.product_variant.*",
-    ],
+    entity: "wishlist",
+    fields: ["*", "items.*", "items.product_variant.*"],
     filters: {
       customer_id: req.auth_context.actor_id,
     },
@@ -922,12 +875,12 @@ export async function GET(
   }
 
   return res.json({
-    wishlist: data[0].wishlist,
+    wishlist: data[0],
   })
 }
 ```
 
-In this route handler function, you use [Query](!docs!/learn/fundamentals/module-links/query) to retrieve the wishlist of the authenticated customer. Notice that you pass the link definition between a wishlist and a customer as an entry point to Query. This allows you to filter the wishlist by the customer ID.
+In this route handler function, you use [Query](!docs!/learn/fundamentals/module-links/query) to retrieve the wishlist of the authenticated customer. For each wishlist, you retrieve its items, and the product variants of those items.
 
 If the wishlist doesn't exist, you throw an error. Otherwise, you return the wishlist in the response.
 
@@ -997,13 +950,6 @@ The workflow to add an item to a wishlist has the following steps:
       },
       {
         type: "step",
-        name: "createRemoteLinkStep",
-        description: "Create a link between the wishlist item and the product variant.",
-        depth: 1,
-        link: "/references/helper-steps/createRemoteLinkStep"
-      },
-      {
-        type: "step",
         name: "useQueryGraphStep",
         description: "Retrieve the wishlist again with the new item added.",
         depth: 1,
@@ -1014,7 +960,7 @@ The workflow to add an item to a wishlist has the following steps:
   hideLegend
 />
 
-The `useQueryGraphStep` and `createRemoteLinkStep` are from Medusa's workflows package. So, you'll only implement the other steps.
+The `useQueryGraphStep` is from Medusa's workflows package. So, you'll only implement the other steps.
 
 #### validateWishlistSalesChannelStep
 
@@ -1089,7 +1035,7 @@ export const validateVariantWishlistStep = createStep(
   }: ValidateVariantWishlistStepInput, { container }) => {
     // validate whether variant is in wishlist
     const isInWishlist = wishlist.items?.some(
-      (item) => item.variant_id === variant_id
+      (item) => item.product_variant_id === variant_id
     )
 
     if (isInWishlist) {
@@ -1148,7 +1094,7 @@ import { WISHLIST_MODULE } from "../../modules/wishlist"
 
 type CreateWishlistItemStepInput = {
   wishlist_id: string
-  variant_id: string
+  product_variant_id: string
 }
 
 export const createWishlistItemStep = createStep(
@@ -1181,23 +1127,19 @@ You can now add the `createWishlistItemWorkflow` to the plugin. Create the file 
 ![Directory structure after adding the workflow file](https://res.cloudinary.com/dza7lstvk/image/upload/v1737470660/Medusa%20Resources/wishlist-16_ovujwp.jpg)
 
 export const createWishlistItemWorkflowHighlights = [
-  ["19", "useQueryGraphStep", "Retrieve the wishlist linked to the customer."],
-  ["30", "validateWishlistSalesChannelStep", "Validate that the wishlist belongs to the specified sales channel."],
-  ["36", "validateVariantWishlistStep", "Validate that the specified variant is not already in the wishlist."],
-  ["42", "createWishlistItemStep", "Create the wishlist item."],
-  ["47", "createRemoteLinkStep", "Create a link between the wishlist item and the product variant."],
-  ["57", "useQueryGraphStep", "Retrieve the wishlist again with the new item added."],
-  ["66", "wishlist", "Return the wishlist with the new item."]
+  ["16", "useQueryGraphStep", "Retrieve the wishlist of the specified customer."],
+  ["27", "validateWishlistSalesChannelStep", "Validate that the wishlist belongs to the specified sales channel."],
+  ["33", "validateVariantWishlistStep", "Validate that the specified variant is not already in the wishlist."],
+  ["39", "createWishlistItemStep", "Create the wishlist item."],
+  ["45", "useQueryGraphStep", "Retrieve the wishlist again with the new item added."],
+  ["54", "wishlist", "Return the wishlist with the new item."]
 ]
 
-```ts title="src/workflows/create-wishlist-item.ts" collapsibleLines="1-9" expandButtonLabel="Show Imports" highlights={createWishlistItemWorkflowHighlights}
+```ts title="src/workflows/create-wishlist-item.ts" collapsibleLines="1-6" expandButtonLabel="Show Imports" highlights={createWishlistItemWorkflowHighlights}
 import { createWorkflow, WorkflowResponse } from "@medusajs/framework/workflows-sdk"
-import { createRemoteLinkStep, useQueryGraphStep } from "@medusajs/medusa/core-flows"
-import WishlistCustomerLink from "../links/wishlist-customer"
+import { useQueryGraphStep } from "@medusajs/medusa/core-flows"
 import { validateWishlistSalesChannelStep } from "./steps/validate-wishlist-sales-channel"
 import { createWishlistItemStep } from "./steps/create-wishlist-item"
-import { WISHLIST_MODULE } from "../modules/wishlist"
-import { Modules } from "@medusajs/framework/utils"
 import { validateVariantWishlistStep } from "./steps/validate-variant-wishlist"
 
 type CreateWishlistItemWorkflowInput = {
@@ -1209,9 +1151,9 @@ type CreateWishlistItemWorkflowInput = {
 export const createWishlistItemWorkflow = createWorkflow(
   "create-wishlist-item",
   (input: CreateWishlistItemWorkflowInput) => {
-    const { data: wishlistCustomerLinks } = useQueryGraphStep({
-      entity: WishlistCustomerLink.entryPoint,
-      fields: ["wishlist.*", "wishlist.items.*"],
+    const { data: wishlists } = useQueryGraphStep({
+      entity: "wishlist",
+      fields: ["*", "items.*"],
       filters: {
         customer_id: input.customer_id,
       },
@@ -1221,7 +1163,7 @@ export const createWishlistItemWorkflow = createWorkflow(
     })
 
     validateWishlistSalesChannelStep({
-      wishlist: wishlistCustomerLinks[0].wishlist,
+      wishlist: wishlists[0],
       sales_channel_id: input.sales_channel_id,
     })
 
@@ -1229,34 +1171,25 @@ export const createWishlistItemWorkflow = createWorkflow(
     validateVariantWishlistStep({
       variant_id: input.variant_id,
       sales_channel_id: input.sales_channel_id,
-      wishlist: wishlistCustomerLinks[0].wishlist,
+      wishlist: wishlists[0],
     })
 
-    const wishlistItem = createWishlistItemStep({
-      variant_id: input.variant_id,
-      wishlist_id: wishlistCustomerLinks[0].wishlist.id,
+    createWishlistItemStep({
+      product_variant_id: input.variant_id,
+      wishlist_id: wishlists[0].id,
     })
-
-    createRemoteLinkStep([{
-      [WISHLIST_MODULE]: {
-        wishlist_item_id: wishlistItem.id,
-      },
-      [Modules.PRODUCT]: {
-        product_variant_id: input.variant_id,
-      },
-    }])
 
     // refetch wishlist
-    const { data: wishlists } = useQueryGraphStep({
+    const { data: updatedWishlists } = useQueryGraphStep({
       entity: "wishlist",
       fields: ["*", "items.*", "items.product_variant.*"],
       filters: {
-        id: wishlistCustomerLinks[0].wishlist.id,
+        id: wishlists[0].id,
       },
     }).config({ name: "refetch-wishlist" })
 
     return new WorkflowResponse({
-      wishlist: wishlists[0],
+      wishlist: updatedWishlists[0],
     })
   }
 )
@@ -1268,7 +1201,6 @@ You create a `createWishlistItemWorkflow`. In the workflow, you:
 - Use the `validateWishlistSalesChannelStep` step to validate that the wishlist belongs to the sales channel specified in the input.
 - Use the `validateVariantWishlistStep` step to validate that the variant specified in the input is not already in the wishlist.
 - Use the `createWishlistItemStep` step to create the wishlist item.
-- Use the [createRemoteLinkStep](/references/helper-steps/createRemoteLinkStep) to create a link between the wishlist item and the product variant.
 - Use the `useQueryGraphStep` again to retrieve the wishlist with the new item added.
 
 You return the wishlist with its items.
@@ -1586,18 +1518,17 @@ You can now add the `deleteWishlistItemWorkflow` to the plugin. Create the file 
 ![Directory structure after adding the workflow file](https://res.cloudinary.com/dza7lstvk/image/upload/v1737474872/Medusa%20Resources/wishlist-22_wt1g36.jpg)
 
 export const deleteWishlistItemWorkflowHighlights = [
-  ["15", "useQueryGraphStep", "Retrieve the wishlist of a customer."],
-  ["26", "validateItemInWishlistStep", "Validate that the item is in the customer's wishlist."],
-  ["31", "deleteWishlistItemStep", "Delete the wishlist item."],
-  ["34", "useQueryGraphStep", "Retrieve the wishlist again with the item removed."],
-  ["43", "wishlist", "Return the wishlist without the removed item."]
+  ["14", "useQueryGraphStep", "Retrieve the wishlist of a customer."],
+  ["25", "validateItemInWishlistStep", "Validate that the item is in the customer's wishlist."],
+  ["30", "deleteWishlistItemStep", "Delete the wishlist item."],
+  ["33", "useQueryGraphStep", "Retrieve the wishlist again with the item removed."],
+  ["42", "wishlist", "Return the wishlist without the removed item."]
 ]
 
 ```ts title="src/workflows/delete-wishlist-item.ts" highlights={deleteWishlistItemWorkflowHighlights}
 import { createWorkflow, WorkflowResponse } from "@medusajs/framework/workflows-sdk"
 import { deleteWishlistItemStep } from "./steps/delete-wishlist-item"
 import { useQueryGraphStep } from "@medusajs/medusa/core-flows"
-import WishlistCustomerLink from "../links/wishlist-customer"
 import { validateItemInWishlistStep } from "./steps/validate-item-in-wishlist"
 
 type DeleteWishlistItemWorkflowInput = {
@@ -1608,9 +1539,9 @@ type DeleteWishlistItemWorkflowInput = {
 export const deleteWishlistItemWorkflow = createWorkflow(
   "delete-wishlist-item",
   (input: DeleteWishlistItemWorkflowInput) => {
-    const { data: wishlistCustomerLinks } = useQueryGraphStep({
-      entity: WishlistCustomerLink.entryPoint,
-      fields: ["wishlist.*", "wishlist.items.*"],
+    const { data: wishlists } = useQueryGraphStep({
+      entity: "wishlist",
+      fields: ["*", "items.*"],
       filters: {
         customer_id: input.customer_id,
       },
@@ -1620,23 +1551,23 @@ export const deleteWishlistItemWorkflow = createWorkflow(
     })
 
     validateItemInWishlistStep({
-      wishlist: wishlistCustomerLinks[0].wishlist,
+      wishlist: wishlists[0],
       wishlist_item_id: input.wishlist_item_id,
     })
 
     deleteWishlistItemStep(input)
 
     // refetch wishlist
-    const { data: wishlists } = useQueryGraphStep({
+    const { data: updatedWishlists } = useQueryGraphStep({
       entity: "wishlist",
       fields: ["*", "items.*", "items.product_variant.*"],
       filters: {
-        id: wishlistCustomerLinks[0].wishlist.id,
+        id: wishlists[0].wishlist.id,
       },
     }).config({ name: "refetch-wishlist" })
 
     return new WorkflowResponse({
-      wishlist: wishlists[0],
+      wishlist: updatedWishlists[0],
     })
   }
 )
@@ -1749,7 +1680,6 @@ Then, to create the API route, create the file `src/api/store/customers/me/wishl
 ```ts title="src/api/store/customers/me/wishlists/share/route.ts"
 import { AuthenticatedMedusaRequest, MedusaResponse } from "@medusajs/framework"
 import { MedusaError } from "@medusajs/framework/utils"
-import WishlistCustomerLink from "../../../../../../links/wishlist-customer"
 import jwt from "jsonwebtoken"
 
 export async function POST(
@@ -1766,8 +1696,8 @@ export async function POST(
   const query = req.scope.resolve("query")
 
   const { data } = await query.graph({
-    entity: WishlistCustomerLink.entryPoint,
-    fields: ["wishlist.*"],
+    entity: "wishlist",
+    fields: ["*"],
     filters: {
       customer_id: req.auth_context.actor_id,
     },
@@ -1780,7 +1710,7 @@ export async function POST(
     )
   }
 
-  if (data[0].wishlist.sales_channel_id !== req.publishable_key_context.sales_channel_ids[0]) {
+  if (data[0].sales_channel_id !== req.publishable_key_context.sales_channel_ids[0]) {
     throw new MedusaError(
       MedusaError.Types.INVALID_DATA,
       "Wishlist does not belong to the specified sales channel"
@@ -1799,7 +1729,7 @@ You'll now generate a token that contains the wishlist ID. To do this, replace t
 const { http } = req.scope.resolve("configModule").projectConfig
 
 const wishlistToken = jwt.sign({
-  wishlist_id: data[0].wishlist.id,
+  wishlist_id: data[0].id,
 }, http.jwtSecret!, {
   expiresIn: http.jwtExpiresIn,
 })
@@ -1932,6 +1862,242 @@ Make sure to replace:
 - `{api_key}` with the publishable API key you copied from the settings, as explained in [a previous section](#retrieve-publishable-api-key).
 
 You'll receive in the response the shared wishlist.
+
+---
+
+## Step 13: Show Wishlist Count in Medusa Admin
+
+In this step, you'll customize the Medusa Admin dashboard to show for each product the number of wishlists it's in.
+
+The Medusa Admin dashboard's pages are customizable to insert widgets of custom content in pre-defined injection zones. You create these widgets as React components that allow admin users to perform custom actions.
+
+<Note>
+
+Learn more about widgets in [this documentation](!docs!/learn/fundamentals/admin/widgets).
+
+</Note>
+
+### Add Method to Retrieve Wishlist Count
+
+To retrieve the number of wishlists a product is in, you'll add a method to the `WishlistModuleService` that runs a query to retrieve distinct wishlist IDs containing a product variant.
+
+In `src/modules/wishlist/service.ts`, add the following imports and method:
+
+```ts title="src/modules/wishlist/service.ts"
+// other imports...
+import { InjectManager } from "@medusajs/framework/utils"
+import { Context } from "@medusajs/framework/types"
+import { EntityManager } from "@mikro-orm/knex"
+
+export default class WishlistModuleService extends MedusaService({
+  Wishlist,
+  WishlistItem,
+}) {
+  @InjectManager()
+  async getWishlistsOfVariants(
+    variantIds: string[],
+    @MedusaContext() context: Context<EntityManager> = {}
+  ): Promise<number> {
+    return (await context.manager?.createQueryBuilder("wishlist_item", "wi")
+      .select(["wi.wishlist_id"], true)
+      .where("wi.product_variant_id IN (?)", [variantIds])
+      .execute())?.length || 0
+  }
+}
+```
+
+To perform queries on the database in a method, add the `@InjectManager` decorator to the method. This will inject a [forked MikroORM entity manager](https://mikro-orm.io/docs/identity-map#forking-entity-manager) that you can use in your method.
+
+Methods with the `@InjectManager` decorator accept as a last parameter a context object that has the `@MedusaContext` decorator. The entity manager is injected into the `manager` property of this paramter.
+
+The method accepts an array of variant IDs as a parameter. In the method, you use the `createQueryBuilder` to construct a query, passing it the name of the `WishlistItem`'s table. You then select distinct `wishlist_id`s where the `product_variant_id` of the wishlist item is in the array of variant IDs.
+
+You execute the query and return the number of distinct wishlist IDs containing the product variants. You'll use this method next.
+
+### Create Wishlist Count API Route
+
+Before creating the widget, you'll create the API route that retrieves the number of wishlists a product is in.
+
+Create the file `src/api/store/products/[id]/wishlist/route.ts` with the following content:
+
+![Directory structure after adding the route file](https://res.cloudinary.com/dza7lstvk/image/upload/v1737630927/Medusa%20Resources/wishlist-26_ervnfg.jpg)
+
+export const wishlistCountRouteHighlights = [
+  ["17", "graph", "Retrieve the product and its variants."],
+  ["25", "", "If product doesn't exist, throw an error."],
+  ["32", "count", "Retrieve the number of wishlists that the product is in."]
+]
+
+```ts title="src/api/store/products/[id]/wishlist/route.ts" highlights={wishlistCountRouteHighlights}
+import { MedusaRequest, MedusaResponse } from "@medusajs/framework"
+import WishlistModuleService from "../../../../../modules/wishlist/service"
+import { WISHLIST_MODULE } from "../../../../../modules/wishlist"
+import { MedusaError } from "@medusajs/framework/utils"
+
+export async function GET(
+  req: MedusaRequest,
+  res: MedusaResponse
+) {
+  const { id } = req.params
+
+  const query = req.scope.resolve("query")
+  const wishlistModuleService: WishlistModuleService = req.scope.resolve(
+    WISHLIST_MODULE
+  )
+
+  const { data: [product] } = await query.graph({
+    entity: "product",
+    fields: ["variants.*"],
+    filters: {
+      id,
+    },
+  })
+
+  if (!product) {
+    throw new MedusaError(
+      MedusaError.Types.NOT_FOUND,
+      `Product with id: ${id} was not found`
+    )
+  }
+
+  const count = await wishlistModuleService.getWishlistsOfVariants(
+    product.variants.map((v) => v.id)
+  )
+
+  res.json({
+    count,
+  })
+}
+```
+
+This route exposes a `GET` endpoint at `/store/products/:id/wishlist`. The `:id` parameter in the route path represents the ID of the product to retrieve the wishlist count for.
+
+In the route handler function, you use Query to retrieve the product and its variants, and throw an error if the product doesn't exist.
+
+Then, you resolve the `WishlistModuleService` from the Medusa Container and use its `getWishlistsOfVariants` method to retrieve the number of wishlists the product's variants are in. You return the count in the response.
+
+You'll use this API route in the widget next.
+
+### Create Wishlist Count Widget
+
+You'll now create the widget that will be shown on a product's page in the Medusa Admin.
+
+In the widget, you'll send a request to the API route you created to retrieve the wishlist count for the product. To send the request, you'll use the [JS SDK](../../../js-sdk/page.mdx), which is a JavaScript library that simplifies sending requests to Medusa's API routes.
+
+To initialize the JS SDK, create the file `src/admin/lib/sdk.ts` with the following content:
+
+![Directory structure after adding the SDK file](https://res.cloudinary.com/dza7lstvk/image/upload/v1737631853/Medusa%20Resources/wishlist-27_pkzeaj.jpg)
+
+```ts title="src/admin/lib/sdk.ts"
+import Medusa from "@medusajs/js-sdk"
+
+export const sdk = new Medusa({
+  baseUrl: "http://localhost:9000",
+  debug: process.env.NODE_ENV === "development",
+  auth: {
+    type: "session",
+  },
+})
+```
+
+You initialize an instance of the JS SDK, which you'll use in the widget to send requests.
+
+<Note>
+
+Learn more about the JS SDK and configuring it in [this documentation](../../../js-sdk/page.mdx).
+
+</Note>
+
+Then, to create the widget, create the file `src/admin/widgets/product-widget.tsx` with the following content:
+
+![Directory structure after adding the widget file](https://res.cloudinary.com/dza7lstvk/image/upload/v1737631988/Medusa%20Resources/wishlist-28_fx8rw7.jpg)
+
+export const widgetHighlights = [
+  ["10", "WishlistResponse", "Define the type of expected response."],
+  ["14", "ProductWidget", "Define and export the widget's React component."],
+  ["15", "data", "Receive the product's details as a prop."],
+  ["17", "useQuery", "Retrieve the wishlist count from the API route."],
+  ["29", "", "Display the count."],
+  ["36", "config", "Export the widget's content."],
+  ["37", "zone", "Inject the widget at the top of a product's details page."]
+]
+
+```tsx title="src/admin/widgets/product-widget.tsx" highlights={widgetHighlights}
+import { defineWidgetConfig } from "@medusajs/admin-sdk"
+import { Container, Heading, Text } from "@medusajs/ui"
+import { useQuery } from "@tanstack/react-query"
+import { sdk } from "../lib/sdk"
+import { 
+  DetailWidgetProps, 
+  AdminProduct,
+} from "@medusajs/framework/types"
+
+type WishlistResponse = {
+  count: number
+}
+
+const ProductWidget = ({ 
+  data: product,
+}: DetailWidgetProps<AdminProduct>) => {
+  const { data, isLoading } = useQuery<WishlistResponse>({
+    queryFn: () => sdk.client.fetch(`/admin/products/${product.id}/wishlist`),
+    queryKey: [["products", product.id, "wishlist"]],
+  })
+
+  return (
+    <Container className="divide-y p-0">
+      <div className="flex items-center justify-between px-6 py-4">
+        <Heading level="h2">Wishlist</Heading>
+      </div>
+      <Text className="px-6 py-4">
+        {isLoading ? 
+          "Loading..." : `This product is in ${data?.count} wishlist(s).`
+        }
+      </Text>
+    </Container>
+  )
+}
+
+export const config = defineWidgetConfig({
+  zone: "product.details.before",
+})
+
+export default ProductWidget
+```
+
+A widget file must export a React component and a `config` object created with `defineWidgetConfig` from the Admin Extension SDK. In the `config` object, you specify the zone to inject the widget into in the `zone` property. This widget is injected into a product's page before any other sections.
+
+<Note title="Tip">
+
+Find all widget injection zones in [this reference](../../../admin-widget-injection-zones/page.mdx).
+
+</Note>
+
+Since the widget is injected into a product's details page, it receives the product's details as a `data` prop. In the widget, you use [Tanstack Query](https://tanstack.com/query/latest) to benefit from features like data caching and invalidation. You use the `useQuery` hook to send a request to the API route you created to retrieve the wishlist count for the product.
+
+Finally, you display the widget's content using components from [Medusa UI](!ui!), allowing you to align the design of your widget with the Medusa Admin's design system.
+
+### Test it Out
+
+To test it out, start the Medusa application.
+
+<Note>
+
+Make sure that `npx medusa plugin:develop` is running in the plugin project to publish the changes to the local registry.
+
+</Note>
+
+Then:
+
+1. open the Medusa Admin at `localhost:9000/app` and log in.
+
+2. Click on Products in the sidebar, then choose a product from the table.
+
+![Click on the "Products" in the sidebar on the right, then choose a product from the table shown in the middle](https://res.cloudinary.com/dza7lstvk/image/upload/v1737632826/Medusa%20Resources/Screenshot_2025-01-23_at_1.46.29_PM_xjsn8s.png)
+
+3. You should see the widget you created showing the number of wishlists the product is in at the top of the page.
+
+![The widget is shown at the top of the product page before other sections](https://res.cloudinary.com/dza7lstvk/image/upload/v1737632826/Medusa%20Resources/Screenshot_2025-01-23_at_1.46.05_PM_hfyz7u.png)
 
 ---
 

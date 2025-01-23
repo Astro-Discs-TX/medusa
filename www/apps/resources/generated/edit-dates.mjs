@@ -5609,7 +5609,7 @@ export const generatedEditDates = {
   "references/modules/sales_channel_models/page.mdx": "2024-12-10T14:55:13.205Z",
   "references/types/DmlTypes/types/types.DmlTypes.KnownDataTypes/page.mdx": "2024-12-17T16:57:19.922Z",
   "references/types/DmlTypes/types/types.DmlTypes.RelationshipTypes/page.mdx": "2024-12-10T14:54:55.435Z",
-  "app/recipes/commerce-automation/restock-notification/page.mdx": "2025-01-21T12:15:41.616Z",
+  "app/recipes/commerce-automation/restock-notification/page.mdx": "2025-01-23T10:18:28.126Z",
   "app/troubleshooting/workflow-errors/page.mdx": "2024-12-11T08:44:36.598Z",
   "app/integrations/guides/shipstation/page.mdx": "2025-01-07T14:40:42.561Z",
   "app/nextjs-starter/guides/customize-stripe/page.mdx": "2024-12-25T14:48:55.877Z",
@@ -5888,6 +5888,6 @@ export const generatedEditDates = {
   "references/core_flows/types/core_flows.ThrowUnlessPaymentCollectionNotePaidInput/page.mdx": "2025-01-17T16:43:25.819Z",
   "references/core_flows/types/core_flows.ValidatePaymentsRefundStepInput/page.mdx": "2025-01-17T16:43:26.128Z",
   "references/core_flows/types/core_flows.ValidateRefundStepInput/page.mdx": "2025-01-17T16:43:26.124Z",
-  "app/plugins/guides/wishlist/page.mdx": "2025-01-22T09:02:37.290Z",
+  "app/plugins/guides/wishlist/page.mdx": "2025-01-23T11:59:10.008Z",
   "app/plugins/page.mdx": "2025-01-22T09:36:37.745Z"
 }
