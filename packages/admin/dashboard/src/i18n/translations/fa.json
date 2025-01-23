@@ -298,24 +298,41 @@
     }
   },
   "filters": {
+    "sortLabel": "مرتب‌سازی",
+    "filterLabel": "فیلتر",
+    "searchLabel": "جستجو",
     "date": {
       "today": "امروز",
-      "lastSevenDays": "هفت روز گذشته",
-      "lastThirtyDays": "سی روز گذشته",
-      "lastNinetyDays": "نود روز گذشته",
-      "lastTwelveMonths": "دوازده ماه گذشته",
+      "lastSevenDays": "۷ روز گذشته",
+      "lastThirtyDays": "۳۰ روز گذشته",
+      "lastNinetyDays": "۹۰ روز گذشته",
+      "lastTwelveMonths": "۱۲ ماه گذشته",
       "custom": "سفارشی",
       "from": "از",
-      "to": "تا"
+      "to": "تا",
+      "starting": "شروع",
+      "ending": "پایان"
     },
     "compare": {
       "lessThan": "کمتر از",
       "greaterThan": "بیشتر از",
-      "exact": "دقیقاً",
-      "range": "محدوده",
+      "exact": "دقیق",
+      "range": "بازه",
       "lessThanLabel": "کمتر از {{value}}",
       "greaterThanLabel": "بیشتر از {{value}}",
       "andLabel": "و"
+    },
+    "sorting": {
+      "alphabeticallyAsc": "از A به Z",
+      "alphabeticallyDesc": "از Z به A",
+      "dateAsc": "جدیدترین اول",
+      "dateDesc": "قدیمی‌ترین اول"
+    },
+    "radio": {
+      "yes": "بله",
+      "no": "خیر",
+      "true": "درست",
+      "false": "نادرست"
     },
     "addFilter": "افزودن فیلتر"
   },
@@ -468,7 +485,17 @@
       }
     },
     "deleteWarning": "شما در حال حذف محصول {{title}} هستید. این اقدام غیرقابل بازگشت است.",
-    "variants": "متغیرها",
+    "variants": {
+      "header": "تنوع‌ها",
+      "empty": {
+        "heading": "بدون تنوع",
+        "description": "هیچ تنوعی برای نمایش وجود ندارد."
+      },
+      "filtered": {
+        "heading": "بدون نتیجه",
+        "description": "هیچ تنوعی با معیارهای فیلتر فعلی مطابقت ندارد."
+      }
+    },
     "attributes": "ویژگی‌ها",
     "editAttributes": "ویرایش ویژگی‌ها",
     "editOptions": "ویرایش گزینه‌ها",
@@ -891,6 +918,16 @@
   "customerGroups": {
     "domain": "گروه‌های مشتریان",
     "subtitle": "مشتریان را به گروه‌ها تقسیم کنید. گروه‌ها می‌توانند تبلیغات و قیمت‌های متفاوتی داشته باشند.",
+    "list": {
+      "empty": {
+        "heading": "گروه مشتری وجود ندارد",
+        "description": "گروه مشتری برای نمایش وجود ندارد."
+      },
+      "filtered": {
+        "heading": "نتیجه‌ای یافت نشد",
+        "description": "هیچ گروه مشتری با معیارهای فیلتر فعلی مطابقت ندارد."
+      }
+    },
     "create": {
       "header": "ایجاد گروه مشتری",
       "hint": "یک گروه مشتری جدید ایجاد کنید تا مشتریان خود را بخش‌بندی کنید.",
@@ -2241,6 +2278,16 @@
       "admin": "ادمین",
       "developer": "توسعه‌دهنده",
       "member": "عضو"
+    },
+    "list": {
+      "empty": {
+        "heading": "کاربری یافت نشد",
+        "description": "پس از دعوت یک کاربر، در اینجا نمایش داده خواهد شد."
+      },
+      "filtered": {
+        "heading": "نتیجه‌ای یافت نشد",
+        "description": "هیچ کاربری با معیارهای فیلتر فعلی مطابقت ندارد."
+      }
     },
     "deleteUserWarning": "شما در حال حذف کاربر {{name}} هستید. این عمل قابل بازگشت نیست.",
     "deleteUserSuccess": "کاربر {{name}} با موفقیت حذف شد",
