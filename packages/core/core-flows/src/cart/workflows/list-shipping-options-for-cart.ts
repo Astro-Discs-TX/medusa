@@ -8,6 +8,7 @@ import { useQueryGraphStep, validatePresenceOfStep } from "../../common"
 import { useRemoteQueryStep } from "../../common/steps/use-remote-query"
 import { cartFieldsForPricingContext } from "../utils/fields"
 import { ListShippingOptionsForCartWorkflowInput } from "@medusajs/types"
+import { isDefined } from "@medusajs/framework/utils"
 
 export const listShippingOptionsForCartWorkflowId =
   "list-shipping-options-for-cart"
@@ -96,7 +97,11 @@ export const listShippingOptionsForCartWorkflow = createWorkflow(
 
           context: {
             is_return: input.is_return ? "true" : "false",
-            enabled_in_store: input.enabled_in_store || true ? "true" : "false",
+            enabled_in_store: !isDefined(input.enabled_in_store)
+              ? "true"
+              : input.enabled_in_store
+              ? "true"
+              : "false",
           },
 
           filters: {

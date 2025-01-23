@@ -1,4 +1,4 @@
-import { ShippingOptionPriceType } from "@medusajs/framework/utils"
+import { isDefined, ShippingOptionPriceType } from "@medusajs/framework/utils"
 import {
   createWorkflow,
   parallelize,
@@ -140,7 +140,11 @@ export const listShippingOptionsForCartWithPricingWorkflow = createWorkflow(
       ({ input, cart, fulfillmentSetIds }) => ({
         context: {
           is_return: input.is_return ? "true" : "false",
-          enabled_in_store: input.enabled_in_store || true ? "true" : "false",
+          enabled_in_store: !isDefined(input.enabled_in_store)
+            ? "true"
+            : input.enabled_in_store
+            ? "true"
+            : "false",
         },
 
         filters: {
