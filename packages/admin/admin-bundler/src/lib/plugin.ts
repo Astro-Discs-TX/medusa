@@ -36,11 +36,13 @@ export async function plugin(options: PluginOptions) {
   const external = new Set([
     ...Object.keys(pkg.dependencies || {}),
     ...Object.keys(pkg.peerDependencies || {}),
+    ...Object.keys(pkg.devDependencies || {}),
     "react",
     "react-dom",
     "react/jsx-runtime",
     "react-router-dom",
     "@medusajs/admin-sdk",
+    "@tanstack/react-query",
   ])
 
   /**
