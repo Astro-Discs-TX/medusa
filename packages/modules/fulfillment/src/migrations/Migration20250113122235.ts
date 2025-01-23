@@ -5,24 +5,24 @@ export class Migration20250113122235 extends Migration {
     this.addSql(`
       UPDATE shipping_option_rule
       SET value = 'true'::jsonb
-      WHERE value = '"\"true\""';
+      WHERE value = '"\\"true\\""';
     `)
     this.addSql(`
       UPDATE shipping_option_rule
       SET value = 'false'::jsonb
-      WHERE value = '"\"false\""';
+      WHERE value = '"\\"false\\""';
     `)
   }
 
   override async down(): Promise<void> {
     this.addSql(`
       UPDATE shipping_option_rule
-      SET value = '"\"true\""'
+      SET value = '"\\"true\\""'
       WHERE value = 'true'::jsonb;
     `)
     this.addSql(`
       UPDATE shipping_option_rule
-      SET value = '"\"false\""'
+      SET value = '"\\"false\\""'
       WHERE value = 'false'::jsonb;
     `)
   }
