@@ -137,6 +137,17 @@ export class Compiler {
   }
 
   /**
+   * Returns a boolean indicating if a file extension belongs
+   * to a JavaScript or TypeScript file
+   */
+  #isScriptFile(filePath: string) {
+    if (filePath.endsWith(".ts") && !filePath.endsWith(".d.ts")) {
+      return true
+    }
+    return filePath.endsWith(".js")
+  }
+
+  /**
    * Loads the medusa config file and prints the error to
    * the console (in case of any errors). Otherwise, the
    * file path and the parsed config is returned
@@ -464,34 +475,41 @@ export class Compiler {
     })
 
     watcher.on("add", async (file) => {
+      if (!this.#isScriptFile(file)) {
+        return
+      }
       const relativePath = path.relative(this.#projectRoot, file)
+      const outputPath = relativePath.replace(/\.ts$/, ".js")
 
       this.#logger.info(`${relativePath} updated: Republishing changes`)
-      await fs.create(
-        relativePath.replace(/\.ts$/, ".js"),
-        await transformer(file)
-      )
+      await fs.create(outputPath, await transformer(file))
 
       onFileChange?.()
     })
     watcher.on("change", async (file) => {
+      if (!this.#isScriptFile(file)) {
+        return
+      }
       const relativePath = path.relative(this.#projectRoot, file)
+      const outputPath = relativePath.replace(/\.ts$/, ".js")
 
       this.#logger.info(`${relativePath} updated: Republishing changes`)
-      await fs.create(
-        relativePath.replace(/\.ts$/, ".js"),
-        await transformer(file)
-      )
+      await fs.create(outputPath, await transformer(file))
 
       onFileChange?.()
     })
     watcher.on("unlink", async (file) => {
+      if (!this.#isScriptFile(file)) {
+        return
+      }
       const relativePath = path.relative(this.#projectRoot, file)
+      const outputPath = relativePath.replace(/\.ts$/, ".js")
 
       this.#logger.info(`${relativePath} removed: Republishing changes`)
-      await fs.remove(file.replace(/\.ts$/, ".js"))
+      await fs.remove(outputPath)
       onFileChange?.()
     })
+
     watcher.on("ready", () => {
       this.#logger.info("watching for file changes")
     })
