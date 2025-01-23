@@ -64,6 +64,7 @@ export const ApiKeySalesChannelSection = ({
           state: rowSelection,
           onRowSelectionChange: setRowSelection,
         }}
+        rowHref={(row) => `/settings/sales-channels/${row.id}`}
         action={{
           label: t("actions.add"),
           to: "sales-channels",

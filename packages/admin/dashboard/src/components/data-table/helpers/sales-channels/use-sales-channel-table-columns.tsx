@@ -2,13 +2,15 @@ import { HttpTypes } from "@medusajs/types"
 import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
 
-import { createDataTableColumnHelper } from "@medusajs/ui"
+import { createDataTableColumnHelper, Tooltip } from "@medusajs/ui"
 import { DataTableStatusCell } from "../../components/data-table-status-cell/data-table-status-cell"
+import { useDataTableDateColumns } from "../general/use-data-table-date-columns"
 
 const columnHelper = createDataTableColumnHelper<HttpTypes.AdminSalesChannel>()
 
 export const useSalesChannelTableColumns = () => {
   const { t } = useTranslation()
+  const dateColumns = useDataTableDateColumns<HttpTypes.AdminSalesChannel>()
 
   return useMemo(
     () => [
@@ -21,10 +23,21 @@ export const useSalesChannelTableColumns = () => {
       }),
       columnHelper.accessor("description", {
         header: () => t("fields.description"),
+        cell: ({ getValue }) => {
+          return (
+            <Tooltip content={getValue()}>
+              <div className="flex h-full w-full items-center overflow-hidden">
+                <span className="truncate">{getValue()}</span>
+              </div>
+            </Tooltip>
+          )
+        },
         enableSorting: true,
         sortLabel: t("fields.description"),
         sortAscLabel: t("filters.sorting.alphabeticallyAsc"),
         sortDescLabel: t("filters.sorting.alphabeticallyDesc"),
+        maxSize: 250,
+        minSize: 100,
       }),
       columnHelper.accessor("is_disabled", {
         header: () => t("fields.status"),
@@ -41,7 +54,8 @@ export const useSalesChannelTableColumns = () => {
           )
         },
       }),
+      ...dateColumns,
     ],
-    [t]
+    [t, dateColumns]
   )
 }
