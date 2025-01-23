@@ -44,7 +44,7 @@ export const updateProductCategoriesWorkflow = createWorkflow(
   updateProductCategoriesWorkflowId,
   (
     input: WorkflowData<ProductCategoryWorkflow.UpdateProductCategoriesWorkflowInput>
-  ): WorkflowResponse<UpdateProductCategoriesWorkflowOutput> => {
+  )  => {
     const updatedCategories = updateProductCategoriesStep(input)
 
     const productCategoryIdEvents = transform(
