@@ -62,11 +62,7 @@ export async function plugin(options: PluginOptions) {
       minify: false,
       outDir: path.resolve(options.root, options.outDir),
       rollupOptions: {
-        external: [
-          ...external,
-          /^node_modules/,
-          /^@?[A-Za-z].*/, // This will treat all packages starting with @ or letters as external
-        ],
+        external: [...external, /^node_modules/, /^@?[A-Za-z].*/],
         output: {
           globals: {
             react: "React",
