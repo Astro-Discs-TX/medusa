@@ -481,6 +481,17 @@ export const sidebar = numberSidebarItems(
       chapterTitle: "Storefront",
     },
     {
+      type: "category",
+      title: "Conventions",
+      children: [
+        {
+          type: "link",
+          title: "Type Aliases",
+          path: "/learn/conventions/ts-aliases",
+        },
+      ],
+    },
+    {
       type: "link",
       path: "/learn/debugging-and-testing",
       title: "Debugging and Testing",
