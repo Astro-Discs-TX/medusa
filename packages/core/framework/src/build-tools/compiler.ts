@@ -453,7 +453,10 @@ export class Compiler {
    */
   async developPluginBackend(
     transformer: (filePath: string) => Promise<string>,
-    onFileChange?: () => void
+    onFileChange?: (
+      filePath: string,
+      action: "add" | "change" | "unlink"
+    ) => void
   ) {
     const fs = new FileSystem(this.#pluginsDistFolder)
     await fs.createJson("medusa-plugin-options.json", {
@@ -484,7 +487,7 @@ export class Compiler {
       this.#logger.info(`${relativePath} updated: Republishing changes`)
       await fs.create(outputPath, await transformer(file))
 
-      onFileChange?.()
+      onFileChange?.(file, "add")
     })
     watcher.on("change", async (file) => {
       if (!this.#isScriptFile(file)) {
@@ -496,7 +499,7 @@ export class Compiler {
       this.#logger.info(`${relativePath} updated: Republishing changes`)
       await fs.create(outputPath, await transformer(file))
 
-      onFileChange?.()
+      onFileChange?.(file, "change")
     })
     watcher.on("unlink", async (file) => {
       if (!this.#isScriptFile(file)) {
@@ -507,7 +510,7 @@ export class Compiler {
 
       this.#logger.info(`${relativePath} removed: Republishing changes`)
       await fs.remove(outputPath)
-      onFileChange?.()
+      onFileChange?.(file, "unlink")
     })
 
     watcher.on("ready", () => {
