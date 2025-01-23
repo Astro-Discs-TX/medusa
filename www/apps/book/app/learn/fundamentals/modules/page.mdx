@@ -148,6 +148,12 @@ You export `BLOG_MODULE` to reference the module's name more reliably when resol
 
 ### 4. Add Module to Medusa's Configurations
 
+<Note>
+
+If you're creating the module in a plugin, this step isn't required as the module is registered when the plugin is registered. Learn more about plugins in [this documentation](../plugins/page.mdx).
+
+</Note>
+
 Once you finish building the module, add it to Medusa's configurations to start using it. Medusa will then register the module's main service in the Medusa container, allowing you to resolve and use it in other customizations.
 
 In `medusa-config.ts`, add a `modules` property and pass an array with your custom module:
