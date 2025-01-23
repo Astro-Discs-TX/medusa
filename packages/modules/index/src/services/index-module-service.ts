@@ -110,8 +110,6 @@ export default class IndexModuleService
       if (fullSyncRequired.length > 0) {
         await this.syncEntities(fullSyncRequired)
       }
-
-      console.log(fullSyncRequired)
     } catch (e) {
       console.log(e)
     }
