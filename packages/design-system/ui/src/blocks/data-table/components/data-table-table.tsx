@@ -190,7 +190,7 @@ const DataTableTable = (props: DataTableTableProps) => {
                     onMouseEnter={() => setHoveredRowId(row.id)}
                     onMouseLeave={() => setHoveredRowId(null)}
                     onClick={(e) => instance.onRowClick?.(e, row)}
-                    className={clx("group/row last:border-b-0", {
+                    className={clx("group/row last-of-type:border-b-0", {
                       "cursor-pointer": !!instance.onRowClick,
                     })}
                   >
@@ -284,7 +284,7 @@ const DataTableEmptyStateDisplay = ({
     state === DataTableEmptyState.EMPTY ? props?.empty : props?.filtered
 
   return (
-    <div className="flex min-h-[250px] w-full flex-col items-center justify-center border-y px-6 py-4">
+    <div className="flex min-h-[250px] flex-1 w-full flex-col items-center justify-center border-y px-6 py-4">
       {content?.custom ?? (
         <DefaultEmptyStateContent
           heading={content?.heading}

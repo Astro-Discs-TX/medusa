@@ -1,15 +1,15 @@
 import { Buildings, Component, PencilSquare, Trash } from "@medusajs/icons"
 import { HttpTypes } from "@medusajs/types"
 import {
-  Badge,
-  clx,
-  Container,
-  createDataTableColumnHelper,
-  createDataTableCommandHelper,
-  createDataTableFilterHelper,
-  DataTableAction,
-  Tooltip,
-  usePrompt,
+    Badge,
+    clx,
+    Container,
+    createDataTableColumnHelper,
+    createDataTableCommandHelper,
+    createDataTableFilterHelper,
+    DataTableAction,
+    Tooltip,
+    usePrompt,
 } from "@medusajs/ui"
 import { keepPreviousData } from "@tanstack/react-query"
 import { useCallback, useMemo } from "react"
@@ -18,10 +18,10 @@ import { useTranslation } from "react-i18next"
 import { CellContext } from "@tanstack/react-table"
 import { useNavigate } from "react-router-dom"
 import { DataTable } from "../../../../../components/data-table"
-import { useDataTableDateFilters } from "../../../../../components/data-table/hooks/general/use-data-table-date-filters"
+import { useDataTableDateFilters } from "../../../../../components/data-table/helpers/general/use-data-table-date-filters"
 import {
-  useDeleteVariantLazy,
-  useProductVariants,
+    useDeleteVariantLazy,
+    useProductVariants,
 } from "../../../../../hooks/api/products"
 import { useQueryParams } from "../../../../../hooks/use-query-params"
 import { PRODUCT_VARIANT_IDS_KEY } from "../../../common/constants"

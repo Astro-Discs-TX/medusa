@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom"
 
 import { PencilSquare } from "@medusajs/icons"
 import { DataTable } from "../../../../../components/data-table"
-import { useDataTableDateFilters } from "../../../../../components/data-table/hooks/general/use-data-table-date-filters"
+import { useDataTableDateFilters } from "../../../../../components/data-table/helpers/general/use-data-table-date-filters"
 import { useUsers } from "../../../../../hooks/api/users"
 import { useDate } from "../../../../../hooks/use-date"
 import { useQueryParams } from "../../../../../hooks/use-query-params"
