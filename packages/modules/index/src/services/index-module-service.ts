@@ -110,6 +110,8 @@ export default class IndexModuleService
       if (fullSyncRequired.length > 0) {
         await this.syncEntities(fullSyncRequired)
       }
+
+      console.log(fullSyncRequired)
     } catch (e) {
       console.log(e)
     }
@@ -124,17 +126,16 @@ export default class IndexModuleService
       currentConfig.map((c) => [c.entity, c] as const)
     )
 
-    const modifiedConfig: {
+    type modifiedConfig = {
       id?: string
       entity: string
       fields: string[]
       fields_hash: string
-    }[] = []
+      status?: IndexMetadataStatus
+    }[]
     const entityPresent = new Set<string>()
-    const newConfig: typeof modifiedConfig = []
-    const updatedConfig: ((typeof modifiedConfig)[0] & {
-      status: IndexMetadataStatus
-    })[] = []
+    const newConfig: modifiedConfig = []
+    const updatedConfig: modifiedConfig = []
     const deletedConfig: string[] = []
 
     for (const [entityName, schemaEntityObjectRepresentation] of Object.entries(
@@ -161,8 +162,6 @@ export default class IndexModuleService
           fields,
           fields_hash,
         }
-
-        modifiedConfig.push(meta)
 
         if (!existingEntityConfig) {
           newConfig.push(meta)
@@ -191,7 +190,9 @@ export default class IndexModuleService
       await this.indexMetadataService_.delete(deletedConfig)
     }
 
-    return modifiedConfig
+    return await this.indexMetadataService_.list({
+      status: [IndexMetadataStatus.PENDING, IndexMetadataStatus.PROCESSING],
+    })
   }
 
   private async syncEntities(
