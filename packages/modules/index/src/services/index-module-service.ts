@@ -134,7 +134,7 @@ export default class IndexModuleService
     const entityPresent = new Set<string>()
     const newConfig: modifiedConfig = []
     const updatedConfig: modifiedConfig = []
-    const deletedConfig: string[] = []
+    const deletedConfig: { entity: string }[] = []
 
     for (const [entityName, schemaEntityObjectRepresentation] of Object.entries(
       schemaObjectRepresentation
@@ -174,7 +174,7 @@ export default class IndexModuleService
 
     for (const [entity] of currentConfigMap) {
       if (!entityPresent.has(entity)) {
-        deletedConfig.push(entity)
+        deletedConfig.push({ entity })
       }
     }
 
