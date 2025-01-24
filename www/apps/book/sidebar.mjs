@@ -382,6 +382,11 @@ export const sidebar = sidebarAttachHrefCommonOptions([
           },
           {
             type: "link",
+            path: "/learn/fundamentals/workflows/store-executions",
+            title: "Store Workflow Executions",
+          },
+          {
+            type: "link",
             path: "/learn/fundamentals/workflows/long-running-workflow",
             title: "Long-Running Workflow",
           },
