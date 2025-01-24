@@ -396,7 +396,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
             data: parentData_,
           })
 
-          const parentIndexRelationEntry = indexRelationRepository.create({
+          const parentIndexRelationEntry = indexRelationRepository.upsert({
             parent_id: (parentData_ as any).id,
             parent_name: parentEntity,
             child_id: cleanedEntityData.id,

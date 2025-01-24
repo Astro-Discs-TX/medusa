@@ -32,13 +32,13 @@ export class DataSynchronizer {
   }: {
     entityName: string
     pagination: {
-      cursor: string
+      cursor?: string
       updated_at?: string | Date
       limit?: number
       batchSize?: number
     }
     ack: (ack: {
-      lastCursor: string
+      lastCursor: string | null
       done?: true
       err?: Error
     }) => Promise<void>
@@ -55,7 +55,7 @@ export class DataSynchronizer {
 
     if (!entityPrimaryKey) {
       void ack({
-        lastCursor: pagination.cursor,
+        lastCursor: pagination.cursor ?? null,
         err: new Error(
           `Entity ${entityName} does not have a linkable primary key`
         ),
@@ -64,14 +64,16 @@ export class DataSynchronizer {
     }
 
     let processed = 0
-    let currentCursor = pagination.cursor
+    let currentCursor = pagination.cursor!
     const batchSize = pagination.batchSize ?? 1000
     const limit = pagination.limit ?? Infinity
     let done = false
 
     while (processed < limit || !done) {
-      const filters: Record<string, any> = {
-        [entityPrimaryKey]: { $gt: currentCursor },
+      const filters: Record<string, any> = {}
+
+      if (currentCursor) {
+        filters[entityPrimaryKey] = { $gt: currentCursor }
       }
 
       if (pagination.updated_at) {
