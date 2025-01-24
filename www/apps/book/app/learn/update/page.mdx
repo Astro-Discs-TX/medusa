@@ -22,7 +22,7 @@ When Medusa puts out a new release, all packages are updated to the same version
 
 <Note>
 
-This doesn't apply to the design-system packages, including `@medusajs/ui`, `@medusajs/ui-presets`, and `@medusajs/ui-icons`. These packages are versioned independently. However, you don't need to install and manage them separately in your Medusa application, as they are included in the `@medusajs/admin-sdk`.
+This doesn't apply to the design-system packages, including `@medusajs/ui`, `@medusajs/ui-presets`, and `@medusajs/ui-icons`. These packages are versioned independently. However, you don't need to install and manage them separately in your Medusa application, as they are included in the `@medusajs/admin-sdk`. If you're using them in a standalone project, such as a storefront or custom admin dashboard, refer to [this section in the Medusa UI documentation](!ui!/installation/standalone-project#updating-ui-packages) for update instructions.
 
 </Note>
 
@@ -99,3 +99,12 @@ Finally, run the migrations to sync link changes:
 ```bash
 npx medusa db:migrate
 ```
+
+---
+
+## Codebase Comments and Tags
+
+In the Medusa codebase, our team uses the following [TSDoc](https://tsdoc.org/) tags to indicate changes made in the latest version for a specific piece of code:
+
+- `@deprecated`: Indicates that a piece of code is deprecated and will be removed in a future version. The tag's message will include details on what to use instead.
+- `@version`: Indicates the version when a piece of code was available from. A piece of code that has this tag will only be available starting from the specified version.
