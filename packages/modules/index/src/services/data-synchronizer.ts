@@ -34,7 +34,7 @@ export class DataSynchronizer {
     pagination: {
       cursor: string
       updated_at?: string | Date
-      limit: number
+      limit?: number
       batchSize?: number
     }
     ack: (ack: {
@@ -66,7 +66,7 @@ export class DataSynchronizer {
     let processed = 0
     let currentCursor = pagination.cursor
     const batchSize = pagination.batchSize ?? 1000
-    const limit = pagination.limit ?? batchSize
+    const limit = pagination.limit ?? Infinity
     let done = false
 
     while (processed < limit || !done) {
