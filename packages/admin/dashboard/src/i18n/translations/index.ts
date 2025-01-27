@@ -16,6 +16,7 @@ import ar from "./ar.json"
 import zhCN from "./zhCN.json"
 import fa from "./fa.json"
 import cs from "./cs.json"
+import zhTW from "./zhTW.json"
 
 export default {
   de: {
@@ -71,5 +72,8 @@ export default {
   },
   cs: {
     translation: cs,
+  },
+  zhTW: {
+    translation: zhTW,
   },
 }

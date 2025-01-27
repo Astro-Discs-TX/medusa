@@ -16,7 +16,8 @@ import {
   ar,
   zhCN,
   faIR,
-  cs
+  cs,
+  zhTW
 } from "date-fns/locale"
 import { Language } from "./types"
 
@@ -129,4 +130,10 @@ export const languages: Language[] = [
     ltr: true,
     date_locale: cs,
   },
+  {
+    code: "zhTW",
+    display_name: "繁體中文",
+    ltr: true,
+    date_locale: zhTW,
+  }
 ]
