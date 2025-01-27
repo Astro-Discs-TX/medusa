@@ -7,6 +7,7 @@ const IndexRelation = model.define("IndexRelation", {
   parent_id: model.text().index("IDX_index_relation_parent_id"),
   child_name: model.text(),
   child_id: model.text().index("IDX_index_relation_child_id"),
+  staled_at: model.dateTime().nullable(),
 })
 
 export default IndexRelation

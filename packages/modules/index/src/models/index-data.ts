@@ -5,6 +5,7 @@ const IndexData = model
     id: model.text().primaryKey(),
     name: model.text().primaryKey(),
     data: model.json().default({}),
+    staled_at: model.dateTime().nullable(),
   })
   .indexes([
     {

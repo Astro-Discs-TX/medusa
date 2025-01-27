@@ -1,5 +1,7 @@
 {
-  "namespaces": ["public"],
+  "namespaces": [
+    "public"
+  ],
   "name": "public",
   "tables": [
     {
@@ -31,6 +33,16 @@
           "nullable": false,
           "default": "'{}'",
           "mappedType": "json"
+        },
+        "staled_at": {
+          "name": "staled_at",
+          "type": "timestamptz",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "length": 6,
+          "mappedType": "datetime"
         },
         "created_at": {
           "name": "created_at",
@@ -106,7 +118,10 @@
         },
         {
           "keyName": "index_data_pkey",
-          "columnNames": ["id", "name"],
+          "columnNames": [
+            "id",
+            "name"
+          ],
           "composite": true,
           "constraint": true,
           "primary": true,
@@ -163,7 +178,12 @@
           "primary": false,
           "nullable": false,
           "default": "'pending'",
-          "enumItems": ["pending", "processing", "done", "error"],
+          "enumItems": [
+            "pending",
+            "processing",
+            "done",
+            "error"
+          ],
           "mappedType": "enum"
         },
         "created_at": {
@@ -222,7 +242,9 @@
         },
         {
           "keyName": "index_metadata_pkey",
-          "columnNames": ["id"],
+          "columnNames": [
+            "id"
+          ],
           "composite": false,
           "constraint": true,
           "primary": true,
@@ -289,6 +311,16 @@
           "nullable": false,
           "mappedType": "text"
         },
+        "staled_at": {
+          "name": "staled_at",
+          "type": "timestamptz",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "length": 6,
+          "mappedType": "datetime"
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamptz",
@@ -354,7 +386,9 @@
         },
         {
           "keyName": "index_relation_pkey",
-          "columnNames": ["id"],
+          "columnNames": [
+            "id"
+          ],
           "composite": false,
           "constraint": true,
           "primary": true,
