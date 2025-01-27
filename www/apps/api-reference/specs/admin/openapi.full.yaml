@@ -16709,72 +16709,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              description: The inventory levels to manage.
-              properties:
-                create:
-                  type: array
-                  description: The inventory levels to create.
-                  items:
-                    type: object
-                    description: The details of an inventory level to create.
-                    required:
-                      - location_id
-                      - inventory_item_id
-                    properties:
-                      location_id:
-                        type: string
-                        title: location_id
-                        description: The ID of the associated stock location.
-                      inventory_item_id:
-                        type: string
-                        title: inventory_item_id
-                        description: The ID of the associated inventory item.
-                      stocked_quantity:
-                        type: number
-                        title: stocked_quantity
-                        description: The stocked quantity.
-                      incoming_quantity:
-                        type: number
-                        title: incoming_quantity
-                        description: The incoming quantity to be added to stock.
-                update:
-                  type: array
-                  description: The inventory levels to update.
-                  items:
-                    type: object
-                    description: The details of an inventory level to update.
-                    required:
-                      - location_id
-                      - inventory_item_id
-                    properties:
-                      location_id:
-                        type: string
-                        title: location_id
-                        description: The ID of the associated stock location.
-                      inventory_item_id:
-                        type: string
-                        title: inventory_item_id
-                        description: The ID of the associated inventory item.
-                      stocked_quantity:
-                        type: number
-                        title: stocked_quantity
-                        description: The stocked quantity.
-                      incoming_quantity:
-                        type: number
-                        title: incoming_quantity
-                        description: The incoming quantity to be added to stock.
-                delete:
-                  type: array
-                  description: The IDs of the inventory levels to delete.
-                  items:
-                    type: string
-                    title: delete
-                    description: The ID of the inventory level to delete.
-                force:
-                  type: boolean
-                  title: force
-                  description: Whether to delete specified inventory levels even if they have a non-zero stocked quantity.
+              $ref: '#/components/schemas/AdminBatchInventoryItemsLocationLevels'
       x-codeSamples:
         - lang: Shell
           label: cURL
@@ -16806,6 +16741,12 @@ paths:
       tags:
         - Inventory Items
       responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminBatchInventoryItemsLocationLevelsResponse'
         '400':
           $ref: '#/components/responses/400_error'
         '401':
@@ -43819,6 +43760,30 @@ components:
           type: number
           title: apply_to_quantity
           description: The quantity that results from matching the `buyget` promotion's condition. For example, if the promotion is a "Buy 2 shirts get 1 free", the value of this attribute is `1`.
+    AdminBatchCreateInventoryItemsLocationLevels:
+      type: object
+      description: The details of an inventory level to create.
+      required:
+        - location_id
+        - inventory_item_id
+      properties:
+        location_id:
+          type: string
+          title: location_id
+          description: The ID of the associated stock location.
+        inventory_item_id:
+          type: string
+          title: inventory_item_id
+          description: The ID of the associated inventory item.
+        stocked_quantity:
+          type: number
+          title: stocked_quantity
+          description: The stocked quantity.
+        incoming_quantity:
+          type: number
+          title: incoming_quantity
+          description: The incoming quantity to be added to stock.
+      x-schemaName: AdminBatchCreateInventoryItemsLocationLevels
     AdminBatchInventoryItemLocationsLevel:
       type: object
       description: The inventory levels to create, update, or delete.
@@ -43881,6 +43846,58 @@ components:
           title: force
           description: Whether to delete specified inventory levels even if they have a non-zero stocked quantity.
       x-schemaName: AdminBatchInventoryItemLocationsLevel
+    AdminBatchInventoryItemsLocationLevels:
+      type: object
+      description: The inventory levels to manage.
+      properties:
+        create:
+          type: array
+          description: The inventory levels to create.
+          items:
+            $ref: '#/components/schemas/AdminBatchCreateInventoryItemsLocationLevels'
+        update:
+          type: array
+          description: The inventory levels to update.
+          items:
+            $ref: '#/components/schemas/AdminBatchUpdateInventoryItemsLocationLevels'
+        delete:
+          type: array
+          description: The IDs of the inventory levels to delete.
+          items:
+            type: string
+            title: delete
+            description: The ID of the inventory level to delete.
+        force:
+          type: boolean
+          title: force
+          description: Whether to delete specified inventory levels even if they have a non-zero stocked quantity.
+      required:
+        - create
+        - update
+        - delete
+      x-schemaName: AdminBatchInventoryItemsLocationLevels
+    AdminBatchInventoryItemsLocationLevelsResponse:
+      type: object
+      description: SUMMARY
+      x-schemaName: AdminBatchInventoryItemsLocationLevelsResponse
+      properties:
+        created:
+          type: array
+          description: The inventory item's created.
+          items:
+            $ref: '#/components/schemas/InventoryLevel'
+        updated:
+          type: array
+          description: The inventory item's updated.
+          items:
+            $ref: '#/components/schemas/InventoryLevel'
+        deleted:
+          type: array
+          description: SUMMARY
+          items:
+            type: string
+            title: deleted
+            description: SUMMARY
     AdminBatchProductRequest:
       type: object
       description: The products to create, update, or delete.
@@ -44011,6 +44028,34 @@ components:
               type: boolean
               title: deleted
               description: Whether the product variants were deleted.
+    AdminBatchUpdateInventoryItemsLocationLevels:
+      type: object
+      description: The details of an inventory level to update.
+      required:
+        - location_id
+        - inventory_item_id
+      properties:
+        location_id:
+          type: string
+          title: location_id
+          description: The ID of the associated stock location.
+        inventory_item_id:
+          type: string
+          title: inventory_item_id
+          description: The ID of the associated inventory item.
+        stocked_quantity:
+          type: number
+          title: stocked_quantity
+          description: The stocked quantity.
+        incoming_quantity:
+          type: number
+          title: incoming_quantity
+          description: The incoming quantity to be added to stock.
+        id:
+          type: string
+          title: id
+          description: The update's ID.
+      x-schemaName: AdminBatchUpdateInventoryItemsLocationLevels
     AdminBatchUpdateProduct:
       type: object
       description: The product's details.
@@ -53259,7 +53304,7 @@ components:
           $ref: '#/components/schemas/AdminShippingOption'
     AdminShippingOptionRule:
       type: object
-      description: The shipping option rule's details.
+      description: The rule's rules.
       x-schemaName: AdminShippingOptionRule
       required:
         - id
@@ -53274,39 +53319,53 @@ components:
         id:
           type: string
           title: id
-          description: The shipping option rule's ID.
+          description: The rule's ID.
         attribute:
           type: string
           title: attribute
-          description: The shipping option rule's attribute.
-          example: is_return
+          description: The rule's attribute.
         operator:
           type: string
-          title: operator
-          description: The shipping option rule's operator.
-          example: eq
+          description: The rule's operator.
+          enum:
+            - gt
+            - lt
+            - eq
+            - ne
+            - in
+            - lte
+            - gte
+            - nin
         value:
-          type: string
-          title: value
+          oneOf:
+            - type: string
+              title: value
+              description: The rule's value.
+            - type: array
+              description: The rule's value.
+              items:
+                type: string
+                title: value
+                description: The value's details.
         shipping_option_id:
           type: string
           title: shipping_option_id
-          description: The ID of the shipping option this rule is for.
+          description: The rule's shipping option id.
         created_at:
           type: string
           format: date-time
           title: created_at
-          description: The date the shipping option rule was created.
+          description: The rule's created at.
         updated_at:
           type: string
           format: date-time
           title: updated_at
-          description: The date the shipping option rule was updated.
+          description: The rule's updated at.
         deleted_at:
           type: string
           format: date-time
           title: deleted_at
-          description: The date the shipping option rule was deleted.
+          description: The rule's deleted at.
     AdminShippingOptionType:
       type: object
       description: The shipping option's details.
@@ -58874,7 +58933,7 @@ components:
             - unknown_error
     InventoryLevel:
       type: object
-      description: The inventory level's details
+      description: The created's details.
       x-schemaName: InventoryLevel
       required:
         - id
@@ -58888,34 +58947,34 @@ components:
         id:
           type: string
           title: id
-          description: The inventory level's ID.
+          description: The created's ID.
         inventory_item_id:
           type: string
           title: inventory_item_id
-          description: The ID of the associated inventory item.
+          description: The created's inventory item id.
         location_id:
           type: string
           title: location_id
-          description: The ID of the associated location.
+          description: The created's location id.
         stocked_quantity:
           type: number
           title: stocked_quantity
-          description: The inventory level's stocked quantity.
+          description: The created's stocked quantity.
         reserved_quantity:
           type: number
           title: reserved_quantity
-          description: The inventory level's reserved quantity.
+          description: The created's reserved quantity.
         available_quantity:
           type: number
           title: available_quantity
-          description: The inventory level's available quantity.
+          description: The created's available quantity.
         incoming_quantity:
           type: number
           title: incoming_quantity
-          description: The inventory level's incoming quantity.
+          description: The created's incoming quantity.
         metadata:
           type: object
-          description: The inventory level's metadata, can hold custom key-value pairs.
+          description: The created's metadata.
     Order:
       type: object
       description: The order change's order.
@@ -69028,6 +69087,78 @@ components:
         - value
         - created_at
         - updated_at
+    StoreProductTagListResponse:
+      type: object
+      description: SUMMARY
+      x-schemaName: StoreProductTagListResponse
+      required:
+        - limit
+        - offset
+        - count
+        - product_tags
+      properties:
+        limit:
+          type: number
+          title: limit
+          description: The product tag's limit.
+        offset:
+          type: number
+          title: offset
+          description: The product tag's offset.
+        count:
+          type: number
+          title: count
+          description: The product tag's count.
+        product_tags:
+          type: array
+          description: The product tag's product tags.
+          items:
+            $ref: '#/components/schemas/StoreProductTag'
+    StoreProductTagResponse:
+      type: object
+      description: SUMMARY
+      x-schemaName: StoreProductTagResponse
+      required:
+        - product_tag
+      properties:
+        product_tag:
+          $ref: '#/components/schemas/StoreProductTag'
+    StoreProductTypeListResponse:
+      type: object
+      description: SUMMARY
+      x-schemaName: StoreProductTypeListResponse
+      required:
+        - limit
+        - offset
+        - count
+        - product_types
+      properties:
+        limit:
+          type: number
+          title: limit
+          description: The product type's limit.
+        offset:
+          type: number
+          title: offset
+          description: The product type's offset.
+        count:
+          type: number
+          title: count
+          description: The product type's count.
+        product_types:
+          type: array
+          description: The product type's product types.
+          items:
+            $ref: '#/components/schemas/StoreProduct'
+    StoreProductTypeResponse:
+      type: object
+      description: SUMMARY
+      x-schemaName: StoreProductTypeResponse
+      required:
+        - product_type
+      properties:
+        product_type:
+          $ref: '#/components/schemas/StoreProduct'
     StoreProductVariant:
       type: object
       description: The variant's details.

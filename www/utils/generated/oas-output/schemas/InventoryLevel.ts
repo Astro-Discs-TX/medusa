@@ -1,7 +1,7 @@
 /**
  * @schema InventoryLevel
  * type: object
- * description: The inventory level's details
+ * description: The created's details.
  * x-schemaName: InventoryLevel
  * required:
  *   - id
@@ -15,34 +15,34 @@
  *   id:
  *     type: string
  *     title: id
- *     description: The inventory level's ID.
+ *     description: The created's ID.
  *   inventory_item_id:
  *     type: string
  *     title: inventory_item_id
- *     description: The ID of the associated inventory item.
+ *     description: The created's inventory item id.
  *   location_id:
  *     type: string
  *     title: location_id
- *     description: The ID of the associated location.
+ *     description: The created's location id.
  *   stocked_quantity:
  *     type: number
  *     title: stocked_quantity
- *     description: The inventory level's stocked quantity.
+ *     description: The created's stocked quantity.
  *   reserved_quantity:
  *     type: number
  *     title: reserved_quantity
- *     description: The inventory level's reserved quantity.
+ *     description: The created's reserved quantity.
  *   available_quantity:
  *     type: number
  *     title: available_quantity
- *     description: The inventory level's available quantity.
+ *     description: The created's available quantity.
  *   incoming_quantity:
  *     type: number
  *     title: incoming_quantity
- *     description: The inventory level's incoming quantity.
+ *     description: The created's incoming quantity.
  *   metadata:
  *     type: object
- *     description: The inventory level's metadata, can hold custom key-value pairs.
+ *     description: The created's metadata.
  * 
 */
 
