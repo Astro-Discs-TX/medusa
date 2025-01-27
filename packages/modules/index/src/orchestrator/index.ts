@@ -1,17 +1,26 @@
 import { ILockingModule, IndexTypes, MedusaContainer } from "@medusajs/types"
 
 export class Orchestrator {
+  /**
+   * Reference to the locking module
+   */
   #lockingModule: ILockingModule
+
+  /**
+   * Owner id when acquiring locks
+   */
+  #lockingOwner = `index-sync-${process.pid}`
 
   /**
    * The current state of the orchestrator
    *
-   * - In "idle" state, one can call the "run" method
+   * - In "idle" state, one can call the "run" method.
    * - In "processing" state, the orchestrator is looping over the entities
-   *   and processing them
-   * - In "completed" state, the provided entities have been processed
+   *   and processing them.
+   * - In "completed" state, the provided entities have been processed.
+   * - The "error" state is set when the task runner throws an error.
    */
-  #state: "idle" | "processing" | "completed"
+  #state: "idle" | "processing" | "completed" | "error" = "idle"
 
   /**
    * Options for the locking module and the task runner to execute the
@@ -82,11 +91,14 @@ export class Orchestrator {
     this.#options = options
   }
 
+  /**
+   * Acquires using the lock module.
+   */
   async #acquireLock(forKey: string): Promise<boolean> {
     try {
       await this.#lockingModule.acquire(forKey, {
         expire: this.#options.lockDuration,
-        ownerId: `index-sync-${process.pid}`,
+        ownerId: this.#lockingOwner,
       })
       return true
     } catch {
@@ -108,7 +120,16 @@ export class Orchestrator {
     this.#currentIndex = index
     const lockAcquired = await this.#acquireLock(entity.entity)
     if (lockAcquired) {
-      await this.#options.taskRunner(entity)
+      try {
+        await this.#options.taskRunner(entity)
+      } catch (error) {
+        this.#state = "error"
+        throw error
+      } finally {
+        await this.#lockingModule.release(entity.entity, {
+          ownerId: this.#lockingOwner,
+        })
+      }
     }
 
     return this.#processAtIndex(index + 1)
