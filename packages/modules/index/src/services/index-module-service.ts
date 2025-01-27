@@ -200,35 +200,29 @@ export default class IndexModuleService
       fields_hash: string
     }[]
   ) {
-    for (const entity of entities) {
+    const updatedStatus = async (
+      entity: string,
+      status: IndexMetadataStatus
+    ) => {
       await this.indexMetadataService_.update({
         data: {
-          status: IndexMetadataStatus.PROCESSING,
+          status,
         },
         selector: {
-          entity: entity.entity,
+          entity,
         },
       })
+    }
+
+    for (const entity of entities) {
+      await updatedStatus(entity.entity, IndexMetadataStatus.PROCESSING)
+
       try {
         // await this.syncEntity(entity)
 
-        await this.indexMetadataService_.update({
-          data: {
-            status: IndexMetadataStatus.DONE,
-          },
-          selector: {
-            entity: entity.entity,
-          },
-        })
+        await updatedStatus(entity.entity, IndexMetadataStatus.DONE)
       } catch (e) {
-        await this.indexMetadataService_.update({
-          data: {
-            status: IndexMetadataStatus.ERROR,
-          },
-          selector: {
-            entity: entity.entity,
-          },
-        })
+        await updatedStatus(entity.entity, IndexMetadataStatus.ERROR)
       }
     }
   }
