@@ -27,11 +27,11 @@ export class DataSynchronizer {
 
   async sync({
     entityName,
-    pagination,
+    pagination = {},
     ack,
   }: {
     entityName: string
-    pagination: {
+    pagination?: {
       cursor?: string
       updated_at?: string | Date
       limit?: number
@@ -93,6 +93,9 @@ export class DataSynchronizer {
       })
 
       done = !data.length
+      if (done) {
+        break
+      }
 
       const envelop: Event = {
         data,

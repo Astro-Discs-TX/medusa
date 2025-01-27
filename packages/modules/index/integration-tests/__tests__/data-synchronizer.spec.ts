@@ -5,19 +5,21 @@ import {
   MedusaAppLoader,
 } from "@medusajs/framework"
 import { MedusaAppOutput, MedusaModule } from "@medusajs/framework/modules-sdk"
-import { EventBusTypes, IndexTypes } from "@medusajs/framework/types"
+import { IndexTypes, InferEntityType } from "@medusajs/framework/types"
 import {
   ContainerRegistrationKeys,
   ModuleRegistrationName,
   Modules,
+  toMikroORMEntity,
 } from "@medusajs/framework/utils"
 import { initDb, TestDatabaseUtils } from "@medusajs/test-utils"
-import { EntityManager } from "@mikro-orm/postgresql"
 import { asValue } from "awilix"
 import * as path from "path"
+import { DataSynchronizer } from "../../src/utils/sync/data-synchronizer"
 import { EventBusServiceMock } from "../__fixtures__"
 import { dbName } from "../__fixtures__/medusa-config"
-import { DataSynchronizer } from "../../src/utils/sync/data-synchronizer"
+import { EntityManager } from "@mikro-orm/postgresql"
+import { IndexData, IndexRelation } from "@models"
 
 const eventBusMock = new EventBusServiceMock()
 const queryMock = {
@@ -29,7 +31,9 @@ const dbUtils = TestDatabaseUtils.dbTestUtilFactory()
 jest.setTimeout(30000)
 
 const testProductId = "test_prod_1"
+const testProductId2 = "test_prod_2"
 const testVariantId = "test_var_1"
+const testVariantId2 = "test_var_2"
 
 const mockData = [
   {
@@ -38,26 +42,39 @@ const mockData = [
     updated_at: new Date(),
   },
   {
+    id: testProductId2,
+    title: "Test Product",
+    updated_at: new Date(),
+  },
+  {
     id: testVariantId,
     title: "Test Variant",
-    product_id: testProductId,
+    product: {
+      id: testProductId,
+    },
+    updated_at: new Date(),
+  },
+  {
+    id: testVariantId2,
+    title: "Test Variant 2",
+    product: {
+      id: testProductId2,
+    },
     updated_at: new Date(),
   },
 ]
 
-describe("DataSynchronizer", () => {
-  let medusaApp: MedusaAppOutput
-  let medusaAppLoader: MedusaAppLoader
-  let index: IndexTypes.IIndexService
-  let dataSynchronizer: DataSynchronizer
-  let manager: EntityManager
+let medusaAppLoader!: MedusaAppLoader
+let index!: IndexTypes.IIndexService
 
-  beforeAll(async () => {
+const beforeAll_ = async () => {
+  try {
     await configLoader(
       path.join(__dirname, "./../__fixtures__"),
       "medusa-config"
     )
 
+    console.log(`Creating database ${dbName}`)
     await dbUtils.create(dbName)
     dbUtils.pgConnection_ = await initDb()
 
@@ -68,91 +85,179 @@ describe("DataSynchronizer", () => {
     })
 
     medusaAppLoader = new MedusaAppLoader(container as any)
-    await medusaAppLoader.runModulesMigrations()
 
+    // Migrations
+    await medusaAppLoader.runModulesMigrations()
+    const linkPlanner = await medusaAppLoader.getLinksExecutionPlanner()
+    const plan = await linkPlanner.createPlan()
+    await linkPlanner.executePlan(plan)
+
+    // Clear partially loaded instances
     MedusaModule.clearInstances()
-    medusaApp = await medusaAppLoader.load()
+
+    // Bootstrap modules
+    const globalApp = await medusaAppLoader.load()
 
     index = container.resolve(Modules.INDEX)
+
+    // Mock event bus  the index module
     ;(index as any).eventBusModuleService_ = eventBusMock
+
+    await globalApp.onApplicationStart()
     ;(index as any).storageProvider_.query_ = queryMock
 
-    await medusaApp.onApplicationStart()
+    return globalApp
+  } catch (error) {
+    console.error("Error initializing", error?.message)
+    throw error
+  }
+}
 
+describe("DataSynchronizer", () => {
+  let index: IndexTypes.IIndexService
+  let dataSynchronizer: DataSynchronizer
+  let medusaApp: MedusaAppOutput
+  let onApplicationPrepareShutdown!: () => Promise<void>
+  let onApplicationShutdown!: () => Promise<void>
+  let manager: EntityManager
+
+  beforeAll(async () => {
+    medusaApp = await beforeAll_()
+    onApplicationPrepareShutdown = medusaApp.onApplicationPrepareShutdown
+    onApplicationShutdown = medusaApp.onApplicationShutdown
     manager = (
       medusaApp.sharedContainer!.resolve(ModuleRegistrationName.INDEX) as any
     ).container_.manager as EntityManager
-
-    // Initialize DataSynchronizer
-    const mockStorageProvider = {
-      consumeEvent: jest.fn().mockImplementation(() => Promise.resolve()),
-    }
-
-    const mockSchemaRepresentation = {
-      product: {
-        fields: ["id", "title", "updated_at"],
-        alias: "product",
-        moduleConfig: {
-          linkableKeys: {
-            id: true,
-          },
-        },
-      },
-      product_variant: {
-        fields: ["id", "title", "product_id", "updated_at"],
-        alias: "product_variant",
-        moduleConfig: {
-          linkableKeys: {
-            id: true,
-          },
-        },
-      },
-    }
-
-    dataSynchronizer = new DataSynchronizer({
-      storageProvider: mockStorageProvider as any,
-      schemaObjectRepresentation: mockSchemaRepresentation as any,
-      query: queryMock as any,
-    })
   })
 
   afterAll(async () => {
-    await medusaApp.onApplicationPrepareShutdown()
-    await medusaApp.onApplicationShutdown()
+    await onApplicationPrepareShutdown()
+    await onApplicationShutdown()
     await dbUtils.shutdown(dbName)
   })
 
   beforeEach(async () => {
     jest.clearAllMocks()
-  })
+    index = container.resolve(Modules.INDEX)
 
-  afterEach(async () => {
-    await dbUtils.teardown({ schema: "public" })
+    const productSchemaObjectRepresentation: IndexTypes.SchemaObjectEntityRepresentation =
+      {
+        fields: ["id", "title", "updated_at"],
+        alias: "product",
+        moduleConfig: {
+          linkableKeys: {
+            id: "Product",
+            product_id: "Product",
+            product_variant_id: "ProductVariant",
+          },
+        },
+        entity: "Product",
+        parents: [],
+        listeners: ["product.created"],
+      }
+
+    const productVariantSchemaObjectRepresentation: IndexTypes.SchemaObjectEntityRepresentation =
+      {
+        fields: ["id", "title", "product.id", "updated_at"],
+        alias: "product_variant",
+        moduleConfig: {
+          linkableKeys: {
+            id: "ProductVariant",
+            product_id: "Product",
+            product_variant_id: "ProductVariant",
+          },
+        },
+        entity: "ProductVariant",
+        parents: [
+          {
+            ref: productSchemaObjectRepresentation,
+            inSchemaRef: productSchemaObjectRepresentation,
+            targetProp: "id",
+          },
+        ],
+        listeners: ["product-variant.created"],
+      }
+
+    const mockSchemaRepresentation = {
+      product: productSchemaObjectRepresentation,
+      product_variant: productVariantSchemaObjectRepresentation,
+    }
+
+    dataSynchronizer = new DataSynchronizer({
+      storageProvider: (index as any).storageProvider_,
+      schemaObjectRepresentation: mockSchemaRepresentation,
+      query: queryMock as any,
+    })
   })
 
   describe("sync", () => {
     it("should sync products data correctly", async () => {
       // Mock query response for products
-      queryMock.graph.mockResolvedValueOnce({
-        data: [mockData[0]],
+      queryMock.graph.mockImplementation(async (config) => {
+        if (Array.isArray(config.filters.id)) {
+          if (config.filters.id.includes(testProductId)) {
+            return {
+              data: [mockData[0]],
+            }
+          } else if (config.filters.id.includes(testProductId2)) {
+            return {
+              data: [mockData[1]],
+            }
+          }
+        }
+
+        if (Object.keys(config.filters).length === 0) {
+          return {
+            data: [mockData[0]],
+          }
+        } else if (config.filters.id["$gt"] === mockData[0].id) {
+          return {
+            data: [mockData[1]],
+          }
+        }
+
+        return {
+          data: [],
+        }
       })
 
       const ackMock = jest.fn()
 
       const result = await dataSynchronizer.sync({
         entityName: "product",
-        pagination: {
-          cursor: "0",
-          limit: 10,
-        },
         ack: ackMock,
       })
 
-      expect(queryMock.graph).toHaveBeenCalledWith({
+      // First loop fetching products
+      expect(queryMock.graph).toHaveBeenNthCalledWith(1, {
+        entity: "product",
+        fields: ["id"],
+        filters: {},
+        pagination: {
+          order: {
+            id: "asc",
+          },
+          take: 1000,
+        },
+      })
+
+      // First time fetching product data for creation from the storage provider
+      expect(queryMock.graph).toHaveBeenNthCalledWith(2, {
+        entity: "product",
+        filters: {
+          id: [testProductId],
+        },
+        fields: ["id", "title", "updated_at"],
+      })
+
+      // Second loop fetching products
+      expect(queryMock.graph).toHaveBeenNthCalledWith(3, {
         entity: "product",
         fields: ["id"],
         filters: {
-          id: { $gt: "0" },
+          id: {
+            $gt: testProductId,
+          },
         },
         pagination: {
           order: {
@@ -162,97 +267,218 @@ describe("DataSynchronizer", () => {
         },
       })
 
-      expect(result).toEqual({
-        lastCursor: testProductId,
-        done: true,
-      })
-
-      expect(ackMock).toHaveBeenCalledWith({
-        lastCursor: testProductId,
-      })
-    })
-
-    it("should sync product variants data correctly", async () => {
-      // Mock query response for variants
-      queryMock.graph.mockResolvedValueOnce({
-        data: [mockData[1]],
-      })
-
-      const ackMock = jest.fn()
-
-      const result = await dataSynchronizer.sync({
-        entityName: "product_variant",
-        pagination: {
-          cursor: "0",
-          updated_at: new Date(Date.now() - 24 * 60 * 60 * 1000), // 24 hours ago
-        },
-        ack: ackMock,
-      })
-
-      expect(queryMock.graph).toHaveBeenCalledWith({
-        entity: "product_variant",
-        fields: ["id"],
+      // Second time fetching product data for creation from the storage provider
+      expect(queryMock.graph).toHaveBeenNthCalledWith(4, {
+        entity: "product",
         filters: {
-          id: { $gt: "0" },
-          updated_at: { $gt: expect.any(Date) },
+          id: [testProductId2],
         },
-        pagination: {
-          order: {
-            id: "asc",
-          },
-          take: 1000,
-        },
+        fields: ["id", "title", "updated_at"],
       })
 
-      expect(result).toEqual({
-        lastCursor: testVariantId,
+      expect(ackMock).toHaveBeenNthCalledWith(1, {
+        lastCursor: testProductId,
+      })
+
+      expect(ackMock).toHaveBeenNthCalledWith(2, {
+        lastCursor: testProductId2,
+      })
+
+      expect(ackMock).toHaveBeenNthCalledWith(3, {
+        lastCursor: testProductId2,
         done: true,
       })
 
-      expect(ackMock).toHaveBeenCalledWith({
-        lastCursor: testVariantId,
+      expect(result).toEqual({
+        lastCursor: testProductId2,
+        done: true,
       })
+
+      const indexData = await manager.find<InferEntityType<IndexData>>(
+        toMikroORMEntity(IndexData),
+        {}
+      )
+      const indexRelationData = await manager.find(
+        toMikroORMEntity(IndexRelation),
+        {}
+      )
+
+      expect(indexData).toHaveLength(2)
+      expect(indexData[0].id).toEqual(testProductId)
+      expect(indexData[1].id).toEqual(testProductId2)
+
+      expect(indexRelationData).toHaveLength(0)
     })
+  })
 
-    it("should handle errors during sync", async () => {
-      const error = new Error("Sync failed")
-      queryMock.graph.mockRejectedValueOnce(error)
+  it("should sync products and product variants data correctly", async () => {
+    // Mock query response for products
+    queryMock.graph.mockImplementation(async (config) => {
+      if (config.entity === "product") {
+        if (Array.isArray(config.filters.id)) {
+          if (config.filters.id.includes(testProductId)) {
+            return {
+              data: [mockData[0]],
+            }
+          } else if (config.filters.id.includes(testProductId2)) {
+            return {
+              data: [mockData[1]],
+            }
+          }
+        }
 
-      const ackMock = jest.fn()
+        if (Object.keys(config.filters).length === 0) {
+          return {
+            data: [mockData[0]],
+          }
+        } else if (config.filters.id["$gt"] === mockData[0].id) {
+          return {
+            data: [mockData[1]],
+          }
+        }
+      }
 
-      const result = await dataSynchronizer.sync({
-        entityName: "product",
-        pagination: {
-          cursor: "0",
-        },
-        ack: ackMock,
-      })
+      if (config.entity === "product_variant") {
+        if (Array.isArray(config.filters.id)) {
+          if (config.filters.id.includes(testVariantId)) {
+            return {
+              data: [mockData[2]],
+            }
+          } else if (config.filters.id.includes(testVariantId2)) {
+            return {
+              data: [mockData[3]],
+            }
+          }
+        }
 
-      expect(ackMock).toHaveBeenCalledWith({
-        lastCursor: "0",
-        err: error,
-      })
-    })
+        if (Object.keys(config.filters).length === 0) {
+          return {
+            data: [mockData[2]],
+          }
+        } else if (config.filters.id["$gt"] === mockData[2].id) {
+          return {
+            data: [mockData[3]],
+          }
+        }
+      }
 
-    it("should handle empty data response", async () => {
-      queryMock.graph.mockResolvedValueOnce({
+      return {
         data: [],
-      })
-
-      const ackMock = jest.fn()
-
-      const result = await dataSynchronizer.sync({
-        entityName: "product",
-        pagination: {
-          cursor: "0",
-        },
-        ack: ackMock,
-      })
-
-      expect(result).toEqual({
-        lastCursor: "0",
-        done: true,
-      })
+      }
     })
+
+    const ackMock = jest.fn()
+
+    await dataSynchronizer.sync({
+      entityName: "product",
+      ack: ackMock,
+    })
+
+    jest.clearAllMocks()
+
+    const result = await dataSynchronizer.sync({
+      entityName: "product_variant",
+      ack: ackMock,
+    })
+
+    // First loop fetching product variants
+    expect(queryMock.graph).toHaveBeenNthCalledWith(1, {
+      entity: "product_variant",
+      fields: ["id"],
+      filters: {},
+      pagination: {
+        order: {
+          id: "asc",
+        },
+        take: 1000,
+      },
+    })
+
+    // First time fetching product variant data for creation from the storage provider
+    expect(queryMock.graph).toHaveBeenNthCalledWith(2, {
+      entity: "product_variant",
+      filters: {
+        id: [testVariantId],
+      },
+      fields: ["id", "title", "product.id", "updated_at"],
+    })
+
+    // Second loop fetching product variants
+    expect(queryMock.graph).toHaveBeenNthCalledWith(3, {
+      entity: "product_variant",
+      fields: ["id"],
+      filters: {
+        id: {
+          $gt: testVariantId,
+        },
+      },
+      pagination: {
+        order: {
+          id: "asc",
+        },
+        take: 1000,
+      },
+    })
+
+    // Second time fetching product variant data for creation from the storage provider
+    expect(queryMock.graph).toHaveBeenNthCalledWith(4, {
+      entity: "product_variant",
+      filters: {
+        id: [testVariantId2],
+      },
+      fields: ["id", "title", "product.id", "updated_at"],
+    })
+
+    expect(ackMock).toHaveBeenNthCalledWith(1, {
+      lastCursor: testVariantId,
+    })
+
+    expect(ackMock).toHaveBeenNthCalledWith(2, {
+      lastCursor: testVariantId2,
+    })
+
+    expect(ackMock).toHaveBeenNthCalledWith(3, {
+      lastCursor: testVariantId2,
+      done: true,
+    })
+
+    expect(result).toEqual({
+      lastCursor: testVariantId2,
+      done: true,
+    })
+
+    const indexData = await manager.find<InferEntityType<IndexData>>(
+      toMikroORMEntity(IndexData),
+      {}
+    )
+    const indexRelationData = await manager.find<
+      InferEntityType<IndexRelation>
+    >(toMikroORMEntity(IndexRelation), {})
+
+    expect(indexData).toHaveLength(4)
+    expect(indexData[0].id).toEqual(testProductId)
+    expect(indexData[1].id).toEqual(testProductId2)
+    expect(indexData[2].id).toEqual(testVariantId)
+    expect(indexData[3].id).toEqual(testVariantId2)
+
+    expect(indexRelationData).toHaveLength(2)
+    expect(indexRelationData[0]).toEqual(
+      expect.objectContaining({
+        parent_id: testProductId,
+        child_id: testVariantId,
+        parent_name: "Product",
+        child_name: "ProductVariant",
+        pivot: "Product-ProductVariant",
+      })
+    )
+    expect(indexRelationData[1]).toEqual(
+      expect.objectContaining({
+        parent_id: testProductId2,
+        child_id: testVariantId2,
+        parent_name: "Product",
+        child_name: "ProductVariant",
+        pivot: "Product-ProductVariant",
+      })
+    )
   })
 })

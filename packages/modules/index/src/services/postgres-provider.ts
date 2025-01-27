@@ -14,7 +14,11 @@ import {
   MedusaContext,
   toMikroORMEntity,
 } from "@medusajs/framework/utils"
-import { EntityManager, SqlEntityManager } from "@mikro-orm/postgresql"
+import {
+  EntityManager,
+  EntityRepository,
+  SqlEntityManager,
+} from "@mikro-orm/postgresql"
 import { IndexData, IndexRelation } from "@models"
 import { createPartitions, QueryBuilder } from "../utils"
 import { flattenObjectKeys } from "../utils/flatten-object-keys"
@@ -204,13 +208,14 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
       }
 
       const { fields, alias } = schemaEntityObjectRepresentation
-      const { data: entityData } = await this.query_.graph({
+      const graphResult = await this.query_.graph({
         entity: alias,
         filters: {
           id: ids,
         },
         fields: [...new Set(["id", ...fields])],
       })
+      const { data: entityData } = graphResult
 
       const argument = {
         entity: schemaEntityObjectRepresentation.entity,
@@ -340,7 +345,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
       transactionManager: SqlEntityManager
     }
     const indexRepository = em.getRepository(toMikroORMEntity(IndexData))
-    const indexRelationRepository = em.getRepository(
+    const indexRelationRepository: EntityRepository<any> = em.getRepository(
       toMikroORMEntity(IndexRelation)
     )
 
@@ -396,16 +401,25 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
             data: parentData_,
           })
 
-          const parentIndexRelationEntry = indexRelationRepository.upsert({
-            parent_id: (parentData_ as any).id,
-            parent_name: parentEntity,
-            child_id: cleanedEntityData.id,
-            child_name: entity,
-            pivot: `${parentEntity}-${entity}`,
-          })
-          indexRelationRepository
-            .getEntityManager()
-            .persist(parentIndexRelationEntry)
+          await indexRelationRepository.upsert(
+            {
+              parent_id: (parentData_ as any).id,
+              parent_name: parentEntity,
+              child_id: cleanedEntityData.id,
+              child_name: entity,
+              pivot: `${parentEntity}-${entity}`,
+            },
+            {
+              onConflictAction: "merge",
+              onConflictFields: [
+                "pivot",
+                "parent_id",
+                "child_id",
+                "parent_name",
+                "child_name",
+              ],
+            }
+          )
         }
       }
     }
