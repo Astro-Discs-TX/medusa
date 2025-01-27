@@ -117,8 +117,13 @@ export class DataSynchronizer {
       }
     }
 
+    let acknoledgement: { lastCursor: string; done?: boolean; err?: Error } = {
+      lastCursor: currentCursor,
+      done: true,
+    }
+
     if (error) {
-      const acknoledgement = {
+      acknoledgement = {
         lastCursor: currentCursor,
         err: error,
       }
@@ -126,10 +131,6 @@ export class DataSynchronizer {
       return acknoledgement
     }
 
-    const acknoledgement = {
-      lastCursor: currentCursor,
-      done: true,
-    }
     void ack(acknoledgement)
     return acknoledgement
   }
