@@ -481,4 +481,6 @@ describe("DataSynchronizer", () => {
       })
     )
   })
+
+  // TODO: Add tests for errors handling and failure handling
 })
