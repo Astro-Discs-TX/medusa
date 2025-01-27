@@ -272,6 +272,7 @@ export const ModulesDefinition: {
     dependencies: [
       Modules.EVENT_BUS,
       ContainerRegistrationKeys.LOGGER,
+      Modules.LOCKING,
       ContainerRegistrationKeys.REMOTE_QUERY,
       ContainerRegistrationKeys.QUERY,
     ],
