@@ -88,7 +88,7 @@ export const generatedEditDates = {
   "app/learn/customization/extend-features/extend-create-product/page.mdx": "2025-01-06T11:18:58.250Z",
   "app/learn/customization/custom-features/page.mdx": "2024-12-09T10:46:28.593Z",
   "app/learn/customization/customize-admin/page.mdx": "2024-12-09T11:02:38.801Z",
-  "app/learn/customization/customize-admin/route/page.mdx": "2024-12-24T15:08:46.095Z",
+  "app/learn/customization/customize-admin/route/page.mdx": "2025-01-22T16:23:31.772Z",
   "app/learn/customization/customize-admin/widget/page.mdx": "2024-12-09T11:02:39.108Z",
   "app/learn/customization/extend-features/define-link/page.mdx": "2024-12-09T11:02:39.346Z",
   "app/learn/customization/extend-features/page.mdx": "2024-12-09T11:02:39.244Z",
@@ -109,5 +109,6 @@ export const generatedEditDates = {
   "app/learn/installation/page.mdx": "2025-01-06T09:12:48.690Z",
   "app/learn/fundamentals/data-models/check-constraints/page.mdx": "2024-12-06T14:34:50.384Z",
   "app/learn/fundamentals/module-links/link/page.mdx": "2025-01-06T09:27:25.604Z",
-  "app/learn/fundamentals/workflows/store-executions/page.mdx": "2025-01-24T12:09:24.087Z"
+  "app/learn/fundamentals/workflows/store-executions/page.mdx": "2025-01-24T12:09:24.087Z",
+  "app/learn/update/page.mdx": "2025-01-24T17:35:21.335Z"
 }
