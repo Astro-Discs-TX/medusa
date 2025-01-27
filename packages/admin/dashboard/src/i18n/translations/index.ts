@@ -15,6 +15,8 @@ import mn from "./mn.json"
 import ar from "./ar.json"
 import zhCN from "./zhCN.json"
 import fa from "./fa.json"
+import cs from "./cs.json"
+import ru from "./ru.json"
 
 export default {
   de: {
@@ -67,5 +69,11 @@ export default {
   },
   fa: {
     translation: fa,
+  },
+  cs: {
+    translation: cs,
+  },
+  ru: {
+    translation: ru,
   },
 }
