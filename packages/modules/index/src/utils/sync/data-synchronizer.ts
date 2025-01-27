@@ -39,7 +39,7 @@ export class DataSynchronizer {
     }
     ack: (ack: {
       lastCursor: string | null
-      done?: true
+      done?: boolean
       err?: Error
     }) => Promise<void>
   }) {
@@ -113,24 +113,24 @@ export class DataSynchronizer {
         void ack({ lastCursor: currentCursor })
       } catch (err) {
         error = err
-        void ack({
-          lastCursor: currentCursor,
-          err,
-        })
         break
       }
     }
 
     if (error) {
-      return {
+      const acknoledgement = {
         lastCursor: currentCursor,
         err: error,
       }
+      void ack(acknoledgement)
+      return acknoledgement
     }
 
-    return {
+    const acknoledgement = {
       lastCursor: currentCursor,
       done: true,
     }
+    void ack(acknoledgement)
+    return acknoledgement
   }
 }
