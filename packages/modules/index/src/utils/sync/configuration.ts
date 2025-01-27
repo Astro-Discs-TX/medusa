@@ -1,9 +1,9 @@
-import { simpleHash } from "@medusajs/framework/utils"
 import { IndexTypes, InferEntityType } from "@medusajs/types"
-import { IndexMetadata } from "@models"
-import { schemaObjectRepresentationPropertiesToOmit } from "@types"
 import { IndexMetadataService } from "../../services/index-metadata"
 import { IndexMetadataStatus } from "../index-metadata-status"
+import { schemaObjectRepresentationPropertiesToOmit } from "@types"
+import { simpleHash } from "@medusajs/framework/utils"
+import { IndexMetadata } from "@models"
 
 export class Configuration {
   #schemaObjectRepresentation: IndexTypes.SchemaObjectRepresentation

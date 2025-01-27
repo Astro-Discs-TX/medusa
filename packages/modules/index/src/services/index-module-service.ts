@@ -18,8 +18,8 @@ import {
   Configuration,
   defaultSchema,
   gqlSchemaToTypes,
-  IndexMetadataStatus,
 } from "@utils"
+import { DataSynchronizer } from "./data-synchronizer"
 
 type InjectedDependencies = {
   [Modules.EVENT_BUS]: IEventBusModuleService
@@ -28,6 +28,7 @@ type InjectedDependencies = {
   storageProviderCtrOptions: unknown
   baseRepository: BaseRepository
   indexMetadataService: ModulesSdkTypes.IMedusaInternalService<any>
+  dataSynchronizer: DataSynchronizer
 }
 
 export default class IndexModuleService
@@ -47,7 +48,12 @@ export default class IndexModuleService
 
   protected storageProvider_: IndexTypes.StorageProvider
 
-  private indexMetadataService_: ModulesSdkTypes.IMedusaInternalService<any>
+  private get indexMetadataService_(): ModulesSdkTypes.IMedusaInternalService<any> {
+    return this.container_.indexMetadataService
+  }
+  private get dataSynchronizer_(): DataSynchronizer {
+    return this.container_.dataSynchronizer
+  }
 
   constructor(
     container: InjectedDependencies,
@@ -61,7 +67,6 @@ export default class IndexModuleService
 
     const {
       [Modules.EVENT_BUS]: eventBusModuleService,
-      indexMetadataService,
       storageProviderCtr,
       storageProviderCtrOptions,
     } = container
@@ -69,8 +74,6 @@ export default class IndexModuleService
     this.eventBusModuleService_ = eventBusModuleService
     this.storageProviderCtr_ = storageProviderCtr
     this.storageProviderCtrOptions_ = storageProviderCtrOptions
-    this.indexMetadataService_ = indexMetadataService
-
     if (!this.eventBusModuleService_) {
       throw new Error(
         "EventBusModuleService is required for the IndexModule to work"
@@ -105,50 +108,23 @@ export default class IndexModuleService
 
       await gqlSchemaToTypes(this.moduleOptions_.schema ?? defaultSchema)
 
+      this.dataSynchronizer_.setSchemaObjectRepresentation(
+        this.schemaObjectRepresentation_
+      )
+      this.dataSynchronizer_.setStorageProvider(this.storageProvider_)
+      this.dataSynchronizer_.onApplicationStart()
+
       const configurationChecker = new Configuration({
         schemaObjectRepresentation: this.schemaObjectRepresentation_,
         indexMetadataService: this.indexMetadataService_,
       })
       const fullSyncRequired = await configurationChecker.checkChanges()
+
       if (fullSyncRequired.length) {
-        await this.syncEntities(fullSyncRequired)
+        await this.dataSynchronizer_.syncData(fullSyncRequired)
       }
     } catch (e) {
       console.log(e)
-    }
-  }
-
-  private async syncEntities(
-    entities: {
-      entity: string
-      fields: string[]
-      fields_hash: string
-    }[]
-  ) {
-    const updatedStatus = async (
-      entity: string,
-      status: IndexMetadataStatus
-    ) => {
-      await this.indexMetadataService_.update({
-        data: {
-          status,
-        },
-        selector: {
-          entity,
-        },
-      })
-    }
-
-    for (const entity of entities) {
-      await updatedStatus(entity.entity, IndexMetadataStatus.PROCESSING)
-
-      try {
-        // await this.syncEntity(entity)
-
-        await updatedStatus(entity.entity, IndexMetadataStatus.DONE)
-      } catch (e) {
-        await updatedStatus(entity.entity, IndexMetadataStatus.ERROR)
-      }
     }
   }
 

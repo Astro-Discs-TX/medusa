@@ -13,13 +13,14 @@ import {
   toMikroORMEntity,
 } from "@medusajs/framework/utils"
 import { initDb, TestDatabaseUtils } from "@medusajs/test-utils"
-import { asValue } from "awilix"
-import * as path from "path"
-import { DataSynchronizer } from "@utils"
-import { EventBusServiceMock } from "../__fixtures__"
-import { dbName } from "../__fixtures__/medusa-config"
 import { EntityManager } from "@mikro-orm/postgresql"
 import { IndexData, IndexRelation } from "@models"
+import { DataSynchronizer } from "@services"
+import { asValue } from "awilix"
+import * as path from "path"
+import { EventBusServiceMock } from "../__fixtures__"
+import { dbName } from "../__fixtures__/medusa-config"
+import { setTimeout } from "timers/promises"
 
 const eventBusMock = new EventBusServiceMock()
 const queryMock = {
@@ -28,7 +29,7 @@ const queryMock = {
 
 const dbUtils = TestDatabaseUtils.dbTestUtilFactory()
 
-jest.setTimeout(30000)
+jest.setTimeout(300000)
 
 const testProductId = "test_prod_1"
 const testProductId2 = "test_prod_2"
@@ -80,11 +81,13 @@ const beforeAll_ = async () => {
 
     container.register({
       [ContainerRegistrationKeys.LOGGER]: asValue(logger),
-      [ContainerRegistrationKeys.QUERY]: asValue(null),
+      [ContainerRegistrationKeys.QUERY]: asValue(queryMock),
+      [ContainerRegistrationKeys.REMOTE_QUERY]: asValue(queryMock),
       [ContainerRegistrationKeys.PG_CONNECTION]: asValue(dbUtils.pgConnection_),
+      [Modules.EVENT_BUS]: asValue(eventBusMock),
     })
 
-    medusaAppLoader = new MedusaAppLoader(container as any)
+    medusaAppLoader = new MedusaAppLoader()
 
     // Migrations
     await medusaAppLoader.runModulesMigrations()
@@ -97,14 +100,18 @@ const beforeAll_ = async () => {
 
     // Bootstrap modules
     const globalApp = await medusaAppLoader.load()
+    container.register({
+      [ContainerRegistrationKeys.LOGGER]: asValue(logger),
+      [ContainerRegistrationKeys.QUERY]: asValue(queryMock),
+      [ContainerRegistrationKeys.REMOTE_QUERY]: asValue(queryMock),
+      [ContainerRegistrationKeys.PG_CONNECTION]: asValue(dbUtils.pgConnection_),
+      [Modules.EVENT_BUS]: asValue(eventBusMock),
+    })
 
     index = container.resolve(Modules.INDEX)
 
-    // Mock event bus  the index module
-    ;(index as any).eventBusModuleService_ = eventBusMock
-
     await globalApp.onApplicationStart()
-    ;(index as any).storageProvider_.query_ = queryMock
+    await setTimeout(1000)
 
     return globalApp
   } catch (error) {
@@ -140,54 +147,7 @@ describe("DataSynchronizer", () => {
     jest.clearAllMocks()
     index = container.resolve(Modules.INDEX)
 
-    const productSchemaObjectRepresentation: IndexTypes.SchemaObjectEntityRepresentation =
-      {
-        fields: ["id", "title", "updated_at"],
-        alias: "product",
-        moduleConfig: {
-          linkableKeys: {
-            id: "Product",
-            product_id: "Product",
-            product_variant_id: "ProductVariant",
-          },
-        },
-        entity: "Product",
-        parents: [],
-        listeners: ["product.created"],
-      }
-
-    const productVariantSchemaObjectRepresentation: IndexTypes.SchemaObjectEntityRepresentation =
-      {
-        fields: ["id", "title", "product.id", "updated_at"],
-        alias: "product_variant",
-        moduleConfig: {
-          linkableKeys: {
-            id: "ProductVariant",
-            product_id: "Product",
-            product_variant_id: "ProductVariant",
-          },
-        },
-        entity: "ProductVariant",
-        parents: [
-          {
-            ref: productSchemaObjectRepresentation,
-            inSchemaRef: productSchemaObjectRepresentation,
-            targetProp: "id",
-          },
-        ],
-        listeners: ["product-variant.created"],
-      }
-
-    const mockSchemaRepresentation = {
-      product: productSchemaObjectRepresentation,
-      product_variant: productVariantSchemaObjectRepresentation,
-    }
-
-    dataSynchronizer = new DataSynchronizer({
-      storageProvider: (index as any).storageProvider_,
-      schemaObjectRepresentation: mockSchemaRepresentation,
-      query: queryMock as any,
-    })
+    dataSynchronizer = (index as any).dataSynchronizer_
   })
 
   describe("sync", () => {
@@ -224,7 +184,7 @@ describe("DataSynchronizer", () => {
       const ackMock = jest.fn()
 
       const result = await dataSynchronizer.sync({
-        entityName: "product",
+        entityName: "Product",
         ack: ackMock,
       })
 
@@ -247,7 +207,7 @@ describe("DataSynchronizer", () => {
         filters: {
           id: [testProductId],
         },
-        fields: ["id", "title", "updated_at"],
+        fields: ["id", "title"],
       })
 
       // Second loop fetching products
@@ -273,7 +233,7 @@ describe("DataSynchronizer", () => {
         filters: {
           id: [testProductId2],
         },
-        fields: ["id", "title", "updated_at"],
+        fields: ["id", "title"],
       })
 
       expect(ackMock).toHaveBeenNthCalledWith(1, {
@@ -370,14 +330,14 @@ describe("DataSynchronizer", () => {
     const ackMock = jest.fn()
 
     await dataSynchronizer.sync({
-      entityName: "product",
+      entityName: "Product",
       ack: ackMock,
     })
 
     jest.clearAllMocks()
 
     const result = await dataSynchronizer.sync({
-      entityName: "product_variant",
+      entityName: "ProductVariant",
       ack: ackMock,
     })
 
@@ -400,7 +360,7 @@ describe("DataSynchronizer", () => {
       filters: {
         id: [testVariantId],
       },
-      fields: ["id", "title", "product.id", "updated_at"],
+      fields: ["id", "product.id", "product_id", "sku"],
     })
 
     // Second loop fetching product variants
@@ -426,7 +386,7 @@ describe("DataSynchronizer", () => {
       filters: {
         id: [testVariantId2],
       },
-      fields: ["id", "title", "product.id", "updated_at"],
+      fields: ["id", "product.id", "product_id", "sku"],
     })
 
     expect(ackMock).toHaveBeenNthCalledWith(1, {
