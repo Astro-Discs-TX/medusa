@@ -68,6 +68,7 @@ export class DataSynchronizer {
     const batchSize = pagination.batchSize ?? 1000
     const limit = pagination.limit ?? Infinity
     let done = false
+    let error = null
 
     while (processed < limit || !done) {
       const filters: Record<string, any> = {}
@@ -111,6 +112,7 @@ export class DataSynchronizer {
 
         void ack({ lastCursor: currentCursor })
       } catch (err) {
+        error = err
         void ack({
           lastCursor: currentCursor,
           err,
@@ -119,12 +121,16 @@ export class DataSynchronizer {
       }
     }
 
-    const acknoledgement: { lastCursor: string; done?: true } = {
+    if (error) {
+      return {
+        lastCursor: currentCursor,
+        err: error,
+      }
+    }
+
+    return {
       lastCursor: currentCursor,
       done: true,
     }
-
-    void ack(acknoledgement)
-    return acknoledgement
   }
 }
