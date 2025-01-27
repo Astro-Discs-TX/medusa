@@ -271,8 +271,8 @@ export const ModulesDefinition: {
     isQueryable: false,
     dependencies: [
       Modules.EVENT_BUS,
-      ContainerRegistrationKeys.LOGGER,
       Modules.LOCKING,
+      ContainerRegistrationKeys.LOGGER,
       ContainerRegistrationKeys.REMOTE_QUERY,
       ContainerRegistrationKeys.QUERY,
     ],
