@@ -6,8 +6,8 @@
 			"pivot": "The name of the index relation's pivot table.",
 			"parent_name": "The parent name of the index relation",
 			"child_name": "The child name of the index relation",
-			"parent_id": "The parent id of the index relation",
-			"child_id": "The child id of the index relation"
+			"parent_id": "The ID of the parent index relation.",
+			"child_id": "The ID of the child index relation."
 		}
 	},
 	"IndexData": {
@@ -15,7 +15,7 @@
 		"properties": {
 			"id": "The ID of the index data.",
 			"name": "The name of the index data",
-			"data": "The data of the index data"
+			"data": "The data of the index"
 		}
 	}
 }
