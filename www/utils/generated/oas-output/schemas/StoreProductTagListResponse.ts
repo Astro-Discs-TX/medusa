@@ -1,7 +1,7 @@
 /**
  * @schema StoreProductTagListResponse
  * type: object
- * description: SUMMARY
+ * description: The paginated list of product tags.
  * x-schemaName: StoreProductTagListResponse
  * required:
  *   - limit
@@ -12,18 +12,18 @@
  *   limit:
  *     type: number
  *     title: limit
- *     description: The product tag's limit.
+ *     description: The maximum number of items returned.
  *   offset:
  *     type: number
  *     title: offset
- *     description: The product tag's offset.
+ *     description: The number of items to skip before retrieving the returned items.
  *   count:
  *     type: number
  *     title: count
- *     description: The product tag's count.
+ *     description: The total number of items available.
  *   product_tags:
  *     type: array
- *     description: The product tag's product tags.
+ *     description: The list of product tags.
  *     items:
  *       $ref: "#/components/schemas/StoreProductTag"
  * 

@@ -1,7 +1,7 @@
 /**
  * @schema StoreProductTypeResponse
  * type: object
- * description: SUMMARY
+ * description: The product type's details.
  * x-schemaName: StoreProductTypeResponse
  * required:
  *   - product_type

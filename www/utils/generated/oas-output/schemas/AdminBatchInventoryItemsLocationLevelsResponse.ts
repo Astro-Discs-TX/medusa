@@ -1,26 +1,26 @@
 /**
  * @schema AdminBatchInventoryItemsLocationLevelsResponse
  * type: object
- * description: SUMMARY
+ * description: The result of managing inventory levels.
  * x-schemaName: AdminBatchInventoryItemsLocationLevelsResponse
  * properties:
  *   created:
  *     type: array
- *     description: The inventory item's created.
+ *     description: The created inventory levels.
  *     items:
  *       $ref: "#/components/schemas/InventoryLevel"
  *   updated:
  *     type: array
- *     description: The inventory item's updated.
+ *     description: The updated inventory levels.
  *     items:
  *       $ref: "#/components/schemas/InventoryLevel"
  *   deleted:
  *     type: array
- *     description: SUMMARY
+ *     description: The IDs of deleted inventory levels.
  *     items:
  *       type: string
  *       title: deleted
- *       description: SUMMARY
+ *       description: The ID of a deleted inventory level.
  * 
 */
 

@@ -43878,26 +43878,26 @@ components:
       x-schemaName: AdminBatchInventoryItemsLocationLevels
     AdminBatchInventoryItemsLocationLevelsResponse:
       type: object
-      description: SUMMARY
+      description: The result of managing inventory levels.
       x-schemaName: AdminBatchInventoryItemsLocationLevelsResponse
       properties:
         created:
           type: array
-          description: The inventory item's created.
+          description: The created inventory levels.
           items:
             $ref: '#/components/schemas/InventoryLevel'
         updated:
           type: array
-          description: The inventory item's updated.
+          description: The updated inventory levels.
           items:
             $ref: '#/components/schemas/InventoryLevel'
         deleted:
           type: array
-          description: SUMMARY
+          description: The IDs of deleted inventory levels.
           items:
             type: string
             title: deleted
-            description: SUMMARY
+            description: The ID of a deleted inventory level.
     AdminBatchProductRequest:
       type: object
       description: The products to create, update, or delete.
@@ -53304,7 +53304,7 @@ components:
           $ref: '#/components/schemas/AdminShippingOption'
     AdminShippingOptionRule:
       type: object
-      description: The rule's rules.
+      description: The shipping option rule's details.
       x-schemaName: AdminShippingOptionRule
       required:
         - id
@@ -53319,11 +53319,12 @@ components:
         id:
           type: string
           title: id
-          description: The rule's ID.
+          description: The shipping option rule's ID.
         attribute:
           type: string
           title: attribute
-          description: The rule's attribute.
+          description: The shipping option rule's attribute.
+          example: is_return
         operator:
           type: string
           description: The rule's operator.
@@ -53337,35 +53338,27 @@ components:
             - gte
             - nin
         value:
-          oneOf:
-            - type: string
-              title: value
-              description: The rule's value.
-            - type: array
-              description: The rule's value.
-              items:
-                type: string
-                title: value
-                description: The value's details.
+          type: string
+          title: value
         shipping_option_id:
           type: string
           title: shipping_option_id
-          description: The rule's shipping option id.
+          description: The ID of the shipping option this rule is for.
         created_at:
           type: string
           format: date-time
           title: created_at
-          description: The rule's created at.
+          description: The date the shipping option rule was created.
         updated_at:
           type: string
           format: date-time
           title: updated_at
-          description: The rule's updated at.
+          description: The date the shipping option rule was updated.
         deleted_at:
           type: string
           format: date-time
           title: deleted_at
-          description: The rule's deleted at.
+          description: The date the shipping option rule was deleted.
     AdminShippingOptionType:
       type: object
       description: The shipping option's details.
@@ -58933,7 +58926,7 @@ components:
             - unknown_error
     InventoryLevel:
       type: object
-      description: The created's details.
+      description: The inventory level's details
       x-schemaName: InventoryLevel
       required:
         - id
@@ -58947,34 +58940,34 @@ components:
         id:
           type: string
           title: id
-          description: The created's ID.
+          description: The inventory level's ID.
         inventory_item_id:
           type: string
           title: inventory_item_id
-          description: The created's inventory item id.
+          description: The ID of the associated inventory item.
         location_id:
           type: string
           title: location_id
-          description: The created's location id.
+          description: The ID of the associated location.
         stocked_quantity:
           type: number
           title: stocked_quantity
-          description: The created's stocked quantity.
+          description: The inventory level's stocked quantity.
         reserved_quantity:
           type: number
           title: reserved_quantity
-          description: The created's reserved quantity.
+          description: The inventory level's reserved quantity.
         available_quantity:
           type: number
           title: available_quantity
-          description: The created's available quantity.
+          description: The inventory level's available quantity.
         incoming_quantity:
           type: number
           title: incoming_quantity
-          description: The created's incoming quantity.
+          description: The inventory level's incoming quantity.
         metadata:
           type: object
-          description: The created's metadata.
+          description: The inventory level's metadata, can hold custom key-value pairs.
     Order:
       type: object
       description: The order change's order.
@@ -69089,7 +69082,7 @@ components:
         - updated_at
     StoreProductTagListResponse:
       type: object
-      description: SUMMARY
+      description: The paginated list of product tags.
       x-schemaName: StoreProductTagListResponse
       required:
         - limit
@@ -69100,23 +69093,23 @@ components:
         limit:
           type: number
           title: limit
-          description: The product tag's limit.
+          description: The maximum number of items returned.
         offset:
           type: number
           title: offset
-          description: The product tag's offset.
+          description: The number of items to skip before retrieving the returned items.
         count:
           type: number
           title: count
-          description: The product tag's count.
+          description: The total number of items available.
         product_tags:
           type: array
-          description: The product tag's product tags.
+          description: The list of product tags.
           items:
             $ref: '#/components/schemas/StoreProductTag'
     StoreProductTagResponse:
       type: object
-      description: SUMMARY
+      description: The product tag's details.
       x-schemaName: StoreProductTagResponse
       required:
         - product_tag
@@ -69125,7 +69118,7 @@ components:
           $ref: '#/components/schemas/StoreProductTag'
     StoreProductTypeListResponse:
       type: object
-      description: SUMMARY
+      description: The paginated list of product types.
       x-schemaName: StoreProductTypeListResponse
       required:
         - limit
@@ -69136,23 +69129,23 @@ components:
         limit:
           type: number
           title: limit
-          description: The product type's limit.
+          description: The maximum number of items returned.
         offset:
           type: number
           title: offset
-          description: The product type's offset.
+          description: The number of items to skip before retrieving the returned items.
         count:
           type: number
           title: count
-          description: The product type's count.
+          description: The total number of items available.
         product_types:
           type: array
-          description: The product type's product types.
+          description: The list of product types.
           items:
             $ref: '#/components/schemas/StoreProduct'
     StoreProductTypeResponse:
       type: object
-      description: SUMMARY
+      description: The product type's details.
       x-schemaName: StoreProductTypeResponse
       required:
         - product_type

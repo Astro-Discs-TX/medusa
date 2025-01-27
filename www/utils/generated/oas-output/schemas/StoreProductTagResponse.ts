@@ -1,7 +1,7 @@
 /**
  * @schema StoreProductTagResponse
  * type: object
- * description: SUMMARY
+ * description: The product tag's details.
  * x-schemaName: StoreProductTagResponse
  * required:
  *   - product_tag
