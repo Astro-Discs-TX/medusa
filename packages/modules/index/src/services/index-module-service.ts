@@ -11,14 +11,15 @@ import {
   ContainerRegistrationKeys,
   Modules,
   ModulesSdkUtils,
-  simpleHash,
 } from "@medusajs/framework/utils"
-import { IndexMetadata } from "@models"
 import { schemaObjectRepresentationPropertiesToOmit } from "@types"
-import { buildSchemaObjectRepresentation } from "../utils/build-config"
-import { defaultSchema } from "../utils/default-schema"
-import { gqlSchemaToTypes } from "../utils/gql-to-types"
-import { IndexMetadataStatus } from "../utils/index-metadata-status"
+import {
+  buildSchemaObjectRepresentation,
+  Configuration,
+  defaultSchema,
+  gqlSchemaToTypes,
+  IndexMetadataStatus,
+} from "@utils"
 
 type InjectedDependencies = {
   [Modules.EVENT_BUS]: IEventBusModuleService
@@ -30,9 +31,7 @@ type InjectedDependencies = {
 }
 
 export default class IndexModuleService
-  extends ModulesSdkUtils.MedusaService({
-    IndexMetadata,
-  })
+  extends ModulesSdkUtils.MedusaService({})
   implements IndexTypes.IIndexService
 {
   private readonly container_: InjectedDependencies
@@ -106,91 +105,17 @@ export default class IndexModuleService
 
       await gqlSchemaToTypes(this.moduleOptions_.schema ?? defaultSchema)
 
-      const fullSyncRequired = await this.syncIndexConfig()
-      if (fullSyncRequired.length > 0) {
+      const configurationChecker = new Configuration({
+        schemaObjectRepresentation: this.schemaObjectRepresentation_,
+        indexMetadataService: this.indexMetadataService_,
+      })
+      const fullSyncRequired = await configurationChecker.checkChanges()
+      if (fullSyncRequired.length) {
         await this.syncEntities(fullSyncRequired)
       }
     } catch (e) {
       console.log(e)
     }
-  }
-
-  private async syncIndexConfig() {
-    const schemaObjectRepresentation = (this.schemaObjectRepresentation_ ??
-      {}) as IndexTypes.SchemaObjectRepresentation
-
-    const currentConfig = await this.indexMetadataService_.list()
-    const currentConfigMap = new Map(
-      currentConfig.map((c) => [c.entity, c] as const)
-    )
-
-    type modifiedConfig = {
-      id?: string
-      entity: string
-      fields: string[]
-      fields_hash: string
-      status?: IndexMetadataStatus
-    }[]
-    const entityPresent = new Set<string>()
-    const newConfig: modifiedConfig = []
-    const updatedConfig: modifiedConfig = []
-    const deletedConfig: { entity: string }[] = []
-
-    for (const [entityName, schemaEntityObjectRepresentation] of Object.entries(
-      schemaObjectRepresentation
-    )) {
-      if (schemaObjectRepresentationPropertiesToOmit.includes(entityName)) {
-        continue
-      }
-
-      const entity = schemaEntityObjectRepresentation.entity
-      const fields = schemaEntityObjectRepresentation.fields.sort().join(",")
-      const fields_hash = simpleHash(fields)
-
-      const existingEntityConfig = currentConfigMap.get(entity)
-
-      entityPresent.add(entity)
-      if (
-        !existingEntityConfig ||
-        existingEntityConfig.fields_hash !== fields_hash
-      ) {
-        const meta = {
-          id: existingEntityConfig?.id,
-          entity,
-          fields,
-          fields_hash,
-        }
-
-        if (!existingEntityConfig) {
-          newConfig.push(meta)
-        } else {
-          updatedConfig.push({
-            ...meta,
-            status: IndexMetadataStatus.PENDING,
-          })
-        }
-      }
-    }
-
-    for (const [entity] of currentConfigMap) {
-      if (!entityPresent.has(entity)) {
-        deletedConfig.push({ entity })
-      }
-    }
-
-    if (newConfig.length > 0) {
-      await this.indexMetadataService_.create(newConfig)
-    }
-    if (updatedConfig.length > 0) {
-      await this.indexMetadataService_.update(updatedConfig)
-    }
-    if (deletedConfig.length > 0) {
-      await this.indexMetadataService_.delete(deletedConfig)
-    }
-
-    return await this.indexMetadataService_.list({
-      status: [IndexMetadataStatus.PENDING, IndexMetadataStatus.PROCESSING],
-    })
   }
 
   private async syncEntities(
