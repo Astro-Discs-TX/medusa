@@ -374,6 +374,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
         id: cleanedEntityData.id,
         name: entity,
         data: cleanedEntityData,
+        // stale: false,
       })
 
       /**
@@ -399,6 +400,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
             id: (parentData_ as any).id,
             name: parentEntity,
             data: parentData_,
+            // stale: false,
           })
 
           await indexRelationRepository.upsert(
@@ -408,6 +410,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
               child_id: cleanedEntityData.id,
               child_name: entity,
               pivot: `${parentEntity}-${entity}`,
+              // stale: false,
             },
             {
               onConflictAction: "merge",
@@ -467,6 +470,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
             acc[property] = entityData[property]
             return acc
           }, {}),
+          // stale: false,
         }
       })
     )
@@ -622,6 +626,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
         id: cleanedEntityData.id,
         name: entity,
         data: cleanedEntityData,
+        // stale: false,
       })
 
       /**
@@ -634,6 +639,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
         child_id: cleanedEntityData.id,
         child_name: entity,
         pivot: `${parentEntityName}-${entity}`,
+        // stale: false,
       })
 
       const childIndexRelationEntry = indexRelationRepository.create({
@@ -642,6 +648,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
         child_id: entityData[childPropertyId] as string,
         child_name: childEntityName,
         pivot: `${entity}-${childEntityName}`,
+        // stale: false,
       })
 
       indexRelationRepository
