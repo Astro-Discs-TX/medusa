@@ -110,7 +110,6 @@ export const EditStoreForm = ({ store }: EditStoreFormProps) => {
                 </Form.Item>
               )}
             />
-            {/* TODO: Add comboboxes for default sales channel and location */}
             <Form.Field
               control={form.control}
               name="default_currency_code"
