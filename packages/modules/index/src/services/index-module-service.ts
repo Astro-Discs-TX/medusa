@@ -51,6 +51,7 @@ export default class IndexModuleService
   private get indexMetadataService_(): ModulesSdkTypes.IMedusaInternalService<any> {
     return this.container_.indexMetadataService
   }
+
   private get dataSynchronizer_(): DataSynchronizer {
     return this.container_.dataSynchronizer
   }
@@ -108,20 +109,19 @@ export default class IndexModuleService
 
       await gqlSchemaToTypes(this.moduleOptions_.schema ?? defaultSchema)
 
-      this.dataSynchronizer_.setSchemaObjectRepresentation(
-        this.schemaObjectRepresentation_
-      )
-      this.dataSynchronizer_.setStorageProvider(this.storageProvider_)
-      this.dataSynchronizer_.onApplicationStart()
+      this.dataSynchronizer_.onApplicationStart({
+        schemaObjectRepresentation: this.schemaObjectRepresentation_,
+        storageProvider: this.storageProvider_,
+      })
 
       const configurationChecker = new Configuration({
         schemaObjectRepresentation: this.schemaObjectRepresentation_,
         indexMetadataService: this.indexMetadataService_,
       })
-      const fullSyncRequired = await configurationChecker.checkChanges()
+      const entitiesMetadataChanged = await configurationChecker.checkChanges()
 
-      if (fullSyncRequired.length) {
-        await this.dataSynchronizer_.syncData(fullSyncRequired)
+      if (entitiesMetadataChanged.length) {
+        await this.dataSynchronizer_.syncEntities(entitiesMetadataChanged)
       }
     } catch (e) {
       console.log(e)

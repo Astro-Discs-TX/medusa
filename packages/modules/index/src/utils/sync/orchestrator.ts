@@ -106,15 +106,8 @@ export class Orchestrator {
    */
   async #processAtIndex(
     taskRunner: (entity: string) => Promise<void>,
-    index: number
+    entity: string
   ) {
-    const entity = this.#entities[index]
-    if (!entity) {
-      this.#state = "completed"
-      return
-    }
-
-    this.#currentIndex = index
     const lockAcquired = await this.#acquireLock(entity)
     if (lockAcquired) {
       try {
@@ -143,8 +136,16 @@ export class Orchestrator {
     }
 
     this.#state = "processing"
+
     for (let i = 0; i < this.#entities.length; i++) {
-      await this.#processAtIndex(taskRunner, i)
+      this.#currentIndex = i
+      const entity = this.#entities[i]
+      if (!entity) {
+        this.#state = "completed"
+        break
+      }
+
+      await this.#processAtIndex(taskRunner, entity)
     }
   }
 }

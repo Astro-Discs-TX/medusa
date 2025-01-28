@@ -8,6 +8,11 @@ import {
 import { CommonEvents, GraphQLUtils } from "@medusajs/framework/utils"
 import { schemaObjectRepresentationPropertiesToOmit } from "@types"
 
+export const IgnorableSchemaObjectRepresentationProperties = [
+  "_serviceNameModuleConfigMap",
+  "_schemaPropertiesMap",
+]
+
 export const CustomDirectives = {
   Listeners: {
     configurationPropertyName: "listeners",

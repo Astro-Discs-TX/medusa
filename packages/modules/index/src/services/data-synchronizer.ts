@@ -11,10 +11,15 @@ import {
   RemoteQueryFunction,
   SchemaObjectEntityRepresentation,
 } from "@medusajs/types"
-import { IndexMetadataStatus, Orchestrator } from "@utils"
+import {
+  IgnorableSchemaObjectRepresentationProperties,
+  IndexMetadataStatus,
+  Orchestrator,
+} from "@utils"
 import { IndexMetadataService } from "./index-metadata"
 
 export class DataSynchronizer {
+  #isReady: boolean = false
   #schemaObjectRepresentation: IndexTypes.SchemaObjectRepresentation
   #storageProvider: IndexTypes.StorageProvider
   #query: RemoteQueryFunction
@@ -32,88 +37,97 @@ export class DataSynchronizer {
     this.#indexDataService = container.indexDataService
   }
 
-  setSchemaObjectRepresentation(
-    schemaObjectRepresentation: IndexTypes.SchemaObjectRepresentation
-  ) {
-    this.#schemaObjectRepresentation = schemaObjectRepresentation
-  }
-
-  setStorageProvider(storageProvider: IndexTypes.StorageProvider) {
-    this.#storageProvider = storageProvider
+  #isReadyOrThrow() {
+    if (!this.#isReady) {
+      throw new Error(
+        "DataSynchronizer is not ready. Call onApplicationStart first."
+      )
+    }
   }
 
   onApplicationStart({
     lockDuration = 1000 * 60 * 5,
+    schemaObjectRepresentation,
+    storageProvider,
   }: {
     lockDuration?: number
-  } = {}) {
+    schemaObjectRepresentation: IndexTypes.SchemaObjectRepresentation
+    storageProvider: IndexTypes.StorageProvider
+  }) {
+    this.#storageProvider = storageProvider
+    this.#schemaObjectRepresentation = schemaObjectRepresentation
+
+    const entitiesSchemaObjectRepresentation = Object.keys(
+      this.#schemaObjectRepresentation ?? {}
+    ).filter(
+      (key) => !IgnorableSchemaObjectRepresentationProperties.includes(key)
+    )
+
     this.#orchestrator = new Orchestrator(
       this.#locking,
-      Object.keys(this.#schemaObjectRepresentation ?? {}),
+      entitiesSchemaObjectRepresentation,
       {
         lockDuration,
       }
     )
+
+    this.#isReady = true
   }
 
-  async syncData(
+  async syncEntities(
     entities: {
       entity: string
       fields: string
       fields_hash: string
     }[]
   ) {
-    const updatedStatus = async (
-      entity: string,
-      status: IndexMetadataStatus
-    ) => {
-      await this.#indexMetadataService.update({
-        data: {
-          status,
-        },
-        selector: {
-          entity,
-        },
-      })
-    }
-
-    const task = async (entity: string) => {
-      await this.#indexDataService.update({
-        data: {
-          staled_at: new Date(),
-        },
-        selector: {
-          name: entity,
-        },
-      })
-
-      const finalAcknoledgement = await this.sync({
-        entityName: entity,
-        ack: async (acknoledgement: any) => {
-          console.log(acknoledgement)
-        },
-      })
-
-      console.log(finalAcknoledgement)
-
-      // if (finalAcknoledgement.err) {
-      // if (finalAcknoledgement.done) {
-    }
+    this.#isReadyOrThrow()
 
     for (const entity of entities) {
-      await updatedStatus(entity.entity, IndexMetadataStatus.PROCESSING)
+      await this.#updatedStatus(entity.entity, IndexMetadataStatus.PROCESSING)
 
       try {
-        await this.#orchestrator.process(task)
+        await this.#orchestrator.process(this.#taskRunner.bind(this))
 
-        await updatedStatus(entity.entity, IndexMetadataStatus.DONE)
+        await this.#updatedStatus(entity.entity, IndexMetadataStatus.DONE)
       } catch (e) {
-        await updatedStatus(entity.entity, IndexMetadataStatus.ERROR)
+        await this.#updatedStatus(entity.entity, IndexMetadataStatus.ERROR)
       }
     }
   }
 
-  async sync({
+  async #updatedStatus(entity: string, status: IndexMetadataStatus) {
+    await this.#indexMetadataService.update({
+      data: {
+        status,
+      },
+      selector: {
+        entity,
+      },
+    })
+  }
+
+  async #taskRunner(entity: string) {
+    await this.#indexDataService.update({
+      data: {
+        staled_at: new Date(),
+      },
+      selector: {
+        name: entity,
+      },
+    })
+    const finalAcknoledgement = await this.syncEntity({
+      entityName: entity,
+      ack: async (acknoledgement: any) => {
+        console.log(acknoledgement)
+      },
+    })
+    console.log(finalAcknoledgement)
+    // if (finalAcknoledgement.err) {
+    // if (finalAcknoledgement.done) {
+  }
+
+  async syncEntity({
     entityName,
     pagination = {},
     ack,
@@ -131,6 +145,8 @@ export class DataSynchronizer {
       err?: Error
     }) => Promise<void>
   }) {
+    this.#isReadyOrThrow()
+
     const schemaEntityObjectRepresentation = this.#schemaObjectRepresentation[
       entityName
     ] as SchemaObjectEntityRepresentation

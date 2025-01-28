@@ -81,10 +81,7 @@ const beforeAll_ = async () => {
 
     container.register({
       [ContainerRegistrationKeys.LOGGER]: asValue(logger),
-      [ContainerRegistrationKeys.QUERY]: asValue(queryMock),
-      [ContainerRegistrationKeys.REMOTE_QUERY]: asValue(queryMock),
       [ContainerRegistrationKeys.PG_CONNECTION]: asValue(dbUtils.pgConnection_),
-      [Modules.EVENT_BUS]: asValue(eventBusMock),
     })
 
     medusaAppLoader = new MedusaAppLoader()
@@ -101,10 +98,8 @@ const beforeAll_ = async () => {
     // Bootstrap modules
     const globalApp = await medusaAppLoader.load()
     container.register({
-      [ContainerRegistrationKeys.LOGGER]: asValue(logger),
       [ContainerRegistrationKeys.QUERY]: asValue(queryMock),
       [ContainerRegistrationKeys.REMOTE_QUERY]: asValue(queryMock),
-      [ContainerRegistrationKeys.PG_CONNECTION]: asValue(dbUtils.pgConnection_),
       [Modules.EVENT_BUS]: asValue(eventBusMock),
     })
 
@@ -183,7 +178,7 @@ describe("DataSynchronizer", () => {
 
       const ackMock = jest.fn()
 
-      const result = await dataSynchronizer.sync({
+      const result = await dataSynchronizer.syncEntity({
         entityName: "Product",
         ack: ackMock,
       })
@@ -264,8 +259,16 @@ describe("DataSynchronizer", () => {
       )
 
       expect(indexData).toHaveLength(2)
-      expect(indexData[0].id).toEqual(testProductId)
-      expect(indexData[1].id).toEqual(testProductId2)
+      expect(indexData).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: testProductId,
+          }),
+          expect.objectContaining({
+            id: testProductId2,
+          }),
+        ])
+      )
 
       expect(indexRelationData).toHaveLength(0)
     })
@@ -329,14 +332,14 @@ describe("DataSynchronizer", () => {
 
     const ackMock = jest.fn()
 
-    await dataSynchronizer.sync({
+    await dataSynchronizer.syncEntity({
       entityName: "Product",
       ack: ackMock,
     })
 
     jest.clearAllMocks()
 
-    const result = await dataSynchronizer.sync({
+    const result = await dataSynchronizer.syncEntity({
       entityName: "ProductVariant",
       ack: ackMock,
     })
@@ -416,29 +419,33 @@ describe("DataSynchronizer", () => {
     >(toMikroORMEntity(IndexRelation), {})
 
     expect(indexData).toHaveLength(4)
-    expect(indexData[0].id).toEqual(testProductId)
-    expect(indexData[1].id).toEqual(testProductId2)
-    expect(indexData[2].id).toEqual(testVariantId)
-    expect(indexData[3].id).toEqual(testVariantId2)
+    expect(indexData).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ id: testProductId }),
+        expect.objectContaining({ id: testProductId2 }),
+        expect.objectContaining({ id: testVariantId }),
+        expect.objectContaining({ id: testVariantId2 }),
+      ])
+    )
 
     expect(indexRelationData).toHaveLength(2)
-    expect(indexRelationData[0]).toEqual(
-      expect.objectContaining({
-        parent_id: testProductId,
-        child_id: testVariantId,
-        parent_name: "Product",
-        child_name: "ProductVariant",
-        pivot: "Product-ProductVariant",
-      })
-    )
-    expect(indexRelationData[1]).toEqual(
-      expect.objectContaining({
-        parent_id: testProductId2,
-        child_id: testVariantId2,
-        parent_name: "Product",
-        child_name: "ProductVariant",
-        pivot: "Product-ProductVariant",
-      })
+    expect(indexRelationData).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          parent_id: testProductId,
+          child_id: testVariantId,
+          parent_name: "Product",
+          child_name: "ProductVariant",
+          pivot: "Product-ProductVariant",
+        }),
+        expect.objectContaining({
+          parent_id: testProductId2,
+          child_id: testVariantId2,
+          parent_name: "Product",
+          child_name: "ProductVariant",
+          pivot: "Product-ProductVariant",
+        }),
+      ])
     )
   })
 
