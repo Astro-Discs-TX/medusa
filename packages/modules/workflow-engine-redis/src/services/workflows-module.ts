@@ -70,6 +70,11 @@ export class WorkflowsModuleService<
     },
     onApplicationStart: async () => {
       await this.workflowOrchestratorService_.onApplicationStart()
+
+      await this.clearExpiredExecutions()
+      setInterval(async () => {
+        await this.clearExpiredExecutions()
+      }, 1000 * 60 * 60)
     },
   }
 
@@ -176,8 +181,7 @@ export class WorkflowsModuleService<
     return this.workflowOrchestratorService_.unsubscribe(args as any, context)
   }
 
-  @InjectSharedContext()
-  async clearExpiredExecutions(@MedusaContext() context: Context = {}) {
+  private async clearExpiredExecutions() {
     return this.manager_.execute(`
       DELETE FROM workflow_execution
       WHERE retention_time IS NOT NULL AND
