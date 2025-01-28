@@ -18,6 +18,7 @@ import { SidebarLeftIcon } from "../Icons/SidebarLeft"
 import { MainNavMobileMenu } from "./MobileMenu"
 import Link from "next/link"
 import { MainNavVersion } from "./Version"
+import { AiAssistantTriggerButton } from "../AiAssistant/TriggerButton"
 
 type MainNavProps = {
   className?: string
@@ -53,6 +54,7 @@ export const MainNav = ({ className, itemsClassName }: MainNavProps) => {
             <BorderedIcon
               icon={config.logo}
               iconWrapperClassName="my-[14px]"
+              wrapperClassName="w-[20px] h-[20px]"
               iconWidth={20}
               iconHeight={20}
             />
@@ -74,6 +76,7 @@ export const MainNav = ({ className, itemsClassName }: MainNavProps) => {
           </LinkButton>
         </div>
         <div className="flex items-center gap-docs_0.25">
+          <AiAssistantTriggerButton />
           <SearchModalOpener />
           <MainNavDesktopMenu />
           <MainNavMobileMenu />

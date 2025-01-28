@@ -3,6 +3,7 @@ import clsx from "clsx"
 import { RootProviders, Sidebar, SidebarProps } from "@/components"
 import { Toc } from "../components/Toc"
 import { MainContentLayout, MainContentLayoutProps } from "./main-content"
+import { AiAssistantChatWindow } from "../components/AiAssistant/ChatWindow"
 
 export type RootLayoutProps = {
   bodyClassName?: string
@@ -38,6 +39,7 @@ export const RootLayout = ({
           <div className={clsx("relative", "h-screen", "flex")}>
             <MainContentLayout {...mainProps} />
             {showToc && <Toc />}
+            <AiAssistantChatWindow />
           </div>
         </ProvidersComponent>
       </RootProviders>
