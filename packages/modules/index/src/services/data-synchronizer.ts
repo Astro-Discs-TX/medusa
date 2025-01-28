@@ -33,6 +33,10 @@ export class DataSynchronizer {
     return this.#container.indexMetadataService
   }
 
+  get #indexSyncService() {
+    return this.#container.indexSyncService
+  }
+
   get #indexDataService() {
     return this.#container.indexDataService
   }
@@ -101,13 +105,34 @@ export class DataSynchronizer {
         name: entity,
       },
     })
+    const lastCursor = await this.#indexSyncService.list(
+      {
+        entity,
+      },
+      {
+        select: ["last_key"],
+      }
+    )
+
     const finalAcknoledgement = await this.syncEntity({
       entityName: entity,
+      pagination: {
+        cursor: lastCursor?.[0]?.last_key,
+      },
       ack: async (acknoledgement: any) => {},
     })
 
     if (finalAcknoledgement.done) {
       await this.#updatedStatus(entity, IndexMetadataStatus.DONE)
+
+      await this.#indexSyncService.update({
+        data: {
+          last_key: finalAcknoledgement.lastCursor,
+        },
+        selector: {
+          entity: entity,
+        },
+      })
     }
 
     if (finalAcknoledgement.err) {
