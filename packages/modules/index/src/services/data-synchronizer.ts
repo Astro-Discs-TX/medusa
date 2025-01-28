@@ -105,8 +105,20 @@ export class DataSynchronizer {
         name: entity,
       },
     })
+    const lastCursor = await this.#indexSyncService.list(
+      {
+        entity,
+      },
+      {
+        select: ["last_key"],
+      }
+    )
+
     const finalAcknoledgement = await this.syncEntity({
       entityName: entity,
+      pagination: {
+        cursor: lastCursor?.[0]?.last_key,
+      },
       ack: async (acknoledgement: any) => {},
     })
 
