@@ -121,4 +121,6 @@ export interface IWorkflowEngineService extends IModuleService {
     },
     sharedContext?: Context
   )
+
+  clearExpiredExecutions(sharedContext?: Context)
 }
