@@ -1,6 +1,6 @@
+import { medusaIntegrationTestRunner } from "@medusajs/test-utils"
 import { IRegionModuleService, RemoteQueryFunction } from "@medusajs/types"
 import { ContainerRegistrationKeys, Modules } from "@medusajs/utils"
-import { medusaIntegrationTestRunner } from "@medusajs/test-utils"
 import { createAdminUser } from "../../..//helpers/create-admin-user"
 import { adminHeaders } from "../../../helpers/create-admin-user"
 
@@ -68,6 +68,59 @@ medusaIntegrationTestRunner({
         await expect(getNonExistingRegion).rejects.toThrow(
           "Region id not found: region_123"
         )
+      })
+
+      it("should fail to retrieve not passing primary key in filters", async () => {
+        const errorMessage =
+          "Region: Primary key(s) [id, iso_2] not found in filters"
+
+        const noPk = remoteQuery(
+          {
+            region: {
+              fields: ["id", "currency_code"],
+            },
+          },
+          { throwIfKeyNotFound: true }
+        )
+        await expect(noPk).rejects.toThrow(errorMessage)
+
+        const noPk2 = remoteQuery(
+          {
+            country: {
+              fields: ["*"],
+            },
+          },
+          { throwIfKeyNotFound: true }
+        )
+        await expect(noPk2).rejects.toThrow(
+          "Country: Primary key(s) [id, iso_2] not found in filters"
+        )
+
+        const noPk3 = remoteQuery(
+          {
+            region: {
+              fields: ["id", "currency_code"],
+              __args: {
+                id: null,
+              },
+            },
+          },
+          { throwIfKeyNotFound: true }
+        )
+        await expect(noPk3).rejects.toThrow(errorMessage)
+
+        const noPk4 = remoteQuery(
+          {
+            region: {
+              fields: ["id", "currency_code"],
+              __args: {
+                currency_code: "EUR",
+              },
+            },
+          },
+          { throwIfKeyNotFound: true }
+        )
+        await expect(noPk4).rejects.toThrow(errorMessage)
       })
 
       it("should fail if a expected relation is not found", async () => {
