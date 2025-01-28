@@ -585,18 +585,6 @@ export interface PaymentProviderDTO {
   is_enabled: boolean
 }
 
-export interface PaymentMethodDTO {
-  /**
-   * The ID of the payment method in the payment provider's system.
-   */
-  id: string
-
-  /**
-   * The data of the payment method, as returned by the payment provider.
-   */
-  data: Record<string, unknown>
-}
-
 /**
  * The filters to apply on the retrieved payment providers.
  */
@@ -656,4 +644,63 @@ export interface RefundReasonDTO {
    * When the refund reason was updated
    */
   updated_at: Date | string
+}
+
+export interface PaymentMethodDTO {
+  /**
+   * The ID of the payment method.
+   */
+  id: string
+
+  /**
+   * The data of the payment method, as returned by the payment provider.
+   */
+  data: Record<string, unknown>
+
+  /**
+   * The ID of the associated payment provider.
+   */
+  provider_id: string
+}
+
+export interface AccountHolderDTO {
+  /**
+   * The ID of the account holder.
+   */
+  id: string
+
+  /**
+   * The ID of the associated payment provider.
+   */
+  provider_id: string
+
+  /**
+   * The external ID of the account holder in the payment provider system.
+   */
+  external_id: string
+
+  /**
+   * The email of the account holder.
+   */
+  email: string | null
+
+  /**
+   * The data of the account holder, as returned by the payment provider.
+   */
+  data: Record<string, unknown>
+
+  /**
+   * When the account holder was created.
+   */
+  created_at?: string | Date | null
+
+  /**
+   * When the account holder was updated.
+   */
+  updated_at?: string | Date | null
+
+  /**
+   * Holds custom data in key-value pairs.
+   */
+  metadata?: Record<string, unknown> | null
 }

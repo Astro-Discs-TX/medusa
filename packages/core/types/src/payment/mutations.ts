@@ -1,6 +1,6 @@
 import { BigNumberInput } from "../totals"
 import { PaymentCollectionStatus } from "./common"
-import { PaymentProviderContext } from "./provider"
+import { PaymentCustomerDTO, PaymentProviderContext } from "./provider"
 
 /**
  * The payment collection to be created.
@@ -256,6 +256,26 @@ export interface CreatePaymentProviderDTO {
 }
 
 /**
+ * The payment session to be created.
+ */
+export interface CreateAccountHolderDTO {
+  /**
+   * The provider's ID.
+   */
+  provider_id: string
+
+  /**
+   * Necessary context data for the associated payment provider.
+   */
+  context: PaymentProviderContext & {
+    /**
+     * The customer information from Medusa.
+     */
+    customer: PaymentCustomerDTO
+  }
+}
+
+/**
  * The details of the webhook event payload.
  */
 export interface ProviderWebhookPayload {
@@ -317,4 +337,24 @@ export interface UpdateRefundReasonDTO {
    * The metadata of the refund reason
    */
   metadata?: Record<string, unknown> | null
+}
+
+/**
+ * The payment method to be created.
+ */
+export interface CreatePaymentMethodDTO {
+  /**
+   * The provider's ID.
+   */
+  provider_id: string
+
+  /**
+   * Necessary data for the associated payment provider to process the payment.
+   */
+  data: Record<string, unknown>
+
+  /**
+   * Necessary context data for the associated payment provider.
+   */
+  context: PaymentProviderContext
 }

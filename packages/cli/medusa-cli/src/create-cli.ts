@@ -205,6 +205,16 @@ function buildLocalCommands(cli, isLocalProject) {
       ),
     })
     .command({
+      command: "db:migrate:scripts",
+      desc: "Run all migration scripts",
+      handler: handlerP(
+        getCommandHandler("db/run-scripts", (args, cmd) => {
+          process.env.NODE_ENV = process.env.NODE_ENV || `development`
+          return cmd(args)
+        })
+      ),
+    })
+    .command({
       command: "db:rollback [modules...]",
       desc: "Rollback last batch of executed migrations for a given module",
       builder: {
@@ -240,7 +250,7 @@ function buildLocalCommands(cli, isLocalProject) {
     })
     .command({
       command: "plugin:db:generate",
-      desc: "Generate migrations for a given module",
+      desc: "Generate migrations for modules in a plugin",
       handler: handlerP(
         getCommandHandler("plugin/db/generate", (args, cmd) => {
           process.env.NODE_ENV = process.env.NODE_ENV || `development`

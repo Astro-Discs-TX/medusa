@@ -3,7 +3,6 @@ import {
   Modules,
   PriceListStatus,
   PriceListType,
-  ProductStatus,
   PromotionRuleOperator,
   PromotionStatus,
   PromotionType,
@@ -15,6 +14,7 @@ import {
 } from "../../../../helpers/create-admin-user"
 import { setupTaxStructure } from "../../../../modules/__tests__/fixtures"
 import { createAuthenticatedCustomer } from "../../../../modules/helpers/create-authenticated-customer"
+import { medusaTshirtProduct } from "../../../__fixtures__/product"
 
 jest.setTimeout(100000)
 
@@ -30,70 +30,6 @@ const shippingAddressData = {
   postal_code: "94016",
 }
 
-const productData = {
-  title: "Medusa T-Shirt",
-  handle: "t-shirt",
-  status: ProductStatus.PUBLISHED,
-  options: [
-    {
-      title: "Size",
-      values: ["S"],
-    },
-    {
-      title: "Color",
-      values: ["Black", "White"],
-    },
-  ],
-  variants: [
-    {
-      title: "S / Black",
-      sku: "SHIRT-S-BLACK",
-      options: {
-        Size: "S",
-        Color: "Black",
-      },
-      manage_inventory: false,
-      prices: [
-        {
-          amount: 1500,
-          currency_code: "usd",
-        },
-        {
-          amount: 1500,
-          currency_code: "eur",
-        },
-        {
-          amount: 1300,
-          currency_code: "dkk",
-        },
-      ],
-    },
-    {
-      title: "S / White",
-      sku: "SHIRT-S-WHITE",
-      options: {
-        Size: "S",
-        Color: "White",
-      },
-      manage_inventory: false,
-      prices: [
-        {
-          amount: 1500,
-          currency_code: "usd",
-        },
-        {
-          amount: 1500,
-          currency_code: "eur",
-        },
-        {
-          amount: 1300,
-          currency_code: "dkk",
-        },
-      ],
-    },
-  ],
-}
-
 medusaIntegrationTestRunner({
   env,
   testSuite: ({ dbConnection, getContainer, api }) => {
@@ -107,7 +43,8 @@ medusaIntegrationTestRunner({
         salesChannel,
         cart,
         customer,
-        promotion
+        promotion,
+        shippingProfile
 
       beforeAll(async () => {
         appContainer = getContainer()
@@ -132,6 +69,14 @@ medusaIntegrationTestRunner({
           },
         }
 
+        shippingProfile = (
+          await api.post(
+            `/admin/shipping-profiles`,
+            { name: "default", type: "default" },
+            adminHeaders
+          )
+        ).data.shipping_profile
+
         await setupTaxStructure(appContainer.resolve(Modules.TAX))
 
         region = (
@@ -150,8 +95,9 @@ medusaIntegrationTestRunner({
           )
         ).data.region
 
-        product = (await api.post("/admin/products", productData, adminHeaders))
-          .data.product
+        product = (
+          await api.post("/admin/products",  { ...medusaTshirtProduct, shipping_profile_id: shippingProfile.id }, adminHeaders)
+        ).data.product
 
         salesChannel = (
           await api.post(
@@ -388,7 +334,7 @@ medusaIntegrationTestRunner({
             rules: [
               {
                 attribute: "enabled_in_store",
-                value: '"true"',
+                value: "true",
                 operator: "eq",
               },
               {
@@ -1779,7 +1725,7 @@ medusaIntegrationTestRunner({
                 rules: [
                   {
                     attribute: "enabled_in_store",
-                    value: '"true"',
+                    value: "true",
                     operator: "eq",
                   },
                   {
@@ -2150,7 +2096,7 @@ medusaIntegrationTestRunner({
                 rules: [
                   {
                     attribute: "enabled_in_store",
-                    value: '"true"',
+                    value: "true",
                     operator: "eq",
                   },
                   {
