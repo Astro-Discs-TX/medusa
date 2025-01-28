@@ -1209,13 +1209,22 @@ export class RemoteJoiner {
 
     if (options?.throwIfKeyNotFound) {
       if (primaryKeyArg?.value == undefined) {
+        if (!primaryKeyArg) {
+          throw new MedusaError(
+            MedusaError.Types.NOT_FOUND,
+            `${
+              serviceConfig.entity ?? serviceConfig.serviceName
+            }: Primary key(s) [${serviceConfig.primaryKeys.join(
+              ", "
+            )}] not found in filters`
+          )
+        }
+
         throw new MedusaError(
           MedusaError.Types.NOT_FOUND,
           `${
             serviceConfig.entity ?? serviceConfig.serviceName
-          }: Primary key(s) [${serviceConfig.primaryKeys.join(
-            ", "
-          )}] not found in filters`
+          }: Value for primary key ${primaryKeyArg.name} not found in filters`
         )
       }
     }

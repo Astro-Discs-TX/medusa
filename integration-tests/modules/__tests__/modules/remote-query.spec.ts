@@ -71,9 +71,6 @@ medusaIntegrationTestRunner({
       })
 
       it("should fail to retrieve not passing primary key in filters", async () => {
-        const errorMessage =
-          "Region: Primary key(s) [id, iso_2] not found in filters"
-
         const noPk = remoteQuery(
           {
             region: {
@@ -82,7 +79,9 @@ medusaIntegrationTestRunner({
           },
           { throwIfKeyNotFound: true }
         )
-        await expect(noPk).rejects.toThrow(errorMessage)
+        await expect(noPk).rejects.toThrow(
+          "Region: Primary key(s) [id, iso_2] not found in filters"
+        )
 
         const noPk2 = remoteQuery(
           {
@@ -98,6 +97,21 @@ medusaIntegrationTestRunner({
 
         const noPk3 = remoteQuery(
           {
+            country: {
+              fields: ["*"],
+              __args: {
+                iso_2: undefined,
+              },
+            },
+          },
+          { throwIfKeyNotFound: true }
+        )
+        await expect(noPk3).rejects.toThrow(
+          "Country: Value for primary key iso_2 not found in filters"
+        )
+
+        const noPk4 = remoteQuery(
+          {
             region: {
               fields: ["id", "currency_code"],
               __args: {
@@ -107,9 +121,11 @@ medusaIntegrationTestRunner({
           },
           { throwIfKeyNotFound: true }
         )
-        await expect(noPk3).rejects.toThrow(errorMessage)
+        await expect(noPk4).rejects.toThrow(
+          "Region: Value for primary key id not found in filters"
+        )
 
-        const noPk4 = remoteQuery(
+        const noPk5 = remoteQuery(
           {
             region: {
               fields: ["id", "currency_code"],
@@ -120,7 +136,9 @@ medusaIntegrationTestRunner({
           },
           { throwIfKeyNotFound: true }
         )
-        await expect(noPk4).rejects.toThrow(errorMessage)
+        await expect(noPk5).rejects.toThrow(
+          "Region: Primary key(s) [id, iso_2] not found in filters"
+        )
       })
 
       it("should fail if a expected relation is not found", async () => {
