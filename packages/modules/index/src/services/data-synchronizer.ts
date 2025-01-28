@@ -169,6 +169,7 @@ export class DataSynchronizer {
     ] as SchemaObjectEntityRepresentation
 
     const { fields, alias, moduleConfig } = schemaEntityObjectRepresentation
+    const isLink = !!moduleConfig?.isLink
 
     const entityPrimaryKey = fields.find(
       (field) => !!moduleConfig?.primaryKeys?.includes(field)
@@ -187,7 +188,7 @@ export class DataSynchronizer {
 
     let processed = 0
     let currentCursor = pagination.cursor!
-    const batchSize = pagination.batchSize ?? 1000
+    const batchSize = Math.min(pagination.batchSize ?? 100, 100)
     const limit = pagination.limit ?? Infinity
     let done = false
     let error = null
@@ -222,7 +223,9 @@ export class DataSynchronizer {
 
       const envelop: Event = {
         data,
-        name: `*.${CommonEvents.CREATED}`,
+        name: !isLink
+          ? `*.${CommonEvents.CREATED}`
+          : `*.${CommonEvents.ATTACHED}`,
       }
 
       try {

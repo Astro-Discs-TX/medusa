@@ -633,27 +633,47 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
        * Create the index relation entries for the parent entity and the child entity
        */
 
-      const parentIndexRelationEntry = indexRelationRepository.create({
-        parent_id: entityData[parentPropertyId] as string,
-        parent_name: parentEntityName,
-        child_id: cleanedEntityData.id,
-        child_name: entity,
-        pivot: `${parentEntityName}-${entity}`,
-        staled_at: null,
-      })
+      await indexRelationRepository.upsert(
+        {
+          parent_id: entityData[parentPropertyId] as string,
+          parent_name: parentEntityName,
+          child_id: cleanedEntityData.id,
+          child_name: entity,
+          pivot: `${parentEntityName}-${entity}`,
+          staled_at: null,
+        },
+        {
+          onConflictAction: "merge",
+          onConflictFields: [
+            "pivot",
+            "parent_id",
+            "child_id",
+            "parent_name",
+            "child_name",
+          ],
+        }
+      )
 
-      const childIndexRelationEntry = indexRelationRepository.create({
-        parent_id: cleanedEntityData.id,
-        parent_name: entity,
-        child_id: entityData[childPropertyId] as string,
-        child_name: childEntityName,
-        pivot: `${entity}-${childEntityName}`,
-        staled_at: null,
-      })
-
-      indexRelationRepository
-        .getEntityManager()
-        .persist([parentIndexRelationEntry, childIndexRelationEntry])
+      await indexRelationRepository.upsert(
+        {
+          parent_id: cleanedEntityData.id,
+          parent_name: entity,
+          child_id: entityData[childPropertyId] as string,
+          child_name: childEntityName,
+          pivot: `${entity}-${childEntityName}`,
+          staled_at: null,
+        },
+        {
+          onConflictAction: "merge",
+          onConflictFields: [
+            "pivot",
+            "parent_id",
+            "child_id",
+            "parent_name",
+            "child_name",
+          ],
+        }
+      )
     }
   }
 
