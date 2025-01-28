@@ -1,23 +1,28 @@
-import { IndexTypes, InferEntityType } from "@medusajs/types"
-import { IndexMetadataService } from "../../services/index-metadata"
-import { IndexMetadataStatus } from "../index-metadata-status"
-import { schemaObjectRepresentationPropertiesToOmit } from "@types"
 import { simpleHash } from "@medusajs/framework/utils"
+import { IndexTypes, InferEntityType } from "@medusajs/types"
 import { IndexMetadata } from "@models"
+import { schemaObjectRepresentationPropertiesToOmit } from "@types"
+import { IndexMetadataService } from "../../services/index-metadata"
+import { IndexSyncService } from "../../services/index-sync"
+import { IndexMetadataStatus } from "../index-metadata-status"
 
 export class Configuration {
   #schemaObjectRepresentation: IndexTypes.SchemaObjectRepresentation
   #indexMetadataService: IndexMetadataService
+  #indexSyncService: IndexSyncService
 
   constructor({
     schemaObjectRepresentation,
     indexMetadataService,
+    indexSyncService,
   }: {
     schemaObjectRepresentation: IndexTypes.SchemaObjectRepresentation
     indexMetadataService: IndexMetadataService
+    indexSyncService: IndexSyncService
   }) {
     this.#schemaObjectRepresentation = schemaObjectRepresentation ?? {}
     this.#indexMetadataService = indexMetadataService
+    this.#indexSyncService = indexSyncService
   }
 
   async checkChanges(): Promise<InferEntityType<typeof IndexMetadata>[]> {
@@ -36,10 +41,17 @@ export class Configuration {
       status?: IndexMetadataStatus
     }[]
 
+    type dataSyncEntry = {
+      id?: string
+      entity: string
+      last_key: null
+    }[]
+
     const entityPresent = new Set<string>()
     const newConfig: modifiedConfig = []
     const updatedConfig: modifiedConfig = []
     const deletedConfig: { entity: string }[] = []
+    const idxSyncData: dataSyncEntry = []
 
     for (const [entityName, schemaEntityObjectRepresentation] of Object.entries(
       schemaObjectRepresentation
@@ -74,6 +86,11 @@ export class Configuration {
             status: IndexMetadataStatus.PENDING,
           })
         }
+
+        idxSyncData.push({
+          entity,
+          last_key: null,
+        })
       }
     }
 
@@ -91,6 +108,22 @@ export class Configuration {
     }
     if (deletedConfig.length > 0) {
       await this.#indexMetadataService.delete(deletedConfig)
+    }
+
+    if (idxSyncData.length > 0) {
+      if (updatedConfig.length > 0) {
+        const ids = await this.#indexSyncService.list({
+          entity: updatedConfig.map((c) => c.entity),
+        })
+        idxSyncData.forEach((sync) => {
+          const id = ids.find((i) => i.entity === sync.entity)?.id
+          if (id) {
+            sync.id = id
+          }
+        })
+      }
+
+      await this.#indexSyncService.upsert(idxSyncData)
     }
 
     return await this.#indexMetadataService.list({

@@ -28,6 +28,7 @@ type InjectedDependencies = {
   storageProviderCtrOptions: unknown
   baseRepository: BaseRepository
   indexMetadataService: ModulesSdkTypes.IMedusaInternalService<any>
+  indexSyncService: ModulesSdkTypes.IMedusaInternalService<any>
   dataSynchronizer: DataSynchronizer
 }
 
@@ -50,6 +51,10 @@ export default class IndexModuleService
 
   private get indexMetadataService_(): ModulesSdkTypes.IMedusaInternalService<any> {
     return this.container_.indexMetadataService
+  }
+
+  private get indexSyncService_(): ModulesSdkTypes.IMedusaInternalService<any> {
+    return this.container_.indexSyncService
   }
 
   private get dataSynchronizer_(): DataSynchronizer {
@@ -117,6 +122,7 @@ export default class IndexModuleService
       const configurationChecker = new Configuration({
         schemaObjectRepresentation: this.schemaObjectRepresentation_,
         indexMetadataService: this.indexMetadataService_,
+        indexSyncService: this.indexSyncService_,
       })
       const entitiesMetadataChanged = await configurationChecker.checkChanges()
 

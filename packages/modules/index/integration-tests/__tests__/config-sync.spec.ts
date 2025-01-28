@@ -105,6 +105,7 @@ const afterEach_ = async () => {
 describe("IndexModuleService syncIndexConfig", function () {
   let medusaApp: MedusaAppOutput
   let indexMetadataService: ModulesSdkTypes.IMedusaInternalService<any>
+  let indexSyncService: ModulesSdkTypes.IMedusaInternalService<any>
   let onApplicationPrepareShutdown!: () => Promise<void>
   let onApplicationShutdown!: () => Promise<void>
 
@@ -125,6 +126,7 @@ describe("IndexModuleService syncIndexConfig", function () {
 
     index = container.resolve(Modules.INDEX)
     indexMetadataService = (index as any).indexMetadataService_
+    indexSyncService = (index as any).indexSyncService_
   })
 
   afterEach(afterEach_)
@@ -183,7 +185,8 @@ describe("IndexModuleService syncIndexConfig", function () {
 
     let configurationChecker = new Configuration({
       schemaObjectRepresentation: (index as any).schemaObjectRepresentation_,
-      indexMetadataService: indexMetadataService,
+      indexMetadataService,
+      indexSyncService,
     })
 
     const syncRequired = await configurationChecker.checkChanges()
@@ -257,7 +260,8 @@ describe("IndexModuleService syncIndexConfig", function () {
 
     configurationChecker = new Configuration({
       schemaObjectRepresentation: (index as any).schemaObjectRepresentation_,
-      indexMetadataService: indexMetadataService,
+      indexMetadataService,
+      indexSyncService,
     })
 
     const syncRequired2 = await configurationChecker.checkChanges()
