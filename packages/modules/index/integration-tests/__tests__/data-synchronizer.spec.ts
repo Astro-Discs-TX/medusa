@@ -127,9 +127,6 @@ describe("DataSynchronizer", () => {
     medusaApp = await beforeAll_()
     onApplicationPrepareShutdown = medusaApp.onApplicationPrepareShutdown
     onApplicationShutdown = medusaApp.onApplicationShutdown
-    manager = (
-      medusaApp.sharedContainer!.resolve(ModuleRegistrationName.INDEX) as any
-    ).container_.manager as EntityManager
   })
 
   afterAll(async () => {

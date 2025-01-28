@@ -7,34 +7,38 @@ import {
   Event,
   ILockingModule,
   IndexTypes,
-  ModulesSdkTypes,
   RemoteQueryFunction,
   SchemaObjectEntityRepresentation,
 } from "@medusajs/types"
-import {
-  IgnorableSchemaObjectRepresentationProperties,
-  IndexMetadataStatus,
-  Orchestrator,
-} from "@utils"
-import { IndexMetadataService } from "./index-metadata"
+import { IndexMetadataStatus, Orchestrator } from "@utils"
 
 export class DataSynchronizer {
+  #container: Record<string, any>
   #isReady: boolean = false
   #schemaObjectRepresentation: IndexTypes.SchemaObjectRepresentation
   #storageProvider: IndexTypes.StorageProvider
-  #query: RemoteQueryFunction
-  #locking: ILockingModule
   #orchestrator!: Orchestrator
-  #indexMetadataService: IndexMetadataService
-  #indexDataService: ModulesSdkTypes.IMedusaInternalService<any>
 
-  constructor(container: Record<string, any>) {
-    this.#query = container[
+  get #query() {
+    return this.#container[
       ContainerRegistrationKeys.QUERY
     ] as RemoteQueryFunction
-    this.#locking = container[Modules.LOCKING] as ILockingModule
-    this.#indexMetadataService = container.indexMetadataService
-    this.#indexDataService = container.indexDataService
+  }
+
+  get #locking() {
+    return this.#container[Modules.LOCKING] as ILockingModule
+  }
+
+  get #indexMetadataService() {
+    return this.#container.indexMetadataService
+  }
+
+  get #indexDataService() {
+    return this.#container.indexDataService
+  }
+
+  constructor(container: Record<string, any>) {
+    this.#container = container
   }
 
   #isReadyOrThrow() {
@@ -46,7 +50,6 @@ export class DataSynchronizer {
   }
 
   onApplicationStart({
-    lockDuration = 1000 * 60 * 5,
     schemaObjectRepresentation,
     storageProvider,
   }: {
@@ -57,20 +60,6 @@ export class DataSynchronizer {
     this.#storageProvider = storageProvider
     this.#schemaObjectRepresentation = schemaObjectRepresentation
 
-    const entitiesSchemaObjectRepresentation = Object.keys(
-      this.#schemaObjectRepresentation ?? {}
-    ).filter(
-      (key) => !IgnorableSchemaObjectRepresentationProperties.includes(key)
-    )
-
-    this.#orchestrator = new Orchestrator(
-      this.#locking,
-      entitiesSchemaObjectRepresentation,
-      {
-        lockDuration,
-      }
-    )
-
     this.#isReady = true
   }
 
@@ -79,21 +68,15 @@ export class DataSynchronizer {
       entity: string
       fields: string
       fields_hash: string
-    }[]
+    }[],
+    lockDuration: number = 1000 * 60 * 5
   ) {
     this.#isReadyOrThrow()
-
-    for (const entity of entities) {
-      await this.#updatedStatus(entity.entity, IndexMetadataStatus.PROCESSING)
-
-      try {
-        await this.#orchestrator.process(this.#taskRunner.bind(this))
-
-        await this.#updatedStatus(entity.entity, IndexMetadataStatus.DONE)
-      } catch (e) {
-        await this.#updatedStatus(entity.entity, IndexMetadataStatus.ERROR)
-      }
-    }
+    const entitiesToSync = entities.map((entity) => entity.entity)
+    this.#orchestrator = new Orchestrator(this.#locking, entitiesToSync, {
+      lockDuration,
+    })
+    await this.#orchestrator.process(this.#taskRunner.bind(this))
   }
 
   async #updatedStatus(entity: string, status: IndexMetadataStatus) {
@@ -108,6 +91,8 @@ export class DataSynchronizer {
   }
 
   async #taskRunner(entity: string) {
+    await this.#updatedStatus(entity, IndexMetadataStatus.PROCESSING)
+
     await this.#indexDataService.update({
       data: {
         staled_at: new Date(),
@@ -118,13 +103,16 @@ export class DataSynchronizer {
     })
     const finalAcknoledgement = await this.syncEntity({
       entityName: entity,
-      ack: async (acknoledgement: any) => {
-        console.log(acknoledgement)
-      },
+      ack: async (acknoledgement: any) => {},
     })
-    console.log(finalAcknoledgement)
-    // if (finalAcknoledgement.err) {
-    // if (finalAcknoledgement.done) {
+
+    if (finalAcknoledgement.done) {
+      await this.#updatedStatus(entity, IndexMetadataStatus.DONE)
+    }
+
+    if (finalAcknoledgement.err) {
+      await this.#updatedStatus(entity, IndexMetadataStatus.ERROR)
+    }
   }
 
   async syncEntity({
@@ -144,7 +132,11 @@ export class DataSynchronizer {
       done?: boolean
       err?: Error
     }) => Promise<void>
-  }) {
+  }): Promise<{
+    lastCursor: string | null
+    done?: boolean
+    err?: Error
+  }> {
     this.#isReadyOrThrow()
 
     const schemaEntityObjectRepresentation = this.#schemaObjectRepresentation[
@@ -154,15 +146,14 @@ export class DataSynchronizer {
     const { fields, alias, moduleConfig } = schemaEntityObjectRepresentation
 
     const entityPrimaryKey = fields.find(
-      (field) => !!moduleConfig.primaryKeys?.includes(field)
+      (field) => !!moduleConfig?.primaryKeys?.includes(field)
     )
 
     if (!entityPrimaryKey) {
+      // TODO: for now these are skiped
       const acknoledgement = {
         lastCursor: pagination.cursor ?? null,
-        err: new Error(
-          `Entity ${entityName} does not have a linkable primary key`
-        ),
+        done: true,
       }
 
       void ack(acknoledgement)
