@@ -147,5 +147,7 @@ export class Orchestrator {
 
       await this.#processAtIndex(taskRunner, entity)
     }
+
+    this.#state = "completed"
   }
 }

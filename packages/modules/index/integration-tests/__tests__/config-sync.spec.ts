@@ -177,6 +177,11 @@ describe("IndexModuleService syncIndexConfig", function () {
       ])
     )
 
+    let indexSync = await indexSyncService.list({
+      last_key: null,
+    })
+    expect(indexSync).toHaveLength(7)
+
     // update config schema
     ;(index as any).schemaObjectRepresentation_ = null
     ;(index as any).moduleOptions_ ??= {}
@@ -206,6 +211,11 @@ describe("IndexModuleService syncIndexConfig", function () {
         }),
       ])
     )
+
+    indexSync = await indexSyncService.list({
+      last_key: null,
+    })
+    expect(indexSync).toHaveLength(7)
 
     const updatedMetadata = await indexMetadataService.list()
 
