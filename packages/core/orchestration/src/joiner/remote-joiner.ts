@@ -1208,7 +1208,7 @@ export class RemoteJoiner {
     })
 
     if (options?.throwIfKeyNotFound) {
-      if (!primaryKeyArg || !primaryKeyArg.value) {
+      if (primaryKeyArg?.value == undefined) {
         throw new MedusaError(
           MedusaError.Types.NOT_FOUND,
           `${
