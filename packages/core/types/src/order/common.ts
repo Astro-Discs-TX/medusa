@@ -26,6 +26,7 @@ export type ChangeActionType =
   | "REINSTATE_ITEM"
   | "TRANSFER_CUSTOMER"
   | "UPDATE_ORDER_PROPERTIES"
+  | "CREDIT_LINE_ADD"
 
 export type OrderChangeStatus =
   | "confirmed"
@@ -126,6 +127,18 @@ export type OrderSummaryDTO = {
    * @ignore
    */
   raw_pending_difference: BigNumberRawValue
+
+  /**
+   * The sum difference of all actions
+   */
+  difference_sum: BigNumberValue
+
+  /**
+   * The raw sum difference of all actions
+   *
+   * @ignore
+   */
+  raw_difference_sum: BigNumberRawValue
 }
 
 /**
@@ -1167,6 +1180,13 @@ export interface OrderDTO {
    * @expandable
    */
   transactions?: OrderTransactionDTO[]
+
+  /**
+   * The credit lines for an order
+   *
+   * @expandable
+   */
+  credit_lines?: OrderCreditLineDTO[]
 
   /**
    * The summary of the order totals.
@@ -2708,6 +2728,21 @@ export interface FilterableOrderChangeProps
   order_id?: string | string[] | OperatorMap<string>
 
   /**
+   * Filter the changes by their associated return's ID.
+   */
+  return_id?: string | string[] | OperatorMap<string>
+
+  /**
+   * Filter the changes by their associated claim's ID.
+   */
+  claim_id?: string | string[] | OperatorMap<string>
+
+  /**
+   * Filter the changes by their associated exchange's ID.
+   */
+  exchange_id?: string | string[] | OperatorMap<string>
+
+  /**
    * Filter the order changes by their status.
    */
   status?: string | string[] | OperatorMap<string>
@@ -3014,12 +3049,74 @@ export interface OrderChangeReturn {
   shippingMethods: any[]
 }
 
+/**
+ * The details of an order after a change is applied on it.
+ */
 export interface OrderPreviewDTO
   extends Omit<OrderDTO, "items" | "shipping_methods"> {
+  /**
+   * The details of the changes made on the order.
+   */
   order_change: OrderChangeDTO
+  /**
+   * The items of the order, along with changes on the items.
+   */
   items: (OrderLineItemDTO & { actions?: OrderChangeActionDTO[] })[]
+  /**
+   * The shipping methods of the order, along with changes on the shipping methods.
+   */
   shipping_methods: (OrderShippingMethodDTO & {
     actions?: OrderChangeActionDTO[]
   })[]
+  /**
+   * The total amount for the requested return.
+   */
   return_requested_total: number
+}
+
+/**
+ * The order credit line details.
+ */
+export interface OrderCreditLineDTO {
+  /**
+   * The ID of the order credit line.
+   */
+  id: string
+
+  /**
+   * The ID of the order that the credit line belongs to.
+   */
+  order_id: string
+
+  /**
+   * The associated order
+   *
+   * @expandable
+   */
+  order: OrderDTO
+
+  /**
+   * The reference model name that the credit line is generated from
+   */
+  reference: string | null
+
+  /**
+   * The reference model id that the credit line is generated from
+   */
+  reference_id: string | null
+
+  /**
+   * The metadata of the order detail
+   */
+  metadata: Record<string, unknown> | null
+
+  /**
+   * The date when the order credit line was created.
+   */
+  created_at: Date
+
+  /**
+   * The date when the order credit line was last updated.
+   */
+  updated_at: Date
 }

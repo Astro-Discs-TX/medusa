@@ -1,16 +1,24 @@
 {
-	"id": 3797,
+	"id": 2565,
 	"name": "currency-models",
 	"variant": "project",
 	"kind": 1,
 	"flags": {},
 	"children": [
 		{
-			"id": 3798,
+			"id": 2566,
 			"name": "Currency",
 			"variant": "declaration",
 			"kind": 32,
 			"flags": {},
+			"sources": [
+				{
+					"fileName": "currency.ts",
+					"line": 3,
+					"character": 0,
+					"url": "https://github.com/medusajs/medusa/blob/43aa993971718063bb40e7e3f650ef0e84056d09/packages/modules/currency/src/models/currency.ts#L3"
+				}
+			],
 			"type": {
 				"type": "reference",
 				"target": {
@@ -19,19 +27,23 @@
 				},
 				"typeArguments": [
 					{
-						"type": "intersection",
-						"types": [
+						"type": "reference",
+						"target": {
+							"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
+							"qualifiedName": "DMLEntitySchemaBuilder"
+						},
+						"typeArguments": [
 							{
 								"type": "reflection",
 								"declaration": {
-									"id": 3799,
+									"id": 2567,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"children": [
 										{
-											"id": 3800,
+											"id": 2568,
 											"name": "code",
 											"variant": "declaration",
 											"kind": 1024,
@@ -44,6 +56,14 @@
 													}
 												]
 											},
+											"sources": [
+												{
+													"fileName": "currency.ts",
+													"line": 4,
+													"character": 2,
+													"url": "https://github.com/medusajs/medusa/blob/43aa993971718063bb40e7e3f650ef0e84056d09/packages/modules/currency/src/models/currency.ts#L4"
+												}
+											],
 											"type": {
 												"type": "reference",
 												"target": {
@@ -67,7 +87,7 @@
 											"defaultValue": "..."
 										},
 										{
-											"id": 3801,
+											"id": 2569,
 											"name": "symbol",
 											"variant": "declaration",
 											"kind": 1024,
@@ -80,6 +100,14 @@
 													}
 												]
 											},
+											"sources": [
+												{
+													"fileName": "currency.ts",
+													"line": 5,
+													"character": 2,
+													"url": "https://github.com/medusajs/medusa/blob/43aa993971718063bb40e7e3f650ef0e84056d09/packages/modules/currency/src/models/currency.ts#L5"
+												}
+											],
 											"type": {
 												"type": "reference",
 												"target": {
@@ -92,7 +120,7 @@
 											"defaultValue": "..."
 										},
 										{
-											"id": 3802,
+											"id": 2570,
 											"name": "symbol_native",
 											"variant": "declaration",
 											"kind": 1024,
@@ -105,6 +133,14 @@
 													}
 												]
 											},
+											"sources": [
+												{
+													"fileName": "currency.ts",
+													"line": 6,
+													"character": 2,
+													"url": "https://github.com/medusajs/medusa/blob/43aa993971718063bb40e7e3f650ef0e84056d09/packages/modules/currency/src/models/currency.ts#L6"
+												}
+											],
 											"type": {
 												"type": "reference",
 												"target": {
@@ -117,7 +153,7 @@
 											"defaultValue": "..."
 										},
 										{
-											"id": 3803,
+											"id": 2571,
 											"name": "name",
 											"variant": "declaration",
 											"kind": 1024,
@@ -130,6 +166,14 @@
 													}
 												]
 											},
+											"sources": [
+												{
+													"fileName": "currency.ts",
+													"line": 7,
+													"character": 2,
+													"url": "https://github.com/medusajs/medusa/blob/43aa993971718063bb40e7e3f650ef0e84056d09/packages/modules/currency/src/models/currency.ts#L7"
+												}
+											],
 											"type": {
 												"type": "reference",
 												"target": {
@@ -142,7 +186,7 @@
 											"defaultValue": "..."
 										},
 										{
-											"id": 3804,
+											"id": 2572,
 											"name": "decimal_digits",
 											"variant": "declaration",
 											"kind": 1024,
@@ -155,6 +199,14 @@
 													}
 												]
 											},
+											"sources": [
+												{
+													"fileName": "currency.ts",
+													"line": 8,
+													"character": 2,
+													"url": "https://github.com/medusajs/medusa/blob/43aa993971718063bb40e7e3f650ef0e84056d09/packages/modules/currency/src/models/currency.ts#L8"
+												}
+											],
 											"type": {
 												"type": "reference",
 												"target": {
@@ -167,7 +219,7 @@
 											"defaultValue": "..."
 										},
 										{
-											"id": 3805,
+											"id": 2573,
 											"name": "rounding",
 											"variant": "declaration",
 											"kind": 1024,
@@ -180,6 +232,14 @@
 													}
 												]
 											},
+											"sources": [
+												{
+													"fileName": "currency.ts",
+													"line": 9,
+													"character": 2,
+													"url": "https://github.com/medusajs/medusa/blob/43aa993971718063bb40e7e3f650ef0e84056d09/packages/modules/currency/src/models/currency.ts#L9"
+												}
+											],
 											"type": {
 												"type": "reference",
 												"target": {
@@ -196,201 +256,28 @@
 										{
 											"title": "Properties",
 											"children": [
-												3800,
-												3801,
-												3802,
-												3803,
-												3804,
-												3805
+												2568,
+												2569,
+												2570,
+												2571,
+												2572,
+												2573
 											]
-										}
-									]
-								}
-							},
-							{
-								"type": "reflection",
-								"declaration": {
-									"id": 3806,
-									"name": "__type",
-									"variant": "declaration",
-									"kind": 65536,
-									"flags": {},
-									"children": [
-										{
-											"id": 3807,
-											"name": "code",
-											"variant": "declaration",
-											"kind": 1024,
-											"flags": {},
-											"type": {
-												"type": "reference",
-												"target": {
-													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/primary-key.ts",
-													"qualifiedName": "PrimaryKeyModifier"
-												},
-												"typeArguments": [
-													{
-														"type": "reference",
-														"target": {
-															"sourceFileName": "../../../../packages/core/utils/src/dml/properties/text.ts",
-															"qualifiedName": "TextProperty"
-														},
-														"name": "TextProperty",
-														"package": "@medusajs/utils"
-													}
-												],
-												"name": "PrimaryKeyModifier",
-												"package": "@medusajs/utils"
-											},
-											"defaultValue": "..."
-										},
-										{
-											"id": 3808,
-											"name": "symbol",
-											"variant": "declaration",
-											"kind": 1024,
-											"flags": {},
-											"type": {
-												"type": "reference",
-												"target": {
-													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/text.ts",
-													"qualifiedName": "TextProperty"
-												},
-												"name": "TextProperty",
-												"package": "@medusajs/utils"
-											},
-											"defaultValue": "..."
-										},
-										{
-											"id": 3809,
-											"name": "symbol_native",
-											"variant": "declaration",
-											"kind": 1024,
-											"flags": {},
-											"type": {
-												"type": "reference",
-												"target": {
-													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/text.ts",
-													"qualifiedName": "TextProperty"
-												},
-												"name": "TextProperty",
-												"package": "@medusajs/utils"
-											},
-											"defaultValue": "..."
-										},
-										{
-											"id": 3810,
-											"name": "name",
-											"variant": "declaration",
-											"kind": 1024,
-											"flags": {},
-											"type": {
-												"type": "reference",
-												"target": {
-													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/text.ts",
-													"qualifiedName": "TextProperty"
-												},
-												"name": "TextProperty",
-												"package": "@medusajs/utils"
-											},
-											"defaultValue": "..."
-										},
-										{
-											"id": 3811,
-											"name": "decimal_digits",
-											"variant": "declaration",
-											"kind": 1024,
-											"flags": {},
-											"type": {
-												"type": "reference",
-												"target": {
-													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/number.ts",
-													"qualifiedName": "NumberProperty"
-												},
-												"name": "NumberProperty",
-												"package": "@medusajs/utils"
-											},
-											"defaultValue": "..."
-										},
-										{
-											"id": 3812,
-											"name": "rounding",
-											"variant": "declaration",
-											"kind": 1024,
-											"flags": {},
-											"type": {
-												"type": "reference",
-												"target": {
-													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/big-number.ts",
-													"qualifiedName": "BigNumberProperty"
-												},
-												"name": "BigNumberProperty",
-												"package": "@medusajs/utils"
-											},
-											"defaultValue": "..."
 										}
 									],
-									"groups": [
+									"sources": [
 										{
-											"title": "Properties",
-											"children": [
-												3807,
-												3808,
-												3809,
-												3810,
-												3811,
-												3812
-											]
+											"fileName": "currency.ts",
+											"line": 3,
+											"character": 40,
+											"url": "https://github.com/medusajs/medusa/blob/43aa993971718063bb40e7e3f650ef0e84056d09/packages/modules/currency/src/models/currency.ts#L3"
 										}
 									]
 								}
-							},
-							{
-								"type": "reflection",
-								"declaration": {
-									"id": 3813,
-									"name": "__type",
-									"variant": "declaration",
-									"kind": 65536,
-									"flags": {},
-									"children": [
-										{
-											"id": 3814,
-											"name": "raw_rounding",
-											"variant": "declaration",
-											"kind": 1024,
-											"flags": {},
-											"type": {
-												"type": "reference",
-												"target": {
-													"sourceFileName": "../../../../packages/core/utils/src/dml/properties/json.ts",
-													"qualifiedName": "JSONProperty"
-												},
-												"name": "JSONProperty",
-												"package": "@medusajs/utils"
-											}
-										}
-									],
-									"groups": [
-										{
-											"title": "Properties",
-											"children": [
-												3814
-											]
-										}
-									]
-								}
-							},
-							{
-								"type": "reference",
-								"target": {
-									"sourceFileName": "../../../../packages/core/utils/src/dml/helpers/entity-builder/create-default-properties.ts",
-									"qualifiedName": "DMLSchemaDefaults"
-								},
-								"name": "DMLSchemaDefaults",
-								"package": "@medusajs/utils"
 							}
-						]
+						],
+						"name": "DMLEntitySchemaBuilder",
+						"package": "@medusajs/utils"
 					},
 					{
 						"type": "literal",
@@ -406,83 +293,47 @@
 		{
 			"title": "Variables",
 			"children": [
-				3798
+				2566
 			]
 		}
 	],
 	"packageName": "@medusajs/currency",
 	"symbolIdMap": {
-		"3797": {
+		"2565": {
 			"sourceFileName": "../../../../packages/modules/currency/src/models/index.ts",
 			"qualifiedName": ""
 		},
-		"3798": {
+		"2566": {
 			"sourceFileName": "../../../../packages/modules/currency/src/models/currency.ts",
 			"qualifiedName": "default"
 		},
-		"3799": {
+		"2567": {
 			"sourceFileName": "../../../../packages/modules/currency/src/models/currency.ts",
 			"qualifiedName": "__object"
 		},
-		"3800": {
+		"2568": {
 			"sourceFileName": "../../../../packages/modules/currency/src/models/currency.ts",
 			"qualifiedName": "__object.code"
 		},
-		"3801": {
+		"2569": {
 			"sourceFileName": "../../../../packages/modules/currency/src/models/currency.ts",
 			"qualifiedName": "__object.symbol"
 		},
-		"3802": {
+		"2570": {
 			"sourceFileName": "../../../../packages/modules/currency/src/models/currency.ts",
 			"qualifiedName": "__object.symbol_native"
 		},
-		"3803": {
+		"2571": {
 			"sourceFileName": "../../../../packages/modules/currency/src/models/currency.ts",
 			"qualifiedName": "__object.name"
 		},
-		"3804": {
+		"2572": {
 			"sourceFileName": "../../../../packages/modules/currency/src/models/currency.ts",
 			"qualifiedName": "__object.decimal_digits"
 		},
-		"3805": {
+		"2573": {
 			"sourceFileName": "../../../../packages/modules/currency/src/models/currency.ts",
 			"qualifiedName": "__object.rounding"
-		},
-		"3806": {
-			"sourceFileName": "../../../../packages/core/utils/src/dml/helpers/entity-builder/create-big-number-properties.ts",
-			"qualifiedName": "__type"
-		},
-		"3807": {
-			"sourceFileName": "../../../../packages/modules/currency/src/models/currency.ts",
-			"qualifiedName": "code"
-		},
-		"3808": {
-			"sourceFileName": "../../../../packages/modules/currency/src/models/currency.ts",
-			"qualifiedName": "symbol"
-		},
-		"3809": {
-			"sourceFileName": "../../../../packages/modules/currency/src/models/currency.ts",
-			"qualifiedName": "symbol_native"
-		},
-		"3810": {
-			"sourceFileName": "../../../../packages/modules/currency/src/models/currency.ts",
-			"qualifiedName": "name"
-		},
-		"3811": {
-			"sourceFileName": "../../../../packages/modules/currency/src/models/currency.ts",
-			"qualifiedName": "decimal_digits"
-		},
-		"3812": {
-			"sourceFileName": "../../../../packages/modules/currency/src/models/currency.ts",
-			"qualifiedName": "rounding"
-		},
-		"3813": {
-			"sourceFileName": "../../../../packages/core/utils/src/dml/helpers/entity-builder/create-big-number-properties.ts",
-			"qualifiedName": "__type"
-		},
-		"3814": {
-			"sourceFileName": "",
-			"qualifiedName": "raw_rounding"
 		}
 	},
 	"files": {
@@ -490,7 +341,7 @@
 			"1": "../../../../packages/modules/currency/src/models/index.ts"
 		},
 		"reflections": {
-			"1": 3797
+			"1": 2565
 		}
 	}
 }

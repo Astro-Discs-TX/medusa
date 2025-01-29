@@ -1,5 +1,79 @@
 # @medusajs/types
 
+## 2.4.0
+
+### Minor Changes
+
+- [#10292](https://github.com/medusajs/medusa/pull/10292) [`cc73802ab3821d2c667942bd887efb7476205547`](https://github.com/medusajs/medusa/commit/cc73802ab3821d2c667942bd887efb7476205547) Thanks [@carlos-r-l-rodrigues](https://github.com/carlos-r-l-rodrigues)! - chore: upgrade to mikro-orm 6
+
+### Patch Changes
+
+- [#10964](https://github.com/medusajs/medusa/pull/10964) [`d4e042e9ad838cfc3b3c83c342afaf76adb281d2`](https://github.com/medusajs/medusa/commit/d4e042e9ad838cfc3b3c83c342afaf76adb281d2) Thanks [@kasperkristensen](https://github.com/kasperkristensen)! - fix(dashboard,js-sdk,types): Remove redundant body for markAsDelivered
+
+## 2.3.1
+
+## 2.3.0
+
+### Patch Changes
+
+- [#10892](https://github.com/medusajs/medusa/pull/10892) [`ff725090bb4ec848cb82c5411bdc25c4b72252ab`](https://github.com/medusajs/medusa/commit/ff725090bb4ec848cb82c5411bdc25c4b72252ab) Thanks [@shahednasser](https://github.com/shahednasser)! - fix(types): add missing inventory_items to input of createProductsWorkflow
+
+- [#10950](https://github.com/medusajs/medusa/pull/10950) [`5eab9e739919594ae7e7e416942ec93d84b699fd`](https://github.com/medusajs/medusa/commit/5eab9e739919594ae7e7e416942ec93d84b699fd) Thanks [@riqwan](https://github.com/riqwan)! - feat(promotion,dashboard,types,utils,medusa): Add statuses to promotions
+
+- [#10975](https://github.com/medusajs/medusa/pull/10975) [`c75678d6d41d3b88d07681ad7e24472d6cbde672`](https://github.com/medusajs/medusa/commit/c75678d6d41d3b88d07681ad7e24472d6cbde672) Thanks [@thetutlage](https://github.com/thetutlage)! - feat: add support for loading admin extensions from the source
+
+- [#10895](https://github.com/medusajs/medusa/pull/10895) [`c1930bd6568043d145e34d8360015e7207e18e4a`](https://github.com/medusajs/medusa/commit/c1930bd6568043d145e34d8360015e7207e18e4a) Thanks [@thetutlage](https://github.com/thetutlage)! - Feat/merge plugin modules
+
+- [#10874](https://github.com/medusajs/medusa/pull/10874) [`28febfc6438351fddb5b214b86f96aff89db688e`](https://github.com/medusajs/medusa/commit/28febfc6438351fddb5b214b86f96aff89db688e) Thanks [@thetutlage](https://github.com/thetutlage)! - feat: remove dead code and refactor the logic of resolving plugins
+
+- [#10630](https://github.com/medusajs/medusa/pull/10630) [`bc22b81cdf9591912744f448c74d45bcb0f11e0c`](https://github.com/medusajs/medusa/commit/bc22b81cdf9591912744f448c74d45bcb0f11e0c) Thanks [@kasperkristensen](https://github.com/kasperkristensen)! - feat(inventory,dashboard,core-flows,js-sdk,types,medusa): Improve inventory management UX
+
+## 2.2.0
+
+### Minor Changes
+
+- [`4f897661eb7a855a881d460c565c2da6459367eb`](https://github.com/medusajs/medusa/commit/4f897661eb7a855a881d460c565c2da6459367eb) Thanks [@olivermrbl](https://github.com/olivermrbl)! - feat: Custom callback to oauth providers
+
+### Patch Changes
+
+- [#10791](https://github.com/medusajs/medusa/pull/10791) [`ecc09fd77db01fcb7e8eb8e60cd19e16e2b5ea81`](https://github.com/medusajs/medusa/commit/ecc09fd77db01fcb7e8eb8e60cd19e16e2b5ea81) Thanks [@thetutlage](https://github.com/thetutlage)! - feat: generate modules mappings at runtime
+
+- [#10707](https://github.com/medusajs/medusa/pull/10707) [`13ddf27c68fc2831b3661940bc5f27bab23ce8c0`](https://github.com/medusajs/medusa/commit/13ddf27c68fc2831b3661940bc5f27bab23ce8c0) Thanks [@shahednasser](https://github.com/shahednasser)! - fix(medusa,types,js-sdk): fix request query parameter types for store product routes
+
+- [#10832](https://github.com/medusajs/medusa/pull/10832) [`99a06102a246c119f69d1873f3cdeee9ff1241a0`](https://github.com/medusajs/medusa/commit/99a06102a246c119f69d1873f3cdeee9ff1241a0) Thanks [@riqwan](https://github.com/riqwan)! - fix(stock-location,core-flows,types): update existing address when updating stock location address
+
+- [#10773](https://github.com/medusajs/medusa/pull/10773) [`5e9d86d75d1f2745c24a4bcd4a5c0df066578ef5`](https://github.com/medusajs/medusa/commit/5e9d86d75d1f2745c24a4bcd4a5c0df066578ef5) Thanks [@thetutlage](https://github.com/thetutlage)! - feat: deprecate remoteQueryConfig in favor of queryConfig
+
+- [#10667](https://github.com/medusajs/medusa/pull/10667) [`47594192b79fbc798cfaf21821b60673745d1374`](https://github.com/medusajs/medusa/commit/47594192b79fbc798cfaf21821b60673745d1374) Thanks [@riqwan](https://github.com/riqwan)! - feat(dashboard,core-flows,types,utils,medusa,order): Order cancelations will refund payments
+
+- [#10697](https://github.com/medusajs/medusa/pull/10697) [`0559d54c18d2e79c78c2b9a348b9873d1a786dea`](https://github.com/medusajs/medusa/commit/0559d54c18d2e79c78c2b9a348b9873d1a786dea) Thanks [@thetutlage](https://github.com/thetutlage)! - fix: pluralization of words ending in y, where y follows a vowel
+
+## 2.1.3
+
+### Patch Changes
+
+- [#10617](https://github.com/medusajs/medusa/pull/10617) [`100da64242838739816351ed259461f2d7c258e3`](https://github.com/medusajs/medusa/commit/100da64242838739816351ed259461f2d7c258e3) Thanks [@adrien2p](https://github.com/adrien2p)! - chore: fulfillment module DML
+
+- [#10408](https://github.com/medusajs/medusa/pull/10408) [`c9b8db04c1b35f1cf129bb9ad74789fbc2881815`](https://github.com/medusajs/medusa/commit/c9b8db04c1b35f1cf129bb9ad74789fbc2881815) Thanks [@olivermrbl](https://github.com/olivermrbl)! - chore: Support custom line items
+
+- [#10606](https://github.com/medusajs/medusa/pull/10606) [`2ad08c4c440706dd2ffe2215807b89ee4a7f325b`](https://github.com/medusajs/medusa/commit/2ad08c4c440706dd2ffe2215807b89ee4a7f325b) Thanks [@vethan](https://github.com/vethan)! - Add description and Label to FilterableRefundReasonProps
+
+- [#10657](https://github.com/medusajs/medusa/pull/10657) [`048620884b5d458b109ac496e7a2056c202bd459`](https://github.com/medusajs/medusa/commit/048620884b5d458b109ac496e7a2056c202bd459) Thanks [@adrien2p](https://github.com/adrien2p)! - chore(types): Keep intelisense while being more loosen
+
+## 2.1.2
+
+### Patch Changes
+
+- [#10569](https://github.com/medusajs/medusa/pull/10569) [`729eb5da7b6daf9781b8bdcbc2fab344e942d444`](https://github.com/medusajs/medusa/commit/729eb5da7b6daf9781b8bdcbc2fab344e942d444) Thanks [@carlos-r-l-rodrigues](https://github.com/carlos-r-l-rodrigues)! - chore: Inventory DML
+
+- [#10499](https://github.com/medusajs/medusa/pull/10499) [`16d27ea6e4c2e4290820fe2328f08557534fcb8f`](https://github.com/medusajs/medusa/commit/16d27ea6e4c2e4290820fe2328f08557534fcb8f) Thanks [@thetutlage](https://github.com/thetutlage)! - Feat/customer dml
+
+- [#10551](https://github.com/medusajs/medusa/pull/10551) [`885c82ded63e504739bf39a113f820c87c9e2d52`](https://github.com/medusajs/medusa/commit/885c82ded63e504739bf39a113f820c87c9e2d52) Thanks [@thetutlage](https://github.com/thetutlage)! - feat: add support for float properties
+
+- [#10602](https://github.com/medusajs/medusa/pull/10602) [`90ad2566fdde2215447100d10c3fe9b17ce826b5`](https://github.com/medusajs/medusa/commit/90ad2566fdde2215447100d10c3fe9b17ce826b5) Thanks [@riqwan](https://github.com/riqwan)! - feat(types,fulfillment): ability to delete a canceled fulfillment
+
+- [#10579](https://github.com/medusajs/medusa/pull/10579) [`6367bccde88158d524dfa01e5a8123ffa3461c10`](https://github.com/medusajs/medusa/commit/6367bccde88158d524dfa01e5a8123ffa3461c10) Thanks [@riqwan](https://github.com/riqwan)! - feat(medusa, pricing): Cart workflows handle pricing context accurately
+
 ## 2.1.1
 
 ### Patch Changes

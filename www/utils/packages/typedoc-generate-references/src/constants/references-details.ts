@@ -46,4 +46,12 @@ export const dmlModules = [
   "sales-channel",
   "api-key",
   "store",
+  "customer",
+  "inventory-next",
+  "payment",
+  "promotion",
+  "stock-location-next",
+  "tax",
+  "fulfillment",
+  "order",
 ]

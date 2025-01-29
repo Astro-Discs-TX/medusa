@@ -1,7 +1,7 @@
 import { medusaIntegrationTestRunner } from "@medusajs/test-utils"
 import {
-  createAdminUser,
   adminHeaders,
+  createAdminUser,
 } from "../../../../helpers/create-admin-user"
 import {
   getPricelistFixture,
@@ -18,6 +18,7 @@ medusaIntegrationTestRunner({
     let region1
     let product1
     let customerGroup1
+    let shippingProfile
 
     beforeEach(async () => {
       const container = getContainer()
@@ -34,10 +35,21 @@ medusaIntegrationTestRunner({
         )
       ).data.region
 
+      shippingProfile = (
+        await api.post(
+          `/admin/shipping-profiles`,
+          { name: "Test", type: "default" },
+          adminHeaders
+        )
+      ).data.shipping_profile
+
       product1 = (
         await api.post(
           "/admin/products",
-          getProductFixture({ title: "Test product" }),
+          getProductFixture({
+            title: "Test product",
+            shipping_profile_id: shippingProfile.id,
+          }),
           adminHeaders
         )
       ).data.product
@@ -102,7 +114,7 @@ medusaIntegrationTestRunner({
             description:
               "Summer sale for VIP customers. 25% off selected items.",
             rules: {
-              customer_group_id: [customerGroup1.id],
+              "customer.groups.id": [customerGroup1.id],
             },
             prices: [
               {
@@ -139,7 +151,7 @@ medusaIntegrationTestRunner({
               starts_at: "2022-07-01T00:00:00.000Z",
               ends_at: "2022-07-31T00:00:00.000Z",
               rules: {
-                customer_group_id: [expect.stringContaining("cusgroup_")],
+                "customer.groups.id": [expect.stringContaining("cusgroup_")],
               },
               prices: [
                 expect.objectContaining({
@@ -335,7 +347,7 @@ medusaIntegrationTestRunner({
             starts_at: "2022-09-01T00:00:00.000Z",
             ends_at: "2022-12-31T00:00:00.000Z",
             rules: {
-              customer_group_id: [customerGroup1.id],
+              "customer.groups.id": [customerGroup1.id],
             },
           }
 
@@ -372,7 +384,7 @@ medusaIntegrationTestRunner({
                 }),
               ]),
               rules: {
-                customer_group_id: [customerGroup1.id],
+                "customer.groups.id": [customerGroup1.id],
               },
               created_at: expect.any(String),
               updated_at: expect.any(String),

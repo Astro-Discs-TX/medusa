@@ -18,10 +18,11 @@ erDiagram
 	Product ||--|| ProductOption : options
 	Product ||--|| ProductImage : images
 	Product }|--|{ ProductCategory : categories
+	ProductCategory ||--|| ProductCategory : category_children
 	ProductCollection ||--|| Product : products
 	ProductOption ||--|| ProductOptionValue : values
 	ProductOptionValue }|--|{ ProductVariant : variants
-	ProductType ||--|| Product : product
+	ProductType ||--|| Product : products
 
 ```
 

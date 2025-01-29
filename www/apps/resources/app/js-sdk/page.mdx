@@ -315,8 +315,8 @@ For example, to send a request to a custom route at `http://localhost:9000/custo
   sdk.client.fetch(`/custom`, {
     method: "post",
     body: {
-      id: "123"
-    }
+      id: "123",
+    },
   }).then((data) => {
     console.log(data)
   })
@@ -351,6 +351,12 @@ The method returns a Promise that, when resolved, has the data returned by the r
 In admin customizations, use [Tanstack Query](https://tanstack.com/query/latest) with the JS SDK to send requests to custom or existing API routes.
 
 Tanstack Query is installed by default in your Medusa application.
+
+<Note type="warning">
+
+Do not install Tanstack Query as that will cause unexpected errors in your development. If you prefer installing it for better auto-completion in your code editor, make sure to install `v^5.28.14` as a development dependency.
+
+</Note>
 
 Use the [configured SDK](#setup-js-sdk) with the [useQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery#usequery) Tanstack Query hook to send `GET` requests, and [useMutation](https://tanstack.com/query/latest/docs/framework/react/reference/useMutation#usemutation) hook to send `POST` or `DELETE` requests.
 

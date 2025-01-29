@@ -1,4 +1,4 @@
-import * as Handlebars from "handlebars"
+import Handlebars from "handlebars"
 import { Comment } from "typedoc"
 
 const EXCLUDED_TAGS = [
@@ -8,6 +8,8 @@ const EXCLUDED_TAGS = [
   "@category",
   "@typeParamDefinition",
   "@version",
+  "@tags",
+  "@summary",
 ]
 
 export default function () {

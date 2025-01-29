@@ -3,8 +3,8 @@ import {
   Modules,
   PriceListStatus,
   PriceListType,
-  ProductStatus,
   PromotionRuleOperator,
+  PromotionStatus,
   PromotionType,
 } from "@medusajs/utils"
 import {
@@ -14,6 +14,7 @@ import {
 } from "../../../../helpers/create-admin-user"
 import { setupTaxStructure } from "../../../../modules/__tests__/fixtures"
 import { createAuthenticatedCustomer } from "../../../../modules/helpers/create-authenticated-customer"
+import { medusaTshirtProduct } from "../../../__fixtures__/product"
 
 jest.setTimeout(100000)
 
@@ -29,70 +30,6 @@ const shippingAddressData = {
   postal_code: "94016",
 }
 
-const productData = {
-  title: "Medusa T-Shirt",
-  handle: "t-shirt",
-  status: ProductStatus.PUBLISHED,
-  options: [
-    {
-      title: "Size",
-      values: ["S"],
-    },
-    {
-      title: "Color",
-      values: ["Black", "White"],
-    },
-  ],
-  variants: [
-    {
-      title: "S / Black",
-      sku: "SHIRT-S-BLACK",
-      options: {
-        Size: "S",
-        Color: "Black",
-      },
-      manage_inventory: false,
-      prices: [
-        {
-          amount: 1500,
-          currency_code: "usd",
-        },
-        {
-          amount: 1500,
-          currency_code: "eur",
-        },
-        {
-          amount: 1300,
-          currency_code: "dkk",
-        },
-      ],
-    },
-    {
-      title: "S / White",
-      sku: "SHIRT-S-WHITE",
-      options: {
-        Size: "S",
-        Color: "White",
-      },
-      manage_inventory: false,
-      prices: [
-        {
-          amount: 1500,
-          currency_code: "usd",
-        },
-        {
-          amount: 1500,
-          currency_code: "eur",
-        },
-        {
-          amount: 1300,
-          currency_code: "dkk",
-        },
-      ],
-    },
-  ],
-}
-
 medusaIntegrationTestRunner({
   env,
   testSuite: ({ dbConnection, getContainer, api }) => {
@@ -106,7 +43,8 @@ medusaIntegrationTestRunner({
         salesChannel,
         cart,
         customer,
-        promotion
+        promotion,
+        shippingProfile
 
       beforeAll(async () => {
         appContainer = getContainer()
@@ -131,6 +69,14 @@ medusaIntegrationTestRunner({
           },
         }
 
+        shippingProfile = (
+          await api.post(
+            `/admin/shipping-profiles`,
+            { name: "default", type: "default" },
+            adminHeaders
+          )
+        ).data.shipping_profile
+
         await setupTaxStructure(appContainer.resolve(Modules.TAX))
 
         region = (
@@ -149,8 +95,9 @@ medusaIntegrationTestRunner({
           )
         ).data.region
 
-        product = (await api.post("/admin/products", productData, adminHeaders))
-          .data.product
+        product = (
+          await api.post("/admin/products",  { ...medusaTshirtProduct, shipping_profile_id: shippingProfile.id }, adminHeaders)
+        ).data.product
 
         salesChannel = (
           await api.post(
@@ -176,6 +123,7 @@ medusaIntegrationTestRunner({
             {
               code: "PROMOTION_APPLIED",
               type: PromotionType.STANDARD,
+              status: PromotionStatus.ACTIVE,
               application_method: {
                 type: "fixed",
                 target_type: "items",
@@ -271,7 +219,7 @@ medusaIntegrationTestRunner({
                 shipping_address: shippingAddressData,
                 items: [{ variant_id: product.variants[0].id, quantity: 1 }],
               },
-              storeHeadersWithCustomer
+              storeHeaders
             )
 
             expect(response.status).toEqual(200)
@@ -302,7 +250,7 @@ medusaIntegrationTestRunner({
       })
 
       describe("POST /store/carts/:id/line-items", () => {
-        let shippingOption
+        let shippingOption, shippingOptionExpensive
 
         beforeEach(async () => {
           const stockLocation = (
@@ -358,25 +306,63 @@ medusaIntegrationTestRunner({
             adminHeaders
           )
 
+          const shippingOptionPayload = {
+            name: `Shipping`,
+            service_zone_id: fulfillmentSet.service_zones[0].id,
+            shipping_profile_id: shippingProfile.id,
+            provider_id: "manual_test-provider",
+            price_type: "flat",
+            type: {
+              label: "Test type",
+              description: "Test description",
+              code: "test-code",
+            },
+            prices: [
+              { currency_code: "usd", amount: 1000 },
+              {
+                currency_code: "usd",
+                amount: 0,
+                rules: [
+                  {
+                    attribute: "item_total",
+                    operator: "gt",
+                    value: 5000,
+                  },
+                ],
+              },
+            ],
+            rules: [
+              {
+                attribute: "enabled_in_store",
+                value: "true",
+                operator: "eq",
+              },
+              {
+                attribute: "is_return",
+                value: "false",
+                operator: "eq",
+              },
+            ],
+          }
+
           shippingOption = (
             await api.post(
               `/admin/shipping-options`,
+              shippingOptionPayload,
+              adminHeaders
+            )
+          ).data.shipping_option
+
+          shippingOptionExpensive = (
+            await api.post(
+              `/admin/shipping-options`,
               {
-                name: `Shipping`,
-                service_zone_id: fulfillmentSet.service_zones[0].id,
-                shipping_profile_id: shippingProfile.id,
-                provider_id: "manual_test-provider",
-                price_type: "flat",
-                type: {
-                  label: "Test type",
-                  description: "Test description",
-                  code: "test-code",
-                },
+                ...shippingOptionPayload,
                 prices: [
-                  { currency_code: "usd", amount: 1000 },
+                  { currency_code: "usd", amount: 10000 },
                   {
                     currency_code: "usd",
-                    amount: 0,
+                    amount: 5000,
                     rules: [
                       {
                         attribute: "item_total",
@@ -384,18 +370,6 @@ medusaIntegrationTestRunner({
                         value: 5000,
                       },
                     ],
-                  },
-                ],
-                rules: [
-                  {
-                    attribute: "enabled_in_store",
-                    value: '"true"',
-                    operator: "eq",
-                  },
-                  {
-                    attribute: "is_return",
-                    value: "false",
-                    operator: "eq",
                   },
                 ],
               },
@@ -414,7 +388,7 @@ medusaIntegrationTestRunner({
                 items: [{ variant_id: product.variants[0].id, quantity: 1 }],
                 promo_codes: [promotion.code],
               },
-              storeHeadersWithCustomer
+              storeHeaders
             )
           ).data.cart
         })
@@ -456,6 +430,65 @@ medusaIntegrationTestRunner({
                       amount: 100,
                     },
                   ],
+                }),
+              ]),
+            })
+          )
+        })
+
+        it("should remove promotions when promotion is no longer in active state", async () => {
+          let responseBeforePromotionUpdate = await api.post(
+            `/store/carts/${cart.id}/line-items`,
+            {
+              variant_id: product.variants[0].id,
+              quantity: 1,
+            },
+            storeHeaders
+          )
+
+          expect(responseBeforePromotionUpdate.data.cart).toEqual(
+            expect.objectContaining({
+              id: cart.id,
+              items: expect.arrayContaining([
+                expect.objectContaining({
+                  adjustments: [
+                    {
+                      id: expect.any(String),
+                      code: "PROMOTION_APPLIED",
+                      promotion_id: promotion.id,
+                      amount: 100,
+                    },
+                  ],
+                }),
+              ]),
+            })
+          )
+
+          await api.post(
+            `/admin/promotions/${promotion.id}`,
+            { status: PromotionStatus.INACTIVE },
+            adminHeaders
+          )
+
+          let responseAfterPromotionUpdate = await api.post(
+            `/store/carts/${cart.id}/line-items`,
+            {
+              variant_id: product.variants[0].id,
+              quantity: 1,
+            },
+            storeHeaders
+          )
+
+          expect(responseAfterPromotionUpdate.status).toEqual(200)
+          expect(responseAfterPromotionUpdate.data.cart).toEqual(
+            expect.objectContaining({
+              id: cart.id,
+              items: expect.arrayContaining([
+                expect.objectContaining({
+                  adjustments: [],
+                }),
+                expect.objectContaining({
+                  adjustments: [],
                 }),
               ]),
             })
@@ -555,6 +588,70 @@ medusaIntegrationTestRunner({
               })
             )
           })
+
+          it("should update payment collection upon changing shipping option", async () => {
+            await api.post(
+              `/store/carts/${cart.id}/shipping-methods`,
+              { option_id: shippingOption.id },
+              storeHeaders
+            )
+
+            await api.post(
+              `/store/payment-collections`,
+              { cart_id: cart.id },
+              storeHeaders
+            )
+
+            const cartAfterCollection = (
+              await api.get(`/store/carts/${cart.id}`, storeHeaders)
+            ).data.cart
+
+            expect(cartAfterCollection).toEqual(
+              expect.objectContaining({
+                id: cart.id,
+                shipping_methods: expect.arrayContaining([
+                  expect.objectContaining({
+                    shipping_option_id: shippingOption.id,
+                  }),
+                ]),
+                payment_collection: expect.objectContaining({
+                  amount: 2398,
+                }),
+              })
+            )
+
+            await api.post(
+              `/store/carts/${cart.id}/line-items`,
+              {
+                variant_id: product.variants[0].id,
+                quantity: 100,
+              },
+              storeHeaders
+            )
+
+            let cartAfterExpensiveShipping = (
+              await api.post(
+                `/store/carts/${cart.id}/shipping-methods`,
+                { option_id: shippingOptionExpensive.id },
+                storeHeaders
+              )
+            ).data.cart
+
+            expect(cartAfterExpensiveShipping).toEqual(
+              expect.objectContaining({
+                id: cartAfterExpensiveShipping.id,
+                shipping_methods: expect.arrayContaining([
+                  expect.objectContaining({
+                    shipping_option_id: shippingOptionExpensive.id,
+                    amount: 5000,
+                  }),
+                ]),
+                payment_collection: expect.objectContaining({
+                  amount: 156398,
+                }),
+              })
+            )
+          })
         })
 
         it("should add item to cart with tax lines multiple times", async () => {
@@ -643,28 +740,61 @@ medusaIntegrationTestRunner({
         })
 
         describe("with sale price lists", () => {
-          let priceList
-
           beforeEach(async () => {
-            priceList = (
+            await api.post(
+              `/admin/price-lists`,
+              {
+                title: "test price list",
+                description: "test",
+                status: PriceListStatus.ACTIVE,
+                type: PriceListType.SALE,
+                prices: [
+                  {
+                    amount: 350,
+                    currency_code: "usd",
+                    variant_id: product.variants[0].id,
+                  },
+                ],
+              },
+              adminHeaders
+            )
+
+            const customerGroup = (
               await api.post(
-                `/admin/price-lists`,
-                {
-                  title: "test price list",
-                  description: "test",
-                  status: PriceListStatus.ACTIVE,
-                  type: PriceListType.SALE,
-                  prices: [
-                    {
-                      amount: 350,
-                      currency_code: "usd",
-                      variant_id: product.variants[0].id,
-                    },
-                  ],
-                },
+                "/admin/customer-groups",
+                { name: "VIP" },
                 adminHeaders
               )
-            ).data.price_list
+            ).data.customer_group
+
+            await api.post(
+              `/admin/customer-groups/${customerGroup.id}/customers`,
+              {
+                add: [customer.id],
+              },
+              adminHeaders
+            )
+
+            await api.post(
+              `/admin/price-lists`,
+              {
+                title: "test price list",
+                description: "test",
+                status: PriceListStatus.ACTIVE,
+                type: PriceListType.SALE,
+                prices: [
+                  {
+                    amount: 200,
+                    currency_code: "usd",
+                    variant_id: product.variants[0].id,
+                  },
+                ],
+                rules: {
+                  "customer.groups.id": [customerGroup.id],
+                },
+              },
+              adminHeaders
+            )
           })
 
           it("should add price from price list and set compare_at_unit_price", async () => {
@@ -709,6 +839,158 @@ medusaIntegrationTestRunner({
               })
             )
           })
+
+          it("should add price from price list associated to a customer group when customer rules match", async () => {
+            const transferredCart = (
+              await api.post(
+                `/store/carts/${cart.id}/customer`,
+                {},
+                storeHeadersWithCustomer
+              )
+            ).data.cart
+
+            expect(transferredCart).toEqual(
+              expect.objectContaining({
+                id: cart.id,
+                items: expect.arrayContaining([
+                  expect.objectContaining({
+                    unit_price: 200,
+                    compare_at_unit_price: 1500,
+                    is_tax_inclusive: true,
+                    quantity: 1,
+                  }),
+                ]),
+              })
+            )
+
+            let response = await api.post(
+              `/store/carts/${cart.id}/line-items`,
+              {
+                variant_id: product.variants[0].id,
+                quantity: 1,
+              },
+              storeHeadersWithCustomer
+            )
+
+            expect(response.status).toEqual(200)
+            expect(response.data.cart).toEqual(
+              expect.objectContaining({
+                id: cart.id,
+                currency_code: "usd",
+                items: expect.arrayContaining([
+                  expect.objectContaining({
+                    unit_price: 200,
+                    compare_at_unit_price: 1500,
+                    is_tax_inclusive: true,
+                    quantity: 2,
+                  }),
+                ]),
+              })
+            )
+          })
+        })
+      })
+
+      describe("POST /store/carts/:id/line-items/:id", () => {
+        let item, customerGroup
+
+        beforeEach(async () => {
+          cart = (
+            await api.post(
+              `/store/carts`,
+              {
+                currency_code: "usd",
+                sales_channel_id: salesChannel.id,
+                region_id: region.id,
+                shipping_address: shippingAddressData,
+                items: [{ variant_id: product.variants[0].id, quantity: 1 }],
+              },
+              storeHeadersWithCustomer
+            )
+          ).data.cart
+
+          item = cart.items[0]
+
+          customerGroup = (
+            await api.post(
+              "/admin/customer-groups",
+              { name: "VIP" },
+              adminHeaders
+            )
+          ).data.customer_group
+
+          await api.post(
+            `/admin/customer-groups/${customerGroup.id}/customers`,
+            {
+              add: [customer.id],
+            },
+            adminHeaders
+          )
+        })
+
+        it("should update cart's line item", async () => {
+          let response = await api.post(
+            `/store/carts/${cart.id}/line-items/${item.id}`,
+            {
+              quantity: 2,
+            },
+            storeHeaders
+          )
+
+          expect(response.status).toEqual(200)
+          expect(response.data.cart).toEqual(
+            expect.objectContaining({
+              id: cart.id,
+              currency_code: "usd",
+              items: expect.arrayContaining([
+                expect.objectContaining({
+                  unit_price: 1500,
+                  quantity: 2,
+                }),
+              ]),
+            })
+          )
+
+          await api.post(
+            `/admin/price-lists`,
+            {
+              title: "test price list",
+              description: "test",
+              status: PriceListStatus.ACTIVE,
+              type: PriceListType.SALE,
+              prices: [
+                {
+                  amount: 200,
+                  currency_code: "usd",
+                  variant_id: product.variants[0].id,
+                },
+              ],
+              rules: {
+                "customer.groups.id": [customerGroup.id],
+              },
+            },
+            adminHeaders
+          )
+
+          response = await api.post(
+            `/store/carts/${cart.id}/line-items/${item.id}`,
+            { quantity: 3 },
+            storeHeaders
+          )
+
+          expect(response.status).toEqual(200)
+          expect(response.data.cart).toEqual(
+            expect.objectContaining({
+              id: cart.id,
+              currency_code: "usd",
+              items: expect.arrayContaining([
+                expect.objectContaining({
+                  unit_price: 200,
+                  quantity: 3,
+                }),
+              ]),
+            })
+          )
         })
       })
 
@@ -930,6 +1212,7 @@ medusaIntegrationTestRunner({
               {
                 code: "PROMOTION_TEST",
                 type: PromotionType.STANDARD,
+                status: PromotionStatus.ACTIVE,
                 application_method: {
                   type: "fixed",
                   target_type: "items",
@@ -1442,7 +1725,7 @@ medusaIntegrationTestRunner({
                 rules: [
                   {
                     attribute: "enabled_in_store",
-                    value: '"true"',
+                    value: "true",
                     operator: "eq",
                   },
                   {
@@ -1813,7 +2096,7 @@ medusaIntegrationTestRunner({
                 rules: [
                   {
                     attribute: "enabled_in_store",
-                    value: '"true"',
+                    value: "true",
                     operator: "eq",
                   },
                   {

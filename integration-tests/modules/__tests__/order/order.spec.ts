@@ -30,6 +30,9 @@ medusaIntegrationTestRunner({
         const created = await orderModule.createOrders({
           region_id: "test_region_id",
           email: "foo@bar.com",
+          metadata: {
+            foo: "bar",
+          },
           items: [
             {
               title: "Custom Item 2",
@@ -108,6 +111,9 @@ medusaIntegrationTestRunner({
           payment_status: "not_paid",
           region_id: "test_region_id",
           fulfillments: [],
+          metadata: {
+            foo: "bar",
+          },
           fulfillment_status: "not_fulfilled",
           summary: expect.objectContaining({
             // TODO: add all summary fields
@@ -356,6 +362,7 @@ medusaIntegrationTestRunner({
             metadata: null,
             created_at: expect.any(String),
             updated_at: expect.any(String),
+            deleted_at: null,
           },
           billing_address: {
             id: expect.any(String),
@@ -373,6 +380,7 @@ medusaIntegrationTestRunner({
             metadata: null,
             created_at: expect.any(String),
             updated_at: expect.any(String),
+            deleted_at: null,
           },
           shipping_methods: [
             expect.objectContaining({

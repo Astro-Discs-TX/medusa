@@ -19,6 +19,7 @@ import {
   MedusaError,
   Modules,
   ProductStatus,
+  PromotionStatus,
   PromotionType,
 } from "@medusajs/utils"
 import {
@@ -657,6 +658,7 @@ medusaIntegrationTestRunner({
 
       describe("POST /store/carts/:id/line-items", () => {
         let region
+
         const productData = {
           title: "Medusa T-Shirt",
           handle: "t-shirt",
@@ -715,8 +717,21 @@ medusaIntegrationTestRunner({
         })
 
         it("adding an existing variant should update or create line item depending on metadata", async () => {
+          const shippingProfile =
+            await fulfillmentModule.createShippingProfiles({
+              name: "Test",
+              type: "default",
+            })
+
           const product = (
-            await api.post(`/admin/products`, productData, adminHeaders)
+            await api.post(
+              `/admin/products`,
+              {
+                ...productData,
+                shipping_profile_id: shippingProfile.id,
+              },
+              adminHeaders
+            )
           ).data.product
 
           const cart = (
@@ -1117,10 +1132,26 @@ medusaIntegrationTestRunner({
             )
           ).data.sales_channel
 
+          const salesChannel2 = (
+            await api.post(
+              "/admin/sales-channels",
+              { name: "second channel", description: "channel" },
+              adminHeaders
+            )
+          ).data.sales_channel
+
           stockLocation = (
             await api.post(
               `/admin/stock-locations`,
               { name: "test location" },
+              adminHeaders
+            )
+          ).data.stock_location
+
+          const stockLocation2 = (
+            await api.post(
+              `/admin/stock-locations`,
+              { name: "test location 2" },
               adminHeaders
             )
           ).data.stock_location
@@ -1145,8 +1176,23 @@ medusaIntegrationTestRunner({
           )
 
           await api.post(
+            `/admin/inventory-items/${inventoryItem.id}/location-levels`,
+            {
+              location_id: stockLocation2.id,
+              stocked_quantity: 10,
+            },
+            adminHeaders
+          )
+
+          await api.post(
             `/admin/stock-locations/${stockLocation.id}/sales-channels`,
             { add: [salesChannel.id] },
+            adminHeaders
+          )
+
+          await api.post(
+            `/admin/stock-locations/${stockLocation2.id}/sales-channels`,
+            { add: [salesChannel2.id] },
             adminHeaders
           )
 
@@ -1171,6 +1217,7 @@ medusaIntegrationTestRunner({
               "/admin/products",
               {
                 title: "Test fixture",
+                shipping_profile_id: shippingProfile.id,
                 options: [
                   { title: "size", values: ["large", "small"] },
                   { title: "color", values: ["green"] },
@@ -1210,6 +1257,23 @@ medusaIntegrationTestRunner({
                 fulfillment_set_id: fulfillmentSet.id,
               },
             },
+            {
+              [Modules.PRODUCT]: {
+                product_id: product.id,
+              },
+              [Modules.SALES_CHANNEL]: {
+                sales_channel_id: salesChannel2.id,
+              },
+            },
+            // Add product to 2 sales channels to test that the right stock location is selected for reservations
+            {
+              [Modules.PRODUCT]: {
+                product_id: product.id,
+              },
+              [Modules.SALES_CHANNEL]: {
+                sales_channel_id: salesChannel.id,
+              },
+            },
           ])
 
           promotion = (
@@ -1218,6 +1282,7 @@ medusaIntegrationTestRunner({
               {
                 code: "TEST",
                 type: PromotionType.STANDARD,
+                status: PromotionStatus.ACTIVE,
                 is_automatic: true,
                 campaign: {
                   campaign_identifier: "test",
@@ -1280,7 +1345,6 @@ medusaIntegrationTestRunner({
           ).data.shipping_option
 
           paymentCollection = await paymentService.createPaymentCollections({
-            region_id: region.id,
             amount: 1000,
             currency_code: "usd",
           })

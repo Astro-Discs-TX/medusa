@@ -1,4 +1,3 @@
-import { deepFlatMap } from "@medusajs/framework/utils"
 import {
   createWorkflow,
   transform,
@@ -7,37 +6,46 @@ import {
 } from "@medusajs/framework/workflows-sdk"
 import { useQueryGraphStep, validatePresenceOfStep } from "../../common"
 import { useRemoteQueryStep } from "../../common/steps/use-remote-query"
+import { cartFieldsForPricingContext } from "../utils/fields"
+import { ListShippingOptionsForCartWorkflowInput } from "@medusajs/types"
+import { isDefined } from "@medusajs/framework/utils"
 
 export const listShippingOptionsForCartWorkflowId =
   "list-shipping-options-for-cart"
 /**
- * This workflow lists the shipping options of a cart.
+ * This workflow lists the shipping options of a cart. It's executed by the
+ * [List Shipping Options Store API Route](https://docs.medusajs.com/api/store#shipping-options_getshippingoptions).
+ *
+ * :::note
+ *
+ * This workflow doesn't retrieve the calculated prices of the shipping options. If you need to retrieve the prices of the shipping options,
+ * use the {@link listShippingOptionsForCartWithPricingWorkflow} workflow.
+ *
+ * :::
+ *
+ * You can use this workflow within your own customizations or custom workflows, allowing you to wrap custom logic around to retrieve the shipping options of a cart
+ * in your custom flows.
+ *
+ * @example
+ * const { result } = await listShippingOptionsForCartWorkflow(container)
+ * .run({
+ *   input: {
+ *     cart_id: "cart_123",
+ *     option_ids: ["so_123"]
+ *   }
+ * })
+ *
+ * @summary
+ *
+ * List a cart's shipping options.
  */
 export const listShippingOptionsForCartWorkflow = createWorkflow(
   listShippingOptionsForCartWorkflowId,
-  (
-    input: WorkflowData<{
-      cart_id: string
-      option_ids?: string[]
-      is_return?: boolean
-      enabled_in_store?: boolean
-    }>
-  ) => {
+  (input: WorkflowData<ListShippingOptionsForCartWorkflowInput>) => {
     const cartQuery = useQueryGraphStep({
       entity: "cart",
       filters: { id: input.cart_id },
-      fields: [
-        "id",
-        "sales_channel_id",
-        "currency_code",
-        "region_id",
-        "shipping_address.city",
-        "shipping_address.country_code",
-        "shipping_address.province",
-        "shipping_address.postal_code",
-        "item_total",
-        "total",
-      ],
+      fields: cartFieldsForPricingContext,
       options: { throwIfKeyNotFound: true },
     }).config({ name: "get-cart" })
 
@@ -51,7 +59,12 @@ export const listShippingOptionsForCartWorkflow = createWorkflow(
     const scFulfillmentSetQuery = useQueryGraphStep({
       entity: "sales_channels",
       filters: { id: cart.sales_channel_id },
-      fields: ["stock_locations.fulfillment_sets.id"],
+      fields: [
+        "stock_locations.fulfillment_sets.id",
+        "stock_locations.id",
+        "stock_locations.name",
+        "stock_locations.address.*",
+      ],
     }).config({ name: "sales_channels-fulfillment-query" })
 
     const scFulfillmentSets = transform(
@@ -59,48 +72,52 @@ export const listShippingOptionsForCartWorkflow = createWorkflow(
       ({ scFulfillmentSetQuery }) => scFulfillmentSetQuery.data[0]
     )
 
-    const fulfillmentSetIds = transform(
-      { options: scFulfillmentSets },
-      (data) => {
+    const { fulfillmentSetIds } = transform(
+      { scFulfillmentSets },
+      ({ scFulfillmentSets }) => {
         const fulfillmentSetIds = new Set<string>()
 
-        deepFlatMap(
-          data.options,
-          "stock_locations.fulfillment_sets",
-          ({ fulfillment_sets: fulfillmentSet }) => {
-            if (fulfillmentSet?.id) {
-              fulfillmentSetIds.add(fulfillmentSet.id)
-            }
-          }
-        )
+        scFulfillmentSets.stock_locations.forEach((stockLocation) => {
+          stockLocation.fulfillment_sets.forEach((fulfillmentSet) => {
+            fulfillmentSetIds.add(fulfillmentSet.id)
+          })
+        })
 
-        return Array.from(fulfillmentSetIds)
+        return {
+          fulfillmentSetIds: Array.from(fulfillmentSetIds),
+        }
       }
     )
 
     const queryVariables = transform(
       { input, fulfillmentSetIds, cart },
-      ({ input, fulfillmentSetIds, cart }) => ({
-        id: input.option_ids,
+      ({ input, fulfillmentSetIds, cart }) => {
+        return {
+          id: input.option_ids,
 
-        context: {
-          is_return: input.is_return ?? false,
-          enabled_in_store: input.enabled_in_store ?? true,
-        },
-
-        filters: {
-          fulfillment_set_id: fulfillmentSetIds,
-
-          address: {
-            country_code: cart.shipping_address?.country_code,
-            province_code: cart.shipping_address?.province,
-            city: cart.shipping_address?.city,
-            postal_expression: cart.shipping_address?.postal_code,
+          context: {
+            is_return: input.is_return ? "true" : "false",
+            enabled_in_store: !isDefined(input.enabled_in_store)
+              ? "true"
+              : input.enabled_in_store
+              ? "true"
+              : "false",
           },
-        },
 
-        calculated_price: { context: cart },
-      })
+          filters: {
+            fulfillment_set_id: fulfillmentSetIds,
+
+            address: {
+              country_code: cart.shipping_address?.country_code,
+              province_code: cart.shipping_address?.province,
+              city: cart.shipping_address?.city,
+              postal_expression: cart.shipping_address?.postal_code,
+            },
+          },
+
+          calculated_price: { context: cart },
+        }
+      }
     )
 
     const shippingOptions = useRemoteQueryStep({
@@ -113,6 +130,7 @@ export const listShippingOptionsForCartWorkflow = createWorkflow(
         "shipping_profile_id",
         "provider_id",
         "data",
+        "service_zone.fulfillment_set_id",
 
         "type.id",
         "type.label",
