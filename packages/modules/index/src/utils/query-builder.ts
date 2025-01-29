@@ -270,6 +270,18 @@ export class QueryBuilder {
     return builder
   }
 
+  private getShortAlias(aliasMapping, alias: string) {
+    aliasMapping.__aliasIndex ??= 0
+
+    if (aliasMapping[alias]) {
+      return aliasMapping[alias]
+    }
+
+    aliasMapping[alias] = "t_" + aliasMapping.__aliasIndex++ + "_"
+
+    return aliasMapping[alias]
+  }
+
   private buildQueryParts(
     structure: Select,
     parentAlias: string,
@@ -284,7 +296,8 @@ export class QueryBuilder {
     const entities = this.getEntity(currentAliasPath)
 
     const mainEntity = entities.ref.entity
-    const mainAlias = mainEntity.toLowerCase() + level
+    const mainAlias =
+      this.getShortAlias(aliasMapping, mainEntity.toLowerCase()) + level
 
     const allEntities: any[] = []
     if (!entities.shortCutOf) {
@@ -311,11 +324,21 @@ export class QueryBuilder {
         )
 
         const alias =
-          intermediateEntity.ref.entity.toLowerCase() + level + "_" + x
+          this.getShortAlias(
+            aliasMapping,
+            intermediateEntity.ref.entity.toLowerCase()
+          ) +
+          level +
+          "_" +
+          x
+
         const parAlias =
           parentIntermediateEntity.ref.entity === parentEntity
             ? parentAlias
-            : parentIntermediateEntity.ref.entity.toLowerCase() +
+            : this.getShortAlias(
+                aliasMapping,
+                parentIntermediateEntity.ref.entity.toLowerCase()
+              ) +
               level +
               "_" +
               (x + 1)
@@ -335,25 +358,25 @@ export class QueryBuilder {
 
     let queryParts: string[] = []
     for (const join of allEntities) {
+      const joinBuilder = this.knex.queryBuilder()
       const { alias, entity, parEntity, parAlias } = join
 
       aliasMapping[currentAliasPath] = alias
 
-      const cName = entity.toLowerCase()
-      const pName = `${parEntity}${entity}`.toLowerCase()
-
       if (level > 0) {
+        const cName = entity.toLowerCase()
+        const pName = `${parEntity}${entity}`.toLowerCase()
+
         let joinTable = `cat_${cName} AS ${alias}`
 
         const pivotTable = `cat_pivot_${pName}`
-        queryParts.push(
-          `LEFT JOIN ${pivotTable} AS ${alias}_ref ON ${alias}_ref.parent_id = ${parAlias}.id`
+        joinBuilder.leftJoin(
+          `${pivotTable} AS ${alias}_ref`,
+          `${alias}_ref.parent_id`,
+          `${parAlias}.id`
         )
-        queryParts.push(
-          `LEFT JOIN ${joinTable} ON ${alias}.id = ${alias}_ref.child_id`
-        )
+        joinBuilder.leftJoin(joinTable, `${alias}.id`, `${alias}_ref.child_id`)
 
-        /*
         const joinWhere = this.selector.joinWhere ?? {}
         const joinKey = Object.keys(joinWhere).find((key) => {
           const k = key.split(".")
@@ -365,10 +388,11 @@ export class QueryBuilder {
           this.parseWhere(
             aliasMapping,
             { [joinKey]: joinWhere[joinKey] },
-            subQuery
+            joinBuilder
           )
         }
-        */
+
+        queryParts.push(joinBuilder.toQuery().replace("select * ", ""))
       }
     }
 
@@ -489,13 +513,18 @@ export class QueryBuilder {
 
     if (countAllResults) {
       selectParts["offset_"] = this.knex.raw(
-        `DENSE_RANK() OVER (ORDER BY ${rootEntity}0.id)`
+        `DENSE_RANK() OVER (ORDER BY ${this.getShortAlias(
+          aliasMapping,
+          rootEntity
+        )}.id)`
       )
     }
 
     queryBuilder.select(selectParts)
 
-    queryBuilder.from(`cat_${rootEntity} AS ${rootEntity}0`)
+    queryBuilder.from(
+      `cat_${rootEntity} AS ${this.getShortAlias(aliasMapping, rootEntity)}`
+    )
 
     joinParts.forEach((joinPart) => {
       queryBuilder.joinRaw(joinPart)

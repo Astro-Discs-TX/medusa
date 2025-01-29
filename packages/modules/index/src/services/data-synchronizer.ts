@@ -218,7 +218,7 @@ export class DataSynchronizer {
 
     let processed = 0
     let currentCursor = pagination.cursor!
-    const batchSize = Math.min(pagination.batchSize ?? 100, 1)
+    const batchSize = Math.min(pagination.batchSize ?? 100, 100)
     const limit = pagination.limit ?? Infinity
     let done = false
     let error = null
