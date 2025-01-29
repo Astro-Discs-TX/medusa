@@ -37,6 +37,7 @@ export class WorkflowsModuleService<
   protected workflowExecutionService_: ModulesSdkTypes.IMedusaInternalService<TWorkflowExecution>
   protected workflowOrchestratorService_: WorkflowOrchestratorService
   protected manager_: SqlEntityManager
+  private clearTimeout_: NodeJS.Timeout
 
   constructor(
     {
@@ -60,9 +61,12 @@ export class WorkflowsModuleService<
     onApplicationStart: async () => {
       await this.clearExpiredExecutions()
 
-      setInterval(async () => {
+      this.clearTimeout_ = setInterval(async () => {
         await this.clearExpiredExecutions()
       }, 1000 * 60 * 60)
+    },
+    onApplicationShutdown: async () => {
+      clearInterval(this.clearTimeout_)
     },
   }
 

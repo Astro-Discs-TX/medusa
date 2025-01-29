@@ -39,6 +39,7 @@ export class WorkflowsModuleService<
   protected workflowOrchestratorService_: WorkflowOrchestratorService
   protected redisDisconnectHandler_: () => Promise<void>
   protected manager_: SqlEntityManager
+  private clearTimeout_: NodeJS.Timeout
 
   constructor(
     {
@@ -64,6 +65,7 @@ export class WorkflowsModuleService<
     onApplicationShutdown: async () => {
       await this.workflowOrchestratorService_.onApplicationShutdown()
       await this.redisDisconnectHandler_()
+      clearInterval(this.clearTimeout_)
     },
     onApplicationPrepareShutdown: async () => {
       await this.workflowOrchestratorService_.onApplicationPrepareShutdown()
@@ -72,7 +74,7 @@ export class WorkflowsModuleService<
       await this.workflowOrchestratorService_.onApplicationStart()
 
       await this.clearExpiredExecutions()
-      setInterval(async () => {
+      this.clearTimeout_ = setInterval(async () => {
         await this.clearExpiredExecutions()
       }, 1000 * 60 * 60)
     },
