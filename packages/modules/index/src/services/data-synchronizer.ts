@@ -156,6 +156,8 @@ export class DataSynchronizer {
               entity: entity,
             },
           })
+
+          await this.#orchestrator.renewLock(entity)
         }
       },
     })
@@ -222,7 +224,7 @@ export class DataSynchronizer {
         done: true,
       }
 
-      void ack(acknoledgement)
+      await ack(acknoledgement)
       return acknoledgement
     }
 
