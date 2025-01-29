@@ -1,10 +1,6 @@
-import { IEventBusModuleService, IndexTypes } from "@medusajs/types"
-import {
-  ContainerRegistrationKeys,
-  defaultCurrencies,
-  Modules,
-} from "@medusajs/utils"
 import { medusaIntegrationTestRunner } from "@medusajs/test-utils"
+import { IndexTypes } from "@medusajs/types"
+import { defaultCurrencies, Modules } from "@medusajs/utils"
 import { setTimeout } from "timers/promises"
 import {
   adminHeaders,
@@ -44,7 +40,6 @@ medusaIntegrationTestRunner({
         ).data.shipping_profile
 
         for (let i = 0; i < 10; i++) {
-          console.info(`[Index engine] Creating product ${i}`)
           const payload = {
             title: "Test Giftcard " + i,
             shipping_profile_id: shippingProfile.id,
