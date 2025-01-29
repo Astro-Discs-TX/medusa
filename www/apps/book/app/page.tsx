@@ -1,5 +1,5 @@
 import clsx from "clsx"
-import { MainNav, RootProviders } from "docs-ui"
+import { AiAssistantChatWindow, MainNav, RootProviders } from "docs-ui"
 import HomepageTopSection from "../components/Homepage/TopSection"
 import Providers from "../providers"
 import HomepageLinksSection from "../components/Homepage/LinksSection"
@@ -40,6 +40,7 @@ const Homepage = () => {
             <HomepageModulesSection />
             <HomepageFooter />
           </div>
+          <AiAssistantChatWindow type="popover" />
         </Providers>
       </RootProviders>
     </body>

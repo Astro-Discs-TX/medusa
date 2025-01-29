@@ -7,12 +7,13 @@ import { AiAssistent } from "@medusajs/icons"
 import { Tooltip } from "../../Tooltip"
 import { Kbd } from "../../Kbd"
 import { getOsShortcut } from "../../../utils"
-import { useAiAssistant } from "../../../providers"
+import { useAiAssistant, useSearch } from "../../../providers"
 import { useKeyboardShortcut } from "../../../hooks"
 
 export const AiAssistantTriggerButton = () => {
   const [hovered, setHovered] = useState(false)
   const { chatOpened, setChatOpened } = useAiAssistant()
+  const { setIsOpen } = useSearch()
   const isActive = useMemo(() => {
     return hovered || chatOpened
   }, [hovered, chatOpened])
@@ -23,6 +24,7 @@ export const AiAssistantTriggerButton = () => {
     shortcutKeys: ["m"],
     action: () => {
       setChatOpened((prev) => !prev)
+      setIsOpen(false)
     },
     checkEditing: false,
   })

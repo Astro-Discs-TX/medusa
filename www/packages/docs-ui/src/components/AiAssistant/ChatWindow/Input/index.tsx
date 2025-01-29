@@ -10,6 +10,7 @@ export const AiAssistantChatWindowInput = () => {
     setQuestion,
     handleSubmit: submitQuestion,
     loading,
+    getThreadItems,
   } = useAiAssistantChat()
   const formRef = useRef<HTMLFormElement | null>(null)
 
@@ -19,6 +20,15 @@ export const AiAssistantChatWindowInput = () => {
   }
 
   const handleKeyboardDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "ArrowUp" && !question) {
+      const lastQuestion = getThreadItems()
+        .reverse()
+        .find((item) => item.type === "question")
+      if (lastQuestion) {
+        setQuestion(lastQuestion.content)
+      }
+      return
+    }
     if (e.key !== "Enter") {
       return
     }
