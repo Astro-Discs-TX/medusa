@@ -21,7 +21,7 @@ export const AiAssistantTriggerButton = () => {
 
   useKeyboardShortcut({
     metakey: true,
-    shortcutKeys: ["m"],
+    shortcutKeys: ["i"],
     action: () => {
       setChatOpened((prev) => !prev)
       setIsOpen(false)
@@ -41,7 +41,7 @@ export const AiAssistantTriggerButton = () => {
               {osShortcut}
             </Kbd>
             <Kbd className="bg-medusa-bg-field-component border-medusa-border-strong w-[18px] h-[18px] inline-block">
-              M
+              i
             </Kbd>
           </span>
         </span>
