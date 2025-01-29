@@ -1,14 +1,13 @@
+import inquirer from "inquirer"
+import { Ora } from "ora"
 import { EOL } from "os"
 import pg from "pg"
+import formatConnectionString from "./format-connection-string.js"
+import logMessage from "./log-message.js"
 import postgresClient, {
   DEFAULT_HOST,
   DEFAULT_PORT,
 } from "./postgres-client.js"
-import inquirer from "inquirer"
-import logMessage from "./log-message.js"
-import formatConnectionString from "./format-connection-string.js"
-import { Ora } from "ora"
-import { getCurrentOs } from "./get-current-os.js"
 
 type CreateDbOptions = {
   client: pg.Client
@@ -226,14 +225,15 @@ export async function getDbClientAndCredentials({
   verbose?: boolean
   dbName?: string
 }> {
-  if (dbName) {
-    return await getForDbName({
-      dbName,
+  /** use the --db-url parameter if specified. if not ask. */
+  if (dbUrl) {
+    return await getForDbUrl({
+      dbUrl,
       verbose,
     })
   } else {
-    return await getForDbUrl({
-      dbUrl,
+    return await getForDbName({
+      dbName,
       verbose,
     })
   }
