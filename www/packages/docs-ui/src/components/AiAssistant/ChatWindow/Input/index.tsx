@@ -54,6 +54,13 @@ export const AiAssistantChatWindowInput = () => {
     adjustTextareaHeight()
   }, [question])
 
+  const handleTouch = (e: React.TouchEvent<HTMLTextAreaElement>) => {
+    e.preventDefault()
+    inputRef.current?.focus({
+      preventScroll: true,
+    })
+  }
+
   return (
     <div
       className={clsx(
@@ -75,6 +82,9 @@ export const AiAssistantChatWindowInput = () => {
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
           onKeyDown={handleKeyboardDown}
+          onTouchStart={handleTouch}
+          onTouchMove={handleTouch}
+          onTouchEnd={handleTouch}
           ref={inputRef as React.RefObject<HTMLTextAreaElement | null>}
           placeholder="Ask me a question about Medusa..."
           disabled={loading}

@@ -2,7 +2,7 @@
 
 import clsx from "clsx"
 import React, { useCallback, useEffect, useRef, useState } from "react"
-import { useAiAssistant } from "../../../providers"
+import { useAiAssistant, useIsBrowser } from "../../../providers"
 import { AiAssistantChatWindowHeader } from "./Header"
 import { useAiAssistantChat } from "../../../providers/AiAssistant/Chat"
 import { AiAssistantSuggestions } from "../Suggestions"
@@ -15,11 +15,15 @@ type AiAssistantChatWindowProps = {
   type?: "default" | "popover"
 }
 
+const DEFAULT_HEIGHT = "calc(100% - 8px)"
+
 export const AiAssistantChatWindow = ({
   type = "default",
 }: AiAssistantChatWindowProps) => {
   const { chatOpened, setChatOpened } = useAiAssistant()
+  const [height, setHeight] = useState(DEFAULT_HEIGHT)
   const [showFade, setShowFade] = useState(false)
+  const { isBrowser } = useIsBrowser()
   const {
     inputRef,
     thread,
@@ -103,6 +107,34 @@ export const AiAssistantChatWindow = ({
     }
   }, [loading])
 
+  const changeHeightForViewport = () => {
+    if (!window.visualViewport?.height) {
+      setHeight(DEFAULT_HEIGHT)
+      return
+    }
+
+    setHeight(`${window.visualViewport.height - 8}px`)
+  }
+
+  useEffect(() => {
+    if (!isBrowser) {
+      return
+    }
+
+    window.visualViewport?.addEventListener("resize", changeHeightForViewport)
+
+    return () => {
+      window.visualViewport?.removeEventListener(
+        "resize",
+        changeHeightForViewport
+      )
+    }
+  }, [isBrowser])
+
+  useEffect(() => {
+    checkShowFade()
+  }, [height])
+
   return (
     <>
       <div
@@ -116,10 +148,10 @@ export const AiAssistantChatWindow = ({
       />
       <div
         className={clsx(
-          "flex z-50 md:w-ai-assistant",
-          "absolute -right-[150%] sm:-right-full top-0 h-[calc(100%-8px)] transition-[right]",
+          "flex z-50 w-[calc(100%-8px)] md:w-ai-assistant transition-[height,right]",
+          "absolute -right-[150%] sm:-right-full top-0",
           type === "default" && [
-            "xxxl:w-0 xxxl:relative xxxl:transition-[width]",
+            "xxxl:w-0 xxxl:relative xxxl:transition-[height,right,width]",
             "xxxl:shadow-elevation-card-rest xxxl:dark:shadow-elevation-card-rest-dark",
             chatOpened && "xxxl:!w-ai-assistant",
           ],
@@ -128,6 +160,9 @@ export const AiAssistantChatWindow = ({
           "flex-col justify-between m-docs_0.25 max-w-ai-assistant",
           chatOpened && ["!right-0"]
         )}
+        style={{
+          height,
+        }}
         ref={chatWindowRef}
       >
         <AiAssistantChatWindowHeader />

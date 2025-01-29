@@ -35,11 +35,7 @@ export const AiAssistantThreadItemActions = ({
   }
 
   return (
-    <div
-      className={clsx(
-        "hidden md:flex gap-docs_0.75 justify-between items-center"
-      )}
-    >
+    <div className={clsx("flex gap-docs_0.75 justify-between items-center")}>
       {item.sources !== undefined && item.sources.length > 0 && (
         <div className="flex gap-[6px] items-center flex-wrap">
           {item.sources.map((source) => (

@@ -330,6 +330,8 @@ module.exports = {
         "modal-sm": "624px",
         "modal-md": "752px",
         "modal-lg": "640px",
+        // ai-assistant
+        "ai-assistant": "500px"
       },
       minWidth: {
         xl: "1419px",
