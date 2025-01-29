@@ -387,13 +387,6 @@ export const confirmClaimRequestWorkflow = createWorkflow(
       updateReturnsStep(updateReturnDate)
     })
 
-    const claimId = transform(
-      { createdClaimItems },
-      ({ createdClaimItems }) => {
-        return createdClaimItems?.[0]?.claim_id
-      }
-    )
-
     const { returnShippingMethod, claimShippingMethod } = transform(
       { orderPreview, orderClaim, returnId },
       extractShippingOption
@@ -421,7 +414,7 @@ export const confirmClaimRequestWorkflow = createWorkflow(
           "additional_items.item.variant.inventory_items.inventory.location_levels.stock_locations.sales_channels.id",
           "additional_items.item.variant.inventory_items.inventory.location_levels.stock_locations.sales_channels.name",
         ],
-        variables: { id: claimId },
+        variables: { id: input.claim_id },
         list: false,
         throw_if_key_not_found: true,
       }).config({ name: "claim-query" })

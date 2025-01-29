@@ -373,13 +373,6 @@ export const confirmExchangeRequestWorkflow = createWorkflow(
       updateReturnsStep(updateReturnData)
     })
 
-    const exchangeId = transform(
-      { createdExchangeItems },
-      ({ createdExchangeItems }) => {
-        return createdExchangeItems?.[0]?.exchange_id
-      }
-    )
-
     const { returnShippingMethod, exchangeShippingMethod } = transform(
       { orderPreview, orderExchange, returnId },
       extractShippingOption
@@ -407,7 +400,7 @@ export const confirmExchangeRequestWorkflow = createWorkflow(
           "additional_items.item.variant.inventory_items.inventory.location_levels.stock_locations.sales_channels.id",
           "additional_items.item.variant.inventory_items.inventory.location_levels.stock_locations.sales_channels.name",
         ],
-        variables: { id: exchangeId },
+        variables: { id: input.exchange_id },
         list: false,
         throw_if_key_not_found: true,
       }).config({ name: "exchange-query" })
