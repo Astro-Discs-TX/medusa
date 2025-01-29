@@ -56,8 +56,7 @@ export const createApiKeysWorkflow = createWorkflow(
     const apiKeys = createApiKeysStep(input)
 
     const apiKeysCreated = createHook("apiKeysCreated", {
-      apiKeys,
-      additional_data: input.additional_data,
+      apiKeys
     })
 
     return new WorkflowResponse(apiKeys, {
