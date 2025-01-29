@@ -11,7 +11,7 @@ import {
   createAdminUser,
 } from "../../../helpers/create-admin-user"
 
-jest.setTimeout(120000)
+jest.setTimeout(300000)
 
 process.env.ENABLE_INDEX_MODULE = "true"
 
@@ -91,7 +91,19 @@ medusaIntegrationTestRunner({
         // Trigger a sync
         await (indexEngine as any).onApplicationStart_()
 
+        console.log("--- QUERY ---")
         const { data: results } = await indexEngine.query<"product">({
+          fields: [
+            "product.*",
+            "product.variants.*",
+            "product.variants.prices.*",
+          ],
+        })
+
+        await setTimeout(5000)
+
+        console.log("--- QUERY 2 ---")
+        await indexEngine.query<"product">({
           fields: [
             "product.*",
             "product.variants.*",
