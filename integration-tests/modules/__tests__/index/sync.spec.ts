@@ -97,6 +97,7 @@ medusaIntegrationTestRunner({
 
         console.info("[Index engine] Sync done")
 
+        // 28 ms - 10 + 10 * 50 + 10 * 50 * 10 = 5510
         const { data: results } = await indexEngine.query<"product">({
           fields: [
             "product.*",

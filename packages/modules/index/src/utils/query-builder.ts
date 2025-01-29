@@ -345,15 +345,13 @@ export class QueryBuilder {
       if (level > 0) {
         let joinTable = `cat_${cName} AS ${alias}`
 
-        if (level > 0) {
-          const pivotTable = `cat_pivot_${pName}`
-          queryParts.push(
-            `LEFT JOIN ${pivotTable} AS ${alias}_ref ON ${alias}_ref.parent_id = ${parAlias}.id`
-          )
-          queryParts.push(
-            `LEFT JOIN ${joinTable} ON ${alias}.id = ${alias}_ref.child_id`
-          )
-        }
+        const pivotTable = `cat_pivot_${pName}`
+        queryParts.push(
+          `LEFT JOIN ${pivotTable} AS ${alias}_ref ON ${alias}_ref.parent_id = ${parAlias}.id`
+        )
+        queryParts.push(
+          `LEFT JOIN ${joinTable} ON ${alias}.id = ${alias}_ref.child_id`
+        )
 
         /*
         const joinWhere = this.selector.joinWhere ?? {}
