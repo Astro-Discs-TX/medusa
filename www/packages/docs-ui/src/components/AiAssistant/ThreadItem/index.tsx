@@ -36,7 +36,7 @@ export const AiAssistantThreadItem = ({ item }: AiAssistantThreadItemProps) => {
         {item.type === "question" && (
           <MarkdownContent
             className="[&>*:last-child]:mb-0"
-            allowedElements={["br", "p", "code"]}
+            allowedElements={["br", "p", "code", "pre"]}
             unwrapDisallowed={true}
           >
             {item.content}
