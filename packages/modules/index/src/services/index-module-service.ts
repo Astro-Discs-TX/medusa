@@ -123,6 +123,7 @@ export default class IndexModuleService
         schemaObjectRepresentation: this.schemaObjectRepresentation_,
         indexMetadataService: this.indexMetadataService_,
         indexSyncService: this.indexSyncService_,
+        dataSynchronizer: this.dataSynchronizer_,
       })
       const entitiesMetadataChanged = await configurationChecker.checkChanges()
 

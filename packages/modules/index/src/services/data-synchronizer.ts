@@ -89,6 +89,26 @@ export class DataSynchronizer {
     await this.#orchestrator.process(this.#taskRunner.bind(this))
   }
 
+  async removeEntities(entities: string[], staleOnly: boolean = false) {
+    this.#isReadyOrThrow()
+
+    const staleCondition = staleOnly ? { staled_at: { $ne: null } } : {}
+
+    // Clean up staled data
+    await this.#indexRelationService.delete({
+      ...staleCondition,
+      $or: entities.flatMap((entity) => [
+        { parent_name: entity },
+        { child_name: entity },
+      ]),
+    })
+
+    await this.#indexDataService.delete({
+      ...staleCondition,
+      name: entities,
+    })
+  }
+
   async #updatedStatus(entity: string, status: IndexMetadataStatus) {
     await this.#indexMetadataService.update({
       data: {
@@ -151,17 +171,7 @@ export class DataSynchronizer {
             entity: entity,
           },
         }),
-        // Clean up staled data
-        this.#indexRelationService.delete({
-          $and: [
-            { staled_at: { $ne: null } },
-            { $or: [{ parent_name: entity }, { child_name: entity }] },
-          ],
-        }),
-        this.#indexDataService.delete({
-          staled_at: { $ne: null },
-          name: entity,
-        }),
+        this.removeEntities([entity], true),
       ])
     }
 

@@ -2,6 +2,7 @@ import { simpleHash } from "@medusajs/framework/utils"
 import { IndexTypes, InferEntityType } from "@medusajs/types"
 import { IndexMetadata } from "@models"
 import { schemaObjectRepresentationPropertiesToOmit } from "@types"
+import { DataSynchronizer } from "../../services/data-synchronizer"
 import { IndexMetadataService } from "../../services/index-metadata"
 import { IndexSyncService } from "../../services/index-sync"
 import { IndexMetadataStatus } from "../index-metadata-status"
@@ -10,19 +11,23 @@ export class Configuration {
   #schemaObjectRepresentation: IndexTypes.SchemaObjectRepresentation
   #indexMetadataService: IndexMetadataService
   #indexSyncService: IndexSyncService
+  #dataSynchronizer: DataSynchronizer
 
   constructor({
     schemaObjectRepresentation,
     indexMetadataService,
     indexSyncService,
+    dataSynchronizer,
   }: {
     schemaObjectRepresentation: IndexTypes.SchemaObjectRepresentation
     indexMetadataService: IndexMetadataService
     indexSyncService: IndexSyncService
+    dataSynchronizer: DataSynchronizer
   }) {
     this.#schemaObjectRepresentation = schemaObjectRepresentation ?? {}
     this.#indexMetadataService = indexMetadataService
     this.#indexSyncService = indexSyncService
+    this.#dataSynchronizer = dataSynchronizer
   }
 
   async checkChanges(): Promise<InferEntityType<typeof IndexMetadata>[]> {
@@ -108,6 +113,9 @@ export class Configuration {
     }
     if (deletedConfig.length > 0) {
       await this.#indexMetadataService.delete(deletedConfig)
+      await this.#dataSynchronizer.removeEntities(
+        deletedConfig.map((c) => c.entity)
+      )
     }
 
     if (idxSyncData.length > 0) {
