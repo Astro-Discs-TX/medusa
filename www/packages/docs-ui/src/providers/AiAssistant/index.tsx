@@ -8,6 +8,8 @@ import { AiAssistantChatProvider } from "./Chat"
 
 export type AiAssistantFeedbackType = "upvote" | "downvote"
 
+export type AiAssistantChatType = "default" | "popover"
+
 export type AiAssistantContextType = {
   getAnswer: (question: string, thread_id?: string) => Promise<Response>
   sendFeedback: (
@@ -17,6 +19,7 @@ export type AiAssistantContextType = {
   version: "v1" | "v2"
   chatOpened: boolean
   setChatOpened: React.Dispatch<React.SetStateAction<boolean>>
+  chatType: AiAssistantChatType
 }
 
 const AiAssistantContext = createContext<AiAssistantContextType | null>(null)
@@ -28,6 +31,7 @@ export type AiAssistantProviderProps = {
   websiteId: string
   version?: "v1" | "v2"
   type?: "search" | "chat"
+  chatType?: AiAssistantChatType
 }
 
 export const AiAssistantProvider = ({
@@ -37,6 +41,7 @@ export const AiAssistantProvider = ({
   version = "v2",
   children,
   type = "chat",
+  chatType = "default",
 }: AiAssistantProviderProps) => {
   const [chatOpened, setChatOpened] = useState(false)
   const { setCommands, setIsOpen, setCommand } = useSearch()
@@ -126,6 +131,7 @@ export const AiAssistantProvider = ({
         version,
         chatOpened,
         setChatOpened,
+        chatType,
       }}
     >
       <AiAssistantChatProvider>

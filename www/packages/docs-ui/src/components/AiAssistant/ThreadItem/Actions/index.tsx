@@ -51,7 +51,7 @@ export const AiAssistantThreadItemActions = ({
         {(feedback === null || feedback === "upvote") && (
           <ActionButton
             onClick={async () => handleFeedback("upvote", item.question_id)}
-            className={clsx(feedback === "upvote" && "!text-medusa-fg-subtle")}
+            className={clsx(feedback === "upvote" && "!text-medusa-fg-muted")}
           >
             <ThumbUp />
           </ActionButton>
@@ -59,9 +59,7 @@ export const AiAssistantThreadItemActions = ({
         {(feedback === null || feedback === "downvote") && (
           <ActionButton
             onClick={async () => handleFeedback("downvote", item.question_id)}
-            className={clsx(
-              feedback === "downvote" && "!text-medusa-fg-subtle"
-            )}
+            className={clsx(feedback === "downvote" && "!text-medusa-fg-muted")}
           >
             <ThumbDown />
           </ActionButton>
@@ -76,7 +74,7 @@ const ActionButton = ({ children, className, ...props }: ButtonProps) => {
     <Button
       variant="transparent"
       className={clsx(
-        "text-medusa-fg-muted hover:text-medusa-fg-subtle",
+        "text-medusa-fg-muted hover:text-medusa-fg-muted",
         "hover:bg-medusa-bg-subtle-hover",
         "!p-[4.5px] rounded-docs_sm",
         className

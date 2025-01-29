@@ -31,6 +31,7 @@ const Providers = ({ children }: ProvidersProps) => {
                         .NEXT_PUBLIC_AI_API_ASSISTANT_RECAPTCHA_SITE_KEY ||
                       "temp"
                     }
+                    chatType="popover"
                   >
                     {children}
                   </AiAssistantProvider>

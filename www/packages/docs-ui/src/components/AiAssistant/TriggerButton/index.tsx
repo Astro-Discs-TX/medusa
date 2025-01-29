@@ -2,16 +2,19 @@
 
 import React, { useMemo, useState } from "react"
 import { Button } from "../../Button"
-import { AiAssistantLuminosityIcon } from "../../Icons"
-import { AiAssistent } from "@medusajs/icons"
 import { Tooltip } from "../../Tooltip"
 import { Kbd } from "../../Kbd"
 import { getOsShortcut } from "../../../utils"
-import { useAiAssistant, useSearch } from "../../../providers"
+import { useAiAssistant, useSearch, useSiteConfig } from "../../../providers"
 import { useKeyboardShortcut } from "../../../hooks"
+import Image from "next/image"
+
+const AI_ASSISTANT_ICON = "/images/ai-assistent-luminosity.png"
+const AI_ASSISTANT_ICON_ACTIVE = "/images/ai-assistent.png"
 
 export const AiAssistantTriggerButton = () => {
   const [hovered, setHovered] = useState(false)
+  const { config } = useSiteConfig()
   const { chatOpened, setChatOpened } = useAiAssistant()
   const { setIsOpen } = useSearch()
   const isActive = useMemo(() => {
@@ -56,11 +59,12 @@ export const AiAssistantTriggerButton = () => {
         onTouchEnd={() => setHovered(false)}
         onClick={() => setChatOpened((prev) => !prev)}
       >
-        {isActive ? (
-          <AiAssistent width={20} height={20} />
-        ) : (
-          <AiAssistantLuminosityIcon />
-        )}
+        <Image
+          src={`${config.basePath}${isActive ? AI_ASSISTANT_ICON_ACTIVE : AI_ASSISTANT_ICON}`}
+          width={15}
+          height={15}
+          alt="AI Assistant"
+        />
       </Button>
     </Tooltip>
   )

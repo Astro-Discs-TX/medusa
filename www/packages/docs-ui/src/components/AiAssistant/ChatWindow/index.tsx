@@ -11,16 +11,10 @@ import { AiAssistantChatWindowInput } from "./Input"
 import { useAiAssistantChatNavigation, useKeyboardShortcut } from "../../.."
 import { AiAssistantChatWindowFooter } from "./Footer"
 
-type AiAssistantChatWindowProps = {
-  type?: "default" | "popover"
-}
-
 const DEFAULT_HEIGHT = "calc(100% - 8px)"
 
-export const AiAssistantChatWindow = ({
-  type = "default",
-}: AiAssistantChatWindowProps) => {
-  const { chatOpened, setChatOpened } = useAiAssistant()
+export const AiAssistantChatWindow = () => {
+  const { chatOpened, setChatOpened, chatType: type } = useAiAssistant()
   const [height, setHeight] = useState(DEFAULT_HEIGHT)
   const [showFade, setShowFade] = useState(false)
   const { isBrowser } = useIsBrowser()
@@ -142,7 +136,7 @@ export const AiAssistantChatWindow = ({
           "fixed top-0 left-0 h-screen w-screen z-50 bg-medusa-bg-overlay",
           !chatOpened && "hidden",
           chatOpened && "block",
-          type === "default" && "xxxl:hidden"
+          type === "default" && "xxl:hidden"
         )}
         onClick={() => setChatOpened(false)}
       />
@@ -151,9 +145,9 @@ export const AiAssistantChatWindow = ({
           "flex z-50 w-[calc(100%-8px)] md:w-ai-assistant transition-[height,right]",
           "absolute -right-[150%] sm:-right-full top-0",
           type === "default" && [
-            "xxxl:w-0 xxxl:relative xxxl:transition-[height,right,width]",
-            "xxxl:shadow-elevation-card-rest xxxl:dark:shadow-elevation-card-rest-dark",
-            chatOpened && "xxxl:!w-ai-assistant",
+            "xxl:w-0 xxl:relative xxl:transition-[height,right,width]",
+            "xxl:shadow-elevation-card-rest xxl:dark:shadow-elevation-card-rest-dark",
+            chatOpened && "xxl:!w-ai-assistant",
           ],
           "shadow-elevation-modal dark:shadow-elevation-modal-dark",
           "bg-medusa-bg-base rounded-docs_DEFAULT overflow-x-hidden",

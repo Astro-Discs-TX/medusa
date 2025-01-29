@@ -24,7 +24,7 @@ export const AiAssistantThreadItem = ({ item }: AiAssistantThreadItemProps) => {
       )}
       <div
         className={clsx(
-          "txt-small text-medusa-fg-subtle",
+          "txt-small text-medusa-fg-base",
           item.type === "question" && [
             "rounded-docs_xl bg-medusa-tag-neutral-bg",
             "px-docs_0.75 py-docs_0.5",

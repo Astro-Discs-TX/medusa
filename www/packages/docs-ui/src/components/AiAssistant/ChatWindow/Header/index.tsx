@@ -38,10 +38,10 @@ export const AiAssistantChatWindowHeader = () => {
       </div>
       <Button
         variant="transparent-clear"
-        className="p-[6.5px] rounded-docs_sm"
+        className="!p-[6.5px] rounded-docs_sm"
         onClick={() => setChatOpened(false)}
       >
-        <XMark className="text-medusa-fg-muted" />
+        <XMark className="text-medusa-fg-muted" height={15} width={15} />
       </Button>
     </div>
   )

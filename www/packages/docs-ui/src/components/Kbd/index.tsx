@@ -18,7 +18,7 @@ export const Kbd = ({
         "inline-flex items-center justify-center",
         "p-0",
         "bg-medusa-bg-field",
-        "text-medusa-fg-subtle",
+        "text-medusa-fg-base",
         "font-base shadow-none",
         variant === "small"
           ? "text-compact-x-small"

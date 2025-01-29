@@ -2,6 +2,7 @@
 
 import {
   AiAssistantProvider,
+  AiAssistantProviderProps,
   AnalyticsProvider,
   HooksLoader,
   LearningPathProvider,
@@ -17,9 +18,10 @@ import { MainNavProvider } from "./main-nav"
 
 type ProvidersProps = {
   children?: React.ReactNode
+  aiAssistantProps?: Partial<Omit<AiAssistantProviderProps, "children">>
 }
 
-const Providers = ({ children }: ProvidersProps) => {
+const Providers = ({ children, aiAssistantProps = {} }: ProvidersProps) => {
   return (
     <AnalyticsProvider writeKey={process.env.NEXT_PUBLIC_SEGMENT_API_KEY}>
       <SiteConfigProvider config={config}>
@@ -31,6 +33,7 @@ const Providers = ({ children }: ProvidersProps) => {
                   <MainNavProvider>
                     <SearchProvider>
                       <AiAssistantProvider
+                        {...aiAssistantProps}
                         apiUrl={
                           process.env.NEXT_PUBLIC_AI_ASSISTANT_URL || "temp"
                         }

@@ -12,12 +12,20 @@ const Homepage = () => {
     <body
       className={clsx(
         "bg-medusa-bg-subtle font-base text-medium w-full",
-        "text-medusa-fg-subtle px-0.25 pt-0.25",
+        "text-medusa-fg-base px-0.25 pt-0.25",
         "h-screen overflow-hidden"
       )}
     >
-      <RootProviders>
-        <Providers>
+      <RootProviders
+        layoutProviderProps={{
+          disableResizeObserver: true,
+        }}
+      >
+        <Providers
+          aiAssistantProps={{
+            chatType: "popover",
+          }}
+        >
           <div
             className={clsx(
               "rounded-t bg-medusa-bg-base",
@@ -40,7 +48,7 @@ const Homepage = () => {
             <HomepageModulesSection />
             <HomepageFooter />
           </div>
-          <AiAssistantChatWindow type="popover" />
+          <AiAssistantChatWindow />
         </Providers>
       </RootProviders>
     </body>

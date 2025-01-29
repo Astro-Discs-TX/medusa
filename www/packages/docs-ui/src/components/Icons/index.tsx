@@ -1,5 +1,4 @@
 export * from "./AiAssistant"
-export * from "./AiAssistantLuminosity"
 export * from "./CalendarRefresh"
 export * from "./ChefHat"
 export * from "./CircleDottedLine"
