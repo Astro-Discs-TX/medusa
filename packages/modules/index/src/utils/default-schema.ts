@@ -5,6 +5,7 @@ export const defaultSchema = `
     id: String
     title: String
     variants: [ProductVariant]
+    sales_channels: [SalesChannel];
   }
   
   type ProductVariant @Listeners(values: ["${Modules.PRODUCT}.product-variant.created", "${Modules.PRODUCT}.product-variant.updated", "${Modules.PRODUCT}.product-variant.deleted"]) {
@@ -18,5 +19,10 @@ export const defaultSchema = `
     id: String
     amount: Int
     currency_code: String
-  } 
+  }
+
+  type SalesChannel @Listeners(values: ["${Modules.SALES_CHANNEL}.sales_channel.created", "${Modules.SALES_CHANNEL}.sales_channel.updated", "${Modules.SALES_CHANNEL}.sales_channel.deleted"]) {
+    id: String
+    is_disabled: Boolean
+  }
 `
