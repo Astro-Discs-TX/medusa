@@ -339,23 +339,23 @@ export class QueryBuilder {
 
       aliasMapping[currentAliasPath] = alias
 
+      const cName = entity.toLowerCase()
+      const pName = `${parEntity}${entity}`.toLowerCase()
+
       if (level > 0) {
-        const subQuery = this.knex.queryBuilder()
+        let joinTable = `cat_${cName} AS ${alias}`
 
-        const cName = entity.toLowerCase()
-        const pName = `${parEntity}${entity}`.toLowerCase()
+        if (level > 0) {
+          const pivotTable = `cat_pivot_${pName}`
+          queryParts.push(
+            `LEFT JOIN ${pivotTable} AS ${alias}_ref ON ${alias}_ref.parent_id = ${parAlias}.id`
+          )
+          queryParts.push(
+            `LEFT JOIN ${joinTable} ON ${alias}.id = ${alias}_ref.child_id`
+          )
+        }
 
-        subQuery
-          .select(`${alias}.id`, `${alias}.data`)
-          .from(`cat_${cName} AS ` + alias)
-          .join(`cat_pivot_${pName} AS ${alias}_ref`, function () {
-            this.on(`${alias}_ref.parent_id`, "=", `${parAlias}.id`).andOn(
-              `${alias}.id`,
-              "=",
-              `${alias}_ref.child_id`
-            )
-          })
-
+        /*
         const joinWhere = this.selector.joinWhere ?? {}
         const joinKey = Object.keys(joinWhere).find((key) => {
           const k = key.split(".")
@@ -370,10 +370,7 @@ export class QueryBuilder {
             subQuery
           )
         }
-
-        queryParts.push(`LEFT JOIN LATERAL (
-          ${subQuery.toQuery()}
-        ) ${alias} ON TRUE`)
+        */
       }
     }
 
