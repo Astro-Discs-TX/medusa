@@ -341,20 +341,20 @@ export class QueryBuilder {
 
       if (level > 0) {
         const subQuery = this.knex.queryBuilder()
-        const knex = this.knex
+
+        const cName = entity.toLowerCase()
+        const pName = `${parEntity}${entity}`.toLowerCase()
+
         subQuery
           .select(`${alias}.id`, `${alias}.data`)
-          .from("index_data AS " + alias)
-          .join(`index_relation AS ${alias}_ref`, function () {
-            this.on(
-              `${alias}_ref.pivot`,
+          .from(`cat_${cName} AS ` + alias)
+          .join(`cat_pivot_${pName} AS ${alias}_ref`, function () {
+            this.on(`${alias}_ref.parent_id`, "=", `${parAlias}.id`).andOn(
+              `${alias}.id`,
               "=",
-              knex.raw("?", [`${parEntity}-${entity}`])
+              `${alias}_ref.child_id`
             )
-              .andOn(`${alias}_ref.parent_id`, "=", `${parAlias}.id`)
-              .andOn(`${alias}.id`, "=", `${alias}_ref.child_id`)
           })
-          .where(`${alias}.name`, "=", knex.raw("?", [entity]))
 
         const joinWhere = this.selector.joinWhere ?? {}
         const joinKey = Object.keys(joinWhere).find((key) => {
@@ -500,7 +500,7 @@ export class QueryBuilder {
 
     queryBuilder.select(selectParts)
 
-    queryBuilder.from(`index_data AS ${rootEntity}0`)
+    queryBuilder.from(`cat_${rootEntity} AS ${rootEntity}0`)
 
     joinParts.forEach((joinPart) => {
       queryBuilder.joinRaw(joinPart)
