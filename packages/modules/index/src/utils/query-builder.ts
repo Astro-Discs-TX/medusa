@@ -506,8 +506,6 @@ export class QueryBuilder {
       queryBuilder.joinRaw(joinPart)
     })
 
-    queryBuilder.where(`${aliasMapping[rootEntity]}.name`, "=", entity)
-
     // WHERE clause
     this.parseWhere(aliasMapping, filter, queryBuilder)
 
