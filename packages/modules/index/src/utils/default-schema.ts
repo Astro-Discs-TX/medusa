@@ -5,7 +5,7 @@ export const defaultSchema = `
     id: String
     title: String
     variants: [ProductVariant]
-    sales_channels: [SalesChannel];
+    sales_channels: [SalesChannel]
   }
   
   type ProductVariant @Listeners(values: ["${Modules.PRODUCT}.product-variant.created", "${Modules.PRODUCT}.product-variant.updated", "${Modules.PRODUCT}.product-variant.deleted"]) {

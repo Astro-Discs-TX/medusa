@@ -277,6 +277,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
 
     const sql = qb.buildQuery(hasPagination, !!keepFilteredEntities)
 
+    console.log("sql", sql)
     const performanceNow = performance.now()
     let resultSet = await manager.execute(sql)
     const performanceAfter = performance.now()

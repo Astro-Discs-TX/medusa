@@ -141,10 +141,6 @@ export class DataSynchronizer {
     })
 
     if (finalAcknoledgement.done) {
-      const staledAtConstraints = {
-        staled_at: { $ne: null },
-      }
-
       await promiseAll([
         this.#updatedStatus(entity, IndexMetadataStatus.DONE),
         this.#indexSyncService.update({
@@ -156,8 +152,16 @@ export class DataSynchronizer {
           },
         }),
         // Clean up staled data
-        this.#indexRelationService.delete(staledAtConstraints),
-        this.#indexDataService.delete(staledAtConstraints),
+        this.#indexRelationService.delete({
+          $and: [
+            { staled_at: { $ne: null } },
+            { $or: [{ parent_name: entity }, { child_name: entity }] },
+          ],
+        }),
+        this.#indexDataService.delete({
+          staled_at: { $ne: null },
+          name: entity,
+        }),
       ])
     }
 
