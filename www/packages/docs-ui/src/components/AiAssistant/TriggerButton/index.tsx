@@ -52,6 +52,8 @@ export const AiAssistantTriggerButton = () => {
         className="!p-[6.5px]"
         onMouseOver={() => setHovered(true)}
         onMouseOut={() => setHovered(false)}
+        onTouchStart={() => setHovered(true)}
+        onTouchEnd={() => setHovered(false)}
         onClick={() => setChatOpened((prev) => !prev)}
       >
         {isActive ? (

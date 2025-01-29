@@ -117,7 +117,7 @@ export const AiAssistantChatWindow = ({
       <div
         className={clsx(
           "flex z-50 md:w-ai-assistant",
-          "absolute -right-full top-0 h-[calc(100%-8px)] transition-[right]",
+          "absolute -right-[150%] sm:-right-full top-0 h-[calc(100%-8px)] transition-[right]",
           type === "default" && [
             "xxxl:w-0 xxxl:relative xxxl:transition-[width]",
             "xxxl:shadow-elevation-card-rest xxxl:dark:shadow-elevation-card-rest-dark",
