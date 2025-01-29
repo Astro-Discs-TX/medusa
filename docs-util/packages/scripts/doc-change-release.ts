@@ -54,6 +54,9 @@ async function main() {
     const latestV1Release = response.data.find(
       (r) => r.tag_name.startsWith("v1.")
     )
+    if (!latestV1Release) {
+      return
+    }
     const version = latestV1Release?.tag_name
 
     //add new announcement
