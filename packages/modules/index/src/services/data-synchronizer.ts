@@ -2,11 +2,13 @@ import {
   CommonEvents,
   ContainerRegistrationKeys,
   Modules,
+  promiseAll,
 } from "@medusajs/framework/utils"
 import {
   Event,
   ILockingModule,
   IndexTypes,
+  ModulesSdkTypes,
   RemoteQueryFunction,
   SchemaObjectEntityRepresentation,
 } from "@medusajs/types"
@@ -33,12 +35,16 @@ export class DataSynchronizer {
     return this.#container.indexMetadataService
   }
 
-  get #indexSyncService() {
+  get #indexSyncService(): ModulesSdkTypes.IMedusaInternalService<any> {
     return this.#container.indexSyncService
   }
 
-  get #indexDataService() {
+  get #indexDataService(): ModulesSdkTypes.IMedusaInternalService<any> {
     return this.#container.indexDataService
+  }
+
+  get #indexRelationService(): ModulesSdkTypes.IMedusaInternalService<any> {
+    return this.#container.indexRelationService
   }
 
   constructor(container: Record<string, any>) {
@@ -95,44 +101,64 @@ export class DataSynchronizer {
   }
 
   async #taskRunner(entity: string) {
-    await this.#updatedStatus(entity, IndexMetadataStatus.PROCESSING)
-
-    await this.#indexDataService.update({
-      data: {
-        staled_at: new Date(),
-      },
-      selector: {
-        name: entity,
-      },
-    })
-    const lastCursor = await this.#indexSyncService.list(
-      {
-        entity,
-      },
-      {
-        select: ["last_key"],
-      }
-    )
+    const [, , [lastCursor]] = await promiseAll([
+      this.#updatedStatus(entity, IndexMetadataStatus.PROCESSING),
+      this.#indexDataService.update({
+        data: {
+          staled_at: new Date(),
+        },
+        selector: {
+          name: entity,
+        },
+      }),
+      this.#indexSyncService.list(
+        {
+          entity,
+        },
+        {
+          select: ["last_key"],
+        }
+      ),
+    ])
 
     const finalAcknoledgement = await this.syncEntity({
       entityName: entity,
       pagination: {
-        cursor: lastCursor?.[0]?.last_key,
+        cursor: lastCursor?.last_key,
       },
-      ack: async (acknoledgement: any) => {},
+      ack: async (ack) => {
+        if (ack.lastCursor) {
+          await this.#indexSyncService.update({
+            data: {
+              last_key: ack.lastCursor,
+            },
+            selector: {
+              entity: entity,
+            },
+          })
+        }
+      },
     })
 
     if (finalAcknoledgement.done) {
-      await this.#updatedStatus(entity, IndexMetadataStatus.DONE)
+      const staledAtConstraints = {
+        staled_at: { $ne: null },
+      }
 
-      await this.#indexSyncService.update({
-        data: {
-          last_key: finalAcknoledgement.lastCursor,
-        },
-        selector: {
-          entity: entity,
-        },
-      })
+      await promiseAll([
+        this.#updatedStatus(entity, IndexMetadataStatus.DONE),
+        this.#indexSyncService.update({
+          data: {
+            last_key: finalAcknoledgement.lastCursor,
+          },
+          selector: {
+            entity: entity,
+          },
+        }),
+        // Clean up staled data
+        this.#indexRelationService.delete(staledAtConstraints),
+        this.#indexDataService.delete(staledAtConstraints),
+      ])
     }
 
     if (finalAcknoledgement.err) {

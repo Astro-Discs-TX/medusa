@@ -91,7 +91,6 @@ medusaIntegrationTestRunner({
         // Trigger a sync
         await (indexEngine as any).onApplicationStart_()
 
-        console.log("--- Querying ---")
         const { data: results } = await indexEngine.query<"product">({
           fields: [
             "product.*",
