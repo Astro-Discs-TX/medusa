@@ -25,7 +25,13 @@ export const examplesSidebar = [
     title: "Server Examples",
     autogenerate_tags: "example+server",
     autogenerate_as_ref: true,
-    children: [],
+    children: [
+      {
+        type: "link",
+        title: "Custom Item Price",
+        path: "/examples/guides/custom-item-price",
+      },
+    ],
   },
   {
     type: "category",

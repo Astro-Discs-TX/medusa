@@ -12,8 +12,50 @@ export const generatedSidebar = [
     "isPathHref": true,
     "type": "link",
     "path": "/examples",
-    "title": "Examples",
+    "title": "Example Snippets",
     "children": []
+  },
+  {
+    "loaded": true,
+    "isPathHref": true,
+    "type": "ref",
+    "path": "/recipes",
+    "title": "Recipes",
+    "children": []
+  },
+  {
+    "loaded": true,
+    "isPathHref": true,
+    "type": "ref",
+    "path": "/plugins",
+    "title": "Plugins",
+    "children": []
+  },
+  {
+    "loaded": true,
+    "isPathHref": true,
+    "type": "ref",
+    "path": "/integrations",
+    "title": "Integrations",
+    "children": []
+  },
+  {
+    "loaded": true,
+    "isPathHref": true,
+    "type": "category",
+    "title": "Server Examples",
+    "autogenerate_tags": "example+server",
+    "autogenerate_as_ref": true,
+    "children": [
+      {
+        "loaded": true,
+        "isPathHref": true,
+        "type": "link",
+        "title": "Custom Item Price",
+        "path": "/examples/guides/custom-item-price",
+        "children": []
+      }
+    ]
   },
   {
     "loaded": true,
@@ -1152,6 +1194,14 @@ export const generatedSidebar = [
                 "type": "link",
                 "path": "/commerce-modules/cart/extend",
                 "title": "Extend Module",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Implement Custom Line Item Pricing in Medusa",
+                "path": "/examples/guides/custom-item-price",
                 "children": []
               }
             ]
@@ -6651,14 +6701,6 @@ export const generatedSidebar = [
                         "loaded": true,
                         "isPathHref": true,
                         "type": "ref",
-                        "title": "updateOrderExchangesStep",
-                        "path": "/references/medusa-workflows/steps/updateOrderExchangesStep",
-                        "children": []
-                      },
-                      {
-                        "loaded": true,
-                        "isPathHref": true,
-                        "type": "ref",
                         "title": "updateOrderShippingMethodsStep",
                         "path": "/references/medusa-workflows/steps/updateOrderShippingMethodsStep",
                         "children": []
@@ -9381,6 +9423,14 @@ export const generatedSidebar = [
                 "type": "ref",
                 "title": "Get Variant Price with Taxes",
                 "path": "/commerce-modules/product/guides/price-with-taxes",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Implement Custom Line Item Pricing in Medusa",
+                "path": "/examples/guides/custom-item-price",
                 "children": []
               }
             ]
