@@ -97,6 +97,13 @@ export class Orchestrator {
   }
 
   /**
+   * Acquires or renew the lock for a given key.
+   */
+  async renewLock(forKey: string): Promise<boolean> {
+    return this.#acquireLock(forKey)
+  }
+
+  /**
    * Processes the entity at a given index. If there are no entities
    * left, the orchestrator state will be set to completed.
    *

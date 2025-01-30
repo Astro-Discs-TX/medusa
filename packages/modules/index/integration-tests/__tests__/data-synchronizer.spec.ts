@@ -8,7 +8,6 @@ import { MedusaAppOutput, MedusaModule } from "@medusajs/framework/modules-sdk"
 import { IndexTypes, InferEntityType } from "@medusajs/framework/types"
 import {
   ContainerRegistrationKeys,
-  ModuleRegistrationName,
   Modules,
   toMikroORMEntity,
 } from "@medusajs/framework/utils"
@@ -18,9 +17,9 @@ import { IndexData, IndexRelation } from "@models"
 import { DataSynchronizer } from "@services"
 import { asValue } from "awilix"
 import * as path from "path"
+import { setTimeout } from "timers/promises"
 import { EventBusServiceMock } from "../__fixtures__"
 import { dbName } from "../__fixtures__/medusa-config"
-import { setTimeout } from "timers/promises"
 
 const eventBusMock = new EventBusServiceMock()
 const queryMock = {
@@ -138,6 +137,7 @@ describe("DataSynchronizer", () => {
   beforeEach(async () => {
     jest.clearAllMocks()
     index = container.resolve(Modules.INDEX)
+    manager = (index as any).container_.manager as EntityManager
 
     dataSynchronizer = (index as any).dataSynchronizer_
   })
@@ -189,7 +189,7 @@ describe("DataSynchronizer", () => {
           order: {
             id: "asc",
           },
-          take: 1000,
+          take: 100,
         },
       })
 
@@ -215,7 +215,7 @@ describe("DataSynchronizer", () => {
           order: {
             id: "asc",
           },
-          take: 1000,
+          take: 100,
         },
       })
 
@@ -350,7 +350,7 @@ describe("DataSynchronizer", () => {
         order: {
           id: "asc",
         },
-        take: 1000,
+        take: 100,
       },
     })
 
@@ -376,7 +376,7 @@ describe("DataSynchronizer", () => {
         order: {
           id: "asc",
         },
-        take: 1000,
+        take: 100,
       },
     })
 

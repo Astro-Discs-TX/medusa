@@ -106,6 +106,7 @@ describe("IndexModuleService syncIndexConfig", function () {
   let medusaApp: MedusaAppOutput
   let indexMetadataService: ModulesSdkTypes.IMedusaInternalService<any>
   let indexSyncService: ModulesSdkTypes.IMedusaInternalService<any>
+  let dataSynchronizer: ModulesSdkTypes.IMedusaInternalService<any>
   let onApplicationPrepareShutdown!: () => Promise<void>
   let onApplicationShutdown!: () => Promise<void>
 
@@ -127,6 +128,7 @@ describe("IndexModuleService syncIndexConfig", function () {
     index = container.resolve(Modules.INDEX)
     indexMetadataService = (index as any).indexMetadataService_
     indexSyncService = (index as any).indexSyncService_
+    dataSynchronizer = (index as any).dataSynchronizer_
   })
 
   afterEach(afterEach_)
@@ -192,6 +194,7 @@ describe("IndexModuleService syncIndexConfig", function () {
       schemaObjectRepresentation: (index as any).schemaObjectRepresentation_,
       indexMetadataService,
       indexSyncService,
+      dataSynchronizer,
     })
 
     const syncRequired = await configurationChecker.checkChanges()
@@ -268,10 +271,16 @@ describe("IndexModuleService syncIndexConfig", function () {
     ;(index as any).moduleOptions_.schema = updateRemovedSchema
     ;(index as any).buildSchemaObjectRepresentation_()
 
+    const spyDataSynchronizer_ = jest.spyOn(
+      (index as any).dataSynchronizer_,
+      "removeEntities"
+    )
+
     configurationChecker = new Configuration({
       schemaObjectRepresentation: (index as any).schemaObjectRepresentation_,
       indexMetadataService,
       indexSyncService,
+      dataSynchronizer,
     })
 
     const syncRequired2 = await configurationChecker.checkChanges()
@@ -287,7 +296,7 @@ describe("IndexModuleService syncIndexConfig", function () {
     )
 
     const updatedMetadata2 = await indexMetadataService.list()
-    expect(updatedMetadata2).toHaveLength(5)
+    expect(updatedMetadata2).toHaveLength(2)
     expect(updatedMetadata2).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -296,26 +305,13 @@ describe("IndexModuleService syncIndexConfig", function () {
           status: "done",
         }),
         expect.objectContaining({
-          entity: "PriceSet",
-          fields: "id",
-          status: "done",
-        }),
-        expect.objectContaining({
-          entity: "Price",
-          fields: "amount,currency_code,price_set.id",
-          status: "done",
-        }),
-        expect.objectContaining({
           entity: "ProductVariant",
           fields: "description,id,product.id,product_id,sku",
           status: "pending",
         }),
-        expect.objectContaining({
-          entity: "LinkProductVariantPriceSet",
-          fields: "id,price_set_id,variant_id",
-          status: "done",
-        }),
       ])
     )
+
+    expect(spyDataSynchronizer_).toHaveBeenCalledTimes(1)
   })
 })

@@ -6,11 +6,7 @@ import {
 } from "@medusajs/framework"
 import { MedusaAppOutput, MedusaModule } from "@medusajs/framework/modules-sdk"
 import { IndexTypes } from "@medusajs/framework/types"
-import {
-  ContainerRegistrationKeys,
-  ModuleRegistrationName,
-  Modules,
-} from "@medusajs/framework/utils"
+import { ContainerRegistrationKeys, Modules } from "@medusajs/framework/utils"
 import { initDb, TestDatabaseUtils } from "@medusajs/test-utils"
 import { EntityManager } from "@mikro-orm/postgresql"
 import { IndexData, IndexRelation } from "@models"
@@ -123,11 +119,11 @@ describe("IndexModuleService query", function () {
   beforeEach(async () => {
     await beforeEach_()
 
-    module = medusaApp.sharedContainer!.resolve(ModuleRegistrationName.INDEX)
+    module = medusaApp.sharedContainer!.resolve(Modules.INDEX)
 
     const manager = (
-      (medusaApp.sharedContainer!.resolve(ModuleRegistrationName.INDEX) as any)
-        .container_.manager as EntityManager
+      (medusaApp.sharedContainer!.resolve(Modules.INDEX) as any).container_
+        .manager as EntityManager
     ).fork()
 
     const indexRepository = manager.getRepository(IndexData)

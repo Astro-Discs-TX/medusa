@@ -89,6 +89,26 @@ export class DataSynchronizer {
     await this.#orchestrator.process(this.#taskRunner.bind(this))
   }
 
+  async removeEntities(entities: string[], staleOnly: boolean = false) {
+    this.#isReadyOrThrow()
+
+    const staleCondition = staleOnly ? { staled_at: { $ne: null } } : {}
+
+    // Clean up staled data
+    await this.#indexRelationService.delete({
+      ...staleCondition,
+      $or: entities.flatMap((entity) => [
+        { parent_name: entity },
+        { child_name: entity },
+      ]),
+    })
+
+    await this.#indexDataService.delete({
+      ...staleCondition,
+      name: entities,
+    })
+  }
+
   async #updatedStatus(entity: string, status: IndexMetadataStatus) {
     await this.#indexMetadataService.update({
       data: {
@@ -136,6 +156,8 @@ export class DataSynchronizer {
               entity: entity,
             },
           })
+
+          await this.#orchestrator.renewLock(entity)
         }
       },
     })
@@ -151,17 +173,7 @@ export class DataSynchronizer {
             entity: entity,
           },
         }),
-        // Clean up staled data
-        this.#indexRelationService.delete({
-          $and: [
-            { staled_at: { $ne: null } },
-            { $or: [{ parent_name: entity }, { child_name: entity }] },
-          ],
-        }),
-        this.#indexDataService.delete({
-          staled_at: { $ne: null },
-          name: entity,
-        }),
+        this.removeEntities([entity], true),
       ])
     }
 
@@ -212,13 +224,13 @@ export class DataSynchronizer {
         done: true,
       }
 
-      void ack(acknoledgement)
+      await ack(acknoledgement)
       return acknoledgement
     }
 
     let processed = 0
     let currentCursor = pagination.cursor!
-    const batchSize = Math.min(pagination.batchSize ?? 100, 1)
+    const batchSize = Math.min(pagination.batchSize ?? 100, 100)
     const limit = pagination.limit ?? Infinity
     let done = false
     let error = null
