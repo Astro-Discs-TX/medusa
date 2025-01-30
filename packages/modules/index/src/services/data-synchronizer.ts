@@ -97,10 +97,14 @@ export class DataSynchronizer {
     // Clean up staled data
     await this.#indexRelationService.delete({
       ...staleCondition,
-      $or: entities.flatMap((entity) => [
-        { parent_name: entity },
-        { child_name: entity },
-      ]),
+      $or: [
+        {
+          parent_name: entities,
+        },
+        {
+          child_name: entities,
+        },
+      ],
     })
 
     await this.#indexDataService.delete({

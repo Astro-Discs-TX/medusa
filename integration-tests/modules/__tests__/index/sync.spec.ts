@@ -11,6 +11,41 @@ jest.setTimeout(300000)
 
 process.env.ENABLE_INDEX_MODULE = "true"
 
+async function populateData(
+  api: any,
+  { productCount = 1, variantCount = 1, priceCount = 1 } = {}
+) {
+  const shippingProfile = (
+    await api.post(
+      `/admin/shipping-profiles`,
+      { name: "Test", type: "default" },
+      adminHeaders
+    )
+  ).data.shipping_profile
+
+  for (let i = 0; i < productCount; i++) {
+    const payload = {
+      title: "Test Giftcard " + i,
+      shipping_profile_id: shippingProfile.id,
+      description: "test-giftcard-description " + i,
+      options: [{ title: "Denominations", values: ["100"] }],
+      variants: new Array(variantCount).fill(0).map((_, j) => ({
+        title: `Test variant ${i} ${j}`,
+        sku: `test-variant-${i}-${j}`,
+        prices: new Array(priceCount).fill(0).map((_, k) => ({
+          currency_code: Object.values(defaultCurrencies)[k].code,
+          amount: 10 * k,
+        })),
+        options: {
+          Denominations: "100",
+        },
+      })),
+    }
+
+    await api.post("/admin/products", payload, adminHeaders)
+  }
+}
+
 medusaIntegrationTestRunner({
   testSuite: ({ getContainer, dbConnection, api, dbConfig }) => {
     let indexEngine: IndexTypes.IIndexService
@@ -31,39 +66,14 @@ medusaIntegrationTestRunner({
 
     describe("Index engine syncing", () => {
       it("should sync the data to the index based on the indexation configuration", async () => {
-        const shippingProfile = (
-          await api.post(
-            `/admin/shipping-profiles`,
-            { name: "Test", type: "default" },
-            adminHeaders
-          )
-        ).data.shipping_profile
+        console.info("[Index engine] Creating products")
 
-        for (let i = 0; i < 10; i++) {
-          const payload = {
-            title: "Test Giftcard " + i,
-            shipping_profile_id: shippingProfile.id,
-            description: "test-giftcard-description " + i,
-            options: [{ title: "Denominations", values: ["100"] }],
-            variants: new Array(50).fill(0).map((_, j) => ({
-              title: `Test variant ${i} ${j}`,
-              sku: `test-variant-${i}-${j}`,
-              prices: new Array(10).fill(0).map((_, k) => ({
-                currency_code: Object.values(defaultCurrencies)[k].code,
-                amount: 10 * k,
-              })),
-              options: {
-                Denominations: "100",
-              },
-            })),
-          }
+        await populateData(api, {
+          productCount: 10,
+          variantCount: 50,
+          priceCount: 10,
+        })
 
-          await api
-            .post("/admin/products", payload, adminHeaders)
-            .catch((err) => {
-              console.log(err)
-            })
-        }
         console.info("[Index engine] Creating products done")
 
         await setTimeout(1000)
@@ -109,6 +119,103 @@ medusaIntegrationTestRunner({
           }
         }
       })
+    })
+
+    it("should sync the data to the index based on the updated indexation configuration", async () => {
+      console.info("[Index engine] Creating products")
+
+      await populateData(api)
+
+      console.info("[Index engine] Creating products done")
+
+      await setTimeout(1000)
+      await dbConnection.raw('TRUNCATE TABLE "index_data";')
+      await dbConnection.raw('TRUNCATE TABLE "index_relation";')
+      await dbConnection.raw('TRUNCATE TABLE "index_metadata";')
+      await dbConnection.raw('TRUNCATE TABLE "index_sync";')
+
+      const { data: indexedDataAfterCreation } =
+        await indexEngine.query<"product">({
+          fields: [
+            "product.*",
+            "product.variants.*",
+            "product.variants.prices.*",
+          ],
+        })
+
+      expect(indexedDataAfterCreation.length).toBe(0)
+
+      // Prevent storage provider to be triggered though
+      ;(indexEngine as any).storageProvider_.onApplicationStart = jest.fn()
+
+      console.info("[Index engine] Triggering sync")
+      // Trigger a sync
+      await (indexEngine as any).onApplicationStart_()
+
+      console.info("[Index engine] Sync done")
+
+      const { data: results } = await indexEngine.query<"product">({
+        fields: [
+          "product.*",
+          "product.variants.*",
+          "product.variants.prices.*",
+        ],
+      })
+
+      expect(results.length).toBe(1)
+      expect(results[0].variants.length).toBe(1)
+      expect(results[0].variants[0].prices.length).toBe(1)
+
+      console.info("[Index engine] Update configuration")
+
+      // Manually change the indexation configuration
+      ;(indexEngine as any).schemaObjectRepresentation_ = null
+      ;(indexEngine as any).moduleOptions_ = {
+        ...(indexEngine as any).moduleOptions_,
+        schema: `
+  type Product @Listeners(values: ["product.created", "product.updated", "product.deleted"]) {
+    id: String
+    title: String
+    handle: String
+    variants: [ProductVariant]
+  }
+  
+  type ProductVariant @Listeners(values: ["variant.created", "variant.updated", "variant.deleted"]) {
+    id: String
+    product_id: String
+    sku: String
+    description: String
+  }
+        `,
+      }
+
+      console.info("[Index engine] Triggering sync")
+      // Trigger a sync
+      await (indexEngine as any).onApplicationStart_()
+
+      console.info("[Index engine] Sync done")
+
+      const err = await indexEngine
+        .query<"product">({
+          fields: [
+            "product.*",
+            "product.variants.*",
+            "product.variants.prices.*",
+          ],
+        })
+        .catch((err) => err)
+
+      expect(err).toBeDefined()
+      expect(err.message).toBe(
+        "Could not find entity for path: product.variants.prices"
+      )
+
+      const { data: updatedResults } = await indexEngine.query<"product">({
+        fields: ["product.*", "product.variants.*"],
+      })
+
+      expect(updatedResults.length).toBe(1)
+      expect(updatedResults[0].variants.length).toBe(1)
     })
   },
 })

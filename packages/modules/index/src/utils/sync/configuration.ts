@@ -111,6 +111,7 @@ export class Configuration {
     if (updatedConfig.length > 0) {
       await this.#indexMetadataService.update(updatedConfig)
     }
+
     if (deletedConfig.length > 0) {
       await this.#indexMetadataService.delete(deletedConfig)
       await this.#dataSynchronizer.removeEntities(
