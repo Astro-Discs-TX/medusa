@@ -1,4 +1,5 @@
 import { LinkWorkflowInput } from "../../common"
+import { AdditionalData } from "../../http"
 import {
   CreateProductCategoryDTO,
   FilterableProductCategoryProps,
@@ -8,12 +9,12 @@ import {
 /**
  * The data to create product categories.
  */
-export interface CreateProductCategoriesWorkflowInput {
+export type CreateProductCategoriesWorkflowInput = {
   /**
    * The product categories to create.
    */
   product_categories: CreateProductCategoryDTO[]
-}
+} & AdditionalData
 /**
  * The data to update product categories.
  */
