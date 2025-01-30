@@ -147,18 +147,26 @@ export class DataSynchronizer {
         cursor: lastCursor?.last_key,
       },
       ack: async (ack) => {
-        if (ack.lastCursor) {
-          await this.#indexSyncService.update({
-            data: {
-              last_key: ack.lastCursor,
-            },
-            selector: {
-              entity: entity,
-            },
-          })
+        const promises: Promise<any>[] = []
 
-          await this.#orchestrator.renewLock(entity)
+        if (ack.lastCursor) {
+          promises.push(
+            this.#indexSyncService.update({
+              data: {
+                last_key: ack.lastCursor,
+              },
+              selector: {
+                entity: entity,
+              },
+            })
+          )
+
+          if (!ack.done && !ack.err) {
+            promises.push(this.#orchestrator.renewLock(entity))
+          }
         }
+
+        await promiseAll(promises)
       },
     })
 
