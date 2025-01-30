@@ -3,6 +3,7 @@ import {
   IEventBusModuleService,
   IndexTypes,
   InternalModuleDeclaration,
+  Logger,
   ModulesSdkTypes,
   RemoteQueryFunction,
 } from "@medusajs/framework/types"
@@ -22,6 +23,7 @@ import {
 import { DataSynchronizer } from "./data-synchronizer"
 
 type InjectedDependencies = {
+  logger: Logger
   [Modules.EVENT_BUS]: IEventBusModuleService
   storageProviderCtr: Constructor<IndexTypes.StorageProvider>
   [ContainerRegistrationKeys.QUERY]: RemoteQueryFunction
@@ -59,6 +61,14 @@ export default class IndexModuleService
 
   private get dataSynchronizer_(): DataSynchronizer {
     return this.container_.dataSynchronizer
+  }
+
+  private get logger_(): Logger {
+    try {
+      return this.container_.logger
+    } catch (e) {
+      return console as unknown as Logger
+    }
   }
 
   constructor(
@@ -131,7 +141,7 @@ export default class IndexModuleService
         await this.dataSynchronizer_.syncEntities(entitiesMetadataChanged)
       }
     } catch (e) {
-      console.log(e)
+      this.logger_.error(e)
     }
   }
 

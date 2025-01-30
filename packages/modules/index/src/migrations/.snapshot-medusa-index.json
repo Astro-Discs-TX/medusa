@@ -90,33 +90,6 @@
           "expression": "CREATE INDEX IF NOT EXISTS \"IDX_index_data_deleted_at\" ON \"index_data\" (deleted_at) WHERE deleted_at IS NULL"
         },
         {
-          "keyName": "IDX_index_data_gin",
-          "columnNames": [],
-          "composite": false,
-          "constraint": false,
-          "primary": false,
-          "unique": false,
-          "expression": "CREATE INDEX IF NOT EXISTS \"IDX_index_data_gin\" ON \"index_data\" USING GIN (data) WHERE deleted_at IS NULL"
-        },
-        {
-          "keyName": "IDX_index_data_id",
-          "columnNames": [],
-          "composite": false,
-          "constraint": false,
-          "primary": false,
-          "unique": false,
-          "expression": "CREATE INDEX IF NOT EXISTS \"IDX_index_data_id\" ON \"index_data\" (id) WHERE deleted_at IS NULL"
-        },
-        {
-          "keyName": "IDX_index_data_name",
-          "columnNames": [],
-          "composite": false,
-          "constraint": false,
-          "primary": false,
-          "unique": false,
-          "expression": "CREATE INDEX IF NOT EXISTS \"IDX_index_data_name\" ON \"index_data\" (name) WHERE deleted_at IS NULL"
-        },
-        {
           "keyName": "index_data_pkey",
           "columnNames": [
             "id",
@@ -357,24 +330,6 @@
       "name": "index_relation",
       "schema": "public",
       "indexes": [
-        {
-          "keyName": "IDX_index_relation_parent_id",
-          "columnNames": [],
-          "composite": false,
-          "constraint": false,
-          "primary": false,
-          "unique": false,
-          "expression": "CREATE INDEX IF NOT EXISTS \"IDX_index_relation_parent_id\" ON \"index_relation\" (parent_id) WHERE deleted_at IS NULL"
-        },
-        {
-          "keyName": "IDX_index_relation_child_id",
-          "columnNames": [],
-          "composite": false,
-          "constraint": false,
-          "primary": false,
-          "unique": false,
-          "expression": "CREATE INDEX IF NOT EXISTS \"IDX_index_relation_child_id\" ON \"index_relation\" (child_id) WHERE deleted_at IS NULL"
-        },
         {
           "keyName": "IDX_index_relation_deleted_at",
           "columnNames": [],

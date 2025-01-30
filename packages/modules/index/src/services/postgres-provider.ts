@@ -9,6 +9,7 @@ import {
   MikroOrmBaseRepository as BaseRepository,
   ContainerRegistrationKeys,
   InjectManager,
+  InjectTransactionManager,
   isDefined,
   MedusaContext,
   toMikroORMEntity,
@@ -324,7 +325,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
    * @param sharedContext
    * @protected
    */
-  @InjectManager()
+  @InjectTransactionManager()
   protected async onCreate<
     TData extends { id: string; [key: string]: unknown }
   >(
@@ -339,7 +340,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
     },
     @MedusaContext() sharedContext: Context<SqlEntityManager> = {}
   ) {
-    const { manager: em } = sharedContext
+    const { transactionManager: em } = sharedContext
     const indexRepository = em!.getRepository(toMikroORMEntity(IndexData))
     const indexRelationRepository: EntityRepository<any> = em!.getRepository(
       toMikroORMEntity(IndexRelation)
@@ -432,7 +433,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
    * @param sharedContext
    * @protected
    */
-  @InjectManager()
+  @InjectTransactionManager()
   protected async onUpdate<
     TData extends { id: string; [key: string]: unknown }
   >(
@@ -447,7 +448,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
     },
     @MedusaContext() sharedContext: Context<SqlEntityManager> = {}
   ) {
-    const { manager: em } = sharedContext
+    const { transactionManager: em } = sharedContext
     const indexRepository = em!.getRepository(toMikroORMEntity(IndexData))
 
     const { data: data_, entityProperties } = PostgresProvider.parseData(
@@ -478,7 +479,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
    * @param sharedContext
    * @protected
    */
-  @InjectManager()
+  @InjectTransactionManager()
   protected async onDelete<
     TData extends { id: string; [key: string]: unknown }
   >(
@@ -493,7 +494,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
     },
     @MedusaContext() sharedContext: Context<SqlEntityManager> = {}
   ) {
-    const { manager: em } = sharedContext
+    const { transactionManager: em } = sharedContext
     const indexRepository = em!.getRepository(toMikroORMEntity(IndexData))
     const indexRelationRepository = em!.getRepository(
       toMikroORMEntity(IndexRelation)
@@ -532,7 +533,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
    * @param schemaEntityObjectRepresentation
    * @protected
    */
-  @InjectManager()
+  @InjectTransactionManager()
   protected async onAttach<
     TData extends { id: string; [key: string]: unknown }
   >(
@@ -547,7 +548,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
     },
     @MedusaContext() sharedContext: Context<SqlEntityManager> = {}
   ) {
-    const { manager: em } = sharedContext
+    const { transactionManager: em } = sharedContext
     const indexRepository = em!.getRepository(toMikroORMEntity(IndexData))
     const indexRelationRepository = em!.getRepository(
       toMikroORMEntity(IndexRelation)
@@ -675,7 +676,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
    * @param sharedContext
    * @protected
    */
-  @InjectManager()
+  @InjectTransactionManager()
   protected async onDetach<
     TData extends { id: string; [key: string]: unknown }
   >(
@@ -690,7 +691,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
     },
     @MedusaContext() sharedContext: Context<SqlEntityManager> = {}
   ) {
-    const { manager: em } = sharedContext
+    const { transactionManager: em } = sharedContext
     const indexRepository = em!.getRepository(toMikroORMEntity(IndexData))
     const indexRelationRepository = em!.getRepository(
       toMikroORMEntity(IndexRelation)

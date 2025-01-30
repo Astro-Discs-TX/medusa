@@ -236,7 +236,7 @@ export class DataSynchronizer {
         done: true,
       }
 
-      await ack(acknoledgement)
+      void ack(acknoledgement)
       return acknoledgement
     }
 
@@ -289,7 +289,7 @@ export class DataSynchronizer {
         currentCursor = data[data.length - 1][entityPrimaryKey]
         processed += data.length
 
-        void ack({ lastCursor: currentCursor })
+        await ack({ lastCursor: currentCursor })
       } catch (err) {
         error = err
         break
