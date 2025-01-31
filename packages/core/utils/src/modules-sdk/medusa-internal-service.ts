@@ -273,6 +273,11 @@ export function MedusaInternalService<
             {},
             sharedContext
           )
+
+          if (!entitiesToUpdate.length) {
+            continue
+          }
+
           // Create a pair of entity and data to update
           entitiesToUpdate.forEach((entity) => {
             toUpdateData.push({
@@ -302,6 +307,10 @@ export function MedusaInternalService<
           {},
           sharedContext
         )
+
+        if (!entitiesToUpdate.length) {
+          return []
+        }
 
         // Create a pair of entity and data to update
         entitiesToUpdate.forEach((entity) => {
