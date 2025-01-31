@@ -690,7 +690,7 @@ export class QueryBuilder {
 
         maps[path][id] = row[path] || undefined
 
-        // If there is and id, but no object values, it means that specific fields were selected
+        // If there is an id, but no object values, it means that specific fields were selected
         // so we recompose the object with all selected fields. (id will always be selected)
         if (!maps[path][id] && id) {
           maps[path][id] = {}

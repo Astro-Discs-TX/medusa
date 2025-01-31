@@ -274,10 +274,6 @@ export function MedusaInternalService<
             sharedContext
           )
 
-          if (!entitiesToUpdate.length) {
-            continue
-          }
-
           // Create a pair of entity and data to update
           entitiesToUpdate.forEach((entity) => {
             toUpdateData.push({
@@ -307,10 +303,6 @@ export function MedusaInternalService<
           {},
           sharedContext
         )
-
-        if (!entitiesToUpdate.length) {
-          return []
-        }
 
         // Create a pair of entity and data to update
         entitiesToUpdate.forEach((entity) => {
@@ -352,6 +344,10 @@ export function MedusaInternalService<
             )} "${missingEntityValues.join(", ")}" not found`
           )
         }
+      }
+
+      if (!toUpdateData.length) {
+        return []
       }
 
       return await this[propertyRepositoryName].update(
@@ -421,10 +417,6 @@ export function MedusaInternalService<
           sharedContext
         )
 
-        if (!entitiesToDelete.length) {
-          return
-        }
-
         for (const entity of entitiesToDelete) {
           const criteria = {}
           primaryKeys.forEach((key) => {
@@ -469,6 +461,10 @@ export function MedusaInternalService<
           })*/
           return criteria
         })
+      }
+
+      if (!deleteCriteria.$or.length) {
+        return
       }
 
       await this[propertyRepositoryName].delete(deleteCriteria, sharedContext)

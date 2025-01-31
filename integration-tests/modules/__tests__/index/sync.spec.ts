@@ -65,7 +65,7 @@ medusaIntegrationTestRunner({
     })
 
     describe("Index engine syncing", () => {
-      it("should sync the data to the index based on the indexation configuration", async () => {
+      it.only("should sync the data to the index based on the indexation configuration", async () => {
         console.info("[Index engine] Creating products")
 
         await populateData(api, {

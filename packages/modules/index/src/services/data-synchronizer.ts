@@ -8,6 +8,7 @@ import {
   Event,
   ILockingModule,
   IndexTypes,
+  Logger,
   ModulesSdkTypes,
   RemoteQueryFunction,
   SchemaObjectEntityRepresentation,
@@ -31,7 +32,7 @@ export class DataSynchronizer {
     return this.#container[Modules.LOCKING] as ILockingModule
   }
 
-  get #indexMetadataService() {
+  get #indexMetadataService(): ModulesSdkTypes.IMedusaInternalService<any> {
     return this.#container.indexMetadataService
   }
 
@@ -45,6 +46,14 @@ export class DataSynchronizer {
 
   get #indexRelationService(): ModulesSdkTypes.IMedusaInternalService<any> {
     return this.#container.indexRelationService
+  }
+
+  get #logger(): Logger {
+    try {
+      return this.#container.logger
+    } catch (err) {
+      return console as unknown as Logger
+    }
   }
 
   constructor(container: Record<string, any>) {
@@ -98,29 +107,21 @@ export class DataSynchronizer {
     await promiseAll([
       this.#indexRelationService.delete({
         selector: {
-          $and: [
+          ...staleCondition,
+          $or: [
             {
-              ...staleCondition,
-              $or: [
-                {
-                  parent_name: entities,
-                },
-                {
-                  child_name: entities,
-                },
-              ],
+              parent_name: entities,
+            },
+            {
+              child_name: entities,
             },
           ],
         },
       }),
       this.#indexDataService.delete({
         selector: {
-          $and: [
-            {
-              ...staleCondition,
-              name: entities,
-            },
-          ],
+          ...staleCondition,
+          name: entities,
         },
       }),
     ])
@@ -264,7 +265,7 @@ export class DataSynchronizer {
         done: true,
       }
 
-      void ack(acknoledgement)
+      await ack(acknoledgement)
       return acknoledgement
     }
 
@@ -319,6 +320,10 @@ export class DataSynchronizer {
 
         await ack({ lastCursor: currentCursor })
       } catch (err) {
+        this.#logger.error(
+          `Index engine] sync failed for entity ${entityName}`,
+          err
+        )
         error = err
         break
       }
@@ -334,11 +339,11 @@ export class DataSynchronizer {
         lastCursor: currentCursor,
         err: error,
       }
-      void ack(acknoledgement)
+      await ack(acknoledgement)
       return acknoledgement
     }
 
-    void ack(acknoledgement)
+    await ack(acknoledgement)
     return acknoledgement
   }
 }
