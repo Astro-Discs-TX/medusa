@@ -23,6 +23,7 @@ export class QueryBuilder {
   private readonly selector: QueryFormat
   private readonly options?: QueryOptions
   private readonly schema: IndexTypes.SchemaObjectRepresentation
+  private readonly allSchemaFields: Set<string>
 
   constructor(args: {
     schema: IndexTypes.SchemaObjectRepresentation
@@ -37,6 +38,9 @@ export class QueryBuilder {
     this.options = args.options
     this.knex = args.knex
     this.structure = this.selector.select
+    this.allSchemaFields = new Set(
+      Object.values(this.schema).flatMap((entity) => entity.fields ?? [])
+    )
   }
 
   private getStructureKeys(structure) {
@@ -293,6 +297,13 @@ export class QueryBuilder {
   ): string[] {
     const currentAliasPath = [...aliasPath, parentProperty].join(".")
 
+    const isSelectableField = this.allSchemaFields.has(parentProperty)
+    if (isSelectableField) {
+      // We are currently selecting a specific field of the parent entity
+      // We don't need to build the query parts for this as there is no join
+      return []
+    }
+
     const entities = this.getEntity(currentAliasPath)
 
     const mainEntity = entities.ref.entity
@@ -399,17 +410,24 @@ export class QueryBuilder {
     const children = this.getStructureKeys(structure)
     for (const child of children) {
       const childStructure = structure[child] as Select
-      queryParts = queryParts.concat(
-        this.buildQueryParts(
-          childStructure,
-          mainAlias,
-          mainEntity,
-          child,
-          aliasPath.concat(parentProperty),
-          level + 1,
-          aliasMapping
+      // const isSelectableField = this.allSchemaFields.has(parentProperty)
+      // if (isSelectableField) {
+      //   return []
+      // }
+
+      queryParts = queryParts
+        .concat(
+          this.buildQueryParts(
+            childStructure,
+            mainAlias,
+            mainEntity,
+            child,
+            aliasPath.concat(parentProperty),
+            level + 1,
+            aliasMapping
+          )
         )
-      )
+        .filter(Boolean)
     }
 
     return queryParts
@@ -423,6 +441,21 @@ export class QueryBuilder {
     selectParts: object = {}
   ): object {
     const currentAliasPath = [...aliasPath, parentProperty].join(".")
+
+    const isSelectableField = this.allSchemaFields.has(parentProperty)
+    if (isSelectableField) {
+      // We are currently selecting a specific field of the parent entity
+      // Let's remove the parent alias from the select parts to not select everything entirely
+      // and add the specific field to the select parts
+      const parentAliasPath = aliasPath.join(".")
+      const alias = aliasMapping[parentAliasPath]
+      delete selectParts[parentAliasPath]
+      selectParts[currentAliasPath] = this.knex.raw(
+        `${alias}.data->'${parentProperty}'`
+      )
+      return selectParts
+    }
+
     const alias = aliasMapping[currentAliasPath]
 
     selectParts[currentAliasPath] = `${alias}.data`
@@ -492,6 +525,7 @@ export class QueryBuilder {
 
     const rootKey = this.getStructureKeys(structure)[0]
     const rootStructure = structure[rootKey] as Select
+
     const entity = this.getEntity(rootKey).ref.entity
     const rootEntity = entity.toLowerCase()
     const aliasMapping: { [path: string]: string } = {}
@@ -587,6 +621,15 @@ export class QueryBuilder {
         const property = path[path.length - 1]
         const parents = path.slice(0, -1)
         const parentPath = parents.join(".")
+
+        // In the case of specific selection
+        // We dont need to check if the property is a list
+        const isSelectableField = this.allSchemaFields.has(property)
+        if (isSelectableField) {
+          pathDetails[currentPath] = { property, parents, parentPath }
+          isListMap[currentPath] = false
+          return
+        }
 
         isListMap[currentPath] = !!this.getEntity(currentPath).ref.parents.find(
           (p) => p.targetProp === property
