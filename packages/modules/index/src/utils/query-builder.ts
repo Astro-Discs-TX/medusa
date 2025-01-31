@@ -706,8 +706,8 @@ export class QueryBuilder {
         }
 
         const isList = isListMap[parentPath + "." + property]
-        if (isList) {
-          parentObj[property] ??= []
+        if (isList && !Array.isArray(parentObj[property])) {
+          parentObj[property] = []
         }
 
         if (maps[path][id] !== undefined) {
