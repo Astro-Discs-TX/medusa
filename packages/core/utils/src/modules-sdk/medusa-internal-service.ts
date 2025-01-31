@@ -412,6 +412,10 @@ export function MedusaInternalService<
           sharedContext
         )
 
+        if (!entitiesToDelete.length) {
+          return
+        }
+
         for (const entity of entitiesToDelete) {
           const criteria = {}
           primaryKeys.forEach((key) => {

@@ -95,22 +95,35 @@ export class DataSynchronizer {
     const staleCondition = staleOnly ? { staled_at: { $ne: null } } : {}
 
     // Clean up staled data
-    await this.#indexRelationService.delete({
-      ...staleCondition,
-      $or: [
-        {
-          parent_name: entities,
+    await promiseAll([
+      this.#indexRelationService.delete({
+        selector: {
+          $and: [
+            {
+              ...staleCondition,
+              $or: [
+                {
+                  parent_name: entities,
+                },
+                {
+                  child_name: entities,
+                },
+              ],
+            },
+          ],
         },
-        {
-          child_name: entities,
+      }),
+      this.#indexDataService.delete({
+        selector: {
+          $and: [
+            {
+              ...staleCondition,
+              name: entities,
+            },
+          ],
         },
-      ],
-    })
-
-    await this.#indexDataService.delete({
-      ...staleCondition,
-      name: entities,
-    })
+      }),
+    ])
   }
 
   async #updatedStatus(entity: string, status: IndexMetadataStatus) {
@@ -125,7 +138,15 @@ export class DataSynchronizer {
   }
 
   async #taskRunner(entity: string) {
-    const [, , [lastCursor]] = await promiseAll([
+    const [[lastCursor]] = await promiseAll([
+      this.#indexSyncService.list(
+        {
+          entity,
+        },
+        {
+          select: ["last_key"],
+        }
+      ),
       this.#updatedStatus(entity, IndexMetadataStatus.PROCESSING),
       this.#indexDataService.update({
         data: {
@@ -135,14 +156,21 @@ export class DataSynchronizer {
           name: entity,
         },
       }),
-      this.#indexSyncService.list(
-        {
-          entity,
+      this.#indexRelationService.update({
+        data: {
+          staled_at: new Date(),
         },
-        {
-          select: ["last_key"],
-        }
-      ),
+        selector: {
+          $or: [
+            {
+              parent_name: entity,
+            },
+            {
+              child_name: entity,
+            },
+          ],
+        },
+      }),
     ])
 
     const finalAcknoledgement = await this.syncEntity({
@@ -160,7 +188,7 @@ export class DataSynchronizer {
                 last_key: ack.lastCursor,
               },
               selector: {
-                entity: entity,
+                entity,
               },
             })
           )
@@ -182,7 +210,7 @@ export class DataSynchronizer {
             last_key: finalAcknoledgement.lastCursor,
           },
           selector: {
-            entity: entity,
+            entity,
           },
         }),
         this.removeEntities([entity], true),
