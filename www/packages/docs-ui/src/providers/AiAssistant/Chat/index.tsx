@@ -98,6 +98,7 @@ export const AiAssistantChatProvider = ({
     null
   )
   const [loading, setLoading] = useState(false)
+  const [preventAutoScroll, setPreventAutoScroll] = useState(false)
   const { getAnswer } = useAiAssistant()
   const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
@@ -107,6 +108,7 @@ export const AiAssistantChatProvider = ({
       return
     }
     setLoading(true)
+    setPreventAutoScroll(false)
     setAnswer("")
     setThread((prevThread) => [
       ...prevThread,
@@ -160,6 +162,9 @@ export const AiAssistantChatProvider = ({
   }
 
   const scrollToBottom = () => {
+    if (preventAutoScroll) {
+      return
+    }
     const parent = contentRef.current?.parentElement as HTMLElement
 
     parent.scrollTop = parent.scrollHeight
@@ -260,45 +265,47 @@ export const AiAssistantChatProvider = ({
 
   useEffect(() => {
     if (
-      !loading &&
-      answer.length &&
-      thread[lastAnswerIndex]?.content !== answer
+      loading ||
+      !answer.length ||
+      thread[lastAnswerIndex]?.content === answer
     ) {
-      const uniqueAnswerSources = answerSources
-        .filter(
-          (source, index) =>
-            answerSources.findIndex(
-              (s) => s.source_url === source.source_url
-            ) === index
-        )
-        .map((source) => {
-          const separatorIndex = source.title.indexOf("|")
-          return {
-            ...source,
-            title:
-              separatorIndex !== -1
-                ? source.title.slice(0, separatorIndex)
-                : source.title,
-          }
-        })
-      setThread((prevThread) => [
-        ...prevThread,
-        {
-          type: "answer",
-          content: answer,
-          question_id: identifiers?.question_answer_id,
-          order: getNewOrder(prevThread),
-          sources:
-            uniqueAnswerSources.length > 3
-              ? uniqueAnswerSources.slice(0, 3)
-              : uniqueAnswerSources,
-        },
-      ])
-      setAnswer("")
-      setAnswerSources([])
-      setMessagesCount((prev) => prev + 1)
-      inputRef.current?.focus()
+      return
     }
+
+    const uniqueAnswerSources = answerSources
+      .filter(
+        (source, index) =>
+          answerSources.findIndex((s) => s.source_url === source.source_url) ===
+          index
+      )
+      .map((source) => {
+        const separatorIndex = source.title.indexOf("|")
+        return {
+          ...source,
+          title:
+            separatorIndex !== -1
+              ? source.title.slice(0, separatorIndex)
+              : source.title,
+        }
+      })
+    setThread((prevThread) => [
+      ...prevThread,
+      {
+        type: "answer",
+        content: answer,
+        question_id: identifiers?.question_answer_id,
+        order: getNewOrder(prevThread),
+        sources:
+          uniqueAnswerSources.length > 3
+            ? uniqueAnswerSources.slice(0, 3)
+            : uniqueAnswerSources,
+      },
+    ])
+    setAnswer("")
+    setAnswerSources([])
+    setMessagesCount((prev) => prev + 1)
+    inputRef.current?.focus()
+    scrollToBottom()
   }, [loading, answer, thread, lastAnswerIndex, inputRef.current])
 
   useResizeObserver(contentRef as React.RefObject<HTMLDivElement>, () => {
@@ -308,6 +315,43 @@ export const AiAssistantChatProvider = ({
 
     scrollToBottom()
   })
+
+  const handleUserScroll = useCallback(() => {
+    if (!question.length || preventAutoScroll) {
+      return
+    }
+
+    setPreventAutoScroll(true)
+  }, [question, preventAutoScroll])
+
+  const handleUserScrollEnd = useCallback(() => {
+    if (preventAutoScroll) {
+      setPreventAutoScroll(false)
+    }
+  }, [preventAutoScroll])
+
+  useEffect(() => {
+    if (!contentRef.current?.parentElement) {
+      return
+    }
+
+    contentRef.current.parentElement.addEventListener("wheel", handleUserScroll)
+    contentRef.current.parentElement.addEventListener(
+      "touchmove",
+      handleUserScroll
+    )
+
+    return () => {
+      contentRef.current?.parentElement?.removeEventListener(
+        "wheel",
+        handleUserScroll
+      )
+      contentRef.current?.parentElement?.removeEventListener(
+        "touchmove",
+        handleUserScroll
+      )
+    }
+  }, [contentRef.current, handleUserScroll])
 
   const getThreadItems = useCallback(() => {
     return sortThread(thread)
