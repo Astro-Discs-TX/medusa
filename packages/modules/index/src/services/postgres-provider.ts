@@ -326,9 +326,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
    * @protected
    */
   @InjectTransactionManager()
-  protected async onCreate<
-    TData extends { id: string; [key: string]: unknown }
-  >(
+  async onCreate<TData extends { id: string; [key: string]: unknown }>(
     {
       entity,
       data,
@@ -434,9 +432,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
    * @protected
    */
   @InjectTransactionManager()
-  protected async onUpdate<
-    TData extends { id: string; [key: string]: unknown }
-  >(
+  async onUpdate<TData extends { id: string; [key: string]: unknown }>(
     {
       entity,
       data,
@@ -480,9 +476,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
    * @protected
    */
   @InjectTransactionManager()
-  protected async onDelete<
-    TData extends { id: string; [key: string]: unknown }
-  >(
+  async onDelete<TData extends { id: string; [key: string]: unknown }>(
     {
       entity,
       data,
@@ -534,9 +528,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
    * @protected
    */
   @InjectTransactionManager()
-  protected async onAttach<
-    TData extends { id: string; [key: string]: unknown }
-  >(
+  async onAttach<TData extends { id: string; [key: string]: unknown }>(
     {
       entity,
       data,
@@ -677,9 +669,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
    * @protected
    */
   @InjectTransactionManager()
-  protected async onDetach<
-    TData extends { id: string; [key: string]: unknown }
-  >(
+  async onDetach<TData extends { id: string; [key: string]: unknown }>(
     {
       entity,
       data,

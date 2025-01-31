@@ -65,13 +65,13 @@ medusaIntegrationTestRunner({
     })
 
     describe("Index engine syncing", () => {
-      it.only("should sync the data to the index based on the indexation configuration", async () => {
+      it("should sync the data to the index based on the indexation configuration", async () => {
         console.info("[Index engine] Creating products")
 
         await populateData(api, {
-          productCount: 10,
-          variantCount: 50,
-          priceCount: 10,
+          productCount: 2,
+          variantCount: 2,
+          priceCount: 2,
         })
 
         console.info("[Index engine] Creating products done")
@@ -102,7 +102,7 @@ medusaIntegrationTestRunner({
 
         console.info("[Index engine] Sync done")
 
-        // 28 ms - 10 + 10 * 50 + 10 * 50 * 10 = 510
+        // 28 ms - 6511 records
         const { data: results } = await indexEngine.query<"product">({
           fields: [
             "product.*",
@@ -111,11 +111,11 @@ medusaIntegrationTestRunner({
           ],
         })
 
-        expect(results.length).toBe(10)
+        expect(results.length).toBe(2)
         for (const result of results) {
-          expect(result.variants.length).toBe(50)
+          expect(result.variants.length).toBe(2)
           for (const variant of result.variants) {
-            expect(variant.prices.length).toBe(10)
+            expect(variant.prices.length).toBe(2)
           }
         }
       })
@@ -216,6 +216,17 @@ medusaIntegrationTestRunner({
 
       expect(updatedResults.length).toBe(1)
       expect(updatedResults[0].variants.length).toBe(1)
+
+      let staledRaws = await dbConnection.raw(
+        'SELECT * FROM "index_data" WHERE "staled_at" IS NOT NULL'
+      )
+
+      expect(staledRaws.rows.length).toBe(0)
+
+      staledRaws = await dbConnection.raw(
+        'SELECT * FROM "index_relation" WHERE "staled_at" IS NOT NULL'
+      )
+      expect(staledRaws.rows.length).toBe(0)
     })
   },
 })

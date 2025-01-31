@@ -1,6 +1,7 @@
 import {
   CommonEvents,
   ContainerRegistrationKeys,
+  groupBy,
   Modules,
   promiseAll,
 } from "@medusajs/framework/utils"
@@ -44,6 +45,7 @@ export class DataSynchronizer {
     return this.#container.indexDataService
   }
 
+  // @ts-ignore
   get #indexRelationService(): ModulesSdkTypes.IMedusaInternalService<any> {
     return this.#container.indexRelationService
   }
@@ -103,28 +105,48 @@ export class DataSynchronizer {
 
     const staleCondition = staleOnly ? { staled_at: { $ne: null } } : {}
 
-    // Clean up staled data
-    await promiseAll([
-      this.#indexRelationService.delete({
-        selector: {
-          ...staleCondition,
-          $or: [
-            {
-              parent_name: entities,
+    const dataToDelete = await this.#indexDataService.list({
+      ...staleCondition,
+      name: entities,
+    })
+
+    const toDeleteByEntity = groupBy(dataToDelete, "name")
+
+    for (const entity of toDeleteByEntity.keys()) {
+      const records = toDeleteByEntity.get(entity)
+      const ids = records?.map(
+        (record: { data: { id: string } }) => record.data.id
+      )
+      if (!ids?.length) {
+        continue
+      }
+
+      if (this.#schemaObjectRepresentation[entity]) {
+        // Here we assume that some data have been deleted from from the source and we are cleaning since they are still staled in the index and we remove them from the index
+
+        // TODO: expand storage provider interface
+        await (this.#storageProvider as any).onDelete({
+          entity,
+          data: ids,
+          schemaEntityObjectRepresentation:
+            this.#schemaObjectRepresentation[entity],
+        })
+      } else {
+        // Here we assume that the entity is not indexed anymore as it is not part of the schema object representation and we are cleaning the index
+        await promiseAll([
+          this.#indexDataService.delete({
+            selector: {
+              name: entity,
             },
-            {
-              child_name: entities,
+          }),
+          this.#indexRelationService.delete({
+            selector: {
+              $or: [{ parent_id: entity }, { child_id: entity }],
             },
-          ],
-        },
-      }),
-      this.#indexDataService.delete({
-        selector: {
-          ...staleCondition,
-          name: entities,
-        },
-      }),
-    ])
+          }),
+        ])
+      }
+    }
   }
 
   async #updatedStatus(entity: string, status: IndexMetadataStatus) {
@@ -155,21 +177,6 @@ export class DataSynchronizer {
         },
         selector: {
           name: entity,
-        },
-      }),
-      this.#indexRelationService.update({
-        data: {
-          staled_at: new Date(),
-        },
-        selector: {
-          $or: [
-            {
-              parent_name: entity,
-            },
-            {
-              child_name: entity,
-            },
-          ],
         },
       }),
     ])
