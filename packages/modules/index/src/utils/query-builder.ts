@@ -660,6 +660,21 @@ export class QueryBuilder {
       return key + id
     }
 
+    const columnMap = {}
+    const rowSchema = resultSet[0]
+    const properties = Object.keys(rowSchema)
+    for (const property of properties) {
+      const segments = property.split(".")
+      const field = segments.pop()
+      const parent = segments.join(".")
+
+      columnMap[parent] ??= []
+      columnMap[parent].push({
+        field,
+        property,
+      })
+    }
+
     resultSet.forEach((row) => {
       for (const path in maps) {
         const id = row[`${path}.id`]
@@ -680,6 +695,13 @@ export class QueryBuilder {
         }
 
         maps[path][id] = row[path] || undefined
+
+        if (!maps[path][id] && id) {
+          maps[path][id] = {}
+          for (const column of columnMap[path]) {
+            maps[path][id][column.field] = row[column.property]
+          }
+        }
 
         const parentObj = maps[parentPath][row[`${parentPath}.id`]]
 
