@@ -192,6 +192,7 @@ medusaIntegrationTestRunner({
       console.info("[Index engine] Triggering sync")
       // Trigger a sync
       await (indexEngine as any).onApplicationStart_()
+      await setTimeout(1000)
 
       console.info("[Index engine] Sync done")
 
