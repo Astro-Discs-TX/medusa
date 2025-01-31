@@ -12,48 +12,58 @@ export const generatedSidebar = [
     "isPathHref": true,
     "type": "link",
     "path": "/examples",
-    "title": "Example Snippets",
-    "children": []
-  },
-  {
-    "loaded": true,
-    "isPathHref": true,
-    "type": "ref",
-    "path": "/recipes",
-    "title": "Recipes",
-    "children": []
-  },
-  {
-    "loaded": true,
-    "isPathHref": true,
-    "type": "ref",
-    "path": "/plugins",
-    "title": "Plugins",
-    "children": []
-  },
-  {
-    "loaded": true,
-    "isPathHref": true,
-    "type": "ref",
-    "path": "/integrations",
-    "title": "Integrations",
-    "children": []
-  },
-  {
-    "loaded": true,
-    "isPathHref": true,
-    "type": "category",
-    "title": "Server Examples",
-    "autogenerate_tags": "example+server",
-    "autogenerate_as_ref": true,
+    "title": "Examples",
+    "isChildSidebar": true,
     "children": [
       {
         "loaded": true,
         "isPathHref": true,
-        "type": "link",
-        "title": "Custom Item Price",
-        "path": "/examples/guides/custom-item-price",
+        "type": "ref",
+        "path": "/examples",
+        "title": "Example Snippets",
         "children": []
+      },
+      {
+        "loaded": true,
+        "isPathHref": true,
+        "type": "ref",
+        "path": "/recipes",
+        "title": "Recipes",
+        "children": []
+      },
+      {
+        "loaded": true,
+        "isPathHref": true,
+        "type": "ref",
+        "path": "/plugins",
+        "title": "Plugins",
+        "children": []
+      },
+      {
+        "loaded": true,
+        "isPathHref": true,
+        "type": "ref",
+        "path": "/integrations",
+        "title": "Integrations",
+        "children": []
+      },
+      {
+        "loaded": true,
+        "isPathHref": true,
+        "type": "category",
+        "title": "Server Examples",
+        "autogenerate_tags": "example+server",
+        "autogenerate_as_ref": true,
+        "children": [
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "link",
+            "title": "Custom Item Price",
+            "path": "/examples/guides/custom-item-price",
+            "children": []
+          }
+        ]
       }
     ]
   },
