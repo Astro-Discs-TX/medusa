@@ -339,7 +339,7 @@ describe("IndexModuleService query", function () {
     ])
   })
 
-  it.only("should query all products ordered by sku DESC with specific fields", async () => {
+  it("should query all products ordered by sku DESC with specific fields", async () => {
     const { data } = await module.query({
       fields: [
         "product.*",

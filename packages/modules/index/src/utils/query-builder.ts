@@ -410,11 +410,6 @@ export class QueryBuilder {
     const children = this.getStructureKeys(structure)
     for (const child of children) {
       const childStructure = structure[child] as Select
-      // const isSelectableField = this.allSchemaFields.has(parentProperty)
-      // if (isSelectableField) {
-      //   return []
-      // }
-
       queryParts = queryParts
         .concat(
           this.buildQueryParts(
@@ -696,6 +691,8 @@ export class QueryBuilder {
 
         maps[path][id] = row[path] || undefined
 
+        // If there is and id, but no object values, it means that specific fields were selected
+        // so we recompose the object with all selected fields. (id will always be selected)
         if (!maps[path][id] && id) {
           maps[path][id] = {}
           for (const column of columnMap[path]) {
