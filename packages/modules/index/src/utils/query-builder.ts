@@ -656,9 +656,8 @@ export class QueryBuilder {
     }
 
     const columnMap = {}
-    const rowSchema = resultSet[0]
-    const properties = Object.keys(rowSchema)
-    for (const property of properties) {
+    const columnNames = Object.keys(resultSet[0] ?? {})
+    for (const property of columnNames) {
       const segments = property.split(".")
       const field = segments.pop()
       const parent = segments.join(".")
