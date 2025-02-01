@@ -6,6 +6,7 @@ import * as React from "react"
 
 import { Kbd } from "@/components/kbd"
 import { clx } from "@/utils/clx"
+import { isInputElement } from "../../utils/is-input-element"
 
 interface CommandBarProps extends React.PropsWithChildren {
   open?: boolean
@@ -167,6 +168,10 @@ const Command = React.forwardRef<HTMLButtonElement, CommandProps>(
   ) => {
     React.useEffect(() => {
       const handleKeyDown = (event: KeyboardEvent) => {
+        if (isInputElement(document.activeElement)) {
+          return
+        }
+
         if (event.key.toLowerCase() === shortcut.toLowerCase()) {
           event.preventDefault()
           event.stopPropagation()
