@@ -6,7 +6,7 @@ import * as React from "react"
 
 import { Kbd } from "@/components/kbd"
 import { clx } from "@/utils/clx"
-import { isInputElement } from "../../utils/is-input-element"
+import { isInputElement } from "@/utils/is-input-element"
 
 interface CommandBarProps extends React.PropsWithChildren {
   open?: boolean
