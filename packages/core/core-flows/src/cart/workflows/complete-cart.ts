@@ -105,6 +105,8 @@ export const completeCartWorkflow = createWorkflow(
       fields: completeCartFields,
       variables: { id: input.id },
       list: false,
+    }).config({
+      name: "cart-query",
     })
 
     const validate = createHook("validate", {
@@ -116,8 +118,20 @@ export const completeCartWorkflow = createWorkflow(
     const order = when("create-order", { orderId }, ({ orderId }) => {
       return !orderId
     }).then(() => {
+      const cartOptionIds = transform({ cart }, ({ cart }) => {
+        return cart.shipping_methods?.map((sm) => sm.shipping_option_id)
+      })
 
-      validateShippingStep({ cart })
+      const shippingOptions = useRemoteQueryStep({
+        entry_point: "shipping_option",
+        fields: ["id", "shipping_profile_id"],
+        variables: { id: cartOptionIds },
+        list: true,
+      }).config({
+        name: "shipping-options-query",
+      })
+
+      validateShippingStep({ cart, shippingOptions })
 
       const paymentSessions = validateCartPaymentsStep({ cart })
 

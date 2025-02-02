@@ -1,6 +1,5 @@
 import {
   CartLineItemDTO,
-  CartShippingMethodDTO,
   CartWorkflowDTO,
   ProductVariantDTO,
   ShippingOptionDTO,
@@ -10,14 +9,12 @@ import { createStep, StepResponse } from "@medusajs/workflows-sdk"
 import { MedusaError } from "../../../../utils/dist/common"
 
 export type ValidateShippingInput = {
-  cart: Omit<CartWorkflowDTO, "items" | "shipping_methods"> & {
+  cart: Omit<CartWorkflowDTO, "items"> & {
     items: (CartLineItemDTO & {
       variant: ProductVariantDTO
     })[]
-    shipping_methods: (CartShippingMethodDTO & {
-      shipping_option: ShippingOptionDTO
-    })[]
   }
+  shippingOptions: ShippingOptionDTO[]
 }
 
 export const validateShippingStepId = "validate-shipping"
@@ -30,7 +27,11 @@ export const validateShippingStepId = "validate-shipping"
 export const validateShippingStep = createStep(
   validateShippingStepId,
   async (data: ValidateShippingInput) => {
-    const { cart } = data
+    const { cart, shippingOptions } = data
+
+    const optionProfileMap: Map<string, string> = new Map(
+      shippingOptions.map((option) => [option.id, option.shipping_profile_id])
+    )
 
     const cartItemsWithShipping =
       cart.items?.filter((item) => item.requires_shipping) || []
@@ -48,8 +49,8 @@ export const validateShippingStep = createStep(
       (item) => (item.variant.product as any)?.shipping_profile?.id
     )
 
-    const availableShippingPorfiles = cartShippingMethods.map(
-      (method) => method.shipping_option?.shipping_profile_id
+    const availableShippingPorfiles = cartShippingMethods.map((method) =>
+      optionProfileMap.get(method.shipping_option_id!)
     )
 
     const missingShippingPorfiles = requiredShippingPorfiles.filter(

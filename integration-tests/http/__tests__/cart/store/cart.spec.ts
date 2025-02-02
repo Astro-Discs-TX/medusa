@@ -96,7 +96,11 @@ medusaIntegrationTestRunner({
         ).data.region
 
         product = (
-          await api.post("/admin/products",  { ...medusaTshirtProduct, shipping_profile_id: shippingProfile.id }, adminHeaders)
+          await api.post(
+            "/admin/products",
+            { ...medusaTshirtProduct, shipping_profile_id: shippingProfile.id },
+            adminHeaders
+          )
         ).data.product
 
         salesChannel = (
@@ -1010,14 +1014,6 @@ medusaIntegrationTestRunner({
               { add: [salesChannel.id] },
               adminHeaders
             )
-
-            const shippingProfile = (
-              await api.post(
-                `/admin/shipping-profiles`,
-                { name: `test-${stockLocation.id}`, type: "default" },
-                adminHeaders
-              )
-            ).data.shipping_profile
 
             const fulfillmentSets = (
               await api.post(
