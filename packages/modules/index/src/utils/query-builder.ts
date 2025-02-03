@@ -404,7 +404,13 @@ export class QueryBuilder {
         const joinKey = Object.keys(joinWhere).find((key) => {
           const k = key.split(".")
           k.pop()
-          return k.join(".") === currentAliasPath
+          const curPath = k.join(".")
+          if (curPath === currentAliasPath) {
+            const relEntity = this.getEntity(curPath, false)
+            return relEntity?.ref?.entity === entity
+          }
+
+          return false
         })
 
         if (joinKey) {
@@ -415,7 +421,9 @@ export class QueryBuilder {
           )
         }
 
-        queryParts.push(joinBuilder.toQuery().replace("select * ", ""))
+        queryParts.push(
+          joinBuilder.toQuery().replace("select * ", "").replace("where", "and")
+        )
       }
     }
 

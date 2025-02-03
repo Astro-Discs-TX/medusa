@@ -539,6 +539,35 @@ describe("IndexModuleService query", function () {
     ])
   })
 
+  it("should query products filtering by variant sku", async () => {
+    const { data } = await module.query({
+      fields: ["product.*", "product.variants.*", "product.variants.prices.*"],
+      joinFilters: {
+        "product.variants.prices.amount": { $gt: 110 },
+      },
+      filters: {
+        product: {
+          variants: {
+            sku: { $like: "aaa%" },
+          },
+        },
+      },
+    })
+
+    expect(data).toEqual([
+      {
+        id: "prod_1",
+        variants: [
+          {
+            id: "var_1",
+            sku: "aaa test aaa",
+            prices: [],
+          },
+        ],
+      },
+    ])
+  })
+
   it("should query products filtering by price and returning the complete entity", async () => {
     const { data } = await module.query({
       fields: ["product.*", "product.variants.*", "product.variants.prices.*"],
