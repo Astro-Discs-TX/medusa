@@ -17,7 +17,7 @@ export const defaultSchema = `
   
   type Price @Listeners(values: ["${Modules.PRICING}.price.created", "${Modules.PRICING}.price.updated", "${Modules.PRICING}.price.deleted"]) {
     id: String
-    amount: Int
+    amount: Float
     currency_code: String
   }
 
