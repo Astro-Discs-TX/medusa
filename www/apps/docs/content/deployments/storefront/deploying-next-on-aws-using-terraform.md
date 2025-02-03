@@ -1,7 +1,3 @@
-Got it! I’ll create a separate document that explains how to build the frontend image using the provided commands and how to push it to an AWS ECR repository. Here’s the draft:
-
----
-
 # **Building and Deploying the MedusaJS Frontend**
 
 This guide explains how to build the MedusaJS frontend using the provided starter template and deploy the resulting Docker image to an AWS ECR repository. This process is essential for deploying the frontend as part of the MedusaJS e-commerce solution.
