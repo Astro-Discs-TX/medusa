@@ -166,8 +166,6 @@ medusaIntegrationTestRunner({
       expect(results[0].variants.length).toBe(1)
       expect(results[0].variants[0].prices.length).toBe(1)
 
-      console.info("[Index engine] Update configuration")
-
       // Manually change the indexation configuration
       ;(indexEngine as any).schemaObjectRepresentation_ = null
       ;(indexEngine as any).moduleOptions_ = {
@@ -189,7 +187,6 @@ medusaIntegrationTestRunner({
         `,
       }
 
-      console.info("[Index engine] Triggering sync")
       // Trigger a sync
       await (indexEngine as any).onApplicationStart_()
       await setTimeout(1000)
