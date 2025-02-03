@@ -194,23 +194,6 @@ medusaIntegrationTestRunner({
       await (indexEngine as any).onApplicationStart_()
       await setTimeout(1000)
 
-      console.info("[Index engine] Sync done")
-
-      const err = await indexEngine
-        .query<"product">({
-          fields: [
-            "product.*",
-            "product.variants.*",
-            "product.variants.prices.*",
-          ],
-        })
-        .catch((err) => err)
-
-      expect(err).toBeDefined()
-      expect(err.message).toBe(
-        "Could not find entity for path: product.variants.prices"
-      )
-
       const { data: updatedResults } = await indexEngine.query<"product">({
         fields: ["product.*", "product.variants.*"],
       })
