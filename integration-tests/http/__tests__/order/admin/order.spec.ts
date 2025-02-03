@@ -947,6 +947,9 @@ medusaIntegrationTestRunner({
       })
 
       it("should only create fulfillments grouped by shipping requirement", async () => {
+        const item1Id = order.items.find((i) => i.requires_shipping).id
+        const item2Id = order.items.find((i) => !i.requires_shipping).id
+
         const {
           response: { data },
         } = await api
@@ -956,11 +959,11 @@ medusaIntegrationTestRunner({
               location_id: seeder.stockLocation.id,
               items: [
                 {
-                  id: order.items[0].id,
+                  id: item1Id,
                   quantity: 1,
                 },
                 {
-                  id: order.items[1].id,
+                  id: item2Id,
                   quantity: 1,
                 },
               ],
@@ -980,7 +983,7 @@ medusaIntegrationTestRunner({
           `/admin/orders/${order.id}/fulfillments?fields=+fulfillments.id,fulfillments.requires_shipping`,
           {
             location_id: seeder.stockLocation.id,
-            items: [{ id: order.items[0].id, quantity: 1 }],
+            items: [{ id: item1Id, quantity: 1 }],
           },
           adminHeaders
         )
@@ -993,7 +996,7 @@ medusaIntegrationTestRunner({
           `/admin/orders/${order.id}/fulfillments?fields=+fulfillments.id,fulfillments.requires_shipping`,
           {
             location_id: seeder.stockLocation.id,
-            items: [{ id: order.items[1].id, quantity: 1 }],
+            items: [{ id: item2Id, quantity: 1 }],
           },
           adminHeaders
         )
