@@ -932,6 +932,7 @@ medusaIntegrationTestRunner({
           .post(
             `/admin/orders/${order.id}/fulfillments`,
             {
+              shipping_option_id: seeder.shippingOption.id, // shipping option with the "regular" shipping profile
               location_id: stockChannelOverride.id,
               items: [{ id: orderItemId, quantity: 1 }],
             },
