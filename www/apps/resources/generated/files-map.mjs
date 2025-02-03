@@ -556,6 +556,10 @@ export const filesMap = [
     "pathname": "/commerce-modules/product"
   },
   {
+    "filePath": "/www/apps/resources/app/commerce-modules/product/variant-inventory/page.mdx",
+    "pathname": "/commerce-modules/product/variant-inventory"
+  },
+  {
     "filePath": "/www/apps/resources/app/commerce-modules/product/workflows/page.mdx",
     "pathname": "/commerce-modules/product/workflows"
   },
@@ -1238,6 +1242,10 @@ export const filesMap = [
   {
     "filePath": "/www/apps/resources/app/troubleshooting/s3/page.mdx",
     "pathname": "/troubleshooting/s3"
+  },
+  {
+    "filePath": "/www/apps/resources/app/troubleshooting/test-errors/page.mdx",
+    "pathname": "/troubleshooting/test-errors"
   },
   {
     "filePath": "/www/apps/resources/app/troubleshooting/workflow-errors/page.mdx",
