@@ -142,7 +142,7 @@ export const generatedEditDates = {
   "app/storefront-development/cart/retrieve/page.mdx": "2025-01-06T15:58:13.885Z",
   "app/storefront-development/cart/update/page.mdx": "2025-01-06T16:01:33.752Z",
   "app/storefront-development/cart/page.mdx": "2024-06-11T11:56:37+03:00",
-  "app/storefront-development/checkout/address/page.mdx": "2025-01-06T16:02:20.872Z",
+  "app/storefront-development/checkout/address/page.mdx": "2025-02-03T16:32:02.682Z",
   "app/storefront-development/checkout/complete-cart/page.mdx": "2024-12-19T16:30:41.019Z",
   "app/storefront-development/checkout/email/page.mdx": "2024-12-19T16:30:40.122Z",
   "app/storefront-development/checkout/payment/stripe/page.mdx": "2024-12-19T16:30:39.173Z",
@@ -233,7 +233,7 @@ export const generatedEditDates = {
   "references/core_flows/core_flows.Order/page.mdx": "2024-12-23T12:30:24.071Z",
   "references/modules/core_flows/page.mdx": "2025-01-27T11:43:48.472Z",
   "references/types/types.HttpTypes/page.mdx": "2025-01-27T11:43:53.717Z",
-  "app/troubleshooting/medusa-admin/no-widget-route/page.mdx": "2024-08-23T11:31:26.346Z",
+  "app/troubleshooting/medusa-admin/no-widget-route/page.mdx": "2025-02-03T12:42:43.932Z",
   "references/auth/IAuthModuleService/methods/auth.IAuthModuleService.createProviderIdentities/page.mdx": "2024-12-09T13:21:36.285Z",
   "references/auth/IAuthModuleService/methods/auth.IAuthModuleService.deleteProviderIdentities/page.mdx": "2024-12-09T13:21:36.293Z",
   "references/auth/IAuthModuleService/methods/auth.IAuthModuleService.listProviderIdentities/page.mdx": "2024-12-09T13:21:36.277Z",
@@ -2115,10 +2115,10 @@ export const generatedEditDates = {
   "app/commerce-modules/cart/links-to-other-modules/page.mdx": "2025-01-06T11:19:35.593Z",
   "app/commerce-modules/customer/extend/page.mdx": "2024-12-25T15:54:37.789Z",
   "app/commerce-modules/fulfillment/links-to-other-modules/page.mdx": "2025-01-06T11:19:35.593Z",
-  "app/commerce-modules/inventory/links-to-other-modules/page.mdx": "2025-01-06T11:19:35.600Z",
+  "app/commerce-modules/inventory/links-to-other-modules/page.mdx": "2025-02-03T12:37:33.622Z",
   "app/commerce-modules/pricing/links-to-other-modules/page.mdx": "2025-01-06T11:19:35.607Z",
   "app/commerce-modules/product/extend/page.mdx": "2024-12-11T09:07:25.252Z",
-  "app/commerce-modules/product/links-to-other-modules/page.mdx": "2025-01-06T11:19:35.606Z",
+  "app/commerce-modules/product/links-to-other-modules/page.mdx": "2025-02-03T12:37:18.919Z",
   "app/commerce-modules/promotion/extend/page.mdx": "2024-12-11T09:07:24.137Z",
   "app/commerce-modules/promotion/links-to-other-modules/page.mdx": "2025-01-06T11:19:35.608Z",
   "app/commerce-modules/order/edit/page.mdx": "2024-10-09T08:50:05.334Z",
@@ -5902,5 +5902,6 @@ export const generatedEditDates = {
   "references/types/HttpTypes/interfaces/types.HttpTypes.StoreProductTypeResponse/page.mdx": "2025-01-27T11:43:54.212Z",
   "references/types/interfaces/types.BaseProductTypeListParams/page.mdx": "2025-01-27T11:43:54.550Z",
   "references/core_flows/Order/Steps_Order/variables/core_flows.Order.Steps_Order.updateOrderChangesStepId/page.mdx": "2025-01-27T11:43:49.278Z",
-  "app/troubleshooting/test-errors/page.mdx": "2025-01-31T13:08:42.639Z"
+  "app/troubleshooting/test-errors/page.mdx": "2025-01-31T13:08:42.639Z",
+  "app/commerce-modules/product/variant-inventory/page.mdx": "2025-02-03T12:19:45.706Z"
 }
