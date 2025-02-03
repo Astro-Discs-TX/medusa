@@ -798,7 +798,7 @@ medusaIntegrationTestRunner({
           ],
           stockChannelOverride,
           inventoryItemOverride,
-          shippingProfileOverride: shippingProfile,
+          shippingProfileOverride: [shippingProfile, shippingProfileOverride],
         })
         order = seeder.order
         order = (await api.get(`/admin/orders/${order.id}`, adminHeaders)).data
