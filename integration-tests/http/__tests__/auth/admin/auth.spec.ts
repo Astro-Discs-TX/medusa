@@ -198,13 +198,11 @@ medusaIntegrationTestRunner({
           },
         })
 
-        const response = await api.post(
-          `/auth/user/emailpass/update?token=${result}`,
-          {
-            email: "test@medusa-commerce.com",
-            password: "new_password",
-          }
-        )
+        const response = await api.post(`/auth/user/emailpass/update`, {
+          token: result,
+          email: "test@medusa-commerce.com",
+          password: "new_password",
+        })
 
         expect(response.status).toEqual(200)
         expect(response.data).toEqual({ success: true })
@@ -249,13 +247,11 @@ medusaIntegrationTestRunner({
           },
         })
 
-        const response = await api.post(
-          `/auth/user/emailpass/update?token=${result}`,
-          {
-            email: "test+new@medusa-commerce.com",
-            password: "new_password",
-          }
-        )
+        const response = await api.post(`/auth/user/emailpass/update`, {
+          token: result,
+          email: "test+new@medusa-commerce.com",
+          password: "new_password",
+        })
 
         expect(response.status).toEqual(200)
         expect(response.data).toEqual({ success: true })
@@ -306,7 +302,8 @@ medusaIntegrationTestRunner({
         jest.advanceTimersByTime(15 * 60 * 1000)
 
         const response = await api
-          .post(`/auth/user/emailpass/update?token=${result}`, {
+          .post(`/auth/user/emailpass/update`, {
+            token: result,
             email: "test@medusa-commerce.com",
             password: "new_password",
           })
@@ -335,7 +332,7 @@ medusaIntegrationTestRunner({
           .catch((e) => e)
 
         expect(response.response.status).toEqual(401)
-        expect(response.response.data.message).toEqual("Invalid token")
+        expect(response.response.data.message).toEqual("No token provided")
       })
 
       it("should fail if update is attempted on different actor type", async () => {
@@ -363,7 +360,8 @@ medusaIntegrationTestRunner({
         jest.advanceTimersByTime(15 * 60 * 1000)
 
         const response = await api
-          .post(`/auth/customer/emailpass/update?token=${result}`, {
+          .post(`/auth/customer/emailpass/update`, {
+            token: result,
             email: "test@medusa-commerce.com",
             password: "new_password",
           })
@@ -398,7 +396,8 @@ medusaIntegrationTestRunner({
         jest.advanceTimersByTime(15 * 60 * 1000)
 
         const response = await api
-          .post(`/auth/user/emailpass/update?token=${result}`, {
+          .post(`/auth/user/emailpass/update`, {
+            token: result,
             email: "test@medusa-commerce.com",
             password: "new_password",
           })

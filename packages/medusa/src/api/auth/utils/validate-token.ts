@@ -15,12 +15,13 @@ import { decode, JwtPayload, verify } from "jsonwebtoken"
 // Middleware to validate that a token is valid
 export const validateToken = () => {
   return async (
-    req: MedusaRequest,
+    req: MedusaRequest<{ token: string }>,
     res: MedusaResponse,
     next: MedusaNextFunction
   ) => {
     const { actor_type, auth_provider } = req.params
-    const { token } = req.query
+
+    const token = req.body.token
 
     const req_ = req as AuthenticatedMedusaRequest
 
@@ -30,7 +31,9 @@ export const validateToken = () => {
     )
 
     if (!token) {
-      return next(errorObject)
+      return next(
+        new MedusaError(MedusaError.Types.UNAUTHORIZED, `No token provided`)
+      )
     }
 
     // @ts-ignore
