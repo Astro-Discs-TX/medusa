@@ -47,8 +47,15 @@ export class QueryBuilder {
     return Object.keys(structure ?? {}).filter((key) => key !== "entity")
   }
 
-  private getEntity(path): IndexTypes.SchemaPropertiesMap[0] {
+  private getEntity(
+    path,
+    throwWhenNotFound = true
+  ): IndexTypes.SchemaPropertiesMap[0] | undefined {
     if (!this.schema._schemaPropertiesMap[path]) {
+      if (!throwWhenNotFound) {
+        return
+      }
+
       throw new Error(`Could not find entity for path: ${path}`)
     }
 
@@ -56,7 +63,7 @@ export class QueryBuilder {
   }
 
   private getGraphQLType(path, field) {
-    const entity = this.getEntity(path)?.ref?.entity
+    const entity = this.getEntity(path)?.ref?.entity!
     const fieldRef = this.entityMap[entity]._fields[field]
     if (!fieldRef) {
       throw new Error(`Field ${field} not found in the entityMap.`)
@@ -298,13 +305,12 @@ export class QueryBuilder {
     const currentAliasPath = [...aliasPath, parentProperty].join(".")
 
     const isSelectableField = this.allSchemaFields.has(parentProperty)
-    if (isSelectableField) {
-      // We are currently selecting a specific field of the parent entity
+    const entities = this.getEntity(currentAliasPath, false)
+    if (isSelectableField || !entities) {
+      // We are currently selecting a specific field of the parent entity or the entity is not found on the index schema
       // We don't need to build the query parts for this as there is no join
       return []
     }
-
-    const entities = this.getEntity(currentAliasPath)
 
     const mainEntity = entities.ref.entity
     const mainAlias =
@@ -322,7 +328,13 @@ export class QueryBuilder {
       const intermediateAlias = entities.shortCutOf.split(".")
 
       for (let i = intermediateAlias.length - 1, x = 0; i >= 0; i--, x++) {
-        const intermediateEntity = this.getEntity(intermediateAlias.join("."))
+        const intermediateEntity = this.getEntity(
+          intermediateAlias.join("."),
+          false
+        )
+        if (!intermediateEntity) {
+          break
+        }
 
         intermediateAlias.pop()
 
@@ -332,7 +344,7 @@ export class QueryBuilder {
 
         const parentIntermediateEntity = this.getEntity(
           intermediateAlias.join(".")
-        )
+        )!
 
         const alias =
           this.getShortAlias(
@@ -452,6 +464,10 @@ export class QueryBuilder {
     }
 
     const alias = aliasMapping[currentAliasPath]
+    // If the entity is not found in the schema (not indexed), we don't need to build the select parts
+    if (!alias) {
+      return selectParts
+    }
 
     selectParts[currentAliasPath] = `${alias}.data`
     selectParts[currentAliasPath + ".id"] = `${alias}.id`
@@ -521,7 +537,7 @@ export class QueryBuilder {
     const rootKey = this.getStructureKeys(structure)[0]
     const rootStructure = structure[rootKey] as Select
 
-    const entity = this.getEntity(rootKey).ref.entity
+    const entity = this.getEntity(rootKey)!.ref.entity
     const rootEntity = entity.toLowerCase()
     const aliasMapping: { [path: string]: string } = {}
 
@@ -610,6 +626,11 @@ export class QueryBuilder {
 
     const initializeMaps = (structure: Select, path: string[]) => {
       const currentPath = path.join(".")
+      const entity = this.getEntity(currentPath, false)
+      if (!entity) {
+        return
+      }
+
       maps[currentPath] = {}
 
       if (path.length > 1) {
@@ -626,9 +647,10 @@ export class QueryBuilder {
           return
         }
 
-        isListMap[currentPath] = !!this.getEntity(currentPath).ref.parents.find(
-          (p) => p.targetProp === property
-        )?.isList
+        isListMap[currentPath] = !!this.getEntity(
+          currentPath,
+          false
+        )?.ref?.parents?.find((p) => p.targetProp === property)?.isList
 
         pathDetails[currentPath] = { property, parents, parentPath }
       }
@@ -677,6 +699,15 @@ export class QueryBuilder {
         if (!pathDetails[path]) {
           if (!maps[path][id]) {
             maps[path][id] = row[path] || undefined
+
+            // If there is an id, but no object values, it means that specific fields were selected
+            // so we recompose the object with all selected fields. (id will always be selected)
+            if (!maps[path][id] && id) {
+              maps[path][id] = {}
+              for (const column of columnMap[path]) {
+                maps[path][id][column.field] = row[column.property]
+              }
+            }
           }
           continue
         }
