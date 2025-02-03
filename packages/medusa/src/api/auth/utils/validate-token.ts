@@ -10,18 +10,19 @@ import {
   MedusaError,
   Modules,
 } from "@medusajs/framework/utils"
+import { HttpTypes } from "@medusajs/types"
 import { decode, JwtPayload, verify } from "jsonwebtoken"
 
 // Middleware to validate that a token is valid
 export const validateToken = () => {
   return async (
-    req: MedusaRequest<{ token: string }>,
+    req: MedusaRequest<HttpTypes.AdminUpdateProvider>,
     res: MedusaResponse,
     next: MedusaNextFunction
   ) => {
     const { actor_type, auth_provider } = req.params
 
-    const token = req.body.token
+    const token = req.body?.token
 
     const req_ = req as AuthenticatedMedusaRequest
 
