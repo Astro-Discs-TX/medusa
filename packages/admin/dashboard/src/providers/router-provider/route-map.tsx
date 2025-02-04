@@ -516,6 +516,11 @@ export const RouteMap: RouteObject[] = [
                         "../../routes/collections/collection-add-products"
                       ),
                   },
+                  {
+                    path: "metadata/edit",
+                    lazy: () =>
+                      import("../../routes/collections/collection-metadata"),
+                  },
                 ],
               },
             ],
