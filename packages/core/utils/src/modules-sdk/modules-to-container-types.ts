@@ -1,8 +1,42 @@
 import { join } from "path"
+import { Modules } from "./definition"
 import type { LoadedModule } from "@medusajs/types"
 import { FileSystem } from "../common/file-system"
 import { toCamelCase } from "../common/to-camel-case"
 import { upperCaseFirst } from "../common/upper-case-first"
+
+/**
+ * For known services that has interfaces, we will set the container
+ * type to the interface than the actual service implementation.
+ *
+ * The idea is to provide more precise types.
+ */
+const SERVICES_INTERFACES = {
+  [Modules.AUTH]: "IAuthModuleService",
+  [Modules.CACHE]: "ICacheService",
+  [Modules.CART]: "ICartModuleService",
+  [Modules.CUSTOMER]: "ICustomerModuleService",
+  [Modules.EVENT_BUS]: "IEventBusModuleService",
+  [Modules.INVENTORY]: "IInventoryService",
+  [Modules.PAYMENT]: "IPaymentModuleService",
+  [Modules.PRICING]: "IPricingModuleService",
+  [Modules.PRODUCT]: "IProductModuleService",
+  [Modules.PROMOTION]: "IPromotionModuleService",
+  [Modules.SALES_CHANNEL]: "ISalesChannelModuleService",
+  [Modules.TAX]: "ITaxModuleService",
+  [Modules.FULFILLMENT]: "IFulfillmentModuleService",
+  [Modules.STOCK_LOCATION]: "IStockLocationService",
+  [Modules.USER]: "IUserModuleService",
+  [Modules.WORKFLOW_ENGINE]: "IWorkflowEngineService",
+  [Modules.REGION]: "IRegionModuleService",
+  [Modules.ORDER]: "IOrderModuleService",
+  [Modules.API_KEY]: "IApiKeyModuleService",
+  [Modules.STORE]: "IStoreModuleService",
+  [Modules.CURRENCY]: "ICurrencyModuleService",
+  [Modules.FILE]: "IFileModuleService",
+  [Modules.NOTIFICATION]: "INotificationModuleService",
+  [Modules.LOCKING]: "ILockingModule",
+}
 
 /**
  * Modules registered inside the config file points to one
@@ -55,6 +89,13 @@ export async function generateContainerTypes(
          * Key registered within the container
          */
         const key = service.__definition.key
+        if (SERVICES_INTERFACES[key]) {
+          result.imports.push(
+            `import type { ${SERVICES_INTERFACES[key]} } from '@medusajs/framework/types'`
+          )
+          result.mappings.push(`${key}: ${SERVICES_INTERFACES[key]}`)
+          return
+        }
 
         /**
          * @todo. The property should exist on "LoadedModule"
