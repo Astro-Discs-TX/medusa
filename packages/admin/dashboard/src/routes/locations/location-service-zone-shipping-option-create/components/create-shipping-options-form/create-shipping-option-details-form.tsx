@@ -81,7 +81,7 @@ export const CreateShippingOptionDetailsForm = ({
           <Text size="small" className="text-ui-fg-subtle">
             {t(
               `stockLocations.shippingOptions.create.${
-                isPickup ? "pickup" : isReturn ? "returns" : "shipping"
+                isReturn ? "returns" : isPickup ? "pickup" : "shipping"
               }.hint`
             )}
           </Text>
