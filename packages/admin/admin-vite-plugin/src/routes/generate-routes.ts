@@ -13,6 +13,7 @@ import { getRoute } from "./helpers"
 type Route = {
   Component: string
   path: string
+  children?: Route[]
 }
 
 type RouteResult = {
@@ -42,9 +43,19 @@ function generateCode(results: RouteResult[]): string {
 }
 
 function formatRoute(route: Route): string {
-  return `{
+  const base = `{
     Component: ${route.Component},
-    path: "${route.path}",
+    path: "${route.path}"`
+
+  if (route.children?.length) {
+    return `${base},
+    children: [
+      ${route.children.map((child) => formatRoute(child)).join(",\n      ")}
+    ]
+  }`
+  }
+
+  return `${base}
   }`
 }
 
@@ -63,7 +74,36 @@ async function getRouteResults(files: string[]): Promise<RouteResult[]> {
   const results = (await Promise.all(files.map(parseFile))).filter(
     (result): result is RouteResult => result !== null
   )
-  return results
+
+  const routeMap = new Map<string, RouteResult>()
+
+  results.forEach((result) => {
+    const routePath = result.route.path
+    const isParallel = routePath.includes("/@")
+
+    if (isParallel) {
+      const parentPath = routePath.split("/@")[0]
+      const parent = routeMap.get(parentPath)
+      if (parent) {
+        parent.route.children = parent.route.children || []
+
+        /**
+         * We do not want to include the @ in the final path, so we remove it.
+         */
+        const finalRoute = {
+          ...result.route,
+          path: result.route.path.replace("@", ""),
+        }
+
+        parent.route.children.push(finalRoute)
+        parent.imports.push(...result.imports)
+      }
+    } else {
+      routeMap.set(routePath, result)
+    }
+  })
+
+  return Array.from(routeMap.values())
 }
 
 async function parseFile(

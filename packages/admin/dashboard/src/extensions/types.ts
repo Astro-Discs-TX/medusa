@@ -13,6 +13,7 @@ import { ZodFirstPartySchemaTypes } from "zod"
 export type RouteExtension = {
   Component: ComponentType
   loader?: LoaderFunction
+  children?: RouteExtension[]
   path: string
 }
 
