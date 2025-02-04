@@ -4806,6 +4806,9 @@
             "markAsShipped": {
               "type": "string"
             },
+            "markAsPickedUp": {
+              "type": "string"
+            },
             "markAsDelivered": {
               "type": "string"
             },
@@ -4915,13 +4918,17 @@
                 },
                 "fulfillmentDelivered": {
                   "type": "string"
+                },
+                "fulfillmentPickedUp": {
+                  "type": "string"
                 }
               },
               "required": [
                 "created",
                 "canceled",
                 "fulfillmentShipped",
-                "fulfillmentDelivered"
+                "fulfillmentDelivered",
+                "fulfillmentPickedUp"
               ],
               "additionalProperties": false
             },
@@ -4952,6 +4959,7 @@
             "available",
             "inStock",
             "markAsShipped",
+            "markAsPickedUp",
             "markAsDelivered",
             "itemsToFulfillDesc",
             "locationDescription",

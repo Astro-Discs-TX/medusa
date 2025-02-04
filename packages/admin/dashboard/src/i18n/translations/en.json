@@ -1281,6 +1281,7 @@
       "available": "Available",
       "inStock": "In stock",
       "markAsShipped": "Mark as shipped",
+      "markAsPickedUp": "Mark as picked up",
       "markAsDelivered": "Mark as delivered",
       "itemsToFulfillDesc": "Choose items and quantities to fulfill",
       "locationDescription": "Choose which location you want to fulfill items from.",
@@ -1310,7 +1311,8 @@
         "created": "Fulfillment created successfully",
         "canceled": "Fulfillment successfully canceled",
         "fulfillmentShipped": "Cannot cancel an already shipped fulfillment",
-        "fulfillmentDelivered": "Fulfillment marked as delivered successfully"
+        "fulfillmentDelivered": "Fulfillment marked as delivered successfully",
+        "fulfillmentPickedUp": "Fulfillment marked as picked up successfully"
       },
       "trackingLabel": "Tracking",
       "shippingFromLabel": "Shipping from",

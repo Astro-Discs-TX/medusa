@@ -30,6 +30,7 @@ import {
 import { useStockLocation } from "../../../../../hooks/api/stock-locations"
 import { formatProvider } from "../../../../../lib/format-provider"
 import { getLocaleAmount } from "../../../../../lib/money-amount-helpers"
+import { FulfillmentSetType } from "../../../../locations/common/constants"
 
 type OrderFulfillmentSectionProps = {
   order: AdminOrder
@@ -213,6 +214,10 @@ const Fulfillment = ({
 
   const showLocation = !!fulfillment.location_id
 
+  const isPickUpFulfillment =
+    fulfillment.shipping_option?.service_zone.fulfillment_set.type ===
+    FulfillmentSetType.Pickup
+
   const { stock_location, isError, error } = useStockLocation(
     fulfillment.location_id!,
     undefined,
@@ -251,7 +256,9 @@ const Fulfillment = ({
     !fulfillment.canceled_at &&
     !fulfillment.shipped_at &&
     !fulfillment.delivered_at &&
-    fulfillment.requires_shipping
+    fulfillment.requires_shipping &&
+    !isPickUpFulfillment
+
   const showDeliveryButton =
     !fulfillment.canceled_at && !fulfillment.delivered_at
 
@@ -267,7 +274,13 @@ const Fulfillment = ({
     if (res) {
       await markAsDelivered(undefined, {
         onSuccess: () => {
-          toast.success(t("orders.fulfillment.toast.fulfillmentDelivered"))
+          toast.success(
+            t(
+              isPickUpFulfillment
+                ? "orders.fulfillment.toast.fulfillmentPickedUp"
+                : "orders.fulfillment.toast.fulfillmentDelivered"
+            )
+          )
         },
         onError: (e) => {
           toast.error(e.message)
@@ -431,7 +444,11 @@ const Fulfillment = ({
         <div className="bg-ui-bg-subtle flex items-center justify-end gap-x-2 rounded-b-xl px-4 py-4">
           {showDeliveryButton && (
             <Button onClick={handleMarkAsDelivered} variant="secondary">
-              {t("orders.fulfillment.markAsDelivered")}
+              {t(
+                isPickUpFulfillment
+                  ? "orders.fulfillment.markAsPickedUp"
+                  : "orders.fulfillment.markAsDelivered"
+              )}
             </Button>
           )}
 
