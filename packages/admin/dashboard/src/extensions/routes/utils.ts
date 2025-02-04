@@ -1,5 +1,5 @@
 import { ComponentType } from "react"
-import { RouteObject } from "react-router-dom"
+import { LoaderFunction, RouteObject } from "react-router-dom"
 import { ErrorBoundary } from "../../components/utilities/error-boundary"
 import { RouteExtension, RouteModule } from "../types"
 
@@ -34,11 +34,29 @@ const createBranchRoute = (segment: string): RouteObject => ({
  * Creates a route object for a leaf node with its component
  * @param Component - The React component to render at this route
  */
-const createLeafRoute = (Component: ComponentType): RouteObject => ({
+const createLeafRoute = (
+  Component: ComponentType,
+  loader?: LoaderFunction,
+  handle?: object
+): RouteObject => ({
   path: "",
   ErrorBoundary: ErrorBoundary,
   async lazy() {
-    return { Component }
+    const result: {
+      Component: ComponentType
+      loader?: LoaderFunction
+      handle?: object
+    } = { Component }
+
+    if (loader) {
+      result.loader = loader
+    }
+
+    if (handle) {
+      result.handle = handle
+    }
+
+    return result
   },
 })
 
@@ -47,10 +65,29 @@ const createLeafRoute = (Component: ComponentType): RouteObject => ({
  * @param path - The route path
  * @param Component - The React component to render
  */
-const createParallelRoute = (path: string, Component: ComponentType) => ({
+const createParallelRoute = (
+  path: string,
+  Component: ComponentType,
+  loader?: LoaderFunction,
+  handle?: object
+) => ({
   path,
   async lazy() {
-    return { Component }
+    const result: {
+      Component: ComponentType
+      loader?: LoaderFunction
+      handle?: object
+    } = { Component }
+
+    if (loader) {
+      result.loader = loader
+    }
+
+    if (handle) {
+      result.handle = handle
+    }
+
+    return result
   },
 })
 
@@ -64,12 +101,12 @@ const processParallelRoutes = (
   currentFullPath: string
 ): RouteObject[] | undefined => {
   return parallelRoutes
-    ?.map(({ path, Component }) => {
+    ?.map(({ path, Component, loader, handle }) => {
       const childPath = path?.replace(currentFullPath, "").replace(/^\/+/, "")
       if (!childPath) {
         return null
       }
-      return createParallelRoute(childPath, Component)
+      return createParallelRoute(childPath, Component, loader, handle)
     })
     .filter(Boolean) as RouteObject[]
 }
@@ -86,6 +123,8 @@ const addRoute = (
   pathSegments: string[],
   Component: ComponentType,
   currentLevel: RouteObject[],
+  loader?: LoaderFunction,
+  handle?: object,
   parallelRoutes?: RouteExtension[],
   fullPath?: string
 ) => {
@@ -107,7 +146,17 @@ const addRoute = (
 
   if (remainingSegments.length === 0) {
     route.children ||= []
-    const leaf = createLeafRoute(Component)
+    const leaf = createLeafRoute(Component, loader)
+
+    /**
+     * The handle needs to be set on the wrapper route object,
+     * in order for it to be resolved correctly thoughout
+     * the branch.
+     */
+    if (handle) {
+      route.handle = handle
+    }
+
     leaf.children = processParallelRoutes(parallelRoutes, currentFullPath)
     route.children.push(leaf)
   } else {
@@ -116,6 +165,8 @@ const addRoute = (
       remainingSegments,
       Component,
       route.children,
+      loader,
+      handle,
       parallelRoutes,
       currentFullPath
     )
@@ -134,12 +185,12 @@ export const createRouteMap = (
 ): RouteObject[] => {
   const root: RouteObject[] = []
 
-  routes.forEach(({ path, Component, children }) => {
+  routes.forEach(({ path, Component, loader, handle, children }) => {
     const cleanedPath = ignore
       ? path.replace(ignore, "").replace(/^\/+/, "")
       : path.replace(/^\/+/, "")
     const pathSegments = cleanedPath.split("/").filter(Boolean)
-    addRoute(pathSegments, Component, root, children)
+    addRoute(pathSegments, Component, root, loader, handle, children)
   })
 
   return root

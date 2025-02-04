@@ -1,6 +1,6 @@
 import fs from "fs/promises"
 import { outdent } from "outdent"
-import { File, parse, ParseResult } from "../babel"
+import { File, parse, ParseResult, traverse } from "../babel"
 import { logger } from "../logger"
 import {
   crawl,
@@ -13,6 +13,8 @@ import { getRoute } from "./helpers"
 type Route = {
   Component: string
   path: string
+  handle?: string
+  loader?: string
   children?: Route[]
 }
 
@@ -43,9 +45,19 @@ function generateCode(results: RouteResult[]): string {
 }
 
 function formatRoute(route: Route): string {
-  const base = `{
+  let base = `{
     Component: ${route.Component},
     path: "${route.path}"`
+
+  if (route.handle) {
+    base += `,
+    handle: ${route.handle}`
+  }
+
+  if (route.loader) {
+    base += `,
+    loader: ${route.loader}`
+  }
 
   if (route.children?.length) {
     return `${base},
@@ -110,22 +122,6 @@ async function parseFile(
   file: string,
   index: number
 ): Promise<RouteResult | null> {
-  if (!(await isValidRouteFile(file))) {
-    return null
-  }
-
-  const routePath = getRoute(file)
-
-  const imports = generateImports(file, index)
-  const route = generateRoute(routePath, index)
-
-  return {
-    imports,
-    route,
-  }
-}
-
-async function isValidRouteFile(file: string): Promise<boolean> {
   const code = await fs.readFile(file, "utf-8")
 
   let ast: ParseResult<File> | null = null
@@ -137,9 +133,29 @@ async function isValidRouteFile(file: string): Promise<boolean> {
       file,
       error: e,
     })
-    return false
+    return null
   }
 
+  if (!(await isValidRouteFile(ast, file))) {
+    return null
+  }
+
+  const { hasHandle, hasLoader } = await hasNamedExports(ast, file)
+  const routePath = getRoute(file)
+
+  const imports = generateImports(file, index, hasHandle, hasLoader)
+  const route = generateRoute(routePath, index, hasHandle, hasLoader)
+
+  return {
+    imports,
+    route,
+  }
+}
+
+async function isValidRouteFile(
+  ast: ParseResult<File>,
+  file: string
+): Promise<boolean> {
   try {
     return await hasDefaultExport(ast)
   } catch (e) {
@@ -150,23 +166,96 @@ async function isValidRouteFile(file: string): Promise<boolean> {
   }
 }
 
-function generateImports(file: string, index: number): string[] {
+function generateImports(
+  file: string,
+  index: number,
+  hasHandle: boolean,
+  hasLoader: boolean
+): string[] {
   const imports: string[] = []
   const route = generateRouteComponentName(index)
   const importPath = normalizePath(file)
 
-  imports.push(`import ${route} from "${importPath}"`)
+  if (!hasHandle && !hasLoader) {
+    imports.push(`import ${route} from "${importPath}"`)
+  } else {
+    const namedImports = [
+      hasHandle && `handle as ${generateHandleName(index)}`,
+      hasLoader && `loader as ${generateLoaderName(index)}`,
+    ]
+      .filter(Boolean)
+      .join(", ")
+    imports.push(`import ${route}, { ${namedImports} } from "${importPath}"`)
+  }
 
   return imports
 }
 
-function generateRoute(route: string, index: number): Route {
+function generateRoute(
+  route: string,
+  index: number,
+  hasHandle: boolean,
+  hasLoader: boolean
+): Route {
   return {
     Component: generateRouteComponentName(index),
     path: route,
+    handle: hasHandle ? generateHandleName(index) : undefined,
+    loader: hasLoader ? generateLoaderName(index) : undefined,
   }
 }
 
 function generateRouteComponentName(index: number): string {
   return `RouteComponent${index}`
+}
+
+function generateHandleName(index: number): string {
+  return `handle${index}`
+}
+
+function generateLoaderName(index: number): string {
+  return `loader${index}`
+}
+
+async function hasNamedExports(
+  ast: ParseResult<File>,
+  file: string
+): Promise<{ hasHandle: boolean; hasLoader: boolean }> {
+  let hasHandle = false
+  let hasLoader = false
+
+  try {
+    traverse(ast, {
+      ExportNamedDeclaration(path) {
+        const declaration = path.node.declaration
+
+        // Handle: export const handle = {...}
+        if (declaration?.type === "VariableDeclaration") {
+          declaration.declarations.forEach((decl) => {
+            if (decl.id.type === "Identifier" && decl.id.name === "handle") {
+              hasHandle = true
+            }
+            if (decl.id.type === "Identifier" && decl.id.name === "loader") {
+              hasLoader = true
+            }
+          })
+        }
+
+        // Handle: export function loader() or export async function loader()
+        if (
+          declaration?.type === "FunctionDeclaration" &&
+          declaration.id?.name === "loader"
+        ) {
+          hasLoader = true
+        }
+      },
+    })
+  } catch (e) {
+    logger.error("An error occurred while checking for named exports.", {
+      file,
+      error: e,
+    })
+  }
+
+  return { hasHandle, hasLoader }
 }

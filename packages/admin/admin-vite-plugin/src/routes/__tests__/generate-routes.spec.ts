@@ -103,6 +103,63 @@ const expectedRoutesWithParallel = `
     ]
 `
 
+const mockFileContentsWithHandleLoader = [
+  `
+    import { defineRouteConfig } from "@medusajs/admin-sdk"
+
+    const Page = () => {
+        return <div>Page 1</div>
+    }
+
+    export const handle = {
+      someConfig: true
+    }
+
+    export const loader = async () => {
+      return { data: true }
+    }
+
+    export const config = defineRouteConfig({
+        label: "Page 1",
+    })
+
+    export default Page
+  `,
+  `
+    import { defineRouteConfig } from "@medusajs/admin-sdk"
+
+    const Page = () => {
+        return <div>Page 2</div>
+    }
+
+    export async function loader() {
+      return { data: true }
+    }
+
+    export const config = defineRouteConfig({
+        label: "Page 2",
+    })
+
+    export default Page
+  `,
+]
+
+const expectedRoutesWithHandleLoader = `
+  routes: [
+    {
+      Component: RouteComponent0,
+      path: "/one",
+      handle: handle0,
+      loader: loader0
+    },
+    {
+      Component: RouteComponent1,
+      path: "/two",
+      loader: loader1
+    }
+  ]
+`
+
 describe("generateRoutes", () => {
   it("should generate routes", async () => {
     const mockFiles = [
@@ -184,6 +241,29 @@ describe("generateRoutes", () => {
 
     expect(utils.normalizeString(result.code)).toEqual(
       utils.normalizeString(expectedRoutesWithParallel)
+    )
+  })
+  it("should handle routes with handle and loader exports", async () => {
+    const mockFiles = [
+      "Users/user/medusa/src/admin/routes/one/page.tsx",
+      "Users/user/medusa/src/admin/routes/two/page.tsx",
+    ]
+    vi.mocked(utils.crawl).mockResolvedValue(mockFiles)
+
+    vi.mocked(fs.readFile).mockImplementation(async (file) =>
+      Promise.resolve(
+        mockFileContentsWithHandleLoader[mockFiles.indexOf(file as string)]
+      )
+    )
+
+    vi.mocked(fs.stat).mockRejectedValue(new Error("File not found"))
+
+    const result = await generateRoutes(
+      new Set(["Users/user/medusa/src/admin"])
+    )
+
+    expect(utils.normalizeString(result.code)).toEqual(
+      utils.normalizeString(expectedRoutesWithHandleLoader)
     )
   })
 })
