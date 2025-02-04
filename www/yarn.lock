@@ -5868,6 +5868,7 @@ __metadata:
     build-scripts: "*"
     clsx: ^2.1.0
     docs-ui: "*"
+    docs-utils: "*"
     eslint: ^9.13.0
     eslint-plugin-prettier: ^5.2.1
     eslint-plugin-react-hooks: ^5.0.0

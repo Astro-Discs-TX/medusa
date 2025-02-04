@@ -7,7 +7,7 @@ import {
 } from "../expression-is-utils.js"
 
 export const parseCard = (
-  node: UnistNode,
+  node: UnistNodeWithData,
   index: number,
   parent: UnistTree
 ): VisitorResult => {
@@ -72,30 +72,40 @@ export const parseCardList = (
     .map((item) => {
       if (
         !isExpressionJsVarObj(item) ||
-        !("text" in item) ||
-        !("link" in item) ||
-        !isExpressionJsVarLiteral(item.text) ||
-        !isExpressionJsVarLiteral(item.link)
+        !("title" in item) ||
+        !("href" in item) ||
+        !isExpressionJsVarLiteral(item.title) ||
+        !isExpressionJsVarLiteral(item.href)
       ) {
         return null
+      }
+      const description = isExpressionJsVarLiteral(item.text)
+        ? (item.text.data as string)
+        : ""
+      const children: UnistNode[] = [
+        {
+          type: "link",
+          url: `${item.href.data}`,
+          children: [
+            {
+              type: "text",
+              value: item.title.data as string,
+            },
+          ],
+        },
+      ]
+      if (description.length) {
+        children.push({
+          type: "text",
+          value: `: ${description}`,
+        })
       }
       return {
         type: "listItem",
         children: [
           {
             type: "paragraph",
-            children: [
-              {
-                type: "link",
-                url: `#${item.link.data}`,
-                children: [
-                  {
-                    type: "text",
-                    value: item.text.data,
-                  },
-                ],
-              },
-            ],
+            children,
           },
         ],
       }
@@ -184,7 +194,7 @@ export const parseDetails = (
 }
 
 export const parseNote = (
-  node: UnistNode,
+  node: UnistNodeWithData,
   index: number,
   parent: UnistTree
 ): VisitorResult => {

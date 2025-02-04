@@ -4,7 +4,7 @@ import remarkStringify from "remark-stringify"
 import { read } from "to-vfile"
 import { UnistNode, UnistNodeWithData, UnistTree } from "types"
 import { Plugin, Transformer, unified } from "unified"
-import { SKIP } from "unist-util-visit"
+import { SKIP, VisitorResult } from "unist-util-visit"
 import type { VFile } from "vfile"
 import {
   parseCard,
@@ -19,6 +19,23 @@ import {
   parseTypeList,
   parseWorkflowDiagram,
 } from "./utils/parse-elms.js"
+
+const parsers: Record<
+  string,
+  (node: UnistNodeWithData, index: number, parent: UnistTree) => VisitorResult
+> = {
+  Card: parseCard,
+  CardList: parseCardList,
+  CodeTabs: parseCodeTabs,
+  Details: parseDetails,
+  Note: parseNote,
+  Prerequisites: parsePrerequisites,
+  SourceCodeLink: parseSourceCodeLink,
+  Table: parseTable,
+  Tabs: parseTabs,
+  TypeList: parseTypeList,
+  WorkflowDiagram: parseWorkflowDiagram,
+}
 
 const parseComponentsPlugin = (): Transformer => {
   return async (tree) => {
@@ -50,14 +67,19 @@ const parseComponentsPlugin = (): Transformer => {
           }
         }
         if (node.type === "heading") {
-          if (
-            node.depth === 1 &&
-            node.children?.length &&
-            node.children[0].value === "metadata.title"
-          ) {
-            node.children[0] = {
-              type: "text",
-              value: pageTitle,
+          if (node.depth === 1 && node.children?.length) {
+            if (node.children[0].value === "metadata.title") {
+              node.children[0] = {
+                type: "text",
+                value: pageTitle,
+              }
+            } else {
+              node.children = node.children
+                .filter((child) => child.type === "text")
+                .map((child) => ({
+                  ...child,
+                  value: child.value?.trim(),
+                }))
             }
           }
           return
@@ -71,33 +93,14 @@ const parseComponentsPlugin = (): Transformer => {
           parent?.children.splice(index, 1)
           return [SKIP, index]
         }
-        switch (node.name) {
-          case "Card":
-            return parseCard(node, index, parent)
-          case "CardList":
-            return parseCardList(node as UnistNodeWithData, index, parent)
-          case "CodeTabs":
-            return parseCodeTabs(node as UnistNodeWithData, index, parent)
-          case "Details":
-            return parseDetails(node as UnistNodeWithData, index, parent)
-          case "Note":
-            return parseNote(node, index, parent)
-          case "Prerequisites":
-            return parsePrerequisites(node as UnistNodeWithData, index, parent)
-          case "SourceCodeLink":
-            return parseSourceCodeLink(node as UnistNodeWithData, index, parent)
-          case "Table":
-            return parseTable(node as UnistNodeWithData, index, parent)
-          case "Tabs":
-            return parseTabs(node as UnistNodeWithData, index, parent)
-          case "TypeList":
-            return parseTypeList(node as UnistNodeWithData, index, parent)
-          case "WorkflowDiagram":
-            return parseWorkflowDiagram(
-              node as UnistNodeWithData,
-              index,
-              parent
-            )
+
+        if (!node.name) {
+          return
+        }
+
+        const parser = parsers[node.name]
+        if (parser) {
+          return parser(node as UnistNodeWithData, index, parent)
         }
       }
     )
