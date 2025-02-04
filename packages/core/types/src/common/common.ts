@@ -128,8 +128,8 @@ export type TotalField =
 export type RequestQueryFields = {
   /**
    * Comma-separated fields that should be included in the returned data.
-   * if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields.
-   * without prefix it will replace the entire default fields.
+   * If a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields.
+   * Without prefix it will replace the entire default fields.
    */
   fields?: string
 
