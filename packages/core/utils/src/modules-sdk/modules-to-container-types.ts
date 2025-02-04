@@ -89,11 +89,13 @@ export async function generateContainerTypes(
          * Key registered within the container
          */
         const key = service.__definition.key
+        const interfaceKey = `'${key}'`
+
         if (SERVICES_INTERFACES[key]) {
           result.imports.push(
             `import type { ${SERVICES_INTERFACES[key]} } from '@medusajs/framework/types'`
           )
-          result.mappings.push(`${key}: ${SERVICES_INTERFACES[key]}`)
+          result.mappings.push(`${interfaceKey}: ${SERVICES_INTERFACES[key]}`)
           return
         }
 
@@ -112,7 +114,7 @@ export async function generateContainerTypes(
 
         result.imports.push(`import type ${serviceName} from '${servicePath}'`)
         result.mappings.push(
-          `${key}: InstanceType<(typeof ${serviceName})['service']>`
+          `${interfaceKey}: InstanceType<(typeof ${serviceName})['service']>`
         )
       })
       return result
