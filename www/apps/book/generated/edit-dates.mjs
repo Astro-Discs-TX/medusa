@@ -75,7 +75,7 @@ export const generatedEditDates = {
   "app/learn/fundamentals/module-links/custom-columns/page.mdx": "2025-01-06T11:19:13.178Z",
   "app/learn/fundamentals/module-links/directions/page.mdx": "2024-12-12T15:31:31.555Z",
   "app/learn/fundamentals/module-links/page.mdx": "2024-12-09T14:39:26.668Z",
-  "app/learn/fundamentals/module-links/query/page.mdx": "2024-12-09T15:54:44.798Z",
+  "app/learn/fundamentals/module-links/query/page.mdx": "2025-02-04T07:35:31.633Z",
   "app/learn/fundamentals/modules/db-operations/page.mdx": "2024-12-09T14:40:50.581Z",
   "app/learn/fundamentals/modules/multiple-services/page.mdx": "2024-10-21T13:30:21.370Z",
   "app/learn/fundamentals/modules/page.mdx": "2025-01-16T08:34:28.947Z",
@@ -88,7 +88,7 @@ export const generatedEditDates = {
   "app/learn/customization/extend-features/extend-create-product/page.mdx": "2025-01-06T11:18:58.250Z",
   "app/learn/customization/custom-features/page.mdx": "2024-12-09T10:46:28.593Z",
   "app/learn/customization/customize-admin/page.mdx": "2024-12-09T11:02:38.801Z",
-  "app/learn/customization/customize-admin/route/page.mdx": "2025-01-27T08:45:19.021Z",
+  "app/learn/customization/customize-admin/route/page.mdx": "2025-02-04T07:35:04.523Z",
   "app/learn/customization/customize-admin/widget/page.mdx": "2025-01-27T08:45:19.022Z",
   "app/learn/customization/extend-features/define-link/page.mdx": "2024-12-09T11:02:39.346Z",
   "app/learn/customization/extend-features/page.mdx": "2024-12-09T11:02:39.244Z",
@@ -114,5 +114,6 @@ export const generatedEditDates = {
   "app/learn/fundamentals/plugins/create/page.mdx": "2025-01-31T13:17:48.052Z",
   "app/learn/fundamentals/plugins/page.mdx": "2025-01-22T10:14:10.433Z",
   "app/learn/customization/reuse-customizations/page.mdx": "2025-01-22T10:01:57.665Z",
-  "app/learn/update/page.mdx": "2025-01-27T08:45:19.030Z"
+  "app/learn/update/page.mdx": "2025-01-27T08:45:19.030Z",
+  "app/learn/fundamentals/module-links/query-context/page.mdx": "2025-02-03T17:04:24.479Z"
 }
