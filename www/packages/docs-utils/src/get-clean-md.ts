@@ -2,14 +2,17 @@ import remarkMdx from "remark-mdx"
 import remarkParse from "remark-parse"
 import remarkStringify from "remark-stringify"
 import { read } from "to-vfile"
-import { UnistNode, UnistNodeWithData, UnistTree } from "types"
+import { FrontMatter, UnistNode, UnistNodeWithData, UnistTree } from "types"
 import { Plugin, Transformer, unified } from "unified"
-import { SKIP, VisitorResult } from "unist-util-visit"
+import { SKIP } from "unist-util-visit"
 import type { VFile } from "vfile"
 import {
+  ComponentParser,
   parseCard,
   parseCardList,
   parseCodeTabs,
+  parseComponentExample,
+  parseComponentReference,
   parseDetails,
   parseNote,
   parsePrerequisites,
@@ -18,13 +21,11 @@ import {
   parseTabs,
   parseTypeList,
   parseWorkflowDiagram,
-} from "./utils/parse-elms.js"
+} from "./utils/parsers.js"
 import remarkFrontmatter from "remark-frontmatter"
+import { matter } from "vfile-matter"
 
-const parsers: Record<
-  string,
-  (node: UnistNodeWithData, index: number, parent: UnistTree) => VisitorResult
-> = {
+const parsers: Record<string, ComponentParser> = {
   Card: parseCard,
   CardList: parseCardList,
   CodeTabs: parseCodeTabs,
@@ -36,9 +37,19 @@ const parsers: Record<
   Tabs: parseTabs,
   TypeList: parseTypeList,
   WorkflowDiagram: parseWorkflowDiagram,
+  ComponentExample: parseComponentExample,
+  ComponentReference: parseComponentReference,
 }
 
-const parseComponentsPlugin = (): Transformer => {
+const isComponentAllowed = (nodeName: string): boolean => {
+  return Object.keys(parsers).includes(nodeName)
+}
+
+type ParserPluginOptions = {
+  [key: string]: unknown
+}
+
+const parseComponentsPlugin = (options: ParserPluginOptions): Transformer => {
   return async (tree) => {
     const { visit } = await import("unist-util-visit")
 
@@ -87,10 +98,7 @@ const parseComponentsPlugin = (): Transformer => {
         }
         if (
           node.type === "mdxjsEsm" ||
-          node.name === "Feedback" ||
-          node.name === "ChildDocs" ||
-          node.name === "DetailsList" ||
-          node.name === "CommerceModuleSections"
+          !isComponentAllowed(node.name as string)
         ) {
           parent?.children.splice(index, 1)
           return [SKIP, index]
@@ -102,7 +110,8 @@ const parseComponentsPlugin = (): Transformer => {
 
         const parser = parsers[node.name]
         if (parser) {
-          return parser(node as UnistNodeWithData, index, parent)
+          const parserOptions = options[node.name] || {}
+          return parser(node as UnistNodeWithData, index, parent, parserOptions)
         }
       }
     )
@@ -129,16 +138,30 @@ const removeFrontmatterPlugin = (): Transformer => {
 }
 
 const getParsedAsString = (file: VFile): string => {
-  return file.toString().replaceAll(/^([\s]*)\* /gm, "$1- ")
+  let content = file.toString().replaceAll(/^([\s]*)\* /gm, "$1- ")
+  const frontmatter = file.data.matter as FrontMatter | undefined
+
+  if (frontmatter?.title) {
+    content = `# ${frontmatter.title}\n\n${frontmatter.description ? `${frontmatter.description}\n\n` : ""}${content}`
+  }
+
+  return content
 }
 
-export const getCleanMd = async (
-  filePath: string,
+type Options = {
+  filePath: string
   plugins?: {
     before?: Plugin[]
     after?: Plugin[]
   }
-): Promise<string> => {
+  parserOptions?: ParserPluginOptions
+}
+
+export const getCleanMd = async ({
+  filePath,
+  plugins,
+  parserOptions,
+}: Options): Promise<string> => {
   if (!filePath.endsWith(".md") && !filePath.endsWith(".mdx")) {
     return ""
   }
@@ -146,13 +169,20 @@ export const getCleanMd = async (
     .use(remarkParse)
     .use(remarkMdx)
     .use(remarkStringify)
-    .use(remarkFrontmatter)
+    .use(remarkFrontmatter, ["yaml"])
+    .use(() => {
+      return (tree, file) => {
+        matter(file)
+      }
+    })
 
   plugins?.before?.forEach((plugin) => {
     unifier.use(...(Array.isArray(plugin) ? plugin : [plugin]))
   })
 
-  unifier.use(parseComponentsPlugin).use(removeFrontmatterPlugin)
+  unifier
+    .use(parseComponentsPlugin, parserOptions || {})
+    .use(removeFrontmatterPlugin)
 
   plugins?.after?.forEach((plugin) => {
     unifier.use(...(Array.isArray(plugin) ? plugin : [plugin]))

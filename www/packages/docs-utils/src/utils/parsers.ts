@@ -5,8 +5,18 @@ import {
   isExpressionJsVarLiteral,
   isExpressionJsVarObj,
 } from "../expression-is-utils.js"
+import path from "path"
+import { readFileSync } from "fs"
+import type { Documentation } from "react-docgen"
 
-export const parseCard = (
+export type ComponentParser<TOptions = any> = (
+  node: UnistNodeWithData,
+  index: number,
+  parent: UnistTree,
+  options?: TOptions
+) => VisitorResult
+
+export const parseCard: ComponentParser = (
   node: UnistNodeWithData,
   index: number,
   parent: UnistTree
@@ -52,7 +62,7 @@ export const parseCard = (
   return [SKIP, index]
 }
 
-export const parseCardList = (
+export const parseCardList: ComponentParser = (
   node: UnistNodeWithData,
   index: number,
   parent: UnistTree
@@ -121,7 +131,7 @@ export const parseCardList = (
   return [SKIP, index]
 }
 
-export const parseCodeTabs = (
+export const parseCodeTabs: ComponentParser = (
   node: UnistNodeWithData,
   index: number,
   parent: UnistTree
@@ -160,7 +170,7 @@ export const parseCodeTabs = (
   return [SKIP, index]
 }
 
-export const parseDetails = (
+export const parseDetails: ComponentParser = (
   node: UnistNodeWithData,
   index: number,
   parent: UnistTree
@@ -190,7 +200,7 @@ export const parseDetails = (
   return [SKIP, index]
 }
 
-export const parseNote = (
+export const parseNote: ComponentParser = (
   node: UnistNodeWithData,
   index: number,
   parent: UnistTree
@@ -199,7 +209,7 @@ export const parseNote = (
   return [SKIP, index]
 }
 
-export const parsePrerequisites = (
+export const parsePrerequisites: ComponentParser = (
   node: UnistNodeWithData,
   index: number,
   parent: UnistTree
@@ -272,7 +282,7 @@ export const parsePrerequisites = (
   return [SKIP, index]
 }
 
-export const parseSourceCodeLink = (
+export const parseSourceCodeLink: ComponentParser = (
   node: UnistNodeWithData,
   index: number,
   parent: UnistTree
@@ -300,7 +310,7 @@ export const parseSourceCodeLink = (
   return [SKIP, index]
 }
 
-export const parseTable = (
+export const parseTable: ComponentParser = (
   node: UnistNodeWithData,
   index: number,
   parent: UnistTree
@@ -355,7 +365,7 @@ export const parseTable = (
   })
 }
 
-export const parseTabs = (
+export const parseTabs: ComponentParser = (
   node: UnistNodeWithData,
   index: number,
   parent: UnistTree
@@ -395,7 +405,7 @@ export const parseTabs = (
   return [SKIP, index]
 }
 
-export const parseTypeList = (
+export const parseTypeList: ComponentParser = (
   node: UnistNodeWithData,
   index: number,
   parent: UnistTree
@@ -468,7 +478,7 @@ export const parseTypeList = (
   return [SKIP, index]
 }
 
-export const parseWorkflowDiagram = (
+export const parseWorkflowDiagram: ComponentParser = (
   node: UnistNodeWithData,
   index: number,
   parent: UnistTree
@@ -559,6 +569,157 @@ export const parseWorkflowDiagram = (
     children: listItems,
   })
   return [SKIP, index]
+}
+
+export const parseComponentExample: ComponentParser<{
+  examplesBasePath: string
+}> = (
+  node: UnistNodeWithData,
+  index: number,
+  parent: UnistTree,
+  options
+): VisitorResult => {
+  if (!options?.examplesBasePath) {
+    return
+  }
+
+  const exampleName = node.attributes?.find((attr) => attr.name === "name")
+  if (!exampleName) {
+    return
+  }
+
+  const fileContent = readFileSync(
+    path.join(options.examplesBasePath, `${exampleName.value as string}.tsx`),
+    "utf-8"
+  )
+
+  parent.children?.splice(index, 1, {
+    type: "code",
+    lang: "tsx",
+    value: fileContent,
+  })
+  return [SKIP, index]
+}
+
+export const parseComponentReference: ComponentParser<{ specsPath: string }> = (
+  node: UnistNodeWithData,
+  index: number,
+  parent: UnistTree,
+  options
+): VisitorResult => {
+  if (!options?.specsPath) {
+    return
+  }
+
+  const mainComponent = node.attributes?.find(
+    (attr) => attr.name === "mainComponent"
+  )?.value as string
+  if (!mainComponent) {
+    return
+  }
+
+  const componentNames: string[] = []
+
+  const componentsToShowAttr = node.attributes?.find(
+    (attr) => attr.name === "componentsToShow"
+  )
+
+  if (
+    componentsToShowAttr &&
+    typeof componentsToShowAttr.value !== "string" &&
+    componentsToShowAttr.value.data?.estree
+  ) {
+    const componentsToShowJsVar = estreeToJs(
+      componentsToShowAttr.value.data.estree
+    )
+
+    if (componentsToShowAttr && Array.isArray(componentsToShowJsVar)) {
+      componentNames.push(
+        ...componentsToShowJsVar
+          .map((item) => {
+            return isExpressionJsVarLiteral(item) ? (item.data as string) : ""
+          })
+          .filter((name) => name.length > 0)
+      )
+    }
+  }
+
+  if (!componentNames.length) {
+    componentNames.push(mainComponent)
+  }
+
+  const getComponentNodes = (componentName: string): UnistNode[] => {
+    const componentSpecsFile = path.join(
+      options.specsPath,
+      mainComponent,
+      `${componentName}.json`
+    )
+
+    const componentSpecs: Documentation = JSON.parse(
+      readFileSync(componentSpecsFile, "utf-8")
+    )
+
+    const componentNodes: UnistNode[] = [
+      {
+        type: "heading",
+        depth: 3,
+        children: [
+          {
+            type: "text",
+            value: `${componentName} Props`,
+          },
+        ],
+      },
+    ]
+
+    if (componentSpecs.description) {
+      componentNodes.push({
+        type: "paragraph",
+        children: [
+          {
+            type: "text",
+            value: componentSpecs.description,
+          },
+        ],
+      })
+    }
+
+    if (componentSpecs.props) {
+      const listNode: UnistNode = {
+        type: "list",
+        ordered: false,
+        spread: false,
+        children: [],
+      }
+
+      Object.entries(componentSpecs.props).forEach(([propName, propData]) => {
+        listNode.children?.push({
+          type: "listItem",
+          children: [
+            {
+              type: "paragraph",
+              children: [
+                {
+                  type: "text",
+                  value: `${propName}: (${propData.type?.name || propData.tsType?.name}) ${propData.description || ""}${propData.defaultValue ? ` Default: ${propData.defaultValue.value}` : ""}`,
+                },
+              ],
+            },
+          ],
+        })
+      })
+
+      componentNodes.push(listNode)
+    }
+
+    return componentNodes
+  }
+
+  parent.children?.splice(
+    index,
+    1,
+    ...componentNames.flatMap(getComponentNodes)
+  )
 }
 
 /**
