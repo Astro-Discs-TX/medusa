@@ -141,23 +141,19 @@ export const parseCodeTabs = (
       return
     }
 
-    children.push({
-      type: "mdxJsxFlowElement",
-      name: "details",
-      children: [
-        {
-          type: "mdxJsxFlowElement",
-          name: "summary",
-          children: [
-            {
-              type: "text",
-              value: (label.value as string) || "summary",
-            },
-          ],
-        },
-        code,
-      ],
-    })
+    children.push(
+      {
+        type: "heading",
+        depth: 3,
+        children: [
+          {
+            type: "text",
+            value: label.value as string,
+          },
+        ],
+      },
+      code
+    )
   })
 
   parent?.children.splice(index, 1, ...children)
@@ -173,23 +169,24 @@ export const parseDetails = (
     (attr) => attr.name === "summaryContent"
   )
 
-  parent?.children.splice(index, 1, {
-    type: "mdxJsxFlowElement",
-    name: "details",
-    children: [
-      {
-        type: "mdxJsxFlowElement",
-        name: "summary",
-        children: [
-          {
-            type: "text",
-            value: (summary?.value as string) || "Details",
-          },
-        ],
-      },
-      ...(node.children || []),
-    ],
-  })
+  const children: UnistNode[] = []
+
+  if (summary?.value) {
+    children.push({
+      type: "heading",
+      depth: 3,
+      children: [
+        {
+          type: "text",
+          value: (summary?.value as string) || "Details",
+        },
+      ],
+    })
+  }
+
+  children.push(...(node.children || []))
+
+  parent?.children.splice(index, 1, ...children)
   return [SKIP, index]
 }
 
@@ -378,23 +375,19 @@ export const parseTabs = (
         return
       }
 
-      tabs.push({
-        type: "mdxJsxFlowElement",
-        name: "details",
-        children: [
-          {
-            type: "mdxJsxFlowElement",
-            name: "summary",
-            children: [
-              {
-                type: "text",
-                value: tabLabel,
-              },
-            ],
-          },
-          ...tabContent,
-        ],
-      })
+      tabs.push(
+        {
+          type: "heading",
+          depth: 3,
+          children: [
+            {
+              type: "text",
+              value: tabLabel,
+            },
+          ],
+        },
+        ...tabContent
+      )
     })
   })
 
@@ -445,7 +438,7 @@ export const parseTypeList = (
           children: [
             {
               type: "text",
-              value: `${typeName}: (${itemType}) ${itemDescription}`,
+              value: `${typeName}: (${itemType}) ${itemDescription}`.trim(),
             },
           ],
         },

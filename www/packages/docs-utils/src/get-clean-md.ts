@@ -19,6 +19,7 @@ import {
   parseTypeList,
   parseWorkflowDiagram,
 } from "./utils/parse-elms.js"
+import remarkFrontmatter from "remark-frontmatter"
 
 const parsers: Record<
   string,
@@ -88,7 +89,8 @@ const parseComponentsPlugin = (): Transformer => {
           node.type === "mdxjsEsm" ||
           node.name === "Feedback" ||
           node.name === "ChildDocs" ||
-          node.name === "DetailsList"
+          node.name === "DetailsList" ||
+          node.name === "CommerceModuleSections"
         ) {
           parent?.children.splice(index, 1)
           return [SKIP, index]
@@ -102,6 +104,25 @@ const parseComponentsPlugin = (): Transformer => {
         if (parser) {
           return parser(node as UnistNodeWithData, index, parent)
         }
+      }
+    )
+  }
+}
+
+const removeFrontmatterPlugin = (): Transformer => {
+  return async (tree) => {
+    const { visit } = await import("unist-util-visit")
+
+    visit(
+      tree as UnistTree,
+      ["yaml", "toml"],
+      (node: UnistNode, index, parent) => {
+        if (typeof index !== "number" || parent?.type !== "root") {
+          return
+        }
+
+        parent.children.splice(index, 1)
+        return [SKIP, index]
       }
     )
   }
@@ -121,13 +142,17 @@ export const getCleanMd = async (
   if (!filePath.endsWith(".md") && !filePath.endsWith(".mdx")) {
     return ""
   }
-  const unifier = unified().use(remarkParse).use(remarkMdx).use(remarkStringify)
+  const unifier = unified()
+    .use(remarkParse)
+    .use(remarkMdx)
+    .use(remarkStringify)
+    .use(remarkFrontmatter)
 
   plugins?.before?.forEach((plugin) => {
     unifier.use(...(Array.isArray(plugin) ? plugin : [plugin]))
   })
 
-  unifier.use(parseComponentsPlugin)
+  unifier.use(parseComponentsPlugin).use(removeFrontmatterPlugin)
 
   plugins?.after?.forEach((plugin) => {
     unifier.use(...(Array.isArray(plugin) ? plugin : [plugin]))
