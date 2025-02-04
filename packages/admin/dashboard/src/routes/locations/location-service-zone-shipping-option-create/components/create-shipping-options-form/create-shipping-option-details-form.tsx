@@ -11,7 +11,10 @@ import { Combobox } from "../../../../../components/inputs/combobox"
 import { useComboboxData } from "../../../../../hooks/use-combobox-data"
 import { sdk } from "../../../../../lib/client"
 import { formatProvider } from "../../../../../lib/format-provider"
-import { ShippingOptionPriceType } from "../../../common/constants"
+import {
+  FulfillmentSetType,
+  ShippingOptionPriceType,
+} from "../../../common/constants"
 import { CreateShippingOptionSchema } from "./schema"
 
 type CreateShippingOptionDetailsFormProps = {
@@ -21,6 +24,7 @@ type CreateShippingOptionDetailsFormProps = {
   locationId: string
   fulfillmentProviderOptions: HttpTypes.AdminFulfillmentProviderOption[]
   selectedProviderId?: string
+  type: FulfillmentSetType
 }
 
 export const CreateShippingOptionDetailsForm = ({
@@ -30,8 +34,11 @@ export const CreateShippingOptionDetailsForm = ({
   locationId,
   fulfillmentProviderOptions,
   selectedProviderId,
+  type,
 }: CreateShippingOptionDetailsFormProps) => {
   const { t } = useTranslation()
+
+  const isPickup = type === FulfillmentSetType.Pickup
 
   const shippingProfiles = useComboboxData({
     queryFn: (params) => sdk.admin.shippingProfile.list(params),
@@ -64,7 +71,7 @@ export const CreateShippingOptionDetailsForm = ({
           <Heading>
             {t(
               `stockLocations.shippingOptions.create.${
-                isReturn ? "returns" : "shipping"
+                isPickup ? "pickup" : isReturn ? "returns" : "shipping"
               }.header`,
               {
                 zone: zone.name,
@@ -74,54 +81,56 @@ export const CreateShippingOptionDetailsForm = ({
           <Text size="small" className="text-ui-fg-subtle">
             {t(
               `stockLocations.shippingOptions.create.${
-                isReturn ? "returns" : "shipping"
+                isPickup ? "pickup" : isReturn ? "returns" : "shipping"
               }.hint`
             )}
           </Text>
         </div>
 
-        <Form.Field
-          control={form.control}
-          name="price_type"
-          render={({ field }) => {
-            return (
-              <Form.Item>
-                <Form.Label>
-                  {t("stockLocations.shippingOptions.fields.priceType.label")}
-                </Form.Label>
-                <Form.Control>
-                  <RadioGroup
-                    className="grid grid-cols-1 gap-4 md:grid-cols-2"
-                    {...field}
-                    onValueChange={field.onChange}
-                  >
-                    <RadioGroup.ChoiceBox
-                      className="flex-1"
-                      value={ShippingOptionPriceType.FlatRate}
-                      label={t(
-                        "stockLocations.shippingOptions.fields.priceType.options.fixed.label"
-                      )}
-                      description={t(
-                        "stockLocations.shippingOptions.fields.priceType.options.fixed.hint"
-                      )}
-                    />
-                    <RadioGroup.ChoiceBox
-                      className="flex-1"
-                      value={ShippingOptionPriceType.Calculated}
-                      label={t(
-                        "stockLocations.shippingOptions.fields.priceType.options.calculated.label"
-                      )}
-                      description={t(
-                        "stockLocations.shippingOptions.fields.priceType.options.calculated.hint"
-                      )}
-                    />
-                  </RadioGroup>
-                </Form.Control>
-                <Form.ErrorMessage />
-              </Form.Item>
-            )
-          }}
-        />
+        {!isPickup && (
+          <Form.Field
+            control={form.control}
+            name="price_type"
+            render={({ field }) => {
+              return (
+                <Form.Item>
+                  <Form.Label>
+                    {t("stockLocations.shippingOptions.fields.priceType.label")}
+                  </Form.Label>
+                  <Form.Control>
+                    <RadioGroup
+                      className="grid grid-cols-1 gap-4 md:grid-cols-2"
+                      {...field}
+                      onValueChange={field.onChange}
+                    >
+                      <RadioGroup.ChoiceBox
+                        className="flex-1"
+                        value={ShippingOptionPriceType.FlatRate}
+                        label={t(
+                          "stockLocations.shippingOptions.fields.priceType.options.fixed.label"
+                        )}
+                        description={t(
+                          "stockLocations.shippingOptions.fields.priceType.options.fixed.hint"
+                        )}
+                      />
+                      <RadioGroup.ChoiceBox
+                        className="flex-1"
+                        value={ShippingOptionPriceType.Calculated}
+                        label={t(
+                          "stockLocations.shippingOptions.fields.priceType.options.calculated.label"
+                        )}
+                        description={t(
+                          "stockLocations.shippingOptions.fields.priceType.options.calculated.hint"
+                        )}
+                      />
+                    </RadioGroup>
+                  </Form.Control>
+                  <Form.ErrorMessage />
+                </Form.Item>
+              )
+            }}
+          />
+        )}
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <Form.Field
@@ -239,16 +248,20 @@ export const CreateShippingOptionDetailsForm = ({
           />
         </div>
 
-        <Divider />
+        {!isPickup && <Divider />}
 
-        <SwitchBox
-          control={form.control}
-          name="enabled_in_store"
-          label={t("stockLocations.shippingOptions.fields.enableInStore.label")}
-          description={t(
-            "stockLocations.shippingOptions.fields.enableInStore.hint"
-          )}
-        />
+        {!isPickup && (
+          <SwitchBox
+            control={form.control}
+            name="enabled_in_store"
+            label={t(
+              "stockLocations.shippingOptions.fields.enableInStore.label"
+            )}
+            description={t(
+              "stockLocations.shippingOptions.fields.enableInStore.hint"
+            )}
+          />
+        )}
       </div>
     </div>
   )
