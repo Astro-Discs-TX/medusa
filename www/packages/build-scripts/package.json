@@ -30,7 +30,9 @@
   "dependencies": {
     "docs-utils": "*",
     "fdir": "^6.4.3",
-    "tags": "*"
+    "slugify": "^1.6.6",
+    "tags": "*",
+    "yaml": "^2.7.0"
   },
   "devDependencies": {
     "@types/node": "^20.11.20",

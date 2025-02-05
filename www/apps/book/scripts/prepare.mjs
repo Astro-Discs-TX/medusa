@@ -13,61 +13,220 @@ import {
 } from "remark-rehype-plugins"
 
 async function main() {
-  // await generateEditedDates()
-  // await generateSidebar(sidebar, {
-  //   addNumbering: true,
-  // })
-  const commonBeforePlugins = [
-    [
-      crossProjectLinksPlugin,
-      {
-        baseUrl: process.env.NEXT_PUBLIC_BASE_URL,
-        projectUrls: {
-          resources: {
-            url: process.env.NEXT_PUBLIC_BASE_URL,
-          },
-          "user-guide": {
-            url: process.env.NEXT_PUBLIC_BASE_URL,
-          },
-          ui: {
-            url: process.env.NEXT_PUBLIC_BASE_URL,
-          },
-          api: {
-            url: process.env.NEXT_PUBLIC_BASE_URL,
-          },
-        },
-        useBaseUrl: true,
-      },
-    ],
-    [localLinksRehypePlugin],
-  ]
-  const commonAfterPlugins = [
-    [addUrlToRelativeLink, { url: process.env.NEXT_PUBLIC_BASE_URL }],
-  ]
+  await generateEditedDates()
+  await generateSidebar(sidebar, {
+    addNumbering: true,
+  })
+  const baseUrl =
+    process.env.NEXT_PUBLIC_PROD_BASE_URL || process.env.NEXT_PUBLIC_BASE_URL
   await generateLlmsFull({
-    outputPath: path.join(process.cwd(), "public", "llms-full.text"),
+    outputPath: path.join(process.cwd(), "public", "llms-full.txt"),
+    plugins: {
+      before: [
+        [
+          crossProjectLinksPlugin,
+          {
+            baseUrl,
+            projectUrls: {
+              resources: {
+                url: baseUrl,
+              },
+              "user-guide": {
+                url: baseUrl,
+              },
+              ui: {
+                url: baseUrl,
+              },
+              api: {
+                url: baseUrl,
+              },
+            },
+            useBaseUrl: true,
+          },
+        ],
+        [localLinksRehypePlugin],
+      ],
+      after: [[addUrlToRelativeLink, { url: baseUrl }]],
+    },
     scanDirs: [
       {
         dir: path.join(process.cwd(), "app"),
-        options: {
-          before: commonBeforePlugins,
-          after: commonAfterPlugins,
+      },
+      {
+        dir: path.join(
+          process.cwd(),
+          "..",
+          "resources",
+          "app",
+          "commerce-modules"
+        ),
+        allowedFilesPatterns: [
+          /^(?!.*\/(workflows|js-sdk|extend|events|admin-widget-zones)\/).*$/,
+        ],
+      },
+      {
+        dir: path.join(
+          process.cwd(),
+          "..",
+          "resources",
+          "references",
+          "core_flows"
+        ),
+        allowedFilesPatterns: [/Workflows_[^.]+\/functions/],
+        generator: {
+          name: "workflows",
+          options: {
+            baseUrl,
+          },
         },
       },
-      // {
-      //   dir: path.join(
-      //     process.cwd(),
-      //     "..",
-      //     "resources",
-      //     "references",
-      //     "core_flows"
-      //   ),
-      //   allowedFilesPatterns: [/(Steps|Workflows)_[^.]+\/functions/],
-      //   options: {
-      //     before: commonBeforePlugins,
-      //     after: commonAfterPlugins,
-      //   },
-      // },
+      {
+        dir: path.join(
+          process.cwd(),
+          "..",
+          "resources",
+          "references",
+          "core_flows"
+        ),
+        allowedFilesPatterns: [/Steps_[^.]+\/functions/],
+        generator: {
+          name: "steps",
+          options: {
+            baseUrl,
+          },
+        },
+      },
+      {
+        dir: path.join(process.cwd(), "..", "resources", "app", "medusa-cli"),
+      },
+      {
+        dir: path.join(process.cwd(), "..", "resources", "app", "medusa-cli"),
+      },
+      {
+        dir: path.join(process.cwd(), "..", "resources", "app", "js-sdk"),
+      },
+      {
+        dir: path.join(
+          process.cwd(),
+          "..",
+          "resources",
+          "references",
+          "js_sdk",
+          "admin"
+        ),
+        allowedFilesPatterns: [/\/methods\//],
+        generator: {
+          name: "jsSdk",
+          options: {
+            baseUrl,
+            type: "Admin",
+          },
+        },
+      },
+      {
+        dir: path.join(
+          process.cwd(),
+          "..",
+          "resources",
+          "references",
+          "js_sdk",
+          "auth"
+        ),
+        allowedFilesPatterns: [/\/methods\//],
+        generator: {
+          name: "jsSdk",
+          options: {
+            baseUrl,
+            type: "Auth",
+          },
+        },
+      },
+      {
+        dir: path.join(
+          process.cwd(),
+          "..",
+          "resources",
+          "references",
+          "js_sdk",
+          "store"
+        ),
+        allowedFilesPatterns: [/\/properties\//],
+        generator: {
+          name: "jsSdk",
+          options: {
+            baseUrl,
+            type: "Store",
+          },
+        },
+      },
+      {
+        dir: path.join(
+          process.cwd(),
+          "..",
+          "resources",
+          "references",
+          "medusa_config",
+          "interfaces",
+          "medusa_config.ConfigModule"
+        ),
+      },
+      {
+        dir: path.join(
+          process.cwd(),
+          "..",
+          "resources",
+          "app",
+          "admin-components"
+        ),
+      },
+      {
+        dir: path.join(
+          process.cwd(),
+          "..",
+          "resources",
+          "app",
+          "service-factory-reference"
+        ),
+      },
+      {
+        dir: path.join(process.cwd(), "..", "api-reference", "markdown"),
+      },
+      {
+        dir: path.join(
+          process.cwd(),
+          "..",
+          "api-reference",
+          "specs",
+          "admin",
+          "paths"
+        ),
+        ext: "yaml",
+        generator: {
+          name: "apiRef",
+          options: {
+            baseUrl: `${baseUrl}/api/admin`,
+            type: "Admin",
+          },
+        },
+      },
+      {
+        dir: path.join(
+          process.cwd(),
+          "..",
+          "api-reference",
+          "specs",
+          "store",
+          "paths"
+        ),
+        ext: "yaml",
+        generator: {
+          name: "apiRef",
+          options: {
+            baseUrl: `${baseUrl}/api/store`,
+            type: "Store",
+          },
+        },
+      },
     ],
   })
 }

@@ -2,71 +2,114 @@ import { getCleanMd, GetCleanMdOptions } from "docs-utils"
 import { fdir } from "fdir"
 import { writeFile } from "fs/promises"
 import path from "path"
+import {
+  apiRefLlmsGenerator,
+  CustomLlmsGenerator,
+  jsSdkLlmsGenerator,
+  stepsLlmsGenerator,
+  workflowsLlmsGenerator,
+} from "./utils/custom-llms-generators.js"
+
+type FileExt = "md" | "yaml"
 
 type Options = {
   outputPath: string
   scanDirs: {
     dir: string
-    options?: Omit<GetCleanMdOptions, "filePath">
-    disallowedFilesPatterns?: RegExp[]
+    options?: Omit<GetCleanMdOptions, "file" | "type">
     allowedFilesPatterns?: RegExp[]
+    generator?: {
+      name: "workflows" | "steps" | "jsSdk" | "apiRef"
+      options: Record<string, unknown>
+    }
+    ext?: FileExt
   }[]
   introText?: string
+  plugins?: GetCleanMdOptions["plugins"]
 }
 
-const crawler = new fdir().withFullPaths()
+const generators: Record<string, CustomLlmsGenerator<any>> = {
+  workflows: workflowsLlmsGenerator,
+  steps: stepsLlmsGenerator,
+  jsSdk: jsSdkLlmsGenerator,
+  apiRef: apiRefLlmsGenerator,
+}
+
+const isExtAllowed = (fileName: string, allowedExt: FileExt) => {
+  switch (allowedExt) {
+    case "md":
+      return fileName.endsWith(".md") || fileName.endsWith(".mdx")
+    case "yaml":
+      return fileName.endsWith(".yaml") || fileName.endsWith(".yml")
+  }
+}
 
 const getContentFromDir = async ({
   dir,
   options = {},
-  disallowedFilesPatterns,
   allowedFilesPatterns,
+  generator,
+  ext = "md",
 }: Options["scanDirs"][0]): Promise<string> => {
-  const files = await crawler
+  const files = await new fdir()
+    .withFullPaths()
     .filter((file) => {
       const baseName = path.basename(file)
 
-      return (
-        (baseName.endsWith(".md") || baseName.endsWith(".mdx")) &&
-        !baseName.startsWith("_")
-      )
+      return isExtAllowed(baseName, ext) && !baseName.startsWith("_")
     })
-    .filter((file) => {
-      const isAllowed =
+    .filter(
+      (file) =>
         !allowedFilesPatterns?.length ||
         allowedFilesPatterns.some((pattern) => file.match(pattern))
-      const isDisallowed =
-        (disallowedFilesPatterns?.length &&
-          disallowedFilesPatterns.some((pattern) => file.match(pattern))) ||
-        !isAllowed
-
-      return isAllowed || !isDisallowed
-    })
+    )
     .crawl(dir)
     .withPromise()
 
-  let content = ""
+  const content: string[] =
+    generator?.name && generators[generator?.name]
+      ? [await generators[generator?.name](files, generator.options)]
+      : []
 
-  for (const file of files) {
-    content += await getCleanMd({
-      filePath: file,
+  if (content.length) {
+    return await getCleanMd({
+      file: content.join("\n\n"),
       ...options,
+      type: "content",
     })
   }
 
-  return content
+  for (const file of files) {
+    content.push(
+      await getCleanMd({
+        file,
+        ...options,
+      })
+    )
+  }
+
+  return content.join("\n\n")
 }
 
 export const generateLlmsFull = async ({
   outputPath,
   scanDirs,
   introText = "",
+  plugins,
 }: Options) => {
-  let text = introText
+  const text: string[] = [introText]
 
   for (const scanDir of scanDirs) {
-    text += await getContentFromDir(scanDir)
+    text.push(
+      await getContentFromDir({
+        ...scanDir,
+        options: {
+          plugins,
+          ...scanDir.options,
+        },
+      })
+    )
   }
 
-  await writeFile(outputPath, text)
+  await writeFile(outputPath, text.join("\n\n"))
 }
