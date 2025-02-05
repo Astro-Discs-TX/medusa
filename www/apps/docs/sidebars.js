@@ -463,6 +463,14 @@ module.exports = {
                 iconName: "academic-cap-solid",
               },
             },
+            {
+              type: "doc",
+              id: "deployments/storefront/deploying-next-on-aws-using-terraform",
+              label: "Deploy Next.js Storefront on AWS",
+              customProps: {
+                iconName: "tools",
+              },
+            },
           ],
           customProps: {
             category_id: "deploy_storefront",

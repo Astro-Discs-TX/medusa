@@ -1,35 +1,31 @@
-# **Building and Deploying the MedusaJS Frontend**
-
-This guide explains how to build the MedusaJS frontend using the provided starter template and deploy the resulting Docker image to an AWS ECR repository. This process is essential for deploying the frontend as part of the MedusaJS e-commerce solution.
-
-- [Prerequisites](#prerequisites)
-- [Setting Up the Frontend Repository](#setting-up-the-frontend-repository)
-- [Building the Frontend Docker Image](#building-the-frontend-docker-image)
-- [Pushing the Image to AWS ECR](#pushing-the-image-to-aws-ecr)
-- [Next Steps](#next-steps)
-- [Troubleshooting](#troubleshooting)
-  - [Common Issues](#common-issues)
-
+---
+description: 'Step-by-step deployment instruction'
+addHowToData: true
 ---
 
-## **Prerequisites**
+# Build and Deploy the Medusa Next.js Storefront on AWS
+
+This guide explains how to build the Medusa Storefront using the provided starter template and deploy the resulting Docker container image to an AWS Elastic Container Registry (ECR). This process is essential for deploying the frontend as part of the Medusa e-commerce solution.
+
+## Prerequisites
 
 Before proceeding, ensure you have the following:
 - **Docker**: Installed and running on your machine. Download Docker [here](https://docs.docker.com/get-started/get-docker/).
 - **AWS CLI**: Installed and configured with your AWS credentials. Follow the [AWS CLI Quickstart guide](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-quickstart.html) if you haven’t set it up yet.
 - **Git**: Installed on your machine. Download Git [here](https://git-scm.com/).
+- **Terraform**: (Optional but recommended) Installed for deploying infrastructure. Download Terraform [here](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli).
 
 ---
 
-## **Setting Up the Frontend Repository**
+## Setting Up the Storefront Repository
 
-1. Clone the `medusa-starter` repository to your local machine:
+1. Clone the [`medusa-starter`](https://github.com/u11d-com/medusa-starter) repository to your local machine:
    ```bash
    git clone https://github.com/u11d-com/medusa-starter.git
    cd medusa-starter
    ```
 
-2. Navigate to the `storefront` directory and initialize the frontend repository:
+2. Navigate to the `storefront` directory and initialize the repository:
    ```bash
    cd storefront
    git init
@@ -37,75 +33,103 @@ Before proceeding, ensure you have the following:
    git fetch --depth 1 origin 0f5452dfe44838f890b798789d75db1a81303b7a
    git checkout 0f5452dfe44838f890b798789d75db1a81303b7a
    ```
-
+This sets up the storefront based on the Medusa Next.js starter template for version 1.
 ---
 
-## **Building the Frontend Docker Image**
+## Building the Storefront Docker Container Image
 
-1. Build the Docker image for the frontend:
+1. Build the Docker container image for the storefront:
    ```bash
    docker build -t medusa_storefront:1.0.0 .
    ```
-   - Replace `medusa:storefront` with a tag in the format `<image_tag>:<version>`. For example, `my-frontend:1.0.0`.
+   - Replace `medusa_storefront` with your preferred image tag in the format `<image_tag>:<version>`, e.g., `my-storefront:1.0.0`.
 
 ---
 
-## **Pushing the Image to AWS ECR**
+## Pushing the Container Image to AWS Elastic Container Registry (ECR)
 
-To deploy the frontend, you’ll need to push the Docker image to an AWS ECR repository. Follow these steps:
+To deploy the storefront, you’ll need to push the Docker container image to an AWS ECR repository. Follow these steps:
 
-### **Step 1: Authenticate Docker to Your ECR Repository**
-Run the following command to authenticate Docker to your ECR repository:
+### Step 1: Authenticate Docker to Your ECR Repository
+Run the following command to authenticate Docker to your AWS ECR registry:
 ```bash
 aws ecr get-login-password --region <region> | docker login --username AWS --password-stdin <aws_account_id>.dkr.ecr.<region>.amazonaws.com
 ```
 Replace:
-- `<region>` with your AWS region (e.g., `us-east-1`).
-- `<aws_account_id>` with your AWS account ID.
+- `<aws_account_id>` with your [AWS account ID](https://docs.aws.amazon.com/accounts/latest/reference/manage-acct-identifiers.html#FindAccountId).
+- `<region>` with your [AWS region](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-regions) (e.g., `eu-west-1`).
 
-### **Step 2: Tag the Docker Image**
-Tag the Docker image with your ECR repository URI:
+### Step 2: Tag the Docker Container Image
+Tag the Docker container image with your ECR repository URI:
 ```bash
 docker tag medusa:storefront <aws_account_id>.dkr.ecr.<region>.amazonaws.com/<repository>:<tag>
 ```
 Replace:
-- `<aws_account_id>` with your AWS account ID.
-- `<region>` with your AWS region.
-- `<repository>` with the name of your ECR repository.
-- `<tag>` with the desired image tag (e.g., `1.0.0`).
+- `medusa_storefront:1.0.0` with the image tag you created earlier.
+- `<aws_account_id>`, `<region>`, `<repository>`, and `<tag>` with your AWS account ID, region, ECR repository name, and desired image tag, respectively.
 
-### **Step 3: Push the Docker Image**
-Push the Docker image to your ECR repository:
+### Step 3: Push the Docker Image
+Push the Docker container image to your ECR repository:
 ```bash
 docker push <aws_account_id>.dkr.ecr.<region>.amazonaws.com/<repository>:<tag>
 ```
 
 Example:
 ```bash
-docker push 123456789012.dkr.ecr.us-east-1.amazonaws.com/my-frontend:1.0.0
+docker push 123456789012.dkr.ecr.us-east-1.amazonaws.com/my-storefront:1.0.0
 ```
 
 For more details, refer to the [AWS ECR documentation](https://docs.aws.amazon.com/AmazonECR/latest/userguide/docker-push-ecr-image.html).
 
 ---
 
-## **Next Steps**
+## Connecting the Storefront to Your Terraform Infrastructure
 
-- Use the pushed image in your Terraform configuration by providing the ECR repository URI and tag in module configuration:
-  ```hcl
-  storefront_container_image = "<aws_account_id>.dkr.ecr.<region>.amazonaws.com/<repository>:<tag>"
-  ```
-- Deploy the frontend by enabling the `storefront_create` option in your Terraform configuration.
+After pushing the Docker image, connect it to your infrastructure deployed via Terraform:
+1. Reference the ECR Image in Terraform:
+Add the ECR repository URI and tag to your Terraform configuration:
+```hcl
+storefront_container_image = "<aws_account_id>.dkr.ecr.<region>.amazonaws.com/<repository>:<tag>"
+```
+
+2. Enable Storefront Deployment:
+Ensure the storefront is enabled in your Terraform module configuration:
+```hcl
+storefront_create = true
+```
+
+3. Apply Terraform Changes:
+Deploy the updated configuration:
+```hcl
+terraform init
+terraform apply
+```
+Confirm the changes when prompted.
 
 ---
 
-## **Troubleshooting**
+## Troubleshooting
 
-### **Common Issues**
-- **Docker Build Fails**: Ensure all dependencies are installed and the Dockerfile is correctly configured.
-- **ECR Authentication Fails**: Verify that your AWS credentials are correctly configured and have the necessary permissions.
-- **Image Push Fails**: Ensure the ECR repository exists and the image tag matches the repository URI.
+### Common Issues
+- **Docker Build Fails**:
+  - Ensure all dependencies are installed.
+  - Verify the `Dockerfile` is correctly configured.
+  - Check for syntax errors or missing files.
+- **ECR Authentication Fails**:
+  - Confirm that your AWS credentials are correctly configured with sufficient permissions.
+  - Ensure your AWS CLI session is active (re-authenticate if necessary).
+- **Image Push Fails**:
+  - Ensure the ECR repository exists.
+  - Ensure the repository URI and image tag are correctly specified.
+  - Check for network connectivity issues.
+- **Terraform Apply Fails**:
+  - Confirm that the referenced Docker image exists in the ECR repository.
+  - Check Terraform logs for specific error messages.
+
+## Additional Resources
+- [MedusaJS Documentation](https://docs.medusajs.com/v1/)
+- [Next.js Documentation](https://nextjs.org/)
+- [Terraform Module for Medusa on AWS Provider Documentation](https://github.com/u11d-com/terraform-aws-medusajs)
 
 ---
-
-:heart: _Technology made with passion by u11d_
+:heart: _Technology made with passion by [u11d](https://u11d.com)_
