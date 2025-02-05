@@ -8,8 +8,8 @@ type Options = {
   scanDirs: {
     dir: string
     options?: Omit<GetCleanMdOptions, "filePath">
-    disallowedFilesPatterns?: string[]
-    allowedFilesPatterns?: string[]
+    disallowedFilesPatterns?: RegExp[]
+    allowedFilesPatterns?: RegExp[]
   }[]
   introText?: string
 }
@@ -36,8 +36,9 @@ const getContentFromDir = async ({
         !allowedFilesPatterns?.length ||
         allowedFilesPatterns.some((pattern) => file.match(pattern))
       const isDisallowed =
-        disallowedFilesPatterns?.length &&
-        disallowedFilesPatterns.some((pattern) => file.match(pattern))
+        (disallowedFilesPatterns?.length &&
+          disallowedFilesPatterns.some((pattern) => file.match(pattern))) ||
+        !isAllowed
 
       return isAllowed || !isDisallowed
     })

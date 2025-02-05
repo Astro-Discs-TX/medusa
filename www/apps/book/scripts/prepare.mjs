@@ -1,3 +1,4 @@
+import "dotenv/config"
 import path from "path"
 import { sidebar } from "../sidebar.mjs"
 import {
@@ -16,41 +17,41 @@ async function main() {
   // await generateSidebar(sidebar, {
   //   addNumbering: true,
   // })
+  const commonBeforePlugins = [
+    [
+      crossProjectLinksPlugin,
+      {
+        baseUrl: process.env.NEXT_PUBLIC_BASE_URL,
+        projectUrls: {
+          resources: {
+            url: process.env.NEXT_PUBLIC_BASE_URL,
+          },
+          "user-guide": {
+            url: process.env.NEXT_PUBLIC_BASE_URL,
+          },
+          ui: {
+            url: process.env.NEXT_PUBLIC_BASE_URL,
+          },
+          api: {
+            url: process.env.NEXT_PUBLIC_BASE_URL,
+          },
+        },
+        useBaseUrl: true,
+      },
+    ],
+    [localLinksRehypePlugin],
+  ]
+  const commonAfterPlugins = [
+    [addUrlToRelativeLink, { url: process.env.NEXT_PUBLIC_BASE_URL }],
+  ]
   await generateLlmsFull({
     outputPath: path.join(process.cwd(), "public", "llms-full.text"),
     scanDirs: [
       {
         dir: path.join(process.cwd(), "app"),
         options: {
-          before: [
-            [
-              crossProjectLinksPlugin,
-              {
-                baseUrl: process.env.NEXT_PUBLIC_BASE_URL,
-                projectUrls: {
-                  resources: {
-                    url: process.env.NEXT_PUBLIC_BASE_URL,
-                  },
-                  "user-guide": {
-                    url: process.env.NEXT_PUBLIC_BASE_URL,
-                  },
-                  ui: {
-                    url: process.env.NEXT_PUBLIC_BASE_URL,
-                  },
-                  api: {
-                    url: process.env.NEXT_PUBLIC_BASE_URL,
-                  },
-                },
-                useBaseUrl:
-                  process.env.NODE_ENV === "production" ||
-                  process.env.VERCEL_ENV === "production",
-              },
-            ],
-            [localLinksRehypePlugin],
-          ],
-          after: [
-            [addUrlToRelativeLink, { url: process.env.NEXT_PUBLIC_BASE_URL }],
-          ],
+          before: commonBeforePlugins,
+          after: commonAfterPlugins,
         },
       },
       // {
@@ -61,10 +62,11 @@ async function main() {
       //     "references",
       //     "core_flows"
       //   ),
-      //   allowedFilesPatterns: [
-      //     "core_flows.[^.]+.Steps",
-      //     "core_flows.[^.]+.Workflows",
-      //   ],
+      //   allowedFilesPatterns: [/(Steps|Workflows)_[^.]+\/functions/],
+      //   options: {
+      //     before: commonBeforePlugins,
+      //     after: commonAfterPlugins,
+      //   },
       // },
     ],
   })
