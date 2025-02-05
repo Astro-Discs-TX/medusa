@@ -1559,7 +1559,9 @@ medusaIntegrationTestRunner({
             adminHeaders
           )
 
-          expect(fetchProduct.shipping_profile.id).toEqual(shippingProfile2.id)
+          expect(fetchProduct.data.product.shipping_profile.id).toEqual(
+            shippingProfile2.id
+          )
 
           payload = {
             subtitle: "new subtitle",
