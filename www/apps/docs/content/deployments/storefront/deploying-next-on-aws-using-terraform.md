@@ -127,7 +127,7 @@ Confirm the changes when prompted.
   - Check Terraform logs for specific error messages.
 
 ## Additional Resources
-- [MedusaJS Documentation](https://docs.medusajs.com/v1/)
+- [Medusa Documentation](https://docs.medusajs.com/v1/)
 - [Next.js Documentation](https://nextjs.org/)
 - [Terraform Module for Medusa on AWS Provider Documentation](https://github.com/u11d-com/terraform-aws-medusajs)
 
