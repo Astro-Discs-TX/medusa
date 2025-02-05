@@ -386,8 +386,6 @@ module.exports = {
               id: "deployments/server/deploying-on-aws-using-terraform",
               label: "Deploy on AWS using Terraform",
               customProps: {
-                sidebar_is_title: true,
-                sidebar_icon: "tools",
                 iconName: "tools",
               },
             },

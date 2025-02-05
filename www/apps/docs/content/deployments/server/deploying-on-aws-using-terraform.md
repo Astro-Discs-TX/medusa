@@ -1,5 +1,5 @@
 ---
-description: 'Learn step-by-step.'
+description: 'Step-by-step deployment instruction'
 addHowToData: true
 ---
 
