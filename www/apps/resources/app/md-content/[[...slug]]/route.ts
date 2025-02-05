@@ -24,7 +24,9 @@ export async function GET(req: NextRequest, { params }: Params) {
   path.join(process.cwd(), "app")
   path.join(process.cwd(), "references")
 
-  const filePathFromMap = await getFileFromMaps(`/${slug.join("/")}`)
+  const filePathFromMap = await getFileFromMaps(
+    `/${slug.join("/")}`.replace("//", "/")
+  )
   if (!filePathFromMap) {
     return notFound()
   }
