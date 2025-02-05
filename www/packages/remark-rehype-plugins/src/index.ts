@@ -1,3 +1,4 @@
+export * from "./add-url-to-relative-link.js"
 export * from "./broken-link-checker.js"
 export * from "./cloudinary-img.js"
 export * from "./cross-project-links.js"
@@ -6,6 +7,7 @@ export * from "./page-number.js"
 export * from "./prerequisites-link-fixer.js"
 export * from "./resolve-admonitions.js"
 export * from "./type-list-link-fixer.js"
+export * from "./ui-rehype-plugin.js"
 export * from "./workflow-diagram-link-fixer.js"
 
 export * from "./utils/fix-link.js"
