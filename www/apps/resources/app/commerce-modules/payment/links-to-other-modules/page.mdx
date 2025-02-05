@@ -117,6 +117,12 @@ createRemoteLinkStep({
 
 Medusa defines a link between the `Customer` and `AccountHolder` data models, allowing payment providers to save payment methods for a customer, if the payment provider supports it.
 
+<Note>
+
+This link is available starting from Medusa `v2.5.0`.
+
+</Note>
+
 ### Retrieve with Query
 
 To retrieve the customer associated with an account holder with [Query](!docs!/learn/fundamentals/module-links/query), pass `customer.*` in `fields`:

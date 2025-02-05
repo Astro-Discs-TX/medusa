@@ -28,6 +28,12 @@ Read-only links are used to query data across modules, but the relations aren't 
 
 Medusa defines a link between the `Customer` and `AccountHolder` data models, allowing payment providers to save payment methods for a customer, if the payment provider supports it.
 
+<Note>
+
+This link is available starting from Medusa `v2.5.0`.
+
+</Note>
+
 ### Retrieve with Query
 
 To retrieve the account holder associated with a customer with [Query](!docs!/learn/fundamentals/module-links/query), pass `customer.*` in `fields`:
