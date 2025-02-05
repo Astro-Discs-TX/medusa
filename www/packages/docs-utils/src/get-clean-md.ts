@@ -11,10 +11,14 @@ import {
   parseCard,
   parseCardList,
   parseCodeTabs,
+  parseColors,
   parseComponentExample,
   parseComponentReference,
   parseDetails,
+  parseHookValues,
+  parseIconSearch,
   parseNote,
+  parsePackageInstall,
   parsePrerequisites,
   parseSourceCodeLink,
   parseTable,
@@ -39,6 +43,10 @@ const parsers: Record<string, ComponentParser> = {
   WorkflowDiagram: parseWorkflowDiagram,
   ComponentExample: parseComponentExample,
   ComponentReference: parseComponentReference,
+  PackageInstall: parsePackageInstall,
+  IconSearch: parseIconSearch,
+  HookValues: parseHookValues,
+  Colors: parseColors,
 }
 
 const isComponentAllowed = (nodeName: string): boolean => {

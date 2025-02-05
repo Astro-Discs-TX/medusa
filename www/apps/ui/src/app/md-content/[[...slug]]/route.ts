@@ -6,6 +6,9 @@ import { NextRequest, NextResponse } from "next/server"
 import path from "path"
 import { addUrlToRelativeLink } from "remark-rehype-plugins"
 import type { Plugin } from "unified"
+import * as Icons from "@medusajs/icons"
+import * as HookValues from "@/registries/hook-values"
+import { colors as allColors } from "@/config/colors"
 
 type Params = {
   params: Promise<{ slug: string[] }>
@@ -26,11 +29,15 @@ export async function GET(req: NextRequest, { params }: Params) {
     return notFound()
   }
 
-  const cleanMdContent = await getCleanMd_(filePath, examplesPath, specsPath, {
-    after: [
-      [addUrlToRelativeLink, { url: process.env.NEXT_PUBLIC_BASE_URL }],
-    ] as unknown as Plugin[],
-  })
+  const cleanMdContent = await getCleanMd_(
+    filePath,
+    { examplesPath, specsPath },
+    {
+      after: [
+        [addUrlToRelativeLink, { url: process.env.NEXT_PUBLIC_BASE_URL }],
+      ] as unknown as Plugin[],
+    }
+  )
 
   return new NextResponse(cleanMdContent, {
     headers: {
@@ -42,22 +49,36 @@ export async function GET(req: NextRequest, { params }: Params) {
 const getCleanMd_ = unstable_cache(
   async (
     filePath: string,
-    examplesPath: string,
-    specsPath: string,
+    parserOptions: {
+      examplesPath: string
+      specsPath: string
+    },
     plugins?: { before?: Plugin[]; after?: Plugin[] }
-  ) =>
-    getCleanMd({
+  ) => {
+    const iconNames = Object.keys(Icons).filter((name) => name !== "default")
+
+    return getCleanMd({
       filePath,
       plugins,
       parserOptions: {
         ComponentExample: {
-          examplesBasePath: examplesPath,
+          examplesBasePath: parserOptions.examplesPath,
         },
         ComponentReference: {
-          specsPath,
+          specsPath: parserOptions.specsPath,
+        },
+        IconSearch: {
+          iconNames,
+        },
+        HookValues: {
+          hooksData: HookValues,
+        },
+        Colors: {
+          colors: allColors,
         },
       },
-    }),
+    })
+  },
   ["clean-md"],
   {
     revalidate: 3600,

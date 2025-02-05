@@ -701,7 +701,8 @@ export const parseComponentReference: ComponentParser<{ specsPath: string }> = (
               children: [
                 {
                   type: "text",
-                  value: `${propName}: (${propData.type?.name || propData.tsType?.name}) ${propData.description || ""}${propData.defaultValue ? ` Default: ${propData.defaultValue.value}` : ""}`,
+                  value:
+                    `${propName}: (${propData.type?.name || propData.tsType?.name}) ${propData.description || ""}${propData.defaultValue ? ` Default: ${propData.defaultValue.value}` : ""}`.trim(),
                 },
               ],
             },
@@ -720,6 +721,169 @@ export const parseComponentReference: ComponentParser<{ specsPath: string }> = (
     1,
     ...componentNames.flatMap(getComponentNodes)
   )
+}
+
+export const parsePackageInstall: ComponentParser = (
+  node: UnistNodeWithData,
+  index: number,
+  parent: UnistTree
+): VisitorResult => {
+  const packageName = node.attributes?.find(
+    (attr) => attr.name === "packageName"
+  )
+  if (!packageName) {
+    return
+  }
+
+  parent.children?.splice(index, 1, {
+    type: "code",
+    lang: "bash",
+    value: `npm install ${packageName.value}`,
+  })
+  return [SKIP, index]
+}
+
+export const parseIconSearch: ComponentParser<{ iconNames: string[] }> = (
+  node: UnistNodeWithData,
+  index: number,
+  parent: UnistTree,
+  options
+): VisitorResult => {
+  if (!options?.iconNames) {
+    return
+  }
+
+  parent.children?.splice(index, 1, {
+    type: "list",
+    ordered: false,
+    spread: false,
+    children: options.iconNames.map((iconName) => ({
+      type: "listItem",
+      children: [
+        {
+          type: "paragraph",
+          children: [
+            {
+              type: "text",
+              value: iconName,
+            },
+          ],
+        },
+      ],
+    })),
+  })
+  return [SKIP, index]
+}
+
+export const parseHookValues: ComponentParser<{
+  hooksData: {
+    [k: string]: {
+      value: string
+      type?: {
+        type: string
+      }
+      description?: string
+    }[]
+  }
+}> = (
+  node: UnistNodeWithData,
+  index: number,
+  parent: UnistTree,
+  options
+): VisitorResult => {
+  if (!options?.hooksData) {
+    return
+  }
+
+  const hookName = node.attributes?.find((attr) => attr.name === "hook")
+
+  if (
+    !hookName ||
+    !hookName.value ||
+    typeof hookName.value !== "string" ||
+    !options.hooksData[hookName.value]
+  ) {
+    return
+  }
+
+  const hookData = options.hooksData[hookName.value]
+
+  const listItems = hookData.map((item) => {
+    return {
+      type: "listItem",
+      children: [
+        {
+          type: "paragraph",
+          children: [
+            {
+              type: "text",
+              value:
+                `${item.value}: (${item.type?.type}) ${item.description || ""}`.trim(),
+            },
+          ],
+        },
+      ],
+    }
+  })
+
+  parent.children?.splice(index, 1, {
+    type: "list",
+    ordered: false,
+    spread: false,
+    children: listItems,
+  })
+  return [SKIP, index]
+}
+
+export const parseColors: ComponentParser<{
+  colors: {
+    [k: string]: Record<string, string>
+  }
+}> = (
+  node: UnistNodeWithData,
+  index: number,
+  parent: UnistTree,
+  options
+): VisitorResult => {
+  if (!options?.colors) {
+    return
+  }
+
+  parent.children?.splice(index, 1, {
+    type: "list",
+    ordered: false,
+    spread: false,
+    children: Object.entries(options.colors).flatMap(([section, colors]) => [
+      {
+        type: "heading",
+        depth: 3,
+        children: [
+          {
+            type: "text",
+            value: section,
+          },
+        ],
+      },
+      ...Object.entries(colors).map(([name, value]) => ({
+        type: "listItem",
+        children: [
+          {
+            type: "paragraph",
+            children: [
+              {
+                type: "text",
+                value: name,
+              },
+              {
+                type: "text",
+                value: `: ${value}`,
+              },
+            ],
+          },
+        ],
+      })),
+    ]),
+  })
 }
 
 /**
