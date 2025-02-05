@@ -229,5 +229,4 @@ No, you can use the [medusa-starter repository](https://github.com/u11d-com/medu
 Modify the Terraform configuration files and run `terraform apply` to apply the changes.
 
 ---
-
-:heart: _Technology made with passion by u11d_
+:heart: _Technology made with passion by [u11d](https://u11d.com)_
