@@ -156,7 +156,7 @@ const getParsedAsString = (file: VFile): string => {
   return content
 }
 
-type Options = {
+export type GetCleanMdOptions = {
   filePath: string
   plugins?: {
     before?: Plugin[]
@@ -169,7 +169,7 @@ export const getCleanMd = async ({
   filePath,
   plugins,
   parserOptions,
-}: Options): Promise<string> => {
+}: GetCleanMdOptions): Promise<string> => {
   if (!filePath.endsWith(".md") && !filePath.endsWith(".mdx")) {
     return ""
   }

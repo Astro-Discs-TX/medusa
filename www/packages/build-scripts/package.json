@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "docs-utils": "*",
+    "fdir": "^6.4.3",
     "tags": "*"
   },
   "devDependencies": {

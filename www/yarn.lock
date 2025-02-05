@@ -5943,6 +5943,7 @@ __metadata:
   dependencies:
     "@types/node": ^20.11.20
     docs-utils: "*"
+    fdir: ^6.4.3
     rimraf: ^5.0.5
     tags: "*"
     tsconfig: "*"
@@ -8512,6 +8513,18 @@ __metadata:
   dependencies:
     format: ^0.2.0
   checksum: b80fbf1019b9ce8b08ee09ce86e02b028563e13a32ac3be34e42bfac00a97b96d8dee6d31e26578ffc16224eb6729e01ff1f97ddfeee00494f4f56c0aeed4bdd
+  languageName: node
+  linkType: hard
+
+"fdir@npm:^6.4.3":
+  version: 6.4.3
+  resolution: "fdir@npm:6.4.3"
+  peerDependencies:
+    picomatch: ^3 || ^4
+  peerDependenciesMeta:
+    picomatch:
+      optional: true
+  checksum: d13c10120e9625adf21d8d80481586200759928c19405a816b77dd28eaeb80e7c59c5def3e2941508045eb06d34eb47fad865ccc8bf98e6ab988bb0ed160fb6f
   languageName: node
   linkType: hard
 
