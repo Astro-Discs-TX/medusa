@@ -42,7 +42,7 @@ This guide explains how to use the [**Terraform module for MedusaJS**](https://g
 Terraform is an infrastructure-as-code tool that allows you to define and provision cloud resources using code. It simplifies the process of managing cloud infrastructure and ensures consistency across environments. Learn more about Terraform [here](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/infrastructure-as-code).
 
 ### Why Use Terraform Module for Medusa?
-[Terraform module for Medusa](https://github.com/u11d-com/terraform-aws-medusajs) simplifies the deployment of MedusaJS on AWS by automating the setup of essential infrastructure components. It aligns with Medusa’s [architectural modules](https://docs.medusajs.com/resources/architectural-modules) for data caching, event distribution, asset and file access, and workflow management. By providing optional infrastructure services, it empowers developers to make informed decisions and optimize the system for production environments. This module is designed for development teams who want to focus on building their e-commerce stores without the overhead of managing cloud infrastructure.
+[Terraform module for Medusa](https://github.com/u11d-com/terraform-aws-medusajs) simplifies the deployment of MedusaJS on AWS by automating the setup of essential infrastructure components. It aligns with Medusa’s [architectural modules](#mapping-medusa-architectural-modules-to-aws-infrastructure) for data caching, event distribution, asset and file access, and workflow management. By providing optional infrastructure services, it empowers developers to make informed decisions and optimize the system for production environments. This module is designed for development teams who want to focus on building their e-commerce stores without the overhead of managing cloud infrastructure.
 
 ---
 
@@ -67,7 +67,7 @@ When designing the Terraform module for Medusa, we prioritized scalability, secu
 Key architectural decisions include:
 - Use of Managed Services: All core components — such as Amazon RDS for PostgreSQL, Amazon ElastiCache for Redis, and the Application Load Balancer (ALB) — are fully managed services. This eliminates the need for teams to handle infrastructure maintenance tasks like patching, backups, and scaling operations.
 - Containerization with AWS Fargate: We run Medusa services as ECS tasks on AWS Fargate, removing the need for Kubernetes cluster management. Teams can focus on defining scaling policies without worrying about the underlying infrastructure.
-- Optimized Docker Images: The Terraform module is complemented by Docker image definitions (provided as Dockerfiles in a separate repository). These images follow best practices for security, performance, and minimal size, ensuring efficient resource utilization in production environments.
+- Optimized Docker Images: The Terraform module is complemented by Docker image definitions (provided as Dockerfiles in a separate [repository](https://github.com/u11d-com/medusa-starter)). These images follow best practices for security, performance, and minimal size, ensuring efficient resource utilization in production environments.
 
 By leveraging managed services, this architecture reduces the time, effort, and expertise required to maintain infrastructure. It provides the flexibility to control scalability while ensuring high availability, robust security, and optimal performance — allowing development teams to concentrate on delivering business value through their e-commerce platforms.
 
@@ -77,7 +77,7 @@ The `Terraform module for Medusa` sets up the following AWS resources to support
 
 ### Core Infrastructure
 - RDS for PostgreSQL: A managed relational database for storing Medusa data.
-- ElastiCache: A caching layer to improve performance.
+- ElastiCache (Redis): A caching layer to improve performance.
 - AWS Fargate for ECS Backend Tasks: Runs the Medusa backend as containerized tasks.
 - Amazon S3: Cloud object storage that ensures scalability, data availability, security, and performance.
 - Application Load Balancer (ALB): Distributes incoming traffic to backend tasks.
@@ -89,14 +89,14 @@ The `Terraform module for Medusa` sets up the following AWS resources to support
 
 ### Mapping Medusa Architectural Modules to AWS Infrastructure
 
-| **Medusa Architectural Module** | **AWS Provisioned Infrastructure**      | **Notes**                             |
-|:---------------------------------|:---------------------------------------|:--------------------------------------|
-| Internal Database               | Amazon RDS for PostgreSQL              |                                        |
-| Cache Modules                   | Amazon ElastiCache                     |                                        |
-| Event Modules                   | Amazon ElastiCache                     |                                        |
-| File Module Providers           | Amazon S3                              |                                        |
-| Workflow Engine Modules         | Amazon ElastiCache                     |                                        |
-| Notification Module Providers   | Amazon SES                             | *Planned for future implementation*   |
+| Medusa Architectural Module | AWS Provisioned Infrastructure | Notes |
+|----------------------------|-------------------------------|--------|
+| Internal Database | Amazon RDS for PostgreSQL | |
+| [Cache Modules](https://docs.medusajs.com/v1/development/cache/modules/redis) | Amazon ElastiCache | |
+| [Event Modules](https://docs.medusajs.com/v1/development/events/modules/redis) | Amazon ElastiCache | |
+| [File Module Providers](https://docs.medusajs.com/v1/plugins/file-service/s3) | Amazon S3 | |
+| Workflow Engine Modules | Amazon ElastiCache | |
+| Notification Module Providers | Amazon SES | *Planned for future implementation* |
 
 ---
 
@@ -106,7 +106,7 @@ The `Terraform module for Medusa` sets up the following AWS resources to support
 Clone the Terraform module repository to your local machine:
 ```bash
 git clone https://github.com/u11d-com/terraform-aws-medusajs
-cd terraform-u11d-medusajs/exaples/minimal
+cd terraform-u11d-medusajs/examples/minimal
 ```
 
 ### Step 2: Provide Variables for the Module
@@ -116,7 +116,7 @@ See module inputs documentation for available configuration options.
 Example variables:
 ```hcl
 aws_region = "us-east-1"
-backend_container_image = "your-medusa-backend-image:latest"
+backend_container_image = "your-medusa-backend-image:v1.20.11"
 ```
 
 ### Step 3: Initialize Terraform
@@ -153,9 +153,9 @@ In addition to the backend, the Terraform module provisions key AWS resources, i
 
 1. Configure S3 and Redis Plugins:
 - Set up the appropriate MedusaJS plugins for S3 and Redis to enable object storage and caching functionalities.
-- The same Redis instance can be utilized for multiple Medusa modules, including cache, event handling, file storage, and the workflow engine.
   - [Redis Cache Module](https://docs.medusajs.com/v1/development/cache/modules/redis)
   - [File Service - S3 plugin](https://docs.medusajs.com/v1/plugins/file-service/s3)
+- The same Redis instance can be utilized for multiple Medusa modules, including cache, event handling, file storage, and the workflow engine.
 
 2. Use Predefined Environment Variables:
 - The Terraform module automatically generates all necessary environment variables, following Medusa’s naming conventions.
@@ -182,7 +182,7 @@ backend_container_registry_credentials = {
     password = "your-registry-password"
   }
 storefront_container_image = "your-repo/medusa-backend:v1.20.11"
-storefront_container_registry_credentials = { = {
+storefront_container_registry_credentials = {
     username = "your-registry-username"
     password = "your-registry-password"
   }

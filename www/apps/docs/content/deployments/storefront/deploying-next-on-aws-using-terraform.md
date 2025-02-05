@@ -25,7 +25,7 @@ Before proceeding, ensure you have the following:
    cd medusa-starter
    ```
 
-2. Navigate to the `storefront` directory and initialize the repository:
+2. Navigate to the `storefront` directory and initialize the repository, this sets up the storefront based on the [Medusa Next.js starter template](https://github.com/medusajs/nextjs-starter-medusa) for version 1:
    ```bash
    cd storefront
    git init
@@ -33,7 +33,7 @@ Before proceeding, ensure you have the following:
    git fetch --depth 1 origin 0f5452dfe44838f890b798789d75db1a81303b7a
    git checkout 0f5452dfe44838f890b798789d75db1a81303b7a
    ```
-This sets up the storefront based on the Medusa Next.js starter template for version 1.
+
 ---
 
 ## Building the Storefront Docker Container Image
@@ -42,7 +42,7 @@ This sets up the storefront based on the Medusa Next.js starter template for ver
    ```bash
    docker build -t medusa_storefront:1.0.0 .
    ```
-   - Replace `medusa_storefront` with your preferred image tag in the format `<image_tag>:<version>`, e.g., `my-storefront:1.0.0`.
+   - Replace `medusa_storefront:1.0.0` with your preferred image tag in the format `<image_tag>:<version>`, e.g., `my-storefront:1.0.0`.
 
 ---
 
@@ -56,13 +56,21 @@ Run the following command to authenticate Docker to your AWS ECR registry:
 aws ecr get-login-password --region <region> | docker login --username AWS --password-stdin <aws_account_id>.dkr.ecr.<region>.amazonaws.com
 ```
 Replace:
+- `<region>` with your desired AWS region code (for example, `eu-west-1`). You can find the complete list of region codes in the [AWS Regions documentation](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-regions). Make sure to use the same region where your Amazon Elastic Container Registry (ECR) is deployed.
 - `<aws_account_id>` with your [AWS account ID](https://docs.aws.amazon.com/accounts/latest/reference/manage-acct-identifiers.html#FindAccountId).
-- `<region>` with your [AWS region](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-regions) (e.g., `eu-west-1`).
+  You can check it by running:
+  ```bash
+  aws sts get-caller-identity \
+      --query Account \
+      --output text
+  ```
+If you created your ECR repository using the [Terraform Module for Medusa on AWS](https://github.com/u11d-com/terraform-aws-medusajs), you can find the ECR repository URL in the module's output values after deployment.
+
 
 ### Step 2: Tag the Docker Container Image
 Tag the Docker container image with your ECR repository URI:
 ```bash
-docker tag medusa:storefront <aws_account_id>.dkr.ecr.<region>.amazonaws.com/<repository>:<tag>
+docker tag medusa_storefront:1.0.0 <aws_account_id>.dkr.ecr.<region>.amazonaws.com/<repository>:<tag>
 ```
 Replace:
 - `medusa_storefront:1.0.0` with the image tag you created earlier.
@@ -92,16 +100,17 @@ Add the ECR repository URI and tag to your Terraform configuration:
 storefront_container_image = "<aws_account_id>.dkr.ecr.<region>.amazonaws.com/<repository>:<tag>"
 ```
 
-2. Enable Storefront Deployment:
+2. Enable storefront deployment:
 Ensure the storefront is enabled in your Terraform module configuration:
 ```hcl
 storefront_create = true
 ```
 
-3. Apply Terraform Changes:
+3. Plan and apply Terraform changes:
 Deploy the updated configuration:
-```hcl
+```bash
 terraform init
+terraform plan
 terraform apply
 ```
 Confirm the changes when prompted.
