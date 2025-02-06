@@ -214,6 +214,11 @@ export const sidebar = sidebarAttachHrefCommonOptions([
             path: "/learn/fundamentals/module-links/custom-columns",
             title: "Custom Columns",
           },
+          {
+            type: "link",
+            path: "/learn/fundamentals/module-links/query-context",
+            title: "Query Context",
+          },
         ],
       },
       {
@@ -450,6 +455,11 @@ export const sidebar = sidebarAttachHrefCommonOptions([
             type: "link",
             path: "/learn/fundamentals/admin/ui-routes",
             title: "Admin UI Routes",
+          },
+          {
+            type: "link",
+            path: "/learn/fundamentals/admin/environment-variables",
+            title: "Environment Variables",
           },
           {
             type: "link",
