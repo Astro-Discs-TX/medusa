@@ -14,7 +14,11 @@ import {
   MedusaContext,
   toMikroORMEntity,
 } from "@medusajs/framework/utils"
-import { EntityManager, SqlEntityManager } from "@mikro-orm/postgresql"
+import {
+  EntityManager,
+  EntityRepository,
+  SqlEntityManager,
+} from "@mikro-orm/postgresql"
 import { IndexData, IndexRelation } from "@models"
 import { createPartitions, QueryBuilder } from "../utils"
 import { flattenObjectKeys } from "../utils/flatten-object-keys"
@@ -322,9 +326,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
    * @protected
    */
   @InjectTransactionManager()
-  protected async onCreate<
-    TData extends { id: string; [key: string]: unknown }
-  >(
+  async onCreate<TData extends { id: string; [key: string]: unknown }>(
     {
       entity,
       data,
@@ -334,13 +336,11 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
       data: TData | TData[]
       schemaEntityObjectRepresentation: IndexTypes.SchemaObjectEntityRepresentation
     },
-    @MedusaContext() sharedContext: Context = {}
+    @MedusaContext() sharedContext: Context<SqlEntityManager> = {}
   ) {
-    const { transactionManager: em } = sharedContext as {
-      transactionManager: SqlEntityManager
-    }
-    const indexRepository = em.getRepository(toMikroORMEntity(IndexData))
-    const indexRelationRepository = em.getRepository(
+    const { transactionManager: em } = sharedContext
+    const indexRepository = em!.getRepository(toMikroORMEntity(IndexData))
+    const indexRelationRepository: EntityRepository<any> = em!.getRepository(
       toMikroORMEntity(IndexRelation)
     )
 
@@ -369,6 +369,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
         id: cleanedEntityData.id,
         name: entity,
         data: cleanedEntityData,
+        staled_at: null,
       })
 
       /**
@@ -394,18 +395,29 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
             id: (parentData_ as any).id,
             name: parentEntity,
             data: parentData_,
+            staled_at: null,
           })
 
-          const parentIndexRelationEntry = indexRelationRepository.create({
-            parent_id: (parentData_ as any).id,
-            parent_name: parentEntity,
-            child_id: cleanedEntityData.id,
-            child_name: entity,
-            pivot: `${parentEntity}-${entity}`,
-          })
-          indexRelationRepository
-            .getEntityManager()
-            .persist(parentIndexRelationEntry)
+          await indexRelationRepository.upsert(
+            {
+              parent_id: (parentData_ as any).id,
+              parent_name: parentEntity,
+              child_id: cleanedEntityData.id,
+              child_name: entity,
+              pivot: `${parentEntity}-${entity}`,
+              staled_at: null,
+            },
+            {
+              onConflictAction: "merge",
+              onConflictFields: [
+                "pivot",
+                "parent_id",
+                "child_id",
+                "parent_name",
+                "child_name",
+              ],
+            }
+          )
         }
       }
     }
@@ -420,9 +432,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
    * @protected
    */
   @InjectTransactionManager()
-  protected async onUpdate<
-    TData extends { id: string; [key: string]: unknown }
-  >(
+  async onUpdate<TData extends { id: string; [key: string]: unknown }>(
     {
       entity,
       data,
@@ -432,12 +442,10 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
       data: TData | TData[]
       schemaEntityObjectRepresentation: IndexTypes.SchemaObjectEntityRepresentation
     },
-    @MedusaContext() sharedContext: Context = {}
+    @MedusaContext() sharedContext: Context<SqlEntityManager> = {}
   ) {
-    const { transactionManager: em } = sharedContext as {
-      transactionManager: SqlEntityManager
-    }
-    const indexRepository = em.getRepository(toMikroORMEntity(IndexData))
+    const { transactionManager: em } = sharedContext
+    const indexRepository = em!.getRepository(toMikroORMEntity(IndexData))
 
     const { data: data_, entityProperties } = PostgresProvider.parseData(
       data,
@@ -453,6 +461,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
             acc[property] = entityData[property]
             return acc
           }, {}),
+          staled_at: null,
         }
       })
     )
@@ -467,9 +476,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
    * @protected
    */
   @InjectTransactionManager()
-  protected async onDelete<
-    TData extends { id: string; [key: string]: unknown }
-  >(
+  async onDelete<TData extends { id: string; [key: string]: unknown }>(
     {
       entity,
       data,
@@ -479,13 +486,11 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
       data: TData | TData[]
       schemaEntityObjectRepresentation: IndexTypes.SchemaObjectEntityRepresentation
     },
-    @MedusaContext() sharedContext: Context = {}
+    @MedusaContext() sharedContext: Context<SqlEntityManager> = {}
   ) {
-    const { transactionManager: em } = sharedContext as {
-      transactionManager: SqlEntityManager
-    }
-    const indexRepository = em.getRepository(toMikroORMEntity(IndexData))
-    const indexRelationRepository = em.getRepository(
+    const { transactionManager: em } = sharedContext
+    const indexRepository = em!.getRepository(toMikroORMEntity(IndexData))
+    const indexRelationRepository = em!.getRepository(
       toMikroORMEntity(IndexRelation)
     )
 
@@ -523,9 +528,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
    * @protected
    */
   @InjectTransactionManager()
-  protected async onAttach<
-    TData extends { id: string; [key: string]: unknown }
-  >(
+  async onAttach<TData extends { id: string; [key: string]: unknown }>(
     {
       entity,
       data,
@@ -535,13 +538,11 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
       data: TData | TData[]
       schemaEntityObjectRepresentation: IndexTypes.SchemaObjectEntityRepresentation
     },
-    @MedusaContext() sharedContext: Context = {}
+    @MedusaContext() sharedContext: Context<SqlEntityManager> = {}
   ) {
-    const { transactionManager: em } = sharedContext as {
-      transactionManager: SqlEntityManager
-    }
-    const indexRepository = em.getRepository(toMikroORMEntity(IndexData))
-    const indexRelationRepository = em.getRepository(
+    const { transactionManager: em } = sharedContext
+    const indexRepository = em!.getRepository(toMikroORMEntity(IndexData))
+    const indexRelationRepository = em!.getRepository(
       toMikroORMEntity(IndexRelation)
     )
 
@@ -608,31 +609,54 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
         id: cleanedEntityData.id,
         name: entity,
         data: cleanedEntityData,
+        staled_at: null,
       })
 
       /**
        * Create the index relation entries for the parent entity and the child entity
        */
 
-      const parentIndexRelationEntry = indexRelationRepository.create({
-        parent_id: entityData[parentPropertyId] as string,
-        parent_name: parentEntityName,
-        child_id: cleanedEntityData.id,
-        child_name: entity,
-        pivot: `${parentEntityName}-${entity}`,
-      })
+      await indexRelationRepository.upsert(
+        {
+          parent_id: entityData[parentPropertyId] as string,
+          parent_name: parentEntityName,
+          child_id: cleanedEntityData.id,
+          child_name: entity,
+          pivot: `${parentEntityName}-${entity}`,
+          staled_at: null,
+        },
+        {
+          onConflictAction: "merge",
+          onConflictFields: [
+            "pivot",
+            "parent_id",
+            "child_id",
+            "parent_name",
+            "child_name",
+          ],
+        }
+      )
 
-      const childIndexRelationEntry = indexRelationRepository.create({
-        parent_id: cleanedEntityData.id,
-        parent_name: entity,
-        child_id: entityData[childPropertyId] as string,
-        child_name: childEntityName,
-        pivot: `${entity}-${childEntityName}`,
-      })
-
-      indexRelationRepository
-        .getEntityManager()
-        .persist([parentIndexRelationEntry, childIndexRelationEntry])
+      await indexRelationRepository.upsert(
+        {
+          parent_id: cleanedEntityData.id,
+          parent_name: entity,
+          child_id: entityData[childPropertyId] as string,
+          child_name: childEntityName,
+          pivot: `${entity}-${childEntityName}`,
+          staled_at: null,
+        },
+        {
+          onConflictAction: "merge",
+          onConflictFields: [
+            "pivot",
+            "parent_id",
+            "child_id",
+            "parent_name",
+            "child_name",
+          ],
+        }
+      )
     }
   }
 
@@ -645,9 +669,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
    * @protected
    */
   @InjectTransactionManager()
-  protected async onDetach<
-    TData extends { id: string; [key: string]: unknown }
-  >(
+  async onDetach<TData extends { id: string; [key: string]: unknown }>(
     {
       entity,
       data,
@@ -657,13 +679,11 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
       data: TData | TData[]
       schemaEntityObjectRepresentation: IndexTypes.SchemaObjectEntityRepresentation
     },
-    @MedusaContext() sharedContext: Context = {}
+    @MedusaContext() sharedContext: Context<SqlEntityManager> = {}
   ) {
-    const { transactionManager: em } = sharedContext as {
-      transactionManager: SqlEntityManager
-    }
-    const indexRepository = em.getRepository(toMikroORMEntity(IndexData))
-    const indexRelationRepository = em.getRepository(
+    const { transactionManager: em } = sharedContext
+    const indexRepository = em!.getRepository(toMikroORMEntity(IndexData))
+    const indexRelationRepository = em!.getRepository(
       toMikroORMEntity(IndexRelation)
     )
 

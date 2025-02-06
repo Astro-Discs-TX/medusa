@@ -13,7 +13,59 @@ export const generatedSidebar = [
     "type": "link",
     "path": "/examples",
     "title": "Examples",
-    "children": []
+    "isChildSidebar": true,
+    "children": [
+      {
+        "loaded": true,
+        "isPathHref": true,
+        "type": "ref",
+        "path": "/examples",
+        "title": "Example Snippets",
+        "children": []
+      },
+      {
+        "loaded": true,
+        "isPathHref": true,
+        "type": "ref",
+        "path": "/recipes",
+        "title": "Recipes",
+        "children": []
+      },
+      {
+        "loaded": true,
+        "isPathHref": true,
+        "type": "ref",
+        "path": "/plugins",
+        "title": "Plugins",
+        "children": []
+      },
+      {
+        "loaded": true,
+        "isPathHref": true,
+        "type": "ref",
+        "path": "/integrations",
+        "title": "Integrations",
+        "children": []
+      },
+      {
+        "loaded": true,
+        "isPathHref": true,
+        "type": "category",
+        "title": "Server Examples",
+        "autogenerate_tags": "example+server",
+        "autogenerate_as_ref": true,
+        "children": [
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "link",
+            "title": "Custom Item Price",
+            "path": "/examples/guides/custom-item-price",
+            "children": []
+          }
+        ]
+      }
+    ]
   },
   {
     "loaded": true,
@@ -1153,6 +1205,14 @@ export const generatedSidebar = [
                 "path": "/commerce-modules/cart/extend",
                 "title": "Extend Module",
                 "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Implement Custom Line Item Pricing in Medusa",
+                "path": "/examples/guides/custom-item-price",
+                "children": []
               }
             ]
           },
@@ -1210,7 +1270,7 @@ export const generatedSidebar = [
                 "loaded": true,
                 "isPathHref": true,
                 "type": "ref",
-                "title": "Checkout Step 2: Enter Address",
+                "title": "Checkout Step 2: Set Address",
                 "path": "/storefront-development/checkout/address",
                 "children": []
               },
@@ -4626,6 +4686,8 @@ export const generatedSidebar = [
             "type": "category",
             "title": "Concepts",
             "initialOpen": false,
+            "autogenerate_tags": "concept+inventory",
+            "autogenerate_as_ref": true,
             "children": [
               {
                 "loaded": true,
@@ -4657,6 +4719,14 @@ export const generatedSidebar = [
                 "type": "link",
                 "path": "/commerce-modules/inventory/links-to-other-modules",
                 "title": "Links to Modules",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Product Variant Inventory",
+                "path": "/commerce-modules/product/variant-inventory",
                 "children": []
               }
             ]
@@ -6651,14 +6721,6 @@ export const generatedSidebar = [
                         "loaded": true,
                         "isPathHref": true,
                         "type": "ref",
-                        "title": "updateOrderExchangesStep",
-                        "path": "/references/medusa-workflows/steps/updateOrderExchangesStep",
-                        "children": []
-                      },
-                      {
-                        "loaded": true,
-                        "isPathHref": true,
-                        "type": "ref",
                         "title": "updateOrderShippingMethodsStep",
                         "path": "/references/medusa-workflows/steps/updateOrderShippingMethodsStep",
                         "children": []
@@ -8025,7 +8087,7 @@ export const generatedSidebar = [
                     "type": "category",
                     "title": "Data Models",
                     "hasTitleStyling": true,
-                    "autogenerate_path": "/references/order_models/classes",
+                    "autogenerate_path": "/references/order_models/variables",
                     "children": [
                       {
                         "loaded": true,
@@ -8996,6 +9058,15 @@ export const generatedSidebar = [
                         "loaded": true,
                         "isPathHref": true,
                         "type": "link",
+                        "path": "/references/payment/listAndCountPaymentMethods",
+                        "title": "listAndCountPaymentMethods",
+                        "description": "",
+                        "children": []
+                      },
+                      {
+                        "loaded": true,
+                        "isPathHref": true,
+                        "type": "link",
                         "path": "/references/payment/listAndCountPaymentProviders",
                         "title": "listAndCountPaymentProviders",
                         "description": "",
@@ -9016,6 +9087,15 @@ export const generatedSidebar = [
                         "type": "link",
                         "path": "/references/payment/listPaymentCollections",
                         "title": "listPaymentCollections",
+                        "description": "",
+                        "children": []
+                      },
+                      {
+                        "loaded": true,
+                        "isPathHref": true,
+                        "type": "link",
+                        "path": "/references/payment/listPaymentMethods",
+                        "title": "listPaymentMethods",
                         "description": "",
                         "children": []
                       },
@@ -9363,6 +9443,14 @@ export const generatedSidebar = [
                 "type": "ref",
                 "title": "Get Variant Price with Taxes",
                 "path": "/commerce-modules/product/guides/price-with-taxes",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Implement Custom Line Item Pricing in Medusa",
+                "path": "/examples/guides/custom-item-price",
                 "children": []
               }
             ]
@@ -10320,6 +10408,14 @@ export const generatedSidebar = [
             "autogenerate_tags": "concept+product",
             "autogenerate_as_ref": true,
             "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "path": "/commerce-modules/product/variant-inventory",
+                "title": "Variant Inventory",
+                "children": []
+              },
               {
                 "loaded": true,
                 "isPathHref": true,
@@ -13182,6 +13278,8 @@ export const generatedSidebar = [
             "type": "category",
             "title": "Concepts",
             "initialOpen": false,
+            "autogenerate_tags": "concept+salesChannel",
+            "autogenerate_as_ref": true,
             "children": [
               {
                 "loaded": true,
@@ -13197,6 +13295,14 @@ export const generatedSidebar = [
                 "type": "link",
                 "path": "/commerce-modules/sales-channel/links-to-other-modules",
                 "title": "Links to Modules",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Product Variant Inventory",
+                "path": "/commerce-modules/product/variant-inventory",
                 "children": []
               }
             ]
@@ -13622,6 +13728,8 @@ export const generatedSidebar = [
             "type": "category",
             "title": "Concepts",
             "initialOpen": false,
+            "autogenerate_tags": "concept+stockLocation",
+            "autogenerate_as_ref": true,
             "children": [
               {
                 "loaded": true,
@@ -13637,6 +13745,22 @@ export const generatedSidebar = [
                 "type": "link",
                 "path": "/commerce-modules/stock-location/links-to-other-modules",
                 "title": "Links to Modules",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Inventory Kits",
+                "path": "/commerce-modules/inventory/inventory-kit",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Product Variant Inventory",
+                "path": "/commerce-modules/product/variant-inventory",
                 "children": []
               }
             ]
@@ -15945,6 +16069,41 @@ export const generatedSidebar = [
   {
     "loaded": true,
     "isPathHref": true,
+    "type": "ref",
+    "path": "/plugins",
+    "title": "Plugins",
+    "isChildSidebar": true,
+    "children": [
+      {
+        "loaded": true,
+        "isPathHref": true,
+        "type": "link",
+        "title": "Overview",
+        "path": "/plugins",
+        "children": []
+      },
+      {
+        "loaded": true,
+        "isPathHref": true,
+        "type": "category",
+        "title": "Guides",
+        "children": [
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "link",
+            "title": "Wishlist",
+            "path": "/plugins/guides/wishlist",
+            "description": "Learn how to build a wishlist plugin.",
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "loaded": true,
+    "isPathHref": true,
     "type": "link",
     "path": "/storefront-development",
     "title": "Storefront Development",
@@ -16238,7 +16397,7 @@ export const generatedSidebar = [
             "isPathHref": true,
             "type": "link",
             "path": "/storefront-development/checkout/address",
-            "title": "2. Enter Address",
+            "title": "2. Set Address",
             "children": []
           },
           {
@@ -16453,6 +16612,15 @@ export const generatedSidebar = [
                 "type": "link",
                 "path": "/medusa-cli/commands/db",
                 "title": "db",
+                "description": "",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "path": "/medusa-cli/commands/plugin",
+                "title": "plugin",
                 "description": "",
                 "children": []
               },
@@ -17231,6 +17399,14 @@ export const generatedSidebar = [
                 "path": "/troubleshooting/workflow-errors",
                 "title": "Workflow Errors",
                 "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "path": "/troubleshooting/test-errors",
+                "title": "Test Errors",
+                "children": []
               }
             ]
           },
@@ -17374,6 +17550,15 @@ export const generatedSidebar = [
                 "type": "link",
                 "path": "/admin-components/components/container",
                 "title": "Container",
+                "description": "",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "path": "/admin-components/components/data-table",
+                "title": "Data Table",
                 "description": "",
                 "children": []
               },
@@ -20972,15 +21157,6 @@ export const generatedSidebar = [
                     "type": "link",
                     "path": "/references/medusa-workflows/steps/updateOrderChangesStep",
                     "title": "updateOrderChangesStep",
-                    "description": "",
-                    "children": []
-                  },
-                  {
-                    "loaded": true,
-                    "isPathHref": true,
-                    "type": "link",
-                    "path": "/references/medusa-workflows/steps/updateOrderExchangesStep",
-                    "title": "updateOrderExchangesStep",
                     "description": "",
                     "children": []
                   },

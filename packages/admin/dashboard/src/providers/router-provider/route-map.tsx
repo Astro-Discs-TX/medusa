@@ -103,6 +103,13 @@ export const RouteMap: RouteObject[] = [
                           import("../../routes/products/product-organization"),
                       },
                       {
+                        path: "shipping-profile",
+                        lazy: () =>
+                          import(
+                            "../../routes/products/product-shipping-profile"
+                          ),
+                      },
+                      {
                         path: "media",
                         lazy: () =>
                           import("../../routes/products/product-media"),
@@ -348,6 +355,10 @@ export const RouteMap: RouteObject[] = [
                     lazy: () =>
                       import("../../routes/orders/order-edit-billing-address"),
                   },
+                  {
+                    path: "metadata/edit",
+                    lazy: () => import("../../routes/orders/order-metadata"),
+                  },
                 ],
               },
             ],
@@ -508,6 +519,11 @@ export const RouteMap: RouteObject[] = [
                       import(
                         "../../routes/collections/collection-add-products"
                       ),
+                  },
+                  {
+                    path: "metadata/edit",
+                    lazy: () =>
+                      import("../../routes/collections/collection-metadata"),
                   },
                 ],
               },
