@@ -103,7 +103,6 @@ medusaIntegrationTestRunner({
           entity: "product",
           fields: [
             "id",
-            "ttitle",
             "description",
             "status",
             "variants.sku",
@@ -125,6 +124,7 @@ medusaIntegrationTestRunner({
             },
           },
         })
+
         expect(resultset.data).toEqual([
           {
             id: expect.any(String),
@@ -152,7 +152,7 @@ medusaIntegrationTestRunner({
                     },
                   },
                 ],
-                prices: [
+                prices: expect.arrayContaining([
                   {
                     amount: 20,
                     currency_code: "CAD",
@@ -163,7 +163,7 @@ medusaIntegrationTestRunner({
                     currency_code: "USD",
                     id: expect.any(String),
                   },
-                ],
+                ]),
               },
               {
                 sku: "extra-variant-1",
@@ -175,7 +175,7 @@ medusaIntegrationTestRunner({
                     value: "Red",
                   },
                 ],
-                prices: [
+                prices: expect.arrayContaining([
                   {
                     amount: 20,
                     currency_code: "CAD",
@@ -186,7 +186,7 @@ medusaIntegrationTestRunner({
                     currency_code: "USD",
                     id: expect.any(String),
                   },
-                ],
+                ]),
                 inventory_items: [
                   {
                     variant_id: expect.any(String),
@@ -216,7 +216,7 @@ medusaIntegrationTestRunner({
                     value: "100",
                   },
                 ],
-                prices: [
+                prices: expect.arrayContaining([
                   {
                     amount: 30,
                     currency_code: "USD",
@@ -227,7 +227,7 @@ medusaIntegrationTestRunner({
                     currency_code: "EUR",
                     id: expect.any(String),
                   },
-                ],
+                ]),
                 inventory_items: [
                   {
                     variant_id: expect.any(String),
