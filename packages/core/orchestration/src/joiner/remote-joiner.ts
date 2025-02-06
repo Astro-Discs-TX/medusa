@@ -1377,66 +1377,54 @@ export class RemoteJoiner {
     relationship?: JoinerRelationship
   }) {
     if (!initialData.length || !relationship) {
-      return
+      return items
     }
 
     const primaryKeys = relationship?.primaryKey.split(",") || [
       serviceConfig.primaryKeys[0],
     ]
     const expandKeys = Object.keys(expands ?? {})
-    const initialDataMap = new Map(
-      initialData.map((dt) => [primaryKeys.map((key) => dt[key]).join(","), dt])
+
+    const initialDataIndexMap = new Map(
+      initialData.map((dt, index) => [
+        primaryKeys.map((key) => dt[key]).join(","),
+        index,
+      ])
+    )
+    const itemMap = new Map(
+      items.map((item) => [primaryKeys.map((key) => item[key]).join(","), item])
     )
 
-    const propPath = path.split(".")
-    items.forEach((mainItem) => {
-      let nestedItems = [mainItem]
+    const orderedMergedItems = new Array(initialData.length)
+    for (const [key, index] of initialDataIndexMap.entries()) {
+      const iniData = initialData[index]
+      const item = itemMap.get(key)
 
-      for (const prop of propPath) {
-        if (prop === BASE_PATH) {
-          continue
-        }
-
-        nestedItems = nestedItems
-          .flatMap((item) => item?.[prop] ?? [])
-          .filter(isDefined)
+      if (!item) {
+        orderedMergedItems[index] = iniData
+        continue
       }
 
-      if (!nestedItems.length) {
-        return
+      // Only merge properties that are not relations
+      const shallowProperty = { ...iniData }
+      for (const key of expandKeys) {
+        const isRel = !!this.getEntityRelationship({
+          parentServiceConfig: serviceConfig,
+          property: key,
+        })
+        if (isRel) {
+          delete shallowProperty[key]
+        }
       }
 
-      nestedItems.forEach((nestedItem) => {
-        if (!isDefined(nestedItem)) {
-          return
-        }
+      Object.assign(item, shallowProperty)
+      orderedMergedItems[index] = item
+    }
 
-        const key = primaryKeys.map((pk) => nestedItem[pk]).join(",")
-
-        const iniData = initialDataMap.get(key)
-        if (iniData) {
-          // Only merge properties that are not relations
-          const shallowProperty = { ...iniData }
-          for (const key of expandKeys) {
-            const isRel = !!this.getEntityRelationship({
-              parentServiceConfig: serviceConfig,
-              property: key,
-            })
-            if (isRel) {
-              delete shallowProperty[key]
-            }
-          }
-
-          Object.assign(nestedItem, shallowProperty)
-        }
-      })
-    })
-
-    // Recursively merge initial data for all expands
     if (expands) {
       for (const expand of expandKeys) {
         this.mergeInitialData({
-          items,
+          items: items.flatMap((dt) => dt[expand] ?? []),
           initialData: initialData
             .flatMap((dt) => dt[expand] ?? [])
             .filter(isDefined),
@@ -1450,6 +1438,8 @@ export class RemoteJoiner {
         })
       }
     }
+
+    return orderedMergedItems
   }
 
   async query(
@@ -1534,10 +1524,12 @@ export class RemoteJoiner {
     })
 
     let data = response.path ? response.data[response.path!] : response.data
-    data = Array.isArray(data) ? data : [data]
+    const isDataArray = Array.isArray(data)
+
+    data = isDataArray ? data : [data]
 
     if (options?.initialData) {
-      this.mergeInitialData({
+      data = this.mergeInitialData({
         items: data,
         initialData: iniDataArray,
         serviceConfig,
@@ -1558,7 +1550,7 @@ export class RemoteJoiner {
       options,
     })
 
-    return response.data
+    return isDataArray ? data : data[0]
   }
 }
 
