@@ -365,12 +365,19 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
         return acc
       }, {}) as TData
 
-      await indexRepository.upsert({
-        id: cleanedEntityData.id,
-        name: entity,
-        data: cleanedEntityData,
-        staled_at: null,
-      })
+      await indexRepository.upsert(
+        {
+          id: cleanedEntityData.id,
+          name: entity,
+          data: cleanedEntityData,
+          staled_at: null,
+        },
+        {
+          onConflictAction: "merge",
+          onConflictFields: ["id", "name"],
+          onConflictMergeFields: ["data", "staled_at"],
+        }
+      )
 
       /**
        * Retrieve the parents to attach it to the index entry.
@@ -391,12 +398,19 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
           : [parentData]
 
         for (const parentData_ of parentDataCollection) {
-          await indexRepository.upsert({
-            id: (parentData_ as any).id,
-            name: parentEntity,
-            data: parentData_,
-            staled_at: null,
-          })
+          await indexRepository.upsert(
+            {
+              id: (parentData_ as any).id,
+              name: parentEntity,
+              data: parentData_,
+              staled_at: null,
+            },
+            {
+              onConflictAction: "merge",
+              onConflictFields: ["id", "name"],
+              onConflictMergeFields: ["data", "staled_at"],
+            }
+          )
 
           await indexRelationRepository.upsert(
             {
@@ -416,6 +430,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
                 "parent_name",
                 "child_name",
               ],
+              onConflictMergeFields: ["staled_at"],
             }
           )
         }
@@ -453,17 +468,24 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
     )
 
     await indexRepository.upsertMany(
-      data_.map((entityData) => {
-        return {
-          id: entityData.id,
-          name: entity,
-          data: entityProperties.reduce((acc, property) => {
-            acc[property] = entityData[property]
-            return acc
-          }, {}),
-          staled_at: null,
+      data_.map(
+        (entityData) => {
+          return {
+            id: entityData.id,
+            name: entity,
+            data: entityProperties.reduce((acc, property) => {
+              acc[property] = entityData[property]
+              return acc
+            }, {}),
+            staled_at: null,
+          }
+        },
+        {
+          onConflictAction: "merge",
+          onConflictFields: ["id", "name"],
+          onConflictMergeFields: ["data", "staled_at"],
         }
-      })
+      )
     )
   }
 
@@ -605,12 +627,19 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
         return acc
       }, {}) as TData
 
-      await indexRepository.upsert({
-        id: cleanedEntityData.id,
-        name: entity,
-        data: cleanedEntityData,
-        staled_at: null,
-      })
+      await indexRepository.upsert(
+        {
+          id: cleanedEntityData.id,
+          name: entity,
+          data: cleanedEntityData,
+          staled_at: null,
+        },
+        {
+          onConflictAction: "merge",
+          onConflictFields: ["id", "name"],
+          onConflictMergeFields: ["data", "staled_at"],
+        }
+      )
 
       /**
        * Create the index relation entries for the parent entity and the child entity
@@ -634,6 +663,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
             "parent_name",
             "child_name",
           ],
+          onConflictMergeFields: ["staled_at"],
         }
       )
 
@@ -655,6 +685,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
             "parent_name",
             "child_name",
           ],
+          onConflictMergeFields: ["staled_at"],
         }
       )
     }
