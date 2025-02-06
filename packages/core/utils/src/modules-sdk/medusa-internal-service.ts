@@ -11,7 +11,6 @@ import {
 } from "@medusajs/types"
 import type { EntityClass, EntitySchema } from "@mikro-orm/core"
 import {
-  flattenObjectToKeyValuePairs,
   isDefined,
   isObject,
   isPresent,
@@ -103,22 +102,6 @@ export function MedusaInternalService<
       primaryKeys.forEach((primaryKey) => {
         config.order![primaryKey] = "ASC"
       })
-    }
-
-    protected validateInput(input: any) {
-      if (isObject(input)) {
-        Object.entries(flattenObjectToKeyValuePairs(input)).forEach((entry) => {
-          const [key, value] = entry
-          if (!isDefined(value)) {
-            throw new MedusaError(
-              MedusaError.Types.INVALID_DATA,
-              `${model.name}: Property ${key} is undefined.`
-            )
-          }
-        })
-      } else if (Array.isArray(input)) {
-        input.forEach((value) => this.validateInput(value))
-      }
     }
 
     @InjectManager(propertyRepositoryName)
@@ -266,8 +249,6 @@ export function MedusaInternalService<
       input: any | any[] | SelectorAndData | SelectorAndData[],
       @MedusaContext() sharedContext: Context = {}
     ): Promise<InferEntityType<TEntity> | InferEntityType<TEntity>[]> {
-      this.validateInput(input)
-
       if (!isDefined(input) || (Array.isArray(input) && input.length === 0)) {
         return (Array.isArray(input) ? [] : void 0) as
           | InferEntityType<TEntity>
@@ -405,8 +386,6 @@ export function MedusaInternalService<
         return
       }
 
-      this.validateInput(idOrSelector)
-
       const primaryKeys = AbstractService_.retrievePrimaryKeys(model)
 
       if (
@@ -506,8 +485,6 @@ export function MedusaInternalService<
       ) {
         return [[], {}]
       }
-
-      this.validateInput(idsOrFilter)
 
       return await this[propertyRepositoryName].softDelete(
         idsOrFilter,
