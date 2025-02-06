@@ -1,6 +1,6 @@
-import { medusaIntegrationTestRunner } from "@medusajs/test-utils"
 import { IndexTypes } from "@medusajs/types"
 import { defaultCurrencies, Modules } from "@medusajs/utils"
+import { medusaIntegrationTestRunner } from "@medusajs/test-utils"
 import { setTimeout } from "timers/promises"
 import {
   adminHeaders,
@@ -65,7 +65,7 @@ medusaIntegrationTestRunner({
           })
 
         // Timeout to allow indexing to finish
-        await setTimeout(4000)
+        await setTimeout(2000)
 
         const { data: results } = await indexEngine.query<"product">({
           fields: [
@@ -144,7 +144,7 @@ medusaIntegrationTestRunner({
           })
 
         // Timeout to allow indexing to finish
-        await setTimeout(4000)
+        await setTimeout(2000)
 
         const { data: results } = await indexEngine.query<"product">({
           fields: [
@@ -224,7 +224,7 @@ medusaIntegrationTestRunner({
           })
         }
 
-        await setTimeout(3000)
+        await setTimeout(5000)
 
         const queryArgs = {
           fields: [
