@@ -58,10 +58,10 @@ describe("GraphQL builder", () => {
       }
 
       enum UserRoleEnum {
-        MODERATOR
-        ADMIN
-        GUEST
-        NEW_USER
+        moderator
+        admin
+        guest
+        new_user
       }
 
       type User {
