@@ -53,7 +53,7 @@ export const CollectionProductSection = ({
     },
   })
 
-  const prompt = usePrompt()
+  const prompt = usePrompt({ singleton: true })
 
   const { mutateAsync } = useUpdateCollectionProducts(collection.id!)
 

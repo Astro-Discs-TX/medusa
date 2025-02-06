@@ -25,7 +25,7 @@ export const ApiKeySalesChannelSection = ({
 }: ApiKeySalesChannelSectionProps) => {
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
   const { t } = useTranslation()
-  const prompt = usePrompt()
+  const prompt = usePrompt({ singleton: true })
 
   const { raw, searchParams } = useSalesChannelTableQuery({
     pageSize: PAGE_SIZE,

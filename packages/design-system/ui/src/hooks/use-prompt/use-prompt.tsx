@@ -3,11 +3,20 @@
 import * as React from "react"
 import { createRoot } from "react-dom/client"
 import { RenderPrompt, RenderPromptProps } from "./render-prompt"
+import { useRef } from "react"
 
 type UsePromptProps = Omit<RenderPromptProps, "onConfirm" | "onCancel" | "open">
 
-const usePrompt = () => {
+const usePrompt = ({ singleton = false }: { singleton?: boolean } = {}) => {
+  const flag = useRef(false)
+
   const prompt = async (props: UsePromptProps): Promise<boolean> => {
+    if (singleton && flag.current) {
+      return false
+    }
+
+    flag.current = true
+
     return new Promise((resolve) => {
       let open = true
 
@@ -17,6 +26,7 @@ const usePrompt = () => {
         open = false
         mountRoot.unmount()
         resolve(false)
+        flag.current = false
 
         // TEMP FIX for Radix issue with dropdowns persisting pointer-events: none on body after closing
         document.body.style.pointerEvents = "auto"
@@ -26,6 +36,7 @@ const usePrompt = () => {
         open = false
         resolve(true)
         mountRoot.unmount()
+        flag.current = false
 
         // TEMP FIX for Radix issue with dropdowns persisting pointer-events: none on body after closing
         document.body.style.pointerEvents = "auto"

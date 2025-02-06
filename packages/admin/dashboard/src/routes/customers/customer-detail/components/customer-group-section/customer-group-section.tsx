@@ -38,7 +38,7 @@ const PREFIX = "cusgr"
 export const CustomerGroupSection = ({
   customer,
 }: CustomerGroupSectionProps) => {
-  const prompt = usePrompt()
+  const prompt = usePrompt({ singleton: true })
 
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
   const { raw, searchParams } = useCustomerGroupTableQuery({
