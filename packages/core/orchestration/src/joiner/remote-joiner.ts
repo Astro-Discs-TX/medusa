@@ -1550,7 +1550,14 @@ export class RemoteJoiner {
       options,
     })
 
-    return isDataArray ? data : data[0]
+    const retData = isDataArray ? data : data[0]
+    if (response.path) {
+      response.data[response.path] = retData
+    } else {
+      response.data = retData
+    }
+
+    return response.data
   }
 }
 

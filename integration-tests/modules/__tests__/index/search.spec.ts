@@ -257,7 +257,7 @@ medusaIntegrationTestRunner({
           })
 
         // Timeout to allow indexing to finish
-        await setTimeout(5000)
+        await setTimeout(3000)
 
         const query = appContainer.resolve(
           ContainerRegistrationKeys.QUERY
@@ -445,7 +445,7 @@ medusaIntegrationTestRunner({
           })
         }
 
-        await setTimeout(5000)
+        await setTimeout(3000)
 
         const queryArgs = {
           fields: [

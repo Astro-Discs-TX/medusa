@@ -817,7 +817,7 @@ describe("RemoteJoiner", () => {
     )
   })
 
-  it.only("Should merge initial data with data fetched", async () => {
+  it("Should merge initial data with data fetched", async () => {
     const query = RemoteJoiner.parseQuery(`
       query {
         order {
