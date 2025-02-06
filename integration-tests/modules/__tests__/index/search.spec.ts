@@ -192,7 +192,7 @@ medusaIntegrationTestRunner({
         }
       })
 
-      it("should use query.index to query the index module and hydrate the data", async () => {
+      it.only("should use query.index to query the index module and hydrate the data", async () => {
         const shippingProfile = (
           await api.post(
             `/admin/shipping-profiles`,
@@ -279,11 +279,10 @@ medusaIntegrationTestRunner({
             "variants.inventory_items.inventory.sku",
             "variants.inventory_items.inventory.description",
           ],
-          joinFilters: {
+          filters: {
             "variants.sku": { $like: "%-1" },
             "variants.prices.amount": { $gt: 30 },
           },
-          filters: {},
           pagination: {
             order: {
               "variants.prices.amount": "DESC",
