@@ -69,7 +69,7 @@ medusaIntegrationTestRunner({
           })
 
         // Timeout to allow indexing to finish
-        await setTimeout(2000)
+        await setTimeout(4000)
 
         const { data: results } = await indexEngine.query<"product">({
           fields: [
@@ -148,7 +148,7 @@ medusaIntegrationTestRunner({
           })
 
         // Timeout to allow indexing to finish
-        await setTimeout(2000)
+        await setTimeout(4000)
 
         const { data: results } = await indexEngine.query<"product">({
           fields: [
@@ -192,7 +192,7 @@ medusaIntegrationTestRunner({
         }
       })
 
-      it.only("should use query.index to query the index module and hydrate the data", async () => {
+      it("should use query.index to query the index module and hydrate the data", async () => {
         const shippingProfile = (
           await api.post(
             `/admin/shipping-profiles`,
