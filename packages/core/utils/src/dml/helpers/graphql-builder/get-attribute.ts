@@ -43,7 +43,7 @@ export function getGraphQLAttributeFromDMLPropety(
       const enumName = toPascalCase(modelName + "_" + field.fieldName + "Enum")
       const enumValues = field.dataType
         .options!.choices.map((value) => {
-          const enumValue = value.replace(/[^a-z0-9_]/gi, "_").toUpperCase()
+          const enumValue = value.replace(/[^a-z0-9_]/gi, "_")
           return `  ${enumValue}`
         })
         .join("\n")
