@@ -78,7 +78,7 @@ The `Terraform module for Medusa` sets up the following AWS resources to support
 Clone the Terraform module repository to your local machine:
 ```bash
 git clone https://github.com/u11d-com/terraform-aws-medusajs
-cd terraform-u11d-medusajs/examples/minimal
+cd terraform-aws-medusajs/examples/minimal
 ```
 
 ### Step 2: Provide Variables for the Module
