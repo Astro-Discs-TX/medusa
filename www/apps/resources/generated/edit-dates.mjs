@@ -102,7 +102,7 @@ export const generatedEditDates = {
   "app/contribution-guidelines/docs/page.mdx": "2024-12-12T11:06:12.250Z",
   "app/create-medusa-app/page.mdx": "2025-01-16T10:00:25.975Z",
   "app/deployment/admin/vercel/page.mdx": "2024-10-16T08:10:29.377Z",
-  "app/deployment/medusa-application/railway/page.mdx": "2025-02-03T09:51:08.102Z",
+  "app/deployment/medusa-application/railway/page.mdx": "2025-02-06T13:28:24.999Z",
   "app/deployment/storefront/vercel/page.mdx": "2025-01-06T12:19:31.142Z",
   "app/deployment/page.mdx": "2024-11-25T14:31:45.277Z",
   "app/integrations/page.mdx": "2024-12-16T16:46:12.395Z",
@@ -2178,7 +2178,7 @@ export const generatedEditDates = {
   "app/commerce-modules/store/links-to-other-modules/page.mdx": "2024-12-24T14:58:24.038Z",
   "app/examples/page.mdx": "2025-02-04T07:36:39.956Z",
   "app/medusa-cli/commands/build/page.mdx": "2024-11-11T11:00:49.665Z",
-  "app/js-sdk/page.mdx": "2024-12-12T11:41:51.152Z",
+  "app/js-sdk/page.mdx": "2025-02-05T09:12:11.479Z",
   "references/js_sdk/admin/Admin/properties/js_sdk.admin.Admin.apiKey/page.mdx": "2025-01-13T18:05:58.463Z",
   "references/js_sdk/admin/Admin/properties/js_sdk.admin.Admin.campaign/page.mdx": "2024-12-26T11:37:18.121Z",
   "references/js_sdk/admin/Admin/properties/js_sdk.admin.Admin.claim/page.mdx": "2025-01-13T18:05:58.348Z",
@@ -3147,7 +3147,7 @@ export const generatedEditDates = {
   "references/types/HttpTypes/interfaces/types.HttpTypes.AdminBatchProductVariantRequest/page.mdx": "2024-12-09T13:21:34.309Z",
   "references/types/WorkflowTypes/ProductWorkflow/interfaces/types.WorkflowTypes.ProductWorkflow.ExportProductsDTO/page.mdx": "2025-01-13T18:05:55.538Z",
   "app/contribution-guidelines/admin-translations/page.mdx": "2024-11-14T08:54:15.369Z",
-  "app/integrations/guides/sanity/page.mdx": "2025-02-04T07:36:48.007Z",
+  "app/integrations/guides/sanity/page.mdx": "2025-02-05T09:10:44.478Z",
   "references/api_key/types/api_key.FindConfigOrder/page.mdx": "2024-11-25T17:49:28.715Z",
   "references/auth/types/auth.FindConfigOrder/page.mdx": "2024-11-25T17:49:28.887Z",
   "references/cart/types/cart.FindConfigOrder/page.mdx": "2024-11-25T17:49:29.455Z",
@@ -5864,7 +5864,7 @@ export const generatedEditDates = {
   "references/core_flows/types/core_flows.ThrowUnlessPaymentCollectionNotePaidInput/page.mdx": "2025-01-17T16:43:25.819Z",
   "references/core_flows/types/core_flows.ValidatePaymentsRefundStepInput/page.mdx": "2025-01-17T16:43:26.128Z",
   "references/core_flows/types/core_flows.ValidateRefundStepInput/page.mdx": "2025-01-17T16:43:26.124Z",
-  "app/plugins/guides/wishlist/page.mdx": "2025-01-23T11:59:10.008Z",
+  "app/plugins/guides/wishlist/page.mdx": "2025-02-05T09:12:22.965Z",
   "app/plugins/page.mdx": "2025-01-22T09:36:37.745Z",
   "app/admin-components/components/data-table/page.mdx": "2025-01-22T16:01:01.279Z",
   "references/order_models/variables/order_models.Order/page.mdx": "2025-01-27T11:43:58.788Z",
@@ -5903,5 +5903,6 @@ export const generatedEditDates = {
   "references/types/interfaces/types.BaseProductTypeListParams/page.mdx": "2025-01-27T11:43:54.550Z",
   "references/core_flows/Order/Steps_Order/variables/core_flows.Order.Steps_Order.updateOrderChangesStepId/page.mdx": "2025-01-27T11:43:49.278Z",
   "app/troubleshooting/test-errors/page.mdx": "2025-01-31T13:08:42.639Z",
-  "app/commerce-modules/product/variant-inventory/page.mdx": "2025-02-03T12:19:45.706Z"
+  "app/commerce-modules/product/variant-inventory/page.mdx": "2025-02-03T12:19:45.706Z",
+  "app/examples/guides/custom-item-price/page.mdx": "2025-02-06T10:37:57.282Z"
 }
