@@ -1,5 +1,6 @@
 import {
   AuthenticatedMedusaRequest,
+  getAuthContextFromJwtToken,
   MedusaNextFunction,
   MedusaRequest,
   MedusaResponse,
@@ -11,7 +12,12 @@ import {
   Modules,
 } from "@medusajs/framework/utils"
 import { HttpTypes } from "@medusajs/types"
-import { decode, JwtPayload, verify } from "jsonwebtoken"
+
+export interface UpdateProviderJwtPayload {
+  entity_id: string
+  actor_type: string
+  provider: string
+}
 
 // Middleware to validate that a token is valid
 export const validateToken = () => {
@@ -22,9 +28,19 @@ export const validateToken = () => {
   ) => {
     const { actor_type, auth_provider } = req.params
 
-    const token = req.body?.token
-
     const req_ = req as AuthenticatedMedusaRequest
+
+    // @ts-ignore
+    const { http } = req_.scope.resolve<ConfigModule>(
+      ContainerRegistrationKeys.CONFIG_MODULE
+    ).projectConfig
+
+    const token = getAuthContextFromJwtToken(
+      req.headers.authorization,
+      http.jwtSecret as string,
+      ["bearer"],
+      [actor_type]
+    ) as UpdateProviderJwtPayload | null
 
     const errorObject = new MedusaError(
       MedusaError.Types.UNAUTHORIZED,
@@ -32,32 +48,23 @@ export const validateToken = () => {
     )
 
     if (!token) {
-      return next(
-        new MedusaError(MedusaError.Types.UNAUTHORIZED, `No token provided`)
-      )
+      return next(errorObject)
     }
-
-    // @ts-ignore
-    const { http } = req_.scope.resolve<ConfigModule>(
-      ContainerRegistrationKeys.CONFIG_MODULE
-    ).projectConfig
 
     const authModule = req.scope.resolve<IAuthModuleService>(Modules.AUTH)
 
-    const decoded = decode(token as string) as JwtPayload
-
-    if (!decoded?.entity_id) {
+    if (!token?.entity_id) {
       return next(errorObject)
     }
 
     // E.g. token was requested for a customer, but attempted used for a user
-    if (decoded?.actor_type !== actor_type) {
+    if (token?.actor_type !== actor_type) {
       return next(errorObject)
     }
 
     const [providerIdentity] = await authModule.listProviderIdentities(
       {
-        entity_id: decoded.entity_id,
+        entity_id: token.entity_id,
         provider: auth_provider,
       },
       {
@@ -66,12 +73,6 @@ export const validateToken = () => {
     )
 
     if (!providerIdentity) {
-      return next(errorObject)
-    }
-
-    try {
-      verify(token as string, http.jwtSecret as string) as JwtPayload
-    } catch (error) {
       return next(errorObject)
     }
 

@@ -199,9 +199,11 @@ medusaIntegrationTestRunner({
         })
 
         const response = await api.post(`/auth/user/emailpass/update`, {
-          token: result,
-          email: "test@medusa-commerce.com",
           password: "new_password",
+        }, {
+          headers: {
+            authorization: `Bearer ${result}`,
+          },
         })
 
         expect(response.status).toEqual(200)
@@ -248,10 +250,15 @@ medusaIntegrationTestRunner({
         })
 
         const response = await api.post(`/auth/user/emailpass/update`, {
-          token: result,
-          email: "test+new@medusa-commerce.com",
-          password: "new_password",
-        })
+            email: "test+new@medusa-commerce.com",
+            password: "new_password",
+          },
+          {
+            headers: {
+              authorization: `Bearer ${result}`,
+            },
+          }
+        )
 
         expect(response.status).toEqual(200)
         expect(response.data).toEqual({ success: true })
@@ -303,10 +310,13 @@ medusaIntegrationTestRunner({
 
         const response = await api
           .post(`/auth/user/emailpass/update`, {
-            token: result,
-            email: "test@medusa-commerce.com",
             password: "new_password",
-          })
+          }, {
+            headers: {
+              authorization: `Bearer ${result}`,
+            },
+          }
+          )
           .catch((e) => e)
 
         expect(response.response.status).toEqual(401)
@@ -332,7 +342,7 @@ medusaIntegrationTestRunner({
           .catch((e) => e)
 
         expect(response.response.status).toEqual(401)
-        expect(response.response.data.message).toEqual("No token provided")
+        expect(response.response.data.message).toEqual("Invalid token")
       })
 
       it("should fail if update is attempted on different actor type", async () => {
@@ -361,10 +371,13 @@ medusaIntegrationTestRunner({
 
         const response = await api
           .post(`/auth/customer/emailpass/update`, {
-            token: result,
-            email: "test@medusa-commerce.com",
             password: "new_password",
-          })
+          }, {
+            headers: {
+              authorization: `Bearer ${result}`,
+            },
+          }
+          )
           .catch((e) => e)
 
         expect(response.response.status).toEqual(401)
@@ -397,10 +410,13 @@ medusaIntegrationTestRunner({
 
         const response = await api
           .post(`/auth/user/emailpass/update`, {
-            token: result,
-            email: "test@medusa-commerce.com",
             password: "new_password",
-          })
+          }, {
+            headers: {
+              authorization: `Bearer ${result}`,
+            },
+          }
+          )
           .catch((e) => e)
 
         expect(response.response.status).toEqual(401)

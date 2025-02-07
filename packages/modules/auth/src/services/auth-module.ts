@@ -249,7 +249,8 @@ export default class AuthModuleService
   }
 
   getAuthIdentityProviderService(
-    provider: string
+    provider: string,
+    authIdentityId?: string
   ): AuthIdentityProviderService {
     return {
       retrieve: async ({ entity_id }) => {
