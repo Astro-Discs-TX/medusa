@@ -36,6 +36,26 @@ export const capturePaymentStep = createStep(
 
     const payment = await paymentModule.capturePayment(input)
 
-    return new StepResponse(payment)
+    return new StepResponse(payment, payment)
+  },
+  async (payment, { container }) => {
+    if (!payment) {
+      return
+    }
+
+    const paymentModule = container.resolve<IPaymentModuleService>(
+      Modules.PAYMENT
+    )
+
+    // Every time we capture a payment, we create a new capture. We want to delete the newset capture if we capture a payment again.
+    const latestCapture = (payment.captures ?? []).sort((a, b) => {
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    })[0]
+
+    if (!latestCapture) {
+      return
+    }
+
+    await paymentModule.deleteCaptures([latestCapture.id])
   }
 )

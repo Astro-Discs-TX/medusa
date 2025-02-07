@@ -37,5 +37,25 @@ export const refundPaymentStep = createStep(
     const payment = await paymentModule.refundPayment(input)
 
     return new StepResponse(payment)
+  },
+  async (payment, { container }) => {
+    if (!payment) {
+      return
+    }
+
+    const paymentModule = container.resolve<IPaymentModuleService>(
+      Modules.PAYMENT
+    )
+
+    // Every time we refund a payment, we create a new refund. We want to delete the newset refund if we refund a payment again.
+    const latestRefund = (payment.refunds ?? []).sort((a, b) => {
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    })[0]
+
+    if (!latestRefund) {
+      return
+    }
+
+    await paymentModule.deleteRefunds([latestRefund.id])
   }
 )
