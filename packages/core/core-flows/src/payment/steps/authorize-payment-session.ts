@@ -54,7 +54,6 @@ export const authorizePaymentSessionStep = createStep(
       logger.error(
         `Error was thrown trying to authorize payment session - ${input.id} - ${e}`
       )
-      throw e
     }
 
     const paymentSession = await paymentModule.retrievePaymentSession(

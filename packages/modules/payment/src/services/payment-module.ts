@@ -881,6 +881,7 @@ export default class PaymentModuleService
     let authorizedAmount = MathBN.convert(0)
     let capturedAmount = MathBN.convert(0)
     let refundedAmount = MathBN.convert(0)
+    let completedAt: Date | undefined
 
     for (const ps of paymentSessions) {
       if (ps.status === PaymentSessionStatus.AUTHORIZED) {
@@ -907,6 +908,11 @@ export default class PaymentModuleService
         : PaymentCollectionStatus.PARTIALLY_AUTHORIZED
     }
 
+    if (MathBN.eq(paymentCollection.amount, capturedAmount)) {
+      status = PaymentCollectionStatus.COMPLETED
+      completedAt = new Date()
+    }
+
     await this.paymentCollectionService_.update(
       {
         id: paymentCollectionId,
@@ -914,6 +920,7 @@ export default class PaymentModuleService
         authorized_amount: authorizedAmount,
         captured_amount: capturedAmount,
         refunded_amount: refundedAmount,
+        completed_at: completedAt,
       },
       sharedContext
     )
