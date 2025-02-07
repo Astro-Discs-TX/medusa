@@ -40,7 +40,7 @@ After the installation is done, the plugin structure will look like this:
 - `src/jobs`: Contains [scheduled jobs](../../scheduled-jobs/page.mdx).
 - `src/links`: Contains [module links](../../module-links/page.mdx).
 - `src/modules`: Contains [modules](../../modules/page.mdx).
-- `src/provider`: Contains module providers, which require some additional setup as explained in [this section](#building-module-providers).
+- `src/provider`: Contains [module providers](#create-module-providers).
 - `src/subscribers`: Contains [subscribers](../../events-and-subscribers/page.mdx).
 - `src/workflows`: Contains [workflows](../../workflows/page.mdx). You can also add [hooks](../../workflows/add-workflow-hook/page.mdx) under `src/workflows/hooks`.
 - `package.json`: Contains the plugin's package information, including general information and dependencies.
@@ -203,12 +203,6 @@ While your Medusa application is running and the plugin is being watched, you ca
 
 You can now build your plugin's customizations. The following guide explains how to build different customizations in your plugin.
 
-<Note title="Tip">
-
-For module providers, refer to [this section](#building-module-providers).
-
-</Note>
-
 <CardList
   items={[
     {
@@ -267,11 +261,9 @@ This command generates migrations for all modules in the plugin. You can then ru
 npx medusa db:migrate
 ```
 
-### Building Module Providers
+### Importing Module Resources
 
-If you're building a module provider, such as a Notification Module Provider, you need to change how your plugin package exports files. That's because a module provider is registered as part of another module, and not automatically registered like other modules.
-
-In your plugin project, add an `exports` field to your `package.json` file:
+Your plugin project should have the following exports in `package.json`:
 
 ```json title="package.json"
 {
@@ -291,7 +283,7 @@ Aside from the `./package.json` and `./providers`, these exports are only a reco
 
 </Note>
 
-You export the following files and directories:
+The plugin exports the following files and directories:
 
 - `./package.json`: The package.json file. Medusa needs to access the `package.json` when registering the plugin.
 - `./workflows`: The workflows exported in `./src/workflows/index.ts`.
@@ -314,7 +306,7 @@ import BlogModule from "@myorg/plugin-name/modules/blog"
 import BlogType from "@myorg/plugin-name/types/blog"
 ```
 
-And you can register a provider in the Medusa application's `medusa-config.ts` like this:
+And you can register a module provider in the Medusa application's `medusa-config.ts` like this:
 
 ```ts highlights={[["9"]]}
 module.exports = defineConfig({
@@ -340,6 +332,8 @@ module.exports = defineConfig({
 ```
 
 You pass to `resolve` the path to the provider relative to the plugin package. So, in this example, the `my-notification` provider is located in `./src/providers/my-notification/index.ts` of the plugin.
+
+### Create Module Providers
 
 To learn how to create module providers, refer to the following guides:
 
@@ -433,5 +427,3 @@ npm publish
 ```
 
 This will publish an updated version of your plugin under a new version.
-
----
