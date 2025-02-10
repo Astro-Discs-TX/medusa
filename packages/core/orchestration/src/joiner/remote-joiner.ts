@@ -891,14 +891,21 @@ export class RemoteJoiner {
       initialData,
     } = params
 
-    const parsedExpands = this.parseProperties({
+    const { parsedExpands, aliasRealPathMap } = this.parseProperties({
       initialService,
       query,
       serviceConfig,
       expands,
       implodeMapping,
-      initialData: options?.initialData ? initialData : undefined,
     })
+
+    if (initialData?.length) {
+      this.createFilterFromInitialData({
+        initialData: options?.initialData as any,
+        parsedExpands,
+        aliasRealPathMap,
+      })
+    }
 
     const groupedExpands = this.groupExpands(parsedExpands)
 
@@ -911,16 +918,12 @@ export class RemoteJoiner {
     serviceConfig: InternalJoinerServiceConfig
     expands: RemoteJoinerQuery["expands"]
     implodeMapping: InternalImplodeMapping[]
-    initialData?: any[]
-  }): Map<string, RemoteExpandProperty> {
-    const {
-      initialService,
-      query,
-      serviceConfig,
-      expands,
-      implodeMapping,
-      initialData,
-    } = params
+  }): {
+    parsedExpands: Map<string, RemoteExpandProperty>
+    aliasRealPathMap: Map<string, string[]>
+  } {
+    const { initialService, query, serviceConfig, expands, implodeMapping } =
+      params
 
     const aliasRealPathMap = new Map<string, string[]>()
     const parsedExpands = new Map<string, any>()
@@ -1057,15 +1060,7 @@ export class RemoteJoiner {
       }
     }
 
-    if (initialData) {
-      this.createFilterFromInitialData({
-        initialData,
-        parsedExpands,
-        aliasRealPathMap,
-      })
-    }
-
-    return parsedExpands
+    return { parsedExpands, aliasRealPathMap }
   }
 
   private getEntity({ entity, prop }: { entity: string; prop: string }) {
@@ -1579,10 +1574,10 @@ function gerPrimaryKeysAndOtherFilters({ serviceConfig, queryObj }): {
     (arg) => !serviceConfig.primaryKeys.includes(arg.name)
   )
 
-  const filters =
-    queryObj.args?.find((arg) => arg.name === "filters")?.value ?? {}
-
   if (!primaryKeyArg) {
+    const filters =
+      queryObj.args?.find((arg) => arg.name === "filters")?.value ?? {}
+
     const primaryKeyFilter = Object.keys(filters).find((key) => {
       return serviceConfig.primaryKeys.includes(key)
     })
