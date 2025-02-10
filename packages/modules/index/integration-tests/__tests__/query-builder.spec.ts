@@ -14,6 +14,7 @@ import { asValue } from "awilix"
 import path from "path"
 import { EventBusServiceMock } from "../__fixtures__"
 import { dbName } from "../__fixtures__/medusa-config"
+import { performance } from "perf_hooks"
 
 const eventBusMock = new EventBusServiceMock()
 const queryMock = jest.fn().mockReturnValue({
@@ -657,15 +658,23 @@ describe("IndexModuleService query", function () {
     ])
   })
 
-  it("should paginate products", async () => {
-    const { data } = await module.query({
+  it.only("should paginate products", async () => {
+    const performance_ = performance.now()
+    const { data, metadata } = await module.query({
       fields: ["product.*", "product.variants.*", "product.variants.prices.*"],
       pagination: {
         take: 1,
         skip: 1,
       },
     })
+    const performance2 = performance.now()
+    console.log(`Time taken: ${performance2 - performance_} milliseconds`)
 
+    expect(metadata).toEqual({
+      count: 2,
+      skip: 1,
+      take: 1,
+    })
     expect(data).toEqual([
       {
         id: "prod_2",

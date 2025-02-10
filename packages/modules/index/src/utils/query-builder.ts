@@ -530,7 +530,15 @@ export class QueryBuilder {
     return result
   }
 
-  public buildQuery(countAllResults = true, returnIdOnly = false): string {
+  public buildQuery({
+    hasPagination = true,
+    hasCount = false,
+    returnIdOnly = false,
+  }: {
+    hasPagination?: boolean
+    hasCount?: boolean
+    returnIdOnly?: boolean
+  }): [string, string | null] {
     const queryBuilder = this.knex.queryBuilder()
 
     const structure = this.structure
@@ -564,15 +572,6 @@ export class QueryBuilder {
       ? this.buildSelectParts(rootStructure, rootKey, aliasMapping)
       : { [rootKey + ".id"]: `${rootAlias}.id` }
 
-    if (countAllResults) {
-      selectParts["offset_"] = this.knex.raw(
-        `DENSE_RANK() OVER (ORDER BY ${this.getShortAlias(
-          aliasMapping,
-          rootEntity
-        )}.id)`
-      )
-    }
-
     queryBuilder.select(selectParts)
 
     queryBuilder.from(
@@ -601,22 +600,76 @@ export class QueryBuilder {
       )
     }
 
-    let sql = `WITH data AS (${queryBuilder.toQuery()})
-    SELECT * ${
-      countAllResults ? ", (SELECT max(offset_) FROM data) AS count" : ""
-    }
-    FROM data`
+    let distinctQueryBuilder = queryBuilder.clone()
 
     let take_ = !isNaN(+take!) ? +take! : 15
     let skip_ = !isNaN(+skip!) ? +skip! : 0
-    if (typeof take === "number" || typeof skip === "number") {
-      sql += `
-        WHERE offset_ > ${skip_}
-          AND offset_ <= ${skip_ + take_}
-      `
+    let sql = ""
+
+    if (hasPagination) {
+      const idColumn = `${this.getShortAlias(aliasMapping, rootEntity)}.id`
+      distinctQueryBuilder.clearSelect()
+      distinctQueryBuilder.select(
+        this.knex.raw(`DISTINCT ON (${idColumn}) ${idColumn} as "id"`)
+      )
+      distinctQueryBuilder.limit(take_)
+      distinctQueryBuilder.offset(skip_)
+
+      sql += `WITH paginated_data AS (${distinctQueryBuilder.toQuery()}),`
+
+      queryBuilder.andWhere(
+        this.knex.raw(`${idColumn} IN (SELECT id FROM "paginated_data")`)
+      )
     }
 
-    return sql
+    sql += `${hasPagination ? " " : "WITH"} data AS (${queryBuilder.toQuery()})
+    SELECT * 
+    FROM data`
+
+    let sqlCount = ""
+    if (hasCount) {
+      const countQueryBuilder = this.knex.queryBuilder()
+      countQueryBuilder.select(this.knex.raw(`COUNT(1) as count`))
+      countQueryBuilder.from(
+        `cat_${rootEntity} AS ${this.getShortAlias(aliasMapping, rootEntity)}`
+      )
+
+      const joinPartsExists = [...joinParts]
+      const joinToFrom = joinPartsExists.shift()
+
+      const [rawFromExists, ...rest] = joinToFrom?.split(" left join ") ?? []
+
+      if (rest.length) {
+        // The rawFromExists contains both join for the pivot table and data table, we re add the pivot join and we will extract the data join later to become the from of the whereExists
+        joinPartsExists.unshift(`left join ${rest.join(" left join ")}`)
+      }
+
+      const [fromExists, whereExists] = rawFromExists.split(" on ")
+
+      const self = this
+      if (fromExists && whereExists) {
+        countQueryBuilder.clearWhere()
+        countQueryBuilder.whereExists(function () {
+          // this.select(self.knex.raw(`1`))
+          // this.from(self.knex.raw(`${fromExists.replace("left join ", "")}`))
+          // joinPartsExists.forEach((joinPart) => {
+          //   this.joinRaw(joinPart)
+          // })
+          // this.where(whereExists)
+          // self.parseWhere(aliasMapping, filter, this)
+        })
+      } else {
+        countQueryBuilder.clearWhere()
+        countQueryBuilder.whereExists(function () {
+          this.select(self.knex.raw(`1`))
+          self.parseWhere(aliasMapping, filter, this)
+        })
+      }
+
+      sqlCount = countQueryBuilder.toSQL().sql
+    }
+
+    return [sql, hasPagination ? sqlCount : null]
   }
 
   public buildObjectFromResultset(

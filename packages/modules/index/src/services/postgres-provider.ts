@@ -12,6 +12,7 @@ import {
   InjectTransactionManager,
   isDefined,
   MedusaContext,
+  promiseAll,
   toMikroORMEntity,
 } from "@medusajs/framework/utils"
 import {
@@ -254,8 +255,13 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
 
     const { manager } = sharedContext as { manager: SqlEntityManager }
     let hasPagination = false
-    if (isDefined(skip)) {
+    let hasCount = false
+    if (isDefined(skip) || isDefined(take)) {
       hasPagination = true
+
+      if (isDefined(skip)) {
+        hasCount = true
+      }
     }
 
     const connection = manager.getConnection()
@@ -276,10 +282,24 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
       },
     })
 
-    const sql = qb.buildQuery(hasPagination, !!keepFilteredEntities)
+    const [sql, sqlCount] = qb.buildQuery({
+      hasPagination,
+      returnIdOnly: !!keepFilteredEntities,
+      hasCount,
+    })
 
-    let resultSet = await manager.execute(sql)
-    const count = hasPagination ? +(resultSet[0]?.count ?? 0) : undefined
+    const promises: Promise<any>[] = []
+
+    promises.push(manager.execute(sql))
+
+    if (hasCount && sqlCount) {
+      promises.push(manager.execute(sqlCount))
+    }
+
+    const test = await manager.execute(`SELECT * FROM cat_product`)
+    console.log(test)
+
+    let [resultSet, count] = await promiseAll(promises)
 
     if (keepFilteredEntities) {
       const mainEntity = Object.keys(select)[0]
@@ -309,7 +329,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
       ) as IndexTypes.QueryResultSet<TEntry>["data"],
       metadata: hasPagination
         ? {
-            count: count!,
+            count: hasCount ? parseInt(count[0].count) : undefined,
             skip,
             take,
           }
