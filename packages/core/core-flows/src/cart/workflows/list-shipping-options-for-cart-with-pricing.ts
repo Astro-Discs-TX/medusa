@@ -22,6 +22,7 @@ const COMMON_OPTIONS_FIELDS = [
   "price_type",
   "service_zone_id",
   "service_zone.fulfillment_set_id",
+  "service_zone.fulfillment_set.type",
   "shipping_profile_id",
   "provider_id",
   "data",

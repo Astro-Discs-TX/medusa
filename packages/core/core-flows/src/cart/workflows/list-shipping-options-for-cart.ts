@@ -131,6 +131,7 @@ export const listShippingOptionsForCartWorkflow = createWorkflow(
         "provider_id",
         "data",
         "service_zone.fulfillment_set_id",
+        "service_zone.fulfillment_set.type",
 
         "type.id",
         "type.label",
