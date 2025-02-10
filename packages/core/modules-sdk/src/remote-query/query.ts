@@ -214,20 +214,24 @@ export class Query {
       pagination.order = { [mainEntity]: pagination.order }
     }
 
-    const indexResponse = await this.#indexModule.query({
+    const indexResponse = (await this.#indexModule.query({
       fields,
       filters,
       joinFilters,
       pagination,
-    })
+    })) as unknown as GraphResultSet<TEntry>
 
     delete queryOptions.pagination
     delete queryOptions.filters
 
-    const finalResultset = await this.graph(queryOptions, {
-      ...options,
-      initialData: indexResponse.data,
-    })
+    let finalResultset: GraphResultSet<TEntry> = indexResponse
+
+    if (indexResponse.data.length) {
+      finalResultset = await this.graph(queryOptions, {
+        ...options,
+        initialData: indexResponse.data,
+      })
+    }
 
     return {
       data: finalResultset.data,
