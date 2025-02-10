@@ -1,5 +1,10 @@
 import { IndexTypes } from "@medusajs/framework/types"
-import { GraphQLUtils, isObject, isString } from "@medusajs/framework/utils"
+import {
+  GraphQLUtils,
+  isObject,
+  isPresent,
+  isString,
+} from "@medusajs/framework/utils"
 import { Knex } from "@mikro-orm/knex"
 import { OrderBy, QueryFormat, QueryOptions, Select } from "@types"
 
@@ -24,6 +29,7 @@ export class QueryBuilder {
   private readonly options?: QueryOptions
   private readonly schema: IndexTypes.SchemaObjectRepresentation
   private readonly allSchemaFields: Set<string>
+  private readonly rawConfig?: IndexTypes.IndexQueryConfig<any>
 
   constructor(args: {
     schema: IndexTypes.SchemaObjectRepresentation
@@ -31,6 +37,7 @@ export class QueryBuilder {
     knex: Knex
     selector: QueryFormat
     options?: QueryOptions
+    rawConfig?: IndexTypes.IndexQueryConfig<any>
   }) {
     this.schema = args.schema
     this.entityMap = args.entityMap
@@ -41,6 +48,7 @@ export class QueryBuilder {
     this.allSchemaFields = new Set(
       Object.values(this.schema).flatMap((entity) => entity.fields ?? [])
     )
+    this.rawConfig = args.rawConfig
   }
 
   private getStructureKeys(structure) {
@@ -306,13 +314,16 @@ export class QueryBuilder {
 
     const isSelectableField = this.allSchemaFields.has(parentProperty)
     const entities = this.getEntity(currentAliasPath, false)
-    if (isSelectableField || !entities) {
+    const entityRef = entities?.ref!
+
+    // !entityRef.alias means the object has not table, it's a nested object
+    if (isSelectableField || !entities || !entityRef?.alias) {
       // We are currently selecting a specific field of the parent entity or the entity is not found on the index schema
       // We don't need to build the query parts for this as there is no join
       return []
     }
 
-    const mainEntity = entities.ref.entity
+    const mainEntity = entityRef.entity
     const mainAlias =
       this.getShortAlias(aliasMapping, mainEntity.toLowerCase()) + level
 
@@ -628,48 +639,55 @@ export class QueryBuilder {
 
     let sqlCount = ""
     if (hasCount) {
-      const countQueryBuilder = this.knex.queryBuilder()
-      countQueryBuilder.select(this.knex.raw(`COUNT(1) as count`))
-      countQueryBuilder.from(
-        `cat_${rootEntity} AS ${this.getShortAlias(aliasMapping, rootEntity)}`
-      )
-
-      const joinPartsExists = [...joinParts]
-      const joinToFrom = joinPartsExists.shift()
-
-      const [rawFromExists, ...rest] = joinToFrom?.split(" left join ") ?? []
-
-      if (rest.length) {
-        // The rawFromExists contains both join for the pivot table and data table, we re add the pivot join and we will extract the data join later to become the from of the whereExists
-        joinPartsExists.unshift(`left join ${rest.join(" left join ")}`)
-      }
-
-      const [fromExists, whereExists] = rawFromExists.split(" on ")
-
-      const self = this
-      if (fromExists && whereExists) {
-        countQueryBuilder.clearWhere()
-        countQueryBuilder.whereExists(function () {
-          // this.select(self.knex.raw(`1`))
-          // this.from(self.knex.raw(`${fromExists.replace("left join ", "")}`))
-          // joinPartsExists.forEach((joinPart) => {
-          //   this.joinRaw(joinPart)
-          // })
-          // this.where(whereExists)
-          // self.parseWhere(aliasMapping, filter, this)
-        })
-      } else {
-        countQueryBuilder.clearWhere()
-        countQueryBuilder.whereExists(function () {
-          this.select(self.knex.raw(`1`))
-          self.parseWhere(aliasMapping, filter, this)
-        })
-      }
-
-      sqlCount = countQueryBuilder.toSQL().sql
+      sqlCount = this.buildQueryCount()
     }
 
-    return [sql, hasPagination ? sqlCount : null]
+    return [sql, hasCount ? sqlCount : null]
+  }
+
+  public buildQueryCount(): string {
+    const queryBuilder = this.knex.queryBuilder()
+
+    const hasWhere = isPresent(this.rawConfig?.filters)
+    const structure = hasWhere ? this.rawConfig?.filters! : this.structure
+
+    const rootKey = this.getStructureKeys(structure)[0]
+
+    const rootStructure = structure[rootKey] as Select
+
+    const entity = this.getEntity(rootKey)!.ref.entity
+    const rootEntity = entity.toLowerCase()
+    const aliasMapping: { [path: string]: string } = {}
+
+    const joinParts = this.buildQueryParts(
+      rootStructure,
+      "",
+      entity,
+      rootKey,
+      [],
+      0,
+      aliasMapping
+    )
+
+    const rootAlias = aliasMapping[rootKey]
+
+    queryBuilder.select(
+      this.knex.raw(`COUNT(DISTINCT ${rootAlias}.id) as count`)
+    )
+
+    queryBuilder.from(
+      `cat_${rootEntity} AS ${this.getShortAlias(aliasMapping, rootEntity)}`
+    )
+
+    joinParts.forEach((joinPart) => {
+      queryBuilder.joinRaw(joinPart)
+    })
+
+    if (hasWhere) {
+      this.parseWhere(aliasMapping, this.selector.where!, queryBuilder)
+    }
+
+    return queryBuilder.toSQL().sql
   }
 
   public buildObjectFromResultset(

@@ -14,7 +14,6 @@ import { asValue } from "awilix"
 import path from "path"
 import { EventBusServiceMock } from "../__fixtures__"
 import { dbName } from "../__fixtures__/medusa-config"
-import { performance } from "perf_hooks"
 
 const eventBusMock = new EventBusServiceMock()
 const queryMock = jest.fn().mockReturnValue({
@@ -658,8 +657,7 @@ describe("IndexModuleService query", function () {
     ])
   })
 
-  it.only("should paginate products", async () => {
-    const performance_ = performance.now()
+  it("should paginate products", async () => {
     const { data, metadata } = await module.query({
       fields: ["product.*", "product.variants.*", "product.variants.prices.*"],
       pagination: {
@@ -667,8 +665,6 @@ describe("IndexModuleService query", function () {
         skip: 1,
       },
     })
-    const performance2 = performance.now()
-    console.log(`Time taken: ${performance2 - performance_} milliseconds`)
 
     expect(metadata).toEqual({
       count: 2,
@@ -718,7 +714,7 @@ describe("IndexModuleService query", function () {
   })
 
   it("should query products filtering by deep nested levels", async () => {
-    const { data } = await module.query({
+    const { data, metadata } = await module.query({
       fields: ["product.*"],
       filters: {
         product: {
@@ -729,8 +725,17 @@ describe("IndexModuleService query", function () {
           },
         },
       },
+      pagination: {
+        take: 1,
+        skip: 0,
+      },
     })
 
+    expect(metadata).toEqual({
+      count: 1,
+      skip: 0,
+      take: 1,
+    })
     expect(data).toEqual([
       {
         id: "prod_2",

@@ -269,6 +269,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
       schema: this.schemaObjectRepresentation_,
       entityMap: this.schemaEntitiesMap_,
       knex: connection.getKnex(),
+      rawConfig: config,
       selector: {
         select,
         where,
@@ -295,9 +296,6 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
     if (hasCount && sqlCount) {
       promises.push(manager.execute(sqlCount))
     }
-
-    const test = await manager.execute(`SELECT * FROM cat_product`)
-    console.log(test)
 
     let [resultSet, count] = await promiseAll(promises)
 
