@@ -6,7 +6,7 @@ import {
   RowSelectionState,
   createColumnHelper,
 } from "@tanstack/react-table"
-import { useMemo, useRef, useState } from "react"
+import { useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { ActionMenu } from "../../../../../components/common/action-menu"
 import { _DataTable } from "../../../../../components/table/data-table"
