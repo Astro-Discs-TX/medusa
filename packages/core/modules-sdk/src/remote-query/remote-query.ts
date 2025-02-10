@@ -14,7 +14,7 @@ import {
   RemoteJoinerQuery,
   RemoteNestedExpands,
 } from "@medusajs/types"
-import { isObject, isPresent, isString, toPascalCase } from "@medusajs/utils"
+import { isPresent, isString, toPascalCase } from "@medusajs/utils"
 import { MedusaModule } from "../medusa-module"
 
 const BASE_PREFIX = ""
@@ -128,7 +128,7 @@ export class RemoteQuery {
 
     if (isPresent(filters)) {
       args[prefix] = filters
-    } else {
+    } else if (isPresent(expand.args)) {
       args[prefix] = expand.args
     }
 
@@ -238,15 +238,13 @@ export class RemoteQuery {
       filters[keyField] = ids
     }
 
-    if (isObject(options?.args?.[BASE_PREFIX])) {
+    delete options.args?.[BASE_PREFIX]
+    if (Object.keys(options.args ?? {}).length) {
       filters = {
         ...filters,
-        ...options?.args?.[BASE_PREFIX],
         ...options?.args,
       }
       options.args = {} as any
-
-      delete filters[BASE_PREFIX]
     }
 
     const hasPagination = this.hasPagination(options)
