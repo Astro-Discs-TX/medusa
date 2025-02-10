@@ -25,7 +25,7 @@ const PAGE_SIZE = 10
 
 export const RegionCountrySection = ({ region }: RegionCountrySectionProps) => {
   const { t } = useTranslation()
-  const prompt = usePrompt({ singleton: true })
+  const prompt = usePrompt()
 
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
 

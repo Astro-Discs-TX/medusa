@@ -7,7 +7,7 @@ import { useRef } from "react"
 
 type UsePromptProps = Omit<RenderPromptProps, "onConfirm" | "onCancel" | "open">
 
-const usePrompt = ({ singleton = false }: { singleton?: boolean } = {}) => {
+const usePrompt = ({ singleton = true }: { singleton?: boolean } = {}) => {
   const flag = useRef(false)
 
   const prompt = async (props: UsePromptProps): Promise<boolean> => {

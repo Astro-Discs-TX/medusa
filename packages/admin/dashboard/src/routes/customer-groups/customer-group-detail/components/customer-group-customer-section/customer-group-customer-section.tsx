@@ -26,7 +26,7 @@ export const CustomerGroupCustomerSection = ({
 }: CustomerGroupCustomerSectionProps) => {
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
   const { t } = useTranslation()
-  const prompt = usePrompt({ singleton: true })
+  const prompt = usePrompt()
 
   const { searchParams, raw } = useCustomerTableQuery({ pageSize: PAGE_SIZE })
   const { customers, count, isLoading, isError, error } = useCustomers({

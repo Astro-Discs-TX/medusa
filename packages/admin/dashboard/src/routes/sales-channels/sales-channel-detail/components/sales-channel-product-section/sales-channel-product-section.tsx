@@ -73,7 +73,7 @@ export const SalesChannelProductSection = ({
 
   const { mutateAsync } = useSalesChannelRemoveProducts(salesChannel.id)
 
-  const prompt = usePrompt({ singleton: true })
+  const prompt = usePrompt()
   const { t } = useTranslation()
 
   const handleRemove = async () => {
