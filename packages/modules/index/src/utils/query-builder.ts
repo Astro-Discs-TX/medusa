@@ -232,6 +232,8 @@ export class QueryBuilder {
             const val = operator === "IN" ? subValue : [subValue]
             if (operator === "=" && subValue === null) {
               operator = "IS"
+            } else if (operator === "!=" && subValue === null) {
+              operator = "IS NOT"
             }
 
             if (operator === "=") {
@@ -679,16 +681,81 @@ export class QueryBuilder {
       `cat_${rootEntity} AS ${this.getShortAlias(aliasMapping, rootEntity)}`
     )
 
-    joinParts.forEach((joinPart) => {
-      queryBuilder.joinRaw(joinPart)
-    })
-
     if (hasWhere) {
+      joinParts.forEach((joinPart) => {
+        queryBuilder.joinRaw(joinPart)
+      })
+
       this.parseWhere(aliasMapping, this.selector.where!, queryBuilder)
     }
 
-    return queryBuilder.toSQL().sql
+    return queryBuilder.toQuery()
   }
+
+  // NOTE: We are keeping the bellow code for now as reference to alternative implementation for us. DO NOT REMOVE
+  // public buildQueryCount(): string {
+  //   const queryBuilder = this.knex.queryBuilder()
+
+  //   const hasWhere = isPresent(this.rawConfig?.filters)
+  //   const structure = hasWhere ? this.rawConfig?.filters! : this.structure
+
+  //   const rootKey = this.getStructureKeys(structure)[0]
+
+  //   const rootStructure = structure[rootKey] as Select
+
+  //   const entity = this.getEntity(rootKey)!.ref.entity
+  //   const rootEntity = entity.toLowerCase()
+  //   const aliasMapping: { [path: string]: string } = {}
+
+  //   const joinParts = this.buildQueryParts(
+  //     rootStructure,
+  //     "",
+  //     entity,
+  //     rootKey,
+  //     [],
+  //     0,
+  //     aliasMapping
+  //   )
+
+  //   const rootAlias = aliasMapping[rootKey]
+
+  //   queryBuilder.select(this.knex.raw(`COUNT(${rootAlias}.id) as count`))
+
+  //   queryBuilder.from(
+  //     `cat_${rootEntity} AS ${this.getShortAlias(aliasMapping, rootEntity)}`
+  //   )
+
+  //   const self = this
+  //   if (hasWhere && joinParts.length) {
+  //     const fromExistsRaw = joinParts.shift()!
+  //     const [joinPartsExists, fromExistsPart] =
+  //       fromExistsRaw.split(" left join ")
+  //     const [fromExists, whereExists] = fromExistsPart.split(" on ")
+  //     joinParts.unshift(joinPartsExists)
+
+  //     queryBuilder.whereExists(function () {
+  //       this.select(self.knex.raw(`1`))
+  //       this.from(self.knex.raw(`${fromExists}`))
+  //       this.joinRaw(joinParts.join("\n"))
+  //       if (hasWhere) {
+  //         self.parseWhere(aliasMapping, self.selector.where!, this)
+  //         this.whereRaw(self.knex.raw(whereExists))
+  //         return
+  //       }
+
+  //       this.whereRaw(self.knex.raw(whereExists))
+  //     })
+  //   } else {
+  //     queryBuilder.whereExists(function () {
+  //       this.select(self.knex.raw(`1`))
+  //       if (hasWhere) {
+  //         self.parseWhere(aliasMapping, self.selector.where!, this)
+  //       }
+  //     })
+  //   }
+
+  //   return queryBuilder.toQuery()
+  // }
 
   public buildObjectFromResultset(
     resultSet: Record<string, any>[]

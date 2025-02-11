@@ -299,12 +299,21 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
 
     let [resultSet, count] = await promiseAll(promises)
 
+    const resultMetadata: IndexTypes.QueryFunctionReturnPagination | undefined =
+      hasPagination
+        ? {
+            count: hasCount ? parseInt(count[0].count) : undefined,
+            skip,
+            take,
+          }
+        : undefined
+
     if (keepFilteredEntities) {
       const mainEntity = Object.keys(select)[0]
 
       const ids = resultSet.map((r) => r[`${mainEntity}.id`])
       if (ids.length) {
-        return await this.query<TEntry>(
+        const result = await this.query<TEntry>(
           {
             fields,
             joinFilters,
@@ -318,6 +327,8 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
           } as IndexTypes.IndexQueryConfig<TEntry>,
           sharedContext
         )
+        result.metadata ??= resultMetadata
+        return result
       }
     }
 
@@ -325,13 +336,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
       data: qb.buildObjectFromResultset(
         resultSet
       ) as IndexTypes.QueryResultSet<TEntry>["data"],
-      metadata: hasPagination
-        ? {
-            count: hasCount ? parseInt(count[0].count) : undefined,
-            skip,
-            take,
-          }
-        : undefined,
+      metadata: resultMetadata,
     }
   }
 
