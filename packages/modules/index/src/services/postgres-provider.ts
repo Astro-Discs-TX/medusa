@@ -250,6 +250,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
 
     const select = normalizeFieldsSelection(fields)
     const where = flattenObjectKeys(filters)
+
     const joinWhere = flattenObjectKeys(joinFilters)
     const orderBy = flattenObjectKeys(inputOrderBy)
 

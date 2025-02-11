@@ -64,7 +64,9 @@ export class QueryBuilder {
         return
       }
 
-      throw new Error(`Could not find entity for path: ${path}`)
+      throw new Error(
+        `Could not find entity for path: ${path}. It might not be indexed.`
+      )
     }
 
     return this.schema._schemaPropertiesMap[path]
@@ -74,7 +76,7 @@ export class QueryBuilder {
     const entity = this.getEntity(path)?.ref?.entity!
     const fieldRef = this.entityMap[entity]._fields[field]
     if (!fieldRef) {
-      throw new Error(`Field ${field} not found in the entityMap.`)
+      throw new Error(`Field ${field} is not indexed.`)
     }
 
     let currentType = fieldRef.type
