@@ -99,7 +99,9 @@ export const reserveInventoryStep = createStep(
     const locking = container.resolve(Modules.LOCKING)
 
     const inventoryItemIds = data.inventoryItemIds
-    await locking.execute(inventoryItemIds, async () => {
+    const lockingKeys = Array.from(new Set(inventoryItemIds))
+
+    await locking.execute(lockingKeys, async () => {
       await inventoryService.deleteReservationItems(data.reservations)
     })
 
