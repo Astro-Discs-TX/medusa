@@ -189,7 +189,7 @@ medusaIntegrationTestRunner({
 
       // Trigger a sync
       await (indexEngine as any).onApplicationStart_()
-      await setTimeout(1000)
+      await setTimeout(3000)
 
       const { data: updatedResults } = await indexEngine.query<"product">({
         fields: ["product.*", "product.variants.*"],
