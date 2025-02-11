@@ -1,29 +1,47 @@
-import * as Dialog from "@radix-ui/react-dialog"
-
 import { SidebarLeft, TriangleRightMini, XMark } from "@medusajs/icons"
 import { IconButton, clx } from "@medusajs/ui"
-import { PropsWithChildren, ReactNode } from "react"
+import { AnimatePresence } from "motion/react"
+import { Dialog as RadixDialog } from "radix-ui"
+import { PropsWithChildren, ReactNode, useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { Link, Outlet, UIMatch, useMatches } from "react-router-dom"
+import {
+  Link,
+  Outlet,
+  UIMatch,
+  useMatches,
+  useNavigation,
+} from "react-router-dom"
 
 import { KeybindProvider } from "../../../providers/keybind-provider"
 import { useGlobalShortcuts } from "../../../providers/keybind-provider/hooks"
 import { useSidebar } from "../../../providers/sidebar-provider"
+import { ProgressBar } from "../../common/progress-bar"
 import { Notifications } from "../notifications"
 
 export const Shell = ({ children }: PropsWithChildren) => {
   const globalShortcuts = useGlobalShortcuts()
+  const navigation = useNavigation()
+
+  const loading = navigation.state === "loading"
 
   return (
     <KeybindProvider shortcuts={globalShortcuts}>
-      <div className="flex h-screen flex-col items-start overflow-hidden lg:flex-row">
+      <div className="relative flex h-screen flex-col items-start overflow-hidden lg:flex-row">
+        <NavigationBar loading={loading} />
         <div>
           <MobileSidebarContainer>{children}</MobileSidebarContainer>
           <DesktopSidebarContainer>{children}</DesktopSidebarContainer>
         </div>
         <div className="flex h-screen w-full flex-col overflow-auto">
           <Topbar />
-          <main className="flex h-full w-full flex-col items-center overflow-y-auto">
+          <main
+            className={clx(
+              "flex h-full w-full flex-col items-center overflow-y-auto transition-opacity delay-200 duration-200",
+              {
+                "opacity-25": loading,
+              }
+            )}
+          >
             <Gutter>
               <Outlet />
             </Gutter>
@@ -31,6 +49,36 @@ export const Shell = ({ children }: PropsWithChildren) => {
         </div>
       </div>
     </KeybindProvider>
+  )
+}
+
+const NavigationBar = ({ loading }: { loading: boolean }) => {
+  const [showBar, setShowBar] = useState(false)
+
+  /**
+   * If the loading state is true, we want to show the bar after a short delay.
+   * The delay is used to prevent the bar from flashing on quick navigations.
+   */
+  useEffect(() => {
+    let timeout: ReturnType<typeof setTimeout>
+
+    if (loading) {
+      timeout = setTimeout(() => {
+        setShowBar(true)
+      }, 200)
+    } else {
+      setShowBar(false)
+    }
+
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [loading])
+
+  return (
+    <div className="fixed inset-x-0 top-0 z-50 h-1">
+      <AnimatePresence>{showBar ? <ProgressBar /> : null}</AnimatePresence>
+    </div>
   )
 }
 
@@ -176,22 +224,22 @@ const MobileSidebarContainer = ({ children }: PropsWithChildren) => {
   const { mobile, toggle } = useSidebar()
 
   return (
-    <Dialog.Root open={mobile} onOpenChange={() => toggle("mobile")}>
-      <Dialog.Portal>
-        <Dialog.Overlay
+    <RadixDialog.Root open={mobile} onOpenChange={() => toggle("mobile")}>
+      <RadixDialog.Portal>
+        <RadixDialog.Overlay
           className={clx(
             "bg-ui-bg-overlay fixed inset-0",
             "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
           )}
         />
-        <Dialog.Content
+        <RadixDialog.Content
           className={clx(
             "bg-ui-bg-subtle shadow-elevation-modal fixed inset-y-2 left-2 flex w-full max-w-[304px] flex-col overflow-hidden rounded-lg border-r",
             "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:slide-out-to-left-1/2 data-[state=open]:slide-in-from-left-1/2 duration-200"
           )}
         >
           <div className="p-3">
-            <Dialog.Close asChild>
+            <RadixDialog.Close asChild>
               <IconButton
                 size="small"
                 variant="transparent"
@@ -199,17 +247,17 @@ const MobileSidebarContainer = ({ children }: PropsWithChildren) => {
               >
                 <XMark />
               </IconButton>
-            </Dialog.Close>
-            <Dialog.Title className="sr-only">
+            </RadixDialog.Close>
+            <RadixDialog.Title className="sr-only">
               {t("app.nav.accessibility.title")}
-            </Dialog.Title>
-            <Dialog.Description className="sr-only">
+            </RadixDialog.Title>
+            <RadixDialog.Description className="sr-only">
               {t("app.nav.accessibility.description")}
-            </Dialog.Description>
+            </RadixDialog.Description>
           </div>
           {children}
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
+        </RadixDialog.Content>
+      </RadixDialog.Portal>
+    </RadixDialog.Root>
   )
 }

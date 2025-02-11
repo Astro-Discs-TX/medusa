@@ -24,7 +24,7 @@ export const storefront = [
     "path": "/storefront-development/cart/update"
   },
   {
-    "title": "Checkout Step 2: Enter Address",
+    "title": "Checkout Step 2: Set Address",
     "path": "/storefront-development/checkout/address"
   },
   {
@@ -76,7 +76,7 @@ export const storefront = [
     "path": "/storefront-development/customers/reset-password"
   },
   {
-    "title": "Retrieve Customer in Storefront",
+    "title": "Retrieve Logged-In Customer in Storefront",
     "path": "/storefront-development/customers/retrieve"
   },
   {

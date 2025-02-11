@@ -1,5 +1,13 @@
 export const inventory = [
   {
+    "title": "Inventory Kits",
+    "path": "/commerce-modules/inventory/inventory-kit"
+  },
+  {
+    "title": "Product Variant Inventory",
+    "path": "/commerce-modules/product/variant-inventory"
+  },
+  {
     "title": "Retrieve Product Variant's Inventory in Storefront",
     "path": "/storefront-development/products/inventory"
   },
@@ -14,6 +22,10 @@ export const inventory = [
   {
     "title": "addToCartWorkflow",
     "path": "/references/medusa-workflows/addToCartWorkflow"
+  },
+  {
+    "title": "completeCartWorkflow",
+    "path": "/references/medusa-workflows/completeCartWorkflow"
   },
   {
     "title": "confirmVariantInventoryWorkflow",
@@ -50,6 +62,10 @@ export const inventory = [
   {
     "title": "updateInventoryLevelsStep",
     "path": "/references/medusa-workflows/steps/updateInventoryLevelsStep"
+  },
+  {
+    "title": "batchInventoryItemLevelsWorkflow",
+    "path": "/references/medusa-workflows/batchInventoryItemLevelsWorkflow"
   },
   {
     "title": "bulkCreateDeleteLevelsWorkflow",

@@ -4,6 +4,10 @@ export const order = [
     "path": "/storefront-development/checkout/complete-cart"
   },
   {
+    "title": "completeCartWorkflow",
+    "path": "/references/medusa-workflows/completeCartWorkflow"
+  },
+  {
     "title": "addOrderTransactionStep",
     "path": "/references/medusa-workflows/steps/addOrderTransactionStep"
   },
@@ -130,10 +134,6 @@ export const order = [
   {
     "title": "updateOrderChangesStep",
     "path": "/references/medusa-workflows/steps/updateOrderChangesStep"
-  },
-  {
-    "title": "updateOrderExchangesStep",
-    "path": "/references/medusa-workflows/steps/updateOrderExchangesStep"
   },
   {
     "title": "updateOrderShippingMethodsStep",
@@ -466,6 +466,10 @@ export const order = [
   {
     "title": "refundPaymentWorkflow",
     "path": "/references/medusa-workflows/refundPaymentWorkflow"
+  },
+  {
+    "title": "refundPaymentsWorkflow",
+    "path": "/references/medusa-workflows/refundPaymentsWorkflow"
   },
   {
     "title": "createReturnReasonsStep",
