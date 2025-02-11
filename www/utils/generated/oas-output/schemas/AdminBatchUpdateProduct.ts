@@ -155,6 +155,10 @@
  *     type: string
  *     title: id
  *     description: The product's ID.
+ *   shipping_profile_id:
+ *     type: string
+ *     title: shipping_profile_id
+ *     description: The update's shipping profile id.
  * required:
  *   - id
  * 

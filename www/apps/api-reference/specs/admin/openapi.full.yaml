@@ -44212,6 +44212,10 @@ components:
           type: string
           title: id
           description: The product's ID.
+        shipping_profile_id:
+          type: string
+          title: shipping_profile_id
+          description: The update's shipping profile id.
       required:
         - id
     AdminBatchUpdateProductVariant:
@@ -45103,6 +45107,7 @@ components:
       x-schemaName: AdminCreateProduct
       required:
         - title
+        - shipping_profile_id
         - options
       properties:
         title:
@@ -45250,6 +45255,10 @@ components:
           type: string
           title: external_id
           description: The ID of the product in an external or third-party system.
+        shipping_profile_id:
+          type: string
+          title: shipping_profile_id
+          description: The create's shipping profile id.
     AdminCreateProductCategory:
       type: object
       description: The product category's details.
@@ -51343,6 +51352,8 @@ components:
           format: date-time
           title: deleted_at
           description: The date the product was deleted.
+        shipping_profile:
+          $ref: '#/components/schemas/AdminShippingProfile'
     AdminProductCategory:
       type: object
       description: The product category's details.
@@ -53304,7 +53315,7 @@ components:
           $ref: '#/components/schemas/AdminShippingOption'
     AdminShippingOptionRule:
       type: object
-      description: The shipping option rule's details.
+      description: The rule's rules.
       x-schemaName: AdminShippingOptionRule
       required:
         - id
@@ -53319,12 +53330,11 @@ components:
         id:
           type: string
           title: id
-          description: The shipping option rule's ID.
+          description: The rule's ID.
         attribute:
           type: string
           title: attribute
-          description: The shipping option rule's attribute.
-          example: is_return
+          description: The rule's attribute.
         operator:
           type: string
           description: The rule's operator.
@@ -53338,27 +53348,35 @@ components:
             - gte
             - nin
         value:
-          type: string
-          title: value
+          oneOf:
+            - type: string
+              title: value
+              description: The rule's value.
+            - type: array
+              description: The rule's value.
+              items:
+                type: string
+                title: value
+                description: The value's details.
         shipping_option_id:
           type: string
           title: shipping_option_id
-          description: The ID of the shipping option this rule is for.
+          description: The rule's shipping option id.
         created_at:
           type: string
           format: date-time
           title: created_at
-          description: The date the shipping option rule was created.
+          description: The rule's created at.
         updated_at:
           type: string
           format: date-time
           title: updated_at
-          description: The date the shipping option rule was updated.
+          description: The rule's updated at.
         deleted_at:
           type: string
           format: date-time
           title: deleted_at
-          description: The date the shipping option rule was deleted.
+          description: The rule's deleted at.
     AdminShippingOptionType:
       type: object
       description: The shipping option's details.
@@ -54160,6 +54178,9 @@ components:
             metadata:
               type: object
               description: The address's metadata, can hold custom key-value pairs.
+        metadata:
+          type: object
+          description: The order's metadata.
     AdminUpdatePriceList:
       type: object
       description: the details to update in a price list.
@@ -62343,9 +62364,6 @@ components:
           title: provider_id
           description: The ID of the payment provider the customer chose.
           example: pp_stripe_stripe
-        context:
-          type: object
-          description: The payment's context, such as the customer or address details. If the customer is logged-in, the customer `id` is set in the context under a `customer.id` property.
         data:
           type: object
           description: Any data necessary for the payment provider to process the payment.
