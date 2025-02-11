@@ -30,6 +30,9 @@ export class QueryBuilder {
   private readonly schema: IndexTypes.SchemaObjectRepresentation
   private readonly allSchemaFields: Set<string>
   private readonly rawConfig?: IndexTypes.IndexQueryConfig<any>
+  private readonly requestedFields: {
+    [key: string]: any
+  }
 
   constructor(args: {
     schema: IndexTypes.SchemaObjectRepresentation
@@ -38,6 +41,9 @@ export class QueryBuilder {
     selector: QueryFormat
     options?: QueryOptions
     rawConfig?: IndexTypes.IndexQueryConfig<any>
+    requestedFields: {
+      [key: string]: any
+    }
   }) {
     this.schema = args.schema
     this.entityMap = args.entityMap
@@ -49,6 +55,7 @@ export class QueryBuilder {
       Object.values(this.schema).flatMap((entity) => entity.fields ?? [])
     )
     this.rawConfig = args.rawConfig
+    this.requestedFields = args.requestedFields
   }
 
   private getStructureKeys(structure) {
@@ -556,7 +563,7 @@ export class QueryBuilder {
   }): [string, string | null] {
     const queryBuilder = this.knex.queryBuilder()
 
-    const structure = this.structure
+    const structure = this.requestedFields
     const filter = this.selector.where ?? {}
 
     const { orderBy: order, skip, take } = this.options ?? {}
@@ -653,7 +660,7 @@ export class QueryBuilder {
     const queryBuilder = this.knex.queryBuilder()
 
     const hasWhere = isPresent(this.rawConfig?.filters)
-    const structure = hasWhere ? this.rawConfig?.filters! : this.structure
+    const structure = hasWhere ? this.rawConfig?.filters! : this.requestedFields
 
     const rootKey = this.getStructureKeys(structure)[0]
 

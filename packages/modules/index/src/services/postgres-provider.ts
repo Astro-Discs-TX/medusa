@@ -8,6 +8,7 @@ import {
 import {
   MikroOrmBaseRepository as BaseRepository,
   ContainerRegistrationKeys,
+  deepMerge,
   InjectManager,
   InjectTransactionManager,
   isDefined,
@@ -265,6 +266,8 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
       }
     }
 
+    const requestedFields = deepMerge(deepMerge(select, filters), inputOrderBy)
+
     const connection = manager.getConnection()
     const qb = new QueryBuilder({
       schema: this.schemaObjectRepresentation_,
@@ -282,6 +285,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
         keepFilteredEntities,
         orderBy,
       },
+      requestedFields,
     })
 
     const [sql, sqlCount] = qb.buildQuery({
