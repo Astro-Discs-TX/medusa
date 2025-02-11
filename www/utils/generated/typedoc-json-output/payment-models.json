@@ -30,7 +30,7 @@
 					"fileName": "account-holder.ts",
 					"line": 3,
 					"character": 6,
-					"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/account-holder.ts#L3"
+					"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/account-holder.ts#L3"
 				}
 			],
 			"type": {
@@ -62,12 +62,20 @@
 											"variant": "declaration",
 											"kind": 1024,
 											"flags": {},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The ID of the account holder."
+													}
+												]
+											},
 											"sources": [
 												{
 													"fileName": "account-holder.ts",
 													"line": 5,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/account-holder.ts#L5"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/account-holder.ts#L5"
 												}
 											],
 											"type": {
@@ -98,12 +106,20 @@
 											"variant": "declaration",
 											"kind": 1024,
 											"flags": {},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The ID of the payment provider storing the account holder's saved payment methods."
+													}
+												]
+											},
 											"sources": [
 												{
 													"fileName": "account-holder.ts",
 													"line": 6,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/account-holder.ts#L6"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/account-holder.ts#L6"
 												}
 											],
 											"type": {
@@ -123,12 +139,20 @@
 											"variant": "declaration",
 											"kind": 1024,
 											"flags": {},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The ID of the account holder in the payment provider's system."
+													}
+												]
+											},
 											"sources": [
 												{
 													"fileName": "account-holder.ts",
 													"line": 7,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/account-holder.ts#L7"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/account-holder.ts#L7"
 												}
 											],
 											"type": {
@@ -150,12 +174,20 @@
 											"flags": {
 												"isOptional": true
 											},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The email of the account holder"
+													}
+												]
+											},
 											"sources": [
 												{
 													"fileName": "account-holder.ts",
 													"line": 8,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/account-holder.ts#L8"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/account-holder.ts#L8"
 												}
 											],
 											"type": {
@@ -175,12 +207,20 @@
 											"variant": "declaration",
 											"kind": 1024,
 											"flags": {},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "The data returned by the payment provider when the account holder is created."
+													}
+												]
+											},
 											"sources": [
 												{
 													"fileName": "account-holder.ts",
 													"line": 9,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/account-holder.ts#L9"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/account-holder.ts#L9"
 												}
 											],
 											"type": {
@@ -202,12 +242,20 @@
 											"flags": {
 												"isOptional": true
 											},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "Holds custom data in key-value pairs."
+													}
+												]
+											},
 											"sources": [
 												{
 													"fileName": "account-holder.ts",
 													"line": 10,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/account-holder.ts#L10"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/account-holder.ts#L10"
 												}
 											],
 											"type": {
@@ -240,7 +288,7 @@
 											"fileName": "account-holder.ts",
 											"line": 4,
 											"character": 27,
-											"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/account-holder.ts#L4"
+											"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/account-holder.ts#L4"
 										}
 									]
 								}
@@ -272,7 +320,7 @@
 					"fileName": "capture.ts",
 					"line": 4,
 					"character": 6,
-					"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/capture.ts#L4"
+					"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/capture.ts#L4"
 				}
 			],
 			"type": {
@@ -317,7 +365,7 @@
 													"fileName": "capture.ts",
 													"line": 6,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/capture.ts#L6"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/capture.ts#L6"
 												}
 											],
 											"type": {
@@ -361,7 +409,7 @@
 													"fileName": "capture.ts",
 													"line": 7,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/capture.ts#L7"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/capture.ts#L7"
 												}
 											],
 											"type": {
@@ -397,7 +445,7 @@
 													"fileName": "capture.ts",
 													"line": 8,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/capture.ts#L8"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/capture.ts#L8"
 												}
 											],
 											"type": {
@@ -439,7 +487,7 @@
 													"fileName": "capture.ts",
 													"line": 11,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/capture.ts#L11"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/capture.ts#L11"
 												}
 											],
 											"type": {
@@ -474,7 +522,7 @@
 													"fileName": "capture.ts",
 													"line": 12,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/capture.ts#L12"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/capture.ts#L12"
 												}
 											],
 											"type": {
@@ -506,7 +554,7 @@
 											"fileName": "capture.ts",
 											"line": 5,
 											"character": 21,
-											"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/capture.ts#L5"
+											"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/capture.ts#L5"
 										}
 									]
 								}
@@ -538,7 +586,7 @@
 					"fileName": "payment-collection.ts",
 					"line": 6,
 					"character": 6,
-					"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment-collection.ts#L6"
+					"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment-collection.ts#L6"
 				}
 			],
 			"type": {
@@ -583,7 +631,7 @@
 													"fileName": "payment-collection.ts",
 													"line": 8,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment-collection.ts#L8"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment-collection.ts#L8"
 												}
 											],
 											"type": {
@@ -627,7 +675,7 @@
 													"fileName": "payment-collection.ts",
 													"line": 9,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment-collection.ts#L9"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment-collection.ts#L9"
 												}
 											],
 											"type": {
@@ -660,7 +708,7 @@
 													"fileName": "payment-collection.ts",
 													"line": 10,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment-collection.ts#L10"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment-collection.ts#L10"
 												}
 											],
 											"type": {
@@ -695,7 +743,7 @@
 													"fileName": "payment-collection.ts",
 													"line": 11,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment-collection.ts#L11"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment-collection.ts#L11"
 												}
 											],
 											"type": {
@@ -730,7 +778,7 @@
 													"fileName": "payment-collection.ts",
 													"line": 12,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment-collection.ts#L12"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment-collection.ts#L12"
 												}
 											],
 											"type": {
@@ -765,7 +813,7 @@
 													"fileName": "payment-collection.ts",
 													"line": 13,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment-collection.ts#L13"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment-collection.ts#L13"
 												}
 											],
 											"type": {
@@ -800,7 +848,7 @@
 													"fileName": "payment-collection.ts",
 													"line": 14,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment-collection.ts#L14"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment-collection.ts#L14"
 												}
 											],
 											"type": {
@@ -833,7 +881,7 @@
 													"fileName": "payment-collection.ts",
 													"line": 15,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment-collection.ts#L15"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment-collection.ts#L15"
 												}
 											],
 											"type": {
@@ -883,7 +931,7 @@
 													"fileName": "payment-collection.ts",
 													"line": 18,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment-collection.ts#L18"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment-collection.ts#L18"
 												}
 											],
 											"type": {
@@ -919,7 +967,7 @@
 													"fileName": "payment-collection.ts",
 													"line": 19,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment-collection.ts#L19"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment-collection.ts#L19"
 												}
 											],
 											"type": {
@@ -962,7 +1010,7 @@
 													"fileName": "payment-collection.ts",
 													"line": 22,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment-collection.ts#L22"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment-collection.ts#L22"
 												}
 											],
 											"type": {
@@ -1005,7 +1053,7 @@
 													"fileName": "payment-collection.ts",
 													"line": 25,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment-collection.ts#L25"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment-collection.ts#L25"
 												}
 											],
 											"type": {
@@ -1051,7 +1099,7 @@
 											"fileName": "payment-collection.ts",
 											"line": 7,
 											"character": 31,
-											"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment-collection.ts#L7"
+											"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment-collection.ts#L7"
 										}
 									]
 								}
@@ -1083,7 +1131,7 @@
 					"fileName": "payment-provider.ts",
 					"line": 4,
 					"character": 6,
-					"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment-provider.ts#L4"
+					"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment-provider.ts#L4"
 				}
 			],
 			"type": {
@@ -1128,7 +1176,7 @@
 													"fileName": "payment-provider.ts",
 													"line": 5,
 													"character": 2,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment-provider.ts#L5"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment-provider.ts#L5"
 												}
 											],
 											"type": {
@@ -1172,7 +1220,7 @@
 													"fileName": "payment-provider.ts",
 													"line": 6,
 													"character": 2,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment-provider.ts#L6"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment-provider.ts#L6"
 												}
 											],
 											"type": {
@@ -1208,7 +1256,7 @@
 													"fileName": "payment-provider.ts",
 													"line": 7,
 													"character": 2,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment-provider.ts#L7"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment-provider.ts#L7"
 												}
 											],
 											"type": {
@@ -1245,7 +1293,7 @@
 											"fileName": "payment-provider.ts",
 											"line": 4,
 											"character": 56,
-											"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment-provider.ts#L4"
+											"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment-provider.ts#L4"
 										}
 									]
 								}
@@ -1277,7 +1325,7 @@
 					"fileName": "payment-session.ts",
 					"line": 5,
 					"character": 6,
-					"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment-session.ts#L5"
+					"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment-session.ts#L5"
 				}
 			],
 			"type": {
@@ -1322,7 +1370,7 @@
 													"fileName": "payment-session.ts",
 													"line": 7,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment-session.ts#L7"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment-session.ts#L7"
 												}
 											],
 											"type": {
@@ -1366,7 +1414,7 @@
 													"fileName": "payment-session.ts",
 													"line": 8,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment-session.ts#L8"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment-session.ts#L8"
 												}
 											],
 											"type": {
@@ -1399,7 +1447,7 @@
 													"fileName": "payment-session.ts",
 													"line": 9,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment-session.ts#L9"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment-session.ts#L9"
 												}
 											],
 											"type": {
@@ -1432,7 +1480,7 @@
 													"fileName": "payment-session.ts",
 													"line": 10,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment-session.ts#L10"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment-session.ts#L10"
 												}
 											],
 											"type": {
@@ -1465,7 +1513,7 @@
 													"fileName": "payment-session.ts",
 													"line": 11,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment-session.ts#L11"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment-session.ts#L11"
 												}
 											],
 											"type": {
@@ -1500,7 +1548,7 @@
 													"fileName": "payment-session.ts",
 													"line": 12,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment-session.ts#L12"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment-session.ts#L12"
 												}
 											],
 											"type": {
@@ -1533,7 +1581,7 @@
 													"fileName": "payment-session.ts",
 													"line": 13,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment-session.ts#L13"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment-session.ts#L13"
 												}
 											],
 											"type": {
@@ -1583,7 +1631,7 @@
 													"fileName": "payment-session.ts",
 													"line": 16,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment-session.ts#L16"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment-session.ts#L16"
 												}
 											],
 											"type": {
@@ -1619,7 +1667,7 @@
 													"fileName": "payment-session.ts",
 													"line": 17,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment-session.ts#L17"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment-session.ts#L17"
 												}
 											],
 											"type": {
@@ -1664,7 +1712,7 @@
 													"fileName": "payment-session.ts",
 													"line": 23,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment-session.ts#L23"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment-session.ts#L23"
 												}
 											],
 											"type": {
@@ -1706,7 +1754,7 @@
 													"fileName": "payment-session.ts",
 													"line": 28,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment-session.ts#L28"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment-session.ts#L28"
 												}
 											],
 											"type": {
@@ -1744,7 +1792,7 @@
 											"fileName": "payment-session.ts",
 											"line": 6,
 											"character": 28,
-											"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment-session.ts#L6"
+											"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment-session.ts#L6"
 										}
 									]
 								}
@@ -1776,7 +1824,7 @@
 					"fileName": "payment.ts",
 					"line": 9,
 					"character": 6,
-					"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment.ts#L9"
+					"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment.ts#L9"
 				}
 			],
 			"type": {
@@ -1821,7 +1869,7 @@
 													"fileName": "payment.ts",
 													"line": 11,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment.ts#L11"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment.ts#L11"
 												}
 											],
 											"type": {
@@ -1865,7 +1913,7 @@
 													"fileName": "payment.ts",
 													"line": 12,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment.ts#L12"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment.ts#L12"
 												}
 											],
 											"type": {
@@ -1898,7 +1946,7 @@
 													"fileName": "payment.ts",
 													"line": 13,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment.ts#L13"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment.ts#L13"
 												}
 											],
 											"type": {
@@ -1931,7 +1979,7 @@
 													"fileName": "payment.ts",
 													"line": 14,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment.ts#L14"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment.ts#L14"
 												}
 											],
 											"type": {
@@ -1966,7 +2014,7 @@
 													"fileName": "payment.ts",
 													"line": 15,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment.ts#L15"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment.ts#L15"
 												}
 											],
 											"type": {
@@ -2001,7 +2049,7 @@
 													"fileName": "payment.ts",
 													"line": 16,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment.ts#L16"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment.ts#L16"
 												}
 											],
 											"type": {
@@ -2036,7 +2084,7 @@
 													"fileName": "payment.ts",
 													"line": 17,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment.ts#L17"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment.ts#L17"
 												}
 											],
 											"type": {
@@ -2071,7 +2119,7 @@
 													"fileName": "payment.ts",
 													"line": 18,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment.ts#L18"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment.ts#L18"
 												}
 											],
 											"type": {
@@ -2107,7 +2155,7 @@
 													"fileName": "payment.ts",
 													"line": 19,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment.ts#L19"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment.ts#L19"
 												}
 											],
 											"type": {
@@ -2150,7 +2198,7 @@
 													"fileName": "payment.ts",
 													"line": 22,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment.ts#L22"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment.ts#L22"
 												}
 											],
 											"type": {
@@ -2193,7 +2241,7 @@
 													"fileName": "payment.ts",
 													"line": 25,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment.ts#L25"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment.ts#L25"
 												}
 											],
 											"type": {
@@ -2236,7 +2284,7 @@
 													"fileName": "payment.ts",
 													"line": 28,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment.ts#L28"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment.ts#L28"
 												}
 											],
 											"type": {
@@ -2282,7 +2330,7 @@
 											"fileName": "payment.ts",
 											"line": 10,
 											"character": 21,
-											"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/payment.ts#L10"
+											"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/payment.ts#L10"
 										}
 									]
 								}
@@ -2314,7 +2362,7 @@
 					"fileName": "refund-reason.ts",
 					"line": 4,
 					"character": 6,
-					"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/refund-reason.ts#L4"
+					"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/refund-reason.ts#L4"
 				}
 			],
 			"type": {
@@ -2359,7 +2407,7 @@
 													"fileName": "refund-reason.ts",
 													"line": 5,
 													"character": 2,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/refund-reason.ts#L5"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/refund-reason.ts#L5"
 												}
 											],
 											"type": {
@@ -2403,7 +2451,7 @@
 													"fileName": "refund-reason.ts",
 													"line": 6,
 													"character": 2,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/refund-reason.ts#L6"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/refund-reason.ts#L6"
 												}
 											],
 											"type": {
@@ -2438,7 +2486,7 @@
 													"fileName": "refund-reason.ts",
 													"line": 7,
 													"character": 2,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/refund-reason.ts#L7"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/refund-reason.ts#L7"
 												}
 											],
 											"type": {
@@ -2473,7 +2521,7 @@
 													"fileName": "refund-reason.ts",
 													"line": 8,
 													"character": 2,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/refund-reason.ts#L8"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/refund-reason.ts#L8"
 												}
 											],
 											"type": {
@@ -2509,7 +2557,7 @@
 													"fileName": "refund-reason.ts",
 													"line": 9,
 													"character": 2,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/refund-reason.ts#L9"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/refund-reason.ts#L9"
 												}
 											],
 											"type": {
@@ -2548,7 +2596,7 @@
 											"fileName": "refund-reason.ts",
 											"line": 4,
 											"character": 50,
-											"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/refund-reason.ts#L4"
+											"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/refund-reason.ts#L4"
 										}
 									]
 								}
@@ -2580,7 +2628,7 @@
 					"fileName": "refund.ts",
 					"line": 5,
 					"character": 6,
-					"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/refund.ts#L5"
+					"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/refund.ts#L5"
 				}
 			],
 			"type": {
@@ -2625,7 +2673,7 @@
 													"fileName": "refund.ts",
 													"line": 7,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/refund.ts#L7"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/refund.ts#L7"
 												}
 											],
 											"type": {
@@ -2669,7 +2717,7 @@
 													"fileName": "refund.ts",
 													"line": 8,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/refund.ts#L8"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/refund.ts#L8"
 												}
 											],
 											"type": {
@@ -2705,7 +2753,7 @@
 													"fileName": "refund.ts",
 													"line": 9,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/refund.ts#L9"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/refund.ts#L9"
 												}
 											],
 											"type": {
@@ -2750,7 +2798,7 @@
 													"fileName": "refund.ts",
 													"line": 12,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/refund.ts#L12"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/refund.ts#L12"
 												}
 											],
 											"type": {
@@ -2792,7 +2840,7 @@
 													"fileName": "refund.ts",
 													"line": 17,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/refund.ts#L17"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/refund.ts#L17"
 												}
 											],
 											"type": {
@@ -2827,7 +2875,7 @@
 													"fileName": "refund.ts",
 													"line": 18,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/refund.ts#L18"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/refund.ts#L18"
 												}
 											],
 											"type": {
@@ -2862,7 +2910,7 @@
 													"fileName": "refund.ts",
 													"line": 19,
 													"character": 4,
-													"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/refund.ts#L19"
+													"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/refund.ts#L19"
 												}
 											],
 											"type": {
@@ -2896,7 +2944,7 @@
 											"fileName": "refund.ts",
 											"line": 6,
 											"character": 20,
-											"url": "https://github.com/medusajs/medusa/blob/3c25aec00616c44b5bd0a66550749708f21aec3e/packages/modules/payment/src/models/refund.ts#L6"
+											"url": "https://github.com/medusajs/medusa/blob/03344a0ee0b6540944f49fcebffd8d10e6bf67b1/packages/modules/payment/src/models/refund.ts#L6"
 										}
 									]
 								}
