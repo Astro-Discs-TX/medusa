@@ -107,7 +107,7 @@
  *         description: The address's metadata, can hold custom key-value pairs.
  *   metadata:
  *     type: object
- *     description: The order's metadata.
+ *     description: The order's metadata, can hold custom key-value pairs.
  * 
 */
 
