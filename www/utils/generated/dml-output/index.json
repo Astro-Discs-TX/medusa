@@ -8,7 +8,7 @@
 			"child_name": "The child name of the index relation",
 			"parent_id": "The ID of the parent index relation.",
 			"child_id": "The ID of the child index relation.",
-			"staled_at": "The staled at of the index relation"
+			"staled_at": "The date the index relation was staled."
 		}
 	},
 	"IndexData": {
@@ -17,7 +17,7 @@
 			"id": "The ID of the index data.",
 			"name": "The name of the index data",
 			"data": "The data of the index",
-			"staled_at": "The staled at of the index data"
+			"staled_at": "The date the index data was staled."
 		}
 	},
 	"IndexMetadata": {
