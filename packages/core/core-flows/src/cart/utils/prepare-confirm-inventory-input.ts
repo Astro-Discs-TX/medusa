@@ -168,7 +168,5 @@ const formatInventoryInput = ({
     )
   })
 
-  console.log(itemsToConfirm)
-
   return itemsToConfirm
 }
