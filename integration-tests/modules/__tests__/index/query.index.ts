@@ -40,6 +40,7 @@ medusaIntegrationTestRunner({
         const payload = [
           {
             title: "Test Product",
+            status: "published",
             description: "test-product-description",
             shipping_profile_id: shippingProfile.id,
             options: [{ title: "Denominations", values: ["100"] }],
@@ -66,6 +67,7 @@ medusaIntegrationTestRunner({
           {
             title: "Extra product",
             description: "extra description",
+            status: "published",
             shipping_profile_id: shippingProfile.id,
             options: [{ title: "Colors", values: ["Red"] }],
             variants: new Array(2).fill(0).map((_, i) => ({
@@ -105,7 +107,6 @@ medusaIntegrationTestRunner({
             "id",
             "description",
             "status",
-
             "variants.sku",
             "variants.barcode",
             "variants.material",
@@ -130,7 +131,7 @@ medusaIntegrationTestRunner({
           {
             id: expect.any(String),
             description: "extra description",
-            status: "draft",
+            status: "published",
             variants: [
               {
                 sku: "extra-variant-0",
@@ -194,7 +195,7 @@ medusaIntegrationTestRunner({
           {
             id: expect.any(String),
             description: "test-product-description",
-            status: "draft",
+            status: "published",
             variants: [
               {
                 sku: "test-variant-1",
