@@ -13,7 +13,59 @@ export const generatedSidebar = [
     "type": "link",
     "path": "/examples",
     "title": "Examples",
-    "children": []
+    "isChildSidebar": true,
+    "children": [
+      {
+        "loaded": true,
+        "isPathHref": true,
+        "type": "ref",
+        "path": "/examples",
+        "title": "Example Snippets",
+        "children": []
+      },
+      {
+        "loaded": true,
+        "isPathHref": true,
+        "type": "ref",
+        "path": "/recipes",
+        "title": "Recipes",
+        "children": []
+      },
+      {
+        "loaded": true,
+        "isPathHref": true,
+        "type": "ref",
+        "path": "/plugins",
+        "title": "Plugins",
+        "children": []
+      },
+      {
+        "loaded": true,
+        "isPathHref": true,
+        "type": "ref",
+        "path": "/integrations",
+        "title": "Integrations",
+        "children": []
+      },
+      {
+        "loaded": true,
+        "isPathHref": true,
+        "type": "category",
+        "title": "Server Examples",
+        "autogenerate_tags": "example+server",
+        "autogenerate_as_ref": true,
+        "children": [
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "link",
+            "title": "Custom Item Price",
+            "path": "/examples/guides/custom-item-price",
+            "children": []
+          }
+        ]
+      }
+    ]
   },
   {
     "loaded": true,
@@ -1152,6 +1204,14 @@ export const generatedSidebar = [
                 "type": "link",
                 "path": "/commerce-modules/cart/extend",
                 "title": "Extend Module",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Implement Custom Line Item Pricing in Medusa",
+                "path": "/examples/guides/custom-item-price",
                 "children": []
               }
             ]
@@ -8313,6 +8373,14 @@ export const generatedSidebar = [
                 "loaded": true,
                 "isPathHref": true,
                 "type": "link",
+                "path": "/commerce-modules/payment/account-holder",
+                "title": "Account Holder",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
                 "path": "/commerce-modules/payment/webhook-events",
                 "title": "Webhook Events",
                 "children": []
@@ -8926,8 +8994,26 @@ export const generatedSidebar = [
                         "loaded": true,
                         "isPathHref": true,
                         "type": "link",
+                        "path": "/references/payment/createAccountHolder",
+                        "title": "createAccountHolder",
+                        "description": "",
+                        "children": []
+                      },
+                      {
+                        "loaded": true,
+                        "isPathHref": true,
+                        "type": "link",
                         "path": "/references/payment/createPaymentCollections",
                         "title": "createPaymentCollections",
+                        "description": "",
+                        "children": []
+                      },
+                      {
+                        "loaded": true,
+                        "isPathHref": true,
+                        "type": "link",
+                        "path": "/references/payment/createPaymentMethods",
+                        "title": "createPaymentMethods",
                         "description": "",
                         "children": []
                       },
@@ -8946,6 +9032,24 @@ export const generatedSidebar = [
                         "type": "link",
                         "path": "/references/payment/createRefundReasons",
                         "title": "createRefundReasons",
+                        "description": "",
+                        "children": []
+                      },
+                      {
+                        "loaded": true,
+                        "isPathHref": true,
+                        "type": "link",
+                        "path": "/references/payment/deleteAccountHolder",
+                        "title": "deleteAccountHolder",
+                        "description": "",
+                        "children": []
+                      },
+                      {
+                        "loaded": true,
+                        "isPathHref": true,
+                        "type": "link",
+                        "path": "/references/payment/deleteCaptures",
+                        "title": "deleteCaptures",
                         "description": "",
                         "children": []
                       },
@@ -8973,6 +9077,15 @@ export const generatedSidebar = [
                         "type": "link",
                         "path": "/references/payment/deleteRefundReasons",
                         "title": "deleteRefundReasons",
+                        "description": "",
+                        "children": []
+                      },
+                      {
+                        "loaded": true,
+                        "isPathHref": true,
+                        "type": "link",
+                        "path": "/references/payment/deleteRefunds",
+                        "title": "deleteRefunds",
                         "description": "",
                         "children": []
                       },
@@ -9216,6 +9329,15 @@ export const generatedSidebar = [
                         "loaded": true,
                         "isPathHref": true,
                         "type": "link",
+                        "path": "/references/payment/models/AccountHolder",
+                        "title": "AccountHolder",
+                        "description": "",
+                        "children": []
+                      },
+                      {
+                        "loaded": true,
+                        "isPathHref": true,
+                        "type": "link",
                         "path": "/references/payment/models/Capture",
                         "title": "Capture",
                         "description": "",
@@ -9236,15 +9358,6 @@ export const generatedSidebar = [
                         "type": "link",
                         "path": "/references/payment/models/PaymentCollection",
                         "title": "PaymentCollection",
-                        "description": "",
-                        "children": []
-                      },
-                      {
-                        "loaded": true,
-                        "isPathHref": true,
-                        "type": "link",
-                        "path": "/references/payment/models/PaymentMethodToken",
-                        "title": "PaymentMethodToken",
                         "description": "",
                         "children": []
                       },
@@ -9383,6 +9496,14 @@ export const generatedSidebar = [
                 "type": "ref",
                 "title": "Get Variant Price with Taxes",
                 "path": "/commerce-modules/product/guides/price-with-taxes",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Implement Custom Line Item Pricing in Medusa",
+                "path": "/examples/guides/custom-item-price",
                 "children": []
               }
             ]
@@ -18710,6 +18831,15 @@ export const generatedSidebar = [
                     "loaded": true,
                     "isPathHref": true,
                     "type": "link",
+                    "path": "/references/medusa-workflows/steps/validateShippingStep",
+                    "title": "validateShippingStep",
+                    "description": "",
+                    "children": []
+                  },
+                  {
+                    "loaded": true,
+                    "isPathHref": true,
+                    "type": "link",
                     "path": "/references/medusa-workflows/steps/validateVariantPricesStep",
                     "title": "validateVariantPricesStep",
                     "description": "",
@@ -21959,6 +22089,15 @@ export const generatedSidebar = [
                     "loaded": true,
                     "isPathHref": true,
                     "type": "link",
+                    "path": "/references/medusa-workflows/steps/createPaymentAccountHolderStep",
+                    "title": "createPaymentAccountHolderStep",
+                    "description": "",
+                    "children": []
+                  },
+                  {
+                    "loaded": true,
+                    "isPathHref": true,
+                    "type": "link",
                     "path": "/references/medusa-workflows/steps/createPaymentSessionStep",
                     "title": "createPaymentSessionStep",
                     "description": "",
@@ -23564,6 +23703,15 @@ export const generatedSidebar = [
                     "type": "link",
                     "path": "/references/medusa-workflows/steps/deleteShippingProfilesStep",
                     "title": "deleteShippingProfilesStep",
+                    "description": "",
+                    "children": []
+                  },
+                  {
+                    "loaded": true,
+                    "isPathHref": true,
+                    "type": "link",
+                    "path": "/references/medusa-workflows/validateStepShippingProfileDelete",
+                    "title": "validateStepShippingProfileDelete",
                     "description": "",
                     "children": []
                   }
