@@ -4,6 +4,7 @@ export const defaultSchema = `
   type Product @Listeners(values: ["${Modules.PRODUCT}.product.created", "${Modules.PRODUCT}.product.updated", "${Modules.PRODUCT}.product.deleted"]) {
     id: String
     title: String
+    status: String
     variants: [ProductVariant]
     sales_channels: [SalesChannel]
   }
