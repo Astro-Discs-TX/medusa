@@ -41,6 +41,15 @@ moduleIntegrationTestRunner<ICartModuleService>({
               field: "cart",
             },
           },
+          creditLine: {
+            id: {
+              entity: "CreditLine",
+              field: "creditLine",
+              linkable: "credit_line_id",
+              primaryKey: "id",
+              serviceName: "cart",
+            },
+          },
           address: {
             id: {
               linkable: "address_id",
