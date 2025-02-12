@@ -17,6 +17,7 @@ moduleIntegrationTestRunner<ICartModuleService>({
 
         expect(Object.keys(linkable)).toEqual([
           "cart",
+          "creditLine",
           "address",
           "lineItem",
           "lineItemAdjustment",
