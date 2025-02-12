@@ -124,14 +124,14 @@ class BlogModuleService extends MedusaService({
     const context = filters.context ?? {}
     delete filters.context
 
-    let [posts, count] = await super.listAndCountPosts(
+    const result = await super.listAndCountPosts(
       filters, 
       config, 
       sharedContext
     )
 
     if (context.lang === "es") {
-      posts = posts.map((post) => {
+      result.posts = posts.map((post) => {
         return {
           ...post,
           title: post.title + " en español",
@@ -139,7 +139,7 @@ class BlogModuleService extends MedusaService({
       })
     }
 
-    return [posts, count]
+    return result
   }
 }
 
