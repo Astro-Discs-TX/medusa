@@ -59,6 +59,7 @@ async function getProductsWithIndexEngine(
     fields: req.queryConfig.fields,
     filters,
     pagination: req.queryConfig.pagination,
+    context,
   })
 
   if (withInventoryQuantity) {
