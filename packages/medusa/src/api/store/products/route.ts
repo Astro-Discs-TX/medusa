@@ -4,6 +4,7 @@ import { HttpTypes } from "@medusajs/framework/types"
 import {
   ContainerRegistrationKeys,
   isPresent,
+  QueryContext,
   remoteQueryObjectFromString,
 } from "@medusajs/framework/utils"
 import IndexEngineFeatureFlag from "../../../loaders/feature-flags/index-engine"
@@ -39,9 +40,8 @@ async function getProductsWithIndexEngine(
   }
 
   if (isPresent(req.pricingContext)) {
-    context["variants.calculated_price"] = {
-      context: req.pricingContext,
-    }
+    context["variants"] ??= {}
+    context["variants.calculated_price"] = QueryContext(req.pricingContext!)
   }
 
   const filters: Record<string, any> = req.filterableFields
