@@ -57,11 +57,6 @@ export const validateToken = () => {
       return next(errorObject)
     }
 
-    // E.g. token was requested for a customer, but attempted used for a user
-    if (token?.actor_type !== actor_type) {
-      return next(errorObject)
-    }
-
     const [providerIdentity] = await authModule.listProviderIdentities(
       {
         entity_id: token.entity_id,

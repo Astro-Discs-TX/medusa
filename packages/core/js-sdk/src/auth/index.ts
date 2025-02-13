@@ -280,11 +280,13 @@ export class Auth {
   updateProvider = async (
     actor: string,
     provider: string,
-    body: HttpTypes.AdminUpdateProvider
+    body: HttpTypes.AdminUpdateProvider,
+    token: string
   ) => {
     await this.client.fetch(`/auth/${actor}/${provider}/update`, {
       method: "POST",
       body,
+      headers: { Authorization: `Bearer ${token}` },
     })
   }
 
