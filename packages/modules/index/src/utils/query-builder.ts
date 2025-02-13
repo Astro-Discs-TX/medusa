@@ -82,6 +82,7 @@ export class QueryBuilder {
   private getGraphQLType(path, field) {
     const entity = this.getEntity(path)?.ref?.entity!
     const fieldRef = this.entityMap[entity]._fields[field]
+
     if (!fieldRef) {
       throw new Error(`Field ${field} is not indexed.`)
     }
@@ -111,6 +112,7 @@ export class QueryBuilder {
       Boolean: (val) => Boolean(val),
       ID: (val) => String(val),
       Date: (val) => new Date(val).toISOString(),
+      DateTime: (val) => new Date(val).toISOString(),
       Time: (val) => new Date(`1970-01-01T${val}Z`).toISOString(),
     }
 
@@ -132,6 +134,7 @@ export class QueryBuilder {
       Float: "::double precision",
       Boolean: "::boolean",
       Date: "::timestamp",
+      DateTime: "::timestamp",
       Time: "::time",
       "": "",
     }
@@ -141,6 +144,7 @@ export class QueryBuilder {
       Float: "0",
       Boolean: "false",
       Date: "1970-01-01 00:00:00",
+      DateTime: "1970-01-01 00:00:00",
       Time: "00:00:00",
       "": "",
     }

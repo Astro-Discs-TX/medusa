@@ -4,7 +4,13 @@ export const defaultSchema = `
   type Product @Listeners(values: ["${Modules.PRODUCT}.product.created", "${Modules.PRODUCT}.product.updated", "${Modules.PRODUCT}.product.deleted"]) {
     id: String
     title: String
+    handle: String
     status: String
+    is_giftcard: String
+    external_id: String
+    created_at: DateTime
+    updated_at: DateTime
+
     variants: [ProductVariant]
     sales_channels: [SalesChannel]
   }
@@ -13,6 +19,7 @@ export const defaultSchema = `
     id: String
     product_id: String
     sku: String
+
     prices: [Price]
   }
   
