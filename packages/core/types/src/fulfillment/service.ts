@@ -1649,6 +1649,7 @@ export interface IFulfillmentModuleService extends IModuleService {
    * const shippingProfile =
    *   await fulfillmentModuleService.createShippingProfiles({
    *     name: "Default",
+   *     type: "default"
    *   })
    */
   createShippingProfiles(
