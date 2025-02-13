@@ -9,17 +9,17 @@ type UsePromptProps = Omit<RenderPromptProps, "onConfirm" | "onCancel" | "open">
 
 const usePrompt = () => {
   const isPromptActive = useRef(false)
+  const currentPromptPromise = useRef<Promise<boolean> | null>(null)
 
   const prompt = async (props: UsePromptProps): Promise<boolean> => {
     if (isPromptActive.current) {
-      return false
+      // If the prompt is already active, return the current promise
+      return currentPromptPromise.current!
     }
 
     isPromptActive.current = true
-
-    return new Promise((resolve) => {
+    const promptPromise = new Promise<boolean>((resolve) => {
       let open = true
-
       const mountRoot = createRoot(document.createElement("div"))
 
       const onCancel = () => {
@@ -27,6 +27,7 @@ const usePrompt = () => {
         mountRoot.unmount()
         resolve(false)
         isPromptActive.current = false
+        currentPromptPromise.current = null
 
         // TEMP FIX for Radix issue with dropdowns persisting pointer-events: none on body after closing
         document.body.style.pointerEvents = "auto"
@@ -37,6 +38,7 @@ const usePrompt = () => {
         resolve(true)
         mountRoot.unmount()
         isPromptActive.current = false
+        currentPromptPromise.current = null
 
         // TEMP FIX for Radix issue with dropdowns persisting pointer-events: none on body after closing
         document.body.style.pointerEvents = "auto"
@@ -55,6 +57,9 @@ const usePrompt = () => {
 
       render()
     })
+
+    currentPromptPromise.current = promptPromise
+    return promptPromise
   }
 
   return prompt
