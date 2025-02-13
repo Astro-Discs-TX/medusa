@@ -40,7 +40,12 @@ export interface ValidateProductInputStepInput {
   /**
    * The shipping profiles to validate.
    */
-  shippingProfiles: { id: string }[]
+  shippingProfiles: {
+    /**
+     * The shipping profile's ID.
+     */ 
+    id: string
+  }[]
 }
 
 const validateProductInputStepId = "validate-product-input"
@@ -168,6 +173,7 @@ export const createProductsWorkflowId = "create-products"
  *         ]
  *       }
  *     ],
+ *     shipping_profile_id: "sp_123",
  *     additional_data: {
  *       erp_id: "123"
  *     }
@@ -178,7 +184,7 @@ export const createProductsWorkflowId = "create-products"
  *
  * Create one or more products with options and variants.
  *
- * @property hooks.productCreated - This hook is executed after the products are created. You can consume this hook to perform custom actions on the created products.
+ * @property hooks.productsCreated - This hook is executed after the products are created. You can consume this hook to perform custom actions on the created products.
  */
 export const createProductsWorkflow = createWorkflow(
   createProductsWorkflowId,
