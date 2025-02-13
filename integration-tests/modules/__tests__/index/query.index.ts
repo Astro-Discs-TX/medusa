@@ -95,7 +95,7 @@ medusaIntegrationTestRunner({
             console.log(err)
           })
         }
-        await setTimeout(5000)
+        await setTimeout(1000)
 
         const query = appContainer.resolve(
           ContainerRegistrationKeys.QUERY
@@ -107,6 +107,7 @@ medusaIntegrationTestRunner({
             "id",
             "description",
             "status",
+            "title",
             "variants.sku",
             "variants.barcode",
             "variants.material",
@@ -131,6 +132,7 @@ medusaIntegrationTestRunner({
           {
             id: expect.any(String),
             description: "extra description",
+            title: "Extra product",
             status: "published",
             variants: [
               {
@@ -195,6 +197,7 @@ medusaIntegrationTestRunner({
           {
             id: expect.any(String),
             description: "test-product-description",
+            title: "Test Product",
             status: "published",
             variants: [
               {
