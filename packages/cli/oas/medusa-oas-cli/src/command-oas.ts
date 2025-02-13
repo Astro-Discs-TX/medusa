@@ -179,7 +179,8 @@ async function getOASFromPaths(
   customBaseFile?: string
 ): Promise<OpenAPIObject> {
   console.log(`🔵 Gathering custom OAS`)
-  const gen = await swaggerInline(additionalPaths, {
+  // fast-glob broke Windows compatibility in v10, see https://github.com/mrmlnc/fast-glob#pattern-syntax, https://github.com/sindresorhus/globby/issues/130
+  const gen = await swaggerInline(additionalPaths.map(path => path.replace(/\\/g, "/")), {
     base:
       customBaseFile ?? path.resolve(basePath, "oas", "default.oas.base.yaml"),
     format: ".json",
