@@ -1625,9 +1625,11 @@ export interface IFulfillmentModuleService extends IModuleService {
    *   await fulfillmentModuleService.createShippingProfiles([
    *     {
    *       name: "Default",
+   *       type: "default"
    *     },
    *     {
    *       name: "Digital",
+   *       type: "digital"
    *     },
    *   ])
    */
