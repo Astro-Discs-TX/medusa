@@ -899,22 +899,25 @@ export interface FilterableProductVariantProps
    * Search through the title and different code attributes on the variant
    */
   q?: string
+
   /**
    * The IDs to filter product variants by.
    */
-  id?: string | string[]
+  id?: string | string[] | OperatorMap<string | string[]>
+
   /**
    * The SKUs to filter product variants by.
    */
-  sku?: string | string[]
+  sku?: string | string[] | OperatorMap<string | string[]>
   /**
    * Filter the product variants by their associated products' IDs.
    */
-  product_id?: string | string[]
+  product_id?: string | string[] | OperatorMap<string | string[]>
+
   /**
    * Filter product variants by their associated options.
    */
-  options?: Record<string, string>
+  options?: Record<string, any>
 }
 
 /**
