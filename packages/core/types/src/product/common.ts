@@ -726,8 +726,13 @@ export interface FilterableProductProps
    * Filters on a product's variant properties.
    */
   variants?: {
-    options?: { value: string; option_id: string }
+    options?: {
+      value?: string
+      option_id?: string
+      option?: Record<string, any>
+    }
   }
+
   /**
    * Filter a product by the ID of the associated type
    */
@@ -917,7 +922,11 @@ export interface FilterableProductVariantProps
   /**
    * Filter product variants by their associated options.
    */
-  options?: Record<string, any>
+  options?: {
+    value?: string
+    option_id?: string
+    option?: Record<string, any>
+  }
 }
 
 /**
