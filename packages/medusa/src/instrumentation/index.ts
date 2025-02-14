@@ -282,16 +282,21 @@ export function registerOtel(
     }>
   }
 ) {
-  const { serviceName, instrument, exporter, ...nodeSdkOptions } = {
+  const {
+    exporter,
+    serviceName,
+    instrument,
+    instrumentations,
+    ...nodeSdkOptions
+  } = {
     instrument: {},
+    instrumentations: [],
     ...options,
   }
 
   const { Resource } = require("@opentelemetry/resources")
   const { NodeSDK } = require("@opentelemetry/sdk-node")
   const { SimpleSpanProcessor } = require("@opentelemetry/sdk-trace-node")
-
-  const instrumentations = options.instrumentations || []
 
   if (instrument.db) {
     const { PgInstrumentation } = require("@opentelemetry/instrumentation-pg")
@@ -310,7 +315,7 @@ export function registerOtel(
   const sdk = new NodeSDK({
     serviceName,
     resource: new Resource({ "service.name": serviceName }),
-    spanProcessor: new SimpleSpanProcessor(options.exporter),
+    spanProcessor: new SimpleSpanProcessor(exporter),
     ...nodeSdkOptions,
     instrumentations: instrumentations,
   } satisfies Partial<NodeSDKConfiguration>)
