@@ -20,6 +20,13 @@ export function LocationServiceZoneShippingOptionCreate() {
     (f) => f.id === fset_id
   )
 
+  if (!isPending && !isFetching && !fulfillmentSet) {
+    throw json(
+      { message: `Fulfillment set with ID ${fset_id} was not found` },
+      404
+    )
+  }
+
   const zone = fulfillmentSet?.service_zones?.find((z) => z.id === zone_id)
 
   if (!isPending && !isFetching && !zone) {
@@ -40,7 +47,7 @@ export function LocationServiceZoneShippingOptionCreate() {
           zone={zone}
           isReturn={isReturn}
           locationId={location_id!}
-          type={fulfillmentSet?.type as FulfillmentSetType}
+          type={fulfillmentSet!.type as FulfillmentSetType}
         />
       )}
     </RouteFocusModal>
