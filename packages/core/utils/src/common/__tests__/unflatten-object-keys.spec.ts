@@ -30,4 +30,16 @@ describe("unflattenWhereClauses", () => {
       },
     })
   })
+
+  it("should unflatten obj", () => {
+    const where = {
+      created_at: "ASC",
+    }
+
+    const result = unflattenObjectKeys(where)
+
+    expect(result).toEqual({
+      created_at: "ASC",
+    })
+  })
 })

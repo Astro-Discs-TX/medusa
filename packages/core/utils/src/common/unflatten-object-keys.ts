@@ -34,7 +34,11 @@ export function unflattenObjectKeys(
 
   for (const key in flattened) {
     if (!key.includes(".")) {
-      result[key] = { ...result[key], ...flattened[key] }
+      if (isObject(result[key])) {
+        result[key] = { ...result[key], ...flattened[key] }
+      } else {
+        result[key] = flattened[key]
+      }
     }
   }
 
