@@ -292,7 +292,6 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
       returnIdOnly: !!keepFilteredEntities,
       hasCount,
     })
-    console.log(sql)
 
     const resultSet = await manager.execute(sql)
 
