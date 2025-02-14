@@ -24,7 +24,10 @@ const main = async function ({ directory }) {
     }[]
 
     const modulePaths = glob.sync(
-      join(directory, "src", "modules", "*", "index.ts")
+      join(directory, "src", "modules", "*", "index.ts"),
+      {
+        posix: true,
+      }
     )
 
     for (const path of modulePaths) {
@@ -63,6 +66,7 @@ async function getEntitiesForModule(path: string) {
 
   const entityPaths = glob.sync(join(path, "models", "*.ts"), {
     ignore: ["**/index.{js,ts}", "**/*.d.ts"],
+    posix: true,
   })
 
   for (const entityPath of entityPaths) {
