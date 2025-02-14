@@ -354,7 +354,7 @@ export function MedusaInternalService<
       // Manage metadata if needed
       toUpdateData.forEach(({ entity, update }) => {
         if (isPresent(update.metadata)) {
-          update.metadata = mergeMetadata(
+          entity.metadata = update.metadata = mergeMetadata(
             entity.metadata ?? {},
             update.metadata
           )
