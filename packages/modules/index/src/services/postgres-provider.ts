@@ -298,8 +298,6 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
       hasCount,
     })
 
-    console.log(sql)
-
     const resultSet = await manager.execute(sql)
 
     const resultMetadata: IndexTypes.QueryFunctionReturnPagination | undefined =
