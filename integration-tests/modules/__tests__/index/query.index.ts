@@ -9,6 +9,8 @@ import {
 
 jest.setTimeout(120000)
 
+// NOTE: In this tests, both API are used to query, we use object pattern and string pattern
+
 process.env.ENABLE_INDEX_MODULE = "true"
 
 medusaIntegrationTestRunner({
@@ -269,13 +271,11 @@ medusaIntegrationTestRunner({
           },
         })
 
+        // Limiting to 1 on purpose to keep it simple and check the correct order is maintained
         expect(resultset.data).toEqual([
           {
             id: expect.any(String),
-            variants: [
-              expect.objectContaining({
-                prices: expect.arrayContaining([]),
-              }),
+            variants: expect.arrayContaining([
               expect.objectContaining({
                 prices: expect.arrayContaining([
                   {
@@ -290,7 +290,7 @@ medusaIntegrationTestRunner({
                   },
                 ]),
               }),
-            ],
+            ]),
           },
         ])
 
@@ -302,35 +302,41 @@ medusaIntegrationTestRunner({
             "variants.prices.currency_code",
           ],
           filters: {
-            "variants.prices.currency_code": "USD",
+            variants: {
+              prices: {
+                currency_code: "USD",
+              },
+            },
           },
           pagination: {
             take: 1,
             skip: 0,
             order: {
-              "variants.prices.amount": "ASC",
+              variants: {
+                prices: {
+                  amount: "ASC",
+                },
+              },
             },
           },
         })
 
+        // Limiting to 1 on purpose to keep it simple and check the correct order is maintained
         expect(resultset2.data).toEqual([
           {
             id: expect.any(String),
             variants: [
               expect.objectContaining({
-                prices: expect.arrayContaining([]),
-              }),
-              expect.objectContaining({
                 prices: expect.arrayContaining([
                   {
                     amount: 30,
                     currency_code: "USD",
-                    id: "price_01JM2ACJ8FDMK3TSV671AZ60HN",
+                    id: expect.any(String),
                   },
                   {
                     amount: 50,
                     currency_code: "EUR",
-                    id: "price_01JM2ACJ8FZG3B4H47EZKC61TN",
+                    id: expect.any(String),
                   },
                 ]),
               }),

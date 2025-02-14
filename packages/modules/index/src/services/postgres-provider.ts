@@ -14,6 +14,7 @@ import {
   isDefined,
   MedusaContext,
   toMikroORMEntity,
+  unflattenObjectKeys,
 } from "@medusajs/framework/utils"
 import {
   EntityManager,
@@ -24,7 +25,6 @@ import { IndexData, IndexRelation } from "@models"
 import { createPartitions, QueryBuilder } from "../utils"
 import { flattenObjectKeys } from "../utils/flatten-object-keys"
 import { normalizeFieldsSelection } from "../utils/normalize-fields-selection"
-import { unflattenObjectKeys } from "../utils/unflatten-object-keys"
 
 type InjectedDependencies = {
   manager: EntityManager

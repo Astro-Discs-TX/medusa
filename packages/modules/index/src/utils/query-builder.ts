@@ -4,10 +4,10 @@ import {
   isObject,
   isPresent,
   isString,
+  unflattenObjectKeys,
 } from "@medusajs/framework/utils"
 import { Knex } from "@mikro-orm/knex"
 import { OrderBy, QueryFormat, QueryOptions, Select } from "@types"
-import { unflattenObjectKeys } from "./unflatten-object-keys"
 
 export const OPERATOR_MAP = {
   $eq: "=",
@@ -628,7 +628,7 @@ export class QueryBuilder {
       const direction = orderBy[aliasPath]
 
       queryBuilder.orderByRaw(
-        pgType.coalesce(`${alias}.data->>'${field}'`) + " " + direction
+        `(${alias}.data->>'${field}')${pgType.cast}` + " " + direction
       )
     }
 
@@ -720,6 +720,8 @@ export class QueryBuilder {
       const field = path.pop()
       const attr = path.join(".")
 
+      const pgType = this.getPostgresCastType(attr, [field])
+
       const alias = aliasMapping[attr]
       const direction = orderBy[aliasPath]
 
@@ -729,8 +731,12 @@ export class QueryBuilder {
       // transform the order by clause to a select MIN/MAX
       queryBuilder.select(
         direction === "ASC"
-          ? this.knex.raw(`MIN(${alias}.data->>'${field}') as ${orderAlias}`)
-          : this.knex.raw(`MAX(${alias}.data->>'${field}') as ${orderAlias}`)
+          ? this.knex.raw(
+              `MIN((${alias}.data->>'${field}')${pgType.cast}) as ${orderAlias}`
+            )
+          : this.knex.raw(
+              `MAX((${alias}.data->>'${field}')${pgType.cast}) as ${orderAlias}`
+            )
       )
     }
 

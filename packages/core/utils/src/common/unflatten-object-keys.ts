@@ -1,4 +1,4 @@
-import { isObject } from "@medusajs/framework/utils"
+import { isObject } from "./is-object"
 
 /**
  * unFlatten object keys
