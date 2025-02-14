@@ -1,3 +1,4 @@
+import { glob } from "glob"
 import { logger } from "@medusajs/framework/logger"
 import {
   defineMikroOrmCliConfig,
@@ -8,9 +9,18 @@ import { dirname, join } from "path"
 
 import { MetadataStorage } from "@mikro-orm/core"
 import { MikroORM } from "@mikro-orm/postgresql"
-import { glob } from "glob"
 
 const TERMINAL_SIZE = process.stdout.columns
+
+function toUnixSlash(path: string) {
+  const isExtendedLengthPath = path.startsWith("\\\\?\\")
+
+  if (isExtendedLengthPath) {
+    return path
+  }
+
+  return path.replace(/\\/g, "/")
+}
 
 /**
  * Generate migrations for all scanned modules in a plugin
@@ -24,10 +34,7 @@ const main = async function ({ directory }) {
     }[]
 
     const modulePaths = glob.sync(
-      join(directory, "src", "modules", "*", "index.ts"),
-      {
-        posix: true,
-      }
+      toUnixSlash(join(directory, "src", "modules", "*", "index.ts"))
     )
 
     for (const path of modulePaths) {
@@ -64,9 +71,8 @@ const main = async function ({ directory }) {
 async function getEntitiesForModule(path: string) {
   const entities = [] as any[]
 
-  const entityPaths = glob.sync(join(path, "models", "*.ts"), {
+  const entityPaths = glob.sync(toUnixSlash(join(path, "models", "*.ts")), {
     ignore: ["**/index.{js,ts}", "**/*.d.ts"],
-    posix: true,
   })
 
   for (const entityPath of entityPaths) {
