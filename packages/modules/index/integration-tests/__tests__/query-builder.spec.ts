@@ -565,6 +565,11 @@ describe("IndexModuleService query", function () {
       pagination: {
         take: 100,
         skip: 0,
+        order: {
+          product: {
+            created_at: "ASC",
+          },
+        },
       },
     })
 

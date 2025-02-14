@@ -13,7 +13,6 @@ import {
   InjectTransactionManager,
   isDefined,
   MedusaContext,
-  promiseAll,
   toMikroORMEntity,
 } from "@medusajs/framework/utils"
 import {
@@ -288,26 +287,21 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
       requestedFields,
     })
 
-    const [sql, sqlCount] = qb.buildQuery({
+    const sql = qb.buildQuery({
       hasPagination,
       returnIdOnly: !!keepFilteredEntities,
       hasCount,
     })
+    console.log(sql)
 
-    const promises: Promise<any>[] = []
-
-    promises.push(manager.execute(sql))
-
-    if (hasCount && sqlCount) {
-      promises.push(manager.execute(sqlCount))
-    }
-
-    let [resultSet, count] = await promiseAll(promises)
+    const resultSet = await manager.execute(sql)
 
     const resultMetadata: IndexTypes.QueryFunctionReturnPagination | undefined =
       hasPagination
         ? {
-            count: hasCount ? parseInt(count[0].count) : undefined,
+            count: hasCount
+              ? parseInt(resultSet[0]?.count_total ?? 0)
+              : undefined,
             skip,
             take,
           }

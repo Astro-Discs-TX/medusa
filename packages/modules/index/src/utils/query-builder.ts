@@ -564,9 +564,10 @@ export class QueryBuilder {
     hasPagination?: boolean
     hasCount?: boolean
     returnIdOnly?: boolean
-  }): [string, string | null] {
+  }): string {
     const queryBuilder = this.knex.queryBuilder()
 
+    const selectOnlyStructure = this.selector.select
     const structure = this.requestedFields
     const filter = this.selector.where ?? {}
 
@@ -595,7 +596,11 @@ export class QueryBuilder {
 
     const rootAlias = aliasMapping[rootKey]
     const selectParts = !returnIdOnly
-      ? this.buildSelectParts(rootStructure, rootKey, aliasMapping)
+      ? this.buildSelectParts(
+          selectOnlyStructure[rootKey] as Select,
+          rootKey,
+          aliasMapping
+        )
       : { [rootKey + ".id"]: `${rootAlias}.id` }
 
     queryBuilder.select(selectParts)
@@ -626,45 +631,50 @@ export class QueryBuilder {
       )
     }
 
-    let distinctQueryBuilder = queryBuilder.clone()
-
     let take_ = !isNaN(+take!) ? +take! : 15
     let skip_ = !isNaN(+skip!) ? +skip! : 0
-    let sql = ""
 
+    let cte = ""
     if (hasPagination) {
-      const idColumn = `${this.getShortAlias(aliasMapping, rootEntity)}.id`
-      distinctQueryBuilder.clearSelect()
-      distinctQueryBuilder.select(
-        this.knex.raw(`DISTINCT ON (${idColumn}) ${idColumn} as "id"`)
-      )
-      distinctQueryBuilder.limit(take_)
-      distinctQueryBuilder.offset(skip_)
+      cte = this.buildCTEData({
+        hasCount,
+        take: take_,
+        skip: skip_,
+        orderBy,
+      })
 
-      sql += `WITH paginated_data AS (${distinctQueryBuilder.toQuery()}),`
+      if (hasCount) {
+        queryBuilder.select(this.knex.raw("pd.count_total"))
+      }
 
-      queryBuilder.andWhere(
-        this.knex.raw(`${idColumn} IN (SELECT id FROM "paginated_data")`)
+      queryBuilder.joinRaw(
+        `JOIN paginated_data AS pd ON ${rootAlias}.id = pd.id`
       )
     }
 
-    sql += `${hasPagination ? " " : "WITH"} data AS (${queryBuilder.toQuery()})
-    SELECT * 
-    FROM data`
-
-    let sqlCount = ""
-    if (hasCount) {
-      sqlCount = this.buildQueryCount()
-    }
-
-    return [sql, hasCount ? sqlCount : null]
+    return cte + queryBuilder.toQuery()
   }
 
-  public buildQueryCount(): string {
+  public buildCTEData({
+    hasCount,
+    skip,
+    take,
+    orderBy,
+  }: {
+    hasCount: boolean
+    skip?: number
+    take: number
+    orderBy: OrderBy
+  }): string {
     const queryBuilder = this.knex.queryBuilder()
 
-    const hasWhere = isPresent(this.rawConfig?.filters)
-    const structure = hasWhere ? this.rawConfig?.filters! : this.requestedFields
+    const hasWhere = isPresent(this.rawConfig?.filters) || isPresent(orderBy)
+    const structure = hasWhere
+      ? {
+          ...this.rawConfig?.filters!,
+          ...orderBy,
+        }
+      : this.requestedFields
 
     const rootKey = this.getStructureKeys(structure)[0]
 
@@ -686,9 +696,7 @@ export class QueryBuilder {
 
     const rootAlias = aliasMapping[rootKey]
 
-    queryBuilder.select(
-      this.knex.raw(`COUNT(DISTINCT ${rootAlias}.id) as count`)
-    )
+    queryBuilder.select(this.knex.raw(`${rootAlias}.id as id`))
 
     queryBuilder.from(
       `cat_${rootEntity} AS ${this.getShortAlias(aliasMapping, rootEntity)}`
@@ -702,7 +710,45 @@ export class QueryBuilder {
       this.parseWhere(aliasMapping, this.selector.where!, queryBuilder)
     }
 
-    return queryBuilder.toQuery()
+    // ORDER BY clause
+    const orderAliases: string[] = []
+    for (const aliasPath in orderBy) {
+      const path = aliasPath.split(".")
+      const field = path.pop()
+      const attr = path.join(".")
+
+      const alias = aliasMapping[attr]
+      const direction = orderBy[aliasPath]
+
+      const orderAlias = `"${alias}.data->>'${field}'"`
+      orderAliases.push(orderAlias + " " + direction)
+
+      // transform the order by clause to a select MIN/MAX
+      queryBuilder.select(
+        direction === "ASC"
+          ? this.knex.raw(`MIN(${alias}.data->>'${field}') as ${orderAlias}`)
+          : this.knex.raw(`MAX(${alias}.data->>'${field}') as ${orderAlias}`)
+      )
+    }
+
+    queryBuilder.groupByRaw(`${rootAlias}.id`)
+
+    const countSubQuery = hasCount
+      ? `, (SELECT count(id) FROM data_select) as count_total`
+      : ""
+
+    return `
+      WITH data_select AS (
+        ${queryBuilder.toQuery()}
+      ),
+      paginated_data AS (
+        SELECT id ${countSubQuery}
+        FROM data_select
+        ${orderAliases.length ? "ORDER BY " + orderAliases.join(", ") : ""}
+        LIMIT ${take}
+        ${skip ? `OFFSET ${skip}` : ""}
+      )
+    `
   }
 
   // NOTE: We are keeping the bellow code for now as reference to alternative implementation for us. DO NOT REMOVE
