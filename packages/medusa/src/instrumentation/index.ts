@@ -154,6 +154,7 @@ export function instrumentRemoteQuery() {
               code: SpanStatusCode.ERROR,
               message: error.message,
             })
+            throw error
           })
           .finally(() => span.end())
       }
@@ -182,6 +183,7 @@ export function instrumentRemoteQuery() {
               code: SpanStatusCode.ERROR,
               message: error.message,
             })
+            throw error
           })
           .finally(() => span.end())
       }
@@ -207,6 +209,7 @@ export function instrumentRemoteQuery() {
               code: SpanStatusCode.ERROR,
               message: error.message,
             })
+            throw error
           })
           .finally(() => span.end())
       }
@@ -251,6 +254,7 @@ export function instrumentWorkflows() {
           span.setAttribute(`workflow.step.${key}`, value)
         })
 
+        // TODO: should we report error and re throw it?
         return await stepHandler().finally(() => span.end())
       }
     )
