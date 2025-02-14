@@ -223,7 +223,7 @@ describe("Internal Module Service Factory", () => {
       ])
     })
 
-    it.only("should update entities metadata successfully", async () => {
+    it("should update entities metadata successfully", async () => {
       const updateData = {
         id: "1",
         name: "UpdatedItem",
