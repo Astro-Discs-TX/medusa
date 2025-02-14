@@ -25,78 +25,77 @@ medusaIntegrationTestRunner({
 
     beforeEach(async () => {
       await createAdminUser(dbConnection, adminHeaders, appContainer)
+      const shippingProfile = (
+        await api.post(
+          `/admin/shipping-profiles`,
+          { name: "Test", type: "default" },
+          adminHeaders
+        )
+      ).data.shipping_profile
+
+      const payload = [
+        {
+          title: "Test Product",
+          status: "published",
+          description: "test-product-description",
+          shipping_profile_id: shippingProfile.id,
+          options: [{ title: "Denominations", values: ["100"] }],
+          variants: [
+            {
+              title: `Test variant 1`,
+              sku: `test-variant-1`,
+              prices: [
+                {
+                  currency_code: Object.values(defaultCurrencies)[0].code,
+                  amount: 30,
+                },
+                {
+                  currency_code: Object.values(defaultCurrencies)[2].code,
+                  amount: 50,
+                },
+              ],
+              options: {
+                Denominations: "100",
+              },
+            },
+          ],
+        },
+        {
+          title: "Extra product",
+          description: "extra description",
+          status: "published",
+          shipping_profile_id: shippingProfile.id,
+          options: [{ title: "Colors", values: ["Red"] }],
+          variants: new Array(2).fill(0).map((_, i) => ({
+            title: `extra variant ${i}`,
+            sku: `extra-variant-${i}`,
+            prices: [
+              {
+                currency_code: Object.values(defaultCurrencies)[1].code,
+                amount: 20,
+              },
+              {
+                currency_code: Object.values(defaultCurrencies)[0].code,
+                amount: 80,
+              },
+            ],
+            options: {
+              Colors: "Red",
+            },
+          })),
+        },
+      ]
+
+      for (const data of payload) {
+        await api.post("/admin/products", data, adminHeaders).catch((err) => {
+          console.log(err)
+        })
+      }
+      await setTimeout(1000)
     })
 
     describe("Index engine - Query.index", () => {
       it("should use query.index to query the index module and hydrate the data", async () => {
-        const shippingProfile = (
-          await api.post(
-            `/admin/shipping-profiles`,
-            { name: "Test", type: "default" },
-            adminHeaders
-          )
-        ).data.shipping_profile
-
-        const payload = [
-          {
-            title: "Test Product",
-            status: "published",
-            description: "test-product-description",
-            shipping_profile_id: shippingProfile.id,
-            options: [{ title: "Denominations", values: ["100"] }],
-            variants: [
-              {
-                title: `Test variant 1`,
-                sku: `test-variant-1`,
-                prices: [
-                  {
-                    currency_code: Object.values(defaultCurrencies)[0].code,
-                    amount: 30,
-                  },
-                  {
-                    currency_code: Object.values(defaultCurrencies)[2].code,
-                    amount: 50,
-                  },
-                ],
-                options: {
-                  Denominations: "100",
-                },
-              },
-            ],
-          },
-          {
-            title: "Extra product",
-            description: "extra description",
-            status: "published",
-            shipping_profile_id: shippingProfile.id,
-            options: [{ title: "Colors", values: ["Red"] }],
-            variants: new Array(2).fill(0).map((_, i) => ({
-              title: `extra variant ${i}`,
-              sku: `extra-variant-${i}`,
-              prices: [
-                {
-                  currency_code: Object.values(defaultCurrencies)[1].code,
-                  amount: 20,
-                },
-                {
-                  currency_code: Object.values(defaultCurrencies)[0].code,
-                  amount: 80,
-                },
-              ],
-              options: {
-                Colors: "Red",
-              },
-            })),
-          },
-        ]
-
-        for (const data of payload) {
-          await api.post("/admin/products", data, adminHeaders).catch((err) => {
-            console.log(err)
-          })
-        }
-        await setTimeout(1000)
-
         const query = appContainer.resolve(
           ContainerRegistrationKeys.QUERY
         ) as RemoteQueryFunction
@@ -122,12 +121,19 @@ medusaIntegrationTestRunner({
             "variants.prices.amount": { $gt: 30 },
           },
           pagination: {
+            take: 10,
+            skip: 0,
             order: {
               "variants.prices.amount": "DESC",
             },
           },
         })
 
+        expect(resultset.metadata).toEqual({
+          count: 2,
+          skip: 0,
+          take: 10,
+        })
         expect(resultset.data).toEqual([
           {
             id: expect.any(String),
@@ -234,6 +240,100 @@ medusaIntegrationTestRunner({
                   },
                 ],
               },
+            ],
+          },
+        ])
+      })
+
+      it("should use query.index to query the index module sorting by price desc", async () => {
+        const query = appContainer.resolve(
+          ContainerRegistrationKeys.QUERY
+        ) as RemoteQueryFunction
+
+        const resultset = await query.index({
+          entity: "product",
+          fields: [
+            "id",
+            "variants.prices.amount",
+            "variants.prices.currency_code",
+          ],
+          filters: {
+            "variants.prices.currency_code": "USD",
+          },
+          pagination: {
+            take: 1,
+            skip: 0,
+            order: {
+              "variants.prices.amount": "DESC",
+            },
+          },
+        })
+
+        expect(resultset.data).toEqual([
+          {
+            id: expect.any(String),
+            variants: [
+              expect.objectContaining({
+                prices: expect.arrayContaining([]),
+              }),
+              expect.objectContaining({
+                prices: expect.arrayContaining([
+                  {
+                    amount: 20,
+                    currency_code: "CAD",
+                    id: expect.any(String),
+                  },
+                  {
+                    amount: 80,
+                    currency_code: "USD",
+                    id: expect.any(String),
+                  },
+                ]),
+              }),
+            ],
+          },
+        ])
+
+        const resultset2 = await query.index({
+          entity: "product",
+          fields: [
+            "id",
+            "variants.prices.amount",
+            "variants.prices.currency_code",
+          ],
+          filters: {
+            "variants.prices.currency_code": "USD",
+          },
+          pagination: {
+            take: 1,
+            skip: 0,
+            order: {
+              "variants.prices.amount": "ASC",
+            },
+          },
+        })
+
+        expect(resultset2.data).toEqual([
+          {
+            id: expect.any(String),
+            variants: [
+              expect.objectContaining({
+                prices: expect.arrayContaining([]),
+              }),
+              expect.objectContaining({
+                prices: expect.arrayContaining([
+                  {
+                    amount: 30,
+                    currency_code: "USD",
+                    id: "price_01JM2ACJ8FDMK3TSV671AZ60HN",
+                  },
+                  {
+                    amount: 50,
+                    currency_code: "EUR",
+                    id: "price_01JM2ACJ8FZG3B4H47EZKC61TN",
+                  },
+                ]),
+              }),
             ],
           },
         ])

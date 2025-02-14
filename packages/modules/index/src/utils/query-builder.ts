@@ -7,6 +7,7 @@ import {
 } from "@medusajs/framework/utils"
 import { Knex } from "@mikro-orm/knex"
 import { OrderBy, QueryFormat, QueryOptions, Select } from "@types"
+import { unflattenObjectKeys } from "./unflatten-object-keys"
 
 export const OPERATOR_MAP = {
   $eq: "=",
@@ -670,10 +671,12 @@ export class QueryBuilder {
 
     const hasWhere = isPresent(this.rawConfig?.filters) || isPresent(orderBy)
     const structure = hasWhere
-      ? {
-          ...this.rawConfig?.filters!,
+      ? unflattenObjectKeys({
+          ...(this.rawConfig?.filters
+            ? unflattenObjectKeys(this.rawConfig?.filters)
+            : {}),
           ...orderBy,
-        }
+        })
       : this.requestedFields
 
     const rootKey = this.getStructureKeys(structure)[0]

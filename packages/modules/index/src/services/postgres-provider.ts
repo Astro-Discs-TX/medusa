@@ -24,6 +24,7 @@ import { IndexData, IndexRelation } from "@models"
 import { createPartitions, QueryBuilder } from "../utils"
 import { flattenObjectKeys } from "../utils/flatten-object-keys"
 import { normalizeFieldsSelection } from "../utils/normalize-fields-selection"
+import { unflattenObjectKeys } from "../utils/unflatten-object-keys"
 
 type InjectedDependencies = {
   manager: EntityManager
@@ -249,10 +250,11 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
     const { take, skip, order: inputOrderBy = {} } = config.pagination ?? {}
 
     const select = normalizeFieldsSelection(fields)
-    const where = flattenObjectKeys(filters)
+    const where = flattenObjectKeys(unflattenObjectKeys(filters))
 
-    const joinWhere = flattenObjectKeys(joinFilters)
-    const orderBy = flattenObjectKeys(inputOrderBy)
+    const inputOrderByObj = unflattenObjectKeys(inputOrderBy)
+    const joinWhere = flattenObjectKeys(unflattenObjectKeys(joinFilters))
+    const orderBy = flattenObjectKeys(inputOrderByObj)
 
     const { manager } = sharedContext as { manager: SqlEntityManager }
     let hasPagination = false
@@ -265,7 +267,10 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
       }
     }
 
-    const requestedFields = deepMerge(deepMerge(select, filters), inputOrderBy)
+    const requestedFields = deepMerge(
+      deepMerge(select, filters),
+      inputOrderByObj
+    )
 
     const connection = manager.getConnection()
     const qb = new QueryBuilder({
@@ -292,6 +297,8 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
       returnIdOnly: !!keepFilteredEntities,
       hasCount,
     })
+
+    console.log(sql)
 
     const resultSet = await manager.execute(sql)
 
