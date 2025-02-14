@@ -223,6 +223,38 @@ describe("Internal Module Service Factory", () => {
       ])
     })
 
+    it.only("should update entities metadata successfully", async () => {
+      const updateData = {
+        id: "1",
+        name: "UpdatedItem",
+        metadata: { key1: "", key2: "key2" },
+      }
+      const entitiesToUpdate = [
+        { id: "1", name: "Item", metadata: { key1: "value1" } },
+      ]
+
+      containerMock[modelRepositoryName].find.mockResolvedValueOnce(
+        entitiesToUpdate
+      )
+
+      containerMock[modelRepositoryName].update.mockResolvedValueOnce([
+        { entity: entitiesToUpdate[0], update: updateData },
+      ])
+
+      const result = await instance.update({ selector: {}, data: updateData })
+      expect(result).toEqual([
+        {
+          entity: entitiesToUpdate[0],
+          update: {
+            ...updateData,
+            metadata: {
+              key2: "key2",
+            },
+          },
+        },
+      ])
+    })
+
     it("should delete entity successfully", async () => {
       await instance.delete("1")
       expect(containerMock[modelRepositoryName].delete).toHaveBeenCalledWith(

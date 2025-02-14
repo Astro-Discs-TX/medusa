@@ -416,9 +416,7 @@ export function mikroOrmBaseRepositoryFactory<const T extends object>(
       await this.initManyToManyToDetachAllItemsIfNeeded(data, context)
 
       data.map((_, index) => {
-        manager.assign(data[index].entity, data[index].update, {
-          mergeObjectProperties: true,
-        })
+        manager.assign(data[index].entity, data[index].update)
         manager.persist(data[index].entity)
       })
 
