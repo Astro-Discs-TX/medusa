@@ -9,7 +9,6 @@ import { ApiRoutesLoader } from "@medusajs/framework/http"
 import { Tracer } from "@medusajs/framework/telemetry"
 import type { SpanExporter } from "@opentelemetry/sdk-trace-node"
 import type { NodeSDKConfiguration } from "@opentelemetry/sdk-node"
-import type { Instrumentation } from "@opentelemetry/instrumentation"
 import { TransactionOrchestrator } from "@medusajs/framework/orchestration"
 
 const EXCLUDED_RESOURCES = [".vite", "virtual:"]
