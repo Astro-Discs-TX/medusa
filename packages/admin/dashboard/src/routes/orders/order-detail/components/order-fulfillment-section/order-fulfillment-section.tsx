@@ -227,7 +227,9 @@ const Fulfillment = ({
   )
 
   let statusText = fulfillment.requires_shipping
-    ? "Awaiting shipping"
+    ? isPickUpFulfillment
+      ? "Awaiting pickup"
+      : "Awaiting shipping"
     : "Awaiting delivery"
   let statusColor: "blue" | "green" | "red" = "blue"
   let statusTimestamp = fulfillment.created_at
