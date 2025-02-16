@@ -121,6 +121,7 @@ export const defaultStoreCartFields = [
   "*region.countries",
   "*payment_collection",
   "*payment_collection.payment_sessions",
+  "*credit_lines",
 ]
 
 export const retrieveTransformQueryConfig = {
