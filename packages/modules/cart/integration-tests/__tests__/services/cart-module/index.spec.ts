@@ -2774,6 +2774,22 @@ moduleIntegrationTestRunner<ICartModuleService>({
             },
           },
         ],
+        credit_lines: [],
+        credit_lines_subtotal: 0,
+        credit_lines_tax_total: 0,
+        credit_lines_total: 0,
+        raw_credit_lines_subtotal: {
+          precision: 20,
+          value: "0",
+        },
+        raw_credit_lines_tax_total: {
+          precision: 20,
+          value: "0",
+        },
+        raw_credit_lines_total: {
+          precision: 20,
+          value: "0",
+        },
         total: 210,
         subtotal: 510,
         tax_total: 0,

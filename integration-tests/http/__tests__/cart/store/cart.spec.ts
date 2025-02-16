@@ -1367,8 +1367,6 @@ medusaIntegrationTestRunner({
             })
 
             it("should complete a cart with inventory item shared between variants", async () => {
-              console.log(cart)
-
               const response = await api.post(
                 `/store/carts/${cart.id}/complete`,
                 {},

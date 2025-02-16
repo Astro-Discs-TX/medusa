@@ -1300,7 +1300,7 @@ export interface CartCreditLineDTO {
   /**
    * The amount of the credit line.
    */
-  amount: number
+  amount: BigNumberValue
 
   /**
    * The reference model name that the credit line is generated from

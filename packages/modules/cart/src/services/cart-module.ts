@@ -173,6 +173,7 @@ export default class CartModuleService
 
     const requiredFieldsForTotals = [
       "items",
+      "credit_lines",
       "items.tax_lines",
       "items.adjustments",
       "shipping_methods",
