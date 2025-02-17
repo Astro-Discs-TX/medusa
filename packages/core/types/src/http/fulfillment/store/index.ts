@@ -84,4 +84,9 @@ export interface StoreCartShippingOption {
    * Calculated price for the shipping option
    */
   calculated_price: StoreCalculatedPrice
+
+  /**
+   * Whether the shipping option has missing inventory for items in the cart.
+   */
+  has_missing_inventory: boolean
 }
