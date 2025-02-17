@@ -6,6 +6,8 @@ export const defaultSchema = `
     title: String
     handle: String
     status: String
+    type_id: String
+    collection_id: String
     is_giftcard: String
     external_id: String
     created_at: DateTime
@@ -14,7 +16,7 @@ export const defaultSchema = `
     variants: [ProductVariant]
     sales_channels: [SalesChannel]
   }
-  
+
   type ProductVariant @Listeners(values: ["${Modules.PRODUCT}.product-variant.created", "${Modules.PRODUCT}.product-variant.updated", "${Modules.PRODUCT}.product-variant.deleted"]) {
     id: String
     product_id: String
