@@ -50,7 +50,6 @@ export const listShippingOptionsForCartWorkflow = createWorkflow(
         "items.variant.manage_inventory",
         "items.variant.inventory_items.inventory_item_id",
         "items.variant.inventory_items.inventory.requires_shipping",
-        // "items.variant.inventory_items.inventory.location_levels.location_id",
         "items.variant.inventory_items.inventory.location_levels.*",
       ],
       options: { throwIfKeyNotFound: true },
