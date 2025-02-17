@@ -16,10 +16,18 @@ export const GET = async (
   res: MedusaResponse<HttpTypes.StoreProductListResponse>
 ) => {
   if (featureFlagRouter.isFeatureEnabled(IndexEngineFeatureFlag.key)) {
-    return getProductsWithIndexEngine(req, res)
+    // TODO: These filters are not supported by the index engine yet
+    if (
+      isPresent(req.filterableFields.tags) ||
+      isPresent(req.filterableFields.categories)
+    ) {
+      return await getProducts(req, res)
+    }
+
+    return await getProductsWithIndexEngine(req, res)
   }
 
-  return getProducts(req, res)
+  return await getProducts(req, res)
 }
 
 async function getProductsWithIndexEngine(
