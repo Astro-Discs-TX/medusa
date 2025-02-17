@@ -310,6 +310,7 @@ medusaIntegrationTestRunner({
                 calculated_amount: 0,
               }),
               price_type: "flat",
+              has_missing_inventory: false,
             })
           )
         })
