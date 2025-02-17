@@ -47,6 +47,7 @@ export const listShippingOptionsForCartWorkflow = createWorkflow(
       filters: { id: input.cart_id },
       fields: [
         ...cartFieldsForPricingContext,
+        "items.*",
         "items.variant.manage_inventory",
         "items.variant.inventory_items.inventory_item_id",
         "items.variant.inventory_items.inventory.requires_shipping",
@@ -166,37 +167,37 @@ export const listShippingOptionsForCartWorkflow = createWorkflow(
         shippingOptions.map((shippingOption) => {
           const price = shippingOption.calculated_price
 
-          const locationId =
-            shippingOption.service_zone.fulfillment_set.location.id
+          // const locationId =
+          //   shippingOption.service_zone.fulfillment_set.location.id
 
-          const itemsAtLocationWithoutAvailableQuantity = cart.items.filter(
-            (item) => {
-              if (!item.variant.manage_inventory) {
-                return false
-              }
+          // const itemsAtLocationWithoutAvailableQuantity = cart.items.filter(
+          //   (item) => {
+          //     if (!item.variant.manage_inventory) {
+          //       return false
+          //     }
 
-              return item.variant.inventory_items.some((inventoryItem) => {
-                if (!inventoryItem.inventory.requires_shipping) {
-                  return false
-                }
+          //     return item.variant.inventory_items.some((inventoryItem) => {
+          //       if (!inventoryItem.inventory.requires_shipping) {
+          //         return false
+          //       }
 
-                const level = inventoryItem.inventory.location_levels.find(
-                  (locationLevel) => {
-                    return locationLevel.location_id === locationId
-                  }
-                )
+          //       const level = inventoryItem.inventory.location_levels.find(
+          //         (locationLevel) => {
+          //           return locationLevel.location_id === locationId
+          //         }
+          //       )
 
-                return !level ? true : level.available_quantity === 0
-              })
-            }
-          )
+          //       return !level ? true : level.available_quantity === 0
+          //     })
+          //   }
+          // )
 
           return {
             ...shippingOption,
             amount: price?.calculated_amount,
             is_tax_inclusive: !!price?.is_calculated_price_tax_inclusive,
-            has_missing_inventory:
-              itemsAtLocationWithoutAvailableQuantity.length > 0,
+            // has_missing_inventory:
+            //   itemsAtLocationWithoutAvailableQuantity.length > 0,
           }
         })
     )
