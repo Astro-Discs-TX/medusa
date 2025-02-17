@@ -88,12 +88,13 @@ medusaIntegrationTestRunner({
         },
       ]
 
-      for (const data of payload) {
-        await api.post("/admin/products", data, adminHeaders).catch((err) => {
+      await api
+        .post("/admin/products/batch", { create: payload }, adminHeaders)
+        .catch((err) => {
           console.log(err)
         })
-      }
-      await setTimeout(1000)
+
+      await setTimeout(2000)
     })
 
     describe("Index engine - Query.index", () => {
