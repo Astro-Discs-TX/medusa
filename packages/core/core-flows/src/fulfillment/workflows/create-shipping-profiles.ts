@@ -2,6 +2,7 @@ import { FulfillmentWorkflow } from "@medusajs/framework/types"
 import {
   WorkflowData,
   WorkflowResponse,
+  createHook,
   createWorkflow,
 } from "@medusajs/framework/workflows-sdk"
 import { createShippingProfilesStep } from "../steps"
@@ -16,6 +17,14 @@ export const createShippingProfilesWorkflow = createWorkflow(
   (
     input: WorkflowData<FulfillmentWorkflow.CreateShippingProfilesWorkflowInput>
   ): WorkflowResponse<FulfillmentWorkflow.CreateShippingProfilesWorkflowOutput> => {
-    return new WorkflowResponse(createShippingProfilesStep(input.data))
+    const shippingProfiles = createShippingProfilesStep(input.data)
+
+    const shippingProfilesCreated = createHook("shippingProfilesCreated", {
+      shippingProfiles,
+    })
+
+    return new WorkflowResponse(shippingProfiles, {
+      hooks: [shippingProfilesCreated],
+    })
   }
 )
