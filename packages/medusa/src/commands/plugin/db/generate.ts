@@ -1,9 +1,10 @@
 import { glob } from "glob"
 import { logger } from "@medusajs/framework/logger"
 import {
-  defineMikroOrmCliConfig,
+  toUnixSlash,
   DmlEntity,
   dynamicImport,
+  defineMikroOrmCliConfig,
 } from "@medusajs/framework/utils"
 import { dirname, join } from "path"
 
@@ -11,16 +12,6 @@ import { MetadataStorage } from "@mikro-orm/core"
 import { MikroORM } from "@mikro-orm/postgresql"
 
 const TERMINAL_SIZE = process.stdout.columns
-
-function toUnixSlash(path: string) {
-  const isExtendedLengthPath = path.startsWith("\\\\?\\")
-
-  if (isExtendedLengthPath) {
-    return path
-  }
-
-  return path.replace(/\\/g, "/")
-}
 
 /**
  * Generate migrations for all scanned modules in a plugin
