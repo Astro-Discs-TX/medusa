@@ -17,8 +17,6 @@ export const defaultSchema = `
     sales_channels: [SalesChannel]
   }
 
-  type ProductType @Listeners(values: ["${Modules.PRODUCT}.product-type.created", "${Modules.PRODUCT}.product-type.updated", "${Modules.PRODUCT}.product-type.deleted"]) {
-  
   type ProductVariant @Listeners(values: ["${Modules.PRODUCT}.product-variant.created", "${Modules.PRODUCT}.product-variant.updated", "${Modules.PRODUCT}.product-variant.deleted"]) {
     id: String
     product_id: String
