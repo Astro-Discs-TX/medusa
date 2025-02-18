@@ -196,7 +196,7 @@ export const listShippingOptionsForCartWorkflow = createWorkflow(
             ...shippingOption,
             amount: price?.calculated_amount,
             is_tax_inclusive: !!price?.is_calculated_price_tax_inclusive,
-            has_missing_inventory:
+            insufficient_inventory:
               itemsAtLocationWithoutAvailableQuantity.length > 0,
           }
         })
