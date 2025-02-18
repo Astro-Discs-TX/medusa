@@ -1480,36 +1480,6 @@ export default class OrderModuleService
     )[],
     @MedusaContext() sharedContext: Context = {}
   ): Promise<OrderTypes.OrderLineItemAdjustmentDTO[]> {
-    const order = await this.retrieveOrder(
-      orderId,
-      { select: ["id"], relations: ["items.item.adjustments"] },
-      sharedContext
-    )
-
-    const existingAdjustments = (order.items ?? [])
-      .map((item) => item.adjustments ?? [])
-      .flat()
-      .map((adjustment) => adjustment.id)
-
-    const adjustmentsSet = new Set(
-      adjustments
-        .map((a) => (a as OrderTypes.UpdateOrderLineItemAdjustmentDTO).id)
-        .filter(Boolean)
-    )
-
-    const toDelete: string[] = []
-
-    // From the existing adjustments, find the ones that are not passed in adjustments
-    existingAdjustments.forEach((adj) => {
-      if (!adjustmentsSet.has(adj)) {
-        toDelete.push(adj)
-      }
-    })
-
-    if (toDelete.length) {
-      await this.orderLineItemAdjustmentService_.delete(toDelete, sharedContext)
-    }
-
     let result = await this.orderLineItemAdjustmentService_.upsert(
       adjustments,
       sharedContext
@@ -1531,41 +1501,6 @@ export default class OrderModuleService
     )[],
     @MedusaContext() sharedContext: Context = {}
   ): Promise<OrderTypes.OrderShippingMethodAdjustmentDTO[]> {
-    const order = await this.retrieveOrder(
-      orderId,
-      { select: ["id"], relations: ["shipping_methods.adjustments"] },
-      sharedContext
-    )
-
-    const existingAdjustments = (order.shipping_methods ?? [])
-      .map((shippingMethod) => shippingMethod.adjustments ?? [])
-      .flat()
-      .map((adjustment) => adjustment.id)
-
-    const adjustmentsSet = new Set(
-      adjustments
-        .map(
-          (a) => (a as OrderTypes.UpdateOrderShippingMethodAdjustmentDTO)?.id
-        )
-        .filter(Boolean)
-    )
-
-    const toDelete: string[] = []
-
-    // From the existing adjustments, find the ones that are not passed in adjustments
-    existingAdjustments.forEach((adj) => {
-      if (!adjustmentsSet.has(adj)) {
-        toDelete.push(adj)
-      }
-    })
-
-    if (toDelete.length) {
-      await this.orderShippingMethodAdjustmentService_.delete(
-        toDelete,
-        sharedContext
-      )
-    }
-
     const result = await this.orderShippingMethodAdjustmentService_.upsert(
       adjustments,
       sharedContext

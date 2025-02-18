@@ -925,6 +925,7 @@ moduleIntegrationTestRunner<IOrderModuleService>({
 
           await service.setOrderLineItemAdjustments(createdOrder.id, [
             {
+              id: adjustments[0].id,
               item_id: itemOne.id,
               amount: 50,
               code: "50%",
@@ -994,10 +995,12 @@ moduleIntegrationTestRunner<IOrderModuleService>({
             ])
           )
 
-          await service.setOrderLineItemAdjustments(createdOrder.id, [])
+          await service.deleteOrderLineItemAdjustments(
+            adjustments.map((a) => a.id)
+          )
 
           const order = await service.retrieveOrder(createdOrder.id, {
-            relations: ["items.item.adjustments"],
+            relations: ["items.adjustments"],
           })
 
           expect(order.items).toEqual(
@@ -1466,13 +1469,18 @@ moduleIntegrationTestRunner<IOrderModuleService>({
                     amount: 50,
                     code: "50%",
                   }),
+                  expect.objectContaining({
+                    shipping_method_id: shippingMethodOne.id,
+                    amount: 100,
+                    code: "FREE",
+                  }),
                 ]),
               }),
             ])
           )
 
           expect(order.shipping_methods?.length).toBe(1)
-          expect(order.shipping_methods?.[0].adjustments?.length).toBe(1)
+          expect(order.shipping_methods?.[0].adjustments?.length).toBe(2)
         })
 
         it("should delete all shipping method adjustments for an order", async () => {
@@ -1513,6 +1521,9 @@ moduleIntegrationTestRunner<IOrderModuleService>({
             ])
           )
 
+          await service.deleteOrderShippingMethodAdjustments(
+            adjustments.map((a) => a.id)
+          )
           await service.setOrderShippingMethodAdjustments(createdOrder.id, [])
 
           const order = await service.retrieveOrder(createdOrder.id, {
