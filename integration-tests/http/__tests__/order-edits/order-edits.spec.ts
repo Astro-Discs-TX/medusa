@@ -505,5 +505,37 @@ medusaIntegrationTestRunner({
         expect(result[0].confirmed_by).toEqual(expect.stringContaining("user_"))
       })
     })
+
+    describe("Order Edit Shipping Methods", () => {
+      it("should add a shipping method to an order edit", async () => {
+        await api.post(
+          "/admin/order-edits",
+          { order_id: order.id, description: "Test" },
+          adminHeaders
+        )
+
+        const orderId = order.id
+
+        const shippingMethod = await api.post(
+          `/admin/order-edits/${orderId}/shipping-method`,
+          { shipping_option_id: shippingOption.id, custom_amount: 5 },
+          adminHeaders
+        )
+
+        expect(
+          shippingMethod.data.order_preview.shipping_methods.length
+        ).toEqual(2)
+        expect(shippingMethod.data.order_preview.shipping_methods).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              amount: 10,
+            }),
+            expect.objectContaining({
+              amount: 5,
+            }),
+          ])
+        )
+      })
+    })
   },
 })
