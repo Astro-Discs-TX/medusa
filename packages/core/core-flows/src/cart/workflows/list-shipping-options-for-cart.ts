@@ -187,7 +187,7 @@ export const listShippingOptionsForCartWorkflow = createWorkflow(
                   }
                 )
 
-                return !level ? true : level.available_quantity === 0
+                return !level ? true : level.available_quantity < item.quantity
               })
             }
           )
