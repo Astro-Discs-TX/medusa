@@ -23,6 +23,8 @@ export const OPERATOR_MAP = {
 }
 
 export class QueryBuilder {
+  #searchVectorColumnName = "document_tsv"
+
   private readonly structure: Select
   private readonly entityMap: Record<string, any>
   private readonly knex: Knex
@@ -585,6 +587,16 @@ export class QueryBuilder {
     const rootEntity = entity.toLowerCase()
     const aliasMapping: { [path: string]: string } = {}
 
+    let hasTextSearch: boolean = false
+    let textSearchQuery: string | null = null
+    const searchQueryFilterProp = `${rootEntity}.q`
+
+    if (filter[searchQueryFilterProp]) {
+      hasTextSearch = true
+      textSearchQuery = filter[searchQueryFilterProp]
+      delete filter[searchQueryFilterProp]
+    }
+
     const joinParts = this.buildQueryParts(
       rootStructure,
       "",
@@ -614,6 +626,36 @@ export class QueryBuilder {
       queryBuilder.joinRaw(joinPart)
     })
 
+    let searchWhereParts: string[] = []
+    if (hasTextSearch) {
+      /**
+       * Build the search where parts for the query,.
+       * Apply the search query to the search vector column for every joined tabled except
+       * the pivot joined table.
+       */
+      searchWhereParts = [
+        `${this.getShortAlias(aliasMapping, rootEntity)}.${
+          this.#searchVectorColumnName
+        } @@ plainto_tsquery('simple', '${textSearchQuery}')`,
+        ...joinParts.flatMap((part) => {
+          const aliases = part
+            .split(" as ")
+            .flatMap((chunk) => chunk.split(" on "))
+            .filter(
+              (alias) => alias.startsWith('"t_') && !alias.includes("_ref")
+            )
+          return aliases.map(
+            (alias) =>
+              `${alias}.${
+                this.#searchVectorColumnName
+              } @@ plainto_tsquery('simple', '${textSearchQuery}')`
+          )
+        }),
+      ]
+
+      queryBuilder.whereRaw(`(${searchWhereParts.join(" OR ")})`)
+    }
+
     // WHERE clause
     this.parseWhere(aliasMapping, filter, queryBuilder)
 
@@ -639,6 +681,7 @@ export class QueryBuilder {
     if (hasPagination) {
       cte = this.buildCTEData({
         hasCount,
+        searchWhereParts,
         take: take_,
         skip: skip_,
         orderBy,
@@ -658,11 +701,13 @@ export class QueryBuilder {
 
   public buildCTEData({
     hasCount,
+    searchWhereParts = [],
     skip,
     take,
     orderBy,
   }: {
     hasCount: boolean
+    searchWhereParts: string[]
     skip?: number
     take: number
     orderBy: OrderBy
@@ -670,14 +715,15 @@ export class QueryBuilder {
     const queryBuilder = this.knex.queryBuilder()
 
     const hasWhere = isPresent(this.rawConfig?.filters) || isPresent(orderBy)
-    const structure = hasWhere
-      ? unflattenObjectKeys({
-          ...(this.rawConfig?.filters
-            ? unflattenObjectKeys(this.rawConfig?.filters)
-            : {}),
-          ...orderBy,
-        })
-      : this.requestedFields
+    const structure =
+      hasWhere && !searchWhereParts.length
+        ? unflattenObjectKeys({
+            ...(this.rawConfig?.filters
+              ? unflattenObjectKeys(this.rawConfig?.filters)
+              : {}),
+            ...orderBy,
+          })
+        : this.requestedFields
 
     const rootKey = this.getStructureKeys(structure)[0]
 
@@ -709,6 +755,10 @@ export class QueryBuilder {
       joinParts.forEach((joinPart) => {
         queryBuilder.joinRaw(joinPart)
       })
+
+      if (searchWhereParts.length) {
+        queryBuilder.whereRaw(`(${searchWhereParts.join(" OR ")})`)
+      }
 
       this.parseWhere(aliasMapping, this.selector.where!, queryBuilder)
     }
