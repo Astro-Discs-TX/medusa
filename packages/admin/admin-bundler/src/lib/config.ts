@@ -38,9 +38,12 @@ export async function getViteConfig(
         "@tanstack/react-query",
       ],
       exclude: [...VIRTUAL_MODULES],
-      entries: options.sources
-        ? options.sources.map((s) => path.join(s, "**/*.{js,ts,jsx,tsx}"))
-        : [],
+      entries: [
+        path.join(root, "index.html"),
+        ...(options.sources?.map((source) =>
+          path.join(source, "**/*.{js,ts,jsx,tsx}")
+        ) ?? []),
+      ],
     },
     define: {
       __BASE__: JSON.stringify(options.path),
