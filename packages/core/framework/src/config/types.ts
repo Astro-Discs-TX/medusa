@@ -98,7 +98,7 @@ export type AdminOptions = {
    * module.exports = defineConfig({
    *   admin: {
    *     storefrontUrl: process.env.MEDUSA_STOREFRONT_URL ||
-   *       "http://localhost:9000"
+   *       "http://localhost:8000"
    *   },
    *   // ...
    * })
