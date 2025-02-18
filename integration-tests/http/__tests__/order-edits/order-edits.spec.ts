@@ -507,7 +507,7 @@ medusaIntegrationTestRunner({
     })
 
     describe("Order Edit Shipping Methods", () => {
-      it("should add a shipping method to an order edit", async () => {
+      it("should add a shipping method through an order edit", async () => {
         await api.post(
           "/admin/order-edits",
           { order_id: order.id, description: "Test" },
