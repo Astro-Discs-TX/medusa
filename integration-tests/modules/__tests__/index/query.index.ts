@@ -25,79 +25,79 @@ medusaIntegrationTestRunner({
       process.env.ENABLE_INDEX_MODULE = "false"
     })
 
-    beforeEach(async () => {
-      await createAdminUser(dbConnection, adminHeaders, appContainer)
-      const shippingProfile = (
-        await api.post(
-          `/admin/shipping-profiles`,
-          { name: "Test", type: "default" },
-          adminHeaders
-        )
-      ).data.shipping_profile
+    describe("Index engine - Query.index", () => {
+      beforeEach(async () => {
+        await createAdminUser(dbConnection, adminHeaders, appContainer)
+        const shippingProfile = (
+          await api.post(
+            `/admin/shipping-profiles`,
+            { name: "Test", type: "default" },
+            adminHeaders
+          )
+        ).data.shipping_profile
 
-      const payload = [
-        {
-          title: "Test Product",
-          status: "published",
-          description: "test-product-description",
-          shipping_profile_id: shippingProfile.id,
-          options: [{ title: "Denominations", values: ["100"] }],
-          variants: [
-            {
-              title: `Test variant 1`,
-              sku: `test-variant-1`,
+        const payload = [
+          {
+            title: "Test Product",
+            status: "published",
+            description: "test-product-description",
+            shipping_profile_id: shippingProfile.id,
+            options: [{ title: "Denominations", values: ["100"] }],
+            variants: [
+              {
+                title: `Test variant 1`,
+                sku: `test-variant-1`,
+                prices: [
+                  {
+                    currency_code: Object.values(defaultCurrencies)[0].code,
+                    amount: 30,
+                  },
+                  {
+                    currency_code: Object.values(defaultCurrencies)[2].code,
+                    amount: 50,
+                  },
+                ],
+                options: {
+                  Denominations: "100",
+                },
+              },
+            ],
+          },
+          {
+            title: "Extra product",
+            description: "extra description",
+            status: "published",
+            shipping_profile_id: shippingProfile.id,
+            options: [{ title: "Colors", values: ["Red"] }],
+            variants: new Array(2).fill(0).map((_, i) => ({
+              title: `extra variant ${i}`,
+              sku: `extra-variant-${i}`,
               prices: [
                 {
-                  currency_code: Object.values(defaultCurrencies)[0].code,
-                  amount: 30,
+                  currency_code: Object.values(defaultCurrencies)[1].code,
+                  amount: 20,
                 },
                 {
-                  currency_code: Object.values(defaultCurrencies)[2].code,
-                  amount: 50,
+                  currency_code: Object.values(defaultCurrencies)[0].code,
+                  amount: 80,
                 },
               ],
               options: {
-                Denominations: "100",
+                Colors: "Red",
               },
-            },
-          ],
-        },
-        {
-          title: "Extra product",
-          description: "extra description",
-          status: "published",
-          shipping_profile_id: shippingProfile.id,
-          options: [{ title: "Colors", values: ["Red"] }],
-          variants: new Array(2).fill(0).map((_, i) => ({
-            title: `extra variant ${i}`,
-            sku: `extra-variant-${i}`,
-            prices: [
-              {
-                currency_code: Object.values(defaultCurrencies)[1].code,
-                amount: 20,
-              },
-              {
-                currency_code: Object.values(defaultCurrencies)[0].code,
-                amount: 80,
-              },
-            ],
-            options: {
-              Colors: "Red",
-            },
-          })),
-        },
-      ]
+            })),
+          },
+        ]
 
-      await api
-        .post("/admin/products/batch", { create: payload }, adminHeaders)
-        .catch((err) => {
-          console.log(err)
-        })
+        await api
+          .post("/admin/products/batch", { create: payload }, adminHeaders)
+          .catch((err) => {
+            console.log(err)
+          })
 
-      await setTimeout(2000)
-    })
+        await setTimeout(2000)
+      })
 
-    describe("Index engine - Query.index", () => {
       it("should use query.index to query the index module and hydrate the data", async () => {
         const query = appContainer.resolve(
           ContainerRegistrationKeys.QUERY
