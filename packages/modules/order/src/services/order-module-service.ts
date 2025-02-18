@@ -731,11 +731,13 @@ export default class OrderModuleService
         shipping_methods,
         items,
       }) as any
+
       const calculated = calculateOrderChange({
         order: orderWithTotals,
         actions: [],
         transactions: order.transactions,
       })
+
       createRawPropertiesFromBigNumber(calculated)
 
       ord.summary = {
@@ -1730,36 +1732,6 @@ export default class OrderModuleService
     )[],
     @MedusaContext() sharedContext: Context = {}
   ): Promise<OrderTypes.OrderLineItemTaxLineDTO[]> {
-    const order = await this.retrieveOrder(
-      orderId,
-      { select: ["id"], relations: ["items.item.tax_lines"] },
-      sharedContext
-    )
-
-    const existingTaxLines = (order.items ?? [])
-      .map((item) => item.tax_lines ?? [])
-      .flat()
-      .map((taxLine) => taxLine.id)
-
-    const taxLinesSet = new Set(
-      taxLines
-        .map(
-          (taxLine) => (taxLine as OrderTypes.UpdateOrderLineItemTaxLineDTO)?.id
-        )
-        .filter(Boolean)
-    )
-
-    const toDelete: string[] = []
-    existingTaxLines.forEach((taxLine: string) => {
-      if (!taxLinesSet.has(taxLine)) {
-        toDelete.push(taxLine)
-      }
-    })
-
-    if (toDelete.length) {
-      await this.orderLineItemTaxLineService_.delete(toDelete, sharedContext)
-    }
-
     const result = await this.orderLineItemTaxLineService_.upsert(
       taxLines as UpdateOrderLineItemTaxLineDTO[],
       sharedContext
@@ -1843,40 +1815,6 @@ export default class OrderModuleService
     )[],
     @MedusaContext() sharedContext: Context = {}
   ): Promise<OrderTypes.OrderShippingMethodTaxLineDTO[]> {
-    const order = await this.retrieveOrder(
-      orderId,
-      { select: ["id"], relations: ["shipping_methods.tax_lines"] },
-      sharedContext
-    )
-
-    const existingTaxLines = (order.shipping_methods ?? [])
-      .map((shippingMethod) => shippingMethod.tax_lines ?? [])
-      .flat()
-      .map((taxLine) => taxLine.id)
-
-    const taxLinesSet = new Set(
-      taxLines
-        .map(
-          (taxLine) =>
-            (taxLine as OrderTypes.UpdateOrderShippingMethodTaxLineDTO)?.id
-        )
-        .filter(Boolean)
-    )
-
-    const toDelete: string[] = []
-    existingTaxLines.forEach((taxLine: string) => {
-      if (!taxLinesSet.has(taxLine)) {
-        toDelete.push(taxLine)
-      }
-    })
-
-    if (toDelete.length) {
-      await this.orderShippingMethodTaxLineService_.delete(
-        toDelete,
-        sharedContext
-      )
-    }
-
     const result = await this.orderShippingMethodTaxLineService_.upsert(
       taxLines as UpdateOrderShippingMethodTaxLineDTO[],
       sharedContext
@@ -2115,7 +2053,7 @@ export default class OrderModuleService
       orderId,
       {
         select: ["id", "version", "items.detail", "summary", "total"],
-        relations: ["transactions", "items", "shipping_methods"],
+        relations: ["transactions", "credit_lines"],
       },
       sharedContext
     )
@@ -2131,7 +2069,7 @@ export default class OrderModuleService
     )
 
     const { itemsToUpsert, shippingMethodsToUpsert, calculatedOrders } =
-      applyChangesToOrder(
+      await applyChangesToOrder(
         [order],
         { [order.id]: orderChange.actions },
         { addActionReferenceToObject: true }
@@ -2139,9 +2077,34 @@ export default class OrderModuleService
 
     const calculated = calculatedOrders[order.id]
 
+    await this.includeTaxLinesAndAdjustementsToPreview(
+      calculated.order,
+      itemsToUpsert,
+      shippingMethodsToUpsert,
+      sharedContext
+    )
+
+    const calcOrder = calculated.order
+
+    const orderWithTotals = decorateCartTotals(
+      calcOrder as DecorateCartLikeInputDTO
+    )
+    calcOrder.summary = calculated.summaryFromTotal(orderWithTotals.total)
+
+    createRawPropertiesFromBigNumber(calcOrder)
+
+    return calcOrder
+  }
+
+  private async includeTaxLinesAndAdjustementsToPreview(
+    order,
+    itemsToUpsert,
+    shippingMethodsToUpsert,
+    sharedContext
+  ) {
     const addedItems = {}
     const addedShippingMethods = {}
-    for (const item of calculated.order.items) {
+    for (const item of order.items) {
       const isExistingItem = item.id === item.detail?.item_id
       if (!isExistingItem) {
         addedItems[item.id] = {
@@ -2156,7 +2119,7 @@ export default class OrderModuleService
       }
     }
 
-    for (const sm of calculated.order.shipping_methods) {
+    for (const sm of order.shipping_methods) {
       if (!isDefined(sm.shipping_option_id)) {
         addedShippingMethods[sm.id] = sm
       }
@@ -2171,7 +2134,7 @@ export default class OrderModuleService
         sharedContext
       )
 
-      calculated.order.items.forEach((item, idx) => {
+      order.items.forEach((item, idx) => {
         if (!addedItems[item.id]) {
           return
         }
@@ -2187,7 +2150,7 @@ export default class OrderModuleService
         const compareAtUnitPrice =
           newItem?.compare_at_unit_price ?? item.compare_at_unit_price
 
-        calculated.order.items[idx] = {
+        order.items[idx] = {
           ...lineItem,
           actions,
           quantity: newItem.quantity,
@@ -2210,7 +2173,7 @@ export default class OrderModuleService
         sharedContext
       )
 
-      calculated.order.shipping_methods.forEach((sm, idx) => {
+      order.shipping_methods.forEach((sm, idx) => {
         if (!addedShippingMethods[sm.id]) {
           return
         }
@@ -2227,7 +2190,7 @@ export default class OrderModuleService
         sm.shipping_method_id = sm.id
         delete sm.id
 
-        calculated.order.shipping_methods[idx] = {
+        order.shipping_methods[idx] = {
           ...shippingMethod,
           actions,
           detail: {
@@ -2237,15 +2200,6 @@ export default class OrderModuleService
         }
       })
     }
-
-    const calcOrder = calculated.order
-
-    decorateCartTotals(calcOrder as DecorateCartLikeInputDTO)
-    calcOrder.summary = calculated.summary
-
-    createRawPropertiesFromBigNumber(calcOrder)
-
-    return calcOrder
   }
 
   async cancelOrderChange(
@@ -2982,27 +2936,25 @@ export default class OrderModuleService
       { id: deduplicate(ordersIds) },
       {
         select: ["id", "version", "items.detail", "summary", "total"],
-        relations: [
-          "transactions",
-          "items",
-          "items.detail",
-          "shipping_methods",
-        ],
+        relations: ["transactions", "credit_lines"],
       },
       sharedContext
     )
-
-    orders = formatOrder(orders, {
-      entity: Order,
-    }) as OrderDTO[]
 
     const {
       itemsToUpsert,
       shippingMethodsToUpsert,
       summariesToUpsert,
       orderToUpdate,
-    } = applyChangesToOrder(orders, actionsMap, {
+    } = await applyChangesToOrder(orders, actionsMap, {
       addActionReferenceToObject: true,
+      includeTaxLinesAndAdjustementsToPreview: async (...args) => {
+        args.push(sharedContext)
+        return await this.includeTaxLinesAndAdjustementsToPreview.apply(
+          this,
+          args
+        )
+      },
     })
 
     await promiseAll([

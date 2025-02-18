@@ -234,6 +234,52 @@ export class OrderChangeProcessing {
     return orderSummary
   }
 
+  // Calculate the order summary from a calculated total including taxes
+  public getSummaryFromTotal(total: BigNumberInput): OrderSummaryDTO {
+    const summary_ = this.summary
+    const orderSummary = {
+      transaction_total: new BigNumber(summary_.transaction_total),
+      original_order_total: new BigNumber(summary_.original_order_total),
+      current_order_total: new BigNumber(total),
+      pending_difference: new BigNumber(summary_.pending_difference),
+      difference_sum: new BigNumber(summary_.difference_sum),
+      paid_total: new BigNumber(summary_.paid_total),
+      refunded_total: new BigNumber(summary_.refunded_total),
+      credit_line_total: new BigNumber(summary_.credit_line_total),
+      accounting_total: new BigNumber(summary_.accounting_total),
+    } as any
+
+    orderSummary.accounting_total = new BigNumber(
+      MathBN.sub(
+        orderSummary.current_order_total,
+        orderSummary.credit_line_total
+      )
+    )
+
+    orderSummary.current_order_total = new BigNumber(
+      MathBN.sub(
+        orderSummary.current_order_total,
+        orderSummary.credit_line_total
+      )
+    )
+
+    orderSummary.pending_difference = new BigNumber(
+      MathBN.sub(
+        orderSummary.current_order_total,
+        orderSummary.transaction_total
+      )
+    )
+
+    orderSummary.difference_sum = new BigNumber(
+      MathBN.sub(
+        orderSummary.current_order_total,
+        orderSummary.original_order_total
+      )
+    )
+
+    return orderSummary
+  }
+
   public getCurrentOrder(): VirtualOrder {
     return this.order
   }
@@ -259,7 +305,10 @@ export function calculateOrderChange({
   calc.processActions()
 
   return {
+    instance: calc,
     summary: calc.getSummary(),
+    summaryFromTotal: (total: BigNumberInput) =>
+      calc.getSummaryFromTotal(total),
     order: calc.getCurrentOrder(),
   }
 }

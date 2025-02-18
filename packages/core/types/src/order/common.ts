@@ -41,104 +41,25 @@ export type OrderChangeStatus =
  * The order summary details.
  */
 export type OrderSummaryDTO = {
-  /**
-   * The total of the order summary.
-   */
-  total: BigNumberValue
-
-  /**
-   * The subtotal of the order summary.
-   */
-  subtotal: BigNumberValue
-
-  /**
-   * The total tax of the order summary.
-   */
-  total_tax: BigNumberValue
-
-  /**
-   * The ordered total of the order summary.
-   */
-  ordered_total: BigNumberValue
-
-  /**
-   * The fulfilled total of the order summary.
-   */
-  fulfilled_total: BigNumberValue
-
-  /**
-   * The returned total of the order summary.
-   */
-  returned_total: BigNumberValue
-
-  /**
-   * The return request total of the order summary.
-   */
-  return_request_total: BigNumberValue
-
-  /**
-   * The write off total of the order summary.
-   */
-  write_off_total: BigNumberValue
-
-  /**
-   * The projected total of the order summary.
-   */
-  projected_total: BigNumberValue
-
-  /**
-   * The net total of the order summary.
-   */
-  net_total: BigNumberValue
-
-  /**
-   * The net subtotal of the order summary.
-   */
-  net_subtotal: BigNumberValue
-
-  /**
-   * The net total tax of the order summary.
-   */
-  net_total_tax: BigNumberValue
-
-  /**
-   * The balance of the order summary.
-   */
-  balance: BigNumberValue
-
-  /**
-   * The paid total of the order summary.
-   */
-  paid_total: BigNumberValue
-
-  /**
-   * The refunded total of the order summary.
-   */
-  refunded_total: BigNumberValue
-
-  /**
-   * The pending difference of the order.
-   */
   pending_difference: BigNumberValue
-
-  /**
-   * The raw pending difference of the order.
-   *
-   * @ignore
-   */
-  raw_pending_difference: BigNumberRawValue
-
-  /**
-   * The sum difference of all actions
-   */
   difference_sum: BigNumberValue
+  current_order_total: BigNumberValue
+  original_order_total: BigNumberValue
+  transaction_total: BigNumberValue
+  paid_total: BigNumberValue
+  refunded_total: BigNumberValue
+  credit_line_total: BigNumberValue
+  accounting_total: BigNumberValue
 
-  /**
-   * The raw sum difference of all actions
-   *
-   * @ignore
-   */
+  raw_pending_difference: BigNumberRawValue
   raw_difference_sum: BigNumberRawValue
+  raw_current_order_total: BigNumberRawValue
+  raw_original_order_total: BigNumberRawValue
+  raw_transaction_total: BigNumberRawValue
+  raw_paid_total: BigNumberRawValue
+  raw_refunded_total: BigNumberRawValue
+  raw_credit_line_total: BigNumberRawValue
+  raw_accounting_total: BigNumberRawValue
 }
 
 /**
