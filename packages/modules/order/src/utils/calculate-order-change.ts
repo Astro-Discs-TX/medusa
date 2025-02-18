@@ -217,6 +217,13 @@ export class OrderChangeProcessing {
     return calculatedAmount
   }
 
+  public mergeSummary(summary: Partial<OrderSummaryCalculated>) {
+    this.summary = {
+      ...this.summary,
+      ...summary,
+    }
+  }
+
   public getSummary(): OrderSummaryDTO {
     const summary = this.summary
     const orderSummary = {

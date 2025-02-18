@@ -133,8 +133,9 @@ export async function applyChangesToOrder(
     }
 
     if (options?.includeTaxLinesAndAdjustementsToPreview) {
-      ;(calculated.instance as any).summary.original_order_total =
-        calculated.order.total
+      calculated.instance.mergeSummary({
+        original_order_total: calculated.order.total,
+      })
       await options?.includeTaxLinesAndAdjustementsToPreview(
         calculated.order,
         itemsToUpsert,
