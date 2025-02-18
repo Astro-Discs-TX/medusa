@@ -69,6 +69,7 @@
     "pg": "^8.13.0",
     "rimraf": "^3.0.2",
     "supertest": "^4.0.2",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.6.2",
     "vite": "^5.4.14"
   },
@@ -93,7 +94,6 @@
     "jsonwebtoken": "^9.0.2",
     "lodash": "4.17.21",
     "morgan": "^1.9.1",
-    "tsconfig-paths": "^4.2.0",
     "zod": "3.22.4"
   },
   "peerDependencies": {
