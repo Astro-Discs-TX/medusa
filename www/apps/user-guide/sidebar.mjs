@@ -65,21 +65,103 @@ export const sidebar = sidebarAttachHrefCommonOptions([
   },
   {
     type: "category",
-    path: "/products",
     title: "Products",
-    autogenerate_path: "/products",
+    children: [
+      {
+        type: "link",
+        title: "Overview",
+        path: "/products",
+      },
+      {
+        type: "link",
+        title: "Create Product",
+        path: "/products/create",
+        children: [
+          {
+            type: "link",
+            title: "Multi-Part Product",
+            path: "/products/create/multi-part",
+          },
+          {
+            type: "link",
+            title: "Bundle Product",
+            path: "/products/create/bundle",
+          },
+        ],
+      },
+      {
+        type: "link",
+        title: "Edit Product",
+        path: "/products/edit",
+      },
+      {
+        type: "link",
+        title: "Manage Variants",
+        path: "/proucts/variants",
+      },
+      {
+        type: "link",
+        title: "Manage Collections",
+        path: "/products/collections",
+      },
+      {
+        type: "link",
+        title: "Categories",
+        path: "/products/categories",
+      },
+      {
+        type: "link",
+        title: "Import Products",
+        path: "/products/import",
+      },
+      {
+        type: "link",
+        title: "Export Products",
+        path: "/products/export",
+      },
+    ],
   },
   {
     type: "category",
-    path: "/inventory",
     title: "Inventory",
-    autogenerate_path: "/inventory",
+    children: [
+      {
+        type: "link",
+        title: "Overview",
+        path: "/inventory",
+      },
+      {
+        type: "link",
+        title: "Manage Inventory",
+        path: "/inventory/inventory",
+      },
+      {
+        type: "link",
+        title: "Manage Reservations",
+        path: "/inventory/reservations",
+      },
+    ],
   },
   {
     type: "category",
-    path: "/customers",
     title: "Customers",
-    autogenerate_path: "/customers",
+    children: [
+      {
+        type: "link",
+        title: "Overview",
+        path: "/customers",
+      },
+      {
+        type: "link",
+        title: "Manage Customers",
+        path: "/customers/manage",
+      },
+      {
+        type: "link",
+        title: "Manage Groups",
+        path: "/customers/groups",
+      },
+    ],
   },
   {
     type: "category",
