@@ -38,6 +38,9 @@ export async function getViteConfig(
         "@tanstack/react-query",
       ],
       exclude: [...VIRTUAL_MODULES],
+      entries: options.sources
+        ? options.sources.map((s) => path.join(s, "**/*.{js,ts,jsx,tsx}"))
+        : [],
     },
     define: {
       __BASE__: JSON.stringify(options.path),
@@ -46,7 +49,12 @@ export async function getViteConfig(
     },
     server: {
       fs: {
-        allow: [searchForWorkspaceRoot(process.cwd())],
+        allow: [
+          searchForWorkspaceRoot(
+            process.cwd(),
+            ...(options.sources?.map((s) => searchForWorkspaceRoot(s)) ?? [])
+          ),
+        ],
       },
       hmr: {
         port: hmrPort,
