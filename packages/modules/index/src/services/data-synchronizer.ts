@@ -287,11 +287,19 @@ export class DataSynchronizer {
     const { fields, alias, moduleConfig } = schemaEntityObjectRepresentation
     const isLink = !!moduleConfig?.isLink
 
-    const entityPrimaryKey = fields.find(
-      (field) => !!moduleConfig?.primaryKeys?.includes(field)
-    )
+    if (!alias) {
+      const acknoledgement = {
+        lastCursor: pagination.cursor ?? null,
+        done: true,
+      }
 
-    if (!entityPrimaryKey) {
+      await ack(acknoledgement)
+      return acknoledgement
+    }
+
+    const entityPrimaryKey = "id"
+    const moduleHasId = !!moduleConfig?.primaryKeys?.includes("id")
+    if (!moduleHasId) {
       // TODO: for now these are skiped
       const acknoledgement = {
         lastCursor: pagination.cursor ?? null,
