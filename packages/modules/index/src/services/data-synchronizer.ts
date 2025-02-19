@@ -303,7 +303,9 @@ export class DataSynchronizer {
       // TODO: for now these are skiped
       const acknoledgement = {
         lastCursor: pagination.cursor ?? null,
-        done: true,
+        err: new Error(
+          `Entity ${entityName} does not have a property 'id'. The 'id' must be provided and must be orderable (e.g ulid)`
+        ),
       }
 
       await ack(acknoledgement)
