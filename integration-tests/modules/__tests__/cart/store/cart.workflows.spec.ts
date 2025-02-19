@@ -992,7 +992,7 @@ medusaIntegrationTestRunner({
                   is_tax_inclusive: true,
                   is_custom_price: false,
                   quantity: 1,
-                  requires_shipping: true,
+                  requires_shipping: false, // product doesn't have a shipping profile nor inventory items that require shipping
                   subtitle: "Test product",
                   title: "Test variant",
                   unit_price: 3000,
@@ -1008,7 +1008,7 @@ medusaIntegrationTestRunner({
                   metadata: {
                     foo: "bar",
                   },
-                  requires_shipping: true,
+                  requires_shipping: true, // overriden when adding to cart
                   subtitle: "Test subtitle",
                   thumbnail: "some-url",
                   title: "Test item",
@@ -1042,7 +1042,7 @@ medusaIntegrationTestRunner({
                   is_tax_inclusive: false,
                   is_custom_price: false,
                   quantity: 1,
-                  requires_shipping: true,
+                  requires_shipping: false,
                   subtitle: "Test product",
                   title: "Test variant",
                   unit_price: 2000,
