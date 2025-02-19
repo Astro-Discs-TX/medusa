@@ -197,7 +197,7 @@ export class DataSynchronizer {
         const promises: Promise<any>[] = []
 
         if (ack.lastCursor) {
-          this.#logger.info(
+          this.#logger.debug(
             `[Index engine] syncing entity '${entity}' updating last cursor to ${ack.lastCursor} (+${chunkElapsedTime}ms)`
           )
 
