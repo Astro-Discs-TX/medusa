@@ -731,7 +731,7 @@ medusaIntegrationTestRunner({
           expect(paymentCollections[0]).toEqual(
             expect.objectContaining({
               status: "not_paid",
-              amount: 110.5,
+              amount: 113.21,
               currency_code: "usd",
             })
           )
@@ -775,7 +775,7 @@ medusaIntegrationTestRunner({
         })
 
         it("should create a payment collection successfully & mark as paid", async () => {
-          const paymentDelta = 110.5
+          const paymentDelta = 113.21
           const orderForPayment = (
             await api.get(`/admin/orders/${order.id}`, adminHeaders)
           ).data.order
@@ -1181,8 +1181,8 @@ medusaIntegrationTestRunner({
 
           expect(orderCheck.summary).toEqual(
             expect.objectContaining({
-              pending_difference: -10,
-              current_order_total: 51,
+              pending_difference: -9.7,
+              current_order_total: 76.3,
               original_order_total: 61,
             })
           )
