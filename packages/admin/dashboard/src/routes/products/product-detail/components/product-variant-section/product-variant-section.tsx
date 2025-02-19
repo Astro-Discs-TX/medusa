@@ -76,7 +76,7 @@ export const ProductVariantSection = ({
       created_at: created_at ? JSON.parse(created_at) : undefined,
       updated_at: updated_at ? JSON.parse(updated_at) : undefined,
       fields:
-        "title,sku,*options,created_at,updated_at,*inventory_items.inventory.location_levels,+inventory_quantity",
+        "title,sku,*options,created_at,updated_at,*inventory_items.inventory.location_levels,inventory_quantity",
     },
     {
       placeholderData: keepPreviousData,
