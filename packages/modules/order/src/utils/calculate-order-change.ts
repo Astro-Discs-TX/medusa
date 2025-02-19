@@ -226,7 +226,7 @@ export class OrderChangeProcessing {
     return orderSummary
   }
 
-  // Calculate the order summary from a calculated total including taxes
+  // Calculate the order summary from a calculated order including taxes
   public getSummaryFromOrder(order: OrderDTO): OrderSummaryDTO {
     const summary_ = this.summary
     const total = order.total
