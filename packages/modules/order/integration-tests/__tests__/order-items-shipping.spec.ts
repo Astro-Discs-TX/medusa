@@ -925,7 +925,6 @@ moduleIntegrationTestRunner<IOrderModuleService>({
 
           await service.setOrderLineItemAdjustments(createdOrder.id, [
             {
-              id: adjustments[0].id,
               item_id: itemOne.id,
               amount: 50,
               code: "50%",
@@ -995,12 +994,10 @@ moduleIntegrationTestRunner<IOrderModuleService>({
             ])
           )
 
-          await service.deleteOrderLineItemAdjustments(
-            adjustments.map((a) => a.id)
-          )
+          await service.setOrderLineItemAdjustments(createdOrder.id, [])
 
           const order = await service.retrieveOrder(createdOrder.id, {
-            relations: ["items.adjustments"],
+            relations: ["items.item.adjustments"],
           })
 
           expect(order.items).toEqual(
@@ -1469,18 +1466,13 @@ moduleIntegrationTestRunner<IOrderModuleService>({
                     amount: 50,
                     code: "50%",
                   }),
-                  expect.objectContaining({
-                    shipping_method_id: shippingMethodOne.id,
-                    amount: 100,
-                    code: "FREE",
-                  }),
                 ]),
               }),
             ])
           )
 
           expect(order.shipping_methods?.length).toBe(1)
-          expect(order.shipping_methods?.[0].adjustments?.length).toBe(2)
+          expect(order.shipping_methods?.[0].adjustments?.length).toBe(1)
         })
 
         it("should delete all shipping method adjustments for an order", async () => {
@@ -1521,9 +1513,6 @@ moduleIntegrationTestRunner<IOrderModuleService>({
             ])
           )
 
-          await service.deleteOrderShippingMethodAdjustments(
-            adjustments.map((a) => a.id)
-          )
           await service.setOrderShippingMethodAdjustments(createdOrder.id, [])
 
           const order = await service.retrieveOrder(createdOrder.id, {
@@ -2279,18 +2268,13 @@ moduleIntegrationTestRunner<IOrderModuleService>({
                     rate: 32,
                     code: "TX-2",
                   }),
-                  expect.objectContaining({
-                    item_id: itemOne.id,
-                    rate: 25,
-                    code: "TX",
-                  }),
                 ]),
               }),
             ])
           )
 
           expect(order.items.length).toBe(1)
-          expect(order.items[0].tax_lines.length).toBe(3)
+          expect(order.items[0].tax_lines.length).toBe(2)
         })
       })
 

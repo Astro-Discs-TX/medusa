@@ -1472,8 +1472,7 @@ export default class OrderModuleService
   }
 
   @InjectTransactionManager()
-  async setOrderLineItemAdjustments(
-    orderId: string,
+  async upsertOrderLineItemAdjustments(
     adjustments: (
       | OrderTypes.CreateOrderLineItemAdjustmentDTO
       | OrderTypes.UpdateOrderLineItemAdjustmentDTO
@@ -1493,6 +1492,77 @@ export default class OrderModuleService
   }
 
   @InjectTransactionManager()
+  async setOrderLineItemAdjustments(
+    orderId: string,
+    adjustments: (
+      | OrderTypes.CreateOrderLineItemAdjustmentDTO
+      | OrderTypes.UpdateOrderLineItemAdjustmentDTO
+    )[],
+    @MedusaContext() sharedContext: Context = {}
+  ): Promise<OrderTypes.OrderLineItemAdjustmentDTO[]> {
+    const order = await this.retrieveOrder(
+      orderId,
+      { select: ["id"], relations: ["items.item.adjustments"] },
+      sharedContext
+    )
+
+    const existingAdjustments = (order.items ?? [])
+      .map((item) => item.adjustments ?? [])
+      .flat()
+      .map((adjustment) => adjustment.id)
+
+    const adjustmentsSet = new Set(
+      adjustments
+        .map((a) => (a as OrderTypes.UpdateOrderLineItemAdjustmentDTO).id)
+        .filter(Boolean)
+    )
+
+    const toDelete: string[] = []
+
+    // From the existing adjustments, find the ones that are not passed in adjustments
+    existingAdjustments.forEach((adj) => {
+      if (!adjustmentsSet.has(adj)) {
+        toDelete.push(adj)
+      }
+    })
+
+    if (toDelete.length) {
+      await this.orderLineItemAdjustmentService_.delete(toDelete, sharedContext)
+    }
+
+    let result = await this.orderLineItemAdjustmentService_.upsert(
+      adjustments,
+      sharedContext
+    )
+
+    return await this.baseRepository_.serialize<
+      OrderTypes.OrderLineItemAdjustmentDTO[]
+    >(result, {
+      populate: true,
+    })
+  }
+
+  @InjectTransactionManager()
+  async upsertOrderShippingMethodAdjustments(
+    adjustments: (
+      | OrderTypes.CreateOrderShippingMethodAdjustmentDTO
+      | OrderTypes.UpdateOrderShippingMethodAdjustmentDTO
+    )[],
+    @MedusaContext() sharedContext: Context = {}
+  ): Promise<OrderTypes.OrderShippingMethodAdjustmentDTO[]> {
+    const result = await this.orderShippingMethodAdjustmentService_.upsert(
+      adjustments,
+      sharedContext
+    )
+
+    return await this.baseRepository_.serialize<
+      OrderTypes.OrderShippingMethodAdjustmentDTO[]
+    >(result, {
+      populate: true,
+    })
+  }
+
+  @InjectTransactionManager()
   async setOrderShippingMethodAdjustments(
     orderId: string,
     adjustments: (
@@ -1501,6 +1571,41 @@ export default class OrderModuleService
     )[],
     @MedusaContext() sharedContext: Context = {}
   ): Promise<OrderTypes.OrderShippingMethodAdjustmentDTO[]> {
+    const order = await this.retrieveOrder(
+      orderId,
+      { select: ["id"], relations: ["shipping_methods.adjustments"] },
+      sharedContext
+    )
+
+    const existingAdjustments = (order.shipping_methods ?? [])
+      .map((shippingMethod) => shippingMethod.adjustments ?? [])
+      .flat()
+      .map((adjustment) => adjustment.id)
+
+    const adjustmentsSet = new Set(
+      adjustments
+        .map(
+          (a) => (a as OrderTypes.UpdateOrderShippingMethodAdjustmentDTO)?.id
+        )
+        .filter(Boolean)
+    )
+
+    const toDelete: string[] = []
+
+    // From the existing adjustments, find the ones that are not passed in adjustments
+    existingAdjustments.forEach((adj) => {
+      if (!adjustmentsSet.has(adj)) {
+        toDelete.push(adj)
+      }
+    })
+
+    if (toDelete.length) {
+      await this.orderShippingMethodAdjustmentService_.delete(
+        toDelete,
+        sharedContext
+      )
+    }
+
     const result = await this.orderShippingMethodAdjustmentService_.upsert(
       adjustments,
       sharedContext
@@ -1659,6 +1764,26 @@ export default class OrderModuleService
   }
 
   @InjectTransactionManager()
+  async upsertOrderLineItemTaxLines(
+    taxLines: (
+      | OrderTypes.CreateOrderLineItemTaxLineDTO
+      | OrderTypes.UpdateOrderLineItemTaxLineDTO
+    )[],
+    @MedusaContext() sharedContext: Context = {}
+  ): Promise<OrderTypes.OrderLineItemTaxLineDTO[]> {
+    const result = await this.orderLineItemTaxLineService_.upsert(
+      taxLines as UpdateOrderLineItemTaxLineDTO[],
+      sharedContext
+    )
+
+    return await this.baseRepository_.serialize<
+      OrderTypes.OrderLineItemTaxLineDTO[]
+    >(result, {
+      populate: true,
+    })
+  }
+
+  @InjectTransactionManager()
   async setOrderLineItemTaxLines(
     orderId: string,
     taxLines: (
@@ -1667,6 +1792,36 @@ export default class OrderModuleService
     )[],
     @MedusaContext() sharedContext: Context = {}
   ): Promise<OrderTypes.OrderLineItemTaxLineDTO[]> {
+    const order = await this.retrieveOrder(
+      orderId,
+      { select: ["id"], relations: ["items.item.tax_lines"] },
+      sharedContext
+    )
+
+    const existingTaxLines = (order.items ?? [])
+      .map((item) => item.tax_lines ?? [])
+      .flat()
+      .map((taxLine) => taxLine.id)
+
+    const taxLinesSet = new Set(
+      taxLines
+        .map(
+          (taxLine) => (taxLine as OrderTypes.UpdateOrderLineItemTaxLineDTO)?.id
+        )
+        .filter(Boolean)
+    )
+
+    const toDelete: string[] = []
+    existingTaxLines.forEach((taxLine: string) => {
+      if (!taxLinesSet.has(taxLine)) {
+        toDelete.push(taxLine)
+      }
+    })
+
+    if (toDelete.length) {
+      await this.orderLineItemTaxLineService_.delete(toDelete, sharedContext)
+    }
+
     const result = await this.orderLineItemTaxLineService_.upsert(
       taxLines as UpdateOrderLineItemTaxLineDTO[],
       sharedContext
@@ -1742,6 +1897,26 @@ export default class OrderModuleService
   }
 
   @InjectTransactionManager()
+  async upsertOrderShippingMethodTaxLines(
+    taxLines: (
+      | OrderTypes.CreateOrderShippingMethodTaxLineDTO
+      | OrderTypes.UpdateOrderShippingMethodTaxLineDTO
+    )[],
+    @MedusaContext() sharedContext: Context = {}
+  ): Promise<OrderTypes.OrderShippingMethodTaxLineDTO[]> {
+    const result = await this.orderShippingMethodTaxLineService_.upsert(
+      taxLines as UpdateOrderShippingMethodTaxLineDTO[],
+      sharedContext
+    )
+
+    return await this.baseRepository_.serialize<
+      OrderTypes.OrderShippingMethodTaxLineDTO[]
+    >(result, {
+      populate: true,
+    })
+  }
+
+  @InjectTransactionManager()
   async setOrderShippingMethodTaxLines(
     orderId: string,
     taxLines: (
@@ -1750,6 +1925,40 @@ export default class OrderModuleService
     )[],
     @MedusaContext() sharedContext: Context = {}
   ): Promise<OrderTypes.OrderShippingMethodTaxLineDTO[]> {
+    const order = await this.retrieveOrder(
+      orderId,
+      { select: ["id"], relations: ["shipping_methods.tax_lines"] },
+      sharedContext
+    )
+
+    const existingTaxLines = (order.shipping_methods ?? [])
+      .map((shippingMethod) => shippingMethod.tax_lines ?? [])
+      .flat()
+      .map((taxLine) => taxLine.id)
+
+    const taxLinesSet = new Set(
+      taxLines
+        .map(
+          (taxLine) =>
+            (taxLine as OrderTypes.UpdateOrderShippingMethodTaxLineDTO)?.id
+        )
+        .filter(Boolean)
+    )
+
+    const toDelete: string[] = []
+    existingTaxLines.forEach((taxLine: string) => {
+      if (!taxLinesSet.has(taxLine)) {
+        toDelete.push(taxLine)
+      }
+    })
+
+    if (toDelete.length) {
+      await this.orderShippingMethodTaxLineService_.delete(
+        toDelete,
+        sharedContext
+      )
+    }
+
     const result = await this.orderShippingMethodTaxLineService_.upsert(
       taxLines as UpdateOrderShippingMethodTaxLineDTO[],
       sharedContext
