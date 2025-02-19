@@ -133,17 +133,16 @@ export class DataSynchronizer {
         })
       } else {
         // Here we assume that the entity is not indexed anymore as it is not part of the schema object representation and we are cleaning the index
+        // TODO: Drop the partition somewhere
         await promiseAll([
-          this.#indexDataService.delete({
-            selector: {
-              name: entity,
-            },
-          }),
-          this.#indexRelationService.delete({
-            selector: {
-              $or: [{ parent_id: entity }, { child_id: entity }],
-            },
-          }),
+          this.#container.manager.execute(
+            `DELETE FROM "index_data" WHERE "name" = ?`,
+            [entity]
+          ),
+          this.#container.manager.execute(
+            `DELETE FROM "index_relation" WHERE "parent_name" = ? OR "child_name" = ?`,
+            [entity, entity]
+          ),
         ])
       }
     }
@@ -173,14 +172,10 @@ export class DataSynchronizer {
         }
       ),
       this.#updatedStatus(entity, IndexMetadataStatus.PROCESSING),
-      this.#indexDataService.update({
-        data: {
-          staled_at: new Date(),
-        },
-        selector: {
-          name: entity,
-        },
-      }),
+      this.#container.manager.execute(
+        `UPDATE "index_data" SET "staled_at" = NOW() WHERE "name" = ?`,
+        [entity]
+      ),
     ])
 
     let startTime = performance.now()
