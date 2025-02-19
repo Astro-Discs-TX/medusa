@@ -26,11 +26,11 @@ export function buildQuery<const T = any>(
     populate: deduplicate(config.relations ?? []),
     fields: config.select as string[],
     limit:
-      Number.isSafeInteger(config.take) && config.take !== null
+      Number.isSafeInteger(config.take) && config.take != null
         ? config.take
         : undefined,
     offset:
-      Number.isSafeInteger(config.skip) && config.skip !== null
+      Number.isSafeInteger(config.skip) && config.skip != null
         ? config.skip
         : undefined,
   }
