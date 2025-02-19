@@ -147,7 +147,9 @@ export class Configuration {
     })
 
     this.#logger.info(
-      `[Index engine] Found ${changes.length} changes in the index configuration that are either pending or processing`
+      `[Index engine] Found ${changes.length} change${
+        changes.length > 1 ? "s" : ""
+      } in the index configuration that are either pending or processing`
     )
 
     return changes

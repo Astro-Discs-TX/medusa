@@ -15,7 +15,7 @@ import {
   SchemaObjectEntityRepresentation,
 } from "@medusajs/types"
 import { IndexMetadataStatus, Orchestrator } from "@utils"
-
+import { setTimeout } from "timers/promises"
 export class DataSynchronizer {
   #container: Record<string, any>
   #isReady: boolean = false
@@ -183,17 +183,22 @@ export class DataSynchronizer {
       }),
     ])
 
+    let startTime = performance.now()
+    let chunkStartTime = startTime
+
     const finalAcknoledgement = await this.syncEntity({
       entityName: entity,
       pagination: {
         cursor: lastCursor?.last_key,
       },
       ack: async (ack) => {
+        const endTime = performance.now()
+        const chunkElapsedTime = (endTime - chunkStartTime).toFixed(2)
         const promises: Promise<any>[] = []
 
         if (ack.lastCursor) {
           this.#logger.info(
-            `[Index engine] syncing entity '${entity}', updating last cursor to ${ack.lastCursor}`
+            `[Index engine] syncing entity '${entity}' updating last cursor to ${ack.lastCursor} (+${chunkElapsedTime}ms)`
           )
 
           promises.push(
@@ -214,15 +219,20 @@ export class DataSynchronizer {
 
         if (ack.err) {
           this.#logger.error(
-            `[Index engine] syncing entity '${entity}', failed with error:\n${ack.err.message}`
+            `[Index engine] syncing entity '${entity}' failed with error (+${chunkElapsedTime}ms):\n${ack.err.message}`
           )
         }
 
         if (ack.done) {
-          this.#logger.info(`[Index engine] syncing entity '${entity}', done`)
+          const elapsedTime = (endTime - startTime).toFixed(2)
+          this.#logger.info(
+            `[Index engine] syncing entity '${entity}' done (+${elapsedTime}ms)`
+          )
         }
 
         await promiseAll(promises)
+
+        chunkStartTime = performance.now()
       },
     })
 
@@ -296,10 +306,9 @@ export class DataSynchronizer {
     let currentCursor = pagination.cursor!
     const batchSize = Math.min(pagination.batchSize ?? 100, 100)
     const limit = pagination.limit ?? Infinity
-    let done = false
     let error = null
 
-    while (processed < limit || !done) {
+    while (processed < limit) {
       const filters: Record<string, any> = {}
 
       if (currentCursor) {
@@ -322,8 +331,7 @@ export class DataSynchronizer {
         },
       })
 
-      done = !data.length
-      if (done) {
+      if (!data.length) {
         break
       }
 
@@ -346,6 +354,8 @@ export class DataSynchronizer {
         error = err
         break
       }
+
+      await setTimeout(0)
     }
 
     let acknoledgement: { lastCursor: string; done?: boolean; err?: Error } = {
