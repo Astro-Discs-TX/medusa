@@ -284,7 +284,7 @@ export class DataSynchronizer {
       entityName
     ] as SchemaObjectEntityRepresentation
 
-    const { fields, alias, moduleConfig } = schemaEntityObjectRepresentation
+    const { alias, moduleConfig } = schemaEntityObjectRepresentation
     const isLink = !!moduleConfig?.isLink
 
     if (!alias) {
@@ -300,7 +300,6 @@ export class DataSynchronizer {
     const entityPrimaryKey = "id"
     const moduleHasId = !!moduleConfig?.primaryKeys?.includes("id")
     if (!moduleHasId) {
-      // TODO: for now these are skiped
       const acknoledgement = {
         lastCursor: pagination.cursor ?? null,
         err: new Error(
