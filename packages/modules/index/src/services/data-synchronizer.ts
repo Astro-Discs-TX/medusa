@@ -133,16 +133,17 @@ export class DataSynchronizer {
         })
       } else {
         // Here we assume that the entity is not indexed anymore as it is not part of the schema object representation and we are cleaning the index
-        // TODO: Drop the partition somewhere
         await promiseAll([
-          this.#container.manager.execute(
-            `DELETE FROM "index_data" WHERE "name" = ?`,
-            [entity]
-          ),
-          this.#container.manager.execute(
-            `DELETE FROM "index_relation" WHERE "parent_name" = ? OR "child_name" = ?`,
-            [entity, entity]
-          ),
+          this.#indexDataService.delete({
+            selector: {
+              name: entity,
+            },
+          }),
+          this.#indexRelationService.delete({
+            selector: {
+              $or: [{ parent_id: entity }, { child_id: entity }],
+            },
+          }),
         ])
       }
     }
@@ -160,6 +161,8 @@ export class DataSynchronizer {
   }
 
   async #taskRunner(entity: string) {
+    this.#logger.info(`[Index engine] syncing entity ${entity}`)
+
     const [[lastCursor]] = await promiseAll([
       this.#indexSyncService.list(
         {
@@ -170,10 +173,14 @@ export class DataSynchronizer {
         }
       ),
       this.#updatedStatus(entity, IndexMetadataStatus.PROCESSING),
-      this.#container.manager.execute(
-        `UPDATE "index_data" SET "staled_at" = NOW() WHERE "name" = ?`,
-        [entity]
-      ),
+      this.#indexDataService.update({
+        data: {
+          staled_at: new Date(),
+        },
+        selector: {
+          name: entity,
+        },
+      }),
     ])
 
     const finalAcknoledgement = await this.syncEntity({
@@ -185,6 +192,10 @@ export class DataSynchronizer {
         const promises: Promise<any>[] = []
 
         if (ack.lastCursor) {
+          this.#logger.info(
+            `[Index engine] syncing entity ${entity}, updating last cursor to ${ack.lastCursor}`
+          )
+
           promises.push(
             this.#indexSyncService.update({
               data: {
@@ -206,6 +217,8 @@ export class DataSynchronizer {
     })
 
     if (finalAcknoledgement.done) {
+      this.#logger.info(`[Index engine] syncing entity ${entity}, done`)
+
       await promiseAll([
         this.#updatedStatus(entity, IndexMetadataStatus.DONE),
         this.#indexSyncService.update({
@@ -221,6 +234,9 @@ export class DataSynchronizer {
     }
 
     if (finalAcknoledgement.err) {
+      this.#logger.error(
+        `[Index engine] syncing entity ${entity}, failed with error:\n${finalAcknoledgement.err.message}`
+      )
       await this.#updatedStatus(entity, IndexMetadataStatus.ERROR)
     }
   }
@@ -253,27 +269,18 @@ export class DataSynchronizer {
       entityName
     ] as SchemaObjectEntityRepresentation
 
-    const { alias, moduleConfig } = schemaEntityObjectRepresentation
+    const { fields, alias, moduleConfig } = schemaEntityObjectRepresentation
     const isLink = !!moduleConfig?.isLink
 
-    if (!alias) {
+    const entityPrimaryKey = fields.find(
+      (field) => !!moduleConfig?.primaryKeys?.includes(field)
+    )
+
+    if (!entityPrimaryKey) {
+      // TODO: for now these are skiped
       const acknoledgement = {
         lastCursor: pagination.cursor ?? null,
         done: true,
-      }
-
-      await ack(acknoledgement)
-      return acknoledgement
-    }
-
-    const entityPrimaryKey = "id"
-    const moduleHasId = !!moduleConfig?.primaryKeys?.includes("id")
-    if (!moduleHasId) {
-      const acknoledgement = {
-        lastCursor: pagination.cursor ?? null,
-        err: new Error(
-          "Entity does not have a property 'id'. The 'id' must be provided and must be orderable (e.g ulid)"
-        ),
       }
 
       await ack(acknoledgement)
@@ -284,9 +291,10 @@ export class DataSynchronizer {
     let currentCursor = pagination.cursor!
     const batchSize = Math.min(pagination.batchSize ?? 100, 100)
     const limit = pagination.limit ?? Infinity
+    let done = false
     let error = null
 
-    while (processed < limit) {
+    while (processed < limit || !done) {
       const filters: Record<string, any> = {}
 
       if (currentCursor) {
@@ -309,7 +317,8 @@ export class DataSynchronizer {
         },
       })
 
-      if (!data.length) {
+      done = !data.length
+      if (done) {
         break
       }
 
