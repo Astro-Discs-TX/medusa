@@ -232,7 +232,6 @@ medusaIntegrationTestRunner({
             tax_total: 6,
             summary: expect.objectContaining({
               paid_total: 0,
-              difference_sum: 0,
               refunded_total: 0,
               transaction_total: 0,
               pending_difference: 106,
@@ -267,7 +266,6 @@ medusaIntegrationTestRunner({
             tax_total: 6,
             summary: expect.objectContaining({
               paid_total: 0,
-              difference_sum: 0,
               refunded_total: 0,
               transaction_total: 0,
               pending_difference: 106,
@@ -307,7 +305,6 @@ medusaIntegrationTestRunner({
             tax_total: 12,
             summary: expect.objectContaining({
               paid_total: 0,
-              difference_sum: 106,
               refunded_total: 0,
               transaction_total: 0,
               pending_difference: 212,
@@ -366,7 +363,6 @@ medusaIntegrationTestRunner({
             tax_total: 12,
             summary: expect.objectContaining({
               paid_total: 212,
-              difference_sum: 106,
               refunded_total: 0,
               transaction_total: 212,
               pending_difference: 0,
@@ -414,7 +410,6 @@ medusaIntegrationTestRunner({
             tax_total: 12,
             summary: expect.objectContaining({
               paid_total: 212,
-              difference_sum: 0,
               refunded_total: 0,
               transaction_total: 212,
               pending_difference: 0,
@@ -452,7 +447,6 @@ medusaIntegrationTestRunner({
             tax_total: 12,
             summary: expect.objectContaining({
               paid_total: 212,
-              difference_sum: 0,
               refunded_total: 0,
               transaction_total: 212,
               pending_difference: 0,
@@ -508,10 +502,9 @@ medusaIntegrationTestRunner({
             tax_total: 18.9,
             summary: expect.objectContaining({
               paid_total: 212,
-              difference_sum: 121.9,
               refunded_total: 0,
               transaction_total: 212,
-              pending_difference: 121.9,
+              pending_difference: 15.9,
               current_order_total: 333.9,
               original_order_total: 212,
             }),
@@ -542,10 +535,9 @@ medusaIntegrationTestRunner({
             tax_total: 18.9,
             summary: expect.objectContaining({
               paid_total: 212,
-              difference_sum: 121.9,
               refunded_total: 0,
               transaction_total: 212,
-              pending_difference: 121.9,
+              pending_difference: 15.9,
               current_order_total: 333.9,
               original_order_total: 212,
             }),
@@ -589,10 +581,9 @@ medusaIntegrationTestRunner({
             tax_total: 24.9,
             summary: expect.objectContaining({
               paid_total: 212,
-              difference_sum: 106,
               refunded_total: 0,
               transaction_total: 212,
-              pending_difference: 227.9,
+              pending_difference: 15.9,
               current_order_total: 439.9,
               original_order_total: 333.9,
             }),
@@ -606,7 +597,7 @@ medusaIntegrationTestRunner({
         expect(pendingPaymentCollection).toEqual(
           expect.objectContaining({
             status: "not_paid",
-            amount: 227.9,
+            amount: 15.9,
           })
         )
 
@@ -620,18 +611,18 @@ medusaIntegrationTestRunner({
 
         expect(paymentCollection).toEqual(
           expect.objectContaining({
-            amount: 227.9,
+            amount: 15.9,
             status: "completed",
             payment_sessions: [
               expect.objectContaining({
                 status: "authorized",
-                amount: 227.9,
+                amount: 15.9,
               }),
             ],
             payments: [
               expect.objectContaining({
                 provider_id: "pp_system_default",
-                amount: 227.9,
+                amount: 15.9,
               }),
             ],
           })
@@ -647,10 +638,9 @@ medusaIntegrationTestRunner({
             subtotal: 415,
             tax_total: 24.9,
             summary: expect.objectContaining({
-              paid_total: 439.9,
-              difference_sum: 106,
+              paid_total: 227.9,
               refunded_total: 0,
-              transaction_total: 439.9,
+              transaction_total: 227.9,
               pending_difference: 0,
               current_order_total: 439.9,
               original_order_total: 333.9,

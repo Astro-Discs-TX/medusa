@@ -2024,7 +2024,7 @@ export default class OrderModuleService
     const orderWithTotals = decorateCartTotals(
       calcOrder as DecorateCartLikeInputDTO
     )
-    calcOrder.summary = calculated.summaryFromTotal(orderWithTotals.total)
+    calcOrder.summary = calculated.getSummaryFromOrder(orderWithTotals)
 
     createRawPropertiesFromBigNumber(calcOrder)
 
@@ -3017,7 +3017,7 @@ export default class OrderModuleService
         id: transactionIds,
       },
       {
-        select: ["order_id", "amount"],
+        select: ["order_id", "version", "amount"],
       },
       sharedContext
     )
@@ -3049,7 +3049,7 @@ export default class OrderModuleService
         id: transactionIds,
       },
       {
-        select: ["order_id", "amount"],
+        select: ["order_id", "version", "amount"],
         withDeleted: true,
       },
       sharedContext
@@ -3074,6 +3074,7 @@ export default class OrderModuleService
   private async updateOrderPaidRefundableAmount_(
     transactionData: {
       order_id: string
+      version: number
       amount: BigNumber | number | BigNumberInput
     }[],
     isRemoved: boolean,
@@ -3082,6 +3083,7 @@ export default class OrderModuleService
     const summaries: any = await super.listOrderSummaries(
       {
         order_id: transactionData.map((trx) => trx.order_id),
+        version: transactionData[0].version,
       },
       {},
       sharedContext
@@ -3099,6 +3101,8 @@ export default class OrderModuleService
 
       const op = isRemoved ? MathBN.sub : MathBN.add
 
+      const initialTrxTotal = summary.totals.transaction_total
+
       for (const trx of trxs) {
         if (MathBN.gt(trx.amount, 0)) {
           summary.totals.paid_total = new BigNumber(
@@ -3115,11 +3119,12 @@ export default class OrderModuleService
         )
       }
 
+      const initialDiff = MathBN.sub(
+        summary.totals.transaction_total,
+        initialTrxTotal
+      )
       summary.totals.pending_difference = new BigNumber(
-        MathBN.sub(
-          summary.totals.current_order_total,
-          summary.totals.transaction_total
-        )
+        MathBN.sub(summary.totals.pending_difference, initialDiff)
       )
     })
 

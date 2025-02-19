@@ -9,13 +9,11 @@ import { BaseReturn } from "../return/common"
 
 export interface BaseOrderSummary {
   pending_difference: number
-  difference_sum: number
   current_order_total: number
   original_order_total: number
   transaction_total: number
   paid_total: number
   refunded_total: number
-  credit_line_total: number
   accounting_total: number
 }
 

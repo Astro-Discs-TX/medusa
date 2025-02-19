@@ -42,7 +42,6 @@ export type OrderChangeStatus =
  */
 export type OrderSummaryDTO = {
   pending_difference: BigNumberValue
-  difference_sum: BigNumberValue
   current_order_total: BigNumberValue
   original_order_total: BigNumberValue
   transaction_total: BigNumberValue
@@ -52,7 +51,6 @@ export type OrderSummaryDTO = {
   accounting_total: BigNumberValue
 
   raw_pending_difference: BigNumberRawValue
-  raw_difference_sum: BigNumberRawValue
   raw_current_order_total: BigNumberRawValue
   raw_original_order_total: BigNumberRawValue
   raw_transaction_total: BigNumberRawValue
@@ -2279,6 +2277,13 @@ export interface OrderTransactionDTO {
    * The ID of the associated order
    */
   order_id: string
+
+  /**
+   * The associated order version
+   *
+   * @expandable
+   */
+  version: number
 
   /**
    * The associated order

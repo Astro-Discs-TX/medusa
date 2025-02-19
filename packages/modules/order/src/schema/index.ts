@@ -18,7 +18,6 @@ enum ChangeActionType {
 
 type OrderSummary {
   pending_difference: Float
-  difference_sum: Float
   current_order_total: Float
   original_order_total: Float
   transaction_total: Float
@@ -27,7 +26,6 @@ type OrderSummary {
   credit_line_total: Float
   accounting_total: Float
   raw_pending_difference: JSON
-  raw_difference_sum: JSON
   raw_current_order_total: JSON
   raw_original_order_total: JSON
   raw_transaction_total: JSON

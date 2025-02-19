@@ -1,6 +1,7 @@
 import {
   InferEntityType,
   OrderChangeActionDTO,
+  OrderDTO,
 } from "@medusajs/framework/types"
 import {
   ChangeActionType,
@@ -132,10 +133,8 @@ export async function applyChangesToOrder(
       orderAttributes.version = version
     }
 
+    // Recalculate actions including new items and shipping methods w/ tax lines and adjustments
     if (options?.includeTaxLinesAndAdjustementsToPreview) {
-      calculated.instance.mergeSummary({
-        original_order_total: calculated.order.total,
-      })
       await options?.includeTaxLinesAndAdjustementsToPreview(
         calculated.order,
         itemsToUpsert,
@@ -149,7 +148,9 @@ export async function applyChangesToOrder(
       id: orderSummary?.version === version ? orderSummary.id : undefined,
       order_id: order.id,
       version,
-      totals: calculated.summaryFromTotal(calculated.order.total),
+      totals: calculated.getSummaryFromOrder(
+        calculated.order as unknown as OrderDTO
+      ),
     })
 
     if (Object.keys(orderAttributes).length > 0) {
