@@ -133,7 +133,7 @@ export async function applyChangesToOrder(
       orderAttributes.version = version
     }
 
-    // Recalculate actions including new items and shipping methods w/ tax lines and adjustments
+    // Including tax lines and adjustments for added items and shipping methods
     if (options?.includeTaxLinesAndAdjustementsToPreview) {
       await options?.includeTaxLinesAndAdjustementsToPreview(
         calculated.order,

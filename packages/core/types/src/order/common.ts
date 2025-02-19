@@ -2280,8 +2280,6 @@ export interface OrderTransactionDTO {
 
   /**
    * The associated order version
-   *
-   * @expandable
    */
   version: number
 
