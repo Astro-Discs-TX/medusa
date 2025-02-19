@@ -161,7 +161,7 @@ export class DataSynchronizer {
   }
 
   async #taskRunner(entity: string) {
-    this.#logger.info(`[Index engine] syncing entity ${entity}`)
+    this.#logger.info(`[Index engine] syncing entity '${entity}'`)
 
     const [[lastCursor]] = await promiseAll([
       this.#indexSyncService.list(
@@ -193,7 +193,7 @@ export class DataSynchronizer {
 
         if (ack.lastCursor) {
           this.#logger.info(
-            `[Index engine] syncing entity ${entity}, updating last cursor to ${ack.lastCursor}`
+            `[Index engine] syncing entity '${entity}', updating last cursor to ${ack.lastCursor}`
           )
 
           promises.push(
@@ -212,13 +212,21 @@ export class DataSynchronizer {
           }
         }
 
+        if (ack.err) {
+          this.#logger.error(
+            `[Index engine] syncing entity '${entity}', failed with error:\n${ack.err.message}`
+          )
+        }
+
+        if (ack.done) {
+          this.#logger.info(`[Index engine] syncing entity '${entity}', done`)
+        }
+
         await promiseAll(promises)
       },
     })
 
     if (finalAcknoledgement.done) {
-      this.#logger.info(`[Index engine] syncing entity ${entity}, done`)
-
       await promiseAll([
         this.#updatedStatus(entity, IndexMetadataStatus.DONE),
         this.#indexSyncService.update({
@@ -234,9 +242,6 @@ export class DataSynchronizer {
     }
 
     if (finalAcknoledgement.err) {
-      this.#logger.error(
-        `[Index engine] syncing entity ${entity}, failed with error:\n${finalAcknoledgement.err.message}`
-      )
       await this.#updatedStatus(entity, IndexMetadataStatus.ERROR)
     }
   }
@@ -338,10 +343,6 @@ export class DataSynchronizer {
 
         await ack({ lastCursor: currentCursor })
       } catch (err) {
-        this.#logger.error(
-          `Index engine] sync failed for entity ${entityName}`,
-          err
-        )
         error = err
         break
       }
