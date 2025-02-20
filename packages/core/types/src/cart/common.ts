@@ -1303,6 +1303,11 @@ export interface CartCreditLineDTO {
   amount: BigNumberValue
 
   /**
+   * The raw amount of the credit line.
+   */
+  raw_amount: BigNumberRawValue
+
+  /**
    * The reference model name that the credit line is generated from
    */
   reference: string | null
