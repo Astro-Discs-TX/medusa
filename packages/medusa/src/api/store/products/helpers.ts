@@ -7,7 +7,6 @@ import {
   TaxCalculationContext,
 } from "@medusajs/framework/types"
 import { calculateAmountsWithTax, Modules } from "@medusajs/framework/utils"
-import { TaxModuleService } from "@medusajs/tax/dist/services"
 
 export type RequestWithContext<
   Body,
@@ -46,7 +45,7 @@ export const wrapProductsWithTaxPrices = async <T>(
     return
   }
 
-  const taxService = req.scope.resolve<TaxModuleService>(Modules.TAX)
+  const taxService = req.scope.resolve(Modules.TAX)
 
   const taxRates = (await taxService.getTaxLines(
     products.map(asTaxItem).flat(),
