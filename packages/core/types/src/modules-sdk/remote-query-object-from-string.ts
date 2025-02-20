@@ -69,7 +69,7 @@ export type RemoteQueryInput<TEntry extends string> = {
    */
   context?: any
   /**
-   * Apply a `withDeleted` flag on the retrieved data to retrieve deleted items.
+   * Apply a `withDeleted` flag on the retrieved data to retrieve soft deleted items.
    */
   withDeleted?: boolean
 }
