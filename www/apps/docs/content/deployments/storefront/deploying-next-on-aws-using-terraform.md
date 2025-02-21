@@ -67,7 +67,7 @@ Replace:
       --query Account \
       --output text
   ```
-If you created your ECR repository using the [Terraform Module for Medusa on AWS](https://registry.terraform.io/modules/u11d-com/medusajs/aws/latest), you can find the ECR repository URL in the module's output values after deployment.
+If you created your ECR repository using the [Terraform Module for Medusa on AWS](https://registry.terraform.io/modules/u11d-com/medusajs/aws), you can find the ECR repository URL in the module's output values after deployment.
 
 
 ### Step 2: Tag the Docker Container Image
@@ -141,7 +141,7 @@ Confirm the changes when prompted.
 ## Additional Resources
 - [Medusa Documentation](https://docs.medusajs.com/v1/)
 - [Next.js Documentation](https://nextjs.org/)
-- [Terraform Module for Medusa on AWS Provider Documentation](https://registry.terraform.io/modules/u11d-com/medusajs/aws/latest)
+- [Terraform Module for Medusa on AWS Provider Documentation](https://registry.terraform.io/modules/u11d-com/medusajs/aws)
 
 ---
 :heart: _Technology made with passion by [u11d](https://u11d.com)_
