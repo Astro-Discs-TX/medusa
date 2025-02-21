@@ -1,6 +1,6 @@
 import {
   BigNumberInput,
-  CartCreditLineDTO,
+  BigNumberValue,
   CartLikeWithTotals,
 } from "@medusajs/types"
 import { BigNumber } from "../big-number"
@@ -18,7 +18,9 @@ interface TotalsConfig {
 }
 
 export interface DecorateCartLikeInputDTO {
-  credit_lines?: CartCreditLineDTO[]
+  credit_lines?: {
+    amount: BigNumberValue
+  }[]
   items?: {
     id?: string
     unit_price: BigNumberInput
