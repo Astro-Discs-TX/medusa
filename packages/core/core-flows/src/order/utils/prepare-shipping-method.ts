@@ -18,7 +18,7 @@ export function prepareShippingMethod(relatedEntityField?: string) {
       data: option.data ?? {},
       name: option.name,
       version: orderChange.version,
-      order_id: data.relatedEntity.order_id,
+      order_id: data.input.order_id,
     } as any
 
     if (relatedEntityField) {
