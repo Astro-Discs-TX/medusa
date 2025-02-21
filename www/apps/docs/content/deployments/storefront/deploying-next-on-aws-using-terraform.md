@@ -40,9 +40,10 @@ Before proceeding, ensure you have the following:
 
 1. Build the Docker container image for the storefront:
    ```bash
-   docker build -t medusa_storefront:1.0.0 .
+   docker build --build-arg MEDUSA_BACKEND_URL="https://my.medusa.backend" -t medusa_storefront:1.0.0 .
    ```
    - Replace `medusa_storefront:1.0.0` with your preferred image tag in the format `<image_tag>:<version>`, e.g., `my-storefront:1.0.0`.
+   - Replace `https://my.medusa.backend` with your existing Medusa backend URL address.
 
 ---
 
@@ -64,7 +65,7 @@ Replace:
       --query Account \
       --output text
   ```
-If you created your ECR repository using the [Terraform Module for Medusa on AWS](https://github.com/u11d-com/terraform-aws-medusajs), you can find the ECR repository URL in the module's output values after deployment.
+If you created your ECR repository using the [Terraform Module for Medusa on AWS](https://registry.terraform.io/modules/u11d-com/medusajs/aws/latest), you can find the ECR repository URL in the module's output values after deployment.
 
 
 ### Step 2: Tag the Docker Container Image
@@ -138,7 +139,7 @@ Confirm the changes when prompted.
 ## Additional Resources
 - [Medusa Documentation](https://docs.medusajs.com/v1/)
 - [Next.js Documentation](https://nextjs.org/)
-- [Terraform Module for Medusa on AWS Provider Documentation](https://github.com/u11d-com/terraform-aws-medusajs)
+- [Terraform Module for Medusa on AWS Provider Documentation](https://registry.terraform.io/modules/u11d-com/medusajs/aws/latest)
 
 ---
 :heart: _Technology made with passion by [u11d](https://u11d.com)_
