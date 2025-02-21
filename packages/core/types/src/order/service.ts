@@ -24,6 +24,7 @@ import {
   OrderChangeReturn,
   OrderClaimDTO,
   OrderClaimItemDTO,
+  OrderCreditLineDTO,
   OrderDTO,
   OrderExchangeDTO,
   OrderExchangeItemDTO,
@@ -52,6 +53,7 @@ import {
   CreateOrderChangeDTO,
   CreateOrderClaimDTO,
   CreateOrderClaimItemDTO,
+  CreateOrderCreditLineDTO,
   CreateOrderDTO,
   CreateOrderExchangeDTO,
   CreateOrderExchangeItemDTO,
@@ -4806,4 +4808,9 @@ export interface IOrderModuleService extends IModuleService {
     data: CancelOrderExchangeDTO,
     sharedContext?: Context
   ): Promise<OrderExchangeDTO>
+
+  createOrderCreditLines(
+    data: CreateOrderCreditLineDTO[],
+    sharedContext?: Context
+  ): Promise<OrderCreditLineDTO[]>
 }

@@ -776,10 +776,7 @@ export default class OrderModuleService
     }
 
     if (creditLinesToCreate.length) {
-      await super.createOrderCreditLines(
-        creditLinesToCreate as any,
-        sharedContext
-      )
+      await super.createOrderCreditLines(creditLinesToCreate, sharedContext)
     }
 
     return createdOrders

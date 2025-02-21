@@ -1,4 +1,4 @@
-import { BigNumberInput } from "../totals"
+import { BigNumberInput, BigNumberValue } from "../totals"
 import {
   ChangeActionType,
   OrderClaimDTO,
@@ -2282,7 +2282,7 @@ export interface CreateOrderCreditLineDTO {
   /**
    * The amount of the credit line.
    */
-  amount: BigNumberInput
+  amount: BigNumberValue
 
   /**
    * The reference model name that the credit line is generated from

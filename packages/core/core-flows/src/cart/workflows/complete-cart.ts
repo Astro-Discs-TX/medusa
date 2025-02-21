@@ -91,8 +91,6 @@ export const completeCartWorkflow = createWorkflow(
     retentionTime: THREE_DAYS,
   },
   (input: WorkflowData<CompleteCartWorkflowInput>) => {
-    let beforePaymentAuthorization
-
     const orderCart = useQueryGraphStep({
       entity: "order_cart",
       fields: ["cart_id", "order_id"],
@@ -137,10 +135,6 @@ export const completeCartWorkflow = createWorkflow(
       validateShippingStep({ cart, shippingOptions })
 
       const paymentSessions = validateCartPaymentsStep({ cart })
-
-      beforePaymentAuthorization = createHook("beforePaymentAuthorization", {
-        input,
-      })
 
       const payment = authorizePaymentSessionStep({
         // We choose the first payment session, as there will only be one active payment session
@@ -217,7 +211,7 @@ export const completeCartWorkflow = createWorkflow(
           .map((adjustment) => adjustment.code)
           .filter(Boolean)
 
-        const creditLines = (cart.credit_lines || []).map(
+        const creditLines = (cart.credit_lines ?? []).map(
           (creditLine: CartCreditLineDTO) => {
             return {
               amount: creditLine.amount,
@@ -344,7 +338,7 @@ export const completeCartWorkflow = createWorkflow(
     })
 
     return new WorkflowResponse(result, {
-      hooks: [validate, beforePaymentAuthorization],
+      hooks: [validate],
     })
   }
 )
