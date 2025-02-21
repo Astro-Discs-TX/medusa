@@ -7,34 +7,6 @@ addHowToData: true
 
 This guide explains how to use the [**Terraform module for Medusa**](https://registry.terraform.io/modules/u11d-com/medusajs/aws) to deploy a production-ready e-commerce backend on AWS. Designed for development teams building Medusa platforms, this module streamlines infrastructure setup while incorporating security best practices. It provides a robust and scalable foundation, enabling teams to quickly deploy a functional backend and then focus on advanced customizations and feature development accelerating development by eliminating the complexities of manual infrastructure provisioning. As a result, teams can rapidly deploy and iterate, significantly minimizing time spent on infrastructure management. This module establishes a reliable groundwork for even the most sophisticated and customized Medusa deployments.
 
-## Table of Contents
-
-- [Introduction](#Introduction)
-  - [What is Terraform?](#what-is-terraform)
-  - [Why Use This Terraform Module?](#why-use-this-terraform-module)
-- [Prerequisites](#prerequisites)
-  - [Tools Required](#tools-required)
-  - [AWS Account Setup](#aws-account-setup)
-- [Overview of the Terraform Module](#overview-of-the-terraform-module)
-  - [Core Infrastructure](#core-infrastructure)
-  - [Optional Infrastructure](#optional-infrastructure)
-- [Architectural Decisions Behind the Terraform Module](#architectural-decisions-behind-the-terraform-module)
-- [Step-by-Step Guide to Using the Terraform Module](#step-by-step-guide-to-using-the-terraform-module)
-- [Connecting Medusa to the Deployed Infrastructure](#connecting-medusa-to-the-deployed-infrastructure)
-  - [Configuring Medusa with Provisioned AWS Services](#configuring-medusa-with-provisioned-aws-services)
-- [Optional Features](#optional-features)
-  - [Enable ECR for Container Images](#enable-ecr-for-container-images)
-  - [Use an External Image Repository](#use-an-external-image-repository)
-- [Common Issues and Troubleshooting](#common-issues-and-troubleshooting)
-  - [Common Errors](#common-errors)
-  - [Clean Up Resources](#clean-up-resources)
-- [Next Steps](#next-steps)
-  - [Deploy the Frontend](#deploy-the-frontend)
-- [FAQs](#faqs)
-  - [Can I use this for local development?](#can-i-use-this-for-local-development)
-  - [How do I update the infrastructure?](#how-do-i-update-the-infrastructure)
-
----
 
 ## Introduction
 
@@ -221,6 +193,8 @@ To deploy the frontend, provide the following variables:
 storefront_create = true
 storefront_container_image  = "your-repo/frontend:v1.20.11"
 ```
+
+For a detailed step-by-step guide on building, pushing, and configuring the storefront container image, refer to the [Storefront Deployment Guide](../storefront/deploying-next-on-aws-using-terraform.md). Following this guide ensures that your storefront is correctly built, stored in AWS ECR, and integrated with the Terraform module.
 
 ---
 
