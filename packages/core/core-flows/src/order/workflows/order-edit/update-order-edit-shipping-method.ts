@@ -120,7 +120,7 @@ export const updateOrderEditShippingMethodWorkflow = createWorkflow(
     input: WorkflowData<OrderWorkflow.UpdateOrderEditShippingMethodWorkflowInput>
   ): WorkflowResponse<OrderPreviewDTO> {
     const order: OrderDTO = useRemoteQueryStep({
-      entry_point: "order_claim",
+      entry_point: "orders",
       fields: ["id", "currency_code"],
       variables: { id: input.order_id },
       list: false,
