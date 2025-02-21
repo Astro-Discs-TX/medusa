@@ -147,7 +147,7 @@ ecr_backend_create = true
 ecr_storefront_create = true
 ```
 
-See [ECR Documentation](https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html) learn how to log in and push images.
+See [ECR Documentation](https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html) to learn how to log in and push images.
 
 ### Use an External Image Repository
 If you’re using an external image repository, provide the repository address and image tag as variables, optionally you might need to provide credentials for repository:
