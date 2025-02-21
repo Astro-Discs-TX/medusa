@@ -676,7 +676,7 @@ describe("Total calculation", function () {
     })
   })
 
-  it.only("should calculate order with items + taxes + adjustments + credit lines", function () {
+  it("should calculate order with items + taxes + adjustments + credit lines", function () {
     const cart = {
       credit_lines: [
         {

@@ -42,7 +42,6 @@ export function calculateCreditLinesTotal({
       creditLinesTaxTotal = MathBN.add(creditLinesTaxTotal, creditLineTaxTotal)
     } else {
       cl["subtotal"] = new BigNumber(creditLineAmount)
-      cl["creditLineAmount"] = new BigNumber(creditLineAmount)
       creditLinesTotal = MathBN.add(creditLinesTotal, creditLineAmount)
     }
   }
