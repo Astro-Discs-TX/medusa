@@ -224,7 +224,6 @@ export class Query {
       pagination,
     })) as unknown as GraphResultSet<TEntry>
 
-    delete queryOptions.pagination
     delete queryOptions.filters
 
     let finalResultset: GraphResultSet<TEntry> = indexResponse
