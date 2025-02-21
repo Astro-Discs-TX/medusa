@@ -26,6 +26,7 @@ Before proceeding, ensure you have the following:
    ```
 
 2. Navigate to the `storefront` directory and initialize the repository, this sets up the storefront based on the [Medusa Next.js starter template](https://github.com/medusajs/nextjs-starter-medusa) for version 1:
+2. Navigate to the `storefront` directory and initialize the repository, this sets up the storefront based on the [Medusa Next.js starter template](https://github.com/medusajs/nextjs-starter-medusa) for version 1:
    ```bash
    cd storefront
    git init
@@ -34,15 +35,17 @@ Before proceeding, ensure you have the following:
    git checkout 0f5452dfe44838f890b798789d75db1a81303b7a
    ```
 
+
 ---
 
 ## Building the Storefront Docker Container Image
 
 1. Build the Docker container image for the storefront:
    ```bash
-   docker build -t medusa_storefront:1.0.0 .
+   docker build --build-arg MEDUSA_BACKEND_URL="https://my.medusa.backend" -t medusa_storefront:1.0.0 .
    ```
    - Replace `medusa_storefront:1.0.0` with your preferred image tag in the format `<image_tag>:<version>`, e.g., `my-storefront:1.0.0`.
+   - Replace `https://my.medusa.backend` with your existing Medusa backend URL address.
 
 ---
 
@@ -64,7 +67,7 @@ Replace:
       --query Account \
       --output text
   ```
-If you created your ECR repository using the [Terraform Module for Medusa on AWS](https://github.com/u11d-com/terraform-aws-medusajs), you can find the ECR repository URL in the module's output values after deployment.
+If you created your ECR repository using the [Terraform Module for Medusa on AWS](https://registry.terraform.io/modules/u11d-com/medusajs/aws), you can find the ECR repository URL in the module's output values after deployment.
 
 
 ### Step 2: Tag the Docker Container Image
@@ -138,7 +141,7 @@ Confirm the changes when prompted.
 ## Additional Resources
 - [Medusa Documentation](https://docs.medusajs.com/v1/)
 - [Next.js Documentation](https://nextjs.org/)
-- [Terraform Module for Medusa on AWS Provider Documentation](https://github.com/u11d-com/terraform-aws-medusajs)
+- [Terraform Module for Medusa on AWS Provider Documentation](https://registry.terraform.io/modules/u11d-com/medusajs/aws)
 
 ---
 :heart: _Technology made with passion by [u11d](https://u11d.com)_

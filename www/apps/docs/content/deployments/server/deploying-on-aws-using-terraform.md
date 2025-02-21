@@ -5,7 +5,7 @@ addHowToData: true
 
 # Deploy the Medusa Backend using the Terraform Module on AWS
 
-This guide explains how to use the [**Terraform module for Medusa**](https://github.com/u11d-com/terraform-aws-medusajs) to deploy a production-ready e-commerce backend on AWS. Designed for development teams building Medusa platforms, this module streamlines infrastructure setup while incorporating security best practices. It provides a robust and scalable foundation, enabling teams to quickly deploy a functional backend and then focus on advanced customizations and feature development accelerating development by eliminating the complexities of manual infrastructure provisioning. As a result, teams can rapidly deploy and iterate, significantly minimizing time spent on infrastructure management. This module establishes a reliable groundwork for even the most sophisticated and customized Medusa deployments.
+This guide explains how to use the [**Terraform module for Medusa**](https://registry.terraform.io/modules/u11d-com/medusajs/aws) to deploy a production-ready e-commerce backend on AWS. Designed for development teams building Medusa platforms, this module streamlines infrastructure setup while incorporating security best practices. It provides a robust and scalable foundation, enabling teams to quickly deploy a functional backend and then focus on advanced customizations and feature development accelerating development by eliminating the complexities of manual infrastructure provisioning. As a result, teams can rapidly deploy and iterate, significantly minimizing time spent on infrastructure management. This module establishes a reliable groundwork for even the most sophisticated and customized Medusa deployments.
 
 
 ## Introduction
@@ -14,7 +14,7 @@ This guide explains how to use the [**Terraform module for Medusa**](https://git
 Terraform is an infrastructure-as-code tool that allows you to define and provision cloud resources using code. It simplifies the process of managing cloud infrastructure and ensures consistency across environments. Learn more about Terraform [here](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/infrastructure-as-code).
 
 ### Why Use Terraform Module for Medusa?
-[Terraform module for Medusa](https://github.com/u11d-com/terraform-aws-medusajs) simplifies the deployment of Medusa on AWS by automating the setup of essential infrastructure components. It aligns with Medusa’s [architectural modules](#mapping-medusa-architectural-modules-to-aws-infrastructure) for data caching, event distribution, asset and file access, and workflow management. By providing optional infrastructure services, it empowers developers to make informed decisions and optimize the system for production environments. This module is designed for development teams who want to focus on building their e-commerce stores without the overhead of managing cloud infrastructure.
+[Terraform module for Medusa](https://registry.terraform.io/modules/u11d-com/medusajs/aws) simplifies the deployment of Medusa on AWS by automating the setup of essential infrastructure components. It aligns with Medusa’s [architectural modules](#mapping-medusa-architectural-modules-to-aws-infrastructure) for data caching, event distribution, asset and file access, and workflow management. By providing optional infrastructure services, it empowers developers to make informed decisions and optimize the system for production environments. This module is designed for development teams who want to focus on building their e-commerce stores without the overhead of managing cloud infrastructure.
 
 ---
 
@@ -45,7 +45,7 @@ By leveraging managed services, this architecture reduces the time, effort, and 
 
 ## Overview of the Terraform Module
 
-The `Terraform module for Medusa` sets up the following AWS resources to support Medusa:
+The [Terraform module for Medusa](https://registry.terraform.io/modules/u11d-com/medusajs/aws) sets up the following AWS resources to support Medusa:
 
 ### Core Infrastructure
 - RDS for PostgreSQL: A managed relational database for storing Medusa data.
@@ -78,17 +78,19 @@ The `Terraform module for Medusa` sets up the following AWS resources to support
 Clone the Terraform module repository to your local machine:
 ```bash
 git clone https://github.com/u11d-com/terraform-aws-medusajs
-cd terraform-aws-medusajs/examples/minimal
+cd terraform-u11d-medusajs/examples/minimal
 ```
 
 ### Step 2: Provide Variables for the Module
 See module inputs documentation for available configuration options.
-[Example configurations](https://github.com/u11d-com/terraform-aws-medusajs/tree/main?tab=readme-ov-file#examples) as a reference.
+[Example configurations](https://registry.terraform.io/modules/u11d-com/medusajs/aws) as a reference.
 
 Example variables:
 ```hcl
-aws_region = "us-east-1"
 backend_container_image = "your-medusa-backend-image:v1.20.11"
+project     = "medusa"
+environment = "prod"
+owner       = "my-team"
 ```
 
 ### Step 3: Initialize Terraform
@@ -144,6 +146,8 @@ To create an ECR repository for storing container images, provide the following 
 ecr_backend_create = true
 ecr_storefront_create = true
 ```
+
+See [ECR Documentation](https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html) to learn how to log in and push images.
 
 ### Use an External Image Repository
 If you’re using an external image repository, provide the repository address and image tag as variables, optionally you might need to provide credentials for repository:
