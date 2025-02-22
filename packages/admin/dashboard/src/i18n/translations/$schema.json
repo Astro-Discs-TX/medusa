@@ -3032,6 +3032,9 @@
         "editItemDetails": {
           "type": "string"
         },
+        "quantityAcrossLocations": {
+          "type": "string"
+        },
         "create": {
           "type": "object",
           "properties": {
@@ -3246,6 +3249,7 @@
         "manageLocations",
         "deleteWarning",
         "editItemDetails",
+        "quantityAcrossLocations",
         "create",
         "reservation",
         "adjustInventory",
