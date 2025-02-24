@@ -1,4 +1,4 @@
-import { BigNumberInput, CartCreditLineDTO } from "@medusajs/types"
+import { BigNumberInput } from "@medusajs/types"
 import { isDefined } from "../../common"
 import { BigNumber } from "../big-number"
 import { MathBN } from "../math"
@@ -8,7 +8,7 @@ export function calculateCreditLinesTotal({
   includesTax,
   taxRate,
 }: {
-  creditLines: Pick<CartCreditLineDTO, "amount">[]
+  creditLines: { amount: BigNumberInput }[]
   includesTax?: boolean
   taxRate?: BigNumberInput
 }) {
