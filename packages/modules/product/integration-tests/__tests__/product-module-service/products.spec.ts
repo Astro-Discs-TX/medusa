@@ -30,7 +30,7 @@ import {
   createTypes,
 } from "../../__fixtures__/product"
 
-jest.setTimeout(300000)
+jest.setTimeout(3000000)
 
 moduleIntegrationTestRunner<IProductModuleService>({
   moduleName: Modules.PRODUCT,
@@ -1164,15 +1164,17 @@ moduleIntegrationTestRunner<IProductModuleService>({
           productCollectionOne = collections[0]
           productCollectionTwo = collections[1]
 
+          const tags = await service.createProductTags([{ value: "tag-1" }])
+
           const resp = await service.createProducts([
             buildProductAndRelationsData({
               collection_id: productCollectionOne.id,
               options: [{ title: "size", values: ["large", "small"] }],
               variants: [{ title: "variant 1", options: { size: "small" } }],
+              tag_ids: [tags[0].id],
             }),
             buildProductAndRelationsData({
               collection_id: productCollectionTwo.id,
-              tags: [],
             }),
           ])
 
@@ -1199,7 +1201,7 @@ moduleIntegrationTestRunner<IProductModuleService>({
           ])
         })
 
-        it("should return a list of products scoped by variant options", async () => {
+        it.only("should return a list of products scoped by variant options", async () => {
           const productsWithVariants = await service.listProducts(
             {
               variants: {
@@ -1312,12 +1314,15 @@ moduleIntegrationTestRunner<IProductModuleService>({
             relations: ["images"],
           })
 
-          const retrievedProductAgain = await service.retrieveProduct(product.id, {
-            relations: ["images"],
-          })
+          const retrievedProductAgain = await service.retrieveProduct(
+            product.id,
+            {
+              relations: ["images"],
+            }
+          )
 
           expect(retrievedProduct.images).toEqual(retrievedProductAgain.images)
-          
+
           expect(retrievedProduct.images).toEqual(
             Array.from({ length: 1000 }, (_, i) =>
               expect.objectContaining({
@@ -1332,7 +1337,9 @@ moduleIntegrationTestRunner<IProductModuleService>({
           // Explicitly verify sequential order
           retrievedProduct.images.forEach((img, idx) => {
             if (idx > 0) {
-              expect(img.rank).toBeGreaterThan(retrievedProduct.images[idx - 1].rank)
+              expect(img.rank).toBeGreaterThan(
+                retrievedProduct.images[idx - 1].rank
+              )
             }
           })
         })

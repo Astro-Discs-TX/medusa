@@ -26,6 +26,7 @@ import { ProductCategoryService } from "@services"
 import {
   arrayDifference,
   EmitEvents,
+  generateEntityId,
   InjectManager,
   InjectTransactionManager,
   isDefined,
@@ -53,6 +54,7 @@ import {
 } from "../types"
 import { eventBuilders } from "../utils"
 import { joinerConfig } from "./../joiner-config"
+import { Collection } from "@mikro-orm/core"
 
 type InjectedDependencies = {
   baseRepository: DAL.RepositoryService
@@ -1568,76 +1570,189 @@ export default class ProductModuleService
       })
     )
 
-    const { entities: productData } =
-      await this.productService_.upsertWithReplace(
-        normalizedInput,
+    const tagIds = normalizedInput
+      .flatMap((d) => (d as any).tags ?? [])
+      .map((t) => t.id)
+    let existingTags: InferEntityType<typeof ProductTag>[] = []
+
+    if (tagIds.length) {
+      existingTags = await this.productTagService_.list(
         {
-          relations: ["tags", "categories"],
+          id: tagIds,
         },
+        {},
+        sharedContext
+      )
+    }
+
+    const existingTagsMap = new Map(existingTags.map((tag) => [tag.id, tag]))
+
+    const variantsToCreate: any[] = []
+
+    const productsToCreate = normalizedInput.map((product) => {
+      const productId = generateEntityId(undefined, "prod")
+      const variants = product.variants?.map((variant) => {
+        return {
+          ...variant,
+          product_id: productId,
+        }
+      })
+
+      if (variants?.length) {
+        variantsToCreate.push(...variants)
+      }
+
+      product.id = productId
+
+      delete product.variants
+
+      if ((product as any).tags?.length) {
+        ;(product as any).tags = (product as any).tags.map(
+          (tag: { id: string }) => {
+            const existingTag = existingTagsMap.get(tag.id)
+            if (existingTag) {
+              return existingTag
+            }
+            return tag
+          }
+        )
+      }
+
+      return product
+    })
+
+    const createdProducts = await this.productService_.create(
+      productsToCreate,
+      sharedContext
+    )
+
+    if (variantsToCreate.length) {
+      const normalizedVariants = variantsToCreate.map((variant) => {
+        const variantOptions = Object.entries(variant.options ?? {}).map(
+          ([, optionValue]) => {
+            // const option = createdProducts
+            //   .flatMap((product) => product.options)
+            //   .flatMap((v) => (v as any).toJSON())
+            //   .find((option) => option.title === optionTitle)!
+
+            const optionValueInstance = createdProducts
+              .flatMap((product) => product.options.map((o) => o.values))
+              .flatMap((v) => (v as any).toJSON())
+              .find((v) => v.value === optionValue)!
+
+            return optionValueInstance
+          }
+        )
+
+        delete variant.options
+
+        variant.options = variantOptions
+        return variant
+      })
+
+      const createdVariants = await this.productVariantService_.create(
+        normalizedVariants,
         sharedContext
       )
 
-    await promiseAll(
-      // Note: It's safe to rely on the order here as `upsertWithReplace` preserves the order of the input
-      normalizedInput.map(async (product, i) => {
-        const upsertedProduct: any = productData[i]
-        upsertedProduct.options = []
-        upsertedProduct.variants = []
-
-        if (product.options?.length) {
-          const { entities: productOptions } =
-            await this.productOptionService_.upsertWithReplace(
-              product.options?.map((option) => ({
-                ...option,
-                product_id: upsertedProduct.id,
-              })) ?? [],
-              { relations: ["values"] },
-              sharedContext
-            )
-          upsertedProduct.options = productOptions
-        }
-
-        if (product.variants?.length) {
-          const { entities: productVariants } =
-            await this.productVariantService_.upsertWithReplace(
-              ProductModuleService.assignOptionsToVariants(
-                product.variants?.map((v) => ({
-                  ...v,
-                  product_id: upsertedProduct.id,
-                })) ?? [],
-                upsertedProduct.options
-              ),
-              { relations: ["options"] },
-              sharedContext
-            )
-          upsertedProduct.variants = productVariants
-        }
-
-        if (Array.isArray(product.images)) {
-          if (product.images.length) {
-            const { entities: productImages } =
-              await this.productImageService_.upsertWithReplace(
-                product.images.map((image, rank) => ({
-                  ...image,
-                  product_id: upsertedProduct.id,
-                  rank,
-                })),
-                {},
-                sharedContext
-              )
-            upsertedProduct.images = productImages
-          } else {
-            await this.productImageService_.delete(
-              { product_id: upsertedProduct.id },
-              sharedContext
-            )
-          }
+      createdVariants.forEach((variant) => {
+        const productId = variant.product_id
+        const product = createdProducts.find((p) => p.id === productId)
+        if (product) {
+          ;(product.variants as unknown as Collection<any>).add(variant)
         }
       })
-    )
+    }
 
-    return productData
+    return createdProducts
   }
+
+  // @InjectTransactionManager()
+  // protected async createProducts_(
+  //   data: ProductTypes.CreateProductDTO[],
+  //   @MedusaContext() sharedContext: Context = {}
+  // ): Promise<InferEntityType<typeof Product>[]> {
+  //   const normalizedInput = await promiseAll(
+  //     data.map(async (d) => {
+  //       const normalized = await this.normalizeCreateProductInput(
+  //         d,
+  //         sharedContext
+  //       )
+  //       this.validateProductCreatePayload(normalized)
+  //       return normalized
+  //     })
+  //   )
+
+  //   const { entities: productData } =
+  //     await this.productService_.upsertWithReplace(
+  //       normalizedInput,
+  //       {
+  //         relations: ["tags", "categories"],
+  //       },
+  //       sharedContext
+  //     )
+
+  //   await promiseAll(
+  //     // Note: It's safe to rely on the order here as `upsertWithReplace` preserves the order of the input
+  //     normalizedInput.map(async (product, i) => {
+  //       const upsertedProduct: any = productData[i]
+  //       upsertedProduct.options = []
+  //       upsertedProduct.variants = []
+
+  //       if (product.options?.length) {
+  //         const { entities: productOptions } =
+  //           await this.productOptionService_.upsertWithReplace(
+  //             product.options?.map((option) => ({
+  //               ...option,
+  //               product_id: upsertedProduct.id,
+  //             })) ?? [],
+  //             { relations: ["values"] },
+  //             sharedContext
+  //           )
+  //         upsertedProduct.options = productOptions
+  //       }
+
+  //       if (product.variants?.length) {
+  //         const { entities: productVariants } =
+  //           await this.productVariantService_.upsertWithReplace(
+  //             ProductModuleService.assignOptionsToVariants(
+  //               product.variants?.map((v) => ({
+  //                 ...v,
+  //                 product_id: upsertedProduct.id,
+  //               })) ?? [],
+  //               upsertedProduct.options
+  //             ),
+  //             { relations: ["options"] },
+  //             sharedContext
+  //           )
+  //         upsertedProduct.variants = productVariants
+  //       }
+
+  //       if (Array.isArray(product.images)) {
+  //         if (product.images.length) {
+  //           const { entities: productImages } =
+  //             await this.productImageService_.upsertWithReplace(
+  //               product.images.map((image, rank) => ({
+  //                 ...image,
+  //                 product_id: upsertedProduct.id,
+  //                 rank,
+  //               })),
+  //               {},
+  //               sharedContext
+  //             )
+  //           upsertedProduct.images = productImages
+  //         } else {
+  //           await this.productImageService_.delete(
+  //             { product_id: upsertedProduct.id },
+  //             sharedContext
+  //           )
+  //         }
+  //       }
+  //     })
+  //   )
+
+  //   return productData
+  // }
 
   @InjectTransactionManager()
   protected async updateProducts_(
@@ -1914,6 +2029,17 @@ export default class ProductModuleService
 
     if (!productData.thumbnail && productData.images?.length) {
       productData.thumbnail = productData.images[0].url
+    }
+
+    if (productData.images?.length) {
+      productData.images = productData.images.map((image, index) =>
+        (image as { rank?: number }).rank != null
+          ? image
+          : {
+              ...image,
+              rank: index,
+            }
+      )
     }
 
     return productData
