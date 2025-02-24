@@ -1,0 +1,15 @@
+{
+  "description": "This component is based on the `div` element and supports all of its props.",
+  "methods": [],
+  "displayName": "InlineTip",
+  "props": {
+    "variant": {
+      "defaultValue": {
+        "value": "\"info\"",
+        "computed": false
+      },
+      "description": "",
+      "required": false
+    }
+  }
+}
