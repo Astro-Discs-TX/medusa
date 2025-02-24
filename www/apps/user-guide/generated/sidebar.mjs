@@ -275,26 +275,38 @@ export const generatedSidebar = [
     "loaded": true,
     "isPathHref": true,
     "type": "category",
-    "path": "/discounts",
-    "title": "Discounts",
-    "autogenerate_path": "/discounts",
+    "title": "Promotions",
     "children": [
       {
         "loaded": true,
         "isPathHref": true,
         "type": "link",
-        "path": "/discounts/create",
-        "title": "Create a Discount",
-        "description": "",
+        "title": "Overview",
+        "path": "/promotions",
         "children": []
       },
       {
         "loaded": true,
         "isPathHref": true,
         "type": "link",
-        "path": "/discounts/manage",
-        "title": "Manage Discounts",
-        "description": "",
+        "title": "Create Promotion",
+        "path": "/promotions/create",
+        "children": []
+      },
+      {
+        "loaded": true,
+        "isPathHref": true,
+        "type": "link",
+        "title": "Manage Promotion",
+        "path": "/promotions/manage",
+        "children": []
+      },
+      {
+        "loaded": true,
+        "isPathHref": true,
+        "type": "link",
+        "title": "Manage Campaigns",
+        "path": "/promotions/campaigns",
         "children": []
       }
     ]
@@ -303,26 +315,30 @@ export const generatedSidebar = [
     "loaded": true,
     "isPathHref": true,
     "type": "category",
-    "path": "/pricing",
-    "title": "Pricing",
-    "autogenerate_path": "/pricing",
+    "title": "Price Lists",
     "children": [
       {
         "loaded": true,
         "isPathHref": true,
         "type": "link",
-        "path": "/pricing/create",
-        "title": "Create a Price List",
-        "description": "",
+        "title": "Overview",
+        "path": "/price-lists",
         "children": []
       },
       {
         "loaded": true,
         "isPathHref": true,
         "type": "link",
-        "path": "/pricing/manage",
-        "title": "Manage Price Lists",
-        "description": "",
+        "title": "Create Price List",
+        "path": "/price-lists/create",
+        "children": []
+      },
+      {
+        "loaded": true,
+        "isPathHref": true,
+        "type": "link",
+        "title": "Manage Price List",
+        "path": "/price-lists/manage",
         "children": []
       }
     ]
@@ -331,45 +347,38 @@ export const generatedSidebar = [
     "loaded": true,
     "isPathHref": true,
     "type": "category",
-    "path": "/settings",
     "title": "Settings",
-    "autogenerate_path": "/settings",
     "children": [
       {
         "loaded": true,
         "isPathHref": true,
         "type": "link",
-        "path": "/settings/profile",
-        "title": "Profile",
-        "description": "",
+        "title": "Overview",
+        "path": "/settings",
         "children": []
       },
       {
         "loaded": true,
         "isPathHref": true,
         "type": "link",
-        "path": "/settings/store",
         "title": "Store",
-        "description": "",
+        "path": "/settings/store",
         "children": []
       },
       {
         "loaded": true,
         "isPathHref": true,
         "type": "link",
-        "path": "/settings/users",
         "title": "Users",
-        "description": "",
+        "path": "/settings/users",
         "children": [
           {
             "loaded": true,
             "isPathHref": true,
             "type": "link",
+            "title": "Invites",
             "path": "/settings/users/invites",
-            "title": "Manage Invites",
-            "description": "",
-            "children": [],
-            "sidebar_position": 1
+            "children": []
           }
         ]
       },
@@ -377,127 +386,104 @@ export const generatedSidebar = [
         "loaded": true,
         "isPathHref": true,
         "type": "link",
-        "path": "/settings/regions",
         "title": "Regions",
-        "description": "",
-        "children": [
-          {
-            "loaded": true,
-            "isPathHref": true,
-            "type": "link",
-            "path": "/settings/regions/manage",
-            "title": "Manage Regions",
-            "description": "",
-            "children": [],
-            "sidebar_position": 1
-          },
-          {
-            "loaded": true,
-            "isPathHref": true,
-            "type": "link",
-            "path": "/settings/regions/countries",
-            "title": "Manage Countries",
-            "description": "",
-            "children": [],
-            "sidebar_position": 2
-          },
-          {
-            "loaded": true,
-            "isPathHref": true,
-            "type": "link",
-            "path": "/settings/regions/providers",
-            "title": "Manage Providers",
-            "description": "",
-            "children": [],
-            "sidebar_position": 3
-          },
-          {
-            "loaded": true,
-            "isPathHref": true,
-            "type": "link",
-            "path": "/settings/regions/shipping-options",
-            "title": "Manage Shipping Options",
-            "description": "",
-            "children": [],
-            "sidebar_position": 4
-          }
-        ]
+        "path": "/settings/regions",
+        "children": []
       },
       {
         "loaded": true,
         "isPathHref": true,
         "type": "link",
-        "path": "/settings/return-reasons",
+        "title": "Tax Regions",
+        "path": "/settings/tax-regions",
+        "children": []
+      },
+      {
+        "loaded": true,
+        "isPathHref": true,
+        "type": "link",
         "title": "Return Reasons",
-        "description": "",
+        "path": "/settings/return-reasons",
         "children": []
       },
       {
         "loaded": true,
         "isPathHref": true,
         "type": "link",
-        "path": "/settings/taxes",
-        "title": "Taxes",
-        "description": "",
-        "children": [
-          {
-            "loaded": true,
-            "isPathHref": true,
-            "type": "link",
-            "path": "/settings/taxes/manage",
-            "title": "Manage Taxes",
-            "description": "",
-            "children": [],
-            "sidebar_position": 1
-          },
-          {
-            "loaded": true,
-            "isPathHref": true,
-            "type": "link",
-            "path": "/settings/taxes/tax-rates",
-            "title": "Manage Tax Rates",
-            "description": "",
-            "children": [],
-            "sidebar_position": 2
-          }
-        ]
-      },
-      {
-        "loaded": true,
-        "isPathHref": true,
-        "type": "link",
-        "path": "/settings/locations",
-        "title": "Locations",
-        "description": "",
-        "children": []
-      },
-      {
-        "loaded": true,
-        "isPathHref": true,
-        "type": "link",
-        "path": "/settings/sales-channels",
         "title": "Sales Channels",
-        "description": "",
+        "path": "/settings/sales-channels",
+        "children": []
+      },
+      {
+        "loaded": true,
+        "isPathHref": true,
+        "type": "link",
+        "title": "Product Types",
+        "path": "/settings/product-types",
+        "children": []
+      },
+      {
+        "loaded": true,
+        "isPathHref": true,
+        "type": "link",
+        "title": "Product Tags",
+        "path": "/settings/product-tags",
+        "children": []
+      },
+      {
+        "loaded": true,
+        "isPathHref": true,
+        "type": "link",
+        "title": "Location & Shipping",
+        "path": "/settings/locations-and-shipping",
         "children": [
           {
             "loaded": true,
             "isPathHref": true,
             "type": "link",
-            "path": "/settings/sales-channels/manage",
-            "title": "Manage Sales Channels",
-            "description": "",
-            "children": [],
-            "sidebar_position": 1
+            "title": "Locations",
+            "path": "/settings/locations-and-shipping/locations",
+            "children": []
           },
           {
             "loaded": true,
             "isPathHref": true,
             "type": "link",
-            "path": "/settings/sales-channels/products",
-            "title": "Manage Products",
-            "description": "",
-            "children": [],
-            "sidebar_position": 2
+            "title": "Shipping Profiles",
+            "path": "/settings/locations-and-shipping/shipping-profiles",
+            "children": []
+          }
+        ]
+      },
+      {
+        "loaded": true,
+        "isPathHref": true,
+        "type": "category",
+        "title": "Developer Settings",
+        "children": [
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "link",
+            "title": "Publishable API Keys",
+            "path": "#",
+            "children": []
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "link",
+            "title": "Secret API Keys",
+            "path": "#",
+            "children": []
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "link",
+            "title": "Workflows",
+            "path": "/settings/executions",
+            "children": []
           }
         ]
       },
@@ -505,42 +491,9 @@ export const generatedSidebar = [
         "loaded": true,
         "isPathHref": true,
         "type": "link",
-        "path": "/settings/developer",
-        "title": "Developer",
-        "description": "",
-        "children": [
-          {
-            "loaded": true,
-            "isPathHref": true,
-            "type": "link",
-            "path": "/settings/developer/api-key-management",
-            "title": "API Key Management",
-            "description": "",
-            "children": [
-              {
-                "loaded": true,
-                "isPathHref": true,
-                "type": "link",
-                "path": "/settings/developer/api-key-management/sales-channels",
-                "title": "Manage Sales Channels",
-                "description": "",
-                "children": [],
-                "sidebar_position": 1
-              }
-            ],
-            "sidebar_position": 1
-          },
-          {
-            "loaded": true,
-            "isPathHref": true,
-            "type": "link",
-            "path": "/settings/developer/executions",
-            "title": "Executions",
-            "description": "",
-            "children": [],
-            "sidebar_position": 2
-          }
-        ]
+        "title": "Profile",
+        "path": "/settings/profile",
+        "children": []
       }
     ]
   }
