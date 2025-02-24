@@ -158,4 +158,132 @@ describe("Routes sorter", () => {
       ]
     `)
   })
+
+  test("handle all regex based routes", () => {
+    const sorter = new RoutesSorter([
+      {
+        matcher: "/admin/:id/export",
+        methods: ["GET"],
+        handler: () => {},
+      },
+      {
+        matcher: "/admin/*/export",
+        methods: ["GET"],
+        handler: () => {},
+      },
+      {
+        matcher: "/admin/products",
+        methods: ["GET"],
+        handler: () => {},
+      },
+      {
+        matcher: "/admin/pr*ts",
+        methods: ["GET"],
+        handler: () => {},
+      },
+      {
+        matcher: "/admin/product(collection)?s",
+        methods: ["GET"],
+        handler: () => {},
+      },
+    ])
+
+    expect(sorter.sort()).toMatchInlineSnapshot(`
+      [
+        {
+          "handler": [Function],
+          "matcher": "/admin/*/export",
+          "methods": [
+            "GET",
+          ],
+        },
+        {
+          "handler": [Function],
+          "matcher": "/admin/pr*ts",
+          "methods": [
+            "GET",
+          ],
+        },
+        {
+          "handler": [Function],
+          "matcher": "/admin/product(collection)?s",
+          "methods": [
+            "GET",
+          ],
+        },
+        {
+          "handler": [Function],
+          "matcher": "/admin/products",
+          "methods": [
+            "GET",
+          ],
+        },
+        {
+          "handler": [Function],
+          "matcher": "/admin/:id/export",
+          "methods": [
+            "GET",
+          ],
+        },
+      ]
+    `)
+  })
+
+  test("handle routes with multiple params", () => {
+    const sorter = new RoutesSorter([
+      {
+        matcher: "/admin/customers/:id/addresses",
+        methods: ["GET"],
+        handler: () => {},
+      },
+      {
+        matcher: "/admin/customers/:id",
+        methods: ["GET"],
+        handler: () => {},
+      },
+      {
+        matcher: "/admin/customers/:id/addresses/:addressId/switch",
+        methods: ["GET"],
+        handler: () => {},
+      },
+      {
+        matcher: "/admin/customers/:id/addresses/:addressId",
+        methods: ["GET"],
+        handler: () => {},
+      },
+    ])
+
+    expect(sorter.sort()).toMatchInlineSnapshot(`
+      [
+        {
+          "handler": [Function],
+          "matcher": "/admin/customers/:id",
+          "methods": [
+            "GET",
+          ],
+        },
+        {
+          "handler": [Function],
+          "matcher": "/admin/customers/:id/addresses",
+          "methods": [
+            "GET",
+          ],
+        },
+        {
+          "handler": [Function],
+          "matcher": "/admin/customers/:id/addresses/:addressId",
+          "methods": [
+            "GET",
+          ],
+        },
+        {
+          "handler": [Function],
+          "matcher": "/admin/customers/:id/addresses/:addressId/switch",
+          "methods": [
+            "GET",
+          ],
+        },
+      ]
+    `)
+  })
 })

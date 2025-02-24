@@ -176,7 +176,7 @@ export class RoutesSorter {
         bucket = "wildcard"
       } else if (segment.startsWith(":")) {
         bucket = "params"
-      } else if (/[\(\+\[\]\)\!]/.test(segment)) {
+      } else if (/[\(\+\*\[\]\)\!]/.test(segment)) {
         bucket = "regex"
       }
 
