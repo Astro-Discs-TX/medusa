@@ -43,6 +43,11 @@ export const recipesSidebar = [
   },
   {
     type: "link",
+    path: "/recipes/erp",
+    title: "Integrate ERP",
+  },
+  {
+    type: "link",
     path: "/recipes/b2b",
     title: "B2B",
   },
@@ -62,11 +67,6 @@ export const recipesSidebar = [
     type: "link",
     path: "/recipes/ecommerce",
     title: "Ecommerce",
-  },
-  {
-    type: "link",
-    path: "/recipes/integrate-ecommerce-stack",
-    title: "Integrate Ecommerce Stack",
   },
   {
     type: "link",

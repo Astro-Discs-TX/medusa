@@ -115,7 +115,6 @@ export const generatedEditDates = {
   "app/recipes/digital-products/examples/standard/page.mdx": "2025-02-13T15:24:15.868Z",
   "app/recipes/digital-products/page.mdx": "2025-01-06T11:19:35.623Z",
   "app/recipes/ecommerce/page.mdx": "2024-10-22T11:01:01.218Z",
-  "app/recipes/integrate-ecommerce-stack/page.mdx": "2024-12-09T13:03:35.846Z",
   "app/recipes/marketplace/examples/vendors/page.mdx": "2025-02-20T07:20:47.970Z",
   "app/recipes/marketplace/page.mdx": "2024-10-03T13:07:44.153Z",
   "app/recipes/multi-region-store/page.mdx": "2024-10-03T13:07:13.813Z",
@@ -5931,5 +5930,6 @@ export const generatedEditDates = {
   "references/payment/types/payment.PaymentCollectionStatus/page.mdx": "2025-02-11T11:36:52.835Z",
   "references/types/types/types.BasePaymentCollectionStatus/page.mdx": "2025-02-11T11:36:50.377Z",
   "references/utils/enums/utils.PaymentActions/page.mdx": "2025-02-11T11:36:54.941Z",
-  "references/utils/enums/utils.PaymentCollectionStatus/page.mdx": "2025-02-11T11:36:54.928Z"
+  "references/utils/enums/utils.PaymentCollectionStatus/page.mdx": "2025-02-11T11:36:54.928Z",
+  "app/recipes/erp/page.mdx": "2025-02-24T17:03:47.779Z"
 }
