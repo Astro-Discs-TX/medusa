@@ -43,7 +43,7 @@ export default async function adminLoader({
     disable: false,
     sources,
     ...admin,
-    outDir: path.join(rootDirectory, ADMIN_RELATIVE_OUTPUT_DIR),
+    outDir: path.join(rootDirectory, admin.outDir ?? ADMIN_RELATIVE_OUTPUT_DIR),
   }
 
   if (adminOptions?.disable) {
