@@ -181,6 +181,7 @@ moduleIntegrationTestRunner<IProductModuleService>({
         })
 
         it("should update a product and upsert relations that are not created yet", async () => {
+          const tags = await service.createProductTags([{ value: "tag-1" }])
           const data = buildProductAndRelationsData({
             images,
             thumbnail: images[0].url,
@@ -190,6 +191,7 @@ moduleIntegrationTestRunner<IProductModuleService>({
                 values: ["val-1", "val-2"],
               },
             ],
+            tag_ids: [tags[0].id],
           })
 
           const variantTitle = data.variants[0].title
@@ -217,7 +219,7 @@ moduleIntegrationTestRunner<IProductModuleService>({
           productBefore.options = data.options
           productBefore.images = data.images
           productBefore.thumbnail = data.thumbnail
-          productBefore.tags = data.tags
+          productBefore.tag_ids = data.tag_ids
           const updatedProducts = await service.upsertProducts([productBefore])
           expect(updatedProducts).toHaveLength(1)
 
@@ -273,7 +275,7 @@ moduleIntegrationTestRunner<IProductModuleService>({
               tags: expect.arrayContaining([
                 expect.objectContaining({
                   id: expect.any(String),
-                  value: productBefore.tags?.[0].value,
+                  value: tags[0].value,
                 }),
               ]),
               variants: expect.arrayContaining([
@@ -856,9 +858,11 @@ moduleIntegrationTestRunner<IProductModuleService>({
       describe("create", function () {
         let images = [{ url: "image-1" }]
         it("should create a product", async () => {
+          const tags = await service.createProductTags([{ value: "tag-1" }])
           const data = buildProductAndRelationsData({
             images,
             thumbnail: images[0].url,
+            tag_ids: [tags[0].id],
           })
 
           const productsCreated = await service.createProducts([data])
@@ -917,7 +921,7 @@ moduleIntegrationTestRunner<IProductModuleService>({
               tags: expect.arrayContaining([
                 expect.objectContaining({
                   id: expect.any(String),
-                  value: data.tags[0].value,
+                  value: tags[0].value,
                 }),
               ]),
               variants: expect.arrayContaining([
@@ -1201,7 +1205,7 @@ moduleIntegrationTestRunner<IProductModuleService>({
           ])
         })
 
-        it.only("should return a list of products scoped by variant options", async () => {
+        it("should return a list of products scoped by variant options", async () => {
           const productsWithVariants = await service.listProducts(
             {
               variants: {
