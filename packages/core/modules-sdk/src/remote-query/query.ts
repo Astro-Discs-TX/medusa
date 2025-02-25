@@ -14,6 +14,7 @@ import {
   MedusaError,
   isObject,
   remoteQueryObjectFromString,
+  unflattenObjectKeys,
 } from "@medusajs/utils"
 import { RemoteQuery } from "./remote-query"
 import { toRemoteQuery } from "./to-remote-query"
@@ -211,7 +212,9 @@ export class Query {
       : ({} as any)
     const pagination = queryOptions.pagination as any
     if (pagination?.order) {
-      pagination.order = { [mainEntity]: pagination.order }
+      pagination.order = {
+        [mainEntity]: unflattenObjectKeys(pagination?.order),
+      }
     }
 
     const indexResponse = (await this.#indexModule.query({
@@ -221,13 +224,21 @@ export class Query {
       pagination,
     })) as unknown as GraphResultSet<TEntry>
 
-    delete queryOptions.pagination
     delete queryOptions.filters
+
+    const graphOptions: RemoteQueryInput<TEntry> = {
+      ...queryOptions,
+      pagination: {
+        // We pass through `take` to force the `select-in` query strategy
+        //   There might be a better way to do this, but for now this should do
+        take: queryOptions.pagination?.take,
+      },
+    }
 
     let finalResultset: GraphResultSet<TEntry> = indexResponse
 
     if (indexResponse.data.length) {
-      finalResultset = await this.graph(queryOptions, {
+      finalResultset = await this.graph(graphOptions, {
         ...options,
         initialData: indexResponse.data,
       })
