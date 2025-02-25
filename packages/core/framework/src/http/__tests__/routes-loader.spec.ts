@@ -369,4 +369,16 @@ describe("Routes loader", () => {
       ]
     `)
   })
+
+  test("throw error for duplicate params", async () => {
+    const BASE_DIR = resolve(
+      __dirname,
+      "../__fixtures__/routers-duplicate-parameter"
+    )
+
+    const loader = new RoutesLoader({})
+    await expect(() => loader.scanDir(BASE_DIR)).rejects.toThrow(
+      "Duplicate parameters found in route /admin/customers/[id]/orders/[id]/route.ts (id). Make sure that all parameters are unique."
+    )
+  })
 })
