@@ -389,7 +389,7 @@ Your ERP may store restrictions on who can purchase what products. For example, 
 
 Since Medusa implements the add-to-cart functionality within a workflow, it allows you to inject custom logic into the workflow using [workflow hooks](!docs!/learn/fundamentals/workflows/workflow-hooks). A workflow hook is a point in a workflow where you can inject a step and perform a custom functionality.
 
-So, to implement the use case of product-purchase restriction, you can use the `validate` hook of the `addToCartWorkflow` to check if the customer is allowed to purchase the product. For example:
+So, to implement the use case of product-purchase restriction, you can use the `validate` hook of the `addToCartWorkflow` or the [completeCartWorkflow](/references/medusa-workflows/completeCartWorkflow) to check if the customer is allowed to purchase the product. For example:
 
 ```ts title="src/workflows/hooks/validate-purchase.ts"
 import { MedusaError } from "@medusajs/framework/utils";
@@ -678,7 +678,7 @@ Learn more about middlewares in [this documentation](!docs!/learn/fundamentals/a
 
 An ERP system often manages the inventory of products, with the ability to track the stock levels and availability of products. When a customer is purchasing a product through Medusa, you want to ensure that the product is available in the ERP system before allowing the purchase.
 
-Similar to the [product-purchase restriction](#restrict-purchase-with-custom-erp-rules) use case, you can use the `validate` hook of the `addToCartWorkflow` to check the product's availability in the ERP system. For example:
+Similar to the [product-purchase restriction](#restrict-purchase-with-custom-erp-rules) use case, you can use the `validate` hook of the `addToCartWorkflow` or the [completeCartWorkflow](/references/medusa-workflows/completeCartWorkflow) to check the product's availability in the ERP system. For example:
 
 ```ts title="src/workflows/hooks/validate-inventory.ts"
 import { MedusaError } from "@medusajs/framework/utils";
