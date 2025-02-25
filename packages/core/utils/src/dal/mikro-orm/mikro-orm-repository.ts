@@ -804,22 +804,24 @@ export function mikroOrmBaseRepositoryFactory<const T extends object>(
           joinColumnsConstraints[joinColumn] = data[referencedColumnName]
         })
 
-        const deletedRelations = await manager
-          .getTransactionContext()
+        const deletedRelations = await (
+          manager.getTransactionContext() ?? manager.getKnex()
+        )
           .queryBuilder()
           .from(relation.targetMeta!.collection)
           .delete()
           .where(joinColumnsConstraints)
-          .andWhere(
-            manager
-              .getKnex()
-              .raw(`id NOT IN (?)`, [normalizedData.map((d: any) => d.id)])
+          .whereNotIn(
+            "id",
+            normalizedData.map((d: any) => d.id)
           )
           .returning("id")
 
         if (deletedRelations.length) {
           performedActions.deleted[relation.type] ??= []
-          performedActions.deleted[relation.type].push(...deletedRelations)
+          performedActions.deleted[relation.type].push(
+            ...deletedRelations.map((row) => ({ id: row.id }))
+          )
         }
 
         if (normalizedData.length) {
@@ -961,19 +963,23 @@ export function mikroOrmBaseRepositoryFactory<const T extends object>(
         } else {
           shouldInsert = true
           toInsert.push(data)
-          performedActions.created[entityName] ??= []
-          performedActions.created[entityName].push({ id: data.id })
         }
       })
 
       if (shouldInsert) {
+        let insertQb = manager.qb(entityName).insert(toInsert).returning("id")
+
+        if (skipUpdate) {
+          insertQb = insertQb.onConflict().ignore()
+        }
+
         promises.push(
-          manager
-            .qb(entityName)
-            .insert(toInsert)
-            .onConflict()
-            .ignore()
-            .execute("all", true)
+          insertQb.execute("all", true).then((res: { id: string }[]) => {
+            performedActions.created[entityName] ??= []
+            performedActions.created[entityName].push(
+              ...res.map((data) => ({ id: data.id }))
+            )
+          })
         )
       }
 
