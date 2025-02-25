@@ -3225,6 +3225,8 @@ export const generatedSidebar = [
             "type": "category",
             "title": "Concepts",
             "initialOpen": false,
+            "autogenerate_tags": "concept+fulfillment",
+            "autogenerate_as_ref": true,
             "children": [
               {
                 "loaded": true,
@@ -3264,6 +3266,14 @@ export const generatedSidebar = [
                 "type": "link",
                 "path": "/commerce-modules/fulfillment/links-to-other-modules",
                 "title": "Links to Other Modules",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Product Shipping Requirement",
+                "path": "/commerce-modules/product/selling-products",
                 "children": []
               }
             ]
@@ -8125,6 +8135,42 @@ export const generatedSidebar = [
                         "title": "updateReturns",
                         "description": "",
                         "children": []
+                      },
+                      {
+                        "loaded": true,
+                        "isPathHref": true,
+                        "type": "link",
+                        "path": "/references/order/upsertOrderLineItemAdjustments",
+                        "title": "upsertOrderLineItemAdjustments",
+                        "description": "",
+                        "children": []
+                      },
+                      {
+                        "loaded": true,
+                        "isPathHref": true,
+                        "type": "link",
+                        "path": "/references/order/upsertOrderLineItemTaxLines",
+                        "title": "upsertOrderLineItemTaxLines",
+                        "description": "",
+                        "children": []
+                      },
+                      {
+                        "loaded": true,
+                        "isPathHref": true,
+                        "type": "link",
+                        "path": "/references/order/upsertOrderShippingMethodAdjustments",
+                        "title": "upsertOrderShippingMethodAdjustments",
+                        "description": "",
+                        "children": []
+                      },
+                      {
+                        "loaded": true,
+                        "isPathHref": true,
+                        "type": "link",
+                        "path": "/references/order/upsertOrderShippingMethodTaxLines",
+                        "title": "upsertOrderShippingMethodTaxLines",
+                        "description": "",
+                        "children": []
                       }
                     ]
                   }
@@ -9338,6 +9384,15 @@ export const generatedSidebar = [
                         "loaded": true,
                         "isPathHref": true,
                         "type": "link",
+                        "path": "/references/payment/updateAccountHolder",
+                        "title": "updateAccountHolder",
+                        "description": "",
+                        "children": []
+                      },
+                      {
+                        "loaded": true,
+                        "isPathHref": true,
+                        "type": "link",
                         "path": "/references/payment/updatePayment",
                         "title": "updatePayment",
                         "description": "",
@@ -10541,6 +10596,14 @@ export const generatedSidebar = [
                 "type": "link",
                 "path": "/commerce-modules/product/variant-inventory",
                 "title": "Variant Inventory",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "path": "/commerce-modules/product/selling-products",
+                "title": "Selling Use Cases",
                 "children": []
               },
               {
@@ -17046,6 +17109,15 @@ export const generatedSidebar = [
                 "type": "link",
                 "path": "/references/js-sdk/admin/customerGroup",
                 "title": "customerGroup",
+                "description": "",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "path": "/references/js-sdk/admin/draftOrder",
+                "title": "draftOrder",
                 "description": "",
                 "children": []
               },

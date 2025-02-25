@@ -6,24 +6,34 @@ import {
 } from "../../utils/common-validators"
 import {
   createFindParams,
+  createOperatorMap,
   createSelectParams,
   WithAdditionalData,
 } from "../../utils/validators"
 
-export type AdminGetOrderParamsType = z.infer<typeof AdminGetOrderParams>
-export const AdminGetOrderParams = createSelectParams()
+export type AdminGetDraftOrderParamsType = z.infer<
+  typeof AdminGetDraftOrderParams
+>
+export const AdminGetDraftOrderParams = createSelectParams()
 
-export const AdminGetOrdersParamsFields = z.object({
+const AdminGetDraftOrdersParamsFields = z.object({
   id: z.union([z.string(), z.array(z.string())]).optional(),
+  created_at: createOperatorMap().optional(),
+  updated_at: createOperatorMap().optional(),
+  q: z.string().optional(),
+  region_id: z.union([z.string(), z.array(z.string())]).optional(),
+  sales_channel_id: z.array(z.string()).optional(),
 })
 
-export type AdminGetOrdersParamsType = z.infer<typeof AdminGetOrdersParams>
-export const AdminGetOrdersParams = createFindParams({
+export type AdminGetDraftOrdersParamsType = z.infer<
+  typeof AdminGetDraftOrdersParams
+>
+export const AdminGetDraftOrdersParams = createFindParams({
   limit: 50,
   offset: 0,
 })
-  .merge(AdminGetOrdersParamsFields)
-  .merge(applyAndAndOrOperators(AdminGetOrdersParamsFields))
+  .merge(AdminGetDraftOrdersParamsFields)
+  .merge(applyAndAndOrOperators(AdminGetDraftOrdersParamsFields))
 
 enum Status {
   completed = "completed",
@@ -64,14 +74,14 @@ const CreateDraftOrder = z
     sales_channel_id: z.string().nullish(),
     email: z.string().nullish(),
     customer_id: z.string().nullish(),
-    billing_address: AddressPayload.optional(),
-    shipping_address: AddressPayload.optional(),
+    billing_address: z.union([AddressPayload, z.string()]).optional(),
+    shipping_address: z.union([AddressPayload, z.string()]).optional(),
     items: z.array(Item).optional(),
     region_id: z.string(),
     promo_codes: z.array(z.string()).optional(),
     currency_code: z.string().nullish(),
     no_notification_order: z.boolean().optional(),
-    shipping_methods: z.array(ShippingMethod),
+    shipping_methods: z.array(ShippingMethod).optional(),
     metadata: z.record(z.unknown()).nullish(),
   })
   .strict()
@@ -91,3 +101,11 @@ export const AdminCreateDraftOrder = WithAdditionalData(
     )
   }
 )
+
+export type AdminUpdateDraftOrderType = z.infer<typeof AdminUpdateDraftOrder>
+export const AdminUpdateDraftOrder = z.object({
+  email: z.string().optional(),
+  shipping_address: AddressPayload.optional(),
+  billing_address: AddressPayload.optional(),
+  metadata: z.record(z.unknown()).nullish(),
+})
