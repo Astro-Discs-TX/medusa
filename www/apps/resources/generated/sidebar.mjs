@@ -158,7 +158,16 @@ export const generatedSidebar = [
         "type": "link",
         "path": "/recipes/erp",
         "title": "Integrate ERP",
-        "children": []
+        "children": [
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "link",
+            "path": "/recipes/erp/odoo",
+            "title": "Odoo Integration",
+            "children": []
+          }
+        ]
       },
       {
         "loaded": true,

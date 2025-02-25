@@ -189,7 +189,7 @@ export const generatedEditDates = {
   "app/troubleshooting/s3/page.mdx": "2025-01-24T13:47:24.994Z",
   "app/troubleshooting/page.mdx": "2024-07-18T08:57:11+02:00",
   "app/usage/page.mdx": "2024-05-13T18:55:11+03:00",
-  "app/page.mdx": "2025-01-09T11:40:57.826Z",
+  "app/page.mdx": "2025-02-25T07:36:59.541Z",
   "app/commerce-modules/auth/_events/_events-table/page.mdx": "2024-07-03T19:27:13+03:00",
   "app/commerce-modules/auth/auth-flows/page.mdx": "2025-01-13T11:31:35.361Z",
   "app/commerce-modules/auth/_events/page.mdx": "2024-07-03T19:27:13+03:00",
@@ -5931,5 +5931,6 @@ export const generatedEditDates = {
   "references/types/types/types.BasePaymentCollectionStatus/page.mdx": "2025-02-11T11:36:50.377Z",
   "references/utils/enums/utils.PaymentActions/page.mdx": "2025-02-11T11:36:54.941Z",
   "references/utils/enums/utils.PaymentCollectionStatus/page.mdx": "2025-02-11T11:36:54.928Z",
-  "app/recipes/erp/page.mdx": "2025-02-24T17:03:47.779Z"
+  "app/recipes/erp/page.mdx": "2025-02-25T11:11:02.259Z",
+  "app/recipes/erp/odoo/page.mdx": "2025-02-25T11:10:05.938Z"
 }

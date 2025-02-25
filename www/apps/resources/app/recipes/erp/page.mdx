@@ -14,6 +14,8 @@ When integrating the ERP system with other ecommerce platforms, you'll face comp
 
 Medusa's framework for customization solves these challenges by giving you a durable execution engine to orchestrate operations through custom flows, and the flexibility to customize the platform's existing flows. You can wrap existing flows with custom logic, inject custom features into existing flows, and create new flows that interact with the ERP system and sync data between the two systems.
 
+![ERP Integration Illustration](https://res.cloudinary.com/dza7lstvk/image/upload/v1740470820/Medusa%20Resources/erp-medusa-integration_pxjpcx.jpg)
+
 In this recipe, you'll learn how to implement some common use cases when integrating an ERP system with Medusa. This includes how to purchase products with custom pricing, restrict products from purchase under conditions in the ERP, sync orders to the ERP, and more.
 
 You can use the code snippets in the recipe as a starting point for your ERP integration, making changes as necessary for your use case. You can also implement other use cases using the same Medusa concepts.
@@ -92,7 +94,7 @@ You can then use the module's service in the custom flows and customizations tha
 
 ### How to Create Module
 
-Refer to [this documentation](!docs!/learn/fundamentals/modules) on how to create a module. You can also refer to the [Odoo Integration guide](#) as an example of how to build a module that integrates an ERP into Medusa.
+Refer to [this documentation](!docs!/learn/fundamentals/modules) on how to create a module. You can also refer to the [Odoo Integration guide](./odoo/page.mdx) as an example of how to build a module that integrates an ERP into Medusa.
 
 The rest of this recipe assumes you have an ERP Module with some methods to retrieve products, prices, and other relevant data.
 
@@ -180,6 +182,12 @@ Then, you create a `syncFromErpWorkflow` that executes the `getProductsFromErpSt
 Finally, you pass the products to be created to the `createProductsWorkflow`, which is a built-in Medusa workflow that creates products.
 
 Learn more about creating workflows and steps in [this documentation](!docs!/learn/fundamentals/workflows).
+
+<Note title="Tip">
+
+Find a detailed example of implementing this workflow in the [Odoo Integration guide](./odoo/page.mdx).
+
+</Note>
 
 ### 2. Create Scheduled Job to Sync Products
 

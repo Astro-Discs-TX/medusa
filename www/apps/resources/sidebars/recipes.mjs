@@ -45,6 +45,13 @@ export const recipesSidebar = [
     type: "link",
     path: "/recipes/erp",
     title: "Integrate ERP",
+    children: [
+      {
+        type: "link",
+        path: "/recipes/erp/odoo",
+        title: "Odoo Integration",
+      },
+    ],
   },
   {
     type: "link",
