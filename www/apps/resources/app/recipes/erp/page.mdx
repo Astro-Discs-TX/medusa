@@ -81,7 +81,7 @@ export default class ErpModuleService {
     // TODO initialize client that connects to ERP
   }
 
-  async getProducts () {
+  async getProducts() {
     // assuming client has a method to fetch products
     return this.client.getProducts()
   }
@@ -123,7 +123,7 @@ For example, you can create the following workflow:
 ```ts title="src/workflows/sync-products.ts"
 import { 
   createStep, createWorkflow, StepResponse, 
-  transform, WorkflowResponse
+  transform, WorkflowResponse,
 } from "@medusajs/framework/workflows-sdk"
 import { createProductsWorkflow } from "@medusajs/medusa/core-flows"
 
@@ -154,9 +154,9 @@ export const syncFromErpWorkflow = createWorkflow(
           variants: erpProduct.variants.map((variant) => ({
             title: variant.title,
             metadata: {
-              external_id: variant.id
-            }
-          }))
+              external_id: variant.id,
+            },
+          })),
           // other data...
         }
       })
@@ -164,12 +164,12 @@ export const syncFromErpWorkflow = createWorkflow(
 
     createProductsWorkflow.runAsStep({
       input: {
-        products: productsToCreate
-      }
+        products: productsToCreate,
+      },
     })
 
     return new WorkflowResponse({
-      erpProducts
+      erpProducts,
     })
   }
 )
@@ -197,9 +197,9 @@ For example, you can create the following scheduled job:
 
 ```ts title="src/scheduled-jobs/sync-products.ts"
 import {
-  MedusaContainer
-} from "@medusajs/framework/types";
-import { syncFromErpWorkflow } from "../workflows/sync-from-erp";
+  MedusaContainer,
+} from "@medusajs/framework/types"
+import { syncFromErpWorkflow } from "../workflows/sync-from-erp"
 
 export default async function syncProductsJob(container: MedusaContainer) {
   await syncFromErpWorkflow(container).run({})
@@ -208,7 +208,7 @@ export default async function syncProductsJob(container: MedusaContainer) {
 export const config = {
   name: "daily-product-sync",
   schedule: "0 0 * * *", // Every day at midnight
-};
+}
 ```
 
 You create a scheduled job that runs once a day, executing the `syncFromErpWorkflow` to sync the products from the ERP to Medusa.
@@ -321,12 +321,12 @@ export const addCustomToCartWorkflow = createWorkflow(
     const itemToAdd = transform({
       item,
       price,
-      variants
+      variants,
     }, (data) => {
       return [{
         ...data.item,
         unit_price: data.price,
-        metadata: data.variants[0].metadata
+        metadata: data.variants[0].metadata,
       }]
     })
     
@@ -392,8 +392,8 @@ Since Medusa implements the add-to-cart functionality within a workflow, it allo
 So, to implement the use case of product-purchase restriction, you can use the `validate` hook of the `addToCartWorkflow` or the [completeCartWorkflow](/references/medusa-workflows/completeCartWorkflow) to check if the customer is allowed to purchase the product. For example:
 
 ```ts title="src/workflows/hooks/validate-purchase.ts"
-import { MedusaError } from "@medusajs/framework/utils";
-import { addToCartWorkflow } from "@medusajs/medusa/core-flows";
+import { MedusaError } from "@medusajs/framework/utils"
+import { addToCartWorkflow } from "@medusajs/medusa/core-flows"
 
 addToCartWorkflow.hooks.validate(
   async ({ input, cart }, { container }) => {
@@ -403,9 +403,9 @@ addToCartWorkflow.hooks.validate(
     
     const customer = cart.customer_id ? await customerModuleService.retrieveCustomer(cart.customer_id) : undefined
     const productVariants = await productModuleService.listProductVariants({
-      id: input.items.map((item) => item.variant_id).filter(Boolean) as string[]
+      id: input.items.map((item) => item.variant_id).filter(Boolean) as string[],
     }, {
-      relations: ["product"]
+      relations: ["product"],
     })
 
     await Promise.all(
@@ -506,11 +506,11 @@ export const syncOrderToErpWorkflow = createWorkflow(
       },
       options: {
         throwIfKeyNotFound: true,
-      }
+      },
     })
 
     const erpOrderId = syncOrderToErpStep({
-      order: orders[0] as unknown as OrderDTO
+      order: orders[0] as unknown as OrderDTO,
     })
 
     updateOrderWorkflow.runAsStep({
@@ -518,9 +518,9 @@ export const syncOrderToErpWorkflow = createWorkflow(
         id: order_id,
         user_id: "",
         metadata: {
-          external_id: erpOrderId
-        }
-      }
+          external_id: erpOrderId,
+        },
+      },
     })
 
     return new WorkflowResponse(erpOrderId)
@@ -555,8 +555,8 @@ export default async function productCreateHandler({
   const { result } = await syncOrderToErpWorkflow(container)
     .run({
       input: {
-        order_id: data.id
-      }
+        order_id: data.id,
+      },
     })
 
   console.log(`Order synced to ERP with id: ${result}`)
@@ -592,24 +592,24 @@ export const syncOrderFromErpWorkflow = createWorkflow(
       filters: {
         // @ts-ignore
         metadata: {
-          external_id: order_erp_data.id
-        }
+          external_id: order_erp_data.id,
+        },
       },
     })
 
     const orderUpdateData = transform({
       order_erp_data,
-      orders
+      orders,
     }, (data) => {
       return {
         id: data.orders[0].id,
         user_id: "",
-        status: data.order_erp_data.status
+        status: data.order_erp_data.status,
       }
     })
 
     const order = updateOrderWorkflow.runAsStep({
-      input: orderUpdateData
+      input: orderUpdateData,
     })
 
     return new WorkflowResponse(order)
@@ -636,8 +636,8 @@ export async function POST(
   // execute the workflow
   await syncOrderFromErpWorkflow(req.scope).run({
     input: {
-      order_erp_data // pass constructed order object
-    }
+      order_erp_data, // pass constructed order object
+    },
   })
 }
 ```
@@ -681,8 +681,8 @@ An ERP system often manages the inventory of products, with the ability to track
 Similar to the [product-purchase restriction](#restrict-purchase-with-custom-erp-rules) use case, you can use the `validate` hook of the `addToCartWorkflow` or the [completeCartWorkflow](/references/medusa-workflows/completeCartWorkflow) to check the product's availability in the ERP system. For example:
 
 ```ts title="src/workflows/hooks/validate-inventory.ts"
-import { MedusaError } from "@medusajs/framework/utils";
-import { addToCartWorkflow } from "@medusajs/medusa/core-flows";
+import { MedusaError } from "@medusajs/framework/utils"
+import { addToCartWorkflow } from "@medusajs/medusa/core-flows"
 
 addToCartWorkflow.hooks.validate(
   async ({ input }, { container }) => {
@@ -690,9 +690,9 @@ addToCartWorkflow.hooks.validate(
     const productModuleService = container.resolve("product")
     
     const productVariants = await productModuleService.listProductVariants({
-      id: input.items.map((item) => item.variant_id).filter(Boolean) as string[]
+      id: input.items.map((item) => item.variant_id).filter(Boolean) as string[],
     }, {
-      relations: ["product"]
+      relations: ["product"],
     })
 
     await Promise.all(
