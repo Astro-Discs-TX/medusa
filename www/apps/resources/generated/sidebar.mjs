@@ -8134,6 +8134,42 @@ export const generatedSidebar = [
                         "title": "updateReturns",
                         "description": "",
                         "children": []
+                      },
+                      {
+                        "loaded": true,
+                        "isPathHref": true,
+                        "type": "link",
+                        "path": "/references/order/upsertOrderLineItemAdjustments",
+                        "title": "upsertOrderLineItemAdjustments",
+                        "description": "",
+                        "children": []
+                      },
+                      {
+                        "loaded": true,
+                        "isPathHref": true,
+                        "type": "link",
+                        "path": "/references/order/upsertOrderLineItemTaxLines",
+                        "title": "upsertOrderLineItemTaxLines",
+                        "description": "",
+                        "children": []
+                      },
+                      {
+                        "loaded": true,
+                        "isPathHref": true,
+                        "type": "link",
+                        "path": "/references/order/upsertOrderShippingMethodAdjustments",
+                        "title": "upsertOrderShippingMethodAdjustments",
+                        "description": "",
+                        "children": []
+                      },
+                      {
+                        "loaded": true,
+                        "isPathHref": true,
+                        "type": "link",
+                        "path": "/references/order/upsertOrderShippingMethodTaxLines",
+                        "title": "upsertOrderShippingMethodTaxLines",
+                        "description": "",
+                        "children": []
                       }
                     ]
                   }
@@ -9340,6 +9376,15 @@ export const generatedSidebar = [
                         "type": "link",
                         "path": "/references/payment/softDeleteRefundReasons",
                         "title": "softDeleteRefundReasons",
+                        "description": "",
+                        "children": []
+                      },
+                      {
+                        "loaded": true,
+                        "isPathHref": true,
+                        "type": "link",
+                        "path": "/references/payment/updateAccountHolder",
+                        "title": "updateAccountHolder",
                         "description": "",
                         "children": []
                       },
@@ -17055,6 +17100,15 @@ export const generatedSidebar = [
                 "type": "link",
                 "path": "/references/js-sdk/admin/customerGroup",
                 "title": "customerGroup",
+                "description": "",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "path": "/references/js-sdk/admin/draftOrder",
+                "title": "draftOrder",
                 "description": "",
                 "children": []
               },
