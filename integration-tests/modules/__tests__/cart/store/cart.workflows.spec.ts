@@ -1907,7 +1907,7 @@ medusaIntegrationTestRunner({
               unit_price: 4000,
               is_custom_price: true,
               quantity: 2,
-              title: "Test variant",
+              title: "Test item",
             })
           )
         })
