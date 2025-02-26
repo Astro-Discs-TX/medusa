@@ -96,10 +96,16 @@ In Medusa, you implement integrations or features around a single commerce domai
 So, you can create a module that exports a class called a service, and in that service, you implement the logic to connect to your ERP system, fetch data from it, and send data to it. The service may look like this:
 
 ```ts title="src/modules/erp/service.ts"
+type Options = {
+  apiKey: string
+}
+
 export default class ErpModuleService {
+  private options: Options
   private client
 
-  constructor({}, options) {
+  constructor({}, options: Options) {
+    this.options = options
     // TODO initialize client that connects to ERP
   }
 
