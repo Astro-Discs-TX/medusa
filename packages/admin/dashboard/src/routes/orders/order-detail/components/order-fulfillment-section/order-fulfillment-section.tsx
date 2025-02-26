@@ -424,12 +424,12 @@ const Fulfillment = ({
                           rel="noopener noreferrer"
                           className="text-ui-fg-interactive hover:text-ui-fg-interactive-hover transition-fg"
                         >
-                          <Text size="small" leading="compact">
-                            {tlink.tracking_number} (Tracking)
+                          <Text size="small" leading="compact" as="span">
+                            {tlink.tracking_number}
                           </Text>
                         </a>
                       )}
-                      {hasTrackingUrl && hasLabelUrl && " | "}
+                      {hasTrackingUrl && hasLabelUrl && " - "}
                       {hasLabelUrl && (
                         <a
                           href={tlink.label_url}
@@ -437,13 +437,13 @@ const Fulfillment = ({
                           rel="noopener noreferrer"
                           className="text-ui-fg-interactive hover:text-ui-fg-interactive-hover transition-fg"
                         >
-                          <Text size="small" leading="compact">
-                            (Label)
+                          <Text size="small" leading="compact" as="span">
+                            Label
                           </Text>
                         </a>
                       )}
                     </li>
-                  );
+                  )
                 }
           
                 return (
