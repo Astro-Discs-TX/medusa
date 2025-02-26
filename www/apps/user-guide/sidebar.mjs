@@ -10,6 +10,11 @@ export const sidebar = sidebarAttachHrefCommonOptions([
     title: "Introduction",
   },
   {
+    type: "link",
+    path: "/reset-password",
+    title: "Reset Password",
+  },
+  {
     type: "separator",
   },
   {
@@ -97,7 +102,7 @@ export const sidebar = sidebarAttachHrefCommonOptions([
       {
         type: "link",
         title: "Manage Variants",
-        path: "/proucts/variants",
+        path: "/products/variants",
       },
       {
         type: "link",
