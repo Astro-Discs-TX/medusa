@@ -111,7 +111,7 @@ export const sidebar = sidebarAttachHrefCommonOptions([
       },
       {
         type: "link",
-        title: "Categories",
+        title: "Manage Categories",
         path: "/products/categories",
       },
       {
@@ -236,7 +236,7 @@ export const sidebar = sidebarAttachHrefCommonOptions([
         children: [
           {
             type: "link",
-            title: "Invites",
+            title: "Manage Invites",
             path: "/settings/users/invites",
           },
         ],
@@ -278,12 +278,12 @@ export const sidebar = sidebarAttachHrefCommonOptions([
         children: [
           {
             type: "link",
-            title: "Locations",
+            title: "Manage Locations",
             path: "/settings/locations-and-shipping/locations",
           },
           {
             type: "link",
-            title: "Shipping Profiles",
+            title: "Manage Shipping Profiles",
             path: "/settings/locations-and-shipping/shipping-profiles",
           },
         ],
