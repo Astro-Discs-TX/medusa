@@ -310,6 +310,11 @@ export const sidebar = sidebarAttachHrefCommonOptions([
           },
           {
             type: "link",
+            path: "/learn/fundamentals/api-routes/parse-body",
+            title: "Body Parsing",
+          },
+          {
+            type: "link",
             path: "/learn/fundamentals/api-routes/validation",
             title: "Validation",
           },
@@ -460,6 +465,11 @@ export const sidebar = sidebarAttachHrefCommonOptions([
             type: "link",
             path: "/learn/fundamentals/admin/environment-variables",
             title: "Environment Variables",
+          },
+          {
+            type: "link",
+            path: "/learn/fundamentals/admin/routing",
+            title: "Routing Customizations",
           },
           {
             type: "link",

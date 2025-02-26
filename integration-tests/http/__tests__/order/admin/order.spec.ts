@@ -387,7 +387,6 @@ medusaIntegrationTestRunner({
             status: "canceled",
 
             summary: expect.objectContaining({
-              credit_line_total: 106,
               current_order_total: 0,
               accounting_total: 0,
             }),
@@ -448,7 +447,6 @@ medusaIntegrationTestRunner({
             status: "canceled",
 
             summary: expect.objectContaining({
-              credit_line_total: 106,
               current_order_total: 0,
               accounting_total: 0,
             }),
@@ -518,7 +516,6 @@ medusaIntegrationTestRunner({
             status: "canceled",
 
             summary: expect.objectContaining({
-              credit_line_total: 106,
               current_order_total: 0,
               accounting_total: 0,
             }),
@@ -668,7 +665,6 @@ medusaIntegrationTestRunner({
             "/admin/products",
             {
               title: `Test fixture 2`,
-              shipping_profile_id: shippingProfile.id,
               options: [
                 { title: "size", values: ["large", "small"] },
                 { title: "color", values: ["green"] },

@@ -2,7 +2,12 @@ import {
   BigNumberInput,
   ConfirmVariantInventoryWorkflowInputDTO,
 } from "@medusajs/framework/types"
-import { MedusaError, deepFlatMap } from "@medusajs/framework/utils"
+import {
+  BigNumber,
+  MathBN,
+  MedusaError,
+  deepFlatMap,
+} from "@medusajs/framework/utils"
 
 interface ConfirmInventoryPreparationInput {
   product_variant_inventory_items: {
@@ -21,6 +26,7 @@ interface ConfirmInventoryPreparationInput {
     allow_backorder?: boolean
   }[]
   location_ids: string[]
+  stockAvailability: Map<string, Map<string, BigNumberInput>>
 }
 
 interface ConfirmInventoryItem {
@@ -38,6 +44,7 @@ export const prepareConfirmInventoryInput = (data: {
   const productVariantInventoryItems = new Map<string, any>()
   const stockLocationIds = new Set<string>()
   const allVariants = new Map<string, any>()
+  const mapLocationAvailability = new Map<string, Map<string, BigNumberInput>>()
   let hasSalesChannelStockLocation = false
   let hasManagedInventory = false
 
@@ -55,7 +62,13 @@ export const prepareConfirmInventoryInput = (data: {
   deepFlatMap(
     data.input,
     "variants.inventory_items.inventory.location_levels.stock_locations.sales_channels",
-    ({ variants, inventory_items, stock_locations, sales_channels }) => {
+    ({
+      variants,
+      inventory_items,
+      location_levels,
+      stock_locations,
+      sales_channels,
+    }) => {
       if (!variants) {
         return
       }
@@ -67,14 +80,39 @@ export const prepareConfirmInventoryInput = (data: {
         hasSalesChannelStockLocation = true
       }
 
+      if (location_levels && inventory_items) {
+        const availability = MathBN.sub(
+          location_levels.raw_stocked_quantity ??
+            location_levels.stocked_quantity ??
+            0,
+          location_levels.raw_reserved_quantity ??
+            location_levels.reserved_quantity ??
+            0
+        )
+
+        if (!mapLocationAvailability.has(location_levels.location_id)) {
+          mapLocationAvailability.set(location_levels.location_id, new Map())
+        }
+
+        const locationMap = mapLocationAvailability.get(
+          location_levels.location_id
+        )!
+        locationMap.set(
+          inventory_items.inventory_item_id,
+          new BigNumber(availability)
+        )
+      }
+
       if (stock_locations && sales_channels?.id === salesChannelId) {
         stockLocationIds.add(stock_locations.id)
       }
 
       if (inventory_items) {
         const inventoryItemId = inventory_items.inventory_item_id
-        if (!productVariantInventoryItems.has(inventoryItemId)) {
-          productVariantInventoryItems.set(inventoryItemId, {
+        const mapKey = `${inventoryItemId}-${inventory_items.variant_id}`
+
+        if (!productVariantInventoryItems.has(mapKey)) {
+          productVariantInventoryItems.set(mapKey, {
             variant_id: inventory_items.variant_id,
             inventory_item_id: inventoryItemId,
             required_quantity: inventory_items.required_quantity,
@@ -112,6 +150,7 @@ export const prepareConfirmInventoryInput = (data: {
       productVariantInventoryItems.values()
     ),
     location_ids: Array.from(stockLocationIds),
+    stockAvailability: mapLocationAvailability,
     items: data.input.items,
     variants: Array.from(allVariants.values()),
   })
@@ -123,6 +162,7 @@ const formatInventoryInput = ({
   product_variant_inventory_items,
   location_ids,
   items,
+  stockAvailability,
   variants,
 }: ConfirmInventoryPreparationInput) => {
   if (!product_variant_inventory_items.length) {
@@ -154,16 +194,27 @@ const formatInventoryInput = ({
       )
     }
 
-    variantInventoryItems.forEach((variantInventoryItem) =>
+    variantInventoryItems.forEach((variantInventoryItem) => {
+      const locationsWithAvailability = location_ids.filter((locId) =>
+        MathBN.gte(
+          stockAvailability
+            .get(locId)
+            ?.get(variantInventoryItem.inventory_item_id) ?? 0,
+          MathBN.mult(variantInventoryItem.required_quantity, item.quantity)
+        )
+      )
+
       itemsToConfirm.push({
         id: item.id,
         inventory_item_id: variantInventoryItem.inventory_item_id,
         required_quantity: variantInventoryItem.required_quantity,
         allow_backorder: !!variant.allow_backorder,
         quantity: item.quantity,
-        location_ids: location_ids,
+        location_ids: locationsWithAvailability.length
+          ? locationsWithAvailability
+          : location_ids,
       })
-    )
+    })
   })
 
   return itemsToConfirm

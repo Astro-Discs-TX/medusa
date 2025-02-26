@@ -1117,7 +1117,9 @@ export const deleteRestaurantAdminStep = createStep(
       RESTAURANT_MODULE
     )
 
-    await restaurantModuleService.createRestaurantAdmins(admin)
+    const { restaurant: _, ...adminData } = admin
+
+    await restaurantModuleService.createRestaurantAdmins(adminData)
   }
 )
 ```
@@ -2364,7 +2366,9 @@ export const updateDeliveryStep = createStep(
   async ({ prevDeliveryData }, { container }) => {
     const deliveryService = container.resolve(DELIVERY_MODULE)
 
-    await deliveryService.updateDeliveries(prevDeliveryData)
+    const { driver, ...prevDeliveryDataWithoutDriver } = prevDeliveryData;
+
+    await deliveryService.updateDeliveries(prevDeliveryDataWithoutDriver)
   }
 )
 ```
@@ -3292,9 +3296,9 @@ You can use a custom Next.js project, or use Medusa's Next.js Starter storefront
 
 Before adding the storefront UI, you need an API route that allows a client to stream delivery changes.
 
-So, create the file `src/api/deliveries/subscribe/route.ts` with the following content:
+So, create the file `src/api/deliveries/[id]/subscribe/route.ts` with the following content:
 
-```ts title="src/api/deliveries/subscribe/route.ts" collapsibleLines="1-12" expandButtonLabel="Show Imports"
+```ts title="src/api/deliveries/[id]/subscribe/route.ts" collapsibleLines="1-12" expandButtonLabel="Show Imports"
 import { 
   MedusaRequest, 
   MedusaResponse,
