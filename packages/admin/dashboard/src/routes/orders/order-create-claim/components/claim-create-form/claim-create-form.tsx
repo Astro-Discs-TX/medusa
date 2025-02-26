@@ -508,10 +508,10 @@ export const ClaimCreateForm = ({
         .filter(Boolean)
 
       const variants = (
-        await sdk.admin.productVariant.list(
-          { id: variantIds },
-          { fields: "*inventory,*inventory.location_levels" }
-        )
+        await sdk.admin.productVariant.list({
+          id: variantIds,
+          fields: "*inventory.location_levels",
+        })
       ).variants
 
       variants.forEach((variant) => {
