@@ -80,7 +80,7 @@ const getCommonPinningStyles = <TData,>(
 
   return {
     position: isPinned ? "sticky" : "relative",
-    width: column.getSize(),
+    width: "100%",
     zIndex: isPinned ? 1 : 0,
     borderBottom: isPinned ? `1px solid ${BORDER_COLOR}` : undefined,
     borderRight: isPinned ? `1px solid ${BORDER_COLOR}` : undefined,
