@@ -88,6 +88,7 @@ async function performCascadingSoftDeletion<T>(
       id: entity.id,
     },
     {
+      select: ["id", ...relationNames.map((r) => `${r}.id`)],
       relations: relationNames,
       withDeleted: true,
     }
