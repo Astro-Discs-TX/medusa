@@ -2,7 +2,7 @@ import { resolve } from "path"
 import { RoutesLoader } from "../routes-loader"
 
 describe("Routes loader", () => {
-  test("load routes from the filesystem", async () => {
+  it("should load routes from the filesystem", async () => {
     const BASE_DIR = resolve(__dirname, "../__fixtures__/routers")
     const loader = new RoutesLoader({})
     await loader.scanDir(BASE_DIR)
@@ -178,7 +178,7 @@ describe("Routes loader", () => {
     `)
   })
 
-  test("override existing routes when duplicates are found while scanning additional directories", async () => {
+  it("should override existing routes when duplicates are found while scanning additional directories", async () => {
     const BASE_DIR = resolve(__dirname, "../__fixtures__/routers")
     const BASE_DIR_2 = resolve(
       __dirname,
@@ -370,7 +370,7 @@ describe("Routes loader", () => {
     `)
   })
 
-  test("throw error for duplicate params", async () => {
+  it("should throw error for duplicate params", async () => {
     const BASE_DIR = resolve(
       __dirname,
       "../__fixtures__/routers-duplicate-parameter"
