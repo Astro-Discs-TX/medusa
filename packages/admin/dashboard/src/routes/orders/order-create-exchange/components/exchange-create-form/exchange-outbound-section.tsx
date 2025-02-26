@@ -62,6 +62,13 @@ export const ExchangeOutboundSection = ({
     fields: "*prices,+service_zone.fulfillment_set.location.id",
   })
 
+  const outboundShippingOptions = shipping_options.filter(
+    (shippingOption) =>
+      !!shippingOption.rules.find(
+        (r) => r.attribute === "is_return" && r.value === "false"
+      )
+  )
+
   const { mutateAsync: addOutboundShipping } = useAddExchangeOutboundShipping(
     exchange.id,
     order.id
@@ -410,11 +417,11 @@ export const ExchangeOutboundSection = ({
                           val && onShippingOptionChange(val)
                         }}
                         {...field}
-                        options={shipping_options.map((so) => ({
+                        options={outboundShippingOptions.map((so) => ({
                           label: so.name,
                           value: so.id,
                         }))}
-                        disabled={!shipping_options.length}
+                        disabled={!outboundShippingOptions.length}
                       />
                     </Form.Control>
                   </Form.Item>
