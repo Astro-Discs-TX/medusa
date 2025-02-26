@@ -27,8 +27,10 @@ export const DELETE = async (
       remoteQueryObjectFromString({
         entryPoint: "inventory_level",
         variables: {
-          inventory_item_id: id,
-          location_id,
+          filters: {
+            inventory_item_id: id,
+            location_id,
+          },
         },
         fields: ["id", "reserved_quantity"],
       })
