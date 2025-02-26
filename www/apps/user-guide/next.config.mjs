@@ -12,6 +12,7 @@ import {
   crossProjectLinksPlugin,
   prerequisitesLinkFixerPlugin,
 } from "remark-rehype-plugins"
+import bundleAnalyzer from "@next/bundle-analyzer"
 
 const withMDX = mdx({
   extension: /\.mdx?$/,
@@ -112,7 +113,7 @@ const nextConfig = {
   },
 }
 
-const withBundleAnalyzer = withBundleAnalyzer({
+const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === "true",
 })
 
