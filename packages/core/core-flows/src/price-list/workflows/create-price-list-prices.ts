@@ -5,6 +5,7 @@ import {
 import {
   WorkflowData,
   WorkflowResponse,
+  createHook,
   createWorkflow,
   parallelize,
 } from "@medusajs/framework/workflows-sdk"
@@ -66,11 +67,16 @@ export const createPriceListPricesWorkflow = createWorkflow(
       validateVariantPriceLinksStep(input.data)
     )
 
-    return new WorkflowResponse(
-      createPriceListPricesStep({
-        data: input.data,
-        variant_price_map: variantPriceMap,
-      })
-    )
+    const priceLists = createPriceListPricesStep({
+      data: input.data,
+      variant_price_map: variantPriceMap,
+    })
+    const priceListsCreated = createHook("priceListsCreated", {
+      priceLists,
+    })
+
+    return new WorkflowResponse(priceLists, {
+      hooks: [priceListsCreated],
+    })
   }
 )
