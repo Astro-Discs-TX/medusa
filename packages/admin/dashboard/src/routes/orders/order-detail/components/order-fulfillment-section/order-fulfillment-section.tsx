@@ -405,33 +405,54 @@ const Fulfillment = ({
           {fulfillment.labels && fulfillment.labels.length > 0 ? (
             <ul>
               {fulfillment.labels.map((tlink) => {
-                const hasUrl =
-                  tlink.url && tlink.url.length > 0 && tlink.url !== "#"
-
-                if (hasUrl) {
+                const hasTrackingUrl =
+                  tlink.tracking_url &&
+                  tlink.tracking_url.length > 0 &&
+                  tlink.tracking_url !== "#";
+                const hasLabelUrl =
+                  tlink.label_url &&
+                  tlink.label_url.length > 0 &&
+                  tlink.label_url !== "#";
+          
+                if (hasTrackingUrl || hasLabelUrl) {
                   return (
                     <li key={tlink.tracking_number}>
-                      <a
-                        href={tlink.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-ui-fg-interactive hover:text-ui-fg-interactive-hover transition-fg"
-                      >
-                        <Text size="small" leading="compact">
-                          {tlink.tracking_number}
-                        </Text>
-                      </a>
+                      {hasTrackingUrl && (
+                        <a
+                          href={tlink.tracking_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-ui-fg-interactive hover:text-ui-fg-interactive-hover transition-fg"
+                        >
+                          <Text size="small" leading="compact">
+                            {tlink.tracking_number} (Tracking)
+                          </Text>
+                        </a>
+                      )}
+                      {hasTrackingUrl && hasLabelUrl && " | "}
+                      {hasLabelUrl && (
+                        <a
+                          href={tlink.label_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-ui-fg-interactive hover:text-ui-fg-interactive-hover transition-fg"
+                        >
+                          <Text size="small" leading="compact">
+                            (Label)
+                          </Text>
+                        </a>
+                      )}
                     </li>
-                  )
+                  );
                 }
-
+          
                 return (
                   <li key={tlink.tracking_number}>
                     <Text size="small" leading="compact">
                       {tlink.tracking_number}
                     </Text>
                   </li>
-                )
+                );
               })}
             </ul>
           ) : (
