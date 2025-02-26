@@ -1,7 +1,29 @@
 import { Prerequisites } from "docs-ui"
 
+export const ogImage = "https://res.cloudinary.com/dza7lstvk/image/upload/v1740556002/Medusa%20Resources/erp-guide_sucmxz.jpg"
+
 export const metadata = {
   title: `Integrate ERP with Medusa`,
+  openGraph: {
+    images: [
+      {
+        url: ogImage,
+        width: 1600,
+        height: 836,
+        type: "image/jpeg"
+      }
+    ],
+  },
+  twitter: {
+    images: [
+      {
+        url: ogImage,
+        width: 1600,
+        height: 836,
+        type: "image/jpeg"
+      }
+    ]
+  }
 }
 
 # {metadata.title}
