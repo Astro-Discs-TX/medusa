@@ -30,14 +30,13 @@ import {
   createTypes,
 } from "../../__fixtures__/product"
 
-jest.setTimeout(3000000)
+jest.setTimeout(300000)
 
 moduleIntegrationTestRunner<IProductModuleService>({
   moduleName: Modules.PRODUCT,
   injectedDependencies: {
     [Modules.EVENT_BUS]: new MockEventBusService(),
   },
-  debug: true,
   testSuite: ({ MikroOrmWrapper, service }) => {
     describe("ProductModuleService products", function () {
       let productCollectionOne: ProductCollection
@@ -970,7 +969,7 @@ moduleIntegrationTestRunner<IProductModuleService>({
         })
       })
 
-      describe.only("softDelete", function () {
+      describe("softDelete", function () {
         let images = [{ url: "image-1" }]
         it("should soft delete a product and its cascaded relations", async () => {
           const data = buildProductAndRelationsData({
@@ -1151,6 +1150,26 @@ moduleIntegrationTestRunner<IProductModuleService>({
               composeMessage(ProductEvents.PRODUCT_DELETED, {
                 data: { id: [products[0].id] },
                 object: "product",
+                source: Modules.PRODUCT,
+                action: CommonEvents.DELETED,
+              }),
+              composeMessage(ProductEvents.PRODUCT_VARIANT_DELETED, {
+                data: { id: [products[0].variants[0].id] },
+                object: "product_variant",
+                source: Modules.PRODUCT,
+                action: CommonEvents.DELETED,
+              }),
+              composeMessage(ProductEvents.PRODUCT_OPTION_DELETED, {
+                data: { id: [products[0].options[0].id] },
+                object: "product_option",
+                source: Modules.PRODUCT,
+                action: CommonEvents.DELETED,
+              }),
+              composeMessage(ProductEvents.PRODUCT_OPTION_VALUE_DELETED, {
+                data: {
+                  id: [products[0].options[0].values[0].id],
+                },
+                object: "product_option_value",
                 source: Modules.PRODUCT,
                 action: CommonEvents.DELETED,
               }),
