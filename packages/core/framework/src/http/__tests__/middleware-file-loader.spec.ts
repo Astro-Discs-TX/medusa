@@ -8,13 +8,20 @@ describe("Middleware file loader", () => {
     await loader.scanDir(BASE_DIR)
 
     expect(loader.getBodyParserConfigRoutes()).toMatchInlineSnapshot(`
-      {
-        "/webhooks/*": {
+      [
+        {
+          "config": {
+            "preserveRawBody": true,
+          },
+          "matcher": "/webhooks",
+          "method": undefined,
+        },
+        {
           "config": false,
           "matcher": "/webhooks/*",
           "method": "POST",
         },
-      }
+      ]
     `)
     expect(loader.getMiddlewares()).toMatchInlineSnapshot(`
       [

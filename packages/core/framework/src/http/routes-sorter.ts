@@ -108,7 +108,6 @@ export class RoutesSorter {
 
   constructor(routes: Route[]) {
     this.#routesToProcess = routes
-    console.log("Processing routes", this.#routesToProcess)
   }
 
   /**
