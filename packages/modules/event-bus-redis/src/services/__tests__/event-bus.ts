@@ -27,6 +27,7 @@ const redisMock = {
   lrange: () => jest.fn(),
   disconnect: () => jest.fn(),
   expire: () => jest.fn(),
+  unlink: () => jest.fn(),
 } as unknown as Redis
 
 const simpleModuleOptions = { redisUrl: "test-url" }
@@ -63,7 +64,7 @@ describe("RedisEventBusService", () => {
         {
           connection: expect.any(Object),
           prefix: "RedisEventBusService",
-          autorun: false
+          autorun: false,
         }
       )
     })
