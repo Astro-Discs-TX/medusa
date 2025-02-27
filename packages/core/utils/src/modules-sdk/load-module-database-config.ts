@@ -72,6 +72,7 @@ export function loadDatabaseConfig(
   const clientUrl =
     options?.database?.clientUrl ?? getEnv("DATABASE_URL", moduleName)
 
+  const poolEnvConfig = getEnv("DATABASE_POOL", moduleName)
   const database = {
     clientUrl,
     schema: getEnv("DATABASE_SCHEMA", moduleName) ?? "public",
@@ -79,7 +80,7 @@ export function loadDatabaseConfig(
       getEnv("DATABASE_DRIVER_OPTIONS", moduleName) ||
         JSON.stringify(getDefaultDriverOptions(clientUrl))
     ),
-    pool: JSON.parse(getEnv("DATABASE_POOL", moduleName) || "{}"),
+    pool: poolEnvConfig ? JSON.parse(poolEnvConfig) : undefined,
     debug: false,
     connection: undefined,
   }
