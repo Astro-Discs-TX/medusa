@@ -79,6 +79,7 @@ export function loadDatabaseConfig(
       getEnv("DATABASE_DRIVER_OPTIONS", moduleName) ||
         JSON.stringify(getDefaultDriverOptions(clientUrl))
     ),
+    pool: JSON.parse(getEnv("DATABASE_POOL", moduleName) || "{}"),
     debug: false,
     connection: undefined,
   }
@@ -91,6 +92,7 @@ export function loadDatabaseConfig(
     database.driverOptions =
       options.database!.driverOptions ??
       getDefaultDriverOptions(database.clientUrl)
+    database.pool = options.database!.pool ?? database.pool
     database.debug = options.database!.debug ?? database.debug
     database.connection = options.database!.connection
   }

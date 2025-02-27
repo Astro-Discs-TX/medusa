@@ -19,8 +19,9 @@ export function pgConnectionLoader(): ReturnType<
 
   // Share a knex connection to be consumed by the shared modules
   const connectionString = configModule.projectConfig.databaseUrl
-  const driverOptions: any =
-    configModule.projectConfig.databaseDriverOptions || {}
+  const driverOptions: any = {
+    ...(configModule.projectConfig.databaseDriverOptions || {}),
+  }
   const schema = configModule.projectConfig.databaseSchema || "public"
   const idleTimeoutMillis = driverOptions.pool?.idleTimeoutMillis ?? undefined // prevent null to be passed
   const poolMin = driverOptions.pool?.min ?? 2
