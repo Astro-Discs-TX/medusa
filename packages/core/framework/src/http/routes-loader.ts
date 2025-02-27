@@ -172,7 +172,8 @@ export class RoutesLoader {
       })
       .map((key) => {
         return {
-          route: routePath,
+          isRoute: true,
+          matcher: routePath,
           method: key as RouteVerb,
           handler: routeExports[key],
           optedOutOfAuth: !shouldAuthenticate,
@@ -233,8 +234,8 @@ export class RoutesLoader {
    * Register a route
    */
   registerRoute(route: ScannedRouteDescriptor | FileSystemRouteDescriptor) {
-    this.#routes[route.route] = this.#routes[route.route] ?? {}
-    const trackedRoute = this.#routes[route.route]
+    this.#routes[route.matcher] = this.#routes[route.matcher] ?? {}
+    const trackedRoute = this.#routes[route.matcher]
     trackedRoute[route.method] = route
   }
 

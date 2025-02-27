@@ -92,10 +92,11 @@ export type RouteDescriptor = {
  * represent a middleware
  */
 export type ScannedRouteDescriptor = {
-  route: string
+  matcher: string
   method: RouteVerb
   handler: RouteHandler
   optedOutOfAuth: boolean
+  isRoute: true
   routeType?: "admin" | "store" | "auth"
   shouldAppendAdminCors: boolean
   shouldAppendStoreCors: boolean
