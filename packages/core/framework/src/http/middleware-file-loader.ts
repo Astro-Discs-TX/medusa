@@ -4,14 +4,14 @@ import { dynamicImport, FileSystem } from "@medusajs/utils"
 import { logger } from "../logger"
 import type {
   MiddlewaresConfig,
+  BodyParserConfigRoute,
   ScannedMiddlewareDescriptor,
-  BodyParserConfigRoutes,
 } from "./types"
 
 /**
  * File name that is used to indicate that the file is a middleware file
  */
-const MIDDLEWARE_NAME = "middlewares"
+const MIDDLEWARE_FILE_NAME = "middlewares"
 
 const log = ({
   activityId,
@@ -38,7 +38,7 @@ export class MiddlewareFileLoader {
    * Middleware collected manually or by scanning directories
    */
   #middleware: ScannedMiddlewareDescriptor[] = []
-  #bodyParserConfigRoutes: BodyParserConfigRoutes = {}
+  #bodyParserConfigRoutes: BodyParserConfigRoute[] = []
 
   /**
    * An eventual activity id for information tracking
@@ -75,7 +75,7 @@ export class MiddlewareFileLoader {
     }
 
     const result = routes.reduce<{
-      bodyParserConfigRoutes: BodyParserConfigRoutes
+      bodyParserConfigRoutes: BodyParserConfigRoute[]
       middleware: ScannedMiddlewareDescriptor[]
     }>(
       (result, route) => {
@@ -90,12 +90,13 @@ export class MiddlewareFileLoader {
         }
 
         const matcher = String(route.matcher)
+
         if ("bodyParser" in route && route.bodyParser !== undefined) {
-          result.bodyParserConfigRoutes[matcher] = {
+          result.bodyParserConfigRoutes.push({
             matcher: matcher,
             method: route.method,
             config: route.bodyParser,
-          }
+          })
         }
 
         if (route.middlewares) {
@@ -110,7 +111,7 @@ export class MiddlewareFileLoader {
         return result
       },
       {
-        bodyParserConfigRoutes: {},
+        bodyParserConfigRoutes: [],
         middleware: [],
       }
     )
@@ -126,13 +127,13 @@ export class MiddlewareFileLoader {
    */
   async scanDir(sourceDir: string) {
     const fs = new FileSystem(sourceDir)
-    if (await fs.exists(`${MIDDLEWARE_NAME}.ts`)) {
+    if (await fs.exists(`${MIDDLEWARE_FILE_NAME}.ts`)) {
       await this.#processMiddlewareFile(
-        join(sourceDir, `${MIDDLEWARE_NAME}.ts`)
+        join(sourceDir, `${MIDDLEWARE_FILE_NAME}.ts`)
       )
-    } else if (await fs.exists(`${MIDDLEWARE_NAME}.js`)) {
+    } else if (await fs.exists(`${MIDDLEWARE_FILE_NAME}.js`)) {
       await this.#processMiddlewareFile(
-        join(sourceDir, `${MIDDLEWARE_NAME}.ts`)
+        join(sourceDir, `${MIDDLEWARE_FILE_NAME}.ts`)
       )
     }
   }

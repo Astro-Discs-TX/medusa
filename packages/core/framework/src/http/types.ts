@@ -117,12 +117,10 @@ export type ScannedMiddlewareDescriptor = {
   handler: MiddlewareFunction
 }
 
-export type BodyParserConfigRoutes = {
-  [matcher: string]: {
-    matcher: string
-    method?: MiddlewareVerb | MiddlewareVerb[]
-    config?: ParserConfig
-  }
+export type BodyParserConfigRoute = {
+  matcher: string
+  method?: MiddlewareVerb | MiddlewareVerb[]
+  config?: ParserConfig
 }
 
 export type GlobalMiddlewareDescriptor = {

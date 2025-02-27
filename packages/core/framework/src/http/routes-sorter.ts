@@ -25,7 +25,7 @@ type Route = {
   /**
    * The HTTP methods this route is supposed to handle.
    */
-  methods?: MiddlewareVerb[]
+  methods?: MiddlewareVerb | MiddlewareVerb[]
 }
 
 /**
