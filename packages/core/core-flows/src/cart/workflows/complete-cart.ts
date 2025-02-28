@@ -14,6 +14,7 @@ import {
   when,
   WorkflowData,
   WorkflowResponse,
+  createHook,
 } from "@medusajs/framework/workflows-sdk"
 import {
   createRemoteLinkStep,
@@ -267,6 +268,12 @@ export const completeCartWorkflow = createWorkflow(
       return { id: order?.id ?? orderId }
     })
 
-    return new WorkflowResponse(result)
+    const cartCompleted = createHook("cartCompleted", {
+      order_id: result,
+    })
+
+    return new WorkflowResponse(result, {
+      hooks: [cartCompleted],
+    })
   }
 )
