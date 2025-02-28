@@ -1,22 +1,31 @@
-import * as Handlebars from "handlebars"
+import Handlebars from "handlebars"
 import { Comment, DeclarationReflection, SignatureReflection } from "typedoc"
-import { MarkdownTheme } from "../../theme"
-import reflectionFormatter from "../../utils/reflection-formatter"
-import { getReflectionTypeParameters } from "../../utils/reflection-type-parameters"
-import { Parameter } from "../../types"
-import { formatParameterComponent } from "../../utils/format-parameter-component"
+import { MarkdownTheme } from "../../theme.js"
+import reflectionFormatter from "../../utils/reflection-formatter.js"
+import { getReflectionTypeParameters } from "../../utils/reflection-type-parameters.js"
+import { Parameter } from "../../types.js"
+import { formatParameterComponent } from "../../utils/format-parameter-component.js"
 
 export default function (theme: MarkdownTheme) {
   Handlebars.registerHelper(
     "returns",
     function (reflection: SignatureReflection) {
+      let returnContent = ""
       if (reflection.variant === "signature" && "type" in reflection) {
-        return getReturnFromType(theme, reflection)
+        returnContent = getReturnFromType(theme, reflection)
       } else if (reflection.comment) {
-        return getReturnFromComment(theme, reflection.comment, reflection.name)
-      } else {
+        returnContent = getReturnFromComment(
+          theme,
+          reflection.comment,
+          reflection.name
+        )
+      }
+
+      if (!returnContent.length) {
         return ""
       }
+
+      return `${Handlebars.helpers.titleLevel()} Returns\n\n${returnContent}`
     }
   )
 }
@@ -43,6 +52,10 @@ function getReturnFromType(
     level: 1,
     maxLevel,
   })
+
+  if (!componentItems.length) {
+    return ""
+  }
 
   if (parameterStyle === "component") {
     return formatParameterComponent({

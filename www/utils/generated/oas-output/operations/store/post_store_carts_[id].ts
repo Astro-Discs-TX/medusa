@@ -2,7 +2,9 @@
  * @oas [post] /store/carts/{id}
  * operationId: PostCartsId
  * summary: Update a Cart
- * description: Update a cart's details. This unsets the shipping an payment methods chosen before, and the customer would have to choose them again.
+ * description: Update a cart's details. This unsets the payment methods chosen before, and the customer would have to choose them again. Also, if the customer has chosen a shipping method whose option
+ *   isn't valid for the cart's shipping address anymore, the shipping method will be unset. For example, if the shipping option is valid only in the US geo zone, and the shipping address's country code
+ *   is `DE`, the shipping method will be unset.
  * x-authenticated: false
  * parameters:
  *   - name: id
@@ -11,6 +13,14 @@
  *     required: true
  *     schema:
  *       type: string
+ *   - name: x-publishable-api-key
+ *     in: header
+ *     description: Publishable API Key created in the Medusa Admin.
+ *     required: true
+ *     schema:
+ *       type: string
+ *       externalDocs:
+ *         url: https://docs.medusajs.com/api/store#publishable-api-key
  *   - name: fields
  *     in: query
  *     description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default

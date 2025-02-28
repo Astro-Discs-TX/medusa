@@ -10,31 +10,31 @@ In this chapter, you'll learn how to manage relationships between data models wh
 
 ### BelongsTo Side of One-to-One
 
-When you create a record of a data model that belongs to another through a one-to-one relation, pass the ID of the other data model's record in the relation property.
+When you create a record of a data model that belongs to another through a one-to-one relation, pass the ID of the other data model's record in the `{relation}_id` property, where `{relation}` is the name of the relation property.
 
 For example, assuming you have the [User and Email data models from the previous chapter](../relationships/page.mdx#one-to-one-relationship), set an email's user ID as follows:
 
 export const belongsHighlights = [
-  ["4", "user", "The ID of the user the email belongs to."],
-  ["11", "user", "The ID of the user the email belongs to."]
+  ["4", "user_id", "The ID of the user the email belongs to."],
+  ["11", "user_id", "The ID of the user the email belongs to."]
 ]
 
 ```ts highlights={belongsHighlights}
 // when creating an email
 const email = await helloModuleService.createEmails({
   // other properties...
-  user: "123",
+  user_id: "123",
 })
 
 // when updating an email
 const email = await helloModuleService.updateEmails({
   id: "321",
   // other properties...
-  user: "123",
+  user_id: "123",
 })
 ```
 
-In the example above, you pass the `user` property when creating or updating an email to specify the user it belongs to.
+In the example above, you pass the `user_id` property when creating or updating an email to specify the user it belongs to.
 
 ### HasOne Side
 
@@ -43,8 +43,8 @@ When you create a record of a data model that has one of another, pass the ID of
 For example, assuming you have the [User and Email data models from the previous chapter](../relationships/page.mdx#one-to-one-relationship), set a user's email ID as follows:
 
 export const hasOneHighlights = [
-  ["4", "email", "The ID of the email that the user has."],
-  ["11", "email", "The ID of the email that the user has."]
+  ["4", "email_id", "The ID of the email that the user has."],
+  ["11", "email_id", "The ID of the email that the user has."]
 ]
 
 ```ts highlights={hasOneHighlights}
@@ -99,6 +99,12 @@ In the example above, you pass the `store_id` property when creating or updating
 ---
 
 ## Manage Many-to-Many Relationship
+
+<Note>
+
+If your many-to-many relation is represented with a [pivotEntity](../relationships/page.mdx#many-to-many-with-custom-columns), refer to [this section](#manage-many-to-many-relationship-with-pivotentity) instead.
+
+</Note>
 
 ### Create Associations
 
@@ -173,6 +179,58 @@ const updatedProduct = await helloModuleService.updateProducts({
 ```
 
 This keeps existing associations between the product and orders, and adds a new one.
+
+---
+
+## Manage Many-to-Many Relationship with pivotEntity
+
+<Note>
+
+If your many-to-many relation is represented without a [pivotEntity](../relationships/page.mdx#many-to-many-with-custom-columns), refer to [this section](#manage-many-to-many-relationship) instead.
+
+</Note>
+
+If you have a many-to-many relation with a `pivotEntity` specified, make sure to pass the data model representing the pivot table to [MedusaService](../../modules/service-factory/page.mdx) that your module's service extends.
+
+For example, assuming you have the [Order, Product, and OrderProduct models from the previous chapter](../relationships/page.mdx#many-to-many-with-custom-columns), add `OrderProduct` to `MedusaService`'s object parameter:
+
+```ts highlights={["4"]}
+class HelloModuleService extends MedusaService({
+  Order,
+  Product,
+  OrderProduct,
+}) {}
+```
+
+This will generate Create, Read, Update and Delete (CRUD) methods for the `OrderProduct` data model, which you can use to create relations between orders and products and manage the extra columns in the pivot table.
+
+For example:
+
+```ts
+// create order-product association
+const orderProduct = await helloModuleService.createOrderProducts({
+  order_id: "123",
+  product_id: "123",
+  metadata: {
+    test: true,
+  },
+})
+
+// update order-product association
+const orderProduct = await helloModuleService.updateOrderProducts({
+  id: "123",
+  metadata: {
+    test: false,
+  },
+})
+
+// delete order-product association
+await helloModuleService.deleteOrderProducts("123")
+```
+
+Since the `OrderProduct` data model belongs to the `Order` and `Product` data models, you can set its order and product as explained in the [one-to-many relationship section](#manage-one-to-many-relationship) using `order_id` and `product_id`.
+
+Refer to the [service factory reference](!resources!/service-factory-reference) for a full list of generated methods and their usages.
 
 ---
 

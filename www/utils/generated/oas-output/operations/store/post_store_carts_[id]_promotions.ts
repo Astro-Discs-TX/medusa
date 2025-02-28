@@ -12,6 +12,14 @@
  *     required: true
  *     schema:
  *       type: string
+ *   - name: x-publishable-api-key
+ *     in: header
+ *     description: Publishable API Key created in the Medusa Admin.
+ *     required: true
+ *     schema:
+ *       type: string
+ *       externalDocs:
+ *         url: https://docs.medusajs.com/api/store#publishable-api-key
  *   - name: fields
  *     in: query
  *     description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default
@@ -28,25 +36,14 @@
  *   content:
  *     application/json:
  *       schema:
- *         type: object
- *         description: The promotion's details.
- *         required:
- *           - promo_codes
- *         properties:
- *           promo_codes:
- *             type: array
- *             description: Promotion codes to add to the cart.
- *             items:
- *               type: string
- *               title: promo_codes
- *               description: A promotion code.
+ *         $ref: "#/components/schemas/StoreCartAddPromotion"
  * x-codeSamples:
  *   - lang: Shell
  *     label: cURL
  *     source: |-
  *       curl -X POST '{backend_url}/store/carts/{id}/promotions' \
- *       -H 'Content-Type: application/json' \ \
- *       -H 'x-publishable-api-key: {your_publishable_api_key}'
+ *       -H 'Content-Type: application/json' \
+ *       -H 'x-publishable-api-key: {your_publishable_api_key}' \
  *       --data-raw '{
  *         "promo_codes": [
  *           "{value}"

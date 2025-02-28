@@ -14,6 +14,9 @@
  *   - type
  *   - provider
  *   - amount
+ *   - prices
+ *   - calculated_price
+ *   - insufficient_inventory
  * properties:
  *   id:
  *     type: string
@@ -91,6 +94,17 @@
  *     description: The shipping option's data, useful for the provider handling fulfillment.
  *     externalDocs:
  *       url: https://docs.medusajs.com/v2/resources/commerce-modules/fulfillment/shipping-option#data-property
+ *   prices:
+ *     type: array
+ *     description: The shipping option's prices.
+ *     items:
+ *       $ref: "#/components/schemas/StorePrice"
+ *   calculated_price:
+ *     $ref: "#/components/schemas/StoreCalculatedPrice"
+ *   insufficient_inventory:
+ *     type: boolean
+ *     title: insufficient_inventory
+ *     description: Whether the shipping option's location doesn't have sufficient quantity for any of the cart's items.
  * 
 */
 

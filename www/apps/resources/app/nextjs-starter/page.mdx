@@ -13,6 +13,12 @@ The Medusa application is made up of a Node.js server and an admin dashboard. Th
 
 Our Next.js Starter is a good place to start building your storefront. The Next.js Starter storefront provides rich commerce features and a sleek design. Developers and businesses can use it as-is or build on top of it to tailor it for the business's unique use case, design, and customer experience.
 
+<Note>
+
+This guide helps technical users set up the Next.js Start storefront. If you're not a technical user, refer your technical team to this documentation instead.
+
+</Note>
+
 ## Installation
 
 ### Approach 1: Install with Medusa Application
@@ -134,16 +140,22 @@ Where `<YOUR_PUBLISHABLE_KEY>` is your Stripe publishable key. You can retrieve 
 
 Then, restart the Next.js Starter storefront. You can now use Stripe during checkout.
 
+<Note title="Tip">
+
+Refer to [this guide](./guides/customize-stripe/page.mdx) to learn how to customize the Stripe integration and components.
+
+</Note>
+
 ---
 
 ## Change Medusa Application URL
 
-By default, the Medusa application runs at `http://localhost:9000`. This value is defined in your Next.js Starter storefront under the environment variable `NEXT_PUBLIC_MEDUSA_BACKEND_URL`.
+By default, the Medusa application runs at `http://localhost:9000`. This value is defined in your Next.js Starter storefront under the environment variable `MEDUSA_BACKEND_URL`.
 
-To change the URL of the Medusa application in the storefront, set the `NEXT_PUBLIC_MEDUSA_BACKEND_URL` environment variable:
+To change the URL of the Medusa application in the storefront, set the `MEDUSA_BACKEND_URL` environment variable:
 
 ```bash
-NEXT_PUBLIC_MEDUSA_BACKEND_URL=https://example.com
+MEDUSA_BACKEND_URL=https://example.com
 ```
 
 ---

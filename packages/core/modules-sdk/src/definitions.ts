@@ -92,7 +92,7 @@ export const ModulesDefinition: {
     label: upperCaseFirst(Modules.AUTH),
     isRequired: false,
     isQueryable: true,
-    dependencies: [ContainerRegistrationKeys.LOGGER],
+    dependencies: [ContainerRegistrationKeys.LOGGER, Modules.CACHE],
     defaultModuleDeclaration: {
       scope: MODULE_SCOPE.INTERNAL,
     },
@@ -271,6 +271,7 @@ export const ModulesDefinition: {
     isQueryable: false,
     dependencies: [
       Modules.EVENT_BUS,
+      Modules.LOCKING,
       ContainerRegistrationKeys.LOGGER,
       ContainerRegistrationKeys.REMOTE_QUERY,
       ContainerRegistrationKeys.QUERY,

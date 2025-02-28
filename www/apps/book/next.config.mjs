@@ -28,6 +28,9 @@ const withMDX = mdx({
               projectPath: path.resolve("..", "ui"),
               contentPath: "src/content/docs",
             },
+            "user-guide": {
+              projectPath: path.resolve("..", "user-guide"),
+            },
           },
         },
       ],
@@ -152,21 +155,26 @@ const nextConfig = {
           }/v1/:path*`,
           basePath: false,
         },
-        // TODO comment out once we have the user guide published
-        // {
-        //   source: "/user-guide",
-        //   destination: `${process.env.NEXT_PUBLIC_USER_GUIDE_URL}/user-guide`,
-        //   basePath: false,
-        // },
-        // {
-        //   source: "/user-guide/:path*",
-        //   destination: `${process.env.NEXT_PUBLIC_USER_GUIDE_URL}/user-guide/:path*`,
-        //   basePath: false,
-        // },
+        {
+          source: "/user-guide",
+          destination: `${process.env.NEXT_PUBLIC_USER_GUIDE_URL || "https://localhost:3001"}/user-guide`,
+          basePath: false,
+        },
+        {
+          source: "/user-guide/:path*",
+          destination: `${process.env.NEXT_PUBLIC_USER_GUIDE_URL || "https://localhost:3001"}/user-guide/:path*`,
+          basePath: false,
+        },
       ],
     }
   },
   redirects,
+  outputFileTracingExcludes: {
+    "*": ["node_modules/@medusajs/icons"],
+  },
+  experimental: {
+    optimizePackageImports: ["@medusajs/icons", "@medusajs/ui"],
+  },
 }
 
 export default withMDX(nextConfig)

@@ -14,12 +14,11 @@ import {
   Tag,
   Users,
 } from "@medusajs/icons"
-import { Avatar, DropdownMenu, Text, clx } from "@medusajs/ui"
-import * as Collapsible from "@radix-ui/react-collapsible"
+import { Avatar, Divider, DropdownMenu, Text, clx } from "@medusajs/ui"
+import { Collapsible as RadixCollapsible } from "radix-ui"
 import { useTranslation } from "react-i18next"
 
 import { useStore } from "../../../hooks/api/store"
-import { Divider } from "../../common/divider"
 import { Skeleton } from "../../common/skeleton"
 import { INavItem, NavItem } from "../../layout/nav-item"
 import { Shell } from "../../layout/shell"
@@ -284,6 +283,19 @@ const Searchbar = () => {
 const CoreRouteSection = () => {
   const coreRoutes = useCoreRoutes()
 
+  const { getMenu } = useDashboardExtension()
+
+  const menuItems = getMenu("coreExtensions")
+
+  menuItems.forEach((item) => {
+    if (item.nested) {
+      const route = coreRoutes.find((route) => route.to === item.nested)
+      if (route) {
+        route.items?.push(item)
+      }
+    }
+  })
+
   return (
     <nav className="flex flex-col gap-y-1 py-3">
       <Searchbar />
@@ -298,7 +310,7 @@ const ExtensionRouteSection = () => {
   const { t } = useTranslation()
   const { getMenu } = useDashboardExtension()
 
-  const menuItems = getMenu("coreExtensions")
+  const menuItems = getMenu("coreExtensions").filter((item) => !item.nested)
 
   if (!menuItems.length) {
     return null
@@ -310,9 +322,9 @@ const ExtensionRouteSection = () => {
         <Divider variant="dashed" />
       </div>
       <div className="flex flex-col gap-y-1 py-3">
-        <Collapsible.Root defaultOpen>
+        <RadixCollapsible.Root defaultOpen>
           <div className="px-4">
-            <Collapsible.Trigger asChild className="group/trigger">
+            <RadixCollapsible.Trigger asChild className="group/trigger">
               <button className="text-ui-fg-subtle flex w-full items-center justify-between px-2">
                 <Text size="xsmall" weight="plus" leading="compact">
                   {t("app.nav.common.extensions")}
@@ -322,9 +334,9 @@ const ExtensionRouteSection = () => {
                   <MinusMini className="group-data-[state=closed]/trigger:hidden" />
                 </div>
               </button>
-            </Collapsible.Trigger>
+            </RadixCollapsible.Trigger>
           </div>
-          <Collapsible.Content>
+          <RadixCollapsible.Content>
             <nav className="flex flex-col gap-y-0.5 py-1 pb-4">
               {menuItems.map((item, i) => {
                 return (
@@ -339,8 +351,8 @@ const ExtensionRouteSection = () => {
                 )
               })}
             </nav>
-          </Collapsible.Content>
-        </Collapsible.Root>
+          </RadixCollapsible.Content>
+        </RadixCollapsible.Root>
       </div>
     </div>
   )

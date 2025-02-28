@@ -12,6 +12,9 @@ required:
   - type
   - provider
   - amount
+  - prices
+  - calculated_price
+  - insufficient_inventory
 properties:
   id:
     type: string
@@ -92,3 +95,16 @@ properties:
     externalDocs:
       url: >-
         https://docs.medusajs.com/v2/resources/commerce-modules/fulfillment/shipping-option#data-property
+  prices:
+    type: array
+    description: The shipping option's prices.
+    items:
+      $ref: ./StorePrice.yaml
+  calculated_price:
+    $ref: ./StoreCalculatedPrice.yaml
+  insufficient_inventory:
+    type: boolean
+    title: insufficient_inventory
+    description: >-
+      Whether the shipping option's location doesn't have sufficient quantity
+      for any of the cart's items.

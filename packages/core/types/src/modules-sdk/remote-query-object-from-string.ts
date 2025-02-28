@@ -11,9 +11,11 @@ export type RemoteQueryObjectConfig<TEntry extends string> = {
     RemoteQueryEntryPoints[TEntry & keyof RemoteQueryEntryPoints]
   > extends never
     ? string[]
-    : ObjectToRemoteQueryFields<
-        RemoteQueryEntryPoints[TEntry & keyof RemoteQueryEntryPoints]
-      >[]
+    :
+        | ObjectToRemoteQueryFields<
+            RemoteQueryEntryPoints[TEntry & keyof RemoteQueryEntryPoints]
+          >[]
+        | string[]
 }
 
 export type RemoteQueryObjectFromStringResult<
@@ -36,9 +38,11 @@ export type RemoteQueryInput<TEntry extends string> = {
     RemoteQueryEntryPoints[TEntry & keyof RemoteQueryEntryPoints]
   > extends never
     ? string[]
-    : ObjectToRemoteQueryFields<
-        RemoteQueryEntryPoints[TEntry & keyof RemoteQueryEntryPoints]
-      >[]
+    :
+        | ObjectToRemoteQueryFields<
+            RemoteQueryEntryPoints[TEntry & keyof RemoteQueryEntryPoints]
+          >[]
+        | string[]
   /**
    * Pagination configurations for the returned list of items.
    */
@@ -46,7 +50,7 @@ export type RemoteQueryInput<TEntry extends string> = {
     /**
      * The number of items to skip before retrieving the returned items.
      */
-    skip: number
+    skip?: number
     /**
      * The maximum number of items to return.
      */
@@ -64,6 +68,10 @@ export type RemoteQueryInput<TEntry extends string> = {
    * Apply a query context on the retrieved data. For example, to retrieve product prices for a certain context.
    */
   context?: any
+  /**
+   * Apply a `withDeleted` flag on the retrieved data to retrieve soft deleted items.
+   */
+  withDeleted?: boolean
 }
 
 export type RemoteQueryGraph<TEntry extends string> = {
