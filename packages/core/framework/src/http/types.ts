@@ -93,7 +93,7 @@ export type RouteDescriptor = {
  */
 export type ScannedRouteDescriptor = {
   matcher: string
-  method: RouteVerb
+  methods: RouteVerb
   handler: RouteHandler
   optedOutOfAuth: boolean
   isRoute: true
@@ -114,13 +114,13 @@ export type FileSystemRouteDescriptor = ScannedRouteDescriptor & {
 
 export type ScannedMiddlewareDescriptor = {
   matcher: string
-  method?: MiddlewareVerb | MiddlewareVerb[]
+  methods?: MiddlewareVerb | MiddlewareVerb[]
   handler: MiddlewareFunction
 }
 
 export type BodyParserConfigRoute = {
   matcher: string
-  method?: MiddlewareVerb | MiddlewareVerb[]
+  methods?: MiddlewareVerb | MiddlewareVerb[]
   config?: ParserConfig
 }
 

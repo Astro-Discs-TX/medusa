@@ -174,7 +174,7 @@ export class RoutesLoader {
         return {
           isRoute: true,
           matcher: routePath,
-          method: key as RouteVerb,
+          methods: key as RouteVerb,
           handler: routeExports[key],
           optedOutOfAuth: !shouldAuthenticate,
           shouldAppendAdminCors: shouldApplyCors && routeType === "admin",
@@ -236,7 +236,7 @@ export class RoutesLoader {
   registerRoute(route: ScannedRouteDescriptor | FileSystemRouteDescriptor) {
     this.#routes[route.matcher] = this.#routes[route.matcher] ?? {}
     const trackedRoute = this.#routes[route.matcher]
-    trackedRoute[route.method] = route
+    trackedRoute[route.methods] = route
   }
 
   /**
@@ -253,14 +253,44 @@ export class RoutesLoader {
    * manually.
    */
   getRoutes() {
-    return Object.keys(this.#routes).reduce<
-      (ScannedRouteDescriptor | FileSystemRouteDescriptor)[]
-    >((result, routePattern) => {
-      const methodsRoutes = this.#routes[routePattern]
-      Object.keys(methodsRoutes).forEach((method) => {
-        result.push(methodsRoutes[method])
-      })
-      return result
-    }, [])
+    return Object.keys(this.#routes).reduce<{
+      list: (ScannedRouteDescriptor | FileSystemRouteDescriptor)[]
+      // authRoutesMatcher: {}
+      // optedOutFromCors: {
+      //   [matcher: string]: {
+      //     [method: string]: ScannedRouteDescriptor | FileSystemRouteDescriptor
+      //   }
+      // }
+    }>(
+      (result, routePattern) => {
+        const methodsRoutes = this.#routes[routePattern]
+        Object.keys(methodsRoutes).forEach((method) => {
+          const route = methodsRoutes[method]
+          result.list.push(route)
+          if (route.optedOutOfAuth) {
+            // result.optedOutFromAuth[route.matcher] =
+            //   result.optedOutFromAuth[route.matcher] ?? {}
+            // result.optedOutFromAuth[route.matcher][route.method] = route
+          }
+
+          if (
+            route.routeType &&
+            !route.shouldAppendAdminCors &&
+            !route.shouldAppendAuthCors &&
+            !route.shouldAppendStoreCors
+          ) {
+            // result.optedOutFromCors[route.matcher] =
+            //   result.optedOutFromCors[route.matcher] ?? {}
+            // result.optedOutFromCors[route.matcher][route.method] = route
+          }
+        })
+        return result
+      },
+      {
+        list: [],
+        // optedOutFromAuth: {},
+        // optedOutFromCors: {},
+      }
+    )
   }
 }

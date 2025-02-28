@@ -246,6 +246,10 @@ export class RoutesSorter<T extends Route> {
     return routes
   }
 
+  getTree() {
+    return this.#routesTree
+  }
+
   /**
    * Sort the input routes
    */

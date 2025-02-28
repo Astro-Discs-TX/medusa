@@ -14,12 +14,12 @@ describe("Middleware file loader", () => {
             "preserveRawBody": true,
           },
           "matcher": "/webhooks",
-          "method": undefined,
+          "methods": undefined,
         },
         {
           "config": false,
           "matcher": "/webhooks/*",
-          "method": "POST",
+          "methods": "POST",
         },
       ]
     `)
@@ -28,22 +28,22 @@ describe("Middleware file loader", () => {
         {
           "handler": [Function],
           "matcher": "/customers",
-          "method": undefined,
+          "methods": undefined,
         },
         {
           "handler": [Function],
           "matcher": "/customers",
-          "method": "POST",
+          "methods": "POST",
         },
         {
           "handler": [Function],
           "matcher": "/store/*",
-          "method": undefined,
+          "methods": undefined,
         },
         {
           "handler": [Function],
           "matcher": "/webhooks/*",
-          "method": "POST",
+          "methods": "POST",
         },
       ]
     `)

@@ -1,11 +1,11 @@
 import { snakeCase } from "lodash"
 import {
-  MedusaNextFunction,
-  MedusaRequest,
-  MedusaResponse,
+  // MedusaNextFunction,
+  // MedusaRequest,
+  // MedusaResponse,
   Query,
 } from "@medusajs/framework"
-import { ApiRoutesLoader } from "@medusajs/framework/http"
+// import { ApiRoutesLoader } from "@medusajs/framework/http"
 import { Tracer } from "@medusajs/framework/telemetry"
 import type { SpanExporter } from "@opentelemetry/sdk-trace-node"
 import type { NodeSDKConfiguration } from "@opentelemetry/sdk-node"
@@ -66,72 +66,72 @@ export function instrumentHttpLayer() {
    * Instrumenting the route handler to report traces to
    * OpenTelemetry
    */
-  ApiRoutesLoader.traceRoute = (handler) => {
-    return async (req, res) => {
-      if (shouldExcludeResource(req.originalUrl)) {
-        return await handler(req, res)
-      }
+  // ApiRoutesLoader.traceRoute = (handler) => {
+  //   return async (req, res) => {
+  //     if (shouldExcludeResource(req.originalUrl)) {
+  //       return await handler(req, res)
+  //     }
 
-      const label = req.route?.path ?? `${req.method} ${req.originalUrl}`
-      const traceName = `route handler: ${label}`
+  //     const label = req.route?.path ?? `${req.method} ${req.originalUrl}`
+  //     const traceName = `route handler: ${label}`
 
-      await HTTPTracer.trace(traceName, async (span) => {
-        try {
-          await handler(req, res)
-        } catch (error) {
-          span.setStatus({
-            code: SpanStatusCode.ERROR,
-            message: error.message || "Failed",
-          })
-          throw error
-        } finally {
-          span.end()
-        }
-      })
-    }
-  }
+  //     await HTTPTracer.trace(traceName, async (span) => {
+  //       try {
+  //         await handler(req, res)
+  //       } catch (error) {
+  //         span.setStatus({
+  //           code: SpanStatusCode.ERROR,
+  //           message: error.message || "Failed",
+  //         })
+  //         throw error
+  //       } finally {
+  //         span.end()
+  //       }
+  //     })
+  //   }
+  // }
 
   /**
    * Instrumenting the middleware handler to report traces to
    * OpenTelemetry
    */
-  ApiRoutesLoader.traceMiddleware = (handler) => {
-    return async (
-      req: MedusaRequest<any>,
-      res: MedusaResponse,
-      next: MedusaNextFunction
-    ) => {
-      if (shouldExcludeResource(req.originalUrl)) {
-        return handler(req, res, next)
-      }
+  // ApiRoutesLoader.traceMiddleware = (handler) => {
+  //   return async (
+  //     req: MedusaRequest<any>,
+  //     res: MedusaResponse,
+  //     next: MedusaNextFunction
+  //   ) => {
+  //     if (shouldExcludeResource(req.originalUrl)) {
+  //       return handler(req, res, next)
+  //     }
 
-      const traceName = `middleware: ${
-        handler.name ? snakeCase(handler.name) : `anonymous`
-      }`
+  //     const traceName = `middleware: ${
+  //       handler.name ? snakeCase(handler.name) : `anonymous`
+  //     }`
 
-      await HTTPTracer.trace(traceName, async (span) => {
-        return new Promise<void>((resolve, reject) => {
-          const _next = (error?: any) => {
-            if (error) {
-              span.setStatus({
-                code: SpanStatusCode.ERROR,
-                message: error.message || "Failed",
-              })
-              span.end()
-              reject(error)
-            } else {
-              span.end()
-              resolve()
-            }
-          }
+  //     await HTTPTracer.trace(traceName, async (span) => {
+  //       return new Promise<void>((resolve, reject) => {
+  //         const _next = (error?: any) => {
+  //           if (error) {
+  //             span.setStatus({
+  //               code: SpanStatusCode.ERROR,
+  //               message: error.message || "Failed",
+  //             })
+  //             span.end()
+  //             reject(error)
+  //           } else {
+  //             span.end()
+  //             resolve()
+  //           }
+  //         }
 
-          handler(req, res, _next)
-        })
-      })
-        .catch(next)
-        .then(next)
-    }
-  }
+  //         handler(req, res, _next)
+  //       })
+  //     })
+  //       .catch(next)
+  //       .then(next)
+  //   }
+  // }
 }
 
 /**

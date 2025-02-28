@@ -6,6 +6,7 @@ import type {
   MiddlewaresConfig,
   BodyParserConfigRoute,
   ScannedMiddlewareDescriptor,
+  MedusaErrorHandlerFunction,
 } from "./types"
 
 /**
@@ -37,6 +38,7 @@ export class MiddlewareFileLoader {
   /**
    * Middleware collected manually or by scanning directories
    */
+  #errorHandler?: MedusaErrorHandlerFunction
   #middleware: ScannedMiddlewareDescriptor[] = []
   #bodyParserConfigRoutes: BodyParserConfigRoute[] = []
 
@@ -94,7 +96,7 @@ export class MiddlewareFileLoader {
         if ("bodyParser" in route && route.bodyParser !== undefined) {
           result.bodyParserConfigRoutes.push({
             matcher: matcher,
-            method: route.method,
+            methods: route.method,
             config: route.bodyParser,
           })
         }
@@ -104,7 +106,7 @@ export class MiddlewareFileLoader {
             result.middleware.push({
               handler: middleware,
               matcher: matcher,
-              method: route.method,
+              methods: route.method,
             })
           })
         }
@@ -116,6 +118,12 @@ export class MiddlewareFileLoader {
       }
     )
 
+    const errorHandler =
+      middlewareConfig.errorHandler as MiddlewaresConfig["errorHandler"]
+
+    if (errorHandler) {
+      this.#errorHandler = errorHandler
+    }
     this.#middleware = result.middleware
     this.#bodyParserConfigRoutes = result.bodyParserConfigRoutes
   }
@@ -133,9 +141,13 @@ export class MiddlewareFileLoader {
       )
     } else if (await fs.exists(`${MIDDLEWARE_FILE_NAME}.js`)) {
       await this.#processMiddlewareFile(
-        join(sourceDir, `${MIDDLEWARE_FILE_NAME}.ts`)
+        join(sourceDir, `${MIDDLEWARE_FILE_NAME}.js`)
       )
     }
+  }
+
+  getErrorHandler() {
+    return this.#errorHandler
   }
 
   /**

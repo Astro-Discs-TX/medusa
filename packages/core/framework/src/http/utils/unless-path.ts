@@ -14,6 +14,7 @@ import {
 export const unlessPath =
   (onPath: RegExp, middleware: MiddlewareFunction) =>
   (req: MedusaRequest, res: MedusaResponse, next: MedusaNextFunction) => {
+    console.log({ onPath, path: req.path })
     if (onPath.test(req.path)) {
       return next()
     } else {

@@ -1,11 +1,19 @@
 import { promiseAll } from "@medusajs/utils"
-import { type Express, RequestHandler, Router } from "express"
-import { logger } from "../logger"
+import {
+  ErrorRequestHandler,
+  type Express,
+  json,
+  RequestHandler,
+  text,
+  urlencoded,
+} from "express"
+// import { logger } from "../logger"
 import {
   FileSystemRouteDescriptor,
   MedusaNextFunction,
   MedusaRequest,
   MedusaResponse,
+  MiddlewareFunction,
   ScannedMiddlewareDescriptor,
   ScannedRouteDescriptor,
 } from "./types"
@@ -14,21 +22,25 @@ import { RoutesLoader } from "./routes-loader"
 import { MiddlewareFileLoader } from "./middleware-file-loader"
 import { RoutesSorter } from "./routes-sorter"
 import { errorHandler } from "./middlewares/error-handler"
+import { wrapHandler } from "./utils/wrap-handler"
+import { authenticate, AuthType } from "./middlewares"
+import { ensurePublishableApiKeyMiddleware } from "./middlewares/ensure-publishable-api-key"
+import { RoutesFinder } from "./routes-finder"
 
-const log = ({
-  activityId,
-  message,
-}: {
-  activityId?: string
-  message: string
-}) => {
-  if (activityId) {
-    logger.progress(activityId, message)
-    return
-  }
+// const log = ({
+//   activityId,
+//   message,
+// }: {
+//   activityId?: string
+//   message: string
+// }) => {
+//   if (activityId) {
+//     logger.progress(activityId, message)
+//     return
+//   }
 
-  logger.debug(message)
-}
+//   logger.debug(message)
+// }
 
 export class ApiLoader {
   /**
@@ -47,7 +59,7 @@ export class ApiLoader {
    * Path from where to load the routes from
    * @private
    */
-  readonly #sourceDir: string | string[]
+  readonly #sourceDirs: string[]
 
   constructor({
     app,
@@ -62,32 +74,86 @@ export class ApiLoader {
   }) {
     this.#app = app
     this.#activityId = activityId
-    this.#sourceDir = sourceDir
+    this.#sourceDirs = Array.isArray(sourceDir) ? sourceDir : [sourceDir]
     this.#assignRestrictedFields(baseRestrictedFields ?? [])
   }
 
-  #registerRoute(
+  /**
+   * Loads routes, middleware, bodyParserConfig routes, routes that have
+   * opted out for Auth and CORS and the error handler.
+   */
+  async #loadHttpResources() {
+    const routesLoader = new RoutesLoader({ activityId: this.#activityId })
+    const middlewareLoader = new MiddlewareFileLoader({
+      activityId: this.#activityId,
+    })
+
+    await promiseAll(
+      this.#sourceDirs.map(async (sourcePath) =>
+        routesLoader.scanDir(sourcePath)
+      )
+    )
+
+    await promiseAll(
+      this.#sourceDirs.map(async (sourcePath) =>
+        middlewareLoader.scanDir(sourcePath)
+      )
+    )
+
+    const routes = routesLoader.getRoutes()
+    return {
+      routes: routes.list,
+      routesFinder: new RoutesFinder<ScannedRouteDescriptor>(),
+      middlewares: middlewareLoader.getMiddlewares(),
+      errorHandler: middlewareLoader.getErrorHandler(),
+      bodyParserConfigRoutes: middlewareLoader.getBodyParserConfigRoutes(),
+    }
+  }
+
+  /**
+   * Registers a middleware or a route handler with Express
+   */
+  #registerExpressHandler(
     route:
       | ScannedMiddlewareDescriptor
       | ScannedRouteDescriptor
       | FileSystemRouteDescriptor
   ) {
     if ("isRoute" in route) {
-      console.log("route>>", route.handler.toString())
-      this.#app[route.method.toLowerCase()](route.matcher, route.handler)
+      // console.log(
+      //   "route>>",
+      //   route.matcher,
+      //   route.methods,
+      //   route.handler.toString()
+      // )
+      this.#app[route.methods.toLowerCase()](
+        route.matcher,
+        wrapHandler(route.handler)
+      )
       return
     }
 
-    if (!route.method) {
-      console.log("global middleware>>", route.handler.toString())
-      this.#app.use(route.matcher, route.handler as unknown as RequestHandler)
+    if (!route.methods) {
+      // console.log(
+      //   "global middleware>>",
+      //   route.matcher,
+      //   route.handler.toString()
+      // )
+      this.#app.use(route.matcher, wrapHandler(route.handler))
       return
     }
 
-    const methods = Array.isArray(route.method) ? route.method : [route.method]
+    const methods = Array.isArray(route.methods)
+      ? route.methods
+      : [route.methods]
     methods.forEach((method) => {
-      console.log("route middleware>>", route.handler.toString())
-      this.#app[method.toLowerCase()](route.matcher, route.handler)
+      // console.log(
+      //   "route middleware>>",
+      //   route.matcher,
+      //   route.methods,
+      //   route.handler.toString()
+      // )
+      this.#app[method.toLowerCase()](route.matcher, wrapHandler(route.handler))
     })
   }
 
@@ -112,25 +178,78 @@ export class ApiLoader {
     }) as unknown as RequestHandler)
   }
 
-  async load() {
-    const normalizedSourcePath = Array.isArray(this.#sourceDir)
-      ? this.#sourceDir
-      : [this.#sourceDir]
+  /**
+   * Applies the route middleware on a route. Encapsulates the logic
+   * needed to pass the middleware via the trace calls
+   */
+  #applyAuthMiddleware(
+    routesFinder: RoutesFinder<ScannedRouteDescriptor>,
+    route: string | RegExp,
+    actorType: string | string[],
+    authType: AuthType | AuthType[],
+    options?: { allowUnauthenticated?: boolean; allowUnregistered?: boolean }
+  ) {
+    let authenticateMiddleware = authenticate(actorType, authType, options)
 
-    const routesLoader = new RoutesLoader({ activityId: this.#activityId })
-    const middlewareLoader = new MiddlewareFileLoader({
-      activityId: this.#activityId,
+    this.#app.use(route, (req, res, next) => {
+      const path = `${route}${req.path}`
+      const matchingRoute = routesFinder.find(path, req.method)
+      if (matchingRoute && matchingRoute.optedOutOfAuth) {
+        console.log("skipping auth", path)
+        return next()
+      }
+      console.log("authenticating", path)
+      return authenticateMiddleware(req, res, next)
     })
+  }
 
-    await promiseAll(
-      normalizedSourcePath.map(async (sourcePath) => {
-        return routesLoader.scanDir(sourcePath)
-      })
-    )
-    await promiseAll(
-      normalizedSourcePath.map(async (sourcePath) => {
-        return middlewareLoader.scanDir(sourcePath)
-      })
+  /**
+   * Apply the most specific body parser middleware to the router
+   */
+  #applyBodyParserMiddleware(path: string): void {
+    this.#app.use(path, [
+      json({
+        verify: (req: MedusaRequest, res: MedusaResponse, buf: Buffer) => {
+          req.rawBody = buf
+        },
+      }),
+      text(),
+      urlencoded({ extended: true }),
+    ])
+  }
+
+  #applyStorePublishableKeyMiddleware(route: string | RegExp) {
+    let middleware = ensurePublishableApiKeyMiddleware as unknown as
+      | RequestHandler
+      | MiddlewareFunction
+
+    this.#app.use(route, middleware as RequestHandler)
+  }
+
+  async load() {
+    this.#applyBodyParserMiddleware("/")
+
+    const {
+      errorHandler: sourceErrorHandler,
+      middlewares,
+      routes,
+      routesFinder,
+    } = await this.#loadHttpResources()
+
+    this.#applyAuthMiddleware(routesFinder, "/admin", "user", [
+      "bearer",
+      "session",
+      "api-key",
+    ])
+    this.#applyStorePublishableKeyMiddleware("/store")
+    this.#applyAuthMiddleware(
+      routesFinder,
+      "/store",
+      "customer",
+      ["bearer", "session"],
+      {
+        allowUnauthenticated: true,
+      }
     )
 
     const collectionToSort = (
@@ -140,21 +259,19 @@ export class ApiLoader {
         | FileSystemRouteDescriptor
       )[]
     )
-      .concat(middlewareLoader.getMiddlewares())
-      .concat(routesLoader.getRoutes())
+      .concat(middlewares)
+      .concat(routes)
 
-    const sortedRoutes = new RoutesSorter(collectionToSort).sort()
-    console.log(sortedRoutes)
-    sortedRoutes.forEach((route) => this.#registerRoute(route))
+    const sorter = new RoutesSorter(collectionToSort)
+    const sortedRoutes = sorter.sort()
 
-    this.#app.use((req, res, next) => {
-      try {
-        next()
-      } catch (e) {
-        console.log("e", e)
-        next(e)
+    sortedRoutes.forEach((route) => {
+      if ("isRoute" in route) {
+        routesFinder.add(route)
       }
+      this.#registerExpressHandler(route)
     })
-    this.#app.use(errorHandler())
+
+    this.#app.use((sourceErrorHandler as ErrorRequestHandler) ?? errorHandler())
   }
 }
