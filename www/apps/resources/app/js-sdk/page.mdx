@@ -48,8 +48,8 @@ For admin customizations, create this file at `src/admin/lib/config.ts`.
 import Medusa from "@medusajs/js-sdk"
 
 export const sdk = new Medusa({
-  baseUrl: "http://localhost:9000",
-  debug: process.env.NODE_ENV === "development",
+  baseUrl: import.meta.env.VITE_BACKEND_URL || "/",
+  debug: import.meta.env.DEV,
   auth: {
     type: "session",
   },
@@ -77,6 +77,12 @@ export const sdk = new Medusa({
 
   </CodeTab>
 </CodeTabs>
+
+<Note title="Tip">
+
+In the Medusa Admin you use `import.meta.env` to access environment variables becaues the Medusa Admin is built on top of [Vite](https://vitejs.dev/). Learn more in [this documentation](!docs!/learn/fundamentals/admin/environment-variables).
+
+</Note>
 
 ### JS SDK Configurations
 
@@ -179,11 +185,36 @@ The `Medusa` initializer accepts as a parameter an object with the following pro
       - `local` for the Local Storage.
       - `session` for the Session Storage.
       - `memory` to store it within the SDK for the current application's runtime.
+      - `custom` to define custom storage using the `auth.storage` configuration. If `auth.storage` isn't defined, the SDK throws an error. This option is only available after Medusa v2.5.1.
+      - `nostore` to not store the token.
 
       </Table.Cell>
       <Table.Cell>
 
       `local`
+
+      </Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.Cell>
+
+      `auth.storage`
+
+      </Table.Cell>
+      <Table.Cell>
+
+      This option is only available after Medusa v2.5.1. It's an object or class that's used when `auth.jwtTokenStorageMethod` is `custom` to store the JWT token. It's useful when using the JS SDK in an environment where Local or Session Storage isn't available. The object or class must have the following methods:
+
+      - `setItem`: A function that accepts a key and value to store the JWT token.
+      - `getItem`: A function that accepts a key to retrieve the JWT token.
+      - `removeItem`: A function that accepts a key to remove the JWT token from storage.
+
+      Learn more in [this section](#use-custom-storage).
+
+      </Table.Cell>
+      <Table.Cell>
+
+      \-
 
       </Table.Cell>
     </Table.Row>
@@ -290,6 +321,60 @@ The `Medusa` initializer accepts as a parameter an object with the following pro
 
 ---
 
+## Send Requests to Custom Routes
+
+The sidebar shows the different methods that you can use to send requests to Medusa's API routes.
+
+To send requests to custom routes, the JS SDK has a `client.fetch` method that wraps the [JavaScript Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) that you can use. The method automatically appends configurations and headers, such as authentication headers, to your request.
+
+For example, to send a request to a custom route at `http://localhost:9000/custom`:
+
+<CodeTabs group="request-type">
+  <CodeTab label="GET" value="get">
+
+  ```ts
+  sdk.client.fetch(`/custom`)
+  .then((data) => {
+    console.log(data)
+  })
+  ```
+  
+  </CodeTab>
+  <CodeTab label="POST" value="post">
+
+  ```ts
+  sdk.client.fetch(`/custom`, {
+    method: "post",
+    body: {
+      id: "123",
+    },
+  }).then((data) => {
+    console.log(data)
+  })
+  ```
+
+  </CodeTab>
+  <CodeTab label="DELETE" value="delete">
+
+  ```ts
+  sdk.client.fetch(`/custom`, {
+    method: "delete",
+  }).then(() => {
+    console.log("success")
+  })
+  ```
+
+  </CodeTab>
+</CodeTabs>
+
+The `fetch` method accepts as a first parameter the route's path relative to the `baseUrl` configuration you passed when you initialized the SDK.
+
+In the second parameter, you can pass an object of [request configurations](https://developer.mozilla.org/en-US/docs/Web/API/RequestInit). You don't need to configure the content-type to be JSON, or stringify the `body` or `query` value, as that's handled by the method.
+
+The method returns a Promise that, when resolved, has the data returned by the request. If the request returns a JSON object, it'll be automatically parsed to a JavaScript object and returned.
+
+---
+
 ## Medusa JS SDK Tips
 
 ### Use Tanstack (React) Query in Admin Customizations
@@ -297,6 +382,12 @@ The `Medusa` initializer accepts as a parameter an object with the following pro
 In admin customizations, use [Tanstack Query](https://tanstack.com/query/latest) with the JS SDK to send requests to custom or existing API routes.
 
 Tanstack Query is installed by default in your Medusa application.
+
+<Note type="warning">
+
+Do not install Tanstack Query as that will cause unexpected errors in your development. If you prefer installing it for better auto-completion in your code editor, make sure to install `v5.64.2` as a development dependency.
+
+</Note>
 
 Use the [configured SDK](#setup-js-sdk) with the [useQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery#usequery) Tanstack Query hook to send `GET` requests, and [useMutation](https://tanstack.com/query/latest/docs/framework/react/reference/useMutation#usemutation) hook to send `POST` or `DELETE` requests.
 
@@ -418,3 +509,49 @@ revalidateTag("products")
 ```
 
 Learn more in the [Next.js documentation](https://nextjs.org/docs/app/building-your-application/caching#fetch-optionsnexttags-and-revalidatetag).
+
+### Use Custom Storage
+
+<Note>
+
+The `auth.storage` configuration is only available after Medusa v2.5.1.
+
+</Note>
+
+If you're using the JS SDK in an environment where Local Storage or Session Storage isn't available, such as in a React Native application, you can define custom logic to store the JWT token.
+
+To do that, set the `auth.jwtTokenStorageMethod` configuration to `custom` and define the `auth.storage` configuration with the custom logic to store the JWT token.
+
+For example, if you're using React Native's `AsyncStorage`:
+
+```ts title="config.ts"
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import Medusa from "@medusajs/js-sdk"
+
+let MEDUSA_BACKEND_URL = "http://localhost:9000"
+
+if (process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL) {
+  MEDUSA_BACKEND_URL = process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL
+}
+
+export const sdk = new Medusa({
+  baseUrl: MEDUSA_BACKEND_URL,
+  debug: process.env.NODE_ENV === "development",
+  publishableKey: process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY,
+  auth: {
+    type: "jwt",
+    jwtTokenStorageMethod: "custom",
+    storge: AsyncStorage,
+  },
+})
+```
+
+In the `auth` configuration, you specify the `type` as `jwt`, the `jwtTokenStorageMethod` as `custom`, and the `storage` as `AsyncStorage`. So, the SDK uses `AsyncStorage` to store the JWT token.
+
+#### Custom Storage Methods
+
+The object or class passed to `auth.storage` configuration must have the following methods:
+
+- `setItem`: A function that accepts a key and value to store the JWT token.
+- `getItem`: A function that accepts a key to retrieve the JWT token.
+- `removeItem`: A function that accepts a key to remove the JWT token from storage.

@@ -12,24 +12,60 @@ import {
 } from "@medusajs/framework/utils"
 import { StepResponse, createStep } from "@medusajs/framework/workflows-sdk"
 
+/**
+ * The details of the line items to create or update.
+ */
 export interface GetLineItemActionsStepInput {
+  /**
+   * The ID of the cart to create line items for.
+   */
   id: string
+  /**
+   * The line items to create or update.
+   */
   items: CreateLineItemForCartDTO[]
+}
+
+export interface GetLineItemActionsStepOutput {
+  /**
+   * The line items to create.
+   */
+  itemsToCreate: CreateLineItemForCartDTO[]
+  /**
+   * The line items to update.
+   */
+  itemsToUpdate: UpdateLineItemWithSelectorDTO[]
 }
 
 export const getLineItemActionsStepId = "get-line-item-actions-step"
 /**
  * This step returns lists of cart line items to create or update based on the
  * provided input.
+ *
+ * @example
+ * const data = getLineItemActionsStep({
+ *   "id": "cart_123",
+ *   "items": [{
+ *     "title": "Shirt",
+ *     "quantity": 1,
+ *     "unit_price": 50,
+ *     "cart_id": "cart_123",
+ *   }]
+ * })
  */
 export const getLineItemActionsStep = createStep(
   getLineItemActionsStepId,
   async (data: GetLineItemActionsStepInput, { container }) => {
+    if (!data.items.length) {
+      return new StepResponse({ itemsToCreate: [], itemsToUpdate: [] }, null)
+    }
+
     const cartModule = container.resolve<ICartModuleService>(Modules.CART)
 
+    const variantIds = data.items.map((d) => d.variant_id!)
     const existingVariantItems = await cartModule.listLineItems({
       cart_id: data.id,
-      variant_id: data.items.map((d) => d.variant_id!),
+      variant_id: variantIds,
     })
 
     const variantItemMap = new Map<string, CartLineItemDTO>(
@@ -67,6 +103,9 @@ export const getLineItemActionsStep = createStep(
       }
     }
 
-    return new StepResponse({ itemsToCreate, itemsToUpdate }, null)
+    return new StepResponse(
+      { itemsToCreate, itemsToUpdate } as GetLineItemActionsStepOutput,
+      null
+    )
   }
 )

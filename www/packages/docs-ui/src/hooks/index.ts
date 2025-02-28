@@ -1,4 +1,6 @@
 export * from "./use-active-on-scroll"
+export * from "./use-ai-assistant-chat-navigation"
+export * from "./use-child-docs"
 export * from "./use-click-outside"
 export * from "./use-collapsible"
 export * from "./use-collapsible-code-lines"

@@ -9,18 +9,25 @@ export function replaceTemplateVariables(
   }
 
   return text
-    .replaceAll("{{alias}}", reflection.getAlias())
-    .replaceAll("{{alias-lower}}", reflection.getAlias().toLowerCase())
-    .replaceAll("{{parent.alias}}", reflection.parent?.getAlias() || "")
+    .replaceAll("{{alias}}", reflection.name)
+    .replaceAll("{{alias-lower}}", reflection.name.toLowerCase())
+    .replaceAll("{{parent.alias}}", reflection.parent?.name || "")
     .replaceAll(
       "{{parent.alias-lower}}",
-      reflection.parent?.getAlias().toLowerCase() || ""
+      reflection.parent?.name.toLowerCase() || ""
     )
     .replaceAll(
       "{{parent.parent.alias}}",
-      reflection.parent?.parent?.getAlias() || ""
+      reflection.parent?.parent?.name || ""
     )
     .replaceAll("{{kind}}", getKindAsText(reflection.kind))
+    .replaceAll(
+      "{{summary}}",
+      reflection.comment?.blockTags
+        .find((tag) => tag.tag === "@summary")
+        ?.content.map((content) => content.text)
+        .join(" ") || ""
+    )
 }
 
 export function getKindAsText(kind: ReflectionKind) {
@@ -32,4 +39,14 @@ export function getKindAsText(kind: ReflectionKind) {
     default:
       return ""
   }
+}
+
+export function getAlias(reflection: Reflection): string {
+  let alias = reflection.name.replaceAll(" ", "_").replaceAll("/", "_")
+
+  if (reflection.kind === ReflectionKind.Module) {
+    alias = alias.replaceAll("-", "_")
+  }
+
+  return alias
 }

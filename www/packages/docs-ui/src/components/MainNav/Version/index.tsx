@@ -37,13 +37,19 @@ export const MainNavVersion = () => {
 
   return (
     <>
-      <Link href={version.releaseUrl} target="_blank">
+      <Link
+        href={version.releaseUrl}
+        target="_blank"
+        className={clsx(version.hide && "hidden")}
+      >
         <Tooltip html="View the release notes<br/>on GitHub">
           <span
-            className="relative text-compact-small-plus"
+            className="relative text-compact-small-plus block"
             onMouseOut={afterHover}
           >
-            <span>v{version.number}</span>
+            <span className="flex justify-center items-center">
+              v{version.number}
+            </span>
             {showNewBadge && (
               <span
                 className={clsx(
@@ -56,7 +62,9 @@ export const MainNavVersion = () => {
           </span>
         </Tooltip>
       </Link>
-      <span className="text-compact-small">&#183;</span>
+      <span className={clsx("text-compact-small", version.hide && "hidden")}>
+        &#183;
+      </span>
     </>
   )
 }

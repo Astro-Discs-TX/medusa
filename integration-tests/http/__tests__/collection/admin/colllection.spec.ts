@@ -1,7 +1,7 @@
 import { medusaIntegrationTestRunner } from "@medusajs/test-utils"
 import {
-  createAdminUser,
   adminHeaders,
+  createAdminUser,
 } from "../../../../helpers/create-admin-user"
 
 jest.setTimeout(30000)
@@ -15,6 +15,8 @@ medusaIntegrationTestRunner({
 
     let baseProduct
     let baseProduct1
+
+    let shippingProfile
 
     beforeEach(async () => {
       const container = getContainer()
@@ -44,12 +46,21 @@ medusaIntegrationTestRunner({
         )
       ).data.collection
 
+      shippingProfile = (
+        await api.post(
+          `/admin/shipping-profiles`,
+          { name: "Test", type: "default" },
+          adminHeaders
+        )
+      ).data.shipping_profile
+
       baseProduct = (
         await api.post(
           "/admin/products",
           {
             title: "test-product",
             options: [{ title: "size", values: ["x", "l"] }],
+            shipping_profile_id: shippingProfile.id,
           },
           adminHeaders
         )
@@ -61,6 +72,7 @@ medusaIntegrationTestRunner({
           {
             title: "test-product1",
             options: [{ title: "size", values: ["x", "l"] }],
+            shipping_profile_id: shippingProfile.id,
           },
           adminHeaders
         )
@@ -216,9 +228,7 @@ medusaIntegrationTestRunner({
       it("adds products to collection", async () => {
         const response = await api.post(
           `/admin/collections/${baseCollection.id}/products?fields=*products`,
-          {
-            add: [baseProduct.id, baseProduct1.id],
-          },
+          { add: [baseProduct.id, baseProduct1.id] },
           adminHeaders
         )
 
@@ -228,6 +238,54 @@ medusaIntegrationTestRunner({
             id: baseCollection.id,
             created_at: expect.any(String),
             updated_at: expect.any(String),
+            products: expect.arrayContaining([
+              expect.objectContaining({
+                collection_id: baseCollection.id,
+                title: "test-product",
+              }),
+              expect.objectContaining({
+                collection_id: baseCollection.id,
+                title: "test-product1",
+              }),
+            ]),
+          })
+        )
+      })
+
+      it("should not remove products from collection when updating collection", async () => {
+        const addProductsResponse = await api.post(
+          `/admin/collections/${baseCollection.id}/products?fields=*products`,
+          { add: [baseProduct.id, baseProduct1.id] },
+          adminHeaders
+        )
+
+        expect(addProductsResponse.status).toEqual(200)
+        expect(addProductsResponse.data.collection).toEqual(
+          expect.objectContaining({
+            id: baseCollection.id,
+            products: expect.arrayContaining([
+              expect.objectContaining({
+                collection_id: baseCollection.id,
+                title: "test-product",
+              }),
+              expect.objectContaining({
+                collection_id: baseCollection.id,
+                title: "test-product1",
+              }),
+            ]),
+          })
+        )
+
+        const updateCollectionResponse = await api.post(
+          `/admin/collections/${baseCollection.id}?fields=*products`,
+          { title: "test collection update" },
+          adminHeaders
+        )
+
+        expect(updateCollectionResponse.status).toEqual(200)
+        expect(updateCollectionResponse.data.collection).toEqual(
+          expect.objectContaining({
+            title: "test collection update",
             products: expect.arrayContaining([
               expect.objectContaining({
                 collection_id: baseCollection.id,

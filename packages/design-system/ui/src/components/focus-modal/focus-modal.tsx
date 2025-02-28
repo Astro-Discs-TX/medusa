@@ -1,7 +1,7 @@
 "use client"
 
 import { XMark } from "@medusajs/icons"
-import * as FocusModalPrimitives from "@radix-ui/react-dialog"
+import { Dialog as RadixDialog } from "radix-ui"
 import * as React from "react"
 
 import { IconButton } from "@/components/icon-button"
@@ -14,40 +14,60 @@ import { clx } from "@/utils/clx"
  * @prop onOpenChange - A function to handle when the modal is opened or closed.
  */
 interface FocusModalRootProps
-  extends React.ComponentPropsWithoutRef<typeof FocusModalPrimitives.Root> {}
+  extends React.ComponentPropsWithoutRef<typeof RadixDialog.Root> {}
 
 /**
  * This component is based on the [Radix UI Dialog](https://www.radix-ui.com/primitives/docs/components/dialog) primitives.
  */
 const FocusModalRoot = (props: FocusModalRootProps) => {
-  return <FocusModalPrimitives.Root {...props} />
+  return <RadixDialog.Root {...props} />
 }
 FocusModalRoot.displayName = "FocusModal"
 
+interface FocusModalTriggerProps extends React.ComponentPropsWithoutRef<typeof RadixDialog.Trigger> {}
+
+/**
+ * This component is used to create the trigger button that opens the modal.
+ * It accepts props from the [Radix UI Dialog Trigger](https://www.radix-ui.com/primitives/docs/components/dialog#trigger) component.
+ */
 const FocusModalTrigger = React.forwardRef<
-  React.ElementRef<typeof FocusModalPrimitives.Trigger>,
-  React.ComponentPropsWithoutRef<typeof FocusModalPrimitives.Trigger>
->((props, ref) => {
-  return <FocusModalPrimitives.Trigger ref={ref} {...props} />
+  React.ElementRef<typeof RadixDialog.Trigger>,
+  FocusModalTriggerProps
+>((props: FocusModalTriggerProps, ref) => {
+  return <RadixDialog.Trigger ref={ref} {...props} />
 })
 FocusModalTrigger.displayName = "FocusModal.Trigger"
 
-const FocusModalClose = FocusModalPrimitives.Close
+/**
+ * This component is used to create the close button for the modal.
+ * It accepts props from the [Radix UI Dialog Close](https://www.radix-ui.com/primitives/docs/components/dialog#close) component.
+ */
+const FocusModalClose = RadixDialog.Close
 FocusModalClose.displayName = "FocusModal.Close"
 
-const FocusModalPortal = (props: FocusModalPrimitives.DialogPortalProps) => {
+interface FocusModalPortalProps extends RadixDialog.DialogPortalProps {}
+
+/**
+ * The `FocusModal.Content` component uses this component to wrap the modal content.
+ * It accepts props from the [Radix UI Dialog Portal](https://www.radix-ui.com/primitives/docs/components/dialog#portal) component.
+ */
+const FocusModalPortal = (props: FocusModalPortalProps) => {
   return (
-    <FocusModalPrimitives.DialogPortal {...props} />
+    <RadixDialog.DialogPortal {...props} />
   )
 }
 FocusModalPortal.displayName = "FocusModal.Portal"
 
+/**
+ * This component is used to create the overlay for the modal.
+ * It accepts props from the [Radix UI Dialog Overlay](https://www.radix-ui.com/primitives/docs/components/dialog#overlay) component.
+ */
 const FocusModalOverlay = React.forwardRef<
-  React.ElementRef<typeof FocusModalPrimitives.Overlay>,
-  React.ComponentPropsWithoutRef<typeof FocusModalPrimitives.Overlay>
+  React.ElementRef<typeof RadixDialog.Overlay>,
+  React.ComponentPropsWithoutRef<typeof RadixDialog.Overlay>
 >(({ className, ...props }, ref) => {
   return (
-    <FocusModalPrimitives.Overlay
+    <RadixDialog.Overlay
       ref={ref}
       className={clx(
         "bg-ui-bg-overlay fixed inset-0",
@@ -60,9 +80,13 @@ const FocusModalOverlay = React.forwardRef<
 })
 FocusModalOverlay.displayName = "FocusModal.Overlay"
 
+/**
+ * This component wraps the content of the modal.
+ * It accepts props from the [Radix UI Dialog Content](https://www.radix-ui.com/primitives/docs/components/dialog#content) component.
+ */
 const FocusModalContent = React.forwardRef<
-  React.ElementRef<typeof FocusModalPrimitives.Content>,
-  React.ComponentPropsWithoutRef<typeof FocusModalPrimitives.Content> & {
+  React.ElementRef<typeof RadixDialog.Content>,
+  React.ComponentPropsWithoutRef<typeof RadixDialog.Content> & {
     overlayProps?: React.ComponentPropsWithoutRef<typeof FocusModalOverlay>
     portalProps?: React.ComponentPropsWithoutRef<typeof FocusModalPortal>
   }
@@ -70,7 +94,7 @@ const FocusModalContent = React.forwardRef<
   return (
     <FocusModalPortal {...portalProps}>
       <FocusModalOverlay {...overlayProps} />
-      <FocusModalPrimitives.Content
+      <RadixDialog.Content
         ref={ref}
         className={clx(
           "bg-ui-bg-base shadow-elevation-modal fixed inset-2 flex flex-col overflow-hidden rounded-lg border outline-none",
@@ -85,6 +109,7 @@ const FocusModalContent = React.forwardRef<
 FocusModalContent.displayName = "FocusModal.Content"
 
 /**
+ * This component is used to wrap the header content of the modal.
  * This component is based on the `div` element and supports all of its props
  */
 const FocusModalHeader = React.forwardRef<
@@ -101,11 +126,11 @@ const FocusModalHeader = React.forwardRef<
       {...props}
     >
       <div className="flex items-center gap-x-2">
-        <FocusModalPrimitives.Close asChild>
+        <RadixDialog.Close asChild>
           <IconButton size="small" type="button" variant="transparent">
             <XMark />
           </IconButton>
-        </FocusModalPrimitives.Close>
+        </RadixDialog.Close>
         <Kbd>esc</Kbd>
       </div>
       {children}
@@ -114,6 +139,10 @@ const FocusModalHeader = React.forwardRef<
 })
 FocusModalHeader.displayName = "FocusModal.Header"
 
+/**
+ * This component is used to wrap the footer content of the modal.
+ * This component is based on the `div` element and supports all of its props
+ */
 const FocusModalFooter = React.forwardRef<
   HTMLDivElement,
   React.ComponentPropsWithoutRef<"div">
@@ -133,20 +162,31 @@ const FocusModalFooter = React.forwardRef<
 })
 FocusModalFooter.displayName = "FocusModal.Footer"
 
+interface FocusModalTitleProps extends React.ComponentPropsWithoutRef<typeof RadixDialog.Title> {}
+
+/**
+ * This component adds an accessible title to the modal.
+ * It accepts props from the [Radix UI Dialog Title](https://www.radix-ui.com/primitives/docs/components/dialog#title) component.
+ */
 const FocusModalTitle = React.forwardRef<
   HTMLHeadingElement,
-  React.ComponentPropsWithoutRef<typeof FocusModalPrimitives.Title>
->(({ className, ...props }, ref) => {
+  FocusModalTitleProps
+>(({ className, ...props }: FocusModalTitleProps, ref) => {
   return (
-    <FocusModalPrimitives.Title ref={ref} {...props} />
+    <RadixDialog.Title ref={ref} {...props} />
   )
 })
 FocusModalTitle.displayName = "FocusModal.Title"
 
-const FocusModalDescription = FocusModalPrimitives.Description
+/**
+ * This component adds accessible description to the modal.
+ * It accepts props from the [Radix UI Dialog Description](https://www.radix-ui.com/primitives/docs/components/dialog#description) component.
+ */
+const FocusModalDescription = RadixDialog.Description
 FocusModalDescription.displayName = "FocusModal.Description"
 
 /**
+ * This component is used to wrap the body content of the modal.
  * This component is based on the `div` element and supports all of its props
  */
 const FocusModalBody = React.forwardRef<

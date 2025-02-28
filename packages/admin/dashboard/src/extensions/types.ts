@@ -4,6 +4,7 @@ import {
   CustomFieldFormZone,
   CustomFieldModel,
   InjectionZone,
+  NestedRoutePosition,
 } from "@medusajs/admin-shared"
 import { ComponentType } from "react"
 import { LoaderFunction } from "react-router-dom"
@@ -12,6 +13,8 @@ import { ZodFirstPartySchemaTypes } from "zod"
 export type RouteExtension = {
   Component: ComponentType
   loader?: LoaderFunction
+  handle?: object
+  children?: RouteExtension[]
   path: string
 }
 
@@ -19,6 +22,7 @@ export type MenuItemExtension = {
   label: string
   path: string
   icon?: ComponentType
+  nested?: NestedRoutePosition
 }
 
 export type WidgetExtension = {

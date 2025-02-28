@@ -86,6 +86,43 @@ export type RouteDescriptor = {
   config?: RouteConfig
 }
 
+/**
+ * Route descriptor refers represents a route either scanned
+ * from the filesystem or registered manually. It does not
+ * represent a middleware
+ */
+export type ScannedRouteDescriptor = {
+  route: string
+  method: RouteVerb
+  handler: RouteHandler
+  optedOutOfAuth: boolean
+  routeType?: "admin" | "store" | "auth"
+  shouldAppendAdminCors: boolean
+  shouldAppendStoreCors: boolean
+  shouldAppendAuthCors: boolean
+}
+
+/**
+ * FileSystem route description represents a route scanned from
+ * the filesystem
+ */
+export type FileSystemRouteDescriptor = ScannedRouteDescriptor & {
+  absolutePath: string
+  relativePath: string
+}
+
+export type ScannedMiddlewareDescriptor = {
+  matcher: string
+  method?: MiddlewareVerb | MiddlewareVerb[]
+  handler: MiddlewareFunction
+}
+
+export type BodyParserConfigRoute = {
+  matcher: string
+  method?: MiddlewareVerb | MiddlewareVerb[]
+  config?: ParserConfig
+}
+
 export type GlobalMiddlewareDescriptor = {
   config?: MiddlewaresConfig
 }
@@ -108,13 +145,22 @@ export interface MedusaRequest<
    * An object containing the select, relation to be used with medusa internal services
    */
   retrieveConfig: FindConfig<unknown>
+
   /**
    * An object containing fields and variables to be used with the remoteQuery
+   *
+   * @version 2.2.0
    */
-  remoteQueryConfig: {
+  queryConfig: {
     fields: string[]
     pagination: { order?: Record<string, string>; skip: number; take?: number }
   }
+
+  /**
+   * @deprecated Use {@link queryConfig} instead.
+   */
+  remoteQueryConfig: MedusaRequest["queryConfig"]
+
   /**
    * An object containing the fields that are filterable e.g `{ id: Any<String> }`
    */
@@ -163,14 +209,18 @@ export interface PublishableKeyContext {
   sales_channel_ids: string[]
 }
 
-export interface AuthenticatedMedusaRequest<Body = unknown, QueryFields = Record<string, unknown>>
-  extends MedusaRequest<Body, QueryFields> {
+export interface AuthenticatedMedusaRequest<
+  Body = unknown,
+  QueryFields = Record<string, unknown>
+> extends MedusaRequest<Body, QueryFields> {
   auth_context: AuthContext
   publishable_key_context?: PublishableKeyContext
 }
 
-export interface MedusaStoreRequest<Body = unknown, QueryFields = Record<string, unknown>>
-  extends MedusaRequest<Body, QueryFields> {
+export interface MedusaStoreRequest<
+  Body = unknown,
+  QueryFields = Record<string, unknown>
+> extends MedusaRequest<Body, QueryFields> {
   auth_context?: AuthContext
   publishable_key_context: PublishableKeyContext
 }

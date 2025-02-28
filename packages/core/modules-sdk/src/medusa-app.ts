@@ -1,6 +1,7 @@
 import { RemoteFetchDataCallback } from "@medusajs/orchestration"
 import {
   ExternalModuleDeclaration,
+  IIndexService,
   ILinkMigrationsPlanner,
   InternalModuleDeclaration,
   LoadedModule,
@@ -27,13 +28,13 @@ import {
   promiseAll,
 } from "@medusajs/utils"
 import { asValue } from "awilix"
+import { Link } from "./link"
 import {
   MedusaModule,
   MigrationOptions,
   ModuleBootstrapOptions,
   RegisterModuleJoinerConfig,
 } from "./medusa-module"
-import { RemoteLink } from "./remote-link"
 import { createQuery, RemoteQuery } from "./remote-query"
 import { MODULE_SCOPE } from "./types"
 
@@ -106,7 +107,8 @@ export async function loadModules(args: {
     let declaration: any = {}
     let definition: Partial<ModuleDefinition> | undefined = undefined
 
-    if (mod === false) {
+    // TODO: We are keeping mod === false for backward compatibility for now
+    if (mod === false || (isObject(mod) && "disable" in mod && mod.disable)) {
       continue
     }
 
@@ -210,7 +212,7 @@ async function initializeLinks({
     )
 
     return {
-      remoteLink: new RemoteLink(),
+      remoteLink: new Link(),
       linkResolution,
       getMigrationPlanner,
     }
@@ -261,7 +263,7 @@ function registerCustomJoinerConfigs(servicesConfig: ModuleJoinerConfig[]) {
 
 export type MedusaAppOutput = {
   modules: Record<string, LoadedModule | LoadedModule[]>
-  link: RemoteLink | undefined
+  link: Link | undefined
   query: RemoteQueryFunction
   entitiesMap?: Record<string, any>
   gqlSchema?: GraphQLUtils.GraphQLSchema
@@ -332,8 +334,8 @@ async function MedusaApp_({
     modulesConfig ??
     (
       await dynamicImport(
-        await (modulesConfigPath ??
-          process.cwd() + (modulesConfigFileName ?? "/modules-config"))
+        modulesConfigPath ??
+          process.cwd() + (modulesConfigFileName ?? "/modules-config")
       )
     ).default
 
@@ -561,13 +563,20 @@ async function MedusaApp_({
     return getMigrationPlanner(options, linkModules)
   }
 
+  const indexModule = sharedContainer_.resolve(Modules.INDEX, {
+    allowUnregistered: true,
+  }) as IIndexService
+
   return {
     onApplicationShutdown,
     onApplicationPrepareShutdown,
     onApplicationStart,
     modules: allModules,
     link: remoteLink,
-    query: createQuery(remoteQuery) as any, // TODO: rm any once we remove the old RemoteQueryFunction and rely on the Query object instead,
+    query: createQuery({
+      remoteQuery,
+      indexModule,
+    }) as any, // TODO: rm any once we remove the old RemoteQueryFunction and rely on the Query object instead,
     entitiesMap,
     gqlSchema: schema,
     notFound,
