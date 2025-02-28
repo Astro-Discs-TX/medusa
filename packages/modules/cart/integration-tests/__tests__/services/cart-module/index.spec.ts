@@ -17,6 +17,7 @@ moduleIntegrationTestRunner<ICartModuleService>({
 
         expect(Object.keys(linkable)).toEqual([
           "cart",
+          "creditLine",
           "address",
           "lineItem",
           "lineItemAdjustment",
@@ -38,6 +39,15 @@ moduleIntegrationTestRunner<ICartModuleService>({
               primaryKey: "id",
               serviceName: "cart",
               field: "cart",
+            },
+          },
+          creditLine: {
+            id: {
+              entity: "CreditLine",
+              field: "creditLine",
+              linkable: "credit_line_id",
+              primaryKey: "id",
+              serviceName: "cart",
             },
           },
           address: {
@@ -1979,7 +1989,7 @@ moduleIntegrationTestRunner<ICartModuleService>({
           const taxLines = await service.setLineItemTaxLines(createdCart.id, [
             {
               item_id: itemOne.id,
-              rate: 20,
+              rate: 20.753,
               code: "TX",
             },
           ])
@@ -1988,7 +1998,7 @@ moduleIntegrationTestRunner<ICartModuleService>({
             expect.arrayContaining([
               expect.objectContaining({
                 item_id: itemOne.id,
-                rate: 20,
+                rate: 20.753,
                 code: "TX",
               }),
             ])
@@ -1997,7 +2007,7 @@ moduleIntegrationTestRunner<ICartModuleService>({
           await service.setLineItemTaxLines(createdCart.id, [
             {
               item_id: itemOne.id,
-              rate: 25,
+              rate: 25.14789,
               code: "TX-2",
             },
           ])
@@ -2013,7 +2023,7 @@ moduleIntegrationTestRunner<ICartModuleService>({
                 tax_lines: expect.arrayContaining([
                   expect.objectContaining({
                     item_id: itemOne.id,
-                    rate: 25,
+                    rate: 25.14789,
                     code: "TX-2",
                   }),
                 ]),
@@ -2512,6 +2522,7 @@ moduleIntegrationTestRunner<ICartModuleService>({
             requires_shipping: true,
             is_discountable: true,
             is_tax_inclusive: false,
+            is_custom_price: false,
             raw_compare_at_unit_price: null,
             raw_unit_price: {
               value: "100",
@@ -2617,6 +2628,7 @@ moduleIntegrationTestRunner<ICartModuleService>({
             requires_shipping: true,
             is_discountable: true,
             is_tax_inclusive: false,
+            is_custom_price: false,
             raw_compare_at_unit_price: null,
             raw_unit_price: {
               value: "200",
@@ -2762,6 +2774,22 @@ moduleIntegrationTestRunner<ICartModuleService>({
             },
           },
         ],
+        credit_lines: [],
+        credit_lines_subtotal: 0,
+        credit_lines_tax_total: 0,
+        credit_lines_total: 0,
+        raw_credit_lines_subtotal: {
+          precision: 20,
+          value: "0",
+        },
+        raw_credit_lines_tax_total: {
+          precision: 20,
+          value: "0",
+        },
+        raw_credit_lines_total: {
+          precision: 20,
+          value: "0",
+        },
         total: 210,
         subtotal: 510,
         tax_total: 0,

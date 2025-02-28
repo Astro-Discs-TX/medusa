@@ -6,13 +6,13 @@ import {
   SomeType,
   TypeParameterReflection,
 } from "typedoc"
-import * as Handlebars from "handlebars"
-import { Parameter } from "../types"
+import Handlebars from "handlebars"
+import { Parameter } from "../types.js"
 import {
   getDefaultValue,
   reflectionComponentFormatter,
-} from "./reflection-formatter"
-import { MarkdownTheme } from "../theme"
+} from "./reflection-formatter.js"
+import { MarkdownTheme } from "../theme.js"
 import { getProjectChild, getType, getTypeChildren } from "utils"
 
 export type GetReflectionTypeParametersParams = {
@@ -98,7 +98,7 @@ export function getReflectionTypeParameters({
           : undefined
       if (
         typeArgs &&
-        !isOnlyVoid(typeArgs as unknown as SomeType[]) &&
+        !isEmpty(typeArgs as unknown as SomeType[]) &&
         canRetrieveChildren
       ) {
         typeArgs.forEach((typeArg) => {
@@ -237,6 +237,8 @@ export function getReflectionTypeParameters({
         ? componentItem[parentKey - 1].children?.push(childParameter)
         : componentItem.push(childParameter)
     })
+  } else if (isEmpty([reflectionType])) {
+    return []
   } else {
     const parentKey = wrapObject
       ? componentItem.push(formatParameter())
@@ -278,8 +280,27 @@ export function loadComment(
   return ""
 }
 
-export function isOnlyVoid(reflectionTypes: SomeType[]) {
-  return reflectionTypes.every(
-    (type) => type.type === "intrinsic" && type.name === "void"
-  )
+const emptyValues = ["void", "never", "undefined"]
+
+export function isEmpty(reflectionTypes: SomeType[]) {
+  return reflectionTypes.every((type) => {
+    if (type.type === "intrinsic" && emptyValues.includes(type.name)) {
+      return true
+    }
+
+    if (type.type !== "union") {
+      return false
+    }
+
+    return type.types.every((unionType) => {
+      if (
+        unionType.type === "intrinsic" &&
+        emptyValues.includes(unionType.name)
+      ) {
+        return true
+      }
+
+      return false
+    })
+  })
 }

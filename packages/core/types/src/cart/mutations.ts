@@ -200,6 +200,11 @@ export interface UpdateCartDataDTO {
    * Holds custom data in key-value pairs.
    */
   metadata?: Record<string, unknown> | null
+
+  /**
+   * The date and time the cart was completed.
+   */
+  completed_at?: string | Date | null
 }
 
 /**
@@ -554,6 +559,11 @@ export interface CreateLineItemDTO {
    * Whether the line item's amount is tax inclusive.
    */
   is_tax_inclusive?: boolean
+
+  /**
+   * Whether the line item's amount is a custom price.
+   */
+  is_custom_price?: boolean
 
   /**
    * The calculated price of the line item after applying promotions.

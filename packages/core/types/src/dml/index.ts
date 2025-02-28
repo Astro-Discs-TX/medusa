@@ -10,7 +10,12 @@ export type DMLSchema = Record<
   PropertyType<any> | RelationshipType<any>
 >
 
-export type IDmlEntityConfig = string | { name?: string; tableName: string }
+export type IDmlEntityConfig =
+  | string
+  | {
+      name?: string
+      tableName: string
+    }
 
 export type InferDmlEntityNameFromConfig<TConfig extends IDmlEntityConfig> =
   TConfig extends string
@@ -41,6 +46,7 @@ export type KnownDataTypes =
   | "enum"
   | "number"
   | "bigNumber"
+  | "float"
   | "serial"
   | "dateTime"
   | "array"
@@ -71,6 +77,7 @@ export type PropertyMetadata = {
   fieldName: string
   defaultValue?: any
   nullable: boolean
+  computed: boolean
   dataType: {
     name: KnownDataTypes
     options?: Record<string, any>
@@ -145,7 +152,9 @@ export interface EntityConstructor<Props> extends Function {
  */
 export type InferForeignKeys<Schema extends DMLSchema> = {
   [K in keyof Schema as Schema[K] extends { $foreignKey: true }
-    ? `${K & string}_id`
+    ? Schema[K] extends { $foreignKeyName: `${infer FkName}` }
+      ? `${FkName & string}`
+      : `${K & string}_id`
     : never]: Schema[K] extends { $foreignKey: true }
     ? null extends Schema[K]["$dataType"]
       ? string | null
@@ -205,6 +214,27 @@ export type InferSchemaFields<Schema extends DMLSchema> = Prettify<
 >
 
 /**
+ * Infers the types of the schema fields from the DML entity
+ * for module services
+ */
+export type InferSchemaFieldsForModuleServices<Schema extends DMLSchema> =
+  Prettify<
+    {
+      [K in keyof Schema]: Schema[K] extends RelationshipType<any>
+        ? Schema[K]["type"] extends "belongsTo"
+          ? string
+          : Schema[K]["type"] extends "hasOne" | "hasOneWithFK"
+          ? string
+          : Schema[K]["type"] extends "hasMany"
+          ? string[]
+          : Schema[K]["type"] extends "manyToMany"
+          ? string[]
+          : never
+        : Schema[K]["$dataType"]
+    } & InferForeignKeys<Schema>
+  >
+
+/**
  * Infers the schema properties without the relationships
  */
 export type InferSchemaProperties<Schema extends DMLSchema> = Prettify<
@@ -238,16 +268,24 @@ export type Infer<T> = T extends IDmlEntity<infer Schema, any>
   ? EntityConstructor<InferSchemaFields<Schema>>
   : never
 
+export type InferEntityForModuleService<T> = T extends IDmlEntity<
+  infer Schema,
+  any
+>
+  ? InferSchemaFieldsForModuleServices<Schema>
+  : never
+
 /**
  * The actions to cascade from a given entity to its
  * relationship.
  */
-export type EntityCascades<Relationships> = {
+export type EntityCascades<DeletableRelationships, DetachableRelationships> = {
   /**
    * The related models to delete when a record of this data model
    * is deleted.
    */
-  delete?: Relationships
+  delete?: DeletableRelationships
+  detach?: DetachableRelationships
 }
 
 /**

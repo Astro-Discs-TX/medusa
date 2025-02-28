@@ -30,12 +30,12 @@ A Medusa application is made up of a Node.js server and an admin dashboard. You 
 To create a Medusa application, use the `create-medusa-app` command:
 
 ```bash
-npx create-medusa-app@latest
+npx create-medusa-app@latest my-medusa-store
 ```
 
-When you run the command, you'll be asked for the project's name and whether you want to install the Next.js storefront.
+Where `my-medusa-store` is the name of the project's directory and PostgreSQL database created for the project. When you run the command, you'll be asked whether you want to install the Next.js storefront.
 
-After answering the prompts, the command installs the Medusa application in a directory with your project name, and prepares a PostgreSQL database that the application connects to.
+After answering the prompts, the command installs the Medusa application in a directory with your project name, and sets up a PostgreSQL database that the application connects to.
 
 If you chose to install the storefront with the Medusa application, the storefront is installed in a separate directory named `{project-name}-storefront`.
 
@@ -118,7 +118,7 @@ This directory is the central place for your custom development. It includes the
 - `admin`: Holds your admin dashboard's custom [widgets](../fundamentals/admin/widgets/page.mdx) and [UI routes](../fundamentals/admin/ui-routes/page.mdx).
 - `api`: Holds your custom [API routes](../fundamentals/api-routes/page.mdx) that are added as endpoints in your Medusa application.
 - `jobs`: Holds your [scheduled jobs](../fundamentals/scheduled-jobs/page.mdx) that run at a specified interval during your Medusa application's runtime.
-- `links`: Holds you [module links](../fundamentals/module-links/page.mdx) that build associations between data models of different modules.
+- `links`: Holds your [module links](../fundamentals/module-links/page.mdx) that build associations between data models of different modules.
 - `modules`: Holds your custom [modules](../fundamentals/modules/page.mdx) that implement custom business logic.
 - `scripts`: Holds your custom [scripts](../fundamentals/custom-cli-scripts/page.mdx) to be executed using Medusa's CLI tool.
 - `subscribers`: Holds your [event listeners](../fundamentals/events-and-subscribers/page.mdx) that are executed asynchronously whenever an event is emitted.
@@ -136,6 +136,12 @@ This file holds your [Medusa configurations](!resources!/references/medusa-confi
 By default, your Medusa application is equipped with the basic configuration to start your development.
 
 If you run into issues with configurations, such as CORS configurations, or need to make changes to the default configuration, refer to [this guide on all available configurations](!resources!/references/medusa-config).
+
+---
+
+## Update Medusa Application
+
+Refer to [this documentation](../update/page.mdx) to learn how to update your Medusa project.
 
 ---
 

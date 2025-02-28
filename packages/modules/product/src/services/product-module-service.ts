@@ -1,6 +1,7 @@
 import {
   Context,
   DAL,
+  FilterableProductOptionValueProps,
   FindConfig,
   IEventBusModuleService,
   InferEntityType,
@@ -25,8 +26,10 @@ import { ProductCategoryService } from "@services"
 import {
   arrayDifference,
   EmitEvents,
+  generateEntityId,
   InjectManager,
   InjectTransactionManager,
+  isDefined,
   isPresent,
   isString,
   isValidHandle,
@@ -228,8 +231,7 @@ export default class ProductModuleService
     return {
       ...config,
       order: {
-        id: "ASC",
-        ...config?.order,
+        ...(config?.order ?? { id: "ASC" }),
         ...(hasImagesRelation
           ? {
               images: {
@@ -242,11 +244,12 @@ export default class ProductModuleService
     }
   }
 
-  // @ts-ignore
+  // @ts-expect-error
   createProductVariants(
     data: ProductTypes.CreateProductVariantDTO[],
     sharedContext?: Context
   ): Promise<ProductTypes.ProductVariantDTO[]>
+  // @ts-expect-error
   createProductVariants(
     data: ProductTypes.CreateProductVariantDTO,
     sharedContext?: Context
@@ -254,6 +257,7 @@ export default class ProductModuleService
 
   @InjectManager()
   @EmitEvents()
+  // @ts-expect-error
   async createProductVariants(
     data:
       | ProductTypes.CreateProductVariantDTO[]
@@ -371,12 +375,13 @@ export default class ProductModuleService
     return Array.isArray(data) ? allVariants : allVariants[0]
   }
 
-  // @ts-ignore
+  // @ts-expect-error
   updateProductVariants(
     id: string,
     data: ProductTypes.UpdateProductVariantDTO,
     sharedContext?: Context
   ): Promise<ProductTypes.ProductVariantDTO>
+  // @ts-expect-error
   updateProductVariants(
     selector: ProductTypes.FilterableProductVariantProps,
     data: ProductTypes.UpdateProductVariantDTO,
@@ -385,6 +390,7 @@ export default class ProductModuleService
 
   @InjectManager()
   @EmitEvents()
+  // @ts-expect-error
   async updateProductVariants(
     idOrSelector: string | ProductTypes.FilterableProductVariantProps,
     data: ProductTypes.UpdateProductVariantDTO,
@@ -503,11 +509,12 @@ export default class ProductModuleService
     return productVariants
   }
 
-  // @ts-ignore
+  // @ts-expect-error
   createProductTags(
     data: ProductTypes.CreateProductTagDTO[],
     sharedContext?: Context
   ): Promise<ProductTypes.ProductTagDTO[]>
+  // @ts-expect-error
   createProductTags(
     data: ProductTypes.CreateProductTagDTO,
     sharedContext?: Context
@@ -515,6 +522,7 @@ export default class ProductModuleService
 
   @InjectManager()
   @EmitEvents()
+  // @ts-expect-error
   async createProductTags(
     data: ProductTypes.CreateProductTagDTO[] | ProductTypes.CreateProductTagDTO,
     @MedusaContext() sharedContext: Context = {}
@@ -582,12 +590,13 @@ export default class ProductModuleService
     return Array.isArray(data) ? allTags : allTags[0]
   }
 
-  // @ts-ignore
+  // @ts-expect-error
   updateProductTags(
     id: string,
     data: ProductTypes.UpdateProductTagDTO,
     sharedContext?: Context
   ): Promise<ProductTypes.ProductTagDTO>
+  // @ts-expect-error
   updateProductTags(
     selector: ProductTypes.FilterableProductTagProps,
     data: ProductTypes.UpdateProductTagDTO,
@@ -596,6 +605,7 @@ export default class ProductModuleService
 
   @InjectManager()
   @EmitEvents()
+  // @ts-expect-error
   async updateProductTags(
     idOrSelector: string | ProductTypes.FilterableProductTagProps,
     data: ProductTypes.UpdateProductTagDTO,
@@ -636,17 +646,19 @@ export default class ProductModuleService
     return isString(idOrSelector) ? updatedTags[0] : updatedTags
   }
 
-  // @ts-ignore
+  // @ts-expect-error
   createProductTypes(
     data: ProductTypes.CreateProductTypeDTO[],
     sharedContext?: Context
   ): Promise<ProductTypes.ProductTypeDTO[]>
+  // @ts-expect-error
   createProductTypes(
     data: ProductTypes.CreateProductTypeDTO,
     sharedContext?: Context
   ): Promise<ProductTypes.ProductTypeDTO>
 
   @InjectManager()
+  // @ts-expect-error
   async createProductTypes(
     data:
       | ProductTypes.CreateProductTypeDTO[]
@@ -704,12 +716,13 @@ export default class ProductModuleService
     return Array.isArray(data) ? allTypes : allTypes[0]
   }
 
-  // @ts-ignore
+  // @ts-expect-error
   updateProductTypes(
     id: string,
     data: ProductTypes.UpdateProductTypeDTO,
     sharedContext?: Context
   ): Promise<ProductTypes.ProductTypeDTO>
+  // @ts-expect-error
   updateProductTypes(
     selector: ProductTypes.FilterableProductTypeProps,
     data: ProductTypes.UpdateProductTypeDTO,
@@ -717,6 +730,7 @@ export default class ProductModuleService
   ): Promise<ProductTypes.ProductTypeDTO[]>
 
   @InjectManager()
+  // @ts-expect-error
   async updateProductTypes(
     idOrSelector: string | ProductTypes.FilterableProductTypeProps,
     data: ProductTypes.UpdateProductTypeDTO,
@@ -752,17 +766,19 @@ export default class ProductModuleService
     return isString(idOrSelector) ? updatedTypes[0] : updatedTypes
   }
 
-  // @ts-ignore
+  // @ts-expect-error
   createProductOptions(
     data: ProductTypes.CreateProductOptionDTO[],
     sharedContext?: Context
   ): Promise<ProductTypes.ProductOptionDTO[]>
+  // @ts-expect-error
   createProductOptions(
     data: ProductTypes.CreateProductOptionDTO,
     sharedContext?: Context
   ): Promise<ProductTypes.ProductOptionDTO>
 
   @InjectManager()
+  // @ts-expect-error
   async createProductOptions(
     data:
       | ProductTypes.CreateProductOptionDTO[]
@@ -849,12 +865,13 @@ export default class ProductModuleService
     return Array.isArray(data) ? allOptions : allOptions[0]
   }
 
-  // @ts-ignore
+  // @ts-expect-error
   updateProductOptions(
     id: string,
     data: ProductTypes.UpdateProductOptionDTO,
     sharedContext?: Context
   ): Promise<ProductTypes.ProductOptionDTO>
+  // @ts-expect-error
   updateProductOptions(
     selector: ProductTypes.FilterableProductOptionProps,
     data: ProductTypes.UpdateProductOptionDTO,
@@ -862,6 +879,7 @@ export default class ProductModuleService
   ): Promise<ProductTypes.ProductOptionDTO[]>
 
   @InjectManager()
+  // @ts-expect-error
   async updateProductOptions(
     idOrSelector: string | ProductTypes.FilterableProductOptionProps,
     data: ProductTypes.UpdateProductOptionDTO,
@@ -966,11 +984,12 @@ export default class ProductModuleService
     return productOptions
   }
 
-  // @ts-ignore
+  // @ts-expect-error
   createProductCollections(
     data: ProductTypes.CreateProductCollectionDTO[],
     sharedContext?: Context
   ): Promise<ProductTypes.ProductCollectionDTO[]>
+  // @ts-expect-error
   createProductCollections(
     data: ProductTypes.CreateProductCollectionDTO,
     sharedContext?: Context
@@ -978,6 +997,7 @@ export default class ProductModuleService
 
   @InjectManager()
   @EmitEvents()
+  // @ts-expect-error
   async createProductCollections(
     data:
       | ProductTypes.CreateProductCollectionDTO[]
@@ -1057,6 +1077,7 @@ export default class ProductModuleService
     if (forCreate.length) {
       created = await this.createCollections_(forCreate, sharedContext)
     }
+
     if (forUpdate.length) {
       updated = await this.updateCollections_(forUpdate, sharedContext)
     }
@@ -1083,12 +1104,13 @@ export default class ProductModuleService
     return Array.isArray(data) ? allCollections : allCollections[0]
   }
 
-  // @ts-ignore
+  // @ts-expect-error
   updateProductCollections(
     id: string,
     data: ProductTypes.UpdateProductCollectionDTO,
     sharedContext?: Context
   ): Promise<ProductTypes.ProductCollectionDTO>
+  // @ts-expect-error
   updateProductCollections(
     selector: ProductTypes.FilterableProductCollectionProps,
     data: ProductTypes.UpdateProductCollectionDTO,
@@ -1097,6 +1119,7 @@ export default class ProductModuleService
 
   @InjectManager()
   @EmitEvents()
+  // @ts-expect-error
   async updateProductCollections(
     idOrSelector: string | ProductTypes.FilterableProductCollectionProps,
     data: ProductTypes.UpdateProductCollectionDTO,
@@ -1174,8 +1197,11 @@ export default class ProductModuleService
 
         if (!!productsToUpdate?.length) {
           const productIds = productsToUpdate.map((p) => p.id)
+
           dissociateSelector["id"] = { $nin: productIds }
           associateSelector["id"] = { $in: productIds }
+        } else if (!isDefined(productsToUpdate)) {
+          return []
         }
 
         const result: Record<string, any>[] = [
@@ -1205,15 +1231,19 @@ export default class ProductModuleService
       }
     )
 
-    await this.productService_.update(updateSelectorAndData, sharedContext)
+    if (updateSelectorAndData.length) {
+      await this.productService_.update(updateSelectorAndData, sharedContext)
+    }
+
     return collections
   }
 
-  // @ts-ignore
+  // @ts-expect-error
   createProductCategories(
     data: ProductTypes.CreateProductCategoryDTO[],
     sharedContext?: Context
   ): Promise<ProductTypes.ProductCategoryDTO[]>
+  // @ts-expect-error
   createProductCategories(
     data: ProductTypes.CreateProductCategoryDTO,
     sharedContext?: Context
@@ -1221,6 +1251,7 @@ export default class ProductModuleService
 
   @InjectManager()
   @EmitEvents()
+  // @ts-expect-error
   async createProductCategories(
     data:
       | ProductTypes.CreateProductCategoryDTO[]
@@ -1318,12 +1349,13 @@ export default class ProductModuleService
     return Array.isArray(data) ? result : result[0]
   }
 
-  // @ts-ignore
+  // @ts-expect-error
   updateProductCategories(
     id: string,
     data: ProductTypes.UpdateProductCategoryDTO,
     sharedContext?: Context
   ): Promise<ProductTypes.ProductCategoryDTO>
+  // @ts-expect-error
   updateProductCategories(
     selector: ProductTypes.FilterableProductTypeProps,
     data: ProductTypes.UpdateProductCategoryDTO,
@@ -1332,6 +1364,7 @@ export default class ProductModuleService
 
   @InjectManager()
   @EmitEvents()
+  // @ts-expect-error
   async updateProductCategories(
     idOrSelector: string | ProductTypes.FilterableProductTypeProps,
     data: ProductTypes.UpdateProductCategoryDTO,
@@ -1383,6 +1416,7 @@ export default class ProductModuleService
     data: ProductTypes.CreateProductDTO[],
     sharedContext?: Context
   ): Promise<ProductTypes.ProductDTO[]>
+  // @ts-expect-error
   createProducts(
     data: ProductTypes.CreateProductDTO,
     sharedContext?: Context
@@ -1390,6 +1424,7 @@ export default class ProductModuleService
 
   @InjectManager()
   @EmitEvents()
+  // @ts-expect-error
   async createProducts(
     data: ProductTypes.CreateProductDTO[] | ProductTypes.CreateProductDTO,
     @MedusaContext() sharedContext: Context = {}
@@ -1470,6 +1505,7 @@ export default class ProductModuleService
     data: ProductTypes.UpdateProductDTO,
     sharedContext?: Context
   ): Promise<ProductTypes.ProductDTO>
+  // @ts-expect-error
   updateProducts(
     selector: ProductTypes.FilterableProductProps,
     data: ProductTypes.UpdateProductDTO,
@@ -1478,6 +1514,7 @@ export default class ProductModuleService
 
   @InjectManager()
   @EmitEvents()
+  // @ts-expect-error
   async updateProducts(
     idOrSelector: string | ProductTypes.FilterableProductProps,
     data: ProductTypes.UpdateProductDTO,
@@ -1532,75 +1569,82 @@ export default class ProductModuleService
       })
     )
 
-    const { entities: productData } =
-      await this.productService_.upsertWithReplace(
-        normalizedInput,
+    const tagIds = normalizedInput
+      .flatMap((d) => (d as any).tags ?? [])
+      .map((t) => t.id)
+    let existingTags: InferEntityType<typeof ProductTag>[] = []
+
+    if (tagIds.length) {
+      existingTags = await this.productTagService_.list(
         {
-          relations: ["tags", "categories"],
+          id: tagIds,
         },
+        {},
         sharedContext
       )
+    }
 
-    await promiseAll(
-      // Note: It's safe to rely on the order here as `upsertWithReplace` preserves the order of the input
-      normalizedInput.map(async (product, i) => {
-        const upsertedProduct: any = productData[i]
-        upsertedProduct.options = []
-        upsertedProduct.variants = []
+    const existingTagsMap = new Map(existingTags.map((tag) => [tag.id, tag]))
 
-        if (product.options?.length) {
-          const { entities: productOptions } =
-            await this.productOptionService_.upsertWithReplace(
-              product.options?.map((option) => ({
-                ...option,
-                product_id: upsertedProduct.id,
-              })) ?? [],
-              { relations: ["values"] },
-              sharedContext
-            )
-          upsertedProduct.options = productOptions
-        }
+    const productsToCreate = normalizedInput.map((product) => {
+      const productId = generateEntityId(product.id, "prod")
+      product.id = productId
 
-        if (product.variants?.length) {
-          const { entities: productVariants } =
-            await this.productVariantService_.upsertWithReplace(
-              ProductModuleService.assignOptionsToVariants(
-                product.variants?.map((v) => ({
-                  ...v,
-                  product_id: upsertedProduct.id,
-                })) ?? [],
-                upsertedProduct.options
-              ),
-              { relations: ["options"] },
-              sharedContext
-            )
-          upsertedProduct.variants = productVariants
-        }
+      if ((product as any).categories?.length) {
+        ;(product as any).categories = (product as any).categories.map(
+          (category: { id: string }) => category.id
+        )
+      }
 
-        if (Array.isArray(product.images)) {
-          if (product.images.length) {
-            const { entities: productImages } =
-              await this.productImageService_.upsertWithReplace(
-                product.images.map((image, rank) => ({
-                  ...image,
-                  product_id: upsertedProduct.id,
-                  rank,
-                })),
-                {},
-                sharedContext
-              )
-            upsertedProduct.images = productImages
-          } else {
-            await this.productImageService_.delete(
-              { product_id: upsertedProduct.id },
-              sharedContext
+      if (product.variants?.length) {
+        const normalizedVariants = product.variants.map((variant) => {
+          const variantId = generateEntityId((variant as any).id, "variant")
+          ;(variant as any).id = variantId
+
+          Object.entries(variant.options ?? {}).forEach(([key, value]) => {
+            const productOption = product.options?.find(
+              (option) => option.title === key
+            )!
+            const productOptionValue = productOption.values?.find(
+              (optionValue) => (optionValue as any).value === value
+            )!
+            ;(productOptionValue as any).variants ??= []
+            ;(productOptionValue as any).variants.push(variant)
+          })
+
+          delete variant.options
+
+          return variant
+        })
+
+        product.variants = normalizedVariants
+      }
+
+      if ((product as any).tags?.length) {
+        ;(product as any).tags = (product as any).tags.map(
+          (tag: { id: string }) => {
+            const existingTag = existingTagsMap.get(tag.id)
+            if (existingTag) {
+              return existingTag
+            }
+
+            throw new MedusaError(
+              MedusaError.Types.INVALID_DATA,
+              `Tag with id ${tag.id} not found. Please create the tag before associating it with the product.`
             )
           }
-        }
-      })
+        )
+      }
+
+      return product
+    })
+
+    const createdProducts = await this.productService_.create(
+      productsToCreate,
+      sharedContext
     )
 
-    return productData
+    return createdProducts
   }
 
   @InjectTransactionManager()
@@ -1739,6 +1783,70 @@ export default class ProductModuleService
     return productData
   }
 
+  // @ts-expect-error
+  updateProductOptionValues(
+    idOrSelector: string,
+    data: ProductTypes.UpdateProductOptionValueDTO,
+    sharedContext?: Context
+  ): Promise<ProductTypes.ProductOptionValueDTO>
+  // @ts-expect-error
+  updateProductOptionValues(
+    selector: FilterableProductOptionValueProps,
+    data: ProductTypes.UpdateProductOptionValueDTO,
+    sharedContext?: Context
+  ): Promise<ProductTypes.ProductOptionValueDTO[]>
+  // @ts-expect-error
+  async updateProductOptionValues(
+    idOrSelector: string | FilterableProductOptionValueProps,
+    data: ProductTypes.UpdateProductOptionValueDTO,
+    sharedContext: Context = {}
+  ): Promise<
+    ProductTypes.ProductOptionValueDTO | ProductTypes.ProductOptionValueDTO[]
+  > {
+    let normalizedInput: ({
+      id: string
+    } & ProductTypes.UpdateProductOptionValueDTO)[] = []
+    if (isString(idOrSelector)) {
+      // This will throw if the product option value does not exist
+      await this.productOptionValueService_.retrieve(
+        idOrSelector,
+        {},
+        sharedContext
+      )
+
+      normalizedInput = [{ id: idOrSelector, ...data }]
+    } else {
+      const productOptionValues = await this.productOptionValueService_.list(
+        idOrSelector,
+        {},
+        sharedContext
+      )
+
+      normalizedInput = productOptionValues.map((product) => ({
+        id: product.id,
+        ...data,
+      }))
+    }
+
+    const productOptionValues = await super.updateProductOptionValues(
+      normalizedInput,
+      sharedContext
+    )
+
+    const updatedProductOptionValues = await this.baseRepository_.serialize<
+      ProductTypes.ProductOptionValueDTO[]
+    >(productOptionValues)
+
+    eventBuilders.updatedProductOptionValue({
+      data: updatedProductOptionValues,
+      sharedContext: sharedContext,
+    })
+
+    return isString(idOrSelector)
+      ? updatedProductOptionValues[0]
+      : updatedProductOptionValues
+  }
+
   /**
    * Validates the manually provided handle value of the product
    * to be URL-safe
@@ -1816,6 +1924,17 @@ export default class ProductModuleService
       productData.thumbnail = productData.images[0].url
     }
 
+    if (productData.images?.length) {
+      productData.images = productData.images.map((image, index) =>
+        (image as { rank?: number }).rank != null
+          ? image
+          : {
+              ...image,
+              rank: index,
+            }
+      )
+    }
+
     return productData
   }
 
@@ -1829,6 +1948,7 @@ export default class ProductModuleService
     }
 
     if (productData.options?.length) {
+      // TODO: Instead of fetching per product, this should fetch for all product allowing for only one query instead of X
       const dbOptions = await this.productOptionService_.list(
         { product_id: productData.id },
         { relations: ["values"] },
@@ -1889,12 +2009,11 @@ export default class ProductModuleService
     collection: ProductTypes.CreateProductCollectionDTO | UpdateCollectionInput
   ): ProductTypes.CreateProductCollectionDTO | UpdateCollectionInput {
     const collectionData = { ...collection }
-    if (collectionData.product_ids?.length) {
+    if (Array.isArray(collectionData.product_ids)) {
       ;(collectionData as any).products = collectionData.product_ids.map(
-        (pid) => ({
-          id: pid,
-        })
+        (pid) => ({ id: pid })
       )
+
       delete collectionData.product_ids
     }
 

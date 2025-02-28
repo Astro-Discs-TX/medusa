@@ -33,7 +33,7 @@ export const navDropdownItems: NavigationItem[] = [
     children: [
       {
         type: "link",
-        title: "Guides",
+        title: "All Guides",
         link: "/resources",
         useAsFallback: true,
       },
@@ -60,17 +60,17 @@ export const navDropdownItems: NavigationItem[] = [
         title: "Storefront Development",
         link: "/resources/storefront-development",
       },
-      {
-        type: "link",
-        title: "UI Library",
-        link: "/ui",
-      },
     ],
   },
   {
     type: "dropdown",
     title: "Tools & SDKs",
     children: [
+      {
+        type: "link",
+        title: "UI Library",
+        link: "/ui",
+      },
       {
         type: "link",
         title: "Medusa CLI",
@@ -146,7 +146,9 @@ export const navDropdownItems: NavigationItem[] = [
         link: "/learn/fundamentals/admin",
       },
       {
-        type: "divider",
+        type: "link",
+        title: "Plugins",
+        link: "/learn/fundamentals/plugins",
       },
       {
         type: "link",
@@ -204,6 +206,11 @@ export const navDropdownItems: NavigationItem[] = [
       },
     ],
   },
+  {
+    type: "link",
+    title: "User Guide",
+    path: "/user-guide",
+  },
 ]
 
 export const searchFilters: OptionType[] = [
@@ -217,15 +224,14 @@ export const searchFilters: OptionType[] = [
   },
   {
     value: "admin-v2",
-    label: "Admin API (v2)",
+    label: "Admin API",
   },
   {
     value: "store-v2",
-    label: "Store API (v2)",
+    label: "Store API",
   },
   {
     value: "ui",
     label: "Medusa UI",
   },
-  // TODO add more filters
 ]

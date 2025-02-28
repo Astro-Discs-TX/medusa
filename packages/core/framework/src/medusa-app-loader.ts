@@ -26,7 +26,7 @@ import {
 } from "@medusajs/utils"
 import { pgConnectionLoader } from "./database"
 
-import { asValue } from "awilix"
+import { aliasTo, asValue } from "awilix"
 import { configManager } from "./config"
 import {
   container,
@@ -115,6 +115,10 @@ export class MedusaAppLoader {
       ),
     }
 
+    const driverOptions = { ...(configManager.config.projectConfig.databaseDriverOptions ?? {}) }
+    const pool = driverOptions.pool ?? {}
+    delete driverOptions.pool
+
     const sharedResourcesConfig: ModuleServiceInitializeOptions = {
       database: {
         clientUrl:
@@ -125,6 +129,7 @@ export class MedusaAppLoader {
           )?.client?.config?.connection?.connectionString ??
           configManager.config.projectConfig.databaseUrl,
         driverOptions: configManager.config.projectConfig.databaseDriverOptions,
+        pool: pool,
         debug: configManager.config.projectConfig.databaseLogging ?? false,
         schema: configManager.config.projectConfig.databaseSchema,
         database: configManager.config.projectConfig.databaseName,
@@ -236,9 +241,10 @@ export class MedusaAppLoader {
       ContainerRegistrationKeys.QUERY,
       asValue(undefined)
     )
+    this.#container.register(ContainerRegistrationKeys.LINK, asValue(undefined))
     this.#container.register(
       ContainerRegistrationKeys.REMOTE_LINK,
-      asValue(undefined)
+      aliasTo(ContainerRegistrationKeys.LINK)
     )
 
     const configModules = this.mergeDefaultModules(configModule.modules)
@@ -257,8 +263,12 @@ export class MedusaAppLoader {
     }
 
     this.#container.register(
-      ContainerRegistrationKeys.REMOTE_LINK,
+      ContainerRegistrationKeys.LINK,
       asValue(medusaApp.link)
+    )
+    this.#container.register(
+      ContainerRegistrationKeys.REMOTE_LINK,
+      aliasTo(ContainerRegistrationKeys.LINK)
     )
     this.#container.register(
       ContainerRegistrationKeys.REMOTE_QUERY,

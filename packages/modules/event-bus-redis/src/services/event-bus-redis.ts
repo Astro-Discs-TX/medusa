@@ -68,12 +68,16 @@ export default class RedisEventBusService extends AbstractEventBusModuleService 
           prefix: `${this.constructor.name}`,
           ...(moduleOptions.workerOptions ?? {}),
           connection: eventBusRedisConnection,
+          autorun: false,
         }
       )
     }
   }
 
   __hooks = {
+    onApplicationStart: async () => {
+      await this.bullWorker_?.run()
+    },
     onApplicationShutdown: async () => {
       await this.queue_.close()
       // eslint-disable-next-line max-len
@@ -219,7 +223,7 @@ export default class RedisEventBusService extends AbstractEventBusModuleService 
       return
     }
 
-    await this.eventBusRedisConnection_.del(`staging:${eventGroupId}`)
+    await this.eventBusRedisConnection_.unlink(`staging:${eventGroupId}`)
   }
 
   /**

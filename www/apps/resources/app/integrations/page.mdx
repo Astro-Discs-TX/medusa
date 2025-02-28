@@ -10,6 +10,12 @@ You can integrate any third-party service to Medusa, including storage services,
 
 Medusa provides integrations out-of-the-box that are listed here, but you can also create your own integrations, such as integrating ERP systems, as explained in [this guide](!docs!/learn/customization/integrate-systems).
 
+<Note>
+
+This section holds guides to help technical teams add integrations to a Medusa application. If you're not a technical user, refer your technical team to this documentation instead.
+
+</Note>
+
 ## Auth
 
 An Auth Module Provider authenticates users with their account on a third-party service.
@@ -28,7 +34,7 @@ An Auth Module Provider authenticates users with their account on a third-party 
   className="mb-1"
 />
 
-Learn how to create a custom third-party authentication provider in [this guide](/references/auth/provider).
+Learn how to integrate a custom third-party authentication provider in [this guide](/references/auth/provider).
 
 ---
 
@@ -66,7 +72,29 @@ A File Module Provider uploads and manages assets, such as product images, on a 
   className="mb-1"
 />
 
-Learn how to create a custom third-party file or storage provider in [this guide](/references/file-provider-module).
+Learn how to integrate a custom third-party file or storage provider in [this guide](/references/file-provider-module).
+
+---
+
+## Fulfillment
+
+A Fulfillment Module Provider provides fulfillment options during checkout, calculates shipping rates, and processes an order's fulfillments.
+
+<CardList
+  items={[
+    {
+      href: "/integrations/guides/shipstation",
+      title: "ShipStation",
+      badge: {
+        variant: "blue",
+        children: "Guide"
+      }
+    }
+  ]}
+  className="mb-1"
+/>
+
+Learn how to create a Fulfillment Provider Module [this guide](/references/fulfillment/provider).
 
 ---
 

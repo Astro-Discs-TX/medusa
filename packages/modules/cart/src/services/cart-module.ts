@@ -24,6 +24,7 @@ import {
 import {
   Address,
   Cart,
+  CreditLine,
   LineItem,
   LineItemAdjustment,
   LineItemTaxLine,
@@ -54,6 +55,7 @@ type InjectedDependencies = {
 
 const generateMethodForModels = {
   Cart,
+  CreditLine,
   Address,
   LineItem,
   LineItemAdjustment,
@@ -66,6 +68,7 @@ const generateMethodForModels = {
 export default class CartModuleService
   extends ModulesSdkUtils.MedusaService<{
     Cart: { dto: CartTypes.CartDTO }
+    CreditLine: { dto: CartTypes.CartCreditLineDTO }
     Address: { dto: CartTypes.CartAddressDTO }
     LineItem: { dto: CartTypes.CartLineItemDTO }
     LineItemAdjustment: { dto: CartTypes.LineItemAdjustmentDTO }
@@ -170,6 +173,7 @@ export default class CartModuleService
 
     const requiredFieldsForTotals = [
       "items",
+      "credit_lines",
       "items.tax_lines",
       "items.adjustments",
       "shipping_methods",
@@ -258,12 +262,14 @@ export default class CartModuleService
     sharedContext?: Context
   ): Promise<CartTypes.CartDTO[]>
 
+  // @ts-expect-error
   async createCarts(
     data: CartTypes.CreateCartDTO,
     sharedContext?: Context
   ): Promise<CartTypes.CartDTO>
 
   @InjectManager()
+  // @ts-expect-error
   async createCarts(
     data: CartTypes.CreateCartDTO[] | CartTypes.CreateCartDTO,
     @MedusaContext() sharedContext: Context = {}
@@ -320,11 +326,13 @@ export default class CartModuleService
   async updateCarts(
     data: CartTypes.UpdateCartDTO[]
   ): Promise<CartTypes.CartDTO[]>
+  // @ts-expect-error
   async updateCarts(
     cartId: string,
     data: CartTypes.UpdateCartDataDTO,
     sharedContext?: Context
   ): Promise<CartTypes.CartDTO>
+  // @ts-expect-error
   async updateCarts(
     selector: Partial<CartTypes.CartDTO>,
     data: CartTypes.UpdateCartDataDTO,
@@ -332,6 +340,7 @@ export default class CartModuleService
   ): Promise<CartTypes.CartDTO[]>
 
   @InjectManager()
+  // @ts-expect-error
   async updateCarts(
     dataOrIdOrSelector:
       | CartTypes.UpdateCartDTO[]
@@ -391,6 +400,18 @@ export default class CartModuleService
 
     const result = await this.cartService_.update(toUpdate, sharedContext)
     return result
+  }
+
+  @InjectManager()
+  // @ts-expect-error
+  async updateShippingMethods(
+    data: CartTypes.UpdateShippingMethodDTO[],
+    sharedContext?: Context
+  ): Promise<CartTypes.CartShippingMethodDTO[]> {
+    return super.updateShippingMethods(
+      data as unknown as CartTypes.CartShippingMethodDTO[],
+      sharedContext
+    ) as unknown as Promise<CartTypes.CartShippingMethodDTO[]>
   }
 
   addLineItems(
@@ -468,11 +489,13 @@ export default class CartModuleService
   updateLineItems(
     data: CartTypes.UpdateLineItemWithSelectorDTO[]
   ): Promise<CartTypes.CartLineItemDTO[]>
+  // @ts-expect-error
   updateLineItems(
     selector: Partial<CartTypes.CartLineItemDTO>,
     data: CartTypes.UpdateLineItemDTO,
     sharedContext?: Context
   ): Promise<CartTypes.CartLineItemDTO[]>
+  // @ts-expect-error
   updateLineItems(
     lineItemId: string,
     data: Partial<CartTypes.UpdateLineItemDTO>,
@@ -480,6 +503,7 @@ export default class CartModuleService
   ): Promise<CartTypes.CartLineItemDTO>
 
   @InjectManager()
+  // @ts-expect-error
   async updateLineItems(
     lineItemIdOrDataOrSelector:
       | string
@@ -562,12 +586,14 @@ export default class CartModuleService
     data: CartTypes.CreateAddressDTO,
     sharedContext?: Context
   ): Promise<CartTypes.CartAddressDTO>
+  // @ts-expect-error
   async createAddresses(
     data: CartTypes.CreateAddressDTO[],
     sharedContext?: Context
   ): Promise<CartTypes.CartAddressDTO[]>
 
   @InjectManager()
+  // @ts-expect-error
   async createAddresses(
     data: CartTypes.CreateAddressDTO[] | CartTypes.CreateAddressDTO,
     @MedusaContext() sharedContext: Context = {}
@@ -599,12 +625,14 @@ export default class CartModuleService
     data: CartTypes.UpdateAddressDTO,
     sharedContext?: Context
   ): Promise<CartTypes.CartAddressDTO>
+  // @ts-expect-error
   async updateAddresses(
     data: CartTypes.UpdateAddressDTO[],
     sharedContext?: Context
   ): Promise<CartTypes.CartAddressDTO[]>
 
   @InjectManager()
+  // @ts-expect-error
   async updateAddresses(
     data: CartTypes.UpdateAddressDTO[] | CartTypes.UpdateAddressDTO,
     @MedusaContext() sharedContext: Context = {}
@@ -1055,10 +1083,9 @@ export default class CartModuleService
       )
     }
 
-    const result = await this.lineItemTaxLineService_.upsert(
-      taxLines,
-      sharedContext
-    )
+    const result = taxLines.length
+      ? await this.lineItemTaxLineService_.upsert(taxLines, sharedContext)
+      : []
 
     return await this.baseRepository_.serialize<CartTypes.LineItemTaxLineDTO[]>(
       result,
@@ -1173,10 +1200,12 @@ export default class CartModuleService
       )
     }
 
-    const result = await this.shippingMethodTaxLineService_.upsert(
-      taxLines as UpdateShippingMethodTaxLineDTO[],
-      sharedContext
-    )
+    const result = taxLines.length
+      ? await this.shippingMethodTaxLineService_.upsert(
+          taxLines as UpdateShippingMethodTaxLineDTO[],
+          sharedContext
+        )
+      : []
 
     return await this.baseRepository_.serialize<
       CartTypes.ShippingMethodTaxLineDTO[]

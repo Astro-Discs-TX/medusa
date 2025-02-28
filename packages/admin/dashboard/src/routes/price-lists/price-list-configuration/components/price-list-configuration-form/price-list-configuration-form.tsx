@@ -4,6 +4,7 @@ import { HttpTypes } from "@medusajs/types"
 import {
   Button,
   DatePicker,
+  Divider,
   Heading,
   IconButton,
   Text,
@@ -14,7 +15,6 @@ import { useFieldArray, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { z } from "zod"
 
-import { Divider } from "../../../../../components/common/divider"
 import { Form } from "../../../../../components/common/form"
 import { RouteDrawer, useRouteModal } from "../../../../../components/modals"
 import { StackedDrawer } from "../../../../../components/modals/stacked-drawer"
@@ -95,9 +95,9 @@ export const PriceListConfigurationForm = ({
     const rules = { ...priceList.rules } // preserve other rules set on the PL
 
     if (groupIds.length) {
-      rules["customer_group_id"] = groupIds
+      rules["customer.groups.id"] = groupIds
     } else {
-      delete rules["customer_group_id"]
+      delete rules["customer.groups.id"]
     }
 
     await mutateAsync(

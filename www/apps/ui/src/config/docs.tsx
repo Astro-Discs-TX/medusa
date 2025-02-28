@@ -153,6 +153,13 @@ export const docsConfig: DocsConfig = {
           },
           {
             type: "link",
+            title: "Data Table",
+            path: "/components/data-table",
+            isPathHref: true,
+            loaded: true,
+          },
+          {
+            type: "link",
             title: "Date Picker",
             path: "/components/date-picker",
             isPathHref: true,
@@ -197,6 +204,13 @@ export const docsConfig: DocsConfig = {
             type: "link",
             title: "Icon Button",
             path: "/components/icon-button",
+            isPathHref: true,
+            loaded: true,
+          },
+          {
+            type: "link",
+            title: "Inline Tip",
+            path: "/components/inline-tip",
             isPathHref: true,
             loaded: true,
           },
