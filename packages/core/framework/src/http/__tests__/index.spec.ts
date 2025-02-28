@@ -163,11 +163,7 @@ describe("RoutesLoader", function () {
       expect(res.text).toBe("GET /admin/unprotected")
     })
 
-    /**
-     * @todo
-     * The error handler is not getting called
-     */
-    it.skip("should return the error as JSON when an error is thrown with default error handling", async () => {
+    it("should return the error as JSON when an error is thrown with default error handling", async () => {
       const res = await request("GET", "/customers/error")
 
       expect(res.status).toBe(400)

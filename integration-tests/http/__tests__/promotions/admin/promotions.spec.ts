@@ -1303,7 +1303,7 @@ medusaIntegrationTestRunner({
           })
         })
 
-        it.only("return all rule attributes for a valid ruleType", async () => {
+        it("return all rule attributes for a valid ruleType", async () => {
           const response = await api.get(
             `/admin/promotions/rule-attribute-options/rules`,
             adminHeaders
