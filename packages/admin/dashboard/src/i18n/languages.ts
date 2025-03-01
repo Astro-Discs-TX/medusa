@@ -1,25 +1,26 @@
 import {
-  de,
+  ar,
   bg,
+  cs,
+  de,
+  el,
   enUS,
   es,
+  faIR,
   fr,
   it,
   ja,
+  mk,
+  mn,
   pl,
   ptBR,
+  ro,
+  ru,
   th,
   tr,
   uk,
-  ro,
-  mk,
-  mn,
-  ar,
+  vi,
   zhCN,
-  faIR,
-  cs,
-  ru,
-  el
 } from "date-fns/locale"
 import { Language } from "./types"
 
@@ -149,5 +150,11 @@ export const languages: Language[] = [
     display_name: "Русский",
     ltr: true,
     date_locale: ru,
+  },
+  {
+    code: "vi",
+    display_name: "Tiếng Việt",
+    ltr: true,
+    date_locale: vi,
   },
 ]
