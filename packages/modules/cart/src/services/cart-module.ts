@@ -815,6 +815,87 @@ export default class CartModuleService
   }
 
   @InjectTransactionManager()
+  async upsertLineItemTaxLines(
+    taxLines: (
+      | CartTypes.CreateLineItemTaxLineDTO
+      | CartTypes.UpdateLineItemTaxLineDTO
+    )[],
+    @MedusaContext() sharedContext: Context = {}
+  ): Promise<CartTypes.LineItemTaxLineDTO[]> {
+    const result = await this.lineItemTaxLineService_.upsert(
+      taxLines as CartTypes.UpdateLineItemTaxLineDTO[],
+      sharedContext
+    )
+
+    return await this.baseRepository_.serialize<CartTypes.LineItemTaxLineDTO[]>(
+      result,
+      {
+        populate: true,
+      }
+    )
+  }
+
+  @InjectTransactionManager()
+  async upsertLineItemAdjustments(
+    adjustments: (
+      | CartTypes.CreateLineItemAdjustmentDTO
+      | CartTypes.UpdateLineItemAdjustmentDTO
+    )[],
+    @MedusaContext() sharedContext: Context = {}
+  ): Promise<CartTypes.LineItemAdjustmentDTO[]> {
+    let result = await this.lineItemAdjustmentService_.upsert(
+      adjustments,
+      sharedContext
+    )
+
+    return await this.baseRepository_.serialize<
+      CartTypes.LineItemAdjustmentDTO[]
+    >(result, {
+      populate: true,
+    })
+  }
+
+  @InjectTransactionManager()
+  async upsertShippingMethodTaxLines(
+    taxLines: (
+      | CartTypes.CreateShippingMethodTaxLineDTO
+      | CartTypes.UpdateShippingMethodTaxLineDTO
+    )[],
+    @MedusaContext() sharedContext: Context = {}
+  ): Promise<CartTypes.ShippingMethodTaxLineDTO[]> {
+    const result = await this.shippingMethodTaxLineService_.upsert(
+      taxLines as UpdateShippingMethodTaxLineDTO[],
+      sharedContext
+    )
+
+    return await this.baseRepository_.serialize<
+      CartTypes.ShippingMethodTaxLineDTO[]
+    >(result, {
+      populate: true,
+    })
+  }
+
+  @InjectTransactionManager()
+  async upsertShippingMethodAdjustments(
+    adjustments: (
+      | CartTypes.CreateShippingMethodAdjustmentDTO
+      | CartTypes.UpdateShippingMethodAdjustmentDTO
+    )[],
+    @MedusaContext() sharedContext: Context = {}
+  ): Promise<CartTypes.ShippingMethodAdjustmentDTO[]> {
+    const result = await this.shippingMethodAdjustmentService_.upsert(
+      adjustments,
+      sharedContext
+    )
+
+    return await this.baseRepository_.serialize<
+      CartTypes.ShippingMethodAdjustmentDTO[]
+    >(result, {
+      populate: true,
+    })
+  }
+
+  @InjectTransactionManager()
   async setLineItemAdjustments(
     cartId: string,
     adjustments: (

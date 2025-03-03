@@ -144,6 +144,10 @@ export const addToCartWorkflow = createWorkflow(
       items: lineItems,
     })
 
+    const allItems = transform({ itemsToCreate, itemsToUpdate }, (data) => {
+      return data.itemsToCreate.concat(data.itemsToUpdate as any[])
+    })
+
     const itemsToConfirmInventory = transform(
       { itemsToUpdate, itemsToCreate },
       (data) => {
@@ -185,7 +189,7 @@ export const addToCartWorkflow = createWorkflow(
     )
 
     refreshCartItemsWorkflow.runAsStep({
-      input: { cart_id: cart.id },
+      input: { cart_id: cart.id, items: allItems },
     })
 
     emitEventStep({

@@ -26,6 +26,7 @@ import { refreshCartShippingMethodsWorkflow } from "./refresh-cart-shipping-meth
 import { refreshPaymentCollectionForCartWorkflow } from "./refresh-payment-collection"
 import { updateCartPromotionsWorkflow } from "./update-cart-promotions"
 import { updateTaxLinesWorkflow } from "./update-tax-lines"
+import { upsertTaxLinesWorkflow } from "./upsert-tax-lines copy"
 
 /**
  * The details of the cart to refresh.
@@ -44,6 +45,16 @@ export type RefreshCartItemsWorkflowInput = {
    * Force refresh the cart items
    */
   force_refresh?: boolean
+
+  /**
+   * The items to refresh.
+   */
+  items?: any[]
+
+  /**
+   * The shipping methods to refresh.
+   */
+  shipping_methods?: any[]
 }
 
 export const refreshCartItemsWorkflowId = "refresh-cart-items"
@@ -158,12 +169,28 @@ export const refreshCartItemsWorkflow = createWorkflow(
       }
     )
 
-    refreshCartShippingMethodsWorkflow.runAsStep({
-      input: refreshCartInput,
+    when({ input }, ({ input }) => {
+      return !!input.force_refresh
+    }).then(() => {
+      refreshCartShippingMethodsWorkflow.runAsStep({
+        input: refreshCartInput,
+      })
+
+      updateTaxLinesWorkflow.runAsStep({
+        input: refreshCartInput,
+      })
     })
 
-    updateTaxLinesWorkflow.runAsStep({
-      input: refreshCartInput,
+    when({ input }, ({ input }) => {
+      return !input.force_refresh && !!input.items
+    }).then(() => {
+      upsertTaxLinesWorkflow.runAsStep({
+        input: {
+          cart: refreshCartInput,
+          items: input.items ?? [],
+          shipping_methods: input.shipping_methods ?? [],
+        },
+      })
     })
 
     const cartPromoCodes = transform(
