@@ -15,29 +15,26 @@ import type { RoutesFinder } from "../routes-finder"
  * Parsers to use for parsing the HTTP request body
  */
 const parsers = {
-  json: memoize(function jsonParserMiddleware(
-    sizeLimit?: ParserConfigArgs["sizeLimit"],
-    preserveRawBody?: ParserConfigArgs["preserveRawBody"]
-  ) {
+  json: memoize(function jsonParserMiddleware(options?: ParserConfigArgs) {
     return json({
-      limit: sizeLimit,
-      verify: preserveRawBody
+      limit: options?.sizeLimit,
+      verify: options?.preserveRawBody
         ? (req: MedusaRequest, res: MedusaResponse, buf: Buffer) => {
             req.rawBody = buf
           }
         : undefined,
     })
   }),
-  text: memoize(function textParser(sizeLimit?: ParserConfigArgs["sizeLimit"]) {
+  text: memoize(function textParser(options?: ParserConfigArgs) {
     return text({
-      limit: sizeLimit,
+      limit: options?.sizeLimit,
     })
   }),
   urlencoded: memoize(function urlencodedParserMiddleware(
-    sizeLimit?: ParserConfigArgs["sizeLimit"]
+    options?: ParserConfigArgs
   ) {
     return urlencoded({
-      limit: sizeLimit,
+      limit: options?.sizeLimit,
       extended: true,
     })
   }),
@@ -51,37 +48,31 @@ const parsers = {
 export function createBodyParserMiddlewaresStack(
   routesFinder: RoutesFinder<BodyParserConfigRoute>
 ) {
-  return ["json", "text", "urlencoded"].map((parser) => {
-    return ((req, res, next) => {
-      const matchingRoute = routesFinder.find(
-        req.path,
-        req.method as MiddlewareVerb
-      )
-      const parserMiddleware = parsers[parser]
-
-      if (!matchingRoute) {
-        return parserMiddleware()(req, res, next)
-      }
-
-      if (matchingRoute.config === false) {
-        logger.debug(
-          `skipping ${parser} bodyparser middleware ${req.method}${req.path}`
+  return (["json", "text", "urlencoded"] as (keyof typeof parsers)[]).map(
+    (parser) => {
+      return ((req, res, next) => {
+        const matchingRoute = routesFinder.find(
+          req.path,
+          req.method as MiddlewareVerb
         )
-        return next()
-      }
+        const parserMiddleware = parsers[parser]
 
-      logger.debug(
-        `using custom ${parser} bodyparser config ${req.method}${req.path}`
-      )
+        if (!matchingRoute) {
+          return parserMiddleware()(req, res, next)
+        }
 
-      if (parser === "json") {
-        return parserMiddleware(
-          matchingRoute.config.sizeLimit,
-          matchingRoute.config.preserveRawBody
-        )(req, res, next)
-      }
+        if (matchingRoute.config === false) {
+          logger.debug(
+            `skipping ${parser} bodyparser middleware ${req.method}${req.path}`
+          )
+          return next()
+        }
 
-      return parserMiddleware()(req, res, next)
-    }) as RequestHandler
-  })
+        logger.debug(
+          `using custom ${parser} bodyparser config ${req.method}${req.path}`
+        )
+        return parserMiddleware(matchingRoute.config)(req, res, next)
+      }) as RequestHandler
+    }
+  )
 }
