@@ -1,19 +1,37 @@
 import pathToRegexp from "path-to-regexp"
-import { MiddlewareVerb } from "./types"
+import type { MiddlewareVerb } from "./types"
 
 export class RoutesFinder<
   T extends { matcher: string; methods: MiddlewareVerb | MiddlewareVerb[] }
 > {
-  #routes: (Omit<T, "methods"> & {
+  /**
+   * Cache of existing matches to avoid regex tests on every
+   * single HTTP request
+   */
+  #existingMatches: Map<
+    string,
+    | (T & {
+        matchRegex: RegExp
+      })
+    | null
+  > = new Map()
+
+  /**
+   * Collection of registered routes
+   */
+  #routes: (T & {
     matchRegex: RegExp
-    methods: string[]
   })[] = []
+
   constructor(routes?: T[]) {
     if (routes) {
       routes.forEach((route) => this.add(route))
     }
   }
 
+  /**
+   * Register route for lookup
+   */
   add(route: T) {
     this.#routes.push({
       ...route,
@@ -22,12 +40,24 @@ export class RoutesFinder<
     })
   }
 
-  find(url: string, method: string) {
-    return this.#routes.find((route) => {
-      if (Array.isArray(route.methods)) {
-        return route.methods.includes(method) && route.matchRegex.test(url)
-      }
-      return route.methods === method && route.matchRegex.test(url)
-    })
+  /**
+   * Get the matching route for a given HTTP method and URL
+   */
+  find(url: string, method: MiddlewareVerb) {
+    const key = `${method}:${url}`
+    if (this.#existingMatches.has(key)) {
+      return this.#existingMatches.get(key)
+    }
+
+    const result =
+      this.#routes.find((route) => {
+        if (Array.isArray(route.methods)) {
+          return route.methods.includes(method) && route.matchRegex.test(url)
+        }
+        return route.methods === method && route.matchRegex.test(url)
+      }) ?? null
+
+    this.#existingMatches.set(key, result)
+    return result
   }
 }

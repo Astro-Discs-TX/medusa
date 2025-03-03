@@ -5,6 +5,7 @@ import type { Express, RequestHandler, ErrorRequestHandler } from "express"
 import type {
   MedusaRequest,
   MedusaResponse,
+  MiddlewareVerb,
   RouteDescriptor,
   MiddlewareFunction,
   MedusaNextFunction,
@@ -153,7 +154,10 @@ export class ApiLoader {
 
     this.#app.use(route, (req, res, next) => {
       const path = `${route}${req.path}`
-      const matchingRoute = routesFinder.find(path, req.method)
+      const matchingRoute = routesFinder.find(
+        path,
+        req.method as MiddlewareVerb
+      )
       if (matchingRoute && matchingRoute[toggleKey] === true) {
         return cors(req, res, next)
       }
@@ -179,7 +183,10 @@ export class ApiLoader {
 
     this.#app.use(route, (req, res, next) => {
       const path = `${route}${req.path}`
-      const matchingRoute = routesFinder.find(path, req.method)
+      const matchingRoute = routesFinder.find(
+        path,
+        req.method as MiddlewareVerb
+      )
       if (matchingRoute && matchingRoute.optedOutOfAuth) {
         logger.debug(`Skipping auth ${req.method}:${path}`)
         return next()

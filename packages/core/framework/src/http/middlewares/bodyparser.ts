@@ -5,6 +5,7 @@ import { json, RequestHandler, text, urlencoded } from "express"
 import type {
   MedusaRequest,
   MedusaResponse,
+  MiddlewareVerb,
   ParserConfigArgs,
   BodyParserConfigRoute,
 } from "../types"
@@ -52,7 +53,10 @@ export function createBodyParserMiddlewaresStack(
 ) {
   return ["json", "text", "urlencoded"].map((parser) => {
     return ((req, res, next) => {
-      const matchingRoute = routesFinder.find(req.path, req.method)
+      const matchingRoute = routesFinder.find(
+        req.path,
+        req.method as MiddlewareVerb
+      )
       const parserMiddleware = parsers[parser]
 
       if (!matchingRoute) {
