@@ -87,6 +87,19 @@ type RoutesBranch<T extends Route> = {
  */
 export class RoutesSorter<T extends Route> {
   /**
+   * The order in which the routes will be sorted. This
+   * can be overridden at the time of call the sort
+   * method.
+   */
+  #orderBy: [
+    keyof RoutesBranch<T>,
+    keyof RoutesBranch<T>,
+    keyof RoutesBranch<T>,
+    keyof RoutesBranch<T>,
+    keyof RoutesBranch<T>
+  ] = ["global", "wildcard", "regex", "static", "params"]
+
+  /**
    * Input routes
    */
   #routesToProcess: T[]
@@ -238,14 +251,15 @@ export class RoutesSorter<T extends Route> {
     /**
      * Concatenating routes as per their priority.
      */
-    const routes: T[] = branchRoutes.global
-      .concat(branchRoutes.wildcard)
-      .concat(branchRoutes.regex)
-      .concat(branchRoutes.static)
-      .concat(branchRoutes.params)
-    return routes
+    return this.#orderBy.reduce<T[]>((result, branch) => {
+      result = result.concat(branchRoutes[branch])
+      return result
+    }, [])
   }
 
+  /**
+   * Returns the intermediate representation of routes as a tree.
+   */
   getTree() {
     return this.#routesTree
   }
@@ -253,7 +267,18 @@ export class RoutesSorter<T extends Route> {
   /**
    * Sort the input routes
    */
-  sort() {
+  sort(
+    orderBy?: [
+      keyof RoutesBranch<T>,
+      keyof RoutesBranch<T>,
+      keyof RoutesBranch<T>,
+      keyof RoutesBranch<T>,
+      keyof RoutesBranch<T>
+    ]
+  ) {
+    if (orderBy) {
+      this.#orderBy = orderBy
+    }
     this.#routesToProcess.map((route) => this.#processRoute(route))
     return this.#sortBranch(this.#routesTree)
   }

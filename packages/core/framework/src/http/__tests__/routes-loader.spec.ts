@@ -4,7 +4,7 @@ import { RoutesLoader } from "../routes-loader"
 describe("Routes loader", () => {
   it("should load routes from the filesystem", async () => {
     const BASE_DIR = resolve(__dirname, "../__fixtures__/routers")
-    const loader = new RoutesLoader({})
+    const loader = new RoutesLoader()
     await loader.scanDir(BASE_DIR)
 
     expect(loader.getRoutes()).toMatchInlineSnapshot(`
@@ -201,7 +201,7 @@ describe("Routes loader", () => {
       __dirname,
       "../__fixtures__/routers-with-duplicates"
     )
-    const loader = new RoutesLoader({})
+    const loader = new RoutesLoader()
     await loader.scanDir(BASE_DIR)
     await loader.scanDir(BASE_DIR_2)
 
@@ -411,7 +411,7 @@ describe("Routes loader", () => {
       "../__fixtures__/routers-duplicate-parameter"
     )
 
-    const loader = new RoutesLoader({})
+    const loader = new RoutesLoader()
     await expect(() => loader.scanDir(BASE_DIR)).rejects.toThrow(
       "Duplicate parameters found in route /admin/customers/[id]/orders/[id]/route.ts (id). Make sure that all parameters are unique."
     )

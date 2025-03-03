@@ -4,7 +4,7 @@ import { MiddlewareFileLoader } from "../middleware-file-loader"
 describe("Middleware file loader", () => {
   it("should load routes from the filesystem", async () => {
     const BASE_DIR = resolve(__dirname, "../__fixtures__/routers-middleware")
-    const loader = new MiddlewareFileLoader({})
+    const loader = new MiddlewareFileLoader()
     await loader.scanDir(BASE_DIR)
 
     expect(loader.getBodyParserConfigRoutes()).toMatchInlineSnapshot(`
@@ -14,7 +14,15 @@ describe("Middleware file loader", () => {
             "preserveRawBody": true,
           },
           "matcher": "/webhooks",
-          "methods": undefined,
+          "methods": [
+            "GET",
+            "POST",
+            "PUT",
+            "PATCH",
+            "DELETE",
+            "OPTIONS",
+            "HEAD",
+          ],
         },
         {
           "config": false,

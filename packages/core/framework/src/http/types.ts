@@ -34,20 +34,6 @@ export type AsyncRouteHandler = (
 
 export type RouteHandler = SyncRouteHandler | AsyncRouteHandler
 
-export type RouteImplementation = {
-  method?: RouteVerb
-  handler: RouteHandler
-}
-
-export type RouteConfig = {
-  optedOutOfAuth?: boolean
-  routeType?: "admin" | "store" | "auth"
-  shouldAppendAdminCors?: boolean
-  shouldAppendStoreCors?: boolean
-  shouldAppendAuthCors?: boolean
-  routes?: RouteImplementation[]
-}
-
 export type MiddlewareFunction =
   | MedusaRequestHandler
   | ((...args: any[]) => any)
@@ -78,41 +64,29 @@ export type MiddlewaresConfig = {
   routes?: MiddlewareRoute[]
 }
 
-export type RouteDescriptor = {
-  absolutePath: string
-  relativePath: string
-  route: string
-  priority: number
-  config?: RouteConfig
-}
-
 /**
  * Route descriptor refers represents a route either scanned
  * from the filesystem or registered manually. It does not
  * represent a middleware
  */
-export type ScannedRouteDescriptor = {
+export type RouteDescriptor = {
   matcher: string
   methods: RouteVerb
   handler: RouteHandler
   optedOutOfAuth: boolean
   isRoute: true
   routeType?: "admin" | "store" | "auth"
+  absolutePath?: string
+  relativePath?: string
   shouldAppendAdminCors: boolean
   shouldAppendStoreCors: boolean
   shouldAppendAuthCors: boolean
 }
 
 /**
- * FileSystem route description represents a route scanned from
- * the filesystem
+ * Represents a middleware
  */
-export type FileSystemRouteDescriptor = ScannedRouteDescriptor & {
-  absolutePath: string
-  relativePath: string
-}
-
-export type ScannedMiddlewareDescriptor = {
+export type MiddlewareDescriptor = {
   matcher: string
   methods?: MiddlewareVerb | MiddlewareVerb[]
   handler: MiddlewareFunction
@@ -120,8 +94,8 @@ export type ScannedMiddlewareDescriptor = {
 
 export type BodyParserConfigRoute = {
   matcher: string
-  methods?: MiddlewareVerb | MiddlewareVerb[]
-  config?: ParserConfig
+  methods: MiddlewareVerb | MiddlewareVerb[]
+  config: ParserConfig
 }
 
 export type GlobalMiddlewareDescriptor = {

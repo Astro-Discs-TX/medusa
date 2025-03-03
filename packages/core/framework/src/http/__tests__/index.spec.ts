@@ -127,7 +127,7 @@ describe("RoutesLoader", function () {
       expect(customersCreateMiddlewareMock).not.toHaveBeenCalled()
     })
 
-    it.skip("should apply raw middleware on POST `/webhooks/payment` route", async function () {
+    it("should apply raw middleware on POST `/webhooks/payment` route", async function () {
       const res = await request("POST", "/webhooks/payment", {
         payload: { test: "test" },
       })
