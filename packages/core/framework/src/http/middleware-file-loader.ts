@@ -107,8 +107,10 @@ export class MiddlewareFileLoader {
     if (errorHandler) {
       this.#errorHandler = errorHandler
     }
-    this.#middleware = result.middleware
-    this.#bodyParserConfigRoutes = result.bodyParserConfigRoutes
+    this.#middleware = this.#middleware.concat(result.middleware)
+    this.#bodyParserConfigRoutes = this.#bodyParserConfigRoutes.concat(
+      result.bodyParserConfigRoutes
+    )
   }
 
   /**
