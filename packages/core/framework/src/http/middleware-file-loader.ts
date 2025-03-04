@@ -45,7 +45,7 @@ export class MiddlewareFileLoader {
 
     const middlewareConfig = middlewareExports.default
     if (!middlewareConfig) {
-      logger.debug(
+      logger.warn(
         `No middleware configuration found in ${absolutePath}. Skipping middleware configuration.`
       )
       return
@@ -53,7 +53,7 @@ export class MiddlewareFileLoader {
 
     const routes = middlewareConfig.routes as MiddlewaresConfig["routes"]
     if (!routes || !Array.isArray(routes)) {
-      logger.debug(
+      logger.warn(
         `Invalid default export found in ${absolutePath}. Make sure to use "defineMiddlewares" function and export its output.`
       )
       return
@@ -77,9 +77,15 @@ export class MiddlewareFileLoader {
         const matcher = String(route.matcher)
 
         if ("bodyParser" in route && route.bodyParser !== undefined) {
+          const methods = route.method || [...HTTP_METHODS]
+
+          logger.debug(
+            `using custom bodyparser config on matcher ${methods}:${route.matcher}`
+          )
+
           result.bodyParserConfigRoutes.push({
             matcher: matcher,
-            methods: route.method || [...HTTP_METHODS],
+            methods,
             config: route.bodyParser,
           })
         }
