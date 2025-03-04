@@ -26,7 +26,7 @@ import { refreshCartShippingMethodsWorkflow } from "./refresh-cart-shipping-meth
 import { refreshPaymentCollectionForCartWorkflow } from "./refresh-payment-collection"
 import { updateCartPromotionsWorkflow } from "./update-cart-promotions"
 import { updateTaxLinesWorkflow } from "./update-tax-lines"
-import { upsertTaxLinesWorkflow } from "./upsert-tax-lines copy"
+import { upsertTaxLinesWorkflow } from "./upsert-tax-lines"
 
 /**
  * The details of the cart to refresh.
