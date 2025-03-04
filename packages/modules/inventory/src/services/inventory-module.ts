@@ -663,7 +663,7 @@ export default class InventoryModuleService
 
     context.messageAggregator?.saveRawMessageData(
       result.map((reservationItem) => ({
-        eventName: InventoryEvents.INVENTORY_LEVEL_UPDATED,
+        eventName: InventoryEvents.RESERVATION_ITEM_UPDATED,
         source: this.constructor.name,
         action: CommonEvents.UPDATED,
         object: "reservation-item",
