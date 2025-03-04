@@ -39,13 +39,10 @@ export default async ({ app, container, plugins }: Options) => {
    * "/products/:id" route.
    */
   sourcePaths.push(
+    join(__dirname, "../api"),
     ...plugins.map((pluginDetails) => {
       return join(pluginDetails.resolve, "api")
-    }),
-    /**
-     * Register the Medusa CORE API routes using the file based routing.
-     */
-    join(__dirname, "../api")
+    })
   )
 
   const {

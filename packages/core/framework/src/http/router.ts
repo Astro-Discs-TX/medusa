@@ -1,6 +1,6 @@
 import logger from "@medusajs/cli/dist/reporter"
 import cors, { CorsOptions } from "cors"
-import { parseCorsOrigins, promiseAll } from "@medusajs/utils"
+import { parseCorsOrigins } from "@medusajs/utils"
 import type { Express, RequestHandler, ErrorRequestHandler } from "express"
 import type {
   MedusaRequest,
@@ -79,17 +79,10 @@ export class ApiLoader {
     const routesLoader = new RoutesLoader()
     const middlewareLoader = new MiddlewareFileLoader()
 
-    await promiseAll(
-      this.#sourceDirs.map(async (sourcePath) =>
-        routesLoader.scanDir(sourcePath)
-      )
-    )
-
-    await promiseAll(
-      this.#sourceDirs.map(async (sourcePath) =>
-        middlewareLoader.scanDir(sourcePath)
-      )
-    )
+    for (let dir of this.#sourceDirs) {
+      await routesLoader.scanDir(dir)
+      await middlewareLoader.scanDir(dir)
+    }
 
     const routes = routesLoader.getRoutes()
     return {
