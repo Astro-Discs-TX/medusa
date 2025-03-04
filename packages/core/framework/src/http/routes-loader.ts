@@ -140,7 +140,7 @@ export class RoutesLoader {
         return {
           isRoute: true,
           matcher: routePath,
-          methods: key as RouteVerb,
+          method: key as RouteVerb,
           handler: routeExports[key],
           optedOutOfAuth: !shouldAuthenticate,
           shouldAppendAdminCors: shouldApplyCors && routeType === "admin",
@@ -202,7 +202,7 @@ export class RoutesLoader {
   registerRoute(route: RouteDescriptor) {
     this.#routes[route.matcher] = this.#routes[route.matcher] ?? {}
     const trackedRoute = this.#routes[route.matcher]
-    trackedRoute[route.methods] = route
+    trackedRoute[route.method] = route
   }
 
   /**

@@ -77,7 +77,7 @@ export class MiddlewareFileLoader {
         const matcher = String(route.matcher)
 
         if ("bodyParser" in route && route.bodyParser !== undefined) {
-          const methods = route.method || [...HTTP_METHODS]
+          const methods = route.methods || [...HTTP_METHODS]
 
           logger.debug(
             `using custom bodyparser config on matcher ${methods}:${route.matcher}`
@@ -95,7 +95,7 @@ export class MiddlewareFileLoader {
             result.middleware.push({
               handler: middleware,
               matcher: matcher,
-              methods: route.method,
+              methods: route.methods,
             })
           })
         }

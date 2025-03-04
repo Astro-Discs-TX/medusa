@@ -102,15 +102,15 @@ export class ApiLoader {
     route: MiddlewareDescriptor | RouteDescriptor | RouteDescriptor
   ) {
     if ("isRoute" in route) {
-      logger.debug(`registering route ${route.methods} ${route.matcher}`)
+      logger.debug(`registering route ${route.method} ${route.matcher}`)
       const handler = ApiLoader.traceRoute
         ? ApiLoader.traceRoute(wrapHandler(route.handler), {
             route: route.matcher,
-            method: route.methods,
+            method: route.method,
           })
         : wrapHandler(route.handler)
 
-      this.#app[route.methods.toLowerCase()](route.matcher, handler)
+      this.#app[route.method.toLowerCase()](route.matcher, handler)
       return
     }
 

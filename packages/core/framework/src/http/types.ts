@@ -53,7 +53,11 @@ export type ParserConfigArgs = {
 export type ParserConfig = false | ParserConfigArgs
 
 export type MiddlewareRoute = {
+  /**
+   * @deprecated. Instead use {@link MiddlewareRoute.methods}
+   */
   method?: MiddlewareVerb | MiddlewareVerb[]
+  methods?: MiddlewareVerb[]
   matcher: string | RegExp
   bodyParser?: ParserConfig
   middlewares?: MiddlewareFunction[]
@@ -71,7 +75,7 @@ export type MiddlewaresConfig = {
  */
 export type RouteDescriptor = {
   matcher: string
-  methods: RouteVerb
+  method: RouteVerb
   handler: RouteHandler
   optedOutOfAuth: boolean
   isRoute: true

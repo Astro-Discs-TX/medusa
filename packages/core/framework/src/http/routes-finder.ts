@@ -1,8 +1,10 @@
 import pathToRegexp from "path-to-regexp"
-import type { MiddlewareVerb } from "./types"
+import type { MiddlewareVerb, RouteVerb } from "./types"
 
 export class RoutesFinder<
-  T extends { matcher: string; methods: MiddlewareVerb | MiddlewareVerb[] }
+  T extends
+    | { matcher: string; methods: MiddlewareVerb | MiddlewareVerb[] }
+    | { matcher: string; method: RouteVerb }
 > {
   /**
    * Cache of existing matches to avoid regex tests on every
@@ -35,7 +37,6 @@ export class RoutesFinder<
   add(route: T) {
     this.#routes.push({
       ...route,
-      methods: Array.isArray(route.methods) ? route.methods : [route.methods],
       matchRegex: pathToRegexp(route.matcher),
     })
   }
@@ -51,10 +52,10 @@ export class RoutesFinder<
 
     const result =
       this.#routes.find((route) => {
-        if (Array.isArray(route.methods)) {
+        if ("methods" in route) {
           return route.methods.includes(method) && route.matchRegex.test(url)
         }
-        return route.methods === method && route.matchRegex.test(url)
+        return route.method === method && route.matchRegex.test(url)
       }) ?? null
 
     this.#existingMatches.set(key, result)

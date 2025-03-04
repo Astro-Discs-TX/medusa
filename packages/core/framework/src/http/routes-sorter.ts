@@ -1,4 +1,4 @@
-import { MiddlewareVerb } from "./types"
+import { MiddlewareVerb, RouteVerb } from "./types"
 
 /**
  * Route represents both the middleware/routes defined via the
@@ -15,6 +15,11 @@ type Route = {
    * Function to handle the request
    */
   handler?: any
+
+  /**
+   * The HTTP method specified as a single value
+   */
+  method?: RouteVerb
 
   /**
    * The HTTP methods this route is supposed to handle.
@@ -176,7 +181,7 @@ export class RoutesSorter<T extends Route> {
     segments.forEach((segment, index) => {
       let bucket: keyof RoutesBranch<T> = "static"
 
-      if (!route.methods) {
+      if (!route.methods && !route.method) {
         bucket = "global"
       } else if (segment.startsWith("*")) {
         bucket = "wildcard"
