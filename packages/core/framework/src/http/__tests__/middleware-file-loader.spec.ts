@@ -27,7 +27,9 @@ describe("Middleware file loader", () => {
         {
           "config": false,
           "matcher": "/webhooks/*",
-          "methods": "POST",
+          "methods": [
+            "POST",
+          ],
         },
       ]
     `)
@@ -41,7 +43,9 @@ describe("Middleware file loader", () => {
         {
           "handler": [Function],
           "matcher": "/customers",
-          "methods": "POST",
+          "methods": [
+            "POST",
+          ],
         },
         {
           "handler": [Function],
@@ -51,7 +55,9 @@ describe("Middleware file loader", () => {
         {
           "handler": [Function],
           "matcher": "/webhooks/*",
-          "methods": "POST",
+          "methods": [
+            "POST",
+          ],
         },
       ]
     `)
