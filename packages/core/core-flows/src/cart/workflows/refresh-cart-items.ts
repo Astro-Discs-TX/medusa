@@ -55,6 +55,13 @@ export type RefreshCartItemsWorkflowInput = {
    * The shipping methods to refresh.
    */
   shipping_methods?: any[]
+
+  /**
+   * Whether to force re-calculating tax amounts, which
+   * may include sending requests to a third-part tax provider, depending
+   * on the configurations of the cart's tax region.
+   */
+  force_tax_calculation?: boolean
 }
 
 export const refreshCartItemsWorkflowId = "refresh-cart-items"
@@ -195,6 +202,7 @@ export const refreshCartItemsWorkflow = createWorkflow(
               cart: refetchedCart,
               items: input.items ?? [],
               shipping_methods: input.shipping_methods ?? [],
+              force_tax_calculation: input.force_tax_calculation,
             }
           }
         ),

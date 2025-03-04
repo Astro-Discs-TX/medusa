@@ -85,6 +85,15 @@ export type UpsertTaxLinesWorkflowInput = {
    * shipping methods.
    */
   shipping_methods: CartShippingMethodDTO[]
+
+  /**
+   * Whether to force re-calculating tax amounts, which
+   * may include sending requests to a third-part tax provider, depending
+   * on the configurations of the cart's tax region.
+   *
+   * @defaultValue false
+   */
+  force_tax_calculation?: boolean
 }
 
 export const upsertTaxLinesWorkflowId = "upsert-tax-lines"
@@ -132,7 +141,7 @@ export const upsertTaxLinesWorkflow = createWorkflow(
         orderOrCart: data.cart,
         items: data.input.items ?? [],
         shipping_methods: data.input.shipping_methods ?? [],
-        force_tax_calculation: true,
+        force_tax_calculation: data.input.force_tax_calculation,
       }))
     )
 
