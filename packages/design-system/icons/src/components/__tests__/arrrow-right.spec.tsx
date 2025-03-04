@@ -1,11 +1,11 @@
 import * as React from "react"
 import { cleanup, render, screen } from "@testing-library/react"
 
-import arrowRight from "../arrow-right"
+import ArrowRight from "../arrow-right"
 
-describe("arrowRight", () => {
+describe("ArrowRight", () => {
   it("should render the icon without errors", async () => {
-    render(<arrowRight data-testid="icon" />)
+    render(<ArrowRight data-testid="icon" />)
 
 
     const svgElement = screen.getByTestId("icon")
