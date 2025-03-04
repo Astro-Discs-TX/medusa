@@ -32,9 +32,9 @@ export class ApiLoader {
    * instrumentation.
    */
   static traceRoute?: (
-    handler: RouteHandler,
+    handler: RouteHandler | MiddlewareFunction | RequestHandler,
     route: { route: string; method: string }
-  ) => RouteHandler
+  ) => RouteHandler | MiddlewareFunction | RequestHandler
 
   /**
    * Wrap the original middleware handler implementation for

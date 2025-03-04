@@ -67,27 +67,35 @@ export function instrumentHttpLayer() {
    * OpenTelemetry
    */
   ApiLoader.traceRoute = (handler) => {
-    return async (req, res) => {
+    return async (req, res, next) => {
       if (shouldExcludeResource(req.originalUrl)) {
-        return await handler(req, res)
+        return await handler(req, res, next)
       }
 
       const label = req.route?.path ?? `${req.method} ${req.originalUrl}`
       const traceName = `route handler: ${label}`
 
       await HTTPTracer.trace(traceName, async (span) => {
-        try {
-          await handler(req, res)
-        } catch (error) {
-          span.setStatus({
-            code: SpanStatusCode.ERROR,
-            message: error.message || "Failed",
-          })
-          throw error
-        } finally {
-          span.end()
-        }
+        return new Promise<void>((resolve, reject) => {
+          const _next = (error?: any) => {
+            if (error) {
+              span.setStatus({
+                code: SpanStatusCode.ERROR,
+                message: error.message || "Failed",
+              })
+              span.end()
+              reject(error)
+            } else {
+              span.end()
+              resolve()
+            }
+          }
+
+          handler(req, res, _next)
+        })
       })
+        .catch(next)
+        .then(next)
     }
   }
 
