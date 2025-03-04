@@ -182,7 +182,10 @@ export const refreshCartItemsWorkflow = createWorkflow(
     })
 
     when({ input }, ({ input }) => {
-      return !input.force_refresh && !!input.items
+      return (
+        !input.force_refresh &&
+        (!!input.items?.length || !!input.shipping_methods?.length)
+      )
     }).then(() => {
       upsertTaxLinesWorkflow.runAsStep({
         input: {

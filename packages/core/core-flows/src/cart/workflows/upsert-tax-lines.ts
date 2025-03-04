@@ -11,6 +11,7 @@ import {
 import { useRemoteQueryStep } from "../../common"
 import { getItemTaxLinesStep } from "../../tax/steps/get-item-tax-lines"
 import { setTaxLinesForItemsStep } from "../steps"
+import { upsertTaxLinesForItemsStep } from "../steps/upsert-tax-lines-for-items"
 
 const cartFields = [
   "id",
@@ -136,7 +137,7 @@ export const upsertTaxLinesWorkflow = createWorkflow(
       }))
     )
 
-    setTaxLinesForItemsStep({
+    upsertTaxLinesForItemsStep({
       cart,
       item_tax_lines: taxLineItems.lineItemTaxLines,
       shipping_tax_lines: taxLineItems.shippingMethodsTaxLines,
