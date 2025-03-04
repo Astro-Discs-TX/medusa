@@ -389,11 +389,11 @@ paths:
       operationId: PostActor_typeAuth_providerUpdate
       summary: Reset a Customer's Password
       x-sidebar-summary: Reset Password
-      description: Reset a customer's password using a reset-password token generated with the [Generate Reset Password Token API route](https://docs.medusajs.com/api/store#auth_postactor_typeauth_providerresetpassword).
+      description: Reset a customer's password using a reset-password token generated with the [Generate Reset Password Token API route](https://docs.medusajs.com/api/store#auth_postactor_typeauth_providerresetpassword). You pass the token as a bearer token in the request's Authorization header.
       externalDocs:
         url: https://docs.medusajs.com/v2/resources/storefront-development/customers/reset-password#2-reset-password-page
         description: 'Storefront development: How to create the reset password page.'
-      x-authenticated: false
+      x-authenticated: true
       parameters:
         - name: auth_provider
           in: path
@@ -402,12 +402,6 @@ paths:
           schema:
             type: string
             example: emailpass
-        - name: token
-          in: query
-          description: The reset password token received using the Get Reset Password API route.
-          required: true
-          schema:
-            type: string
       requestBody:
         content:
           application/json:
@@ -422,12 +416,15 @@ paths:
         - lang: Shell
           label: cURL
           source: |-
-            curl -X POST '{backend_url}/auth/customer/emailpass/update?token=123' \
+            curl -X POST '{backend_url}/auth/customer/emailpass/update' \
             -H 'Content-Type: application/json' \
+            -H 'Authorization: Bearer {token}' \
             --data-raw '{
               "email": "customer@gmail.com",
               "password": "supersecret"
             }'
+      security:
+        - reset_password: []
       tags:
         - Auth
       responses:
@@ -17523,7 +17520,7 @@ components:
           $ref: '#/components/schemas/AdminShippingOption'
     AdminShippingOptionRule:
       type: object
-      description: The shipping option rule's details.
+      description: The rule's rules.
       x-schemaName: AdminShippingOptionRule
       required:
         - id
@@ -17538,12 +17535,11 @@ components:
         id:
           type: string
           title: id
-          description: The shipping option rule's ID.
+          description: The rule's ID.
         attribute:
           type: string
           title: attribute
-          description: The shipping option rule's attribute.
-          example: is_return
+          description: The rule's attribute.
         operator:
           type: string
           description: The rule's operator.
@@ -17557,27 +17553,35 @@ components:
             - gte
             - nin
         value:
-          type: string
-          title: value
+          oneOf:
+            - type: string
+              title: value
+              description: The rule's value.
+            - type: array
+              description: The rule's value.
+              items:
+                type: string
+                title: value
+                description: The value's details.
         shipping_option_id:
           type: string
           title: shipping_option_id
-          description: The ID of the shipping option this rule is for.
+          description: The rule's shipping option id.
         created_at:
           type: string
           format: date-time
           title: created_at
-          description: The date the shipping option rule was created.
+          description: The rule's created at.
         updated_at:
           type: string
           format: date-time
           title: updated_at
-          description: The date the shipping option rule was updated.
+          description: The rule's updated at.
         deleted_at:
           type: string
           format: date-time
           title: deleted_at
-          description: The date the shipping option rule was deleted.
+          description: The rule's deleted at.
     AdminShippingOptionType:
       type: object
       description: The shipping option's details.
@@ -19595,6 +19599,8 @@ components:
         - id
         - calculated_amount
         - original_amount
+        - original_amount_with_tax
+        - original_amount_without_tax
         - currency_code
       properties:
         id:
@@ -19644,6 +19650,14 @@ components:
         original_price:
           type: object
           description: The original price's details.
+        original_amount_with_tax:
+          type: number
+          title: original_amount_with_tax
+          description: The calculated price's original amount with tax.
+        original_amount_without_tax:
+          type: number
+          title: original_amount_without_tax
+          description: The calculated price's original amount without tax.
     BaseCapture:
       type: object
       description: The details of a captured payment.
@@ -23938,6 +23952,7 @@ components:
         - id
         - order_id
         - order
+        - amount
         - reference
         - reference_id
         - metadata
@@ -23975,6 +23990,10 @@ components:
           format: date-time
           title: updated_at
           description: The date the credit line was updated.
+        amount:
+          type: number
+          title: amount
+          description: The credit line's amount.
     OrderExchange:
       type: object
       description: The order change's exchange.
@@ -24527,6 +24546,10 @@ components:
           format: date-time
           title: updated_at
           description: The date the item was updated.
+        damaged_quantity:
+          type: number
+          title: damaged_quantity
+          description: The item's damaged quantity.
     OrderShippingMethod:
       type: object
       description: The shipping method's details.
@@ -25027,6 +25050,8 @@ components:
         - id
         - calculated_amount
         - original_amount
+        - original_amount_with_tax
+        - original_amount_without_tax
         - currency_code
       properties:
         id:
@@ -25133,6 +25158,14 @@ components:
               type: number
               title: max_quantity
               description: The maximum quantity required in the cart for the price to apply.
+        original_amount_with_tax:
+          type: number
+          title: original_amount_with_tax
+          description: The calculated price's original amount with tax.
+        original_amount_without_tax:
+          type: number
+          title: original_amount_without_tax
+          description: The calculated price's original amount without tax.
     StoreCart:
       type: object
       description: The cart's details.
@@ -34445,3 +34478,8 @@ components:
       x-displayName: Cookie Session ID
       in: cookie
       name: connect.sid
+    reset_password:
+      type: http
+      x-displayName: Reset Password Token
+      scheme: bearer
+      x-is-auth: false
