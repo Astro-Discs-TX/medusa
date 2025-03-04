@@ -820,8 +820,7 @@ export default class CartModuleService
     )
 
     return await this.baseRepository_.serialize<CartTypes.LineItemTaxLineDTO[]>(
-      result,
-      {}
+      result
     )
   }
 

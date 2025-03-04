@@ -144,10 +144,6 @@ export const addToCartWorkflow = createWorkflow(
       items: lineItems,
     })
 
-    const allItems = transform({ itemsToCreate, itemsToUpdate }, (data) => {
-      return data.itemsToCreate.concat(data.itemsToUpdate as any[])
-    })
-
     const itemsToConfirmInventory = transform(
       { itemsToUpdate, itemsToCreate },
       (data) => {
@@ -177,7 +173,7 @@ export const addToCartWorkflow = createWorkflow(
       },
     })
 
-    parallelize(
+    const [createdLineItems, updatedLineItems] = parallelize(
       createLineItemsStep({
         id: cart.id,
         items: itemsToCreate,
@@ -186,6 +182,13 @@ export const addToCartWorkflow = createWorkflow(
         id: cart.id,
         items: itemsToUpdate,
       })
+    )
+
+    const allItems = transform(
+      { createdLineItems, updatedLineItems },
+      ({ createdLineItems = [], updatedLineItems = [] }) => {
+        return createdLineItems.concat(updatedLineItems)
+      }
     )
 
     refreshCartItemsWorkflow.runAsStep({

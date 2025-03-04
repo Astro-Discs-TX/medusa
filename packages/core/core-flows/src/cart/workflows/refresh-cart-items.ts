@@ -169,13 +169,13 @@ export const refreshCartItemsWorkflow = createWorkflow(
       }
     )
 
+    refreshCartShippingMethodsWorkflow.runAsStep({
+      input: refreshCartInput,
+    })
+
     when({ input }, ({ input }) => {
       return !!input.force_refresh
     }).then(() => {
-      refreshCartShippingMethodsWorkflow.runAsStep({
-        input: refreshCartInput,
-      })
-
       updateTaxLinesWorkflow.runAsStep({
         input: refreshCartInput,
       })
@@ -188,11 +188,16 @@ export const refreshCartItemsWorkflow = createWorkflow(
       )
     }).then(() => {
       upsertTaxLinesWorkflow.runAsStep({
-        input: {
-          cart: refreshCartInput,
-          items: input.items ?? [],
-          shipping_methods: input.shipping_methods ?? [],
-        },
+        input: transform(
+          { refetchedCart, input },
+          ({ refetchedCart, input }) => {
+            return {
+              cart: refetchedCart,
+              items: input.items ?? [],
+              shipping_methods: input.shipping_methods ?? [],
+            }
+          }
+        ),
       })
     })
 

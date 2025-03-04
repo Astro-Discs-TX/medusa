@@ -130,8 +130,8 @@ export const upsertTaxLinesWorkflow = createWorkflow(
     const taxLineItems = getItemTaxLinesStep(
       transform({ input, cart }, (data) => ({
         orderOrCart: data.cart,
-        items: input.items ?? [],
-        shipping_methods: input.shipping_methods ?? [],
+        items: data.input.items ?? [],
+        shipping_methods: data.input.shipping_methods ?? [],
         force_tax_calculation: true,
       }))
     )

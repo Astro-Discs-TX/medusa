@@ -4,6 +4,8 @@ import {
   CreateShippingMethodTaxLineDTO,
   ICartModuleService,
   ItemTaxLineDTO,
+  LineItemTaxLineDTO,
+  ShippingMethodTaxLineDTO,
   ShippingTaxLineDTO,
 } from "@medusajs/framework/types"
 import { Modules, promiseAll } from "@medusajs/framework/utils"
@@ -81,13 +83,22 @@ export const upsertTaxLinesForItemsStep = createStep(
           : [],
       ])
 
-    const itemsTaxLinesData = normalizeItemTaxLinesForCart(item_tax_lines)
-    const shippingTaxLinesData =
-      normalizeShippingTaxLinesForCart(shipping_tax_lines)
+    const itemsTaxLinesData = normalizeItemTaxLinesForCart(
+      item_tax_lines,
+      existingLineItemTaxLines
+    )
+    const shippingTaxLinesData = normalizeShippingTaxLinesForCart(
+      shipping_tax_lines,
+      existingShippingMethodTaxLines
+    )
 
     await promiseAll([
-      cartService.upsertLineItemTaxLines(itemsTaxLinesData),
-      cartService.upsertShippingMethodTaxLines(shippingTaxLinesData),
+      itemsTaxLinesData.length
+        ? cartService.upsertLineItemTaxLines(itemsTaxLinesData)
+        : [],
+      shippingTaxLinesData.length
+        ? cartService.upsertShippingMethodTaxLines(shippingTaxLinesData)
+        : [],
     ])
 
     return new StepResponse(null, {
@@ -133,10 +144,11 @@ export const upsertTaxLinesForItemsStep = createStep(
 )
 
 function normalizeItemTaxLinesForCart(
-  taxLines: ItemTaxLineDTO[]
+  taxLines: ItemTaxLineDTO[],
+  existingTaxLines: LineItemTaxLineDTO[]
 ): CreateLineItemTaxLineDTO[] {
   return taxLines.map((taxLine: ItemTaxLineDTO & { id?: string }) => ({
-    id: taxLine?.id,
+    id: existingTaxLines.find((t) => t.item_id === taxLine.line_item_id)?.id,
     description: taxLine.name,
     tax_rate_id: taxLine.rate_id,
     code: taxLine.code!,
@@ -147,10 +159,13 @@ function normalizeItemTaxLinesForCart(
 }
 
 function normalizeShippingTaxLinesForCart(
-  taxLines: ShippingTaxLineDTO[]
+  taxLines: ShippingTaxLineDTO[],
+  existingTaxLines: ShippingMethodTaxLineDTO[]
 ): CreateShippingMethodTaxLineDTO[] {
   return taxLines.map((taxLine: ShippingTaxLineDTO & { id?: string }) => ({
-    id: taxLine?.id,
+    id: existingTaxLines.find(
+      (t) => t.shipping_method_id === taxLine.shipping_line_id
+    )?.id,
     description: taxLine.name,
     tax_rate_id: taxLine.rate_id,
     code: taxLine.code!,
