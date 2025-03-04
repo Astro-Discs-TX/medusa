@@ -1,12 +1,13 @@
 import { memoize } from "lodash"
 import logger from "@medusajs/cli/dist/reporter"
-import { json, RequestHandler, text, urlencoded } from "express"
+import { json, NextFunction, RequestHandler, text, urlencoded } from "express"
 
 import type {
   MedusaRequest,
   MedusaResponse,
   MiddlewareVerb,
   ParserConfigArgs,
+  MiddlewareFunction,
   BodyParserConfigRoute,
 } from "../types"
 import type { RoutesFinder } from "../routes-finder"
@@ -46,11 +47,20 @@ const parsers = {
  * instances are cached for re-use.
  */
 export function createBodyParserMiddlewaresStack(
-  routesFinder: RoutesFinder<BodyParserConfigRoute>
+  route: string,
+  routesFinder: RoutesFinder<BodyParserConfigRoute>,
+  tracer?: (
+    handler: RequestHandler | MiddlewareFunction,
+    route: { route: string; method?: string }
+  ) => RequestHandler | MiddlewareFunction
 ) {
   return (["json", "text", "urlencoded"] as (keyof typeof parsers)[]).map(
     (parser) => {
-      return ((req, res, next) => {
+      function bodyParser(
+        req: MedusaRequest,
+        res: MedusaResponse,
+        next: NextFunction
+      ) {
         const matchingRoute = routesFinder.find(
           req.path,
           req.method as MiddlewareVerb
@@ -72,7 +82,15 @@ export function createBodyParserMiddlewaresStack(
           `using custom ${parser} bodyparser config ${req.method}${req.path}`
         )
         return parserMiddleware(matchingRoute.config)(req, res, next)
-      }) as RequestHandler
+      }
+
+      Object.defineProperty(bodyParser, "name", {
+        value: `${parser}BodyParser`,
+      })
+
+      return (
+        tracer ? tracer(bodyParser, { route }) : bodyParser
+      ) as RequestHandler
     }
   )
 }

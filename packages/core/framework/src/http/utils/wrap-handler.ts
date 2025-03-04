@@ -1,4 +1,3 @@
-import { RequestHandler } from "express"
 import type {
   MedusaNextFunction,
   MedusaRequest,
@@ -7,7 +6,9 @@ import type {
   RouteHandler,
 } from "../types"
 
-export const wrapHandler = (fn: RouteHandler | MiddlewareFunction) => {
+export const wrapHandler = <T extends RouteHandler | MiddlewareFunction>(
+  fn: T
+) => {
   async function wrappedHandler(
     req: MedusaRequest,
     res: MedusaResponse,
@@ -33,5 +34,5 @@ export const wrapHandler = (fn: RouteHandler | MiddlewareFunction) => {
   if (fn.name) {
     Object.defineProperty(wrappedHandler, "name", { value: fn.name })
   }
-  return wrappedHandler as unknown as RequestHandler
+  return wrappedHandler as T
 }

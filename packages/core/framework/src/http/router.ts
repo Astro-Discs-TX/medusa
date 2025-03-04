@@ -1,5 +1,5 @@
 import logger from "@medusajs/cli/dist/reporter"
-import corsMiddleware, { CorsOptions } from "cors"
+import cors, { CorsOptions } from "cors"
 import { parseCorsOrigins, promiseAll } from "@medusajs/utils"
 import type { Express, RequestHandler, ErrorRequestHandler } from "express"
 import type {
@@ -11,6 +11,7 @@ import type {
   MedusaNextFunction,
   MiddlewareDescriptor,
   BodyParserConfigRoute,
+  RouteHandler,
 } from "./types"
 
 import { RoutesLoader } from "./routes-loader"
@@ -26,6 +27,24 @@ import { ensurePublishableApiKeyMiddleware } from "./middlewares/ensure-publisha
 import { configManager } from "../config"
 
 export class ApiLoader {
+  /**
+   * Wrap the original route handler implementation for
+   * instrumentation.
+   */
+  static traceRoute?: (
+    handler: RouteHandler,
+    route: { route: string; method: string }
+  ) => RouteHandler
+
+  /**
+   * Wrap the original middleware handler implementation for
+   * instrumentation.
+   */
+  static traceMiddleware?: (
+    handler: RequestHandler | MiddlewareFunction,
+    route: { route: string; method?: string }
+  ) => RequestHandler | MiddlewareFunction
+
   /**
    * An express instance
    * @private
@@ -92,16 +111,26 @@ export class ApiLoader {
   ) {
     if ("isRoute" in route) {
       logger.debug(`registering route ${route.methods}:${route.matcher}`)
-      this.#app[route.methods.toLowerCase()](
-        route.matcher,
-        wrapHandler(route.handler)
-      )
+      const handler = ApiLoader.traceRoute
+        ? ApiLoader.traceRoute(wrapHandler(route.handler), {
+            route: route.matcher,
+            method: route.methods,
+          })
+        : wrapHandler(route.handler)
+
+      this.#app[route.methods.toLowerCase()](route.matcher, handler)
       return
     }
 
     if (!route.methods) {
       logger.debug(`registering global middleware for ${route.matcher}`)
-      this.#app.use(route.matcher, wrapHandler(route.handler))
+      const handler = ApiLoader.traceMiddleware
+        ? (ApiLoader.traceMiddleware(wrapHandler(route.handler), {
+            route: route.matcher,
+          }) as RequestHandler)
+        : (wrapHandler(route.handler) as RequestHandler)
+
+      this.#app.use(route.matcher, handler)
       return
     }
 
@@ -110,7 +139,14 @@ export class ApiLoader {
       : [route.methods]
     methods.forEach((method) => {
       logger.debug(`registering route middleware ${method}:${route.matcher}`)
-      this.#app[method.toLowerCase()](route.matcher, wrapHandler(route.handler))
+      const handler = ApiLoader.traceMiddleware
+        ? (ApiLoader.traceMiddleware(wrapHandler(route.handler), {
+            route: route.matcher,
+            method: method,
+          }) as RequestHandler)
+        : wrapHandler(route.handler)
+
+      this.#app[method.toLowerCase()](route.matcher, handler)
     })
   }
 
@@ -139,6 +175,16 @@ export class ApiLoader {
   }
 
   /**
+   * Creates the options for the Cors middleware
+   */
+  #createCorsOptions(origin: string): CorsOptions {
+    return {
+      origin: parseCorsOrigins(origin),
+      credentials: true,
+    }
+  }
+
+  /**
    * Assigns global cors middleware for a given prefix
    */
   #applyCorsMiddleware(
@@ -150,21 +196,33 @@ export class ApiLoader {
       | "shouldAppendStoreCors",
     corsOptions: CorsOptions
   ) {
-    const cors = corsMiddleware(corsOptions)
-
-    this.#app.use(route, (req, res, next) => {
+    const corsFn = cors(corsOptions)
+    const corsMiddleware: RequestHandler = function corsMiddleware(
+      req,
+      res,
+      next
+    ) {
       const path = `${route}${req.path}`
       const matchingRoute = routesFinder.find(
         path,
         req.method as MiddlewareVerb
       )
       if (matchingRoute && matchingRoute[toggleKey] === true) {
-        return cors(req, res, next)
+        return corsFn(req, res, next)
       }
 
       logger.debug(`Skipping CORS middleware ${req.method}:${path}`)
       return next()
-    })
+    }
+
+    this.#app.use(
+      route,
+      ApiLoader.traceMiddleware
+        ? (ApiLoader.traceMiddleware(corsMiddleware, {
+            route,
+          }) as RequestHandler)
+        : cors(corsOptions)
+    )
   }
 
   /**
@@ -179,9 +237,13 @@ export class ApiLoader {
     options?: { allowUnauthenticated?: boolean; allowUnregistered?: boolean }
   ) {
     logger.debug(`Registering auth middleware for prefix ${route}`)
-    let authenticateMiddleware = authenticate(actorType, authType, options)
 
-    this.#app.use(route, (req, res, next) => {
+    const originalFn = authenticate(actorType, authType, options)
+    const authMiddleware: RequestHandler = function authMiddleware(
+      req,
+      res,
+      next
+    ) {
       const path = `${route}${req.path}`
       const matchingRoute = routesFinder.find(
         path,
@@ -193,8 +255,17 @@ export class ApiLoader {
       }
 
       logger.debug(`Authenticating route ${req.method}:${path}`)
-      return authenticateMiddleware(req, res, next)
-    })
+      return originalFn(req, res, next)
+    }
+
+    this.#app.use(
+      route,
+      ApiLoader.traceMiddleware
+        ? (ApiLoader.traceMiddleware(authMiddleware, {
+            route,
+          }) as RequestHandler)
+        : authMiddleware
+    )
   }
 
   /**
@@ -205,27 +276,27 @@ export class ApiLoader {
     routesFinder: RoutesFinder<BodyParserConfigRoute>
   ): void {
     logger.debug(`Registering bodyparser middleware for prefix ${route}`)
-    this.#app.use(route, createBodyParserMiddlewaresStack(routesFinder))
+    this.#app.use(
+      route,
+      createBodyParserMiddlewaresStack(
+        route,
+        routesFinder,
+        ApiLoader.traceMiddleware
+      )
+    )
   }
 
   /**
    * Applies the middleware to authenticate the headers to contain
    * a `x-publishable-key` header
    */
-  #applyStorePublishableKeyMiddleware(route: string | RegExp) {
+  #applyStorePublishableKeyMiddleware(route: string) {
     logger.debug(`Registering publishable key middleware for prefix ${route}`)
-    let middleware = ensurePublishableApiKeyMiddleware as unknown as
-      | RequestHandler
-      | MiddlewareFunction
+    let middleware = ApiLoader.traceMiddleware
+      ? ApiLoader.traceMiddleware(ensurePublishableApiKeyMiddleware, { route })
+      : ensurePublishableApiKeyMiddleware
 
     this.#app.use(route, middleware as RequestHandler)
-  }
-
-  #createCorsOptions(origin: string): CorsOptions {
-    return {
-      origin: parseCorsOrigins(origin),
-      credentials: true,
-    }
   }
 
   async load() {
