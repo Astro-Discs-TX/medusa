@@ -1129,7 +1129,7 @@ export default class CartModuleService
       return taxLine
     })
 
-    const taxLinesSet = new Set<string>(
+    const taxLineIdsSet = new Set<string>(
       normalizedTaxLines.map(
         (taxLine) => (taxLine as CartTypes.UpdateLineItemTaxLineDTO)?.id
       )
@@ -1144,9 +1144,9 @@ export default class CartModuleService
       item: { cart_id: cartId },
     }
 
-    if (taxLinesSet.size) {
+    if (taxLineIdsSet.size) {
       deleteConstraints.id = {
-        $nin: Array.from(taxLinesSet),
+        $nin: Array.from(taxLineIdsSet),
       }
     }
 
@@ -1228,48 +1228,46 @@ export default class CartModuleService
     )[],
     @MedusaContext() sharedContext: Context = {}
   ): Promise<CartTypes.ShippingMethodTaxLineDTO[]> {
-    const cart = await this.retrieveCart(
-      cartId,
-      { select: ["id"], relations: ["shipping_methods.tax_lines"] },
-      sharedContext
-    )
-
-    const existingTaxLines = await this.listShippingMethodTaxLines(
-      { shipping_method: { cart_id: cart.id } },
-      { select: ["id"] },
-      sharedContext
-    )
-
-    const taxLinesSet = new Set(
-      taxLines
-        .map(
-          (taxLine) => (taxLine as CartTypes.UpdateShippingMethodTaxLineDTO)?.id
-        )
-        .filter(Boolean)
-    )
-
-    const toDelete: CartTypes.ShippingMethodTaxLineDTO[] = []
-
-    // From the existing tax lines, find the ones that are not passed in taxLines
-    existingTaxLines.forEach((taxLine: CartTypes.ShippingMethodTaxLineDTO) => {
-      if (!taxLinesSet.has(taxLine.id)) {
-        toDelete.push(taxLine)
-      }
+    const normalizedTaxLines = (
+      taxLines as CartTypes.UpdateShippingMethodTaxLineDTO[]
+    ).map((taxLine) => {
+      taxLine.id = generateEntityId(taxLine.id, "casmtxl")
+      return taxLine
     })
 
-    if (toDelete.length) {
-      await this.shippingMethodTaxLineService_.softDelete(
-        toDelete.map((taxLine) => taxLine!.id),
-        sharedContext
+    const taxLineIdsSet = new Set(
+      normalizedTaxLines.map(
+        (taxLine) => (taxLine as CartTypes.UpdateShippingMethodTaxLineDTO)?.id
       )
+    )
+
+    const deleteConstraints: {
+      id?: {
+        $nin: string[]
+      }
+      shipping_method: { cart_id: string }
+    } = {
+      shipping_method: { cart_id: cartId },
     }
 
-    const result = taxLines.length
-      ? await this.shippingMethodTaxLineService_.upsert(
-          taxLines as UpdateShippingMethodTaxLineDTO[],
-          sharedContext
-        )
-      : []
+    if (taxLineIdsSet.size) {
+      deleteConstraints.id = {
+        $nin: Array.from(taxLineIdsSet),
+      }
+    }
+
+    const [result] = await promiseAll([
+      taxLines.length
+        ? this.shippingMethodTaxLineService_.upsert(
+            taxLines as UpdateShippingMethodTaxLineDTO[],
+            sharedContext
+          )
+        : [],
+      this.shippingMethodTaxLineService_.softDelete(
+        deleteConstraints,
+        sharedContext
+      ),
+    ])
 
     return await this.baseRepository_.serialize<
       CartTypes.ShippingMethodTaxLineDTO[]
