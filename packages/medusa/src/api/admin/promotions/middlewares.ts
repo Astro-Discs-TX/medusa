@@ -134,10 +134,6 @@ export const adminPromotionRoutesMiddlewares: MiddlewareRoute[] = [
     method: ["GET"],
     matcher: "/admin/promotions/rule-attribute-options/:rule_type",
     middlewares: [
-      (_, __, next) => {
-        console.log("specific one")
-        next()
-      },
       validateAndTransformQuery(
         AdminGetPromotionRuleParams,
         QueryConfig.listRuleTransformQueryConfig

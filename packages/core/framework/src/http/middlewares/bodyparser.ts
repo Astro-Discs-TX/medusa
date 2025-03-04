@@ -73,13 +73,13 @@ export function createBodyParserMiddlewaresStack(
 
         if (matchingRoute.config === false) {
           logger.debug(
-            `skipping ${parser} bodyparser middleware ${req.method}${req.path}`
+            `skipping ${parser} bodyparser middleware ${req.method} ${req.path}`
           )
           return next()
         }
 
         logger.debug(
-          `using custom ${parser} bodyparser config ${req.method}${req.path}`
+          `using custom ${parser} bodyparser config ${req.method} ${req.path}`
         )
         return parserMiddleware(matchingRoute.config)(req, res, next)
       }

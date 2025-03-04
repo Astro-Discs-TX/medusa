@@ -217,20 +217,16 @@ export class RoutesLoader {
    * manually.
    */
   getRoutes() {
-    return Object.keys(this.#routes).reduce<{
-      list: RouteDescriptor[]
-    }>(
+    return Object.keys(this.#routes).reduce<RouteDescriptor[]>(
       (result, routePattern) => {
         const methodsRoutes = this.#routes[routePattern]
         Object.keys(methodsRoutes).forEach((method) => {
           const route = methodsRoutes[method]
-          result.list.push(route)
+          result.push(route)
         })
         return result
       },
-      {
-        list: [],
-      }
+      []
     )
   }
 }

@@ -201,7 +201,16 @@ export class RoutesSorter<T extends Route> {
   /**
    * Returns an array of sorted routes for a given branch.
    */
-  #sortBranch(routeBranch: { [segment: string]: RoutesBranch<T> }) {
+  #sortBranch(
+    routeBranch: { [segment: string]: RoutesBranch<T> },
+    orderBy: [
+      keyof RoutesBranch<T>,
+      keyof RoutesBranch<T>,
+      keyof RoutesBranch<T>,
+      keyof RoutesBranch<T>,
+      keyof RoutesBranch<T>
+    ]
+  ) {
     const branchRoutes = Object.keys(routeBranch).reduce<{
       global: T[]
       wildcard: T[]
@@ -214,27 +223,29 @@ export class RoutesSorter<T extends Route> {
 
         result.global.push(...node.global.routes)
         if (node.global.children) {
-          result.global.push(...this.#sortBranch(node.global.children))
+          result.global.push(...this.#sortBranch(node.global.children, orderBy))
         }
 
         result.wildcard.push(...node.wildcard.routes)
         if (node.wildcard.children) {
-          result.wildcard.push(...this.#sortBranch(node.wildcard.children))
+          result.wildcard.push(
+            ...this.#sortBranch(node.wildcard.children, orderBy)
+          )
         }
 
         result.regex.push(...node.regex.routes)
         if (node.regex.children) {
-          result.regex.push(...this.#sortBranch(node.regex.children))
+          result.regex.push(...this.#sortBranch(node.regex.children, orderBy))
         }
 
         result.static.push(...node.static.routes)
         if (node.static.children) {
-          result.static.push(...this.#sortBranch(node.static.children))
+          result.static.push(...this.#sortBranch(node.static.children, orderBy))
         }
 
         result.params.push(...node.params.routes)
         if (node.params.children) {
-          result.params.push(...this.#sortBranch(node.params.children))
+          result.params.push(...this.#sortBranch(node.params.children, orderBy))
         }
 
         return result
@@ -251,7 +262,7 @@ export class RoutesSorter<T extends Route> {
     /**
      * Concatenating routes as per their priority.
      */
-    return this.#orderBy.reduce<T[]>((result, branch) => {
+    return orderBy.reduce<T[]>((result, branch) => {
       result = result.concat(branchRoutes[branch])
       return result
     }, [])
@@ -265,7 +276,8 @@ export class RoutesSorter<T extends Route> {
   }
 
   /**
-   * Sort the input routes
+   * Sort the input routes. You can optionally specify a custom
+   * orderBy array. Defaults to: ["global", "wildcard", "regex", "static", "params"]
    */
   sort(
     orderBy?: [
@@ -276,10 +288,7 @@ export class RoutesSorter<T extends Route> {
       keyof RoutesBranch<T>
     ]
   ) {
-    if (orderBy) {
-      this.#orderBy = orderBy
-    }
     this.#routesToProcess.map((route) => this.#processRoute(route))
-    return this.#sortBranch(this.#routesTree)
+    return this.#sortBranch(this.#routesTree, orderBy ?? this.#orderBy)
   }
 }

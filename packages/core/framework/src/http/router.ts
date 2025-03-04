@@ -84,9 +84,8 @@ export class ApiLoader {
       await middlewareLoader.scanDir(dir)
     }
 
-    const routes = routesLoader.getRoutes()
     return {
-      routes: routes.list,
+      routes: routesLoader.getRoutes(),
       routesFinder: new RoutesFinder<RouteDescriptor>(),
       middlewares: middlewareLoader.getMiddlewares(),
       errorHandler: middlewareLoader.getErrorHandler() as
@@ -103,7 +102,7 @@ export class ApiLoader {
     route: MiddlewareDescriptor | RouteDescriptor | RouteDescriptor
   ) {
     if ("isRoute" in route) {
-      logger.debug(`registering route ${route.methods}:${route.matcher}`)
+      logger.debug(`registering route ${route.methods} ${route.matcher}`)
       const handler = ApiLoader.traceRoute
         ? ApiLoader.traceRoute(wrapHandler(route.handler), {
             route: route.matcher,
@@ -131,7 +130,7 @@ export class ApiLoader {
       ? route.methods
       : [route.methods]
     methods.forEach((method) => {
-      logger.debug(`registering route middleware ${method}:${route.matcher}`)
+      logger.debug(`registering route middleware ${method} ${route.matcher}`)
       const handler = ApiLoader.traceMiddleware
         ? (ApiLoader.traceMiddleware(wrapHandler(route.handler), {
             route: route.matcher,
@@ -182,7 +181,7 @@ export class ApiLoader {
    */
   #applyCorsMiddleware(
     routesFinder: RoutesFinder<RouteDescriptor>,
-    route: string,
+    namespace: string,
     toggleKey:
       | "shouldAppendAdminCors"
       | "shouldAppendAuthCors"
@@ -195,7 +194,7 @@ export class ApiLoader {
       res,
       next
     ) {
-      const path = `${route}${req.path}`
+      const path = `${namespace}${req.path}`
       const matchingRoute = routesFinder.find(
         path,
         req.method as MiddlewareVerb
@@ -204,15 +203,15 @@ export class ApiLoader {
         return corsFn(req, res, next)
       }
 
-      logger.debug(`Skipping CORS middleware ${req.method}:${path}`)
+      logger.debug(`Skipping CORS middleware ${req.method} ${path}`)
       return next()
     }
 
     this.#app.use(
-      route,
+      namespace,
       ApiLoader.traceMiddleware
         ? (ApiLoader.traceMiddleware(corsMiddleware, {
-            route,
+            route: namespace,
           }) as RequestHandler)
         : cors(corsOptions)
     )
@@ -224,12 +223,12 @@ export class ApiLoader {
    */
   #applyAuthMiddleware(
     routesFinder: RoutesFinder<RouteDescriptor>,
-    route: string,
+    namespace: string,
     actorType: string | string[],
     authType: AuthType | AuthType[],
     options?: { allowUnauthenticated?: boolean; allowUnregistered?: boolean }
   ) {
-    logger.debug(`Registering auth middleware for prefix ${route}`)
+    logger.debug(`Registering auth middleware for prefix ${namespace}`)
 
     const originalFn = authenticate(actorType, authType, options)
     const authMiddleware: RequestHandler = function authMiddleware(
@@ -237,25 +236,25 @@ export class ApiLoader {
       res,
       next
     ) {
-      const path = `${route}${req.path}`
+      const path = `${namespace}${req.path}`
       const matchingRoute = routesFinder.find(
         path,
         req.method as MiddlewareVerb
       )
       if (matchingRoute && matchingRoute.optedOutOfAuth) {
-        logger.debug(`Skipping auth ${req.method}:${path}`)
+        logger.debug(`Skipping auth ${req.method} ${path}`)
         return next()
       }
 
-      logger.debug(`Authenticating route ${req.method}:${path}`)
+      logger.debug(`Authenticating route ${req.method} ${path}`)
       return originalFn(req, res, next)
     }
 
     this.#app.use(
-      route,
+      namespace,
       ApiLoader.traceMiddleware
         ? (ApiLoader.traceMiddleware(authMiddleware, {
-            route,
+            route: namespace,
           }) as RequestHandler)
         : authMiddleware
     )
@@ -265,14 +264,14 @@ export class ApiLoader {
    * Apply the most specific body parser middleware to the router
    */
   #applyBodyParserMiddleware(
-    route: string,
+    namespace: string,
     routesFinder: RoutesFinder<BodyParserConfigRoute>
   ): void {
-    logger.debug(`Registering bodyparser middleware for prefix ${route}`)
+    logger.debug(`Registering bodyparser middleware for prefix ${namespace}`)
     this.#app.use(
-      route,
+      namespace,
       createBodyParserMiddlewaresStack(
-        route,
+        namespace,
         routesFinder,
         ApiLoader.traceMiddleware
       )
@@ -283,13 +282,17 @@ export class ApiLoader {
    * Applies the middleware to authenticate the headers to contain
    * a `x-publishable-key` header
    */
-  #applyStorePublishableKeyMiddleware(route: string) {
-    logger.debug(`Registering publishable key middleware for prefix ${route}`)
+  #applyStorePublishableKeyMiddleware(namespace: string) {
+    logger.debug(
+      `Registering publishable key middleware for namespace ${namespace}`
+    )
     let middleware = ApiLoader.traceMiddleware
-      ? ApiLoader.traceMiddleware(ensurePublishableApiKeyMiddleware, { route })
+      ? ApiLoader.traceMiddleware(ensurePublishableApiKeyMiddleware, {
+          route: namespace,
+        })
       : ensurePublishableApiKeyMiddleware
 
-    this.#app.use(route, middleware as RequestHandler)
+    this.#app.use(namespace, middleware as RequestHandler)
   }
 
   async load() {
