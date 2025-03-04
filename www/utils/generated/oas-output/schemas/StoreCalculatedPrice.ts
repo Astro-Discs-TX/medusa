@@ -118,11 +118,11 @@
  *   original_amount_with_tax:
  *     type: number
  *     title: original_amount_with_tax
- *     description: The calculated price's original amount with tax.
+ *     description: The original amount with taxes applied.
  *   original_amount_without_tax:
  *     type: number
  *     title: original_amount_without_tax
- *     description: The calculated price's original amount without tax.
+ *     description: The original amount without taxes.
  * 
 */
 
