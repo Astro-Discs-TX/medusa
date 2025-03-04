@@ -66,7 +66,7 @@ export default defineMiddlewares({
 The `defineMiddlewares` function accepts a middleware configurations object that has the property `routes`. `routes`'s value is an array of middleware route objects, each having the following properties:
 
 - `matcher`: a string or regular expression indicating the API route path to apply the middleware on. The regular expression must be compatible with [path-to-regexp](https://github.com/pillarjs/path-to-regexp).
-- `middlewares`: An array of middleware functions.
+- `middlewares`: An array of global and route middleware functions.
 
 In the example above, you define a global middleware that logs the message `Received a request!` whenever a request is sent to an API route path starting with `/custom`.
 
@@ -91,7 +91,7 @@ Received a request!
 
 ## How to Create a Route Middleware?
 
-In the previous section, you learned how to create a global middleware. You define the route middleware in the same way, but you specify an additional property `method`. Its value is one or more HTTP methods to apply the middleware to.
+In the previous section, you learned how to create a global middleware. You define the route middleware in the same way in `src/api/middlewares.ts`, but you specify an additional property `method` in the middleware route object. Its value is one or more HTTP methods to apply the middleware to.
 
 For example:
 
@@ -317,6 +317,8 @@ And the route middlewares are sorted into the following order before they're reg
 1. Route middleware `/custom*`.
 2. Route middleware `/custom/:id`.
 
+Then, the middlwares are registered in the order mentioned earlier, with global middlewares first, then the route middlewares.
+
 ### Middlewares and Route Execution Order
 
 When a request is sent to an API route, the global middlewares are executed first, then the route middlewares, and finally the route handler.
@@ -363,6 +365,6 @@ The global middleware runs first, then the route middleware, and finally the rou
 
 ## Overriding Middlewares
 
-A middleware can never override an existing middleware. Instead, middlewares are added to the end of the middleware stack.
+A middleware can not override an existing middleware. Instead, middlewares are added to the end of the middleware stack.
 
-For example, if you define a custom validation middleware on an existing route, such as `validateAndTransformBody`, then both the original and the custom validation middleware will run.
+For example, if you define a custom validation middleware, such as `validateAndTransformBody`, on an existing route, then both the original and the custom validation middleware will run.
