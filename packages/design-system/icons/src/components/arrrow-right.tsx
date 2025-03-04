@@ -1,6 +1,6 @@
 import * as React from "react"
 import type { IconProps } from "../types"
-const ArrrowRight = React.forwardRef<SVGSVGElement, IconProps>(
+const arrowRight = React.forwardRef<SVGSVGElement, IconProps>(
   ({ color = "currentColor", ...props }, ref) => {
     return (
       <svg
@@ -22,5 +22,5 @@ const ArrrowRight = React.forwardRef<SVGSVGElement, IconProps>(
     )
   }
 )
-ArrrowRight.displayName = "ArrrowRight"
-export default ArrrowRight
+arrowRight.displayName = "arrowRight"
+export default arrowRight
