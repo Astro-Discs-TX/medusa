@@ -16,7 +16,7 @@ export const DateCell = ({ date }: DateCellProps) => {
   value.setMinutes(value.getMinutes() - value.getTimezoneOffset())
 
   const hour12 = Intl.DateTimeFormat().resolvedOptions().hour12
-  const timestampFormat = hour12 ? "dd MMM yyyy hh:MM a" : "dd MMM yyyy HH:MM"
+  const timestampFormat = hour12 ? "dd MMM yyyy hh:mm a" : "dd MMM yyyy HH:mm"
 
   return (
     <div className="flex h-full w-full items-center overflow-hidden">
