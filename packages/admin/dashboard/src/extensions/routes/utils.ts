@@ -189,8 +189,20 @@ export const createRouteMap = (
     const cleanedPath = ignore
       ? path.replace(ignore, "").replace(/^\/+/, "")
       : path.replace(/^\/+/, "")
+    // This is related to settings route when children are present, fixing the children path to also ignore the paths if specified 
+    // outlet issue when @edit throws 404 because the settings/ part is not cleaned in the children route path
+    // Have tested it locally and it works 
+    const processedChildren = children?.map(child => {
+      if (child.path && ignore) {
+        return {
+          ...child,
+          path: child.path.replace(ignore, "").replace(/^\/+/, "")
+        }
+      }
+      return child
+    })
     const pathSegments = cleanedPath.split("/").filter(Boolean)
-    addRoute(pathSegments, Component, root, loader, handle, children)
+    addRoute(pathSegments, Component, root, loader, handle, processedChildren)
   })
 
   return root
