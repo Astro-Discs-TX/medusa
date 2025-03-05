@@ -111,10 +111,12 @@ export function OrderCreateFulfillmentForm({
       return
     }
 
-    let items = Object.entries(data.quantity).map(([id, quantity]) => ({
-      id,
-      quantity,
-    }))
+    let items = Object.entries(data.quantity)
+      .map(([id, quantity]) => ({
+        id,
+        quantity,
+      }))
+      .filter(({ quantity }) => !!quantity)
 
     /**
      * If items require shipping fulfill only items with matching shipping profile.
@@ -129,8 +131,7 @@ export function OrderCreateFulfillmentForm({
       }, {} as any)
 
       items = items.filter(
-        ({ id, quantity }) =>
-          !!quantity && itemShippingProfileMap[id] === selectedShippingProfileId
+        ({ id }) => itemShippingProfileMap[id] === selectedShippingProfileId
       )
     }
 
