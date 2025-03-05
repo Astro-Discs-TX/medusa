@@ -37,7 +37,6 @@ describe("HTTP Instrumentation", () => {
         },
       })
 
-      console.log(errorHandlerMock.mock.calls[0])
       expect(res.status).toBe(400)
       expect(errorHandlerMock).toHaveBeenCalled()
       expect(errorHandlerMock).toHaveBeenCalledWith(
