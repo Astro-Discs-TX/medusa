@@ -32,9 +32,9 @@ export class ApiLoader {
    * instrumentation.
    */
   static traceRoute?: (
-    handler: RouteHandler | MiddlewareFunction | RequestHandler,
+    handler: RouteHandler,
     route: { route: string; method: string }
-  ) => RouteHandler | MiddlewareFunction | RequestHandler
+  ) => RouteHandler
 
   /**
    * Wrap the original middleware handler implementation for
@@ -104,13 +104,13 @@ export class ApiLoader {
     if ("isRoute" in route) {
       logger.debug(`registering route ${route.method} ${route.matcher}`)
       const handler = ApiLoader.traceRoute
-        ? ApiLoader.traceRoute(wrapHandler(route.handler), {
+        ? ApiLoader.traceRoute(route.handler, {
             route: route.matcher,
             method: route.method,
           })
-        : wrapHandler(route.handler)
+        : route.handler
 
-      this.#app[route.method.toLowerCase()](route.matcher, handler)
+      this.#app[route.method.toLowerCase()](route.matcher, wrapHandler(handler))
       return
     }
 
