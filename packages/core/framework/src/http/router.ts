@@ -117,12 +117,12 @@ export class ApiLoader {
     if (!route.methods) {
       logger.debug(`registering global middleware for ${route.matcher}`)
       const handler = ApiLoader.traceMiddleware
-        ? (ApiLoader.traceMiddleware(wrapHandler(route.handler), {
+        ? (ApiLoader.traceMiddleware(route.handler, {
             route: route.matcher,
           }) as RequestHandler)
-        : (wrapHandler(route.handler) as RequestHandler)
+        : (route.handler as RequestHandler)
 
-      this.#app.use(route.matcher, handler)
+      this.#app.use(route.matcher, wrapHandler(handler))
       return
     }
 
