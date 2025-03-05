@@ -138,7 +138,7 @@ async function main() {
 
   if (!freshnessCheckLabel.nodes.length) {
     console.log(
-      "Please add freshness check label in Linear under the documentation team first then try again"
+      "Please add freshness check label in Linear under the DX team first then try again"
     )
     process.exit(1)
   }
