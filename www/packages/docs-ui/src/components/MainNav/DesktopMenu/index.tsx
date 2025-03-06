@@ -7,7 +7,7 @@ import {
   getOsShortcut,
   Menu,
   useClickOutside,
-  useSidebar,
+  useSidebarNew,
 } from "../../.."
 import clsx from "clsx"
 import { HouseIcon } from "../../Icons/House"
@@ -17,7 +17,7 @@ import { MenuItem } from "types"
 export const MainNavDesktopMenu = () => {
   const [isOpen, setIsOpen] = useState(false)
   const { setDesktopSidebarOpen, isSidebarShown, desktopSidebarOpen } =
-    useSidebar()
+    useSidebarNew()
   const ref = useRef<HTMLDivElement>(null)
 
   useClickOutside({

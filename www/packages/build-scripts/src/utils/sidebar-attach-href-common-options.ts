@@ -1,13 +1,13 @@
-import { RawSidebarItem } from "types"
+import { SidebarNew } from "types"
 
-const commonOptions: Partial<RawSidebarItem> = {
+const commonOptions: Partial<SidebarNew.RawSidebarItem> = {
   loaded: true,
   isPathHref: true,
 }
 
-export function sidebarAttachHrefCommonOptions(
-  sidebar: RawSidebarItem[]
-): RawSidebarItem[] {
+export function sidebarAttachCommonOptions(
+  sidebar: SidebarNew.RawSidebarItem[]
+): SidebarNew.RawSidebarItem[] {
   return sidebar.map((item) => {
     if (item.type === "separator") {
       return item
@@ -16,7 +16,7 @@ export function sidebarAttachHrefCommonOptions(
     return {
       ...commonOptions,
       ...item,
-      children: sidebarAttachHrefCommonOptions(item.children || []),
+      children: sidebarAttachCommonOptions(item.children || []),
     }
   })
 }

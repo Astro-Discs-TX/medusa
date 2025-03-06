@@ -9,7 +9,7 @@ import {
   swrFetcher,
   useIsBrowser,
   useScrollController,
-  useSidebar,
+  useSidebarNew,
 } from "docs-ui"
 import dynamic from "next/dynamic"
 import type { SectionProps } from "../../Section"
@@ -45,7 +45,7 @@ const MDXContentClient = dynamic<MDXContentClientProps>(
 ) as React.FC<MDXContentClientProps>
 
 const TagSectionComponent = ({ tag }: TagSectionProps) => {
-  const { activePath, setActivePath } = useSidebar()
+  const { activePath, setActivePath } = useSidebarNew()
   const router = useRouter()
   const [loadData, setLoadData] = useState(false)
   const slugTagName = useMemo(() => getSectionId([tag.name]), [tag])

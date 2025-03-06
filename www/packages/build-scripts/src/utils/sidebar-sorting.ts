@@ -1,14 +1,14 @@
-import { InteractiveSidebarItem, RawSidebarItem, SidebarSortType } from "types"
+import { SidebarNew } from "types"
 
 type Options = {
-  items: RawSidebarItem[]
-  type?: SidebarSortType
+  items: SidebarNew.RawSidebarItem[]
+  type?: SidebarNew.SidebarSortType
 }
 
 export const sortSidebarItems = ({
   items,
   type = "none",
-}: Options): RawSidebarItem[] => {
+}: Options): SidebarNew.RawSidebarItem[] => {
   switch (type) {
     case "alphabetize":
       return alphabetizeSidebarItems(items)
@@ -17,9 +17,11 @@ export const sortSidebarItems = ({
   }
 }
 
-const alphabetizeSidebarItems = (items: RawSidebarItem[]): RawSidebarItem[] => {
-  const segments: RawSidebarItem[][] = []
-  let currentSegment: RawSidebarItem[] = []
+const alphabetizeSidebarItems = (
+  items: SidebarNew.RawSidebarItem[]
+): SidebarNew.RawSidebarItem[] => {
+  const segments: SidebarNew.RawSidebarItem[][] = []
+  let currentSegment: SidebarNew.RawSidebarItem[] = []
 
   items.forEach((item) => {
     if (item.type === "separator") {
@@ -41,7 +43,7 @@ const alphabetizeSidebarItems = (items: RawSidebarItem[]): RawSidebarItem[] => {
     .map((segment) => {
       return segment[0].type === "separator"
         ? segment
-        : (segment as InteractiveSidebarItem[]).sort((a, b) =>
+        : (segment as SidebarNew.InteractiveSidebarItem[]).sort((a, b) =>
             a.title.localeCompare(b.title)
           )
     })

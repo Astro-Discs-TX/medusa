@@ -1,7 +1,7 @@
 "use client"
 
 import {
-  SidebarProvider as UiSidebarProvider,
+  SidebarNewProvider as UiSidebarProvider,
   usePageLoading,
   useScrollController,
 } from "docs-ui"
@@ -20,10 +20,11 @@ const SidebarProvider = ({ children }: SidebarProviderProps) => {
       isLoading={isLoading}
       setIsLoading={setIsLoading}
       shouldHandleHashChange={true}
+      shouldHandlePathChange={false}
       scrollableElement={scrollableElement}
-      initialItems={config.sidebar}
-      persistState={false}
-      projectName="api"
+      sidebars={config.sidebars}
+      persistCategoryState={false}
+      disableActiveTransition={false}
     >
       {children}
     </UiSidebarProvider>

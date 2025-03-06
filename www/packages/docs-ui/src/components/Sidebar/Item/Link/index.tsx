@@ -3,18 +3,18 @@
 // @refresh reset
 
 import React, { useEffect, useMemo, useRef } from "react"
-import { SidebarItemLink as SidebarItemlinkType } from "types"
+import { SidebarNew } from "types"
 import {
   checkSidebarItemVisibility,
   SidebarItem,
   useMobile,
-  useSidebar,
+  useSidebarNew,
 } from "../../../.."
 import clsx from "clsx"
 import Link from "next/link"
 
 export type SidebarItemLinkProps = {
-  item: SidebarItemlinkType
+  item: SidebarNew.SidebarItemLink
   nested?: boolean
 } & React.AllHTMLAttributes<HTMLLIElement>
 
@@ -24,14 +24,14 @@ export const SidebarItemLink = ({
   nested = false,
 }: SidebarItemLinkProps) => {
   const {
-    isLinkActive,
+    isItemActive,
     setMobileSidebarOpen: setSidebarOpen,
     disableActiveTransition,
     sidebarRef,
     sidebarTopHeight,
-  } = useSidebar()
+  } = useSidebarNew()
   const { isMobile } = useMobile()
-  const active = useMemo(() => isLinkActive(item, true), [isLinkActive, item])
+  const active = useMemo(() => isItemActive(item), [isItemActive, item])
   const ref = useRef<HTMLLIElement>(null)
 
   const newTopCalculator = useMemo(() => {
@@ -84,11 +84,7 @@ export const SidebarItemLink = ({
   }, [active, isMobile])
 
   const hasChildren = useMemo(() => {
-    return (
-      !item.isChildSidebar &&
-      !item.hideChildren &&
-      (item.children?.length || 0) > 0
-    )
+    return !item.hideChildren && (item.children?.length || 0) > 0
   }, [item.children])
 
   const isTitleOneWord = useMemo(

@@ -1,8 +1,8 @@
 import {
-  SidebarProvider as UiSidebarProvider,
+  SidebarNewProvider as UiSidebarProvider,
   useScrollController,
 } from "docs-ui"
-import { docsConfig } from "@/config/docs"
+import { sidebars } from "@/config/sidebar"
 
 type SidebarProviderProps = {
   children?: React.ReactNode
@@ -13,11 +13,8 @@ const SidebarProvider = ({ children }: SidebarProviderProps) => {
 
   return (
     <UiSidebarProvider
-      initialItems={docsConfig.sidebar}
-      shouldHandlePathChange={true}
+      sidebars={sidebars}
       scrollableElement={scrollableElement}
-      disableActiveTransition={true}
-      projectName="ui"
     >
       {children}
     </UiSidebarProvider>

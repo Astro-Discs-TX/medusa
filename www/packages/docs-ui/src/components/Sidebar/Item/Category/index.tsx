@@ -3,13 +3,13 @@
 // @refresh reset
 
 import React, { useEffect, useMemo, useState } from "react"
-import { SidebarItemCategory as SidebarItemCategoryType } from "types"
-import { Loading, SidebarItem, useSidebar } from "../../../.."
+import { SidebarNew } from "types"
+import { Loading, SidebarItem, useSidebarNew } from "../../../.."
 import clsx from "clsx"
 import { MinusMini, PlusMini } from "@medusajs/icons"
 
-export type SidebarItemCategory = {
-  item: SidebarItemCategoryType
+export type SidebarItemCategoryProps = {
+  item: SidebarNew.SidebarItemCategory
   expandItems?: boolean
 } & React.AllHTMLAttributes<HTMLDivElement>
 
@@ -17,17 +17,17 @@ export const SidebarItemCategory = ({
   item,
   expandItems = true,
   className,
-}: SidebarItemCategory) => {
+}: SidebarItemCategoryProps) => {
   const [showLoading, setShowLoading] = useState(false)
   const [open, setOpen] = useState(
     item.initialOpen !== undefined ? item.initialOpen : expandItems
   )
   const {
-    isChildrenActive,
+    isItemActive,
     updatePersistedCategoryState,
     getPersistedCategoryState,
-    persistState,
-  } = useSidebar()
+    persistCategoryState,
+  } = useSidebarNew()
   const itemShowLoading = useMemo(() => {
     return !item.loaded || (item.showLoadingIfEmpty && !item.children?.length)
   }, [item])
@@ -45,22 +45,22 @@ export const SidebarItemCategory = ({
   }, [itemShowLoading, showLoading])
 
   useEffect(() => {
-    const isActive = isChildrenActive(item)
+    const isActive = isItemActive(item)
 
     if (isActive && !open) {
       setOpen(true)
     }
-  }, [isChildrenActive, item.children])
+  }, [isItemActive, item.children])
 
   useEffect(() => {
-    if (!persistState) {
+    if (!persistCategoryState) {
       return
     }
     const persistedOpen = getPersistedCategoryState(item.title)
     if (persistedOpen !== undefined) {
       setOpen(persistedOpen)
     }
-  }, [persistState])
+  }, [persistCategoryState])
 
   const handleOpen = () => {
     item.onOpen?.()
@@ -90,7 +90,7 @@ export const SidebarItemCategory = ({
             if (!open) {
               handleOpen()
             }
-            if (persistState) {
+            if (persistCategoryState) {
               updatePersistedCategoryState(item.title, !open)
             }
             setOpen((prev) => !prev)

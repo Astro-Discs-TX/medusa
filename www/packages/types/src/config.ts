@@ -1,14 +1,17 @@
-import { SidebarSectionItems } from "./sidebar.js"
+import { SidebarNew } from "./index.js"
 
 export type BreadcrumbOptions = {
-  showCategories?: boolean
+  startItems?: {
+    title: string
+    link: string
+  }[]
 }
 
 export declare type DocsConfig = {
   titleSuffix?: string
   baseUrl: string
   basePath?: string
-  sidebar: SidebarSectionItems
+  sidebars: SidebarNew.Sidebar[]
   filesBasePath?: string
   useNextLinks?: boolean
   project: {

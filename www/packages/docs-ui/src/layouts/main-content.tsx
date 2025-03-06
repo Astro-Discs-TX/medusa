@@ -1,9 +1,8 @@
 "use client"
 
 import React, { useEffect } from "react"
-import { useSidebar } from "../providers/Sidebar"
 import clsx from "clsx"
-import { MainNav, useIsBrowser, useLayout } from ".."
+import { MainNav, useIsBrowser, useLayout, useSidebarNew } from ".."
 
 export type MainContentLayoutProps = {
   mainWrapperClasses?: string
@@ -17,7 +16,7 @@ export const MainContentLayout = ({
   contentClassName,
 }: MainContentLayoutProps) => {
   const { isBrowser } = useIsBrowser()
-  const { desktopSidebarOpen } = useSidebar()
+  const { desktopSidebarOpen } = useSidebarNew()
   const { mainContentRef } = useLayout()
 
   useEffect(() => {

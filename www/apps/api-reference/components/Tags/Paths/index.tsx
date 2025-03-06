@@ -2,7 +2,7 @@
 
 import type { OpenAPIV3 } from "openapi-types"
 import type { Operation, PathsObject } from "@/types/openapi"
-import { useSidebar } from "docs-ui"
+import { findSidebarItem, useSidebarNew } from "docs-ui"
 import { Fragment, Suspense, useEffect } from "react"
 import dynamic from "next/dynamic"
 import type { TagOperationProps } from "../Operation"
@@ -10,7 +10,7 @@ import clsx from "clsx"
 import getTagChildSidebarItems from "@/utils/get-tag-child-sidebar-items"
 import { useLoading } from "@/providers/loading"
 import DividedLoading from "@/components/DividedLoading"
-import { SidebarItemSections, SidebarItem, SidebarItemCategory } from "types"
+import { SidebarNew } from "types"
 
 const TagOperation = dynamic<TagOperationProps>(
   async () => import("../Operation")
@@ -22,20 +22,20 @@ export type TagPathsProps = {
 } & React.HTMLAttributes<HTMLDivElement>
 
 const TagPaths = ({ tag, className, paths }: TagPathsProps) => {
-  const { items, addItems, findItemInSection } = useSidebar()
+  const { shownSidebar, addItems } = useSidebarNew()
   const { loading } = useLoading()
 
   useEffect(() => {
     if (paths) {
-      const parentItem = findItemInSection(
-        items[SidebarItemSections.DEFAULT],
-        { title: tag.name },
-        false
-      ) as SidebarItemCategory
-      const pathItems: SidebarItem[] = getTagChildSidebarItems(paths)
+      const parentItem = findSidebarItem({
+        sidebarItems: shownSidebar.items,
+        item: { title: tag.name, type: "category" },
+        checkChildren: false,
+      }) as SidebarNew.SidebarItemCategory
+      const pathItems: SidebarNew.SidebarItem[] = getTagChildSidebarItems(paths)
       if ((parentItem?.children?.length || 0) < pathItems.length) {
         addItems(pathItems, {
-          section: SidebarItemSections.DEFAULT,
+          sidebar_id: shownSidebar.sidebar_id,
           parent: {
             type: "category",
             title: tag.name,
@@ -46,7 +46,7 @@ const TagPaths = ({ tag, className, paths }: TagPathsProps) => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paths])
+  }, [paths, shownSidebar.sidebar_id])
 
   return (
     <Suspense>

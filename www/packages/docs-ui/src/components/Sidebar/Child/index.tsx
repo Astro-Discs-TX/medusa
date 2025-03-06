@@ -2,16 +2,15 @@
 
 import React from "react"
 import clsx from "clsx"
-import { InteractiveSidebarItem } from "types"
 import { ArrowUturnLeft } from "@medusajs/icons"
-import { useSidebar } from "../../.."
+import { useSidebarNew } from "../../../providers"
 
-type SidebarTitleProps = {
-  item: InteractiveSidebarItem
-}
+export const SidebarChild = () => {
+  const { goBack, parentSidebar } = useSidebarNew()
 
-export const SidebarChild = ({ item }: SidebarTitleProps) => {
-  const { goBack } = useSidebar()
+  if (!parentSidebar) {
+    return <></>
+  }
 
   return (
     <div className="px-docs_0.75">
@@ -25,9 +24,7 @@ export const SidebarChild = ({ item }: SidebarTitleProps) => {
         tabIndex={-1}
       >
         <ArrowUturnLeft />
-        <span className="truncate flex-1">
-          {item.childSidebarTitle || item.title}
-        </span>
+        <span className="truncate flex-1">{parentSidebar.title}</span>
       </div>
     </div>
   )

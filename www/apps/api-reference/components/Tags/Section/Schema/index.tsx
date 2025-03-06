@@ -1,6 +1,6 @@
 "use client"
 
-import { Suspense, useEffect, useMemo, useRef } from "react"
+import { Suspense, useEffect, useMemo } from "react"
 import { SchemaObject } from "../../../../types/openapi"
 import TagOperationParameters from "../../Operation/Parameters"
 import {
@@ -11,9 +11,8 @@ import {
   Note,
   useIsBrowser,
   useScrollController,
-  useSidebar,
+  useSidebarNew,
 } from "docs-ui"
-import { SidebarItemSections } from "types"
 import getSectionId from "../../../../utils/get-section-id"
 import DividedLayout from "../../../../layouts/Divided"
 import SectionContainer from "../../../Section/Container"
@@ -30,7 +29,7 @@ export type TagSectionSchemaProps = {
 }
 
 const TagSectionSchema = ({ schema, tagName }: TagSectionSchemaProps) => {
-  const { addItems, setActivePath, activePath } = useSidebar()
+  const { addItems, setActivePath, activePath, shownSidebar } = useSidebarNew()
   const { displayedArea } = useArea()
   const formattedName = useMemo(
     () => singular(tagName).replaceAll(" ", ""),
@@ -69,7 +68,7 @@ const TagSectionSchema = ({ schema, tagName }: TagSectionSchemaProps) => {
         },
       ],
       {
-        section: SidebarItemSections.DEFAULT,
+        sidebar_id: shownSidebar.sidebar_id,
         parent: {
           type: "category",
           title: tagName,
@@ -80,7 +79,7 @@ const TagSectionSchema = ({ schema, tagName }: TagSectionSchemaProps) => {
       }
     )
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formattedName])
+  }, [formattedName, shownSidebar.sidebar_id])
 
   useEffect(() => {
     if (!isBrowser) {

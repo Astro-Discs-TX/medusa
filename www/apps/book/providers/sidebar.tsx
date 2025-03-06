@@ -1,7 +1,7 @@
 "use client"
 
 import {
-  SidebarProvider as UiSidebarProvider,
+  SidebarNewProvider as UiSidebarProvider,
   useScrollController,
 } from "docs-ui"
 import { config } from "@/config"
@@ -15,13 +15,8 @@ const SidebarProvider = ({ children }: SidebarProviderProps) => {
 
   return (
     <UiSidebarProvider
-      shouldHandlePathChange={true}
-      shouldHandleHashChange={false}
       scrollableElement={scrollableElement}
-      initialItems={config.sidebar}
-      staticSidebarItems={true}
-      disableActiveTransition={true}
-      projectName="docs"
+      sidebars={config.sidebars}
     >
       {children}
     </UiSidebarProvider>

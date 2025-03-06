@@ -1,9 +1,9 @@
-import type { SidebarItem } from "types"
 import type { Operation, PathsObject } from "@/types/openapi"
 import type { OpenAPIV3 } from "openapi-types"
 import dynamic from "next/dynamic"
 import type { MethodLabelProps } from "@/components/MethodLabel"
 import getSectionId from "./get-section-id"
+import { SidebarNew } from "types"
 
 const MethodLabel = dynamic<MethodLabelProps>(
   async () => import("../components/MethodLabel")
@@ -11,8 +11,8 @@ const MethodLabel = dynamic<MethodLabelProps>(
 
 export default function getTagChildSidebarItems(
   paths: PathsObject
-): SidebarItem[] {
-  const items: SidebarItem[] = []
+): SidebarNew.SidebarItem[] {
+  const items: SidebarNew.SidebarItem[] = []
   Object.entries(paths).forEach(([, operations]) => {
     Object.entries(operations).map(([method, operation]) => {
       const definedOperation = operation as Operation

@@ -3,17 +3,17 @@
 // @refresh reset
 
 import React, { useEffect, useMemo, useRef } from "react"
-import { SidebarItemSubCategory as SidebarItemSubCategoryType } from "types"
+import { SidebarNew } from "types"
 import {
   checkSidebarItemVisibility,
   SidebarItem,
   useMobile,
-  useSidebar,
+  useSidebarNew,
 } from "../../../.."
 import clsx from "clsx"
 
-export type SidebarItemLinkProps = {
-  item: SidebarItemSubCategoryType
+export type SidebarItemSubCategoryProps = {
+  item: SidebarNew.SidebarItemSubCategory
   nested?: boolean
 } & React.AllHTMLAttributes<HTMLLIElement>
 
@@ -21,12 +21,12 @@ export const SidebarItemSubCategory = ({
   item,
   className,
   nested = false,
-}: SidebarItemLinkProps) => {
-  const { isLinkActive, disableActiveTransition, sidebarRef } = useSidebar()
+}: SidebarItemSubCategoryProps) => {
+  const { isItemActive, disableActiveTransition, sidebarRef } = useSidebarNew()
   const { isMobile } = useMobile()
   const active = useMemo(
-    () => !isMobile && isLinkActive(item, true),
-    [isLinkActive, item, isMobile]
+    () => !isMobile && isItemActive(item),
+    [isItemActive, item, isMobile]
   )
   const ref = useRef<HTMLLIElement>(null)
 

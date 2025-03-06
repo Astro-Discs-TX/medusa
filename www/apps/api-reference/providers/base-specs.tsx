@@ -2,11 +2,11 @@
 
 import { ExpandedDocument, SecuritySchemeObject } from "@/types/openapi"
 import { ReactNode, createContext, useContext, useEffect, useMemo } from "react"
-import { SidebarItem, SidebarItemSections } from "types"
+import { SidebarNew } from "types"
 import getSectionId from "../utils/get-section-id"
 import getTagChildSidebarItems from "../utils/get-tag-child-sidebar-items"
 import { useRouter } from "next/navigation"
-import { useSidebar } from "docs-ui"
+import { useSidebarNew } from "docs-ui"
 
 type BaseSpecsContextType = {
   baseSpecs: ExpandedDocument | undefined
@@ -22,7 +22,8 @@ type BaseSpecsProviderProps = {
 
 const BaseSpecsProvider = ({ children, baseSpecs }: BaseSpecsProviderProps) => {
   const router = useRouter()
-  const { activePath, addItems, setActivePath, resetItems } = useSidebar()
+  const { activePath, addItems, setActivePath, resetItems, shownSidebar } =
+    useSidebarNew()
 
   const getSecuritySchema = (
     securityName: string
@@ -48,7 +49,7 @@ const BaseSpecsProvider = ({ children, baseSpecs }: BaseSpecsProviderProps) => {
       return []
     }
 
-    const itemsToAdd: SidebarItem[] = [
+    const itemsToAdd: SidebarNew.SidebarItem[] = [
       {
         type: "separator",
       },
@@ -89,9 +90,9 @@ const BaseSpecsProvider = ({ children, baseSpecs }: BaseSpecsProviderProps) => {
     }
 
     addItems(itemsToAdd, {
-      section: SidebarItemSections.DEFAULT,
+      sidebar_id: shownSidebar.sidebar_id,
     })
-  }, [itemsToAdd])
+  }, [itemsToAdd, shownSidebar.sidebar_id])
 
   useEffect(() => {
     return () => {

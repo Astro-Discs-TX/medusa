@@ -1,40 +1,39 @@
 "use client"
 
-import React, { Suspense, useMemo, useRef } from "react"
-import { isSidebarItemLink, useSidebar } from "@/providers"
+import React, { Suspense, useRef } from "react"
+import { useSidebarNew } from "@/providers"
 import clsx from "clsx"
 import { Loading } from "@/components"
 import { SidebarItem } from "./Item"
 // @ts-expect-error can't install the types package because it doesn't support React v19
 import { CSSTransition, SwitchTransition } from "react-transition-group"
-import { SidebarTop, SidebarTopProps } from "./Top"
+import { SidebarTop } from "./Top"
 import { useClickOutside, useKeyboardShortcut } from "@/hooks"
 import useResizeObserver from "@react-hook/resize-observer"
+import { isSidebarItemLink } from "../../utils/sidebar-utils"
 
 export type SidebarProps = {
   className?: string
   expandItems?: boolean
-  sidebarTopProps?: Omit<SidebarTopProps, "parentItem">
 }
 
 export const Sidebar = ({
   className = "",
   expandItems = true,
-  sidebarTopProps,
 }: SidebarProps) => {
   const sidebarWrapperRef = useRef(null)
   const sidebarTopRef = useRef<HTMLDivElement>(null)
   const {
-    items,
-    currentItems,
+    shownSidebar,
     mobileSidebarOpen,
     setMobileSidebarOpen,
-    staticSidebarItems,
+    isSidebarStatic,
     sidebarRef,
     desktopSidebarOpen,
     setDesktopSidebarOpen,
     setSidebarTopHeight,
-  } = useSidebar()
+    sidebarHistory,
+  } = useSidebarNew()
   useClickOutside({
     elmRef: sidebarWrapperRef,
     onClickOutside: () => {
@@ -50,11 +49,6 @@ export const Sidebar = ({
       setDesktopSidebarOpen((prev) => !prev)
     },
   })
-
-  const sidebarItems = useMemo(
-    () => currentItems || items,
-    [items, currentItems]
-  )
 
   useResizeObserver(sidebarTopRef as React.RefObject<HTMLElement>, () => {
     setSidebarTopHeight(sidebarTopRef.current?.clientHeight || 0)
@@ -94,7 +88,11 @@ export const Sidebar = ({
         <ul className={clsx("h-full w-full", "flex flex-col")}>
           <SwitchTransition>
             <CSSTransition
-              key={sidebarItems.parentItem?.title || "home"}
+              key={
+                sidebarHistory.length
+                  ? sidebarHistory[sidebarHistory.length - 1]
+                  : "home"
+              }
               nodeRef={sidebarRef}
               classNames={{
                 enter: "animate-fadeInLeft animate-fast",
@@ -110,32 +108,12 @@ export const Sidebar = ({
                 ref={sidebarRef}
                 id="sidebar"
               >
-                <SidebarTop
-                  {...sidebarTopProps}
-                  parentItem={sidebarItems.parentItem}
-                  ref={sidebarTopRef}
-                />
-                {/* MOBILE SIDEBAR - keeping this in case we need it in the future */}
-                {/* <div className={clsx("lg:hidden")}>
-                  {!sidebarItems.mobile.length && !staticSidebarItems && (
-                    <Loading className="px-0" />
-                  )}
-                  {sidebarItems.mobile.map((item, index) => (
-                    <SidebarItem
-                      item={item}
-                      key={index}
-                      expandItems={expandItems}
-                      hasNextItems={index !== sidebarItems.default.length - 1}
-                    />
-                  ))}
-                  {sidebarItems.mobile.length > 0 && <DottedSeparator />}
-                </div> */}
-                {/* DESKTOP SIDEBAR */}
+                <SidebarTop ref={sidebarTopRef} />
                 <div className="pt-docs_0.75">
-                  {!sidebarItems.default.length && !staticSidebarItems && (
+                  {!shownSidebar.items.length && !isSidebarStatic && (
                     <Loading className="px-0" />
                   )}
-                  {sidebarItems.default.map((item, index) => {
+                  {shownSidebar.items.map((item, index) => {
                     const itemKey =
                       item.type === "separator"
                         ? index
@@ -156,9 +134,7 @@ export const Sidebar = ({
                         <SidebarItem
                           item={item}
                           expandItems={expandItems}
-                          hasNextItems={
-                            index !== sidebarItems.default.length - 1
-                          }
+                          hasNextItems={index !== shownSidebar.items.length - 1}
                         />
                       </Suspense>
                     )

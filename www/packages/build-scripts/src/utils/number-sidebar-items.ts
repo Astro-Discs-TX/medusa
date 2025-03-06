@@ -1,15 +1,15 @@
-import { InteractiveSidebarItem, SidebarItem, SidebarItemCategory } from "types"
+import { SidebarNew } from "types"
 
 export default function numberSidebarItems(
-  sidebarItems: SidebarItem[],
+  sidebarItems: SidebarNew.SidebarItem[],
   numbering = [1]
-): SidebarItem[] {
+): SidebarNew.SidebarItem[] {
   if (!numbering.length) {
     numbering.push(1)
   }
   const isTopItems = numbering.length === 1
-  const numberedItems: SidebarItem[] = []
-  let parentItem: InteractiveSidebarItem | undefined
+  const numberedItems: SidebarNew.SidebarItem[] = []
+  let parentItem: SidebarNew.InteractiveSidebarItem | undefined
   sidebarItems.forEach((item) => {
     if (item.type === "separator") {
       ;(parentItem?.children || numberedItems).push(item)
@@ -43,7 +43,7 @@ export default function numberSidebarItems(
 
       parentItem = numberedItems[
         numberedItems.length - 1
-      ] as SidebarItemCategory
+      ] as SidebarNew.SidebarItemCategory
     }
 
     if (item.children) {
