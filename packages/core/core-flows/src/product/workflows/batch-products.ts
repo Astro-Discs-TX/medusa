@@ -41,6 +41,7 @@ const conditionallyDeleteProducts = (input: BatchProductWorkflowInput) =>
     deleteProductsWorkflow.runAsStep({ input: { ids: input.delete! } })
   )
 
+
 export const batchProductsWorkflowId = "batch-products"
 /**
  * This workflow creates, updates, or deletes products. It's used by the
