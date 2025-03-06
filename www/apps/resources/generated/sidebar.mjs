@@ -8927,14 +8927,6 @@ export const generatedSidebar = [
                 "title": "Payment with Stripe in React Storefront",
                 "path": "https://docs.medusajs.com/resources/storefront-development/checkout/payment/stripe",
                 "children": []
-              },
-              {
-                "loaded": true,
-                "isPathHref": true,
-                "type": "ref",
-                "title": "Implement Express Checkout with Medusa",
-                "path": "https://docs.medusajs.com/resources/storefront-development/guides/express-checkout",
-                "children": []
               }
             ]
           },
