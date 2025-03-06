@@ -88,7 +88,7 @@ jobs:
       - name: Get Directories to Scan
         if: ${{ steps.pr-files.outputs.files_lt_threshold == 'true' }}
         working-directory: www/vale
-        run: ./get-files.sh book app
+        run: ./get-files.sh book app contribution-guidelines usage
         id: directories
 
       - name: Vale Linter
@@ -145,7 +145,7 @@ jobs:
 
       - name: Get Directories to Scan
         working-directory: www/vale
-        run: ./get-files.sh resources app contribution-guidelines usage
+        run: ./get-files.sh resources app
         id: directories
 
       - name: Vale Linter
