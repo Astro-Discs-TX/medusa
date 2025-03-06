@@ -19,6 +19,7 @@ import {
   StepFunction,
   StepResponse,
   transform,
+  when,
   WorkflowResponse,
 } from ".."
 import { MedusaWorkflow } from "../../../medusa-workflow"
@@ -739,6 +740,54 @@ describe("Workflow composer", function () {
           },
         ],
         obj: "return from 4",
+      })
+    })
+
+    it("should compose a new workflow with conditional parallelized steps", async () => {
+      const mockStep1Fn = jest.fn().mockImplementation(() => {
+        return new StepResponse(true)
+      }) as any
+      const mockStep2Fn = jest.fn().mockImplementation(() => {
+        return new StepResponse(true)
+      }) as any
+      const mockStep3Fn = jest.fn().mockImplementation(() => {
+        return new StepResponse(true)
+      }) as any
+      const mockStep4Fn = jest.fn().mockImplementation(() => {
+        return new StepResponse(true)
+      }) as any
+
+      const step1 = createStep("step1", mockStep1Fn)
+      const step2 = createStep("step2", mockStep2Fn)
+      const step3 = createStep("step3", mockStep3Fn)
+      const step4 = createStep("step4", mockStep4Fn)
+
+      const workflow = createWorkflow("workflow1", function (input) {
+        const [ret1, ret2, ret3, ret4] = parallelize(
+          step1(),
+          when({}, () => false).then(() => {
+            return step2()
+          }),
+          step3(),
+          when({}, () => false).then(() => {
+            return step4()
+          })
+        )
+        return new WorkflowResponse({ ret1, ret2, ret3, ret4 })
+      })
+
+      const { result: workflowResult } = await workflow().run()
+
+      expect(mockStep1Fn).toHaveBeenCalledTimes(1)
+      expect(mockStep2Fn).toHaveBeenCalledTimes(0)
+      expect(mockStep3Fn).toHaveBeenCalledTimes(1)
+      expect(mockStep4Fn).toHaveBeenCalledTimes(0)
+
+      expect(workflowResult).toEqual({
+        ret1: true,
+        ret2: undefined,
+        ret3: true,
+        ret4: undefined,
       })
     })
 
