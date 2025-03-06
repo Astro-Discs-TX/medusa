@@ -1388,6 +1388,14 @@ export const generatedSidebar = [
                 "title": "Checkout Step 3: Choose Shipping Method",
                 "path": "https://docs.medusajs.com/resources/storefront-development/checkout/shipping",
                 "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Implement Express Checkout with Medusa",
+                "path": "https://docs.medusajs.com/resources/storefront-development/guides/express-checkout",
+                "children": []
               }
             ]
           },
@@ -1662,14 +1670,6 @@ export const generatedSidebar = [
                     "description": "The following methods or properties are used to send requests to Store API Routes related to the Cart Module.",
                     "autogenerate_as_ref": true,
                     "children": [
-                      {
-                        "loaded": true,
-                        "isPathHref": true,
-                        "type": "ref",
-                        "title": "Implement Express Checkout with Medusa",
-                        "path": "https://docs.medusajs.com/resources/storefront-development/guides/express-checkout",
-                        "children": []
-                      },
                       {
                         "loaded": true,
                         "isPathHref": true,
@@ -3445,6 +3445,14 @@ export const generatedSidebar = [
                 "title": "Checkout Step 3: Choose Shipping Method",
                 "path": "https://docs.medusajs.com/resources/storefront-development/checkout/shipping",
                 "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Implement Express Checkout with Medusa",
+                "path": "https://docs.medusajs.com/resources/storefront-development/guides/express-checkout",
+                "children": []
               }
             ]
           },
@@ -4019,14 +4027,6 @@ export const generatedSidebar = [
                     "description": "The following methods or properties are used to send requests to Store API Routes related to the Fulfillment Module.",
                     "autogenerate_as_ref": true,
                     "children": [
-                      {
-                        "loaded": true,
-                        "isPathHref": true,
-                        "type": "ref",
-                        "title": "Implement Express Checkout with Medusa",
-                        "path": "https://docs.medusajs.com/resources/storefront-development/guides/express-checkout",
-                        "children": []
-                      },
                       {
                         "loaded": true,
                         "isPathHref": true,
@@ -5998,6 +5998,14 @@ export const generatedSidebar = [
                 "title": "Checkout Step 5: Complete Cart",
                 "path": "https://docs.medusajs.com/resources/storefront-development/checkout/complete-cart",
                 "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Implement Express Checkout with Medusa",
+                "path": "https://docs.medusajs.com/resources/storefront-development/guides/express-checkout",
+                "children": []
               }
             ]
           },
@@ -7128,14 +7136,6 @@ export const generatedSidebar = [
                         "loaded": true,
                         "isPathHref": true,
                         "type": "ref",
-                        "title": "Implement Express Checkout with Medusa",
-                        "path": "https://docs.medusajs.com/resources/storefront-development/guides/express-checkout",
-                        "children": []
-                      },
-                      {
-                        "loaded": true,
-                        "isPathHref": true,
-                        "type": "ref",
                         "title": "order",
                         "path": "https://docs.medusajs.com/resources/references/js-sdk/store/order",
                         "children": []
@@ -7157,6 +7157,14 @@ export const generatedSidebar = [
                         "type": "ref",
                         "title": "claim",
                         "path": "https://docs.medusajs.com/resources/references/js-sdk/admin/claim",
+                        "children": []
+                      },
+                      {
+                        "loaded": true,
+                        "isPathHref": true,
+                        "type": "ref",
+                        "title": "draftOrder",
+                        "path": "https://docs.medusajs.com/resources/references/js-sdk/admin/draftOrder",
                         "children": []
                       },
                       {
@@ -8863,6 +8871,14 @@ export const generatedSidebar = [
                 "title": "Payment with Stripe in React Storefront",
                 "path": "https://docs.medusajs.com/resources/storefront-development/checkout/payment/stripe",
                 "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "title": "Implement Express Checkout with Medusa",
+                "path": "https://docs.medusajs.com/resources/storefront-development/guides/express-checkout",
+                "children": []
               }
             ]
           },
@@ -9318,14 +9334,6 @@ export const generatedSidebar = [
                     "description": "The following methods or properties are used to send requests to Store API Routes related to the Payment Module.",
                     "autogenerate_as_ref": true,
                     "children": [
-                      {
-                        "loaded": true,
-                        "isPathHref": true,
-                        "type": "ref",
-                        "title": "Implement Express Checkout with Medusa",
-                        "path": "https://docs.medusajs.com/resources/storefront-development/guides/express-checkout",
-                        "children": []
-                      },
                       {
                         "loaded": true,
                         "isPathHref": true,
@@ -11041,6 +11049,14 @@ export const generatedSidebar = [
                 "loaded": true,
                 "isPathHref": true,
                 "type": "ref",
+                "title": "Implement Express Checkout with Medusa",
+                "path": "https://docs.medusajs.com/resources/storefront-development/guides/express-checkout",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
                 "title": "List Product Categories in Storefront",
                 "path": "https://docs.medusajs.com/resources/storefront-development/products/categories/list",
                 "children": []
@@ -11738,14 +11754,6 @@ export const generatedSidebar = [
                     "description": "The following methods or properties are used to send requests to Store API Routes related to the Product Module.",
                     "autogenerate_as_ref": true,
                     "children": [
-                      {
-                        "loaded": true,
-                        "isPathHref": true,
-                        "type": "ref",
-                        "title": "Implement Express Checkout with Medusa",
-                        "path": "https://docs.medusajs.com/resources/storefront-development/guides/express-checkout",
-                        "children": []
-                      },
                       {
                         "loaded": true,
                         "isPathHref": true,
@@ -13517,6 +13525,14 @@ export const generatedSidebar = [
                 "loaded": true,
                 "isPathHref": true,
                 "type": "ref",
+                "title": "Implement Express Checkout with Medusa",
+                "path": "https://docs.medusajs.com/resources/storefront-development/guides/express-checkout",
+                "children": []
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
                 "title": "Region Context in Storefront",
                 "path": "https://docs.medusajs.com/resources/storefront-development/regions/context",
                 "children": []
@@ -13774,14 +13790,6 @@ export const generatedSidebar = [
                     "description": "The following methods or properties are used to send requests to Store API Routes related to the Region Module.",
                     "autogenerate_as_ref": true,
                     "children": [
-                      {
-                        "loaded": true,
-                        "isPathHref": true,
-                        "type": "ref",
-                        "title": "Implement Express Checkout with Medusa",
-                        "path": "https://docs.medusajs.com/resources/storefront-development/guides/express-checkout",
-                        "children": []
-                      },
                       {
                         "loaded": true,
                         "isPathHref": true,
@@ -18174,7 +18182,7 @@ export const generatedSidebar = [
             "isPathHref": true,
             "type": "link",
             "title": "Medusa Cloud",
-            "path": "https://medusajs.com/contact",
+            "path": "https://medusajs.com/pricing",
             "children": []
           },
           {
