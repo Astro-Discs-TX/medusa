@@ -26,20 +26,17 @@ export interface BatchProductWorkflowInput
     UpdateProductWorkflowInputDTO
   > {}
 
-// TODO: Fix return type here
-const conditionallyCreateProducts = (input: BatchProductWorkflowInput): any =>
+const conditionallyCreateProducts = (input: BatchProductWorkflowInput) =>
   when({ input }, ({ input }) => !!input.create?.length).then(() =>
     createProductsWorkflow.runAsStep({ input: { products: input.create! } })
   )
 
-// TODO: Fix return type here
-const conditionallyUpdateProducts = (input: BatchProductWorkflowInput): any =>
+const conditionallyUpdateProducts = (input: BatchProductWorkflowInput) =>
   when({ input }, ({ input }) => !!input.update?.length).then(() =>
     updateProductsWorkflow.runAsStep({ input: { products: input.update! } })
   )
 
-// TODO: Fix return type here
-const conditionallyDeleteProducts = (input: BatchProductWorkflowInput): any =>
+const conditionallyDeleteProducts = (input: BatchProductWorkflowInput) =>
   when({ input }, ({ input }) => !!input.delete?.length).then(() =>
     deleteProductsWorkflow.runAsStep({ input: { ids: input.delete! } })
   )
