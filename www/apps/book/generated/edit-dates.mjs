@@ -118,6 +118,6 @@ export const generatedEditDates = {
   "app/learn/fundamentals/api-routes/parse-body/page.mdx": "2025-02-14T08:32:25.596Z",
   "app/learn/fundamentals/admin/routing/page.mdx": "2025-02-24T09:50:37.495Z",
   "app/learn/resources/contribution-guidelines/admin-translations/page.mdx": "2025-02-11T16:57:46.726Z",
-  "app/learn/resources/contribution-guidelines/docs/page.mdx": "2024-12-13T07:45:27.487Z",
+  "app/learn/resources/contribution-guidelines/docs/page.mdx": "2025-03-06T09:32:26.010Z",
   "app/learn/resources/usage/page.mdx": "2025-02-26T13:35:34.824Z"
 }
