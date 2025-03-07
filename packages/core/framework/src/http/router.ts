@@ -195,11 +195,13 @@ export class ApiLoader {
       res,
       next
     ) {
+      let method: string = req.method
+      if (req.method === "OPTIONS") {
+        method = req.headers["access-control-request-method"] ?? req.method
+      }
+
       const path = `${namespace}${req.path}`
-      const matchingRoute = routesFinder.find(
-        path,
-        req.method as MiddlewareVerb
-      )
+      const matchingRoute = routesFinder.find(path, method as MiddlewareVerb)
       if (matchingRoute && matchingRoute[toggleKey] === true) {
         return corsFn(req, res, next)
       }
