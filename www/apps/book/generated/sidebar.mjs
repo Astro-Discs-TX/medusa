@@ -6,6 +6,7 @@ export const generatedSidebars = [
       {
         "loaded": true,
         "isPathHref": true,
+        "initialOpen": false,
         "type": "category",
         "title": "1. Get Started",
         "children": [
@@ -46,6 +47,7 @@ export const generatedSidebars = [
       {
         "loaded": true,
         "isPathHref": true,
+        "initialOpen": false,
         "type": "category",
         "title": "2. Customization Tutorial",
         "children": [
@@ -230,6 +232,7 @@ export const generatedSidebars = [
       {
         "loaded": true,
         "isPathHref": true,
+        "initialOpen": false,
         "type": "category",
         "title": "3. Framework",
         "children": [
@@ -909,6 +912,7 @@ export const generatedSidebars = [
       {
         "loaded": true,
         "isPathHref": true,
+        "initialOpen": false,
         "type": "category",
         "title": "4. Admin Development",
         "children": [
@@ -1008,6 +1012,7 @@ export const generatedSidebars = [
       {
         "loaded": true,
         "isPathHref": true,
+        "initialOpen": false,
         "type": "category",
         "title": "6. Configurations",
         "children": [
@@ -1038,6 +1043,7 @@ export const generatedSidebars = [
       {
         "loaded": true,
         "isPathHref": true,
+        "initialOpen": false,
         "type": "category",
         "title": "7. Debugging & Testing",
         "children": [
@@ -1170,6 +1176,7 @@ export const generatedSidebars = [
       {
         "loaded": true,
         "isPathHref": true,
+        "initialOpen": false,
         "type": "category",
         "title": "9. Upgrade",
         "children": [
@@ -1200,6 +1207,7 @@ export const generatedSidebars = [
       {
         "loaded": true,
         "isPathHref": true,
+        "initialOpen": false,
         "type": "category",
         "title": "10. Resources",
         "children": [

@@ -29,6 +29,7 @@ export default function numberSidebarItems(
       numberedItems.push(
         item.type === "category"
           ? {
+              initialOpen: false,
               ...item,
               title: item.chapterTitle,
             }
