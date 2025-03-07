@@ -173,6 +173,7 @@ export class ApiLoader {
     return {
       origin: parseCorsOrigins(origin),
       credentials: true,
+      preflightContinue: false,
     }
   }
 
@@ -213,7 +214,7 @@ export class ApiLoader {
         ? (ApiLoader.traceMiddleware(corsMiddleware, {
             route: namespace,
           }) as RequestHandler)
-        : cors(corsOptions)
+        : corsMiddleware
     )
   }
 
@@ -334,16 +335,17 @@ export class ApiLoader {
       "api-key",
     ])
 
-    /**
-     * Publishable key check, CORS and auth setup for store routes.
-     */
-    this.#applyStorePublishableKeyMiddleware("/store")
     this.#applyCorsMiddleware(
       routesFinder,
       "/store",
       "shouldAppendStoreCors",
       this.#createCorsOptions(configManager.config.projectConfig.http.storeCors)
     )
+    /**
+     * Publishable key check, CORS and auth setup for store routes.
+     */
+    this.#applyStorePublishableKeyMiddleware("/store")
+
     this.#applyAuthMiddleware(
       routesFinder,
       "/store",
