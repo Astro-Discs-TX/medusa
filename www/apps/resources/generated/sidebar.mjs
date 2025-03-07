@@ -18653,14 +18653,6 @@ export const generatedSidebars = [
           {
             "loaded": true,
             "isPathHref": true,
-            "type": "link",
-            "path": "/references/medusa-config",
-            "title": "Medusa Configurations",
-            "children": []
-          },
-          {
-            "loaded": true,
-            "isPathHref": true,
             "type": "sidebar",
             "sidebar_id": "deployment-guides",
             "title": "Deployment Guides",
@@ -18681,7 +18673,7 @@ export const generatedSidebars = [
                 "isPathHref": true,
                 "type": "link",
                 "title": "Medusa Cloud",
-                "path": "https://medusajs.com/contact",
+                "path": "https://medusajs.com/pricing",
                 "children": []
               },
               {
