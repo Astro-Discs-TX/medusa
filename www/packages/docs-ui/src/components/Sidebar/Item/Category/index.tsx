@@ -31,6 +31,9 @@ export const SidebarItemCategory = ({
   const itemShowLoading = useMemo(() => {
     return !item.loaded || (item.showLoadingIfEmpty && !item.children?.length)
   }, [item])
+  const isActive = useMemo(() => {
+    return isItemActive(item)
+  }, [isItemActive, item])
 
   useEffect(() => {
     if (open && itemShowLoading) {
@@ -45,19 +48,17 @@ export const SidebarItemCategory = ({
   }, [itemShowLoading, showLoading])
 
   useEffect(() => {
-    const isActive = isItemActive(item)
-
     if (isActive && !open) {
       setOpen(true)
     }
-  }, [isItemActive, item.children])
+  }, [isActive, item.children])
 
   useEffect(() => {
     if (!persistCategoryState) {
       return
     }
     const persistedOpen = getPersistedCategoryState(item.title)
-    if (persistedOpen !== undefined) {
+    if (persistedOpen !== undefined && !isActive) {
       setOpen(persistedOpen)
     }
   }, [persistCategoryState])

@@ -26,20 +26,34 @@ export const areSidebarItemsEqual = ({
   itemB: SidebarNew.SidebarItem
   compareTitles?: boolean
 }): boolean => {
-  if (
-    itemA.type === "separator" ||
-    itemB.type === "separator" ||
-    itemA.type !== itemB.type
-  ) {
+  if (itemA.type !== itemB.type) {
     return false
   }
-  const hasSameTitle = !compareTitles || itemA.title === itemB.title
-  const hasSamePath =
-    !isSidebarItemLink(itemA) ||
-    !isSidebarItemLink(itemB) ||
-    itemA.path === itemB.path
+  // after this, we know that itemA and itemB have the same type
+  switch (itemA.type) {
+    case "separator":
+      return true
+    case "sidebar":
+      return (
+        itemA.sidebar_id === (itemB as SidebarNew.SidebarItemSidebar).sidebar_id
+      )
+    case "category":
+    case "sub-category":
+      return compareTitles
+        ? itemA.title === (itemB as SidebarNew.SidebarItemCategory).title
+        : false
+    case "link":
+    case "ref":
+    case "external": {
+      const hasSameTitle =
+        !compareTitles ||
+        itemA.title === (itemB as SidebarNew.SidebarItemLink).title
+      const hasSamePath =
+        itemA.path === (itemB as SidebarNew.SidebarItemLink).path
 
-  return hasSameTitle && hasSamePath
+      return hasSameTitle && hasSamePath
+    }
+  }
 }
 
 export const findSidebarItem = ({
@@ -53,20 +67,23 @@ export const findSidebarItem = ({
   checkChildren?: boolean
   compareTitles?: boolean
 }): SidebarNew.SidebarItem | undefined => {
-  return sidebarItems.find((i) => {
+  let foundItem: SidebarNew.SidebarItem | undefined
+  sidebarItems.some((i) => {
     if (areSidebarItemsEqual({ itemA: i, itemB: item })) {
-      return true
-    }
-
-    if (checkChildren && "children" in i && i.children) {
-      return findSidebarItem({
+      foundItem = i
+    } else if (checkChildren && "children" in i && i.children) {
+      foundItem = findSidebarItem({
         sidebarItems: i.children,
         item,
         checkChildren,
         compareTitles,
       })
     }
+
+    return foundItem !== undefined
   })
+
+  return foundItem
 }
 
 export const getSidebarItemWithHistory = ({
@@ -89,7 +106,7 @@ export const getSidebarItemWithHistory = ({
   let foundItem: SidebarNew.SidebarItem | undefined
   let parentSidebar: SidebarNew.SidebarItemSidebar | undefined
   sidebarItems.some((i) => {
-    if (areSidebarItemsEqual({ itemA: i, itemB: item })) {
+    if (areSidebarItemsEqual({ itemA: i, itemB: item, compareTitles })) {
       foundItem = i
       return true
     }
@@ -105,9 +122,12 @@ export const getSidebarItemWithHistory = ({
       if (result.item) {
         foundItem = result.item
         if (i.type === "sidebar") {
-          parentSidebar = i
-          sidebarHistory.push(i.sidebar_id, ...result.sidebarHistory)
+          parentSidebar = result.parentSidebar || i
+          sidebarHistory.push(i.sidebar_id)
+        } else {
+          parentSidebar = result.parentSidebar
         }
+        sidebarHistory.push(...result.sidebarHistory)
         return true
       }
     }

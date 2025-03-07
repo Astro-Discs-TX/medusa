@@ -1,12 +1,24 @@
 "use client"
 
-import React from "react"
+import React, { useMemo } from "react"
 import clsx from "clsx"
 import { ArrowUturnLeft } from "@medusajs/icons"
 import { useSidebarNew } from "../../../providers"
 
 export const SidebarChild = () => {
   const { goBack, parentSidebar } = useSidebarNew()
+
+  const title = useMemo(() => {
+    if (!parentSidebar) {
+      return ""
+    }
+
+    return (
+      "childSidebarTitle" in parentSidebar
+        ? parentSidebar.childSidebarTitle || parentSidebar.title
+        : parentSidebar.title
+    ) as string
+  }, [parentSidebar])
 
   if (!parentSidebar) {
     return <></>
@@ -24,7 +36,7 @@ export const SidebarChild = () => {
         tabIndex={-1}
       >
         <ArrowUturnLeft />
-        <span className="truncate flex-1">{parentSidebar.title}</span>
+        <span className="truncate flex-1">{title}</span>
       </div>
     </div>
   )

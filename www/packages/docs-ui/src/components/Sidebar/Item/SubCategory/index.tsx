@@ -103,15 +103,8 @@ export const SidebarItemSubCategory = ({
             "py-docs_0.25 px-docs_0.5",
             "block w-full",
             !isTitleOneWord && "break-words",
-            active && [
-              "rounded-docs_sm",
-              "shadow-borders-base dark:shadow-borders-base-dark",
-              "text-medusa-fg-base",
-            ],
-            !active && [
-              !nested && "text-medusa-fg-subtle",
-              nested && "text-medusa-fg-muted",
-            ],
+            !nested && "text-medusa-fg-subtle",
+            nested && "text-medusa-fg-muted",
             "text-compact-small-plus",
             className
           )}

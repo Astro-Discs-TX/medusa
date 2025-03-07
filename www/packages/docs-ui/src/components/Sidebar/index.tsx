@@ -1,6 +1,6 @@
 "use client"
 
-import React, { Suspense, useRef } from "react"
+import React, { Suspense, useMemo, useRef } from "react"
 import { useSidebarNew } from "@/providers"
 import clsx from "clsx"
 import { Loading } from "@/components"
@@ -24,6 +24,7 @@ export const Sidebar = ({
   const sidebarWrapperRef = useRef(null)
   const sidebarTopRef = useRef<HTMLDivElement>(null)
   const {
+    sidebars,
     shownSidebar,
     mobileSidebarOpen,
     setMobileSidebarOpen,
@@ -53,6 +54,12 @@ export const Sidebar = ({
   useResizeObserver(sidebarTopRef as React.RefObject<HTMLElement>, () => {
     setSidebarTopHeight(sidebarTopRef.current?.clientHeight || 0)
   })
+
+  const sidebarItems = useMemo(() => {
+    return shownSidebar && "items" in shownSidebar
+      ? shownSidebar.items
+      : shownSidebar?.children || []
+  }, [shownSidebar])
 
   return (
     <>
@@ -91,7 +98,7 @@ export const Sidebar = ({
               key={
                 sidebarHistory.length
                   ? sidebarHistory[sidebarHistory.length - 1]
-                  : "home"
+                  : sidebars[0].sidebar_id
               }
               nodeRef={sidebarRef}
               classNames={{
@@ -110,10 +117,10 @@ export const Sidebar = ({
               >
                 <SidebarTop ref={sidebarTopRef} />
                 <div className="pt-docs_0.75">
-                  {!shownSidebar.items.length && !isSidebarStatic && (
+                  {!sidebarItems.length && !isSidebarStatic && (
                     <Loading className="px-0" />
                   )}
-                  {shownSidebar.items.map((item, index) => {
+                  {sidebarItems.map((item, index) => {
                     const itemKey =
                       item.type === "separator"
                         ? index
@@ -134,7 +141,7 @@ export const Sidebar = ({
                         <SidebarItem
                           item={item}
                           expandItems={expandItems}
-                          hasNextItems={index !== shownSidebar.items.length - 1}
+                          hasNextItems={index !== sidebarItems.length - 1}
                         />
                       </Suspense>
                     )

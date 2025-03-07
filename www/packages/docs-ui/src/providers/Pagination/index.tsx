@@ -178,7 +178,11 @@ export const PaginationProvider = ({ children }: PaginationProviderProps) => {
 
   useEffect(() => {
     if (activePath !== previousActivePath) {
-      const result = searchItems(shownSidebar.items)
+      const sidebarItems =
+        shownSidebar && "items" in shownSidebar
+          ? shownSidebar.items
+          : shownSidebar?.children || []
+      const result = searchItems(sidebarItems)
       setPrevPage(
         result.prevItem
           ? {

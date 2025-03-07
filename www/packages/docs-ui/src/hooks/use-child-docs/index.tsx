@@ -166,7 +166,9 @@ export const useChildDocs = ({
   const filteredItems = useMemo(() => {
     let targetItems =
       type === "sidebar"
-        ? shownSidebar.items
+        ? shownSidebar && "items" in shownSidebar
+          ? shownSidebar.items
+          : shownSidebar?.children || []
         : [...(activeItem?.children || [])]
     if (filterType !== "all" && targetItems) {
       targetItems = filterItems(targetItems)

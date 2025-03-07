@@ -635,19 +635,19 @@ export const sidebars = [
             children: [
               {
                 type: "link",
-                path: "/resources/contribution-guidelines/docs",
+                path: "/learn/resources/contribution-guidelines/docs",
                 title: "Docs",
               },
               {
                 type: "link",
-                path: "/resources//contribution-guidelines/admin-translations",
+                path: "/learn/resources//contribution-guidelines/admin-translations",
                 title: "Admin Translations",
               },
             ],
           },
           {
             type: "link",
-            path: "/resources/usage",
+            path: "/learn/resources/usage",
             title: "Usage",
           },
         ],

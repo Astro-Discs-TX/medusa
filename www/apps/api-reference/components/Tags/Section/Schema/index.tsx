@@ -57,6 +57,9 @@ const TagSectionSchema = ({ schema, tagName }: TagSectionSchemaProps) => {
   }, [isBrowser, scrollableElement])
 
   useEffect(() => {
+    if (!shownSidebar) {
+      return
+    }
     addItems(
       [
         {
@@ -79,7 +82,7 @@ const TagSectionSchema = ({ schema, tagName }: TagSectionSchemaProps) => {
       }
     )
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formattedName, shownSidebar.sidebar_id])
+  }, [formattedName, shownSidebar?.sidebar_id])
 
   useEffect(() => {
     if (!isBrowser) {

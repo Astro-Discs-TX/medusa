@@ -26,9 +26,16 @@ const TagPaths = ({ tag, className, paths }: TagPathsProps) => {
   const { loading } = useLoading()
 
   useEffect(() => {
+    if (!shownSidebar) {
+      return
+    }
+
     if (paths) {
       const parentItem = findSidebarItem({
-        sidebarItems: shownSidebar.items,
+        sidebarItems:
+          "items" in shownSidebar
+            ? shownSidebar.items
+            : shownSidebar.children || [],
         item: { title: tag.name, type: "category" },
         checkChildren: false,
       }) as SidebarNew.SidebarItemCategory
@@ -46,7 +53,7 @@ const TagPaths = ({ tag, className, paths }: TagPathsProps) => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paths, shownSidebar.sidebar_id])
+  }, [paths, shownSidebar?.sidebar_id])
 
   return (
     <Suspense>

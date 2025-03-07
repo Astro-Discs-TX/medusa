@@ -85,14 +85,14 @@ const BaseSpecsProvider = ({ children, baseSpecs }: BaseSpecsProviderProps) => {
   }, [baseSpecs])
 
   useEffect(() => {
-    if (!itemsToAdd.length) {
+    if (!itemsToAdd.length || !shownSidebar) {
       return
     }
 
     addItems(itemsToAdd, {
       sidebar_id: shownSidebar.sidebar_id,
     })
-  }, [itemsToAdd, shownSidebar.sidebar_id])
+  }, [itemsToAdd, shownSidebar?.sidebar_id])
 
   useEffect(() => {
     return () => {

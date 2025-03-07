@@ -40,7 +40,7 @@ export type SidebarStyleOptions = {
 
 export type SidebarContextType = {
   sidebars: SidebarNew.Sidebar[]
-  shownSidebar: SidebarNew.Sidebar
+  shownSidebar: SidebarNew.Sidebar | SidebarNew.SidebarItemSidebar | undefined
   parentSidebar: SidebarNew.Sidebar | SidebarNew.SidebarItemSidebar | undefined
   activePath: string | null
   activeItem: SidebarNew.SidebarItemLink | null
@@ -282,7 +282,7 @@ export const SidebarNewProvider = ({
     if (!activePath) {
       return {
         activeItem: null,
-        sidebarHistory: activeMainSidebar ? [activeMainSidebar.sidebar_id] : [],
+        sidebarHistory: [] as string[],
         parentSidebar: undefined,
       }
     }
@@ -290,6 +290,7 @@ export const SidebarNewProvider = ({
       getSidebarItemWithHistory({
         sidebarItems: activeMainSidebar.items,
         item: { type: "link", path: activePath, title: "" },
+        compareTitles: false,
       }) || null
 
     return {
@@ -302,17 +303,27 @@ export const SidebarNewProvider = ({
     }
   }, [activePath, activeMainSidebar])
 
+  const getSidebar = useCallback(
+    (sidebar_id: string) => {
+      return (
+        sidebars.find((s) => s.sidebar_id === sidebar_id) ||
+        (findSidebarItem({
+          sidebarItems: activeMainSidebar.items || [],
+          item: { type: "sidebar", sidebar_id, title: "" },
+          compareTitles: false,
+        }) as SidebarNew.SidebarItemSidebar)
+      )
+    },
+    [sidebars, activeMainSidebar]
+  )
+
   const shownSidebar = useMemo(() => {
-    if (!sidebarHistory.length || sidebarHistory.length === 1) {
-      return activeMainSidebar
+    if (!sidebarHistory.length) {
+      return
     }
 
-    return (
-      sidebars.find(
-        (s) => s.sidebar_id === sidebarHistory[sidebarHistory.length - 1]
-      ) || activeMainSidebar
-    )
-  }, [activeMainSidebar, sidebarHistory])
+    return getSidebar(sidebarHistory[sidebarHistory.length - 1])
+  }, [activeMainSidebar, sidebarHistory, getSidebar])
 
   const isItemActive = useCallback(
     (item: SidebarNew.InteractiveSidebarItem): boolean => {
@@ -381,6 +392,12 @@ export const SidebarNewProvider = ({
     const currentPath = location.hash.replace("#", "")
     if (currentPath) {
       setActivePath(currentPath)
+    } else {
+      const firstChild = getFirstLinkChild(activeMainSidebar.items)
+
+      if (firstChild) {
+        setActivePath(firstChild.path)
+      }
     }
   }
 
@@ -397,10 +414,7 @@ export const SidebarNewProvider = ({
 
     const handleScroll = () => {
       if (getScrolledTop(resolvedScrollableElement) === 0) {
-        // TODO replace with first item of the selected sidebar
-        const firstChild = activeMainSidebar.items.find(
-          (item) => item.type === "link"
-        ) as SidebarNew.SidebarItemLink
+        const firstChild = getFirstLinkChild(activeMainSidebar.items)
 
         if (firstChild) {
           setActivePath(firstChild.path)
@@ -504,44 +518,36 @@ export const SidebarNewProvider = ({
       : storageData[project.title][title]
   }
 
-  const getFirstLinkChild = (
-    items: SidebarNew.SidebarItem[]
-  ): SidebarNew.SidebarItemLink | undefined => {
-    let foundItem: SidebarNew.SidebarItemLink | undefined
-    items.some((item) => {
-      if (item.type === "link") {
-        foundItem = item
-      } else if ("children" in item && item.children) {
-        foundItem = getFirstLinkChild(item.children)
-      }
+  const getFirstLinkChild = useCallback(
+    (
+      items: SidebarNew.SidebarItem[]
+    ): SidebarNew.SidebarItemLink | undefined => {
+      let foundItem: SidebarNew.SidebarItemLink | undefined
+      items.some((item) => {
+        if (item.type === "link") {
+          foundItem = item
+        } else if ("children" in item && item.children) {
+          foundItem = getFirstLinkChild(item.children)
+        }
 
-      return foundItem !== undefined
-    })
+        return foundItem !== undefined
+      })
 
-    return foundItem
-  }
-
-  const getSidebarFirstLinkChild = (
-    sidebar: SidebarNew.Sidebar | SidebarNew.SidebarItemSidebar
-  ): SidebarNew.SidebarItemLink | undefined => {
-    const itemsToSearch =
-      "items" in sidebar ? sidebar.items : sidebar.children || []
-
-    return getFirstLinkChild(itemsToSearch)
-  }
-
-  const getSidebar = useCallback(
-    (sidebar_id: string) => {
-      return (
-        sidebars.find((s) => s.sidebar_id === sidebar_id) ||
-        (findSidebarItem({
-          sidebarItems: activeMainSidebar.items || [],
-          item: { type: "sidebar", sidebar_id, title: "" },
-          compareTitles: false,
-        }) as SidebarNew.SidebarItemSidebar)
-      )
+      return foundItem
     },
-    [sidebars, activeMainSidebar]
+    []
+  )
+
+  const getSidebarFirstLinkChild = useCallback(
+    (
+      sidebar: SidebarNew.Sidebar | SidebarNew.SidebarItemSidebar
+    ): SidebarNew.SidebarItemLink | undefined => {
+      const itemsToSearch =
+        "items" in sidebar ? sidebar.items : sidebar.children || []
+
+      return getFirstLinkChild(itemsToSearch)
+    },
+    [getFirstLinkChild]
   )
 
   const openSidebar = (sidebar_id: string) => {
@@ -554,14 +560,17 @@ export const SidebarNewProvider = ({
 
     if (firstChild) {
       setActivePath(firstChild.path)
+      router.replace(
+        firstChild.isPathHref ? firstChild.path : `#${firstChild.path}`
+      )
     }
   }
 
   const goBack = () => {
-    if (!sidebarHistory || sidebarHistory.length < 2) {
+    if (!sidebarHistory || sidebarHistory.length <= 1) {
       openSidebar(activeMainSidebar.sidebar_id)
     } else {
-      const lastSidebar = sidebarHistory[sidebarHistory.length - 1]
+      const lastSidebar = sidebarHistory[sidebarHistory.length - 2]
 
       openSidebar(lastSidebar)
     }

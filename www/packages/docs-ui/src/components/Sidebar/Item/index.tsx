@@ -6,6 +6,7 @@ import { SidebarItemLink } from "./Link"
 import { SidebarItemSubCategory } from "./SubCategory"
 import { DottedSeparator } from "../.."
 import { SidebarItemCategory } from "./Category"
+import { SidebarItemSidebar } from "./Sidebar"
 
 export type SidebarItemProps = {
   item: SidebarNew.SidebarItem
@@ -33,6 +34,8 @@ export const SidebarItem = ({
     case "ref":
     case "external":
       return <SidebarItemLink item={item} {...props} />
+    case "sidebar":
+      return <SidebarItemSidebar item={item} {...props} />
     case "separator":
       return <DottedSeparator />
   }
