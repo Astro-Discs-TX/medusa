@@ -114,7 +114,7 @@ export const Sidebar = ({ className = "" }: SidebarProps) => {
                 <SidebarTop ref={sidebarTopRef} />
                 <div className="pt-docs_0.75">
                   {!sidebarItems.length && !isSidebarStatic && (
-                    <Loading className="px-0" />
+                    <Loading className="px-docs_0.75" />
                   )}
                   {sidebarItems.map((item, index) => {
                     const itemKey =

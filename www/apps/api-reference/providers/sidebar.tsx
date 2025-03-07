@@ -25,6 +25,7 @@ const SidebarProvider = ({ children }: SidebarProviderProps) => {
       sidebars={config.sidebars}
       persistCategoryState={false}
       disableActiveTransition={false}
+      isSidebarStatic={false}
     >
       {children}
     </UiSidebarProvider>

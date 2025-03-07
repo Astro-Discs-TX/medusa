@@ -13,11 +13,9 @@ export const SidebarChild = () => {
       return ""
     }
 
-    return (
-      "childSidebarTitle" in shownSidebar
-        ? shownSidebar.childSidebarTitle || shownSidebar.title
-        : shownSidebar.title
-    ) as string
+    return "childSidebarTitle" in shownSidebar
+      ? shownSidebar.childSidebarTitle || shownSidebar.title
+      : shownSidebar.title
   }, [shownSidebar])
 
   if (!shownSidebar) {
