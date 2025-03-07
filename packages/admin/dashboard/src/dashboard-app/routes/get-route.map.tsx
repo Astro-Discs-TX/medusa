@@ -351,6 +351,11 @@ export function getRouteMap({
                         import("../../routes/orders/order-create-refund"),
                     },
                     {
+                      path: "credit-lines",
+                      lazy: () =>
+                        import("../../routes/orders/order-create-credit-line"),
+                    },
+                    {
                       path: "transfer",
                       lazy: () =>
                         import("../../routes/orders/order-request-transfer"),
