@@ -86,11 +86,6 @@ export const sidebar = [
         title: "General",
         children: [
           {
-            type: "link",
-            path: "/references/medusa-config",
-            title: "Medusa Configurations",
-          },
-          {
             type: "sidebar",
             sidebar_id: "deployment-guides",
             title: "Deployment Guides",
@@ -106,7 +101,7 @@ export const sidebar = [
               {
                 type: "link",
                 title: "Medusa Cloud",
-                path: "https://medusajs.com/contact",
+                path: "https://medusajs.com/pricing",
               },
               {
                 type: "separator",
