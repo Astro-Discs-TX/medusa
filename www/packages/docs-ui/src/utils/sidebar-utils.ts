@@ -100,17 +100,12 @@ export const getSidebarItemWithHistory = ({
 }): {
   item: Sidebar.SidebarItem | undefined
   sidebarHistory: string[]
-  parentSidebar?: Sidebar.SidebarItemSidebar
 } => {
   let foundItem: Sidebar.SidebarItem | undefined
-  let parentSidebar: Sidebar.SidebarItemSidebar | undefined
   sidebarItems.some((i) => {
     if (areSidebarItemsEqual({ itemA: i, itemB: item, compareTitles })) {
       foundItem = i
-      return true
-    }
-
-    if (checkChildren && "children" in i && i.children) {
+    } else if (checkChildren && "children" in i && i.children) {
       const result = getSidebarItemWithHistory({
         sidebarItems: i.children,
         item,
@@ -121,18 +116,14 @@ export const getSidebarItemWithHistory = ({
       if (result.item) {
         foundItem = result.item
         if (i.type === "sidebar") {
-          parentSidebar = result.parentSidebar || i
           sidebarHistory.push(i.sidebar_id)
-        } else {
-          parentSidebar = result.parentSidebar
         }
         sidebarHistory.push(...result.sidebarHistory)
-        return true
       }
     }
 
-    return false
+    return foundItem !== undefined
   })
 
-  return { item: foundItem, sidebarHistory, parentSidebar }
+  return { item: foundItem, sidebarHistory }
 }

@@ -6,21 +6,21 @@ import { ArrowUturnLeft } from "@medusajs/icons"
 import { useSidebar } from "../../../providers"
 
 export const SidebarChild = () => {
-  const { goBack, parentSidebar } = useSidebar()
+  const { goBack, shownSidebar } = useSidebar()
 
   const title = useMemo(() => {
-    if (!parentSidebar) {
+    if (!shownSidebar) {
       return ""
     }
 
     return (
-      "childSidebarTitle" in parentSidebar
-        ? parentSidebar.childSidebarTitle || parentSidebar.title
-        : parentSidebar.title
+      "childSidebarTitle" in shownSidebar
+        ? shownSidebar.childSidebarTitle || shownSidebar.title
+        : shownSidebar.title
     ) as string
-  }, [parentSidebar])
+  }, [shownSidebar])
 
-  if (!parentSidebar) {
+  if (!shownSidebar) {
     return <></>
   }
 

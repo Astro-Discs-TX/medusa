@@ -24,27 +24,49 @@ import { usePathname, useRouter } from "next/navigation"
 
 export type SidebarActionOptions = {
   sidebar_id: string
+  /**
+   * When specified, the items are added as children of the parent item
+   */
   parent?: {
     type: Sidebar.InteractiveSidebarItemTypes
     path: string
     title: string
+    /**
+     * Whether to change the loaded state of the parent item
+     */
     changeLoaded?: boolean
   }
+  /**
+   * The position to insert the items at
+   */
   indexPosition?: number
+  /**
+   * If enabled, the items are filtered to not add items that already exist
+   */
   ignoreExisting?: boolean
 }
 
 export type SidebarStyleOptions = {
+  /**
+   * Useful for projects that have nested sidebars.
+   */
   disableActiveTransition?: boolean
 }
 
 export type SidebarContextType = {
   sidebars: Sidebar.Sidebar[]
+  /**
+   * The sidebar that is currently shown
+   */
   shownSidebar: Sidebar.Sidebar | Sidebar.SidebarItemSidebar | undefined
-  parentSidebar: Sidebar.Sidebar | Sidebar.SidebarItemSidebar | undefined
   activePath: string | null
   activeItem: Sidebar.SidebarItemLink | null
   setActivePath: (path: string | null) => void
+  /**
+   * Check if an item is active. This includes checking its child items,
+   * so for UI links that have children, the `checkLinkChildren` option should be set to `false`
+   * to ensure that the link isn't shown as active if a child link is active.
+   */
   isItemActive: (options: {
     item: Sidebar.InteractiveSidebarItem
     checkLinkChildren?: boolean
@@ -281,12 +303,11 @@ export const SidebarProvider = ({
     )
   }, [sidebars, activePath])
 
-  const { activeItem, sidebarHistory, parentSidebar } = useMemo(() => {
+  const { activeItem, sidebarHistory } = useMemo(() => {
     if (!activePath) {
       return {
         activeItem: null,
         sidebarHistory: [] as string[],
-        parentSidebar: undefined,
       }
     }
     const result =
@@ -589,7 +610,6 @@ export const SidebarProvider = ({
       value={{
         sidebars,
         shownSidebar,
-        parentSidebar,
         activePath,
         activeItem,
         setActivePath,
