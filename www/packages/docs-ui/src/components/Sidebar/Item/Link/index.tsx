@@ -2,26 +2,28 @@
 
 // @refresh reset
 
-import React, { useEffect, useMemo, useRef } from "react"
-import { SidebarNew } from "types"
+import React, { useCallback, useEffect, useMemo, useRef } from "react"
+import { Sidebar } from "types"
 import {
   checkSidebarItemVisibility,
   SidebarItem,
   useMobile,
-  useSidebarNew,
+  useSidebar,
 } from "../../../.."
 import clsx from "clsx"
 import Link from "next/link"
 
 export type SidebarItemLinkProps = {
-  item: SidebarNew.SidebarItemLink
+  item: Sidebar.SidebarItemLink
   nested?: boolean
+  isParentCategoryOpen?: boolean
 } & React.AllHTMLAttributes<HTMLLIElement>
 
 export const SidebarItemLink = ({
   item,
   className,
   nested = false,
+  isParentCategoryOpen,
 }: SidebarItemLinkProps) => {
   const {
     isItemActive,
@@ -29,12 +31,19 @@ export const SidebarItemLink = ({
     disableActiveTransition,
     sidebarRef,
     sidebarTopHeight,
-  } = useSidebarNew()
+  } = useSidebar()
   const { isMobile } = useMobile()
-  const active = useMemo(() => isItemActive(item), [isItemActive, item])
+  const active = useMemo(
+    () =>
+      isItemActive({
+        item,
+        checkLinkChildren: false,
+      }),
+    [isItemActive, item]
+  )
   const ref = useRef<HTMLLIElement>(null)
 
-  const newTopCalculator = useMemo(() => {
+  const getNewTopCalculator = useCallback(() => {
     if (!sidebarRef.current || !ref.current) {
       return 0
     }
@@ -48,33 +57,43 @@ export const SidebarItemLink = ({
       sidebarRef.current.scrollTop -
       10 // remove extra margin just in case
     )
-  }, [sidebarTopHeight, sidebarRef, ref])
+  }, [sidebarTopHeight, sidebarRef.current, ref.current])
 
   useEffect(() => {
-    if (active && ref.current && sidebarRef.current && !isMobile) {
-      const isVisible = checkSidebarItemVisibility(
-        (ref.current.children.item(0) as HTMLElement) || ref.current,
-        !disableActiveTransition
-      )
-      if (isVisible) {
-        return
-      }
-      if (!disableActiveTransition) {
-        ref.current.scrollIntoView({
-          block: "center",
-        })
-      } else {
-        sidebarRef.current.scrollTo({
-          top: newTopCalculator,
-        })
-      }
+    if (
+      !active ||
+      !ref.current ||
+      !sidebarRef.current ||
+      isMobile ||
+      !isParentCategoryOpen
+    ) {
+      return
+    }
+
+    const isVisible = checkSidebarItemVisibility(
+      (ref.current.children.item(0) as HTMLElement) || ref.current,
+      !disableActiveTransition
+    )
+    if (isVisible) {
+      return
+    }
+    if (!disableActiveTransition) {
+      ref.current.scrollIntoView({
+        block: "center",
+      })
+    } else {
+      sidebarRef.current.scrollTo({
+        top: getNewTopCalculator(),
+      })
     }
   }, [
     active,
     sidebarRef.current,
     disableActiveTransition,
     isMobile,
-    newTopCalculator,
+    ref.current,
+    getNewTopCalculator,
+    isParentCategoryOpen,
   ])
 
   useEffect(() => {
@@ -143,6 +162,7 @@ export const SidebarItemLink = ({
               item={childItem}
               key={index}
               nested={!item.childrenSameLevel}
+              isParentCategoryOpen={isParentCategoryOpen}
             />
           ))}
         </ul>

@@ -2,7 +2,7 @@ import { MetadataRoute } from "next"
 
 import { sidebars } from "@/config/sidebar"
 import { absoluteUrl } from "@/lib/absolute-url"
-import { SidebarNew } from "types"
+import { Sidebar } from "types"
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date()
@@ -12,7 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified?: string | Date
   }> = []
 
-  function pushItems(newItems: SidebarNew.SidebarItem[]) {
+  function pushItems(newItems: Sidebar.SidebarItem[]) {
     newItems.forEach((item) => {
       if (item.type !== "link") {
         return

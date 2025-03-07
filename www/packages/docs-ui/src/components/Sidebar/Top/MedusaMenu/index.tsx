@@ -7,7 +7,7 @@ import {
   getOsShortcut,
   useAnalytics,
   useClickOutside,
-  useSidebarNew,
+  useSidebar,
 } from "../../../.."
 import {
   EllipsisHorizontal,
@@ -19,7 +19,7 @@ import { Menu } from "../../../Menu"
 
 export const SidebarTopMedusaMenu = () => {
   const [openMenu, setOpenMenu] = useState(false)
-  const { setDesktopSidebarOpen } = useSidebarNew()
+  const { setDesktopSidebarOpen } = useSidebar()
   const { track } = useAnalytics()
   const ref = useRef<HTMLDivElement>(null)
 

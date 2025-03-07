@@ -11,7 +11,7 @@ import {
   Note,
   useIsBrowser,
   useScrollController,
-  useSidebarNew,
+  useSidebar,
 } from "docs-ui"
 import getSectionId from "../../../../utils/get-section-id"
 import DividedLayout from "../../../../layouts/Divided"
@@ -29,7 +29,7 @@ export type TagSectionSchemaProps = {
 }
 
 const TagSectionSchema = ({ schema, tagName }: TagSectionSchemaProps) => {
-  const { addItems, setActivePath, activePath, shownSidebar } = useSidebarNew()
+  const { addItems, setActivePath, activePath, shownSidebar } = useSidebar()
   const { displayedArea } = useArea()
   const formattedName = useMemo(
     () => singular(tagName).replaceAll(" ", ""),

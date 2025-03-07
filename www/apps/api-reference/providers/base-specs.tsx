@@ -2,11 +2,11 @@
 
 import { ExpandedDocument, SecuritySchemeObject } from "@/types/openapi"
 import { ReactNode, createContext, useContext, useEffect, useMemo } from "react"
-import { SidebarNew } from "types"
+import { Sidebar } from "types"
 import getSectionId from "../utils/get-section-id"
 import getTagChildSidebarItems from "../utils/get-tag-child-sidebar-items"
 import { useRouter } from "next/navigation"
-import { useSidebarNew } from "docs-ui"
+import { useSidebar } from "docs-ui"
 
 type BaseSpecsContextType = {
   baseSpecs: ExpandedDocument | undefined
@@ -23,7 +23,7 @@ type BaseSpecsProviderProps = {
 const BaseSpecsProvider = ({ children, baseSpecs }: BaseSpecsProviderProps) => {
   const router = useRouter()
   const { activePath, addItems, setActivePath, resetItems, shownSidebar } =
-    useSidebarNew()
+    useSidebar()
 
   const getSecuritySchema = (
     securityName: string
@@ -49,7 +49,7 @@ const BaseSpecsProvider = ({ children, baseSpecs }: BaseSpecsProviderProps) => {
       return []
     }
 
-    const itemsToAdd: SidebarNew.SidebarItem[] = [
+    const itemsToAdd: Sidebar.SidebarItem[] = [
       {
         type: "separator",
       },
@@ -68,6 +68,7 @@ const BaseSpecsProvider = ({ children, baseSpecs }: BaseSpecsProviderProps) => {
         children: childItems,
         loaded: childItems.length > 0,
         showLoadingIfEmpty: true,
+        initialOpen: false,
         onOpen: () => {
           if (location.hash !== tagPathName) {
             router.push(`#${tagPathName}`, {

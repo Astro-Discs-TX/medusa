@@ -1,11 +1,11 @@
 "use client"
 
 import React from "react"
-import { Button, useSidebarNew } from "../../../.."
+import { Button, useSidebar } from "../../../.."
 import { XMarkMini } from "@medusajs/icons"
 
 export const SidebarTopMobileClose = () => {
-  const { setMobileSidebarOpen } = useSidebarNew()
+  const { setMobileSidebarOpen } = useSidebar()
 
   return (
     <div className="m-docs_0.75 lg:hidden">

@@ -3,10 +3,10 @@
 import React, { useMemo } from "react"
 import clsx from "clsx"
 import { ArrowUturnLeft } from "@medusajs/icons"
-import { useSidebarNew } from "../../../providers"
+import { useSidebar } from "../../../providers"
 
 export const SidebarChild = () => {
-  const { goBack, parentSidebar } = useSidebarNew()
+  const { goBack, parentSidebar } = useSidebar()
 
   const title = useMemo(() => {
     if (!parentSidebar) {

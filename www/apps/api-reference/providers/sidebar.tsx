@@ -1,7 +1,7 @@
 "use client"
 
 import {
-  SidebarNewProvider as UiSidebarProvider,
+  SidebarProvider as UiSidebarProvider,
   usePageLoading,
   useScrollController,
 } from "docs-ui"

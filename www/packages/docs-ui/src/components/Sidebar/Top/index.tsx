@@ -3,12 +3,12 @@
 import React from "react"
 import { SidebarChild } from "../Child"
 import { SidebarTopMobileClose } from "./MobileClose"
-import { DottedSeparator, useSidebarNew } from "../../.."
+import { DottedSeparator, useSidebar } from "../../.."
 import clsx from "clsx"
 
 export const SidebarTop = React.forwardRef<HTMLDivElement>(
   function SidebarTop(props, ref) {
-    const { sidebarHistory } = useSidebarNew()
+    const { sidebarHistory } = useSidebar()
 
     return (
       <div

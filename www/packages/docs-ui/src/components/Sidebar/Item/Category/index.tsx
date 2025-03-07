@@ -3,36 +3,36 @@
 // @refresh reset
 
 import React, { useEffect, useMemo, useState } from "react"
-import { SidebarNew } from "types"
-import { Loading, SidebarItem, useSidebarNew } from "../../../.."
+import { Sidebar } from "types"
+import { Loading, SidebarItem, useSidebar } from "../../../.."
 import clsx from "clsx"
 import { MinusMini, PlusMini } from "@medusajs/icons"
 
 export type SidebarItemCategoryProps = {
-  item: SidebarNew.SidebarItemCategory
-  expandItems?: boolean
+  item: Sidebar.SidebarItemCategory
 } & React.AllHTMLAttributes<HTMLDivElement>
 
 export const SidebarItemCategory = ({
   item,
-  expandItems = true,
   className,
 }: SidebarItemCategoryProps) => {
   const [showLoading, setShowLoading] = useState(false)
   const [open, setOpen] = useState(
-    item.initialOpen !== undefined ? item.initialOpen : expandItems
+    item.initialOpen !== undefined ? item.initialOpen : true
   )
   const {
     isItemActive,
     updatePersistedCategoryState,
     getPersistedCategoryState,
     persistCategoryState,
-  } = useSidebarNew()
+  } = useSidebar()
   const itemShowLoading = useMemo(() => {
     return !item.loaded || (item.showLoadingIfEmpty && !item.children?.length)
   }, [item])
   const isActive = useMemo(() => {
-    return isItemActive(item)
+    return isItemActive({
+      item,
+    })
   }, [isItemActive, item])
 
   useEffect(() => {
@@ -134,7 +134,7 @@ export const SidebarItemCategory = ({
             <SidebarItem
               item={childItem}
               key={index}
-              expandItems={expandItems}
+              isParentCategoryOpen={open}
             />
           ))}
         </ul>

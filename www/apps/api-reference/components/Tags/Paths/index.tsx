@@ -1,8 +1,7 @@
 "use client"
 
-import type { OpenAPIV3 } from "openapi-types"
-import type { Operation, PathsObject } from "@/types/openapi"
-import { findSidebarItem, useSidebarNew } from "docs-ui"
+import type { Operation, PathsObject, TagObject } from "@/types/openapi"
+import { findSidebarItem, useSidebar } from "docs-ui"
 import { Fragment, Suspense, useEffect } from "react"
 import dynamic from "next/dynamic"
 import type { TagOperationProps } from "../Operation"
@@ -10,19 +9,19 @@ import clsx from "clsx"
 import getTagChildSidebarItems from "@/utils/get-tag-child-sidebar-items"
 import { useLoading } from "@/providers/loading"
 import DividedLoading from "@/components/DividedLoading"
-import { SidebarNew } from "types"
+import { Sidebar } from "types"
 
 const TagOperation = dynamic<TagOperationProps>(
   async () => import("../Operation")
 ) as React.FC<TagOperationProps>
 
 export type TagPathsProps = {
-  tag: OpenAPIV3.TagObject
+  tag: TagObject
   paths: PathsObject
 } & React.HTMLAttributes<HTMLDivElement>
 
 const TagPaths = ({ tag, className, paths }: TagPathsProps) => {
-  const { shownSidebar, addItems } = useSidebarNew()
+  const { shownSidebar, addItems } = useSidebar()
   const { loading } = useLoading()
 
   useEffect(() => {
@@ -38,9 +37,11 @@ const TagPaths = ({ tag, className, paths }: TagPathsProps) => {
             : shownSidebar.children || [],
         item: { title: tag.name, type: "category" },
         checkChildren: false,
-      }) as SidebarNew.SidebarItemCategory
-      const pathItems: SidebarNew.SidebarItem[] = getTagChildSidebarItems(paths)
-      if ((parentItem?.children?.length || 0) < pathItems.length) {
+      }) as Sidebar.SidebarItemCategory
+      const pathItems: Sidebar.SidebarItem[] = getTagChildSidebarItems(paths)
+      const targetLength =
+        pathItems.length + (tag["x-associatedSchema"] ? 1 : 0)
+      if ((parentItem.children?.length || 0) < targetLength) {
         addItems(pathItems, {
           sidebar_id: shownSidebar.sidebar_id,
           parent: {

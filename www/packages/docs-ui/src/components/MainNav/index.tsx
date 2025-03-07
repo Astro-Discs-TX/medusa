@@ -8,7 +8,7 @@ import {
   GITHUB_ISSUES_LINK,
   SearchModalOpener,
   useLayout,
-  useSidebarNew,
+  useSidebar,
   useSiteConfig,
 } from "../.."
 import { MainNavItems } from "./Items"
@@ -26,7 +26,7 @@ type MainNavProps = {
 }
 
 export const MainNav = ({ className, itemsClassName }: MainNavProps) => {
-  const { setMobileSidebarOpen, isSidebarShown } = useSidebarNew()
+  const { setMobileSidebarOpen, isSidebarShown } = useSidebar()
   const { config } = useSiteConfig()
   const { showCollapsedNavbar } = useLayout()
 

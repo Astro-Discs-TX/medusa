@@ -1,9 +1,9 @@
 "use client"
 
 import { createContext, useEffect } from "react"
-import { useSidebarNew } from "docs-ui"
+import { useSidebar } from "docs-ui"
 import { useArea } from "./area"
-import { SidebarNew } from "types"
+import { Sidebar } from "types"
 
 const PageTitleContext = createContext(null)
 
@@ -12,7 +12,7 @@ type PageTitleProviderProps = {
 }
 
 const PageTitleProvider = ({ children }: PageTitleProviderProps) => {
-  const { activePath, activeItem } = useSidebarNew()
+  const { activePath, activeItem } = useSidebar()
   const { displayedArea } = useArea()
 
   useEffect(() => {
@@ -27,7 +27,7 @@ const PageTitleProvider = ({ children }: PageTitleProviderProps) => {
         // find the child that matches the active path
         const item = activeItem?.children?.find(
           (i) => i.type === "link" && i.path === activePath
-        ) as SidebarNew.SidebarItemLink
+        ) as Sidebar.SidebarItemLink
         if (item) {
           document.title = `${item.title} - ${titleSuffix}`
         }

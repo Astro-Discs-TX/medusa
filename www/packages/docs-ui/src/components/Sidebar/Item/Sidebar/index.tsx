@@ -3,13 +3,13 @@
 // @refresh reset
 
 import React, { useMemo } from "react"
-import { SidebarNew } from "types"
-import { useSidebarNew } from "../../../.."
+import { Sidebar } from "types"
+import { useSidebar } from "../../../.."
 import clsx from "clsx"
 import Link from "next/link"
 
 export type SidebarItemSidebarProps = {
-  item: SidebarNew.SidebarItemSidebar
+  item: Sidebar.SidebarItemSidebar
   nested?: boolean
 } & React.AllHTMLAttributes<HTMLLIElement>
 
@@ -18,7 +18,7 @@ export const SidebarItemSidebar = ({
   className,
   nested = false,
 }: SidebarItemSidebarProps) => {
-  const { getSidebarFirstChild } = useSidebarNew()
+  const { getSidebarFirstChild } = useSidebar()
 
   const isTitleOneWord = useMemo(
     () => item.title.split(" ").length === 1,

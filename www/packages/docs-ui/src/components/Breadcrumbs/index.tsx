@@ -3,10 +3,10 @@
 import React, { useMemo } from "react"
 import clsx from "clsx"
 import Link from "next/link"
-import { useSidebarNew, useSiteConfig } from "../../providers"
+import { useSidebar, useSiteConfig } from "../../providers"
 import { Button } from "../Button"
 import { TriangleRightMini } from "@medusajs/icons"
-import { SidebarNew } from "types"
+import { Sidebar } from "types"
 
 type BreadcrumbItems = {
   title: string
@@ -14,13 +14,13 @@ type BreadcrumbItems = {
 }[]
 
 export const Breadcrumbs = () => {
-  const { sidebarHistory, getSidebarFirstChild, getSidebar } = useSidebarNew()
+  const { sidebarHistory, getSidebarFirstChild, getSidebar } = useSidebar()
   const {
-    config: { breadcrumbOptions, basePath },
+    config: { breadcrumbOptions },
   } = useSiteConfig()
 
-  const getLinkPath = (item: SidebarNew.SidebarItemLink): string => {
-    return item.isPathHref ? `${basePath}${item.path}` : `#${item.path}`
+  const getLinkPath = (item: Sidebar.SidebarItemLink): string => {
+    return item.isPathHref ? item.path : `#${item.path}`
   }
 
   const breadcrumbItems = useMemo(() => {

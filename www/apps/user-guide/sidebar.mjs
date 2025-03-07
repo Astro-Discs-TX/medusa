@@ -1,4 +1,4 @@
-/** @type {import('types').SidebarNew.RawSidebar[]} */
+/** @type {import('types').Sidebar.RawSidebar[]} */
 export const sidebar = [
   {
     sidebar_id: "user-guide",

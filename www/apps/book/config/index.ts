@@ -1,4 +1,4 @@
-import { DocsConfig, SidebarNew } from "types"
+import { DocsConfig, Sidebar } from "types"
 import { globalConfig } from "docs-ui"
 import { generatedSidebars } from "../generated/sidebar.mjs"
 
@@ -9,7 +9,7 @@ export const config: DocsConfig = {
   titleSuffix: "Medusa v2 Documentation",
   baseUrl,
   basePath: process.env.NEXT_PUBLIC_BASE_PATH,
-  sidebars: generatedSidebars as SidebarNew.Sidebar[],
+  sidebars: generatedSidebars as Sidebar.Sidebar[],
   project: {
     title: "Documentation",
     key: "book",

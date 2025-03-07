@@ -1,14 +1,12 @@
-export enum SidebarItemSections {
-  DEFAULT = "default",
-  MOBILE = "mobile",
+export type Sidebar = {
+  sidebar_id: string
+  title: string
+  items: SidebarItem[]
 }
 
 export type SidebarItemCommon = {
   title: string
   children?: SidebarItem[]
-  isChildSidebar?: boolean
-  hasTitleStyling?: boolean
-  childSidebarTitle?: string
   loaded?: boolean
   additionalElms?: React.ReactNode
   chapterTitle?: string
@@ -25,6 +23,7 @@ export type InteractiveSidebarItemTypes =
   | "link"
   | "ref"
   | "external"
+  | "sidebar"
 
 export type SidebarItemLink = SidebarItemCommon & {
   type: "link" | "ref" | "external"
@@ -32,6 +31,11 @@ export type SidebarItemLink = SidebarItemCommon & {
   isPathHref?: boolean
   linkProps?: React.AllHTMLAttributes<HTMLAnchorElement>
   childrenSameLevel?: boolean
+}
+
+export type SidebarItemSidebar = SidebarItemCommon & {
+  type: "sidebar"
+  sidebar_id: string
 }
 
 export type SidebarItemCategory = SidebarItemCommon & {
@@ -54,18 +58,13 @@ export type InteractiveSidebarItem =
   | SidebarItemLink
   | SidebarItemCategory
   | SidebarItemSubCategory
+  | SidebarItemSidebar
 
 export type SidebarItemLinkWithParent = SidebarItemLink & {
   parentItem?: InteractiveSidebarItem
 }
 
 export type SidebarItem = InteractiveSidebarItem | SidebarItemSeparator
-
-export type SidebarSectionItems = {
-  [k in SidebarItemSections]: SidebarItem[]
-} & {
-  parentItem?: InteractiveSidebarItem
-}
 
 export type SidebarSortType = "none" | "alphabetize"
 
@@ -86,8 +85,17 @@ export type RawSidebarItem = SidebarItem & {
       }
   )
 
+export type RawSidebar = Omit<Sidebar, "items"> & {
+  items: RawSidebarItem[]
+}
+
 export type PersistedSidebarCategoryState = {
   [k: string]: {
     [k: string]: boolean
   }
 }
+
+// export type SidebarHeirarchyItem = {
+//   title: string
+//   path?: string
+// }

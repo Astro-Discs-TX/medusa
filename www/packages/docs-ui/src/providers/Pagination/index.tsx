@@ -2,9 +2,9 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react"
 import { usePrevious } from "@uidotdev/usehooks"
-import { useSidebarNew } from "../Sidebar/new"
+import { useSidebar } from "../Sidebar"
 import { isSidebarItemLink } from "../../utils/sidebar-utils"
-import { SidebarNew } from "types"
+import { Sidebar } from "types"
 
 export type Page = {
   title: string
@@ -22,8 +22,8 @@ export const PaginationContext = createContext<PaginationContextType | null>(
   null
 )
 
-type SidebarItemWithParent = SidebarNew.InteractiveSidebarItem & {
-  parent?: SidebarNew.InteractiveSidebarItem
+type SidebarItemWithParent = Sidebar.InteractiveSidebarItem & {
+  parent?: Sidebar.InteractiveSidebarItem
 }
 
 type SearchItemsResult = {
@@ -37,13 +37,13 @@ export type PaginationProviderProps = {
 }
 
 export const PaginationProvider = ({ children }: PaginationProviderProps) => {
-  const { shownSidebar, activePath } = useSidebarNew()
+  const { shownSidebar, activePath } = useSidebar()
   const previousActivePath = usePrevious(activePath)
   const [nextPage, setNextPage] = useState<Page | undefined>()
   const [prevPage, setPrevPage] = useState<Page | undefined>()
 
   const getFirstChild = (
-    item: SidebarNew.InteractiveSidebarItem
+    item: Sidebar.InteractiveSidebarItem
   ): SidebarItemWithParent | undefined => {
     const children = getChildrenWithPages(item)
     if (!children?.length) {
@@ -59,7 +59,7 @@ export const PaginationProvider = ({ children }: PaginationProviderProps) => {
   }
 
   const getChildrenWithPages = (
-    item: SidebarNew.InteractiveSidebarItem
+    item: Sidebar.InteractiveSidebarItem
   ): SidebarItemWithParent[] | undefined => {
     return item.children?.filter(
       (childItem) =>
@@ -70,7 +70,7 @@ export const PaginationProvider = ({ children }: PaginationProviderProps) => {
   }
 
   const getPrevItem = (
-    items: SidebarNew.SidebarItem[],
+    items: Sidebar.SidebarItem[],
     index: number
   ): SidebarItemWithParent | undefined => {
     let foundItem: SidebarItemWithParent | undefined
@@ -100,7 +100,7 @@ export const PaginationProvider = ({ children }: PaginationProviderProps) => {
   }
 
   const getNextItem = (
-    items: SidebarNew.SidebarItem[],
+    items: Sidebar.SidebarItem[],
     index: number
   ): SidebarItemWithParent | undefined => {
     let foundItem: SidebarItemWithParent | undefined
@@ -128,7 +128,7 @@ export const PaginationProvider = ({ children }: PaginationProviderProps) => {
   }
 
   const searchItems = (
-    currentItems: SidebarNew.SidebarItem[]
+    currentItems: Sidebar.SidebarItem[]
   ): SearchItemsResult => {
     const result: SearchItemsResult = {
       foundActive: false,

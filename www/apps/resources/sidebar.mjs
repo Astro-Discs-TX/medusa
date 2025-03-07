@@ -26,7 +26,7 @@ import { troubleshootingSidebar } from "./sidebars/troubleshooting.mjs"
 import { userSidebar } from "./sidebars/user.mjs"
 import { examplesSidebar } from "./sidebars/examples.mjs"
 
-/** @type {import("types").SidebarNew.RawSidebar[]} */
+/** @type {import("types").Sidebar.RawSidebar[]} */
 export const sidebar = [
   {
     sidebar_id: "resources",

@@ -1,7 +1,7 @@
-import { SidebarNew } from "types"
+import { Sidebar } from "types"
 
 export const validateSidebarUniqueIds = (
-  sidebars: (SidebarNew.RawSidebar | SidebarNew.SidebarItemSidebar)[],
+  sidebars: (Sidebar.RawSidebar | Sidebar.SidebarItemSidebar)[],
   sidebarIds = new Set<string>()
 ): void => {
   for (const sidebar of sidebars) {
@@ -15,7 +15,7 @@ export const validateSidebarUniqueIds = (
       "items" in sidebar ? sidebar.items : sidebar.children || []
     ).filter(
       (child) => child.type === "sidebar"
-    ) as SidebarNew.SidebarItemSidebar[]
+    ) as Sidebar.SidebarItemSidebar[]
 
     validateSidebarUniqueIds(children, sidebarIds)
   }

@@ -1,6 +1,6 @@
-import { SidebarNew } from "types"
+import { Sidebar } from "types"
 
-export const sidebars: SidebarNew.Sidebar[] = [
+export const sidebars: Sidebar.Sidebar[] = [
   {
     sidebar_id: "ui",
     title: "Medusa UI",

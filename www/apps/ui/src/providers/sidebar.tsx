@@ -1,5 +1,5 @@
 import {
-  SidebarNewProvider as UiSidebarProvider,
+  SidebarProvider as UiSidebarProvider,
   useScrollController,
 } from "docs-ui"
 import { sidebars } from "@/config/sidebar"

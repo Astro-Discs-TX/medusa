@@ -1,7 +1,7 @@
 "use client"
 
 import React, { Suspense, useMemo, useRef } from "react"
-import { useSidebarNew } from "@/providers"
+import { useSidebar } from "@/providers"
 import clsx from "clsx"
 import { Loading } from "@/components"
 import { SidebarItem } from "./Item"
@@ -14,13 +14,9 @@ import { isSidebarItemLink } from "../../utils/sidebar-utils"
 
 export type SidebarProps = {
   className?: string
-  expandItems?: boolean
 }
 
-export const Sidebar = ({
-  className = "",
-  expandItems = true,
-}: SidebarProps) => {
+export const Sidebar = ({ className = "" }: SidebarProps) => {
   const sidebarWrapperRef = useRef(null)
   const sidebarTopRef = useRef<HTMLDivElement>(null)
   const {
@@ -34,7 +30,7 @@ export const Sidebar = ({
     setDesktopSidebarOpen,
     setSidebarTopHeight,
     sidebarHistory,
-  } = useSidebarNew()
+  } = useSidebar()
   useClickOutside({
     elmRef: sidebarWrapperRef,
     onClickOutside: () => {
@@ -140,7 +136,6 @@ export const Sidebar = ({
                       >
                         <SidebarItem
                           item={item}
-                          expandItems={expandItems}
                           hasNextItems={index !== sidebarItems.length - 1}
                         />
                       </Suspense>

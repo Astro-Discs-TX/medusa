@@ -11,7 +11,7 @@ import {
   isElmWindow,
   useIsBrowser,
   useScrollController,
-  useSidebarNew,
+  useSidebar,
 } from "docs-ui"
 import type { TagOperationCodeSectionProps } from "./CodeSection"
 import TagsOperationDescriptionSection from "./DescriptionSection"
@@ -40,7 +40,7 @@ const TagOperation = ({
   endpointPath,
   className,
 }: TagOperationProps) => {
-  const { activePath, setActivePath } = useSidebarNew()
+  const { activePath, setActivePath } = useSidebar()
   const router = useRouter()
   const [show, setShow] = useState(false)
   const path = useMemo(

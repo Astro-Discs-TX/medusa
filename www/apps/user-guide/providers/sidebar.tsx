@@ -1,6 +1,6 @@
 "use client"
 import {
-  SidebarNewProvider as UiSidebarProvider,
+  SidebarProvider as UiSidebarProvider,
   useScrollController,
 } from "docs-ui"
 import { config } from "@/config"

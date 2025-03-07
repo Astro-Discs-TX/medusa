@@ -1,7 +1,7 @@
 "use client"
 
 import clsx from "clsx"
-import { useActiveOnScroll, useSidebarNew } from "docs-ui"
+import { useActiveOnScroll, useSidebar } from "docs-ui"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef } from "react"
 
@@ -21,7 +21,7 @@ const Section = ({
     useDefaultIfNoActive: false,
     maxLevel: 2,
   })
-  const { setActivePath } = useSidebarNew()
+  const { setActivePath } = useSidebar()
   const router = useRouter()
 
   useEffect(() => {

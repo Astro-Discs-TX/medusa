@@ -2,7 +2,7 @@
 
 import React, { useEffect } from "react"
 import clsx from "clsx"
-import { MainNav, useIsBrowser, useLayout, useSidebarNew } from ".."
+import { MainNav, useIsBrowser, useLayout, useSidebar } from ".."
 
 export type MainContentLayoutProps = {
   mainWrapperClasses?: string
@@ -16,7 +16,7 @@ export const MainContentLayout = ({
   contentClassName,
 }: MainContentLayoutProps) => {
   const { isBrowser } = useIsBrowser()
-  const { desktopSidebarOpen } = useSidebarNew()
+  const { desktopSidebarOpen } = useSidebar()
   const { mainContentRef } = useLayout()
 
   useEffect(() => {

@@ -1,15 +1,15 @@
 "use client"
 
-import { useScrollController, useSidebarNew, H2 as UiH2 } from "docs-ui"
+import { useScrollController, useSidebar, H2 as UiH2 } from "docs-ui"
 import { useEffect, useMemo, useRef, useState } from "react"
 import getSectionId from "../../../utils/get-section-id"
-import { SidebarNew } from "types"
+import { Sidebar } from "types"
 
 type H2Props = React.HTMLAttributes<HTMLHeadingElement>
 
 const H2 = ({ children, ...props }: H2Props) => {
   const headingRef = useRef<HTMLHeadingElement>(null)
-  const { activePath, addItems, removeItems, shownSidebar } = useSidebarNew()
+  const { activePath, addItems, removeItems, shownSidebar } = useSidebar()
   const { scrollableElement, scrollToElement } = useScrollController()
   const [scrolledFirstTime, setScrolledFirstTime] = useState(false)
 
@@ -32,7 +32,7 @@ const H2 = ({ children, ...props }: H2Props) => {
     if (!shownSidebar) {
       return
     }
-    const items: SidebarNew.SidebarItem[] = [
+    const items: Sidebar.SidebarItem[] = [
       {
         type: "link",
         path: `${id}`,

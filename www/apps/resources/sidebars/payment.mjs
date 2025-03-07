@@ -1,4 +1,4 @@
-/** @type {import('types').SidebarNew.SidebarItem[]} */
+/** @type {import('types').Sidebar.SidebarItem[]} */
 export const paymentSidebar = [
   {
     type: "sidebar",
