@@ -45,6 +45,7 @@ For admin customizations, create this file at `src/admin/lib/config.ts`.
   <CodeTab label="Admin" value="admin">
 
 ```ts title="src/admin/lib/config.ts"
+/// <reference types="vite/types/importMeta.d.ts" />
 import Medusa from "@medusajs/js-sdk"
 
 export const sdk = new Medusa({
