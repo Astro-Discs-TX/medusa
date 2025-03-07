@@ -18,7 +18,7 @@ export const SidebarItemSidebar = ({
   className,
   nested = false,
 }: SidebarItemSidebarProps) => {
-  const { getSidebarFirstChild } = useSidebar()
+  const { getSidebarFirstLinkChild: getSidebarFirstChild } = useSidebar()
 
   const isTitleOneWord = useMemo(
     () => item.title.split(" ").length === 1,

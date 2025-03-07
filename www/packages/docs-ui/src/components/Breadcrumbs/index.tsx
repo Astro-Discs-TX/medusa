@@ -14,7 +14,7 @@ type BreadcrumbItems = {
 }[]
 
 export const Breadcrumbs = () => {
-  const { sidebarHistory, getSidebarFirstChild, getSidebar } = useSidebar()
+  const { sidebarHistory, getSidebarFirstLinkChild, getSidebar } = useSidebar()
   const {
     config: { breadcrumbOptions },
   } = useSiteConfig()
@@ -36,7 +36,7 @@ export const Breadcrumbs = () => {
         return
       }
 
-      const sidebarFirstChild = getSidebarFirstChild(sidebar)
+      const sidebarFirstChild = getSidebarFirstLinkChild(sidebar)
 
       if (!sidebarFirstChild) {
         return

@@ -86,21 +86,34 @@ export type SidebarContextType = {
   // Whether the items in the sidebar are static or are added dynamically
   // TODO look into generating the sidebar item of the API reference
   isSidebarStatic: boolean
-  // Whether the active path should change when the hash changes
-  // This is only used by the API reference
+  /**
+   * Whether the active path should change when the hash changes
+   * This is only used by the API reference
+   */
   shouldHandleHashChange: boolean
   sidebarRef: React.RefObject<HTMLDivElement | null>
+  /**
+   * Go back in the sidebar history
+   */
   goBack: () => void
+  /**
+   * The height of the top part of the sidebar
+   */
   sidebarTopHeight: number
   setSidebarTopHeight: React.Dispatch<React.SetStateAction<number>>
+  /**
+   * Reset the sidebar to its initial state (the sidebars passed as a prop)
+   */
   resetItems: () => void
   updatePersistedCategoryState: (title: string, opened: boolean) => void
   getPersistedCategoryState: (title: string) => boolean | undefined
   persistCategoryState: boolean
   isSidebarShown: boolean
   sidebarHistory: string[]
-  openSidebar: (sidebar_id: string) => void
-  getSidebarFirstChild: (
+  /**
+   * Get the first link child of a sidebar
+   */
+  getSidebarFirstLinkChild: (
     sidebar: Sidebar.Sidebar | Sidebar.SidebarItemSidebar
   ) => Sidebar.SidebarItemLink | undefined
   getSidebar: (
@@ -632,8 +645,7 @@ export const SidebarProvider = ({
         persistCategoryState,
         isSidebarShown,
         sidebarHistory,
-        openSidebar,
-        getSidebarFirstChild: getSidebarFirstLinkChild,
+        getSidebarFirstLinkChild,
         getSidebar,
         disableActiveTransition,
       }}
