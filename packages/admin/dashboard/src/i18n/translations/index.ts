@@ -1,24 +1,25 @@
+import ar from "./ar.json"
 import bg from "./bg.json"
+import bn from "./bn.json"
+import cs from "./cs.json"
 import de from "./de.json"
 import el from "./el.json"
 import en from "./en.json"
 import es from "./es.json"
+import fa from "./fa.json"
 import fr from "./fr.json"
 import it from "./it.json"
 import ja from "./ja.json"
+import mk from "./mk.json"
+import mn from "./mn.json"
 import pl from "./pl.json"
 import ptBR from "./ptBR.json"
+import ro from "./ro.json"
+import ru from "./ru.json"
 import th from "./th.json"
 import tr from "./tr.json"
 import uk from "./uk.json"
-import ro from "./ro.json"
-import mk from "./mk.json"
-import mn from "./mn.json"
-import ar from "./ar.json"
 import zhCN from "./zhCN.json"
-import fa from "./fa.json"
-import cs from "./cs.json"
-import ru from "./ru.json"
 
 export default {
   bg: {
@@ -83,5 +84,8 @@ export default {
   },
   ru: {
     translation: ru,
+  },
+  bn: {
+    translation: bn,
   },
 }
