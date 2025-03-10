@@ -10,11 +10,11 @@ import {
   AdminUpdateCustomerAddress,
 } from "./validators"
 
-import { MiddlewareRoute } from "@medusajs/framework/http"
 import {
   validateAndTransformBody,
   validateAndTransformQuery,
 } from "@medusajs/framework"
+import { MiddlewareRoute } from "@medusajs/framework/http"
 import { createLinkBody } from "../../utils/validators"
 
 export const adminCustomerRoutesMiddlewares: MiddlewareRoute[] = [
@@ -78,7 +78,7 @@ export const adminCustomerRoutesMiddlewares: MiddlewareRoute[] = [
       validateAndTransformBody(AdminUpdateCustomerAddress),
       validateAndTransformQuery(
         AdminCustomerParams,
-        QueryConfig.retrieveTransformQueryConfig
+        QueryConfig.retrieveAddressTransformQueryConfig
       ),
     ],
   },
