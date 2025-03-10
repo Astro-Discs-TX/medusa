@@ -1258,7 +1258,7 @@ medusaIntegrationTestRunner({
           ])
         )
 
-        // !. create a partial fulfillment
+        // 1. create a partial fulfillment
         const fulOrder = (
           await api.post(
             `/admin/orders/${order.id}/fulfillments?fields=*fulfillments,*fulfillments.items`,

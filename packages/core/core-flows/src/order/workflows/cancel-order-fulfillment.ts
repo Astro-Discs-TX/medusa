@@ -171,35 +171,36 @@ function prepareInventoryUpdate({
     return acc
   }, {})
 
-  for (const fitem of fulfillment.items) {
+  for (const fulfillmentItem of fulfillment.items) {
     // if this is `null` this means that item is from variant that has `manage_inventory` false
-    if (!fitem.inventory_item_id) {
+    if (!fulfillmentItem.inventory_item_id) {
       continue
     }
 
-    const orderItem = orderItemsMap[fitem.line_item_id as string]
+    const orderItem = orderItemsMap[fulfillmentItem.line_item_id as string]
 
     orderItem?.variant?.inventory_items.forEach((iitem) => {
-      const reservation = reservationMap[fitem.inventory_item_id as string]
+      const reservation =
+        reservationMap[fulfillmentItem.inventory_item_id as string]
 
       if (!reservation) {
         toCreate.push({
           inventory_item_id: iitem.inventory.id,
           location_id: fulfillment.location_id,
-          quantity: fitem.quantity, // <- this is the inventory quantity that is being fulfilled so it menas it does include the required quantity
+          quantity: fulfillmentItem.quantity, // <- this is the inventory quantity that is being fulfilled so it menas it does include the required quantity
         })
       } else {
         toUpdate.push({
           id: reservation.id,
-          quantity: reservation.quantity + fitem.quantity,
+          quantity: reservation.quantity + fulfillmentItem.quantity,
         })
       }
     })
 
     inventoryAdjustment.push({
-      inventory_item_id: fitem.inventory_item_id as string,
+      inventory_item_id: fulfillmentItem.inventory_item_id as string,
       location_id: fulfillment.location_id,
-      adjustment: fitem.quantity,
+      adjustment: fulfillmentItem.quantity,
     })
   }
 
