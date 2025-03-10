@@ -54,6 +54,17 @@ OrderChangeProcessing.registerActionType(
           `Quantity to cancel item ${refId} must be greater than 0.`
         )
       }
+
+      const greater = MathBN.gt(
+        action.details?.quantity,
+        existing.detail?.fulfilled_quantity
+      )
+      if (greater) {
+        throw new MedusaError(
+          MedusaError.Types.INVALID_DATA,
+          `Cannot cancel more items than what was fulfilled for item ${refId}.`
+        )
+      }
     },
   }
 )
