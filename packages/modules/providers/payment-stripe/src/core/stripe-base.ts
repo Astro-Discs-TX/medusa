@@ -42,6 +42,7 @@ import {
 import {
   ErrorCodes,
   ErrorIntentStatus,
+  HandledErrorType,
   PaymentIntentOptions,
   StripeOptions,
 } from "../types"
@@ -115,6 +116,87 @@ abstract class StripeBase extends AbstractPaymentProvider<StripeOptions> {
     return res
   }
 
+  handleStripeError(error: any): HandledErrorType | null {
+    if (error instanceof Stripe.errors.StripeError) {
+      switch (error.type) {
+        case 'StripeCardError':
+          const stripeError = error.raw as Stripe.errors.StripeCardError
+          if (stripeError.payment_intent) {
+            return {
+              retry: false,
+              data: stripeError.payment_intent
+            }
+          } else {
+            throw this.buildError(
+              "An error occurred in InitiatePayment during the creation of the stripe payment intent",
+              error
+            )
+          }
+
+        case 'StripeConnectionError':
+        case 'StripeRateLimitError':
+          return {
+            retry: true,
+            data: null,
+          }
+        case 'StripeAPIError': {
+          return null
+        }
+        default:
+          throw this.buildError(
+            "An error occurred in InitiatePayment during the creation of the stripe payment intent",
+            error
+          )
+      }
+    } else {
+      throw this.buildError(
+        "An error occurred in InitiatePayment during the creation of the stripe payment intent",
+        error
+      )
+    }
+  }
+
+  async executeWithRetry<T>(
+    apiCall: () => Promise<T>,
+    maxRetries: number = 3,
+    baseDelay: number = 1000,
+    currentAttempt: number = 1
+  ): Promise<T | null> {
+    try {
+      return await apiCall();
+    } catch (error) {
+      const handledError = this.handleStripeError(error)
+      if (handledError === null) {
+        return null
+      }
+
+      if (
+        handledError.retry &&
+        currentAttempt <= maxRetries
+      ) {
+        const delay = baseDelay * Math.pow(2, currentAttempt - 1) * (0.5 + Math.random() * 0.5);
+        await new Promise(resolve => setTimeout(resolve, delay));
+        return this.executeWithRetry(apiCall, maxRetries, baseDelay, currentAttempt + 1);
+      }
+
+      if (
+        handledError.retry && 
+        currentAttempt > maxRetries
+      ) {
+        return null
+      }
+
+      if (handledError.data) {
+        return handledError.data as T
+      }
+      throw this.buildError(
+        "An error occurred in InitiatePayment during the creation of the stripe payment intent",
+        error
+      )
+    }
+  }
+
+
   async getPaymentStatus({
     data,
   }: GetPaymentStatusInput): Promise<GetPaymentStatusOutput> {
@@ -173,22 +255,21 @@ abstract class StripeBase extends AbstractPaymentProvider<StripeOptions> {
       | string
       | undefined
 
-    let sessionData
-    try {
-      sessionData = (await this.stripe_.paymentIntents.create(intentRequest, {
-        idempotencyKey: context?.idempotency_key,
-      })) as unknown as Record<string, unknown>
-    } catch (e) {
-      throw this.buildError(
-        "An error occurred in InitiatePayment during the creation of the stripe payment intent",
-        e
+      const sessionData = await this.executeWithRetry<Stripe.PaymentIntent>(
+        () => this.stripe_.paymentIntents.create(intentRequest, {
+          idempotencyKey: context?.idempotency_key,
+        })
       )
-    }
-
-    return {
-      id: sessionData.id,
-      data: sessionData,
-    }
+      if (sessionData === null) {
+        return {
+          id: data?.session_id as string,
+        }
+      }
+  
+      return {
+        id: sessionData.id,
+        data: sessionData as unknown as Record<string, unknown>,
+      }
   }
 
   async authorizePayment(

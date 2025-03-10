@@ -1,3 +1,5 @@
+import Stripe from "stripe"
+
 export interface StripeOptions {
   /**
    * The API key for the Stripe account
@@ -20,6 +22,10 @@ export interface StripeOptions {
    */
   paymentDescription?: string
 }
+
+export type HandledErrorType = 
+| { retry: true; data: null } 
+| { retry: false; data: Stripe.PaymentIntent };
 
 export interface PaymentIntentOptions {
   capture_method?: "automatic" | "manual"
