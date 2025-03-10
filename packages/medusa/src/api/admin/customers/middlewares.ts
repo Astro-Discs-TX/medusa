@@ -4,6 +4,7 @@ import {
   AdminCreateCustomer,
   AdminCreateCustomerAddress,
   AdminCustomerAddressesParams,
+  AdminCustomerAddressParams,
   AdminCustomerParams,
   AdminCustomersParams,
   AdminUpdateCustomer,
@@ -67,6 +68,16 @@ export const adminCustomerRoutesMiddlewares: MiddlewareRoute[] = [
       validateAndTransformBody(AdminCreateCustomerAddress),
       validateAndTransformQuery(
         AdminCustomerParams,
+        QueryConfig.retrieveTransformQueryConfig
+      ),
+    ],
+  },
+  {
+    method: ["GET"],
+    matcher: "/admin/customers/:id/addresses/:address_id",
+    middlewares: [
+      validateAndTransformQuery(
+        AdminCustomerAddressParams,
         QueryConfig.retrieveTransformQueryConfig
       ),
     ],
