@@ -41,7 +41,6 @@ const conditionallyDeleteProducts = (input: BatchProductWorkflowInput) =>
     deleteProductsWorkflow.runAsStep({ input: { ids: input.delete! } })
   )
 
-
 export const batchProductsWorkflowId = "batch-products"
 /**
  * This workflow creates, updates, or deletes products. It's used by the
@@ -99,6 +98,7 @@ export const batchProductsWorkflow = createWorkflow(
     input: WorkflowData<BatchProductWorkflowInput>
   ): WorkflowResponse<BatchWorkflowOutput<ProductTypes.ProductDTO>> => {
     const res = parallelize(
+      // @ts-expect-error
       conditionallyCreateProducts(input),
       conditionallyUpdateProducts(input),
       conditionallyDeleteProducts(input)

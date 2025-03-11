@@ -54,4 +54,14 @@ export const adminDraftOrderRoutesMiddlewares: MiddlewareRoute[] = [
       ),
     ],
   },
+  {
+    method: ["POST"],
+    matcher: "/admin/draft-orders/:id/convert",
+    middlewares: [
+      validateAndTransformQuery(
+        AdminGetDraftOrderParams,
+        QueryConfig.retrieveTransformQueryConfig
+      ),
+    ],
+  },
 ]

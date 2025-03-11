@@ -105,6 +105,7 @@ export const AdminCreateDraftOrder = WithAdditionalData(
 export type AdminUpdateDraftOrderType = z.infer<typeof AdminUpdateDraftOrder>
 export const AdminUpdateDraftOrder = z.object({
   email: z.string().optional(),
+  customer_id: z.string().optional(),
   shipping_address: AddressPayload.optional(),
   billing_address: AddressPayload.optional(),
   metadata: z.record(z.unknown()).nullish(),

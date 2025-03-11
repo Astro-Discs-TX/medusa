@@ -1115,6 +1115,11 @@ export interface OrderDTO {
   summary?: OrderSummaryDTO
 
   /**
+   * Whether the order is a draft order.
+   */
+  is_draft_order?: boolean
+
+  /**
    * Holds custom data in key-value pairs.
    */
   metadata?: Record<string, unknown> | null
