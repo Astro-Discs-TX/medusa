@@ -136,7 +136,8 @@
     "logout": "Wyloguj się",
     "hide": "Ukryj",
     "export": "Eksportuj",
-    "import": "Importuj"
+    "import": "Importuj",
+    "cannotUndo": "Tego działania nie można cofnąć"
   },
   "operators": {
     "in": "W"
@@ -297,6 +298,9 @@
     }
   },
   "filters": {
+    "sortLabel": "Sortuj",
+    "filterLabel": "Filtruj",
+    "searchLabel": "Szukaj",
     "date": {
       "today": "Dzisiaj",
       "lastSevenDays": "Ostatnie 7 dni",
@@ -305,7 +309,9 @@
       "lastTwelveMonths": "Ostatnie 12 miesięcy",
       "custom": "Niestandardowy",
       "from": "Od",
-      "to": "Do"
+      "to": "Do",
+      "starting": "Początek",
+      "ending": "Koniec"
     },
     "compare": {
       "lessThan": "Mniej niż",
@@ -315,6 +321,12 @@
       "lessThanLabel": "mniej niż {{value}}",
       "greaterThanLabel": "więcej niż {{value}}",
       "andLabel": "i"
+    },
+    "sorting": {
+      "alphabeticallyAsc": "od A do Z",
+      "alphabeticallyDesc": "od Z do A",
+      "dateAsc": "Od najnowszych",
+      "dateDesc": "Od najstarszych"
     },
     "radio": {
       "yes": "Tak",
@@ -542,6 +554,10 @@
         "label": "Rabaty",
         "hint": "Jeśli odznaczone, rabaty nie będą stosowane do tego produktu"
       },
+      "shipping_profile": {
+        "label": "Profil wysyłki",
+        "hint": "Połącz produkt z profilem wysyłki"
+      },
       "type": {
         "label": "Typ"
       },
@@ -657,6 +673,29 @@
         "header": "Edytuj organizację",
         "toasts": {
           "success": "Pomyślnie zaktualizowano organizację {{title}}."
+        }
+      }
+    },
+    "stock": {
+      "heading": "Zarządzaj stanem magazynowym produktów i ich lokalizacjami",
+      "description": "Aktualizuj poziomy zapasów dla wszystkich wariantów produktu.",
+      "loading": "Proszę czekać, może to chwilę potrwać...",
+      "tooltips": {
+        "alreadyManaged": "Ten element magazynowy jest już edytowalny w ramach {{title}}.",
+        "alreadyManagedWithSku": "Ten element magazynowy jest już edytowalny w ramach {{title}} ({{sku}})."
+      }
+    },
+    "shippingProfile": {
+      "header": "Konfiguracja wysyłki",
+      "edit": {
+        "header": "Edytuj konfigurację wysyłki",
+        "toasts": {
+          "success": "Pomyślnie zaktualizowano profil wysyłki dla {{title}}."
+        }
+      },
+      "create": {
+        "errors": {
+          "required": "Profil wysyłki jest wymagany."
         }
       }
     },
@@ -805,10 +844,25 @@
         "quantityOutOfRange": "Minimalna ilość to 1, a maksymalna ilość to {{max}}"
       }
     },
+    "adjustInventory": {
+      "errors": {
+        "stockedQuantity": "Nie można ustawić stanu magazynowego na wartość niższą niż zarezerwowana ilość ({{quantity}})."
+      }
+    },
     "toast": {
       "updateLocations": "Lokalizacje zaktualizowane pomyślnie.",
       "updateLevel": "Poziom magazynowy zaktualizowany pomyślnie.",
       "updateItem": "Element magazynowy zaktualizowany pomyślnie."
+    },
+    "stock": {
+      "title": "Aktualizuj stany magazynowe",
+      "description": "Zaktualizuj stan magazynowy dla wybranych pozycji.",
+      "action": "Edytuj stany magazynowe",
+      "placeholder": "Nieaktywne",
+      "disablePrompt_one": "Zamierzasz wyłączyć {{count}} stan magazynowy. Tej operacji nie można cofnąć.",
+      "disablePrompt_other": "Zamierzasz wyłączyć {{count}} stany magazynowe. Tej operacji nie można cofnąć.",
+      "disabledToggleTooltip": "Nie można wyłączyć: najpierw wyzeruj przychodzące i/lub zarezerwowane ilości.",
+      "successToast": "Stany magazynowe zostały pomyślnie zaktualizowane."
     }
   },
   "giftCards": {
@@ -882,6 +936,16 @@
   "customerGroups": {
     "domain": "Grupy klientów",
     "subtitle": "Organizuj klientów w grupy. Grupy mogą mieć różne promocje i ceny.",
+    "list": {
+      "empty": {
+        "heading": "Brak grup klientów",
+        "description": "Nie ma żadnych grup klientów do wyświetlenia."
+      },
+      "filtered": {
+        "heading": "Brak wyników",
+        "description": "Żadne grupy klientów nie pasują do bieżących kryteriów filtrowania."
+      }
+    },
     "create": {
       "header": "Utwórz grupę klientów",
       "hint": "Utwórz nową grupę klientów, aby segmentować swoich klientów.",
@@ -922,9 +986,19 @@
     "exchange": "Wymiana",
     "return": "Zwrot",
     "cancelWarning": "Masz zamiar anulować zamówienie {{id}}. Tej akcji nie można cofnąć.",
+    "orderCanceled": "Zamówienie zostało pomyślnie anulowane",
     "onDateFromSalesChannel": "{{date}} z {{salesChannel}}",
     "list": {
       "noRecordsMessage": "Twoje zamówienia pojawią się tutaj."
+    },
+    "status": {
+      "not_paid": "Nieopłacone",
+      "pending": "Oczekujące",
+      "completed": "Zrealizowane",
+      "draft": "Szkic",
+      "archived": "Zarchiwizowane",
+      "canceled": "Anulowane",
+      "requires_action": "Wymaga działania"
     },
     "summary": {
       "requestReturn": "Złóż wniosek o zwrot",
@@ -1010,6 +1084,20 @@
       },
       "validation": {
         "quantityLowerThanFulfillment": "Nie można ustawić ilości mniejszej lub równej ilości zrealizowanej"
+      }
+    },
+    "edit": {
+      "email": {
+        "title": "Edytuj adres e-mail",
+        "requestSuccess": "Adres e-mail zamówienia został zmieniony na {{email}}."
+      },
+      "shippingAddress": {
+        "title": "Edytuj adres dostawy",
+        "requestSuccess": "Adres dostawy zamówienia został zaktualizowany."
+      },
+      "billingAddress": {
+        "title": "Edytuj adres rozliczeniowy",
+        "requestSuccess": "Adres rozliczeniowy zamówienia został zaktualizowany."
       }
     },
     "returns": {
@@ -1179,6 +1267,8 @@
     "fulfillment": {
       "cancelWarning": "Masz zamiar anulować realizację. Tej akcji nie można cofnąć.",
       "markAsDeliveredWarning": "Masz zamiar oznaczyć realizację jako dostarczoną. Tej akcji nie można cofnąć.",
+      "differentOptionSelected": "Wybrana opcja dostawy różni się od tej wybranej przez klienta.",
+      "disabledItemTooltip": "Wybrana opcja dostawy nie pozwala na realizację tego przedmiotu",
       "unfulfilledItems": "Niezrealizowane produkty",
       "statusLabel": "Status realizacji",
       "statusTitle": "Status realizacji",
@@ -1191,6 +1281,7 @@
       "available": "Dostępne",
       "inStock": "W magazynie",
       "markAsShipped": "Oznacz jako wysłaną",
+      "markAsPickedUp": "Oznacz jako odebrane",
       "markAsDelivered": "Oznacz jako dostarczoną",
       "itemsToFulfillDesc": "Wybierz produkty i ilości do realizacji",
       "locationDescription": "Wybierz lokalizację, z której chcesz zrealizować produkty.",
@@ -1199,7 +1290,9 @@
       "error": {
         "wrongQuantity": "Tylko jeden produkt jest dostępny do realizacji",
         "wrongQuantity_other": "Ilość powinna być liczbą od 1 do {{number}}",
-        "noItems": "Brak produktów do realizacji."
+        "noItems": "Brak produktów do realizacji.",
+        "noShippingOption": "Opcja dostawy jest wymagana",
+        "noLocation": "Lokalizacja jest wymagana"
       },
       "status": {
         "notFulfilled": "Niezrealizowane",
@@ -1218,7 +1311,8 @@
         "created": "Realizacja została pomyślnie utworzona",
         "canceled": "Realizacja została pomyślnie anulowana",
         "fulfillmentShipped": "Nie można anulować już wysłanej realizacji",
-        "fulfillmentDelivered": "Realizacja została pomyślnie oznaczona jako dostarczona"
+        "fulfillmentDelivered": "Realizacja została pomyślnie oznaczona jako dostarczona",
+        "fulfillmentPickedUp": "Realizacja została pomyślnie oznaczona jako odebrana"
       },
       "trackingLabel": "Tracking",
       "shippingFromLabel": "Wysyłka z",
@@ -1308,8 +1402,14 @@
           "confirmed": "Edycja zamówienia #{{editId}} potwierdzona"
         },
         "transfer": {
-          "requested": "Zamówienie przekazane #{{transferId}} złożone",
-          "confirmed": "Zamówienie przekazane #{{transferId}} potwierdzone"
+          "requested": "Przekazanie zamówienia #{{transferId}} zostało zgłoszone",
+          "confirmed": "Przekazanie zamówienia #{{transferId}} zostało potwierdzone",
+          "declined": "Przekazanie zamówienia #{{transferId}} zostało odrzucone"
+        },
+        "update_order": {
+          "shipping_address": "Adres dostawy został pomyślnie zaktualizowany",
+          "billing_address": "Adres rozliczeniowy został pomyślnie zaktualizowany",
+          "email": "Adres e-mail został pomyślnie zaktualizowany"
         }
       }
     },
@@ -1415,11 +1515,17 @@
     },
     "salesChannels": {
       "header": "Kanały sprzedaży",
+      "hint": "Zarządzaj kanałami sprzedaży połączonymi z tą lokalizacją.",
       "label": "Połączone kanały sprzedaży",
       "connectedTo": "Połączono z {{count}} z {{total}} kanałów sprzedaży",
       "noChannels": "Lokalizacja nie jest połączona z żadnymi kanałami sprzedaży.",
       "action": "Połącz kanały sprzedaży",
       "successToast": "Kanały sprzedaży zostały pomyślnie zaktualizowane."
+    },
+    "pickupOptions": {
+      "edit": {
+        "header": "Edytuj opcje odbioru osobistego"
+      }
     },
     "shippingOptions": {
       "create": {
@@ -1428,6 +1534,12 @@
           "hint": "Utwórz nową opcję wysyłki, aby zdefiniować, w jaki sposób produkty są wysyłane z tej lokalizacji.",
           "label": "Opcje wysyłki",
           "successToast": "Opcja wysyłki {{name}} została pomyślnie utworzona."
+        },
+        "pickup": {
+          "header": "Utwórz opcję odbioru osobistego dla {{zone}}",
+          "hint": "Utwórz nową opcję odbioru osobistego, aby określić sposób odbioru produktów z tej lokalizacji.",
+          "label": "Opcje odbioru",
+          "successToast": "Opcja odbioru osobistego {{name}} została pomyślnie utworzona."
         },
         "returns": {
           "header": "Utwórz opcję zwrotu dla {{zone}}",
@@ -1453,10 +1565,47 @@
       "pricing": {
         "action": "Edytuj ceny"
       },
+      "conditionalPrices": {
+        "header": "Ceny warunkowe dla  {{name}}",
+        "description": "Zarządzaj cenami warunkowymi dla tej opcji dostawy w zależności od łącznej wartości przedmiotów w koszyku.",
+        "attributes": {
+          "cartItemTotal": "Łączna wartość przedmiotów w koszyku"
+        },
+        "summaries": {
+          "range": "Jeśli <0>{{attribute}}</0> mieści się w przedziale <1>{{gte}}</1> - <2>{{lte}}</2>",
+          "greaterThan": "Jeśli <0>{{attribute}}</0> ≥ <1>{{gte}}</1>",
+          "lessThan": "Jeśli <0>{{attribute}}</0> ≤ <1>{{lte}}</1>"
+        },
+        "actions": {
+          "addPrice": "Dodaj cenę",
+          "manageConditionalPrices": "Zarządzaj cenami warunkowymi"
+        },
+        "rules": {
+          "amount": "Cena opcji dostawy",
+          "gte": "Minimalna łączna wartość koszyka",
+          "lte": "Maksymalna łączna wartość koszyka"
+        },
+        "customRules": {
+          "label": "Niestandardowe reguły",
+          "tooltip": "Ta cena warunkowa zawiera reguły, którymi nie można zarządzać w panelu.",
+          "eq": "Łączna wartość koszyka musi być równa",
+          "gt": "Łączna wartość koszyka musi być większa niż",
+          "lt": "Łączna wartość koszyka musi być mniejsza niż"
+        },
+        "errors": {
+          "amountRequired": "Cena opcji dostawy jest wymagana",
+          "minOrMaxRequired": "Należy podać co najmniej minimalną lub maksymalną wartość koszyka",
+          "minGreaterThanMax": "Minimalna wartość koszyka musi być mniejsza lub równa maksymalnej wartości koszyka",
+          "duplicateAmount": "Cena opcji dostawy musi być unikalna dla każdej warunkowej reguły",
+          "overlappingConditions": "Reguły cenowe nie mogą się powielać"
+        }
+      },
       "fields": {
         "count": {
           "shipping_one": "{{count}} opcja wysyłki",
           "shipping_other": "{{count}} opcje wysyłki",
+          "pickup_one": "{{count}} opcje odbioru",
+          "pickup_other": "{{count}} opcje odbioru",
           "returns_one": "{{count}} opcja zwrotu",
           "returns_other": "{{count}} opcje zwrotu"
         },
@@ -1478,7 +1627,8 @@
           "hint": "Czy klienci mogą używać tej opcji podczas płatności."
         },
         "provider": "Dostawca realizacji",
-        "profile": "Profil wysyłki"
+        "profile": "Profil wysyłki",
+        "fulfillmentOption": "Opcja realizacji"
       }
     },
     "serviceZones": {
@@ -2167,8 +2317,19 @@
       "developer": "Wywoływacz",
       "member": "Członek"
     },
+    "list": {
+      "empty": {
+        "heading": "Brak użytkowników",
+        "description": "Gdy użytkownik zostanie zaproszony, pojawi się tutaj."
+      },
+      "filtered": {
+        "heading": "Brak wyników",
+        "description": "Żaden użytkownik nie pasuje do bieżących kryteriów filtrowania."
+      }
+    },
     "deleteUserWarning": "Zamierzasz usunąć użytkownika {{name}}. Tej akcji nie można cofnąć.",
-    "invite": "Zapraszać"
+    "deleteUserSuccess": "Użytkownik {{name}} został pomyślnie usunięty",
+    "invite": "Zaproszenia"
   },
   "store": {
     "domain": "Sklep",
@@ -2176,6 +2337,8 @@
     "editStore": "Edytuj sklep",
     "defaultCurrency": "Domyślna waluta",
     "defaultRegion": "Domyślny region",
+    "defaultSalesChannel": "Domyślny kanał sprzedaży",
+    "defaultLocation": "Domyślna lokalizacja",
     "swapLinkTemplate": "Zamień szablon łącza",
     "paymentLinkTemplate": "Szablon łącza do płatności",
     "inviteLinkTemplate": "Szablon linku zaproszenia",
@@ -2322,6 +2485,16 @@
   "salesChannels": {
     "domain": "Kanały sprzedaży",
     "subtitle": "Zarządzaj kanałami online i offline, w których sprzedajesz produkty.",
+    "list": {
+      "empty": {
+        "heading": "Brak kanałów sprzedaży",
+        "description": "Gdy kanał sprzedaży zostanie utworzony, pojawi sie tutaj."
+      },
+      "filtered": {
+        "heading": "Brak wyników",
+        "description": "Żaden kanał sprzedaży nie pasuje do bieżących kryteriów filtrowania."
+      }
+    },
     "createSalesChannel": "Utwórz kanał sprzedaży",
     "createSalesChannelHint": "Utwórz nowy kanał sprzedaży, w którym będziesz mógł sprzedawać swoje produkty.",
     "enabledHint": "Określ, czy kanał sprzedaży jest włączony.",
@@ -2335,6 +2508,9 @@
       "create": "Kanał sprzedaży został pomyślnie utworzony",
       "update": "Kanał sprzedaży został pomyślnie zaktualizowany",
       "delete": "Kanał sprzedaży został pomyślnie usunięty"
+    },
+    "tooltip": {
+      "cannotDeleteDefault": "Nie można usunąć domyślnego kanału sprzedaży"
     },
     "products": {
       "list": {
@@ -2450,7 +2626,7 @@
     "fields": {
       "value": {
         "label": "Wartość",
-        "placeholder": "zły_rozmiar",
+        "placeholder": "zly_rozmiar",
         "tooltip": "Wartość powinna być unikalnym identyfikatorem powodu zwrotu."
       },
       "label": {
@@ -2613,6 +2789,8 @@
     "scheduled": "Zaplanowany",
     "expired": "Wygasły",
     "active": "Aktywny",
+    "inactive": "Nieaktywny",
+    "draft": "Szkic",
     "enabled": "Włączony",
     "disabled": "Wyłączony"
   },
@@ -2622,7 +2800,11 @@
     "available": "Dostępny",
     "inStock": "W magazynie",
     "added": "W dodatku",
-    "removed": "REMOVED"
+    "removed": "Usunięty",
+    "from": "Od",
+    "to": "Do",
+    "beaware": "Zwróć uwagę",
+    "loading": "Ładowanie"
   },
   "fields": {
     "amount": "Kwota",
@@ -2654,6 +2836,7 @@
     "discountable": "Zniżka",
     "handle": "Uchwyt",
     "subtitle": "Podtytuł",
+    "by": "Przez",
     "item": "Przedmiot",
     "qty": "ilość",
     "limit": "Limit",
@@ -2709,8 +2892,8 @@
     "variants": "Warianty",
     "orders": "Święcenia",
     "account": "Konto",
-    "total": "Zamówienie ogółem",
-    "paidTotal": "Całość zdobyta",
+    "total": "Wartość zamówienia",
+    "paidTotal": "Kwota otrzymana",
     "totalExclTax": "Razem bez podatek",
     "subtotal": "Suma częściowa",
     "shipping": "Wysyłka",
@@ -2734,10 +2917,10 @@
     "salesChannels": "Kanały sprzedaży",
     "product": "Produkt",
     "createdAt": "Stworzony",
-    "updatedAt": "Zaktualizowano",
+    "updatedAt": "Zaktualizowany",
     "revokedAt": "Odwołane o godz",
-    "true": "PRAWDA",
-    "false": "FAŁSZ",
+    "true": "Prawda",
+    "false": "Fałsz",
     "giftCard": "Karta podarunkowa",
     "tag": "Etykietka",
     "dateIssued": "Data wydania",
