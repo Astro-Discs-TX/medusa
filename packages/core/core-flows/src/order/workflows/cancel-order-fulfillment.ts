@@ -143,7 +143,7 @@ function prepareCancelOrderFulfillmentData({
         (i) => i.line_item_id === lineItemId
       )!
 
-      let quantity: any = fitem.quantity
+      let quantity: BigNumberInput = fitem.quantity
 
       // NOTE: if the order item has an inventory kit or `required_qunatity` > 1, fulfillment items wont't match 1:1 with order items.
       // - for each inventory item in the kit, a fulfillment item will be created i.e. one line item could have multiple fulfillment items
@@ -153,15 +153,12 @@ function prepareCancelOrderFulfillmentData({
       //   NOTE: for now we only need to find one inventory item of a line item to compute this since when a fulfillment is created all inventory items are fulfilled together.
       //   If we allow to cancel partial fulfillments for an order item, we need to change this.
       //
-      if (iitems.length) {
+      if (iitems?.length) {
         const iitem = iitems.find(
           (i) => i.inventory.id === fitem.inventory_item_id
         )
 
-        quantity = MathBN.div(
-          quantity as number,
-          iitem.required_quantity
-        ).toNumber()
+        quantity = MathBN.div(quantity, iitem.required_quantity)
       }
 
       return {

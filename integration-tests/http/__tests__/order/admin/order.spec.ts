@@ -1269,7 +1269,7 @@ medusaIntegrationTestRunner({
           )
         ).data.order
 
-        // 2. two fulfillments items are created for a single (inventory kit) line item
+        // 2. two fulfillment items are created for a single (inventory kit) line item
         expect(fulOrder.fulfillments[0].items).toEqual(
           expect.arrayContaining([
             expect.objectContaining({
