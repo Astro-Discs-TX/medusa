@@ -23,10 +23,6 @@ export interface StripeOptions {
   paymentDescription?: string
 }
 
-export type HandledErrorType = 
-| { retry: true; data: null } 
-| { retry: false; data: Stripe.PaymentIntent };
-
 export interface PaymentIntentOptions {
   capture_method?: "automatic" | "manual"
   setup_future_usage?: "on_session" | "off_session"

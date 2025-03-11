@@ -1,5 +1,5 @@
 import Stripe from "stripe"
-
+import { setTimeout } from "timers/promises"
 import {
   AuthorizePaymentInput,
   AuthorizePaymentOutput,
@@ -42,7 +42,6 @@ import {
 import {
   ErrorCodes,
   ErrorIntentStatus,
-  HandledErrorType,
   PaymentIntentOptions,
   StripeOptions,
 } from "../types"
@@ -50,6 +49,10 @@ import {
   getAmountFromSmallestUnit,
   getSmallestUnit,
 } from "../utils/get-smallest-unit"
+
+type HandledErrorType = 
+| { retry: true; } 
+| { retry: false; data: Stripe.PaymentIntent };
 
 abstract class StripeBase extends AbstractPaymentProvider<StripeOptions> {
   protected readonly options_: StripeOptions
@@ -137,7 +140,6 @@ abstract class StripeBase extends AbstractPaymentProvider<StripeOptions> {
         case 'StripeRateLimitError':
           return {
             retry: true,
-            data: null,
           }
         case 'StripeAPIError': {
           return null
@@ -175,7 +177,7 @@ abstract class StripeBase extends AbstractPaymentProvider<StripeOptions> {
         currentAttempt <= maxRetries
       ) {
         const delay = baseDelay * Math.pow(2, currentAttempt - 1) * (0.5 + Math.random() * 0.5);
-        await new Promise(resolve => setTimeout(resolve, delay));
+        await setTimeout(delay);
         return this.executeWithRetry(apiCall, maxRetries, baseDelay, currentAttempt + 1);
       }
 
