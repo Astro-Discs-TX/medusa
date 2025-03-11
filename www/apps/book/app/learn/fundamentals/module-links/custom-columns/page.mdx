@@ -29,13 +29,13 @@ export const linkHighlights = [
 ]
 
 ```ts highlights={linkHighlights}
-import HelloModule from "../modules/hello"
+import BlogModule from "../modules/blog"
 import ProductModule from "@medusajs/medusa/product"
 import { defineLink } from "@medusajs/framework/utils"
 
 export default defineLink(
   ProductModule.linkable.product,
-  HelloModule.linkable.myCustom,
+  BlogModule.linkable.blog,
   {
     database: {
       extraColumns: {
@@ -48,7 +48,7 @@ export default defineLink(
 )
 ```
 
-This adds to the table created for the link between `product` and `myCustom` a `metadata` column of type `json`.
+This adds to the table created for the link between `product` and `blog` a `metadata` column of type `json`.
 
 ### Database Options
 
@@ -106,8 +106,8 @@ await link.create({
   [Modules.PRODUCT]: {
     product_id: "123",
   },
-  HELLO_MODULE: {
-    my_custom_id: "321",
+  [BLOG_MODULE]: {
+    post_id: "321",
   },
   data: {
     metadata: {
@@ -126,28 +126,28 @@ To retrieve linked records with their custom columns, use [Query](../query/page.
 For example:
 
 export const retrieveHighlights = [
-  ["1", "productHelloLink", "Import the exported link definition."],
+  ["1", "productPostLink", "Import the exported link definition."],
   ["6", "entity", "Pass the link definition to retrieve its data."],
   ["7", `"metadata"`, "Retrieve the `metadata` column."],
   ["7", `"product.*"`, "Retrieve the linked product's details."],
-  ["7", `"my_custom.*"`, "Retrieve the linked `myCustom` record's details."],
+  ["7", `"post.*"`, "Retrieve the linked `post` record's details."],
 ]
 
 ```ts highlights={retrieveHighlights}
-import productHelloLink from "../links/product-hello"
+import productPostLink from "../links/product-post"
 
 // ...
 
 const { data } = await query.graph({
-  entity: productHelloLink.entryPoint,
-  fields: ["metadata", "product.*", "my_custom.*"],
+  entity: productPostLink.entryPoint,
+  fields: ["metadata", "product.*", "post.*"],
   filters: {
     product_id: "prod_123",
   },
 })
 ```
 
-This retrieves the product of id `prod_123` and its linked `my_custom` records.
+This retrieves the product of id `prod_123` and its linked `post` records.
 
 In the `fields` array you pass `metadata`, which is the custom column to retrieve of the link.
 
@@ -166,8 +166,8 @@ await link.create({
   [Modules.PRODUCT]: {
     product_id: "123",
   },
-  HELLO_MODULE: {
-    my_custom_id: "321",
+  [BLOG_MODULE]: {
+    post_id: "321",
   },
   data: {
     metadata: {
