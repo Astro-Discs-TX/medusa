@@ -1,10 +1,20 @@
 export const metadata = {
-  title: `${pageNumber} Add Columns to a Link`,
+  title: `${pageNumber} Add Columns to a Link Table`,
 }
 
 # {metadata.title}
 
-In this chapter, you'll learn how to add custom columns to a link definition and manage them.
+In this chapter, you'll learn how to add custom columns to a link definition's table and manage them.
+
+## Link Table's Default Columns
+
+When you define a link between two data models, Medusa creates a link table in the database to store the IDs of the linked records. You can learn more about the created table in the [Module Links chapter](../page.mdx).
+
+In various cases, you might need to store additional data in the link table. For example, if you define a link between a `product` and a `post`, you might want to store the publish date of the product's post in the link table.
+
+In those cases, you can add a custom column to a link's table in the link definition. You can later set that column whenever you create or update a link between the linked records.
+
+---
 
 ## How to Add Custom Columns to a Link's Table?
 
