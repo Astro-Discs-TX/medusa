@@ -133,7 +133,7 @@ export class RedisDistributedTransactionStorage
               job.data.schedulerOptions
             )}`
           )
-          await this.executeScheduledJob(
+          return await this.executeScheduledJob(
             job.data.jobId,
             job.data.schedulerOptions
           )
@@ -187,9 +187,8 @@ export class RedisDistributedTransactionStorage
     try {
       // TODO: In the case of concurrency being forbidden, we want to generate a predictable transaction ID and rely on the idempotency
       // of the transaction to ensure that the transaction is only executed once.
-      return await this.workflowOrchestratorService_.run(jobId, {
+      await this.workflowOrchestratorService_.run(jobId, {
         logOnError: true,
-        throwOnError: false,
       })
     } catch (e) {
       if (e instanceof MedusaError && e.type === MedusaError.Types.NOT_FOUND) {
