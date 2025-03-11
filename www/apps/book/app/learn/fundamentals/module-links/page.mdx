@@ -10,7 +10,7 @@ In this chapter, you’ll learn what a module link is and how to define one.
 
 Medusa's modular architecture isolates modules from one another to ensure they can be integrated into your application without side effects. Module isolation has other benefits, which you can learn about in the [Module Isolation chapter](../modules/isolation/page.mdx). Since modules are isolated, you can't access another module's data models to add a relation to it or extend it. Instead, you use a module link.
 
-A module link forms an association between two data models of different modules while maintaining module isolation. Using module links, you can build virtual relations between your custom data models and data models in the commerce modules, which is useful as you extend the features provided by the commerce modules.
+A module link forms an association between two data models of different modules while maintaining module isolation. Using module links, you can build virtual relations between your custom data models and data models in the commerce modules, which is useful as you extend the features provided by the commerce modules. Then, Medusa creates a link table in the database to store the IDs of the linked records. You'll learn more about link tables later in this chapter.
 
 For example, the [Brand Customizations Tutorial](../../customization/extend-features/page.mdx) shows how to create a Brand Module that adds the concept of brands to your application, then link those brands to a product.
 
@@ -60,7 +60,7 @@ Use either of these commands whenever you make changes to your link definitions.
 
 ---
 
-### How Module Links are Stored
+### Module Link's Database Table
 
 When you define a module link, the Medusa application creates a table in the database for that link. The table's name is a combination of the names of the two data models linked in the format `module1_table1_module2_table2`, where:
 
@@ -157,7 +157,7 @@ In this example, when a product is deleted, its linked `post` record is also del
 
 ## Renaming Participants in a Link
 
-As mentioned in the [How Module Links are Stored](#how-module-links-are-stored) section, the name of a link's table consists of the names of the modules and the data models' table names.
+As mentioned in the [How Module Links are Stored](#module-links-database-table) section, the name of a link's table consists of the names of the modules and the data models' table names.
 
 So, if you rename a module or a data model's table, then run the `db:sync-links` or `db:migrate` commands, you'll be asked to delete the old link table and create a new one.
 
