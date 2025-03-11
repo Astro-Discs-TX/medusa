@@ -1,7 +1,7 @@
 export const generatedEditDates = {
   "app/learn/fundamentals/scheduled-jobs/page.mdx": "2024-12-09T10:51:40.570Z",
   "app/learn/fundamentals/workflows/page.mdx": "2024-12-09T14:45:17.837Z",
-  "app/learn/deployment/page.mdx": "2025-03-06T09:15:39.707Z",
+  "app/learn/deployment/page.mdx": "2025-03-11T14:53:25.540Z",
   "app/learn/page.mdx": "2025-03-11T10:17:39.318Z",
   "app/learn/fundamentals/modules/commerce-modules/page.mdx": "2024-12-09T10:46:29.339Z",
   "app/learn/fundamentals/workflows/retry-failed-steps/page.mdx": "2024-12-04T07:37:59.823Z",
@@ -97,7 +97,7 @@ export const generatedEditDates = {
   "app/learn/customization/integrate-systems/service/page.mdx": "2024-12-09T11:02:39.594Z",
   "app/learn/customization/next-steps/page.mdx": "2024-12-06T14:34:53.356Z",
   "app/learn/fundamentals/modules/architectural-modules/page.mdx": "2024-10-21T13:30:21.367Z",
-  "app/learn/introduction/architecture/page.mdx": "2025-01-16T10:25:10.780Z",
+  "app/learn/introduction/architecture/page.mdx": "2025-03-11T15:28:01.187Z",
   "app/learn/fundamentals/data-models/infer-type/page.mdx": "2024-12-09T15:54:08.713Z",
   "app/learn/fundamentals/custom-cli-scripts/seed-data/page.mdx": "2024-12-09T14:38:06.385Z",
   "app/learn/fundamentals/environment-variables/page.mdx": "2025-03-11T08:55:03.343Z",
@@ -119,6 +119,7 @@ export const generatedEditDates = {
   "app/learn/resources/contribution-guidelines/admin-translations/page.mdx": "2025-02-11T16:57:46.726Z",
   "app/learn/resources/contribution-guidelines/docs/page.mdx": "2025-03-06T09:32:26.010Z",
   "app/learn/resources/usage/page.mdx": "2025-02-26T13:35:34.824Z",
-  "app/learn/configurations/medusa-config/page.mdx": "2025-03-11T08:50:04.239Z",
-  "app/learn/configurations/ts-aliases/page.mdx": "2025-02-11T16:57:46.683Z"
+  "app/learn/configurations/medusa-config/page.mdx": "2025-03-11T14:27:04.528Z",
+  "app/learn/configurations/ts-aliases/page.mdx": "2025-02-11T16:57:46.683Z",
+  "app/learn/production/worker-mode/page.mdx": "2025-03-11T15:21:50.906Z"
 }
