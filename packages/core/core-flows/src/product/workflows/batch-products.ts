@@ -98,7 +98,6 @@ export const batchProductsWorkflow = createWorkflow(
     input: WorkflowData<BatchProductWorkflowInput>
   ): WorkflowResponse<BatchWorkflowOutput<ProductTypes.ProductDTO>> => {
     const res = parallelize(
-      // @ts-expect-error
       conditionallyCreateProducts(input),
       conditionallyUpdateProducts(input),
       conditionallyDeleteProducts(input)
