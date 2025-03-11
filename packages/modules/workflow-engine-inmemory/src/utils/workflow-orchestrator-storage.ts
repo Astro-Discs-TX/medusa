@@ -24,7 +24,7 @@ export class InMemoryDistributedTransactionStorage
     string,
     {
       timer: NodeJS.Timeout
-      expression: CronExpression
+      expression: CronExpression | `interval:${string}`
       numberOfExecutions: number
       config: SchedulerOptions
     }
@@ -261,8 +261,19 @@ export class InMemoryDistributedTransactionStorage
     // In order to ensure that the schedule configuration is always up to date, we first cancel an existing job, if there was one
     // any only then we add the new one.
     await this.remove(jobId)
-    const expression = parseExpression(schedulerOptions.cron)
-    const nextExecution = expression.next().getTime() - Date.now()
+    const expression =
+      "cron" in schedulerOptions ? parseExpression(schedulerOptions.cron) : null
+    let nextExecution = 0
+    if (expression) {
+      nextExecution = expression.next().getTime() - Date.now()
+    } else if ("interval" in schedulerOptions) {
+      nextExecution = schedulerOptions.interval
+    } else {
+      throw new MedusaError(
+        MedusaError.Types.INVALID_ARGUMENT,
+        "Cron schedule cron or interval definition is required for scheduled jobs."
+      )
+    }
 
     const timer = setTimeout(async () => {
       this.jobHandler(jobId)
@@ -270,7 +281,11 @@ export class InMemoryDistributedTransactionStorage
 
     this.scheduled.set(jobId, {
       timer,
-      expression,
+      expression:
+        expression ??
+        `interval:${
+          "interval" in schedulerOptions ? schedulerOptions.interval : 0
+        }`,
       numberOfExecutions: 0,
       config: schedulerOptions,
     })
@@ -306,7 +321,10 @@ export class InMemoryDistributedTransactionStorage
       return
     }
 
-    const nextExecution = job.expression.next().getTime() - Date.now()
+    let nextExecution = !(job.expression as string).startsWith("interval:")
+      ? (job.expression as CronExpression).next().getTime() - Date.now()
+      : parseInt((job.expression as string).split(":")[1])
+
     const timer = setTimeout(async () => {
       this.jobHandler(jobId)
     }, nextExecution)

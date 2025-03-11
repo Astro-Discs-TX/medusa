@@ -15,7 +15,7 @@ import {
   TransactionState,
 } from "@medusajs/framework/utils"
 import { WorkflowOrchestratorService } from "@services"
-import { Queue, Worker } from "bullmq"
+import { Queue, RepeatOptions, Worker } from "bullmq"
 import Redis from "ioredis"
 
 enum JobType {
@@ -434,6 +434,23 @@ export class RedisDistributedTransactionStorage
     const jobId =
       typeof jobDefinition === "string" ? jobDefinition : jobDefinition.jobId
 
+    if ("cron" in schedulerOptions && "interval" in schedulerOptions) {
+      throw new Error(
+        `Unable to register a job with both scheduler options interval and cron.`
+      )
+    }
+
+    const repeatOptions: RepeatOptions = {
+      limit: schedulerOptions.numberOfExecutions,
+      key: `${JobType.SCHEDULE}_${jobId}`,
+    }
+
+    if ("cron" in schedulerOptions) {
+      repeatOptions.pattern = schedulerOptions.cron
+    } else {
+      repeatOptions.every = schedulerOptions.interval
+    }
+
     // If it is the same key (eg. the same workflow name), the old one will get overridden.
     await this.jobQueue?.add(
       JobType.SCHEDULE,
@@ -442,19 +459,12 @@ export class RedisDistributedTransactionStorage
         schedulerOptions,
       },
       {
-        repeat: {
-          pattern: schedulerOptions.cron,
-          limit: schedulerOptions.numberOfExecutions,
-          key: `${JobType.SCHEDULE}_${jobId}`,
-        },
+        repeat: repeatOptions,
         removeOnComplete: {
           age: 86400,
           count: 1000,
         },
-        removeOnFail: {
-          age: 604800,
-          count: 5000,
-        },
+        removeOnFail: false,
       }
     )
   }
