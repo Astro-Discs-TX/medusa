@@ -20,6 +20,8 @@ import React, {
   useState,
 } from "react"
 import { getScrolledTop as getScrolledTopUtil, isElmWindow } from "../../utils"
+import { useKeyboardShortcut } from "../use-keyboard-shortcut"
+import { useLayout } from "../../providers"
 
 type EventFunc = (...args: never[]) => unknown
 
@@ -72,6 +74,7 @@ function useScrollControllerContextValue({
   restoreScrollOnReload?: boolean
 }): ScrollController {
   const scrollEventsEnabledRef = useRef(true)
+  const { showCollapsedNavbar } = useLayout()
 
   const [scrollableElement, setScrollableElement] = useState<
     Element | Window | undefined
@@ -91,6 +94,11 @@ function useScrollControllerContextValue({
     scrollToTop(elm.offsetTop)
   }
 
+  const topMargin = useMemo(() => {
+    // might need a better way to set these static values
+    return showCollapsedNavbar ? 112 : 56
+  }, [showCollapsedNavbar])
+
   const scrollToTop = (top: number, parentTop?: number) => {
     const parentOffsetTop =
       parentTop !== undefined
@@ -102,9 +110,8 @@ function useScrollControllerContextValue({
             : 0
 
     scrollableElement?.scrollTo({
-      // 56 is the height of the navbar
-      // might need a better way to determine it.
-      top: top - parentOffsetTop - 56,
+      top: top - parentOffsetTop - topMargin,
+      behavior: "instant",
     })
   }
 
@@ -140,6 +147,52 @@ export function ScrollControllerProvider({
 }) {
   const value = useScrollControllerContextValue({
     scrollableSelector,
+  })
+  useKeyboardShortcut({
+    metakey: false,
+    shortcutKeys: ["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End"],
+    action: (e) => {
+      // check that document or body are focused
+      const activeElement = document.activeElement
+      if (
+        isElmWindow(value.scrollableElement) ||
+        !value.scrollableElement ||
+        (activeElement !== document.body &&
+          activeElement !== document.documentElement)
+      ) {
+        return
+      }
+
+      let newScroll = value.scrollableElement.scrollTop
+      const scrollThreshold = 50
+      const pageScrollAmount =
+        value.scrollableElement.clientHeight - scrollThreshold
+
+      switch (e.key) {
+        case "ArrowUp":
+          newScroll = -scrollThreshold
+          break
+        case "ArrowDown":
+          newScroll = scrollThreshold
+          break
+        case "PageUp":
+          newScroll = -pageScrollAmount
+          break
+        case "PageDown":
+          newScroll = pageScrollAmount
+          break
+        case "Home":
+          newScroll = -newScroll
+          break
+        case "End":
+          newScroll = value.scrollableElement.scrollHeight
+      }
+
+      value.scrollableElement?.scrollBy({
+        top: newScroll,
+        behavior: "smooth",
+      })
+    },
   })
   return (
     <ScrollMonitorContext.Provider value={value}>

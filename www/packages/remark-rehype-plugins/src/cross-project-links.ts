@@ -1,18 +1,13 @@
-/* eslint-disable no-case-declarations */
 import type { Transformer } from "unified"
 import type {
   CrossProjectLinksOptions,
-  ExpressionJsVar,
   UnistNode,
   UnistNodeWithData,
   UnistTree,
-} from "./types/index.js"
-import { estreeToJs } from "./utils/estree-to-js.js"
+} from "types"
+import { estreeToJs } from "docs-utils"
 import getAttribute from "./utils/get-attribute.js"
-import {
-  isExpressionJsVarLiteral,
-  isExpressionJsVarObj,
-} from "./utils/expression-is-utils.js"
+import { performActionOnLiteral } from "./utils/perform-action-on-literal.js"
 
 const PROJECT_REGEX = /^!(?<area>[\w-]+)!/
 
@@ -53,6 +48,14 @@ function linkElmFixer(node: UnistNode, options: CrossProjectLinksOptions) {
   node.properties.href = matchAndFixLinks(node.properties.href, options)
 }
 
+function linkNodeFixer(node: UnistNode, options: CrossProjectLinksOptions) {
+  if (!node.url) {
+    return
+  }
+
+  node.url = matchAndFixLinks(node.url, options)
+}
+
 function componentFixer(
   node: UnistNodeWithData,
   options: CrossProjectLinksOptions
@@ -61,88 +64,69 @@ function componentFixer(
     return
   }
 
-  const fixProperty = (item: ExpressionJsVar) => {
-    if (!isExpressionJsVarObj(item)) {
+  let attributeName: string | undefined
+
+  const maybeCheckAttribute = () => {
+    if (!attributeName) {
       return
     }
 
-    Object.entries(item).forEach(([key, value]) => {
-      if (
-        (key !== "href" && key !== "link") ||
-        !isExpressionJsVarLiteral(value)
-      ) {
-        return
-      }
+    const attribute = getAttribute(node, attributeName)
 
-      value.original.value = matchAndFixLinks(
-        value.original.value as string,
+    if (!attribute) {
+      return
+    }
+
+    if (typeof attribute.value === "string") {
+      attribute.value = matchAndFixLinks(attribute.value, options)
+      return
+    }
+
+    if (!attribute.value.data?.estree) {
+      return
+    }
+
+    const itemJsVar = estreeToJs(attribute.value.data.estree)
+
+    if (!itemJsVar) {
+      return
+    }
+
+    performActionOnLiteral(itemJsVar, (item) => {
+      item.original.value = matchAndFixLinks(
+        item.original.value as string,
         options
       )
-      value.original.raw = JSON.stringify(value.original.value)
+      item.original.raw = JSON.stringify(item.original.value)
     })
   }
 
   switch (node.name) {
     case "CardList":
-      const itemsAttribute = getAttribute(node, "items")
-
-      if (
-        !itemsAttribute?.value ||
-        typeof itemsAttribute.value === "string" ||
-        !itemsAttribute.value.data?.estree
-      ) {
-        return
-      }
-
-      const jsVar = estreeToJs(itemsAttribute.value.data.estree)
-
-      if (!jsVar) {
-        return
-      }
-
-      if (Array.isArray(jsVar)) {
-        jsVar.forEach(fixProperty)
-      } else {
-        fixProperty(jsVar)
-      }
-      return
-    case "Card":
-      const hrefAttribute = getAttribute(node, "href")
-
-      if (!hrefAttribute?.value || typeof hrefAttribute.value !== "string") {
-        return
-      }
-
-      hrefAttribute.value = matchAndFixLinks(hrefAttribute.value, options)
-
-      return
     case "Prerequisites":
-      const prerequisitesItemsAttribute = getAttribute(node, "items")
-
-      if (
-        !prerequisitesItemsAttribute?.value ||
-        typeof prerequisitesItemsAttribute.value === "string" ||
-        !prerequisitesItemsAttribute.value.data?.estree
-      ) {
-        return
-      }
-
-      const prerequisitesJsVar = estreeToJs(
-        prerequisitesItemsAttribute.value.data.estree
-      )
-
-      if (!prerequisitesJsVar) {
-        return
-      }
-
-      if (Array.isArray(prerequisitesJsVar)) {
-        prerequisitesJsVar.forEach(fixProperty)
-      } else {
-        fixProperty(prerequisitesJsVar)
-      }
-      return
+      attributeName = "items"
+      break
+    case "Card":
+      attributeName = "href"
+      break
+    case "WorkflowDiagram":
+      attributeName = "workflow"
+      break
+    case "TypeList":
+      attributeName = "types"
+      break
   }
+
+  maybeCheckAttribute()
 }
+
+const allowedComponentNames = [
+  "Card",
+  "CardList",
+  "Prerequisites",
+  "WorkflowDiagram",
+  "TypeList",
+]
 
 export function crossProjectLinksPlugin(
   options: CrossProjectLinksOptions
@@ -152,22 +136,23 @@ export function crossProjectLinksPlugin(
 
     visit(
       tree as UnistTree,
-      ["element", "mdxJsxFlowElement"],
+      ["element", "mdxJsxFlowElement", "link"],
       (node: UnistNode) => {
         const isComponent =
-          node.name === "Card" ||
-          node.name === "CardList" ||
-          node.name === "Prerequisites"
-        const isLink = node.tagName === "a" && node.properties?.href
-        if (!isComponent && !isLink) {
+          node.name && allowedComponentNames.includes(node.name)
+        const isLinkElm = node.tagName === "a" && node.properties?.href
+        const isLinkNode = node.type === "link" && node.url
+        if (!isComponent && !isLinkElm && !isLinkNode) {
           return
         }
 
         if (isComponent) {
           componentFixer(node as UnistNodeWithData, options)
+        } else if (isLinkElm) {
+          linkElmFixer(node, options)
+        } else {
+          linkNodeFixer(node, options)
         }
-
-        linkElmFixer(node, options)
       }
     )
   }

@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ArrowPath, Link, Trash } from "@medusajs/icons"
-import { InviteDTO } from "@medusajs/types"
+import { HttpTypes } from "@medusajs/types"
 import {
   Alert,
   Button,
@@ -22,7 +22,7 @@ import * as zod from "zod"
 import { ActionMenu } from "../../../../../components/common/action-menu"
 import { Form } from "../../../../../components/common/form"
 import { RouteFocusModal } from "../../../../../components/modals/index.ts"
-import { DataTable } from "../../../../../components/table/data-table"
+import { _DataTable } from "../../../../../components/table/data-table"
 import { KeyboundForm } from "../../../../../components/utilities/keybound-form/keybound-form.tsx"
 import {
   useCreateInvite,
@@ -70,7 +70,7 @@ export const InviteUserForm = () => {
   const columns = useColumns()
 
   const { table } = useDataTable({
-    data: (invites ?? []) as InviteDTO[],
+    data: invites ?? [],
     columns,
     count,
     enablePagination: true,
@@ -159,7 +159,7 @@ export const InviteUserForm = () => {
               <div className="flex flex-col gap-y-4">
                 <Heading level="h2">{t("users.pendingInvites")}</Heading>
                 <Container className="overflow-hidden p-0">
-                  <DataTable
+                  <_DataTable
                     table={table}
                     columns={columns}
                     count={count}
@@ -185,7 +185,7 @@ export const InviteUserForm = () => {
   )
 }
 
-const InviteActions = ({ invite }: { invite: InviteDTO }) => {
+const InviteActions = ({ invite }: { invite: HttpTypes.AdminInvite }) => {
   const { mutateAsync: revokeAsync } = useDeleteInvite(invite.id)
   const { mutateAsync: resendAsync } = useResendInvite(invite.id)
 
@@ -253,7 +253,7 @@ const InviteActions = ({ invite }: { invite: InviteDTO }) => {
   )
 }
 
-const columnHelper = createColumnHelper<InviteDTO>()
+const columnHelper = createColumnHelper<HttpTypes.AdminInvite>()
 
 const useColumns = () => {
   const { t } = useTranslation()

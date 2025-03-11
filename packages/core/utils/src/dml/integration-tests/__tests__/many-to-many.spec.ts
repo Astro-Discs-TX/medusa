@@ -1,15 +1,16 @@
-import { join } from "path"
+import { EntityConstructor } from "@medusajs/types"
 import { MetadataStorage, MikroORM } from "@mikro-orm/core"
+import { defineConfig } from "@mikro-orm/postgresql"
+import { join } from "path"
+import { createDatabase, dropDatabase } from "pg-god"
+import { FileSystem } from "../../../common"
+import { CustomTsMigrationGenerator, mikroOrmSerializer } from "../../../dal"
 import { model } from "../../entity-builder"
 import {
   mikroORMEntityBuilder,
   toMikroOrmEntities,
 } from "../../helpers/create-mikro-orm-entity"
-import { createDatabase, dropDatabase } from "pg-god"
-import { CustomTsMigrationGenerator, mikroOrmSerializer } from "../../../dal"
-import { EntityConstructor } from "@medusajs/types"
 import { pgGodCredentials } from "../utils"
-import { FileSystem } from "../../../common"
 
 jest.setTimeout(30000)
 
@@ -62,19 +63,20 @@ describe("manyToMany - manyToMany", () => {
 
     await createDatabase({ databaseName: dbName }, pgGodCredentials)
 
-    orm = await MikroORM.init({
-      entities: [Team, User, Squad],
-      tsNode: true,
-      dbName,
-      password: pgGodCredentials.password,
-      host: pgGodCredentials.host,
-      user: pgGodCredentials.user,
-      type: "postgresql",
-      migrations: {
-        generator: CustomTsMigrationGenerator,
-        path: fileSystem.basePath,
-      },
-    })
+    orm = await MikroORM.init(
+      defineConfig({
+        entities: [Team, User, Squad],
+        tsNode: true,
+        dbName,
+        password: pgGodCredentials.password,
+        host: pgGodCredentials.host,
+        user: pgGodCredentials.user,
+        migrations: {
+          generator: CustomTsMigrationGenerator,
+          path: fileSystem.basePath,
+        },
+      })
+    )
 
     const migrator = orm.getMigrator()
     await migrator.createMigration()
@@ -217,13 +219,13 @@ describe("manyToMany - manyToMany", () => {
     ;[User, Team] = toMikroOrmEntities([user, team])
 
     const teamMetaData = MetadataStorage.getMetadataFromDecorator(Team)
-    expect((teamMetaData.properties as any).users.mappedBy).toBe("squads")
-    expect((teamMetaData.properties as any).users.owner).toBe(false)
+    expect((teamMetaData.properties as any).users.inversedBy).toBe("squads")
+    expect((teamMetaData.properties as any).users.owner).toBe(true)
 
     const userMetaData = MetadataStorage.getMetadataFromDecorator(User)
-    expect((userMetaData.properties as any).squads.mappedBy).not.toBeDefined()
-    expect((userMetaData.properties as any).squads.inversedBy).toBe("users")
-    expect((userMetaData.properties as any).squads.owner).toBe(true)
+    expect((userMetaData.properties as any).squads.inversedBy).not.toBeDefined()
+    expect((userMetaData.properties as any).squads.mappedBy).toBe("users")
+    expect((userMetaData.properties as any).squads.owner).toBe(false)
   })
 
   it(`should load the dml's correclty when both side of the relation are specifying the mappedBy options without pivot table`, () => {
@@ -248,14 +250,14 @@ describe("manyToMany - manyToMany", () => {
     let [User, Team] = toMikroOrmEntities([user, team])
 
     const teamMetaData = MetadataStorage.getMetadataFromDecorator(Team)
-    expect((teamMetaData.properties as any).users.mappedBy).toBe("squads")
-    expect((teamMetaData.properties as any).users.owner).toBe(false)
+    expect((teamMetaData.properties as any).users.inversedBy).toBe("squads")
+    expect((teamMetaData.properties as any).users.owner).toBe(true)
     expect((teamMetaData.properties as any).users.pivotTable).toBe("team_users")
 
     const userMetaData = MetadataStorage.getMetadataFromDecorator(User)
-    expect((userMetaData.properties as any).squads.mappedBy).not.toBeDefined()
-    expect((userMetaData.properties as any).squads.inversedBy).toBe("users")
-    expect((userMetaData.properties as any).squads.owner).toBe(true)
+    expect((userMetaData.properties as any).squads.inversedBy).not.toBeDefined()
+    expect((userMetaData.properties as any).squads.mappedBy).toBe("users")
+    expect((userMetaData.properties as any).squads.owner).toBe(false)
     expect((userMetaData.properties as any).squads.pivotTable).toBe(
       "team_users"
     )
@@ -292,7 +294,7 @@ describe("manyToMany - manyToMany", () => {
 
     expect(error).toBeDefined()
     expect(error?.message).toEqual(
-      'Invalid relationship reference for "user.squads". Make sure to set the mappedBy property on one side or the other or both.'
+      'Invalid relationship reference for "User.squads". Make sure to set the mappedBy property on one side or the other or both.'
     )
   })
 

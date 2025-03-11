@@ -1,10 +1,11 @@
+import { createCartCreditLinesWorkflow } from "@medusajs/core-flows"
 import { medusaIntegrationTestRunner } from "@medusajs/test-utils"
 import {
   Modules,
   PriceListStatus,
   PriceListType,
-  ProductStatus,
   PromotionRuleOperator,
+  PromotionStatus,
   PromotionType,
 } from "@medusajs/utils"
 import {
@@ -14,6 +15,7 @@ import {
 } from "../../../../helpers/create-admin-user"
 import { setupTaxStructure } from "../../../../modules/__tests__/fixtures"
 import { createAuthenticatedCustomer } from "../../../../modules/helpers/create-authenticated-customer"
+import { medusaTshirtProduct } from "../../../__fixtures__/product"
 
 jest.setTimeout(100000)
 
@@ -29,70 +31,6 @@ const shippingAddressData = {
   postal_code: "94016",
 }
 
-const productData = {
-  title: "Medusa T-Shirt",
-  handle: "t-shirt",
-  status: ProductStatus.PUBLISHED,
-  options: [
-    {
-      title: "Size",
-      values: ["S"],
-    },
-    {
-      title: "Color",
-      values: ["Black", "White"],
-    },
-  ],
-  variants: [
-    {
-      title: "S / Black",
-      sku: "SHIRT-S-BLACK",
-      options: {
-        Size: "S",
-        Color: "Black",
-      },
-      manage_inventory: false,
-      prices: [
-        {
-          amount: 1500,
-          currency_code: "usd",
-        },
-        {
-          amount: 1500,
-          currency_code: "eur",
-        },
-        {
-          amount: 1300,
-          currency_code: "dkk",
-        },
-      ],
-    },
-    {
-      title: "S / White",
-      sku: "SHIRT-S-WHITE",
-      options: {
-        Size: "S",
-        Color: "White",
-      },
-      manage_inventory: false,
-      prices: [
-        {
-          amount: 1500,
-          currency_code: "usd",
-        },
-        {
-          amount: 1500,
-          currency_code: "eur",
-        },
-        {
-          amount: 1300,
-          currency_code: "dkk",
-        },
-      ],
-    },
-  ],
-}
-
 medusaIntegrationTestRunner({
   env,
   testSuite: ({ dbConnection, getContainer, api }) => {
@@ -106,7 +44,8 @@ medusaIntegrationTestRunner({
         salesChannel,
         cart,
         customer,
-        promotion
+        promotion,
+        shippingProfile
 
       beforeAll(async () => {
         appContainer = getContainer()
@@ -131,6 +70,14 @@ medusaIntegrationTestRunner({
           },
         }
 
+        shippingProfile = (
+          await api.post(
+            `/admin/shipping-profiles`,
+            { name: "default", type: "default" },
+            adminHeaders
+          )
+        ).data.shipping_profile
+
         await setupTaxStructure(appContainer.resolve(Modules.TAX))
 
         region = (
@@ -149,8 +96,13 @@ medusaIntegrationTestRunner({
           )
         ).data.region
 
-        product = (await api.post("/admin/products", productData, adminHeaders))
-          .data.product
+        product = (
+          await api.post(
+            "/admin/products",
+            { ...medusaTshirtProduct, shipping_profile_id: shippingProfile.id },
+            adminHeaders
+          )
+        ).data.product
 
         salesChannel = (
           await api.post(
@@ -176,6 +128,7 @@ medusaIntegrationTestRunner({
             {
               code: "PROMOTION_APPLIED",
               type: PromotionType.STANDARD,
+              status: PromotionStatus.ACTIVE,
               application_method: {
                 type: "fixed",
                 target_type: "items",
@@ -271,7 +224,7 @@ medusaIntegrationTestRunner({
                 shipping_address: shippingAddressData,
                 items: [{ variant_id: product.variants[0].id, quantity: 1 }],
               },
-              storeHeadersWithCustomer
+              storeHeaders
             )
 
             expect(response.status).toEqual(200)
@@ -302,7 +255,133 @@ medusaIntegrationTestRunner({
       })
 
       describe("POST /store/carts/:id/line-items", () => {
+        let shippingOption, shippingOptionExpensive
+
         beforeEach(async () => {
+          const stockLocation = (
+            await api.post(
+              `/admin/stock-locations`,
+              { name: "test location" },
+              adminHeaders
+            )
+          ).data.stock_location
+
+          await api.post(
+            `/admin/stock-locations/${stockLocation.id}/sales-channels`,
+            { add: [salesChannel.id] },
+            adminHeaders
+          )
+
+          const shippingProfile = (
+            await api.post(
+              `/admin/shipping-profiles`,
+              { name: `test-${stockLocation.id}`, type: "default" },
+              adminHeaders
+            )
+          ).data.shipping_profile
+
+          const fulfillmentSets = (
+            await api.post(
+              `/admin/stock-locations/${stockLocation.id}/fulfillment-sets?fields=*fulfillment_sets`,
+              {
+                name: `Test-${shippingProfile.id}`,
+                type: "test-type",
+              },
+              adminHeaders
+            )
+          ).data.stock_location.fulfillment_sets
+
+          const fulfillmentSet = (
+            await api.post(
+              `/admin/fulfillment-sets/${fulfillmentSets[0].id}/service-zones`,
+              {
+                name: `Test-${shippingProfile.id}`,
+                geo_zones: [
+                  { type: "country", country_code: "it" },
+                  { type: "country", country_code: "us" },
+                ],
+              },
+              adminHeaders
+            )
+          ).data.fulfillment_set
+
+          await api.post(
+            `/admin/stock-locations/${stockLocation.id}/fulfillment-providers`,
+            { add: ["manual_test-provider"] },
+            adminHeaders
+          )
+
+          const shippingOptionPayload = {
+            name: `Shipping`,
+            service_zone_id: fulfillmentSet.service_zones[0].id,
+            shipping_profile_id: shippingProfile.id,
+            provider_id: "manual_test-provider",
+            price_type: "flat",
+            type: {
+              label: "Test type",
+              description: "Test description",
+              code: "test-code",
+            },
+            prices: [
+              { currency_code: "usd", amount: 1000 },
+              {
+                currency_code: "usd",
+                amount: 0,
+                rules: [
+                  {
+                    attribute: "item_total",
+                    operator: "gt",
+                    value: 5000,
+                  },
+                ],
+              },
+            ],
+            rules: [
+              {
+                attribute: "enabled_in_store",
+                value: "true",
+                operator: "eq",
+              },
+              {
+                attribute: "is_return",
+                value: "false",
+                operator: "eq",
+              },
+            ],
+          }
+
+          shippingOption = (
+            await api.post(
+              `/admin/shipping-options`,
+              shippingOptionPayload,
+              adminHeaders
+            )
+          ).data.shipping_option
+
+          shippingOptionExpensive = (
+            await api.post(
+              `/admin/shipping-options`,
+              {
+                ...shippingOptionPayload,
+                prices: [
+                  { currency_code: "usd", amount: 10000 },
+                  {
+                    currency_code: "usd",
+                    amount: 5000,
+                    rules: [
+                      {
+                        attribute: "item_total",
+                        operator: "gt",
+                        value: 5000,
+                      },
+                    ],
+                  },
+                ],
+              },
+              adminHeaders
+            )
+          ).data.shipping_option
+
           cart = (
             await api.post(
               `/store/carts`,
@@ -314,7 +393,7 @@ medusaIntegrationTestRunner({
                 items: [{ variant_id: product.variants[0].id, quantity: 1 }],
                 promo_codes: [promotion.code],
               },
-              storeHeadersWithCustomer
+              storeHeaders
             )
           ).data.cart
         })
@@ -362,29 +441,365 @@ medusaIntegrationTestRunner({
           )
         })
 
-        describe("with sale price lists", () => {
-          let priceList
+        it("should remove promotions when promotion is no longer in active state", async () => {
+          let responseBeforePromotionUpdate = await api.post(
+            `/store/carts/${cart.id}/line-items`,
+            {
+              variant_id: product.variants[0].id,
+              quantity: 1,
+            },
+            storeHeaders
+          )
 
-          beforeEach(async () => {
-            priceList = (
-              await api.post(
-                `/admin/price-lists`,
-                {
-                  title: "test price list",
-                  description: "test",
-                  status: PriceListStatus.ACTIVE,
-                  type: PriceListType.SALE,
-                  prices: [
+          expect(responseBeforePromotionUpdate.data.cart).toEqual(
+            expect.objectContaining({
+              id: cart.id,
+              items: expect.arrayContaining([
+                expect.objectContaining({
+                  adjustments: [
                     {
-                      amount: 350,
-                      currency_code: "usd",
-                      variant_id: product.variants[0].id,
+                      id: expect.any(String),
+                      code: "PROMOTION_APPLIED",
+                      promotion_id: promotion.id,
+                      amount: 100,
                     },
                   ],
+                }),
+              ]),
+            })
+          )
+
+          await api.post(
+            `/admin/promotions/${promotion.id}`,
+            { status: PromotionStatus.INACTIVE },
+            adminHeaders
+          )
+
+          let responseAfterPromotionUpdate = await api.post(
+            `/store/carts/${cart.id}/line-items`,
+            {
+              variant_id: product.variants[0].id,
+              quantity: 1,
+            },
+            storeHeaders
+          )
+
+          expect(responseAfterPromotionUpdate.status).toEqual(200)
+          expect(responseAfterPromotionUpdate.data.cart).toEqual(
+            expect.objectContaining({
+              id: cart.id,
+              items: expect.arrayContaining([
+                expect.objectContaining({
+                  adjustments: [],
+                }),
+                expect.objectContaining({
+                  adjustments: [],
+                }),
+              ]),
+            })
+          )
+        })
+
+        describe("with custom shipping options prices", () => {
+          beforeEach(async () => {
+            cart = (
+              await api.post(
+                `/store/carts`,
+                {
+                  currency_code: "usd",
+                  sales_channel_id: salesChannel.id,
+                  region_id: region.id,
+                  items: [{ variant_id: product.variants[0].id, quantity: 1 }],
+                  promo_codes: [promotion.code],
                 },
+                storeHeadersWithCustomer
+              )
+            ).data.cart
+          })
+
+          it("should update shipping method amount when cart totals change", async () => {
+            let response = await api.post(
+              `/store/carts/${cart.id}/shipping-methods`,
+              { option_id: shippingOption.id },
+              storeHeaders
+            )
+
+            expect(response.data.cart).toEqual(
+              expect.objectContaining({
+                id: cart.id,
+                shipping_methods: expect.arrayContaining([
+                  expect.objectContaining({
+                    shipping_option_id: shippingOption.id,
+                    amount: 1000,
+                    is_tax_inclusive: true,
+                  }),
+                ]),
+              })
+            )
+
+            response = await api.post(
+              `/store/carts/${cart.id}/line-items`,
+              {
+                variant_id: product.variants[0].id,
+                quantity: 100,
+              },
+              storeHeaders
+            )
+
+            expect(response.data.cart).toEqual(
+              expect.objectContaining({
+                id: cart.id,
+                shipping_methods: expect.arrayContaining([
+                  expect.objectContaining({
+                    shipping_option_id: shippingOption.id,
+                    amount: 0,
+                    is_tax_inclusive: true,
+                  }),
+                ]),
+              })
+            )
+          })
+
+          it("should remove shipping methods when they are no longer valid for the cart", async () => {
+            let response = await api.post(
+              `/store/carts/${cart.id}/shipping-methods`,
+              { option_id: shippingOption.id },
+              storeHeaders
+            )
+
+            expect(response.data.cart).toEqual(
+              expect.objectContaining({
+                id: cart.id,
+                shipping_methods: expect.arrayContaining([
+                  expect.objectContaining({
+                    shipping_option_id: shippingOption.id,
+                    amount: 1000,
+                    is_tax_inclusive: true,
+                  }),
+                ]),
+              })
+            )
+
+            response = await api.post(
+              `/store/carts/${cart.id}`,
+              { region_id: noAutomaticRegion.id },
+              storeHeaders
+            )
+
+            expect(response.data.cart).toEqual(
+              expect.objectContaining({
+                id: cart.id,
+                shipping_methods: expect.arrayContaining([]),
+              })
+            )
+          })
+
+          it("should update payment collection upon changing shipping option", async () => {
+            await api.post(
+              `/store/carts/${cart.id}/shipping-methods`,
+              { option_id: shippingOption.id },
+              storeHeaders
+            )
+
+            await api.post(
+              `/store/payment-collections`,
+              { cart_id: cart.id },
+              storeHeaders
+            )
+
+            const cartAfterCollection = (
+              await api.get(`/store/carts/${cart.id}`, storeHeaders)
+            ).data.cart
+
+            expect(cartAfterCollection).toEqual(
+              expect.objectContaining({
+                id: cart.id,
+                shipping_methods: expect.arrayContaining([
+                  expect.objectContaining({
+                    shipping_option_id: shippingOption.id,
+                  }),
+                ]),
+                payment_collection: expect.objectContaining({
+                  amount: 2398,
+                }),
+              })
+            )
+
+            await api.post(
+              `/store/carts/${cart.id}/line-items`,
+              {
+                variant_id: product.variants[0].id,
+                quantity: 100,
+              },
+              storeHeaders
+            )
+
+            let cartAfterExpensiveShipping = (
+              await api.post(
+                `/store/carts/${cart.id}/shipping-methods`,
+                { option_id: shippingOptionExpensive.id },
+                storeHeaders
+              )
+            ).data.cart
+
+            expect(cartAfterExpensiveShipping).toEqual(
+              expect.objectContaining({
+                id: cartAfterExpensiveShipping.id,
+                shipping_methods: expect.arrayContaining([
+                  expect.objectContaining({
+                    shipping_option_id: shippingOptionExpensive.id,
+                    amount: 5000,
+                  }),
+                ]),
+                payment_collection: expect.objectContaining({
+                  amount: 156398,
+                }),
+              })
+            )
+          })
+        })
+
+        it("should add item to cart with tax lines multiple times", async () => {
+          let response = await api.post(
+            `/store/carts/${cart.id}/line-items`,
+            {
+              variant_id: product.variants[0].id,
+              quantity: 1,
+            },
+            storeHeaders
+          )
+
+          expect(response.status).toEqual(200)
+          expect(response.data.cart).toEqual(
+            expect.objectContaining({
+              id: cart.id,
+              currency_code: "usd",
+              items: expect.arrayContaining([
+                expect.objectContaining({
+                  unit_price: 1500,
+                  compare_at_unit_price: null,
+                  is_tax_inclusive: true,
+                  title: "S / Black",
+                  quantity: 2,
+                  tax_lines: [
+                    expect.objectContaining({
+                      description: "CA Default Rate",
+                      code: "CADEFAULT",
+                      rate: 5,
+                      provider_id: "system",
+                    }),
+                  ],
+                }),
+              ]),
+            })
+          )
+
+          response = await api.post(
+            `/store/carts/${cart.id}/line-items`,
+            {
+              variant_id: product.variants[1].id,
+              quantity: 1,
+            },
+            storeHeaders
+          )
+
+          expect(response.status).toEqual(200)
+          expect(response.data.cart).toEqual(
+            expect.objectContaining({
+              id: cart.id,
+              currency_code: "usd",
+              items: expect.arrayContaining([
+                expect.objectContaining({
+                  unit_price: 1500,
+                  compare_at_unit_price: null,
+                  is_tax_inclusive: true,
+                  quantity: 2,
+                  title: "S / Black",
+                  tax_lines: [
+                    expect.objectContaining({
+                      description: "CA Default Rate",
+                      code: "CADEFAULT",
+                      rate: 5,
+                      provider_id: "system",
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  unit_price: 1500,
+                  compare_at_unit_price: null,
+                  is_tax_inclusive: true,
+                  quantity: 1,
+                  title: "S / White",
+                  tax_lines: [
+                    expect.objectContaining({
+                      description: "CA Default Rate",
+                      code: "CADEFAULT",
+                      rate: 5,
+                      provider_id: "system",
+                    }),
+                  ],
+                }),
+              ]),
+            })
+          )
+        })
+
+        describe("with sale price lists", () => {
+          beforeEach(async () => {
+            await api.post(
+              `/admin/price-lists`,
+              {
+                title: "test price list",
+                description: "test",
+                status: PriceListStatus.ACTIVE,
+                type: PriceListType.SALE,
+                prices: [
+                  {
+                    amount: 350,
+                    currency_code: "usd",
+                    variant_id: product.variants[0].id,
+                  },
+                ],
+              },
+              adminHeaders
+            )
+
+            const customerGroup = (
+              await api.post(
+                "/admin/customer-groups",
+                { name: "VIP" },
                 adminHeaders
               )
-            ).data.price_list
+            ).data.customer_group
+
+            await api.post(
+              `/admin/customer-groups/${customerGroup.id}/customers`,
+              {
+                add: [customer.id],
+              },
+              adminHeaders
+            )
+
+            await api.post(
+              `/admin/price-lists`,
+              {
+                title: "test price list",
+                description: "test",
+                status: PriceListStatus.ACTIVE,
+                type: PriceListType.SALE,
+                prices: [
+                  {
+                    amount: 200,
+                    currency_code: "usd",
+                    variant_id: product.variants[0].id,
+                  },
+                ],
+                rules: {
+                  "customer.groups.id": [customerGroup.id],
+                },
+              },
+              adminHeaders
+            )
           })
 
           it("should add price from price list and set compare_at_unit_price", async () => {
@@ -429,10 +844,61 @@ medusaIntegrationTestRunner({
               })
             )
           })
+
+          it("should add price from price list associated to a customer group when customer rules match", async () => {
+            const transferredCart = (
+              await api.post(
+                `/store/carts/${cart.id}/customer`,
+                {},
+                storeHeadersWithCustomer
+              )
+            ).data.cart
+
+            expect(transferredCart).toEqual(
+              expect.objectContaining({
+                id: cart.id,
+                items: expect.arrayContaining([
+                  expect.objectContaining({
+                    unit_price: 200,
+                    compare_at_unit_price: 1500,
+                    is_tax_inclusive: true,
+                    quantity: 1,
+                  }),
+                ]),
+              })
+            )
+
+            let response = await api.post(
+              `/store/carts/${cart.id}/line-items`,
+              {
+                variant_id: product.variants[0].id,
+                quantity: 1,
+              },
+              storeHeadersWithCustomer
+            )
+
+            expect(response.status).toEqual(200)
+            expect(response.data.cart).toEqual(
+              expect.objectContaining({
+                id: cart.id,
+                currency_code: "usd",
+                items: expect.arrayContaining([
+                  expect.objectContaining({
+                    unit_price: 200,
+                    compare_at_unit_price: 1500,
+                    is_tax_inclusive: true,
+                    quantity: 2,
+                  }),
+                ]),
+              })
+            )
+          })
         })
       })
 
-      describe("POST /store/carts/:id/complete", () => {
+      describe("POST /store/carts/:id/line-items/:id", () => {
+        let item, customerGroup
+
         beforeEach(async () => {
           cart = (
             await api.post(
@@ -443,77 +909,180 @@ medusaIntegrationTestRunner({
                 region_id: region.id,
                 shipping_address: shippingAddressData,
                 items: [{ variant_id: product.variants[0].id, quantity: 1 }],
-                promo_codes: [promotion.code],
               },
               storeHeadersWithCustomer
             )
           ).data.cart
 
-          const paymentCollection = (
+          item = cart.items[0]
+
+          customerGroup = (
             await api.post(
-              `/store/payment-collections`,
-              { cart_id: cart.id },
-              storeHeaders
+              "/admin/customer-groups",
+              { name: "VIP" },
+              adminHeaders
             )
-          ).data.payment_collection
+          ).data.customer_group
 
           await api.post(
-            `/store/payment-collections/${paymentCollection.id}/payment-sessions`,
-            { provider_id: "pp_system_default" },
-            storeHeaders
+            `/admin/customer-groups/${customerGroup.id}/customers`,
+            {
+              add: [customer.id],
+            },
+            adminHeaders
           )
         })
 
-        it("should successfully complete cart", async () => {
-          const response = await api.post(
-            `/store/carts/${cart.id}/complete`,
-            {},
+        it("should update cart's line item", async () => {
+          let response = await api.post(
+            `/store/carts/${cart.id}/line-items/${item.id}`,
+            {
+              quantity: 2,
+            },
             storeHeaders
           )
 
           expect(response.status).toEqual(200)
-          expect(response.data.order).toEqual(
+          expect(response.data.cart).toEqual(
             expect.objectContaining({
-              id: expect.any(String),
+              id: cart.id,
               currency_code: "usd",
               items: expect.arrayContaining([
                 expect.objectContaining({
                   unit_price: 1500,
-                  compare_at_unit_price: null,
-                  quantity: 1,
+                  quantity: 2,
+                }),
+              ]),
+            })
+          )
+
+          await api.post(
+            `/admin/price-lists`,
+            {
+              title: "test price list",
+              description: "test",
+              status: PriceListStatus.ACTIVE,
+              type: PriceListType.SALE,
+              prices: [
+                {
+                  amount: 200,
+                  currency_code: "usd",
+                  variant_id: product.variants[0].id,
+                },
+              ],
+              rules: {
+                "customer.groups.id": [customerGroup.id],
+              },
+            },
+            adminHeaders
+          )
+
+          response = await api.post(
+            `/store/carts/${cart.id}/line-items/${item.id}`,
+            { quantity: 3 },
+            storeHeaders
+          )
+
+          expect(response.status).toEqual(200)
+          expect(response.data.cart).toEqual(
+            expect.objectContaining({
+              id: cart.id,
+              currency_code: "usd",
+              items: expect.arrayContaining([
+                expect.objectContaining({
+                  unit_price: 200,
+                  quantity: 3,
                 }),
               ]),
             })
           )
         })
+      })
 
-        describe("with sale price lists", () => {
-          let priceList
-
+      describe("POST /store/carts/:id/complete", () => {
+        describe("should successfully complete cart", () => {
           beforeEach(async () => {
-            priceList = (
+            const stockLocation = (
               await api.post(
-                `/admin/price-lists`,
+                `/admin/stock-locations`,
+                { name: "test location" },
+                adminHeaders
+              )
+            ).data.stock_location
+
+            await api.post(
+              `/admin/stock-locations/${stockLocation.id}/sales-channels`,
+              { add: [salesChannel.id] },
+              adminHeaders
+            )
+
+            const fulfillmentSets = (
+              await api.post(
+                `/admin/stock-locations/${stockLocation.id}/fulfillment-sets?fields=*fulfillment_sets`,
                 {
-                  title: "test price list",
-                  description: "test",
-                  status: PriceListStatus.ACTIVE,
-                  type: PriceListType.SALE,
-                  prices: [
-                    {
-                      amount: 350,
-                      currency_code: "usd",
-                      variant_id: product.variants[0].id,
-                    },
-                  ],
+                  name: `Test-${shippingProfile.id}`,
+                  type: "test-type",
                 },
                 adminHeaders
               )
-            ).data.price_list
+            ).data.stock_location.fulfillment_sets
+
+            const fulfillmentSet = (
+              await api.post(
+                `/admin/fulfillment-sets/${fulfillmentSets[0].id}/service-zones`,
+                {
+                  name: `Test-${shippingProfile.id}`,
+                  geo_zones: [{ type: "country", country_code: "US" }],
+                },
+                adminHeaders
+              )
+            ).data.fulfillment_set
 
             await api.post(
-              `/store/carts/${cart.id}/line-items`,
-              { variant_id: product.variants[0].id, quantity: 1 },
+              `/admin/stock-locations/${stockLocation.id}/fulfillment-providers`,
+              { add: ["manual_test-provider"] },
+              adminHeaders
+            )
+
+            const shippingOption = (
+              await api.post(
+                `/admin/shipping-options`,
+                {
+                  name: `Test shipping option ${fulfillmentSet.id}`,
+                  service_zone_id: fulfillmentSet.service_zones[0].id,
+                  shipping_profile_id: shippingProfile.id,
+                  provider_id: "manual_test-provider",
+                  price_type: "flat",
+                  type: {
+                    label: "Test type",
+                    description: "Test description",
+                    code: "test-code",
+                  },
+                  prices: [{ currency_code: "usd", amount: 1000 }],
+                  rules: [],
+                },
+                adminHeaders
+              )
+            ).data.shipping_option
+
+            cart = (
+              await api.post(
+                `/store/carts`,
+                {
+                  currency_code: "usd",
+                  sales_channel_id: salesChannel.id,
+                  region_id: region.id,
+                  shipping_address: shippingAddressData,
+                  items: [{ variant_id: product.variants[0].id, quantity: 1 }],
+                  promo_codes: [promotion.code],
+                },
+                storeHeadersWithCustomer
+              )
+            ).data.cart
+
+            await api.post(
+              `/store/carts/${cart.id}/shipping-methods`,
+              { option_id: shippingOption.id },
               storeHeaders
             )
 
@@ -532,25 +1101,642 @@ medusaIntegrationTestRunner({
             )
           })
 
-          it("should add price from price list and set compare_at_unit_price for order item", async () => {
+          it("should successfully complete cart", async () => {
+            createCartCreditLinesWorkflow.run({
+              input: [
+                {
+                  cart_id: cart.id,
+                  amount: 100,
+                  currency_code: "usd",
+                  reference: "test",
+                  reference_id: "test",
+                },
+              ],
+              container: appContainer,
+            })
+
             const response = await api.post(
               `/store/carts/${cart.id}/complete`,
-              { variant_id: product.variants[0].id, quantity: 1 },
+              {},
               storeHeaders
             )
 
             expect(response.status).toEqual(200)
             expect(response.data.order).toEqual(
               expect.objectContaining({
+                id: expect.any(String),
+                currency_code: "usd",
+                credit_lines: [
+                  expect.objectContaining({
+                    amount: 100,
+                    reference: "test",
+                    reference_id: "test",
+                  }),
+                ],
                 items: expect.arrayContaining([
                   expect.objectContaining({
-                    unit_price: 350,
-                    compare_at_unit_price: 1500,
-                    is_tax_inclusive: true,
-                    quantity: 2,
+                    unit_price: 1500,
+                    compare_at_unit_price: null,
+                    quantity: 1,
                   }),
                 ]),
               })
+            )
+          })
+
+          it("should successfully complete cart without shipping for digital products", async () => {
+            /**
+             * Product has a shipping profile so cart item should not require shipping
+             */
+            const product = (
+              await api.post(
+                `/admin/products`,
+                {
+                  title: "Product without inventory management",
+                  description: "test",
+                  options: [
+                    {
+                      title: "Size",
+                      values: ["S", "M", "L", "XL"],
+                    },
+                  ],
+                  variants: [
+                    {
+                      title: "S / Black",
+                      sku: "special-shirt",
+                      options: {
+                        Size: "S",
+                      },
+                      manage_inventory: false,
+                      prices: [
+                        {
+                          amount: 1500,
+                          currency_code: "usd",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                adminHeaders
+              )
+            ).data.product
+
+            let cart = (
+              await api.post(
+                `/store/carts`,
+                {
+                  currency_code: "usd",
+                  sales_channel_id: salesChannel.id,
+                  region_id: region.id,
+                  shipping_address: shippingAddressData,
+                },
+                storeHeadersWithCustomer
+              )
+            ).data.cart
+
+            cart = (
+              await api.post(
+                `/store/carts/${cart.id}/line-items`,
+                {
+                  variant_id: product.variants[0].id,
+                  quantity: 1,
+                },
+                storeHeaders
+              )
+            ).data.cart
+
+            const paymentCollection = (
+              await api.post(
+                `/store/payment-collections`,
+                { cart_id: cart.id },
+                storeHeaders
+              )
+            ).data.payment_collection
+
+            await api.post(
+              `/store/payment-collections/${paymentCollection.id}/payment-sessions`,
+              { provider_id: "pp_system_default" },
+              storeHeaders
+            )
+
+            expect(cart.items[0].requires_shipping).toEqual(false)
+
+            const response = await api.post(
+              `/store/carts/${cart.id}/complete`,
+              {},
+              storeHeaders
+            )
+
+            expect(response.status).toEqual(200)
+            expect(response.data.order).toEqual(
+              expect.objectContaining({
+                shipping_methods: [],
+                items: expect.arrayContaining([
+                  expect.objectContaining({
+                    requires_shipping: false,
+                  }),
+                ]),
+              })
+            )
+          })
+
+          describe("with sale price lists", () => {
+            let priceList
+
+            beforeEach(async () => {
+              priceList = (
+                await api.post(
+                  `/admin/price-lists`,
+                  {
+                    title: "test price list",
+                    description: "test",
+                    status: PriceListStatus.ACTIVE,
+                    type: PriceListType.SALE,
+                    prices: [
+                      {
+                        amount: 350,
+                        currency_code: "usd",
+                        variant_id: product.variants[0].id,
+                      },
+                    ],
+                  },
+                  adminHeaders
+                )
+              ).data.price_list
+
+              await api.post(
+                `/store/carts/${cart.id}/line-items`,
+                { variant_id: product.variants[0].id, quantity: 1 },
+                storeHeaders
+              )
+
+              const paymentCollection = (
+                await api.post(
+                  `/store/payment-collections`,
+                  { cart_id: cart.id },
+                  storeHeaders
+                )
+              ).data.payment_collection
+
+              await api.post(
+                `/store/payment-collections/${paymentCollection.id}/payment-sessions`,
+                { provider_id: "pp_system_default" },
+                storeHeaders
+              )
+            })
+
+            it("should add price from price list and set compare_at_unit_price for order item", async () => {
+              const response = await api.post(
+                `/store/carts/${cart.id}/complete`,
+                {},
+                storeHeaders
+              )
+
+              expect(response.status).toEqual(200)
+              expect(response.data.order).toEqual(
+                expect.objectContaining({
+                  items: expect.arrayContaining([
+                    expect.objectContaining({
+                      unit_price: 350,
+                      compare_at_unit_price: 1500,
+                      is_tax_inclusive: true,
+                      quantity: 2,
+                    }),
+                  ]),
+                })
+              )
+            })
+          })
+
+          describe("with inventory kit", () => {
+            let stockLocation, inventoryItem, product, cart
+            beforeEach(async () => {
+              stockLocation = (
+                await api.post(
+                  `/admin/stock-locations`,
+                  { name: "test location" },
+                  adminHeaders
+                )
+              ).data.stock_location
+
+              inventoryItem = (
+                await api.post(
+                  `/admin/inventory-items`,
+                  { sku: "bottle" },
+                  adminHeaders
+                )
+              ).data.inventory_item
+
+              await api.post(
+                `/admin/inventory-items/${inventoryItem.id}/location-levels`,
+                {
+                  location_id: stockLocation.id,
+                  stocked_quantity: 10,
+                },
+                adminHeaders
+              )
+
+              await api.post(
+                `/admin/stock-locations/${stockLocation.id}/sales-channels`,
+                { add: [salesChannel.id] },
+                adminHeaders
+              )
+
+              product = (
+                await api.post(
+                  "/admin/products",
+                  {
+                    title: `Test fixture ${shippingProfile.id}`,
+                    shipping_profile_id: shippingProfile.id,
+                    options: [
+                      { title: "pack", values: ["1-pack", "2-pack", "3-pack"] },
+                    ],
+                    variants: [
+                      {
+                        title: "2-pack",
+                        sku: "2-pack",
+                        inventory_items: [
+                          {
+                            inventory_item_id: inventoryItem.id,
+                            required_quantity: 2,
+                          },
+                        ],
+                        prices: [
+                          {
+                            currency_code: "usd",
+                            amount: 100,
+                          },
+                        ],
+                        options: {
+                          pack: "2-pack",
+                        },
+                      },
+                      {
+                        title: "3-pack",
+                        sku: "3-pack",
+                        inventory_items: [
+                          {
+                            inventory_item_id: inventoryItem.id,
+                            required_quantity: 3,
+                          },
+                        ],
+                        prices: [
+                          {
+                            currency_code: "usd",
+                            amount: 140,
+                          },
+                        ],
+                        options: {
+                          pack: "3-pack",
+                        },
+                      },
+                    ],
+                  },
+                  adminHeaders
+                )
+              ).data.product
+
+              cart = (
+                await api.post(
+                  `/store/carts`,
+                  {
+                    currency_code: "usd",
+                    sales_channel_id: salesChannel.id,
+                    region_id: region.id,
+                    shipping_address: shippingAddressData,
+                    items: [
+                      { variant_id: product.variants[0].id, quantity: 1 },
+                      { variant_id: product.variants[1].id, quantity: 1 },
+                    ],
+                  },
+                  storeHeadersWithCustomer
+                )
+              ).data.cart
+
+              const fulfillmentSets = (
+                await api.post(
+                  `/admin/stock-locations/${stockLocation.id}/fulfillment-sets?fields=*fulfillment_sets`,
+                  {
+                    name: `Test-inventory`,
+                    type: "test-type",
+                  },
+                  adminHeaders
+                )
+              ).data.stock_location.fulfillment_sets
+
+              const fulfillmentSet = (
+                await api.post(
+                  `/admin/fulfillment-sets/${fulfillmentSets[0].id}/service-zones`,
+                  {
+                    name: `Test-inventory`,
+                    geo_zones: [{ type: "country", country_code: "US" }],
+                  },
+                  adminHeaders
+                )
+              ).data.fulfillment_set
+
+              await api.post(
+                `/admin/stock-locations/${stockLocation.id}/fulfillment-providers`,
+                { add: ["manual_test-provider"] },
+                adminHeaders
+              )
+
+              const shippingOption = (
+                await api.post(
+                  `/admin/shipping-options`,
+                  {
+                    name: `Test shipping option ${fulfillmentSet.id}`,
+                    service_zone_id: fulfillmentSet.service_zones[0].id,
+                    shipping_profile_id: shippingProfile.id,
+                    provider_id: "manual_test-provider",
+                    price_type: "flat",
+                    type: {
+                      label: "Test type",
+                      description: "Test description",
+                      code: "test-code",
+                    },
+                    prices: [{ currency_code: "usd", amount: 1000 }],
+                    rules: [],
+                  },
+                  adminHeaders
+                )
+              ).data.shipping_option
+
+              await api.post(
+                `/store/carts/${cart.id}/shipping-methods`,
+                { option_id: shippingOption.id },
+                storeHeaders
+              )
+
+              const paymentCollection = (
+                await api.post(
+                  `/store/payment-collections`,
+                  { cart_id: cart.id },
+                  storeHeaders
+                )
+              ).data.payment_collection
+
+              await api.post(
+                `/store/payment-collections/${paymentCollection.id}/payment-sessions`,
+                { provider_id: "pp_system_default" },
+                storeHeaders
+              )
+            })
+
+            it("should complete a cart with inventory item shared between variants", async () => {
+              const response = await api.post(
+                `/store/carts/${cart.id}/complete`,
+                {},
+                storeHeaders
+              )
+
+              expect(response.status).toEqual(200)
+              expect(response.data.order).toEqual(
+                expect.objectContaining({
+                  items: expect.arrayContaining([
+                    expect.objectContaining({
+                      title: "2-pack",
+                      quantity: 1,
+                    }),
+                    expect.objectContaining({
+                      title: "3-pack",
+                      quantity: 1,
+                    }),
+                  ]),
+                })
+              )
+
+              const reservations = (
+                await api.get(`/admin/reservations`, adminHeaders)
+              ).data.reservations
+
+              expect(reservations).toEqual(
+                expect.arrayContaining([
+                  expect.objectContaining({
+                    location_id: stockLocation.id,
+                    inventory_item_id: inventoryItem.id,
+                    quantity: 2, // 2-pack
+                    inventory_item: expect.objectContaining({
+                      id: inventoryItem.id,
+                      sku: "bottle",
+                      reserved_quantity: 5,
+                      stocked_quantity: 10,
+                    }),
+                  }),
+                  expect.objectContaining({
+                    location_id: stockLocation.id,
+                    inventory_item_id: inventoryItem.id,
+                    quantity: 3, // 3-pack
+                    inventory_item: expect.objectContaining({
+                      id: inventoryItem.id,
+                      sku: "bottle",
+                      reserved_quantity: 5,
+                      stocked_quantity: 10,
+                    }),
+                  }),
+                ])
+              )
+            })
+          })
+        })
+
+        describe("shipping validation", () => {
+          it("should fail to complete the cart if no shipping method is selected and items require shipping", async () => {
+            const cart = (
+              await api.post(
+                `/store/carts`,
+                {
+                  currency_code: "usd",
+                  sales_channel_id: salesChannel.id,
+                  region_id: region.id,
+                  shipping_address: shippingAddressData,
+                  items: [{ variant_id: product.variants[0].id, quantity: 1 }],
+                  promo_codes: [promotion.code],
+                },
+                storeHeadersWithCustomer
+              )
+            ).data.cart
+
+            const paymentCollection = (
+              await api.post(
+                `/store/payment-collections`,
+                { cart_id: cart.id },
+                storeHeaders
+              )
+            ).data.payment_collection
+
+            await api.post(
+              `/store/payment-collections/${paymentCollection.id}/payment-sessions`,
+              { provider_id: "pp_system_default" },
+              storeHeaders
+            )
+
+            const response = await api
+              .post(`/store/carts/${cart.id}/complete`, {}, storeHeaders)
+              .catch((e) => e)
+
+            expect(response.response.status).toEqual(400)
+            expect(response.response.data.message).toEqual(
+              "No shipping method selected but the cart contains items that require shipping."
+            )
+          })
+
+          it("should fail to complete the cart if the shipping profile of a product is not supported by the shipping method", async () => {
+            const stockLocation = (
+              await api.post(
+                `/admin/stock-locations`,
+                { name: "test location" },
+                adminHeaders
+              )
+            ).data.stock_location
+
+            await api.post(
+              `/admin/stock-locations/${stockLocation.id}/sales-channels`,
+              { add: [salesChannel.id] },
+              adminHeaders
+            )
+
+            const shippingProfile = (
+              await api.post(
+                `/admin/shipping-profiles`,
+                { name: `test-${stockLocation.id}`, type: "default" },
+                adminHeaders
+              )
+            ).data.shipping_profile
+
+            const fulfillmentSets = (
+              await api.post(
+                `/admin/stock-locations/${stockLocation.id}/fulfillment-sets?fields=*fulfillment_sets`,
+                {
+                  name: `Test-${shippingProfile.id}`,
+                  type: "test-type",
+                },
+                adminHeaders
+              )
+            ).data.stock_location.fulfillment_sets
+
+            const fulfillmentSet = (
+              await api.post(
+                `/admin/fulfillment-sets/${fulfillmentSets[0].id}/service-zones`,
+                {
+                  name: `Test-${shippingProfile.id}`,
+                  geo_zones: [{ type: "country", country_code: "US" }],
+                },
+                adminHeaders
+              )
+            ).data.fulfillment_set
+
+            await api.post(
+              `/admin/stock-locations/${stockLocation.id}/fulfillment-providers`,
+              { add: ["manual_test-provider"] },
+              adminHeaders
+            )
+
+            const shippingOption = (
+              await api.post(
+                `/admin/shipping-options`,
+                {
+                  name: `Test shipping option ${fulfillmentSet.id}`,
+                  service_zone_id: fulfillmentSet.service_zones[0].id,
+                  shipping_profile_id: shippingProfile.id,
+                  provider_id: "manual_test-provider",
+                  price_type: "flat",
+                  type: {
+                    label: "Test type",
+                    description: "Test description",
+                    code: "test-code",
+                  },
+                  prices: [{ currency_code: "usd", amount: 1000 }],
+                  rules: [],
+                },
+                adminHeaders
+              )
+            ).data.shipping_option
+
+            const specialShippingProfile = (
+              await api.post(
+                `/admin/shipping-profiles`,
+                { name: "special-shipping-profile", type: "special" },
+                adminHeaders
+              )
+            ).data.shipping_profile
+
+            const product = (
+              await api.post(
+                `/admin/products`,
+                {
+                  title: "test product",
+                  description: "test",
+                  options: [
+                    {
+                      title: "Size",
+                      values: ["S", "M", "L", "XL"],
+                    },
+                  ],
+                  variants: [
+                    {
+                      title: "S / Black",
+                      sku: "special-shirt",
+                      options: {
+                        Size: "S",
+                      },
+                      manage_inventory: false,
+                      prices: [
+                        {
+                          amount: 1500,
+                          currency_code: "usd",
+                        },
+                      ],
+                    },
+                  ],
+                  shipping_profile_id: specialShippingProfile.id, // --> product has a different shipping profile than
+                },
+                adminHeaders
+              )
+            ).data.product
+
+            const cart = (
+              await api.post(
+                `/store/carts`,
+                {
+                  currency_code: "usd",
+                  sales_channel_id: salesChannel.id,
+                  region_id: region.id,
+                  shipping_address: shippingAddressData,
+                  items: [{ variant_id: product.variants[0].id, quantity: 1 }],
+                  promo_codes: [promotion.code],
+                },
+                storeHeadersWithCustomer
+              )
+            ).data.cart
+
+            await api.post(
+              `/store/carts/${cart.id}/shipping-methods`,
+              { option_id: shippingOption.id },
+              storeHeaders
+            )
+
+            const paymentCollection = (
+              await api.post(
+                `/store/payment-collections`,
+                { cart_id: cart.id },
+                storeHeaders
+              )
+            ).data.payment_collection
+
+            await api.post(
+              `/store/payment-collections/${paymentCollection.id}/payment-sessions`,
+              { provider_id: "pp_system_default" },
+              storeHeaders
+            )
+
+            const response = await api
+              .post(`/store/carts/${cart.id}/complete`, {}, storeHeaders)
+              .catch((e) => e)
+
+            expect(response.response.status).toEqual(400)
+            expect(response.response.data.message).toEqual(
+              "The cart items require shipping profiles that are not satisfied by the current shipping methods"
             )
           })
         })
@@ -650,6 +1836,7 @@ medusaIntegrationTestRunner({
               {
                 code: "PROMOTION_TEST",
                 type: PromotionType.STANDARD,
+                status: PromotionStatus.ACTIVE,
                 application_method: {
                   type: "fixed",
                   target_type: "items",
@@ -1162,7 +2349,7 @@ medusaIntegrationTestRunner({
                 rules: [
                   {
                     attribute: "enabled_in_store",
-                    value: '"true"',
+                    value: "true",
                     operator: "eq",
                   },
                   {
@@ -1256,6 +2443,52 @@ medusaIntegrationTestRunner({
                 id: customer.id,
                 email: "tony@stark-industries.com",
               }),
+            })
+          )
+        })
+
+        it("should remove promotion adjustments when promotion is deleted", async () => {
+          let cartBeforeRemovingPromotion = (
+            await api.get(`/store/carts/${cart.id}`, storeHeaders)
+          ).data.cart
+
+          expect(cartBeforeRemovingPromotion).toEqual(
+            expect.objectContaining({
+              id: cart.id,
+              items: expect.arrayContaining([
+                expect.objectContaining({
+                  adjustments: [
+                    {
+                      id: expect.any(String),
+                      code: "PROMOTION_APPLIED",
+                      promotion_id: promotion.id,
+                      amount: 100,
+                    },
+                  ],
+                }),
+              ]),
+            })
+          )
+
+          await api.delete(`/admin/promotions/${promotion.id}`, adminHeaders)
+
+          let response = await api.post(
+            `/store/carts/${cart.id}`,
+            {
+              email: "test@test.com",
+            },
+            storeHeaders
+          )
+
+          expect(response.status).toEqual(200)
+          expect(response.data.cart).toEqual(
+            expect.objectContaining({
+              id: cart.id,
+              items: expect.arrayContaining([
+                expect.objectContaining({
+                  adjustments: [],
+                }),
+              ]),
             })
           )
         })
@@ -1396,6 +2629,222 @@ medusaIntegrationTestRunner({
               }),
             })
           )
+        })
+      })
+
+      describe("POST /store/carts/:id/shipping-methods", () => {
+        let shippingOption
+
+        beforeEach(async () => {
+          const stockLocation = (
+            await api.post(
+              `/admin/stock-locations`,
+              { name: "test location" },
+              adminHeaders
+            )
+          ).data.stock_location
+
+          await api.post(
+            `/admin/stock-locations/${stockLocation.id}/sales-channels`,
+            { add: [salesChannel.id] },
+            adminHeaders
+          )
+
+          const shippingProfile = (
+            await api.post(
+              `/admin/shipping-profiles`,
+              { name: `test-${stockLocation.id}`, type: "default" },
+              adminHeaders
+            )
+          ).data.shipping_profile
+
+          const fulfillmentSets = (
+            await api.post(
+              `/admin/stock-locations/${stockLocation.id}/fulfillment-sets?fields=*fulfillment_sets`,
+              {
+                name: `Test-${shippingProfile.id}`,
+                type: "test-type",
+              },
+              adminHeaders
+            )
+          ).data.stock_location.fulfillment_sets
+
+          const fulfillmentSet = (
+            await api.post(
+              `/admin/fulfillment-sets/${fulfillmentSets[0].id}/service-zones`,
+              {
+                name: `Test-${shippingProfile.id}`,
+                geo_zones: [
+                  { type: "country", country_code: "it" },
+                  { type: "country", country_code: "us" },
+                ],
+              },
+              adminHeaders
+            )
+          ).data.fulfillment_set
+
+          await api.post(
+            `/admin/stock-locations/${stockLocation.id}/fulfillment-providers`,
+            { add: ["manual_test-provider"] },
+            adminHeaders
+          )
+
+          shippingOption = (
+            await api.post(
+              `/admin/shipping-options`,
+              {
+                name: `Test shipping option ${fulfillmentSet.id}`,
+                service_zone_id: fulfillmentSet.service_zones[0].id,
+                shipping_profile_id: shippingProfile.id,
+                provider_id: "manual_test-provider",
+                price_type: "flat",
+                type: {
+                  label: "Test type",
+                  description: "Test description",
+                  code: "test-code",
+                },
+                prices: [
+                  { currency_code: "usd", amount: 1000 },
+                  {
+                    currency_code: "usd",
+                    amount: 500,
+                    rules: [
+                      {
+                        attribute: "item_total",
+                        operator: "gt",
+                        value: 3000,
+                      },
+                    ],
+                  },
+                ],
+                rules: [
+                  {
+                    attribute: "enabled_in_store",
+                    value: "true",
+                    operator: "eq",
+                  },
+                  {
+                    attribute: "is_return",
+                    value: "false",
+                    operator: "eq",
+                  },
+                ],
+              },
+              adminHeaders
+            )
+          ).data.shipping_option
+
+          cart = (
+            await api.post(
+              `/store/carts?fields=+total`,
+              {
+                currency_code: "usd",
+                sales_channel_id: salesChannel.id,
+                region_id: region.id,
+                items: [{ variant_id: product.variants[0].id, quantity: 1 }],
+              },
+              storeHeadersWithCustomer
+            )
+          ).data.cart
+        })
+
+        it("should add shipping method to cart", async () => {
+          let response = await api.post(
+            `/store/carts/${cart.id}/shipping-methods`,
+            { option_id: shippingOption.id },
+            storeHeaders
+          )
+
+          expect(response.status).toEqual(200)
+          expect(response.data.cart).toEqual(
+            expect.objectContaining({
+              id: cart.id,
+              shipping_methods: expect.arrayContaining([
+                expect.objectContaining({
+                  shipping_option_id: shippingOption.id,
+                  amount: 1000,
+                  is_tax_inclusive: true,
+                }),
+              ]),
+            })
+          )
+
+          // Total is over the amount 3000 to enable the second pricing rule
+          const cart2 = (
+            await api.post(
+              `/store/carts?fields=+total`,
+              {
+                currency_code: "usd",
+                sales_channel_id: salesChannel.id,
+                region_id: region.id,
+                items: [{ variant_id: product.variants[0].id, quantity: 5 }],
+              },
+              storeHeadersWithCustomer
+            )
+          ).data.cart
+
+          response = await api.post(
+            `/store/carts/${cart2.id}/shipping-methods`,
+            { option_id: shippingOption.id },
+            storeHeaders
+          )
+
+          expect(response.data.cart).toEqual(
+            expect.objectContaining({
+              id: cart2.id,
+              shipping_methods: expect.arrayContaining([
+                expect.objectContaining({
+                  shipping_option_id: shippingOption.id,
+                  amount: 500,
+                  is_tax_inclusive: true,
+                }),
+              ]),
+            })
+          )
+        })
+
+        it("should throw when prices are not setup for shipping option", async () => {
+          cart = (
+            await api.post(
+              `/store/carts?fields=+total`,
+              {
+                currency_code: "eur",
+                sales_channel_id: salesChannel.id,
+                region_id: region.id,
+                items: [{ variant_id: product.variants[0].id, quantity: 5 }],
+              },
+              storeHeadersWithCustomer
+            )
+          ).data.cart
+
+          let { response } = await api
+            .post(
+              `/store/carts/${cart.id}/shipping-methods`,
+              { option_id: shippingOption.id },
+              storeHeaders
+            )
+            .catch((e) => e)
+
+          expect(response.data).toEqual({
+            type: "invalid_data",
+            message: `Shipping options with IDs ${shippingOption.id} do not have a price`,
+          })
+        })
+
+        it("should throw when shipping option id is not found", async () => {
+          let { response } = await api
+            .post(
+              `/store/carts/${cart.id}/shipping-methods`,
+              { option_id: "does-not-exist" },
+              storeHeaders
+            )
+            .catch((e) => e)
+
+          expect(response.status).toEqual(400)
+          expect(response.data).toEqual({
+            type: "invalid_data",
+            message: "Shipping Options are invalid for cart.",
+          })
         })
       })
     })

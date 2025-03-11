@@ -56,15 +56,11 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <BareboneLayout htmlClassName={clsx(inter.variable, robotoMono.variable)}>
-      <TightLayout
-        sidebarProps={{
-          expandItems: true,
-        }}
-        ProvidersComponent={Providers}
-      >
-        {children}
-      </TightLayout>
+    <BareboneLayout
+      htmlClassName={clsx(inter.variable, robotoMono.variable)}
+      gaId={process.env.NEXT_PUBLIC_GA_ID}
+    >
+      <TightLayout ProvidersComponent={Providers}>{children}</TightLayout>
     </BareboneLayout>
   )
 }

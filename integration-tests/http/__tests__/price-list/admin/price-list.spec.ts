@@ -1,7 +1,7 @@
 import { medusaIntegrationTestRunner } from "@medusajs/test-utils"
 import {
-  createAdminUser,
   adminHeaders,
+  createAdminUser,
 } from "../../../../helpers/create-admin-user"
 import {
   getPricelistFixture,
@@ -18,6 +18,7 @@ medusaIntegrationTestRunner({
     let region1
     let product1
     let customerGroup1
+    let shippingProfile
 
     beforeEach(async () => {
       const container = getContainer()
@@ -34,10 +35,21 @@ medusaIntegrationTestRunner({
         )
       ).data.region
 
+      shippingProfile = (
+        await api.post(
+          `/admin/shipping-profiles`,
+          { name: "Test", type: "default" },
+          adminHeaders
+        )
+      ).data.shipping_profile
+
       product1 = (
         await api.post(
           "/admin/products",
-          getProductFixture({ title: "Test product" }),
+          getProductFixture({
+            title: "Test product",
+            shipping_profile_id: shippingProfile.id,
+          }),
           adminHeaders
         )
       ).data.product
@@ -102,7 +114,7 @@ medusaIntegrationTestRunner({
             description:
               "Summer sale for VIP customers. 25% off selected items.",
             rules: {
-              customer_group_id: [customerGroup1.id],
+              "customer.groups.id": [customerGroup1.id],
             },
             prices: [
               {
@@ -139,7 +151,7 @@ medusaIntegrationTestRunner({
               starts_at: "2022-07-01T00:00:00.000Z",
               ends_at: "2022-07-31T00:00:00.000Z",
               rules: {
-                customer_group_id: [expect.stringContaining("cusgroup_")],
+                "customer.groups.id": [expect.stringContaining("cusgroup_")],
               },
               prices: [
                 expect.objectContaining({
@@ -183,8 +195,8 @@ medusaIntegrationTestRunner({
                   amount: 100,
                   currency_code: "usd",
                   // BREAKING: Min and max quantity are returned as string
-                  min_quantity: "1",
-                  max_quantity: "100",
+                  min_quantity: 1,
+                  max_quantity: 100,
                   variant_id: product1.variants[0].id,
                   created_at: expect.any(String),
                   updated_at: expect.any(String),
@@ -194,8 +206,8 @@ medusaIntegrationTestRunner({
                   id: expect.any(String),
                   amount: 80,
                   currency_code: "usd",
-                  min_quantity: "101",
-                  max_quantity: "500",
+                  min_quantity: 101,
+                  max_quantity: 500,
                   variant_id: product1.variants[0].id,
                   created_at: expect.any(String),
                   updated_at: expect.any(String),
@@ -335,7 +347,7 @@ medusaIntegrationTestRunner({
             starts_at: "2022-09-01T00:00:00.000Z",
             ends_at: "2022-12-31T00:00:00.000Z",
             rules: {
-              customer_group_id: [customerGroup1.id],
+              "customer.groups.id": [customerGroup1.id],
             },
           }
 
@@ -360,19 +372,19 @@ medusaIntegrationTestRunner({
                   amount: 100,
                   currency_code: "usd",
                   id: expect.any(String),
-                  max_quantity: "100",
-                  min_quantity: "1",
+                  max_quantity: 100,
+                  min_quantity: 1,
                 }),
                 expect.objectContaining({
                   amount: 80,
                   currency_code: "usd",
                   id: expect.any(String),
-                  max_quantity: "500",
-                  min_quantity: "101",
+                  max_quantity: 500,
+                  min_quantity: 101,
                 }),
               ]),
               rules: {
-                customer_group_id: [customerGroup1.id],
+                "customer.groups.id": [customerGroup1.id],
               },
               created_at: expect.any(String),
               updated_at: expect.any(String),
@@ -409,15 +421,15 @@ medusaIntegrationTestRunner({
               amount: 100,
               currency_code: "usd",
               id: expect.any(String),
-              max_quantity: "100",
-              min_quantity: "1",
+              max_quantity: 100,
+              min_quantity: 1,
             }),
             expect.objectContaining({
               amount: 250,
               currency_code: "eur",
               id: expect.any(String),
-              max_quantity: "500",
-              min_quantity: "101",
+              max_quantity: 500,
+              min_quantity: 101,
             }),
           ])
         })
@@ -470,16 +482,16 @@ medusaIntegrationTestRunner({
                 id: expect.any(String),
                 amount: 100,
                 currency_code: "usd",
-                min_quantity: "1",
-                max_quantity: "100",
+                min_quantity: 1,
+                max_quantity: 100,
                 variant_id: product1.variants[0].id,
               }),
               expect.objectContaining({
                 id: expect.any(String),
                 amount: 80,
                 currency_code: "usd",
-                min_quantity: "101",
-                max_quantity: "500",
+                min_quantity: 101,
+                max_quantity: 500,
                 variant_id: product1.variants[0].id,
               }),
               expect.objectContaining({
@@ -487,24 +499,24 @@ medusaIntegrationTestRunner({
                 amount: 45,
                 currency_code: "usd",
                 variant_id: product1.variants[0].id,
-                min_quantity: "1001",
-                max_quantity: "2000",
+                min_quantity: 1001,
+                max_quantity: 2000,
               }),
               expect.objectContaining({
                 id: expect.any(String),
                 amount: 35,
                 currency_code: "usd",
                 variant_id: product1.variants[0].id,
-                min_quantity: "2001",
-                max_quantity: "3000",
+                min_quantity: 2001,
+                max_quantity: 3000,
               }),
               expect.objectContaining({
                 id: expect.any(String),
                 amount: 25,
                 currency_code: "usd",
                 variant_id: product1.variants[0].id,
-                min_quantity: "3001",
-                max_quantity: "4000",
+                min_quantity: 3001,
+                max_quantity: 4000,
               }),
             ])
           )
@@ -551,16 +563,16 @@ medusaIntegrationTestRunner({
                 id: expect.any(String),
                 amount: 45,
                 currency_code: "usd",
-                min_quantity: "1",
-                max_quantity: "100",
+                min_quantity: 1,
+                max_quantity: 100,
                 variant_id: product1.variants[0].id,
               }),
               expect.objectContaining({
                 id: expect.any(String),
                 amount: 35,
                 currency_code: "usd",
-                min_quantity: "101",
-                max_quantity: "500",
+                min_quantity: 101,
+                max_quantity: 500,
                 variant_id: product1.variants[0].id,
               }),
             ])
@@ -605,16 +617,16 @@ medusaIntegrationTestRunner({
                 id: expect.any(String),
                 amount: 100,
                 currency_code: "usd",
-                min_quantity: "1",
-                max_quantity: "100",
+                min_quantity: 1,
+                max_quantity: 100,
                 variant_id: product1.variants[0].id,
               }),
               expect.objectContaining({
                 id: expect.any(String),
                 amount: 80,
                 currency_code: "usd",
-                min_quantity: "101",
-                max_quantity: "500",
+                min_quantity: 101,
+                max_quantity: 500,
                 variant_id: product1.variants[0].id,
               }),
               expect.objectContaining({
@@ -698,8 +710,8 @@ medusaIntegrationTestRunner({
             expect.objectContaining({
               amount: 80,
               currency_code: "usd",
-              min_quantity: "101",
-              max_quantity: "500",
+              min_quantity: 101,
+              max_quantity: 500,
               variant_id: product1.variants[0].id,
             }),
           ])

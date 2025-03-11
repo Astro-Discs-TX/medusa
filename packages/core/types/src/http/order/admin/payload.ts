@@ -1,3 +1,22 @@
+export interface AdminUpdateOrder {
+  /**
+   * The order's email.
+   */
+  email?: string
+  /**
+   * The order's shipping address.
+   */
+  shipping_address?: OrderAddress
+  /**
+   * The order's billing address.
+   */
+  billing_address?: OrderAddress
+  /**
+   * The order's metadata.
+   */
+  metadata?: Record<string, unknown> | null
+}
+
 export interface AdminCreateOrderFulfillment {
   /**
    * The items to add to the fulfillment.
@@ -17,6 +36,11 @@ export interface AdminCreateOrderFulfillment {
    * to fulfill the items from.
    */
   location_id?: string
+  /**
+   * The ID of the shipping option to use for the fulfillment.
+   * Overrides the shipping option selected by the customer.
+   */
+  shipping_option_id?: string
   /**
    * Whether to notify the customer about this change.
    */
@@ -75,10 +99,65 @@ export interface AdminCancelOrderFulfillment {
   no_notification?: boolean
 }
 
-export interface AdminMarkOrderFulfillmentAsDelivered {}
-
 export interface AdminRequestOrderTransfer {
   customer_id: string
   internal_note?: string
   description?: string
+}
+
+export interface OrderAddress {
+  /**
+   * The first name of the address.
+   */
+  first_name?: string
+
+  /**
+   * The last name of the address.
+   */
+  last_name?: string
+
+  /**
+   * The phone number of the address.
+   */
+  phone?: string
+
+  /**
+   * The company of the address.
+   */
+  company?: string
+
+  /**
+   * The first address line of the address.
+   */
+  address_1?: string
+
+  /**
+   * The second address line of the address.
+   */
+  address_2?: string
+
+  /**
+   * The city of the address.
+   */
+  city?: string
+
+  /**
+   * The country code of the address.
+   */
+  country_code?: string
+
+  /**
+   * The province/state of the address.
+   */
+  province?: string
+
+  /**
+   * The postal code of the address.
+   */
+  postal_code?: string
+
+  /**
+   * Holds custom data in key-value pairs.
+   */
+  metadata?: Record<string, unknown> | null
 }

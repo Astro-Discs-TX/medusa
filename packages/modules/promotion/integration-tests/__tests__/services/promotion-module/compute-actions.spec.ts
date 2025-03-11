@@ -2,6 +2,7 @@ import { IPromotionModuleService } from "@medusajs/framework/types"
 import {
   ApplicationMethodType,
   Modules,
+  PromotionStatus,
   PromotionType,
 } from "@medusajs/framework/utils"
 import { moduleIntegrationTestRunner, SuiteOptions } from "@medusajs/test-utils"
@@ -21,9 +22,72 @@ moduleIntegrationTestRunner({
         await createCampaigns(MikroOrmWrapper.forkManager())
       })
 
+      it("should return empty array when promotion is not active (draft or inactive)", async () => {
+        const promotion = await createDefaultPromotion(service, {
+          status: PromotionStatus.DRAFT,
+          rules: [
+            {
+              attribute: "customer.customer_group.id",
+              operator: "in",
+              values: ["VIP", "top100"],
+            },
+          ],
+          application_method: {
+            type: "fixed",
+            target_type: "items",
+            allocation: "each",
+            value: 200,
+            max_quantity: 1,
+            target_rules: [
+              {
+                attribute: "product_category.id",
+                operator: "eq",
+                values: ["catg_cotton"],
+              },
+            ],
+          },
+        })
+
+        const result = await service.computeActions([promotion.code!], {
+          currency_code: "usd",
+          customer: {
+            customer_group: {
+              id: "VIP",
+            },
+          },
+          items: [
+            {
+              id: "item_cotton_tshirt",
+              quantity: 1,
+              subtotal: 100,
+              product_category: {
+                id: "catg_cotton",
+              },
+              product: {
+                id: "prod_tshirt",
+              },
+            },
+            {
+              id: "item_cotton_sweater",
+              quantity: 5,
+              subtotal: 750,
+              product_category: {
+                id: "catg_cotton",
+              },
+              product: {
+                id: "prod_sweater",
+              },
+            },
+          ],
+        })
+
+        expect(result).toEqual([])
+      })
+
       describe("when code is not present in database", () => {
         it("should return empty array when promotion does not exist", async () => {
           const response = await service.computeActions(["DOES_NOT_EXIST"], {
+            currency_code: "usd",
             customer: {
               customer_group: {
                 id: "VIP",
@@ -57,68 +121,6 @@ moduleIntegrationTestRunner({
 
           expect(response).toEqual([])
         })
-
-        it("should throw error when code in items adjustment does not exist", async () => {
-          await createDefaultPromotion(service, {})
-
-          const error = await service
-            .computeActions(["PROMOTION_TEST"], {
-              items: [
-                {
-                  id: "item_cotton_tshirt",
-                  quantity: 1,
-                  subtotal: 100,
-                  adjustments: [
-                    {
-                      id: "test-adjustment",
-                      code: "DOES_NOT_EXIST",
-                    },
-                  ],
-                },
-                {
-                  id: "item_cotton_sweater",
-                  quantity: 5,
-                  subtotal: 750,
-                },
-              ],
-            })
-            .catch((e) => e)
-
-          expect(error.message).toContain(
-            "Applied Promotion for code (DOES_NOT_EXIST) not found"
-          )
-        })
-
-        it("should throw error when code in shipping adjustment does not exist", async () => {
-          await createDefaultPromotion(service, {})
-
-          const error = await service
-            .computeActions(["PROMOTION_TEST"], {
-              items: [
-                {
-                  id: "item_cotton_tshirt",
-                  quantity: 1,
-                  subtotal: 100,
-                },
-                {
-                  id: "item_cotton_sweater",
-                  quantity: 5,
-                  subtotal: 750,
-                  adjustments: [
-                    {
-                      id: "test-adjustment",
-                      code: "DOES_NOT_EXIST",
-                    },
-                  ],
-                },
-              ],
-            })
-            .catch((e) => e)
-
-          expect(error.message).toContain(
-            "Applied Promotion for code (DOES_NOT_EXIST) not found"
-          )
-        })
       })
 
       describe("when promotion is for items and allocation is each", () => {
@@ -149,6 +151,7 @@ moduleIntegrationTestRunner({
             })
 
             const result = await service.computeActions(["PROMOTION_TEST"], {
+              currency_code: "usd",
               customer: {
                 customer_group: {
                   id: "VIP",
@@ -194,6 +197,41 @@ moduleIntegrationTestRunner({
                 code: "PROMOTION_TEST",
               },
             ])
+
+            const resultWithoutCustomer = await service.computeActions(
+              ["PROMOTION_TEST"],
+              {
+                currency_code: "usd",
+                items: [
+                  {
+                    id: "item_cotton_tshirt",
+                    quantity: 1,
+                    subtotal: 100,
+                    product_category: {
+                      id: "catg_cotton",
+                    },
+                    product: {
+                      id: "prod_tshirt",
+                    },
+                  },
+                  {
+                    id: "item_cotton_sweater",
+                    quantity: 5,
+                    subtotal: 750,
+                    product_category: {
+                      id: "catg_cotton",
+                    },
+                    product: {
+                      id: "prod_sweater",
+                    },
+                  },
+                ],
+              }
+            )
+
+            expect(JSON.parse(JSON.stringify(resultWithoutCustomer))).toEqual(
+              []
+            )
           })
 
           it("should compute the correct item amendments when there are multiple promotions to apply", async () => {
@@ -249,6 +287,7 @@ moduleIntegrationTestRunner({
             const result = await service.computeActions(
               ["PROMOTION_TEST", "PROMOTION_TEST_2"],
               {
+                currency_code: "usd",
                 customer: {
                   customer_group: {
                     id: "VIP",
@@ -285,19 +324,7 @@ moduleIntegrationTestRunner({
               {
                 action: "addItemAdjustment",
                 item_id: "item_cotton_tshirt",
-                amount: 30,
-                code: "PROMOTION_TEST",
-              },
-              {
-                action: "addItemAdjustment",
-                item_id: "item_cotton_sweater",
-                amount: 30,
-                code: "PROMOTION_TEST",
-              },
-              {
-                action: "addItemAdjustment",
-                item_id: "item_cotton_tshirt",
-                amount: 20,
+                amount: 50,
                 code: "PROMOTION_TEST_2",
               },
               {
@@ -305,6 +332,12 @@ moduleIntegrationTestRunner({
                 item_id: "item_cotton_sweater",
                 amount: 50,
                 code: "PROMOTION_TEST_2",
+              },
+              {
+                action: "addItemAdjustment",
+                item_id: "item_cotton_sweater",
+                amount: 30,
+                code: "PROMOTION_TEST",
               },
             ])
           })
@@ -362,6 +395,7 @@ moduleIntegrationTestRunner({
             const result = await service.computeActions(
               ["PROMOTION_TEST", "PROMOTION_TEST_2"],
               {
+                currency_code: "usd",
                 customer: {
                   customer_group: {
                     id: "VIP",
@@ -436,6 +470,7 @@ moduleIntegrationTestRunner({
             })
 
             const result = await service.computeActions(["PROMOTION_TEST"], {
+              currency_code: "usd",
               customer: {
                 customer_group: {
                   id: "VIP",
@@ -497,6 +532,7 @@ moduleIntegrationTestRunner({
             })
 
             const result = await service.computeActions(["PROMOTION_TEST"], {
+              currency_code: "usd",
               customer: {
                 customer_group: {
                   id: "VIP",
@@ -550,6 +586,7 @@ moduleIntegrationTestRunner({
             })
 
             const result = await service.computeActions(["PROMOTION_TEST"], {
+              currency_code: "usd",
               customer: {
                 customer_group: {
                   id: "VIP",
@@ -650,6 +687,7 @@ moduleIntegrationTestRunner({
             const result = await service.computeActions(
               ["PROMOTION_TEST", "PROMOTION_TEST_2"],
               {
+                currency_code: "usd",
                 customer: {
                   customer_group: {
                     id: "VIP",
@@ -763,6 +801,7 @@ moduleIntegrationTestRunner({
             const result = await service.computeActions(
               ["PROMOTION_TEST", "PROMOTION_TEST_2"],
               {
+                currency_code: "usd",
                 customer: {
                   customer_group: {
                     id: "VIP",
@@ -837,6 +876,7 @@ moduleIntegrationTestRunner({
             })
 
             const result = await service.computeActions(["PROMOTION_TEST"], {
+              currency_code: "usd",
               customer: {
                 customer_group: {
                   id: "VIP",
@@ -894,6 +934,7 @@ moduleIntegrationTestRunner({
             })
 
             const result = await service.computeActions(["PROMOTION_TEST"], {
+              currency_code: "usd",
               customer: {
                 customer_group: {
                   id: "VIP",
@@ -949,6 +990,7 @@ moduleIntegrationTestRunner({
             })
 
             const result = await service.computeActions(["PROMOTION_TEST"], {
+              currency_code: "usd",
               customer: {
                 customer_group: {
                   id: "VIP",
@@ -1022,6 +1064,7 @@ moduleIntegrationTestRunner({
             })
 
             const result = await service.computeActions([], {
+              currency_code: "usd",
               customer: {
                 customer_group: {
                   id: "VIP",
@@ -1121,6 +1164,7 @@ moduleIntegrationTestRunner({
             const result = await service.computeActions(
               ["PROMOTION_TEST", "PROMOTION_TEST_2"],
               {
+                currency_code: "usd",
                 customer: {
                   customer_group: {
                     id: "VIP",
@@ -1157,18 +1201,6 @@ moduleIntegrationTestRunner({
               {
                 action: "addItemAdjustment",
                 item_id: "item_cotton_tshirt",
-                amount: 7.5,
-                code: "PROMOTION_TEST",
-              },
-              {
-                action: "addItemAdjustment",
-                item_id: "item_cotton_sweater",
-                amount: 22.5,
-                code: "PROMOTION_TEST",
-              },
-              {
-                action: "addItemAdjustment",
-                item_id: "item_cotton_tshirt",
                 amount: 12.5,
                 code: "PROMOTION_TEST_2",
               },
@@ -1177,6 +1209,18 @@ moduleIntegrationTestRunner({
                 item_id: "item_cotton_sweater",
                 amount: 37.5,
                 code: "PROMOTION_TEST_2",
+              },
+              {
+                action: "addItemAdjustment",
+                item_id: "item_cotton_tshirt",
+                amount: 7.5,
+                code: "PROMOTION_TEST",
+              },
+              {
+                action: "addItemAdjustment",
+                item_id: "item_cotton_sweater",
+                amount: 22.5,
+                code: "PROMOTION_TEST",
               },
             ])
           })
@@ -1233,6 +1277,7 @@ moduleIntegrationTestRunner({
             const result = await service.computeActions(
               ["PROMOTION_TEST", "PROMOTION_TEST_2"],
               {
+                currency_code: "usd",
                 customer: {
                   customer_group: {
                     id: "VIP",
@@ -1306,6 +1351,7 @@ moduleIntegrationTestRunner({
             })
 
             const result = await service.computeActions(["PROMOTION_TEST"], {
+              currency_code: "usd",
               customer: {
                 customer_group: {
                   id: "VIP",
@@ -1362,6 +1408,7 @@ moduleIntegrationTestRunner({
             })
 
             const result = await service.computeActions(["PROMOTION_TEST"], {
+              currency_code: "usd",
               customer: {
                 customer_group: {
                   id: "VIP",
@@ -1414,6 +1461,7 @@ moduleIntegrationTestRunner({
             })
 
             const result = await service.computeActions(["PROMOTION_TEST"], {
+              currency_code: "usd",
               customer: {
                 customer_group: {
                   id: "VIP",
@@ -1487,6 +1535,7 @@ moduleIntegrationTestRunner({
             })
 
             const result = await service.computeActions([], {
+              currency_code: "usd",
               customer: {
                 customer_group: {
                   id: "VIP",
@@ -1585,6 +1634,7 @@ moduleIntegrationTestRunner({
             const result = await service.computeActions(
               ["PROMOTION_TEST", "PROMOTION_TEST_2"],
               {
+                currency_code: "usd",
                 customer: {
                   customer_group: {
                     id: "VIP",
@@ -1696,6 +1746,7 @@ moduleIntegrationTestRunner({
             const result = await service.computeActions(
               ["PROMOTION_TEST", "PROMOTION_TEST_2"],
               {
+                currency_code: "usd",
                 customer: {
                   customer_group: {
                     id: "VIP",
@@ -1781,6 +1832,7 @@ moduleIntegrationTestRunner({
             })
 
             const result = await service.computeActions(["PROMOTION_TEST"], {
+              currency_code: "usd",
               customer: {
                 customer_group: {
                   id: "VIP",
@@ -1837,6 +1889,7 @@ moduleIntegrationTestRunner({
             })
 
             const result = await service.computeActions(["PROMOTION_TEST"], {
+              currency_code: "usd",
               customer: {
                 customer_group: {
                   id: "VIP",
@@ -1892,6 +1945,7 @@ moduleIntegrationTestRunner({
             })
 
             const result = await service.computeActions(["PROMOTION_TEST"], {
+              currency_code: "usd",
               customer: {
                 customer_group: {
                   id: "VIP",
@@ -1965,6 +2019,7 @@ moduleIntegrationTestRunner({
             })
 
             const result = await service.computeActions([], {
+              currency_code: "usd",
               customer: {
                 customer_group: {
                   id: "VIP",
@@ -2040,6 +2095,7 @@ moduleIntegrationTestRunner({
             const result = await service.computeActions(
               [],
               {
+                currency_code: "usd",
                 customer: {
                   customer_group: {
                     id: "VIP",
@@ -2128,6 +2184,7 @@ moduleIntegrationTestRunner({
             const result = await service.computeActions(
               ["PROMOTION_TEST", "PROMOTION_TEST_2"],
               {
+                currency_code: "usd",
                 customer: {
                   customer_group: {
                     id: "VIP",
@@ -2234,6 +2291,7 @@ moduleIntegrationTestRunner({
             const result = await service.computeActions(
               ["PROMOTION_TEST", "PROMOTION_TEST_2"],
               {
+                currency_code: "usd",
                 customer: {
                   customer_group: {
                     id: "VIP",
@@ -2307,6 +2365,7 @@ moduleIntegrationTestRunner({
             })
 
             const result = await service.computeActions(["PROMOTION_TEST"], {
+              currency_code: "usd",
               customer: {
                 customer_group: {
                   id: "VIP",
@@ -4002,6 +4061,7 @@ moduleIntegrationTestRunner({
           const result = await service.computeActions(
             ["PROMOTION_TEST", "PROMOTION_TEST_2"],
             {
+              currency_code: "usd",
               customer: {
                 customer_group: {
                   id: "VIP",
@@ -4038,18 +4098,6 @@ moduleIntegrationTestRunner({
             {
               action: "addItemAdjustment",
               item_id: "item_cotton_tshirt",
-              amount: 7.5,
-              code: "PROMOTION_TEST",
-            },
-            {
-              action: "addItemAdjustment",
-              item_id: "item_cotton_sweater",
-              amount: 22.5,
-              code: "PROMOTION_TEST",
-            },
-            {
-              action: "addItemAdjustment",
-              item_id: "item_cotton_tshirt",
               amount: 12.5,
               code: "PROMOTION_TEST_2",
             },
@@ -4058,6 +4106,18 @@ moduleIntegrationTestRunner({
               item_id: "item_cotton_sweater",
               amount: 37.5,
               code: "PROMOTION_TEST_2",
+            },
+            {
+              action: "addItemAdjustment",
+              item_id: "item_cotton_tshirt",
+              amount: 7.5,
+              code: "PROMOTION_TEST",
+            },
+            {
+              action: "addItemAdjustment",
+              item_id: "item_cotton_sweater",
+              amount: 22.5,
+              code: "PROMOTION_TEST",
             },
           ])
         })
@@ -4101,6 +4161,7 @@ moduleIntegrationTestRunner({
           const result = await service.computeActions(
             ["PROMOTION_TEST", "PROMOTION_TEST_2"],
             {
+              currency_code: "usd",
               customer: {
                 customer_group: {
                   id: "VIP",
@@ -4948,26 +5009,31 @@ moduleIntegrationTestRunner({
               context
             )
 
-            expect(JSON.parse(JSON.stringify(result))).toEqual([
-              {
-                action: "addItemAdjustment",
-                item_id: "item_cotton_tshirt2",
-                amount: 1225,
-                code: "BUY50GET1000",
-              },
-              {
-                action: "addItemAdjustment",
-                item_id: "item_cotton_tshirt",
-                amount: 1275,
-                code: "BUY50GET1000",
-              },
-              {
-                action: "addItemAdjustment",
-                item_id: "item_cotton_tshirt2",
-                amount: 50,
-                code: "BUY10GET20",
-              },
-            ])
+            const serializedResult = JSON.parse(JSON.stringify(result))
+
+            expect(serializedResult).toHaveLength(3)
+            expect(serializedResult).toEqual(
+              expect.arrayContaining([
+                {
+                  action: "addItemAdjustment",
+                  item_id: "item_cotton_tshirt2",
+                  amount: 1225,
+                  code: "BUY50GET1000",
+                },
+                {
+                  action: "addItemAdjustment",
+                  item_id: "item_cotton_tshirt",
+                  amount: 1275,
+                  code: "BUY50GET1000",
+                },
+                {
+                  action: "addItemAdjustment",
+                  item_id: "item_cotton_tshirt2",
+                  amount: 50,
+                  code: "BUY10GET20",
+                },
+              ])
+            )
           })
 
           it("should compute adjustment accurately across items", async () => {

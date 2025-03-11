@@ -10,7 +10,12 @@ export type DMLSchema = Record<
   PropertyType<any> | RelationshipType<any>
 >
 
-export type IDmlEntityConfig = string | { name?: string; tableName: string }
+export type IDmlEntityConfig =
+  | string
+  | {
+      name?: string
+      tableName: string
+    }
 
 export type InferDmlEntityNameFromConfig<TConfig extends IDmlEntityConfig> =
   TConfig extends string
@@ -41,6 +46,8 @@ export type KnownDataTypes =
   | "enum"
   | "number"
   | "bigNumber"
+  | "float"
+  | "serial"
   | "dateTime"
   | "array"
   | "json"
@@ -51,6 +58,7 @@ export type KnownDataTypes =
  */
 export type RelationshipTypes =
   | "hasOne"
+  | "hasOneWithFK"
   | "hasMany"
   | "belongsTo"
   | "manyToMany"
@@ -69,6 +77,7 @@ export type PropertyMetadata = {
   fieldName: string
   defaultValue?: any
   nullable: boolean
+  computed: boolean
   dataType: {
     name: KnownDataTypes
     options?: Record<string, any>
@@ -111,7 +120,7 @@ export type RelationshipMetadata = {
   name: string
   type: RelationshipTypes
   entity: unknown
-  nullable: boolean
+  nullable?: boolean
   mappedBy?: string
   searchable: boolean
   options: Record<string, any>
@@ -142,9 +151,11 @@ export interface EntityConstructor<Props> extends Function {
  * "belongsTo" relation meaning "hasOne" and "ManyToOne"
  */
 export type InferForeignKeys<Schema extends DMLSchema> = {
-  [K in keyof Schema as Schema[K] extends { type: "belongsTo" }
-    ? `${K & string}_id`
-    : never]: Schema[K] extends { type: "belongsTo" }
+  [K in keyof Schema as Schema[K] extends { $foreignKey: true }
+    ? Schema[K] extends { $foreignKeyName: `${infer FkName}` }
+      ? `${FkName & string}`
+      : `${K & string}_id`
+    : never]: Schema[K] extends { $foreignKey: true }
     ? null extends Schema[K]["$dataType"]
       ? string | null
       : string
@@ -184,15 +195,14 @@ export type InferHasManyFields<Relation> = Relation extends () => IDmlEntity<
 export type InferManyToManyFields<Relation> = InferHasManyFields<Relation>
 
 /**
- * Inferring the types of the schema fields from the DML
- * entity
+ * Infers the types of the schema fields from the DML entity
  */
 export type InferSchemaFields<Schema extends DMLSchema> = Prettify<
   {
     [K in keyof Schema]: Schema[K] extends RelationshipType<any>
       ? Schema[K]["type"] extends "belongsTo"
         ? InferBelongsToFields<Schema[K]["$dataType"]>
-        : Schema[K]["type"] extends "hasOne"
+        : Schema[K]["type"] extends "hasOne" | "hasOneWithFK"
         ? InferHasOneFields<Schema[K]["$dataType"]>
         : Schema[K]["type"] extends "hasMany"
         ? InferHasManyFields<Schema[K]["$dataType"]>
@@ -204,11 +214,38 @@ export type InferSchemaFields<Schema extends DMLSchema> = Prettify<
 >
 
 /**
- * Helper to infer the schema type of a DmlEntity
+ * Infers the types of the schema fields from the DML entity
+ * for module services
  */
-export type Infer<T> = T extends IDmlEntity<infer Schema, any>
-  ? EntityConstructor<InferSchemaFields<Schema>>
-  : never
+export type InferSchemaFieldsForModuleServices<Schema extends DMLSchema> =
+  Prettify<
+    {
+      [K in keyof Schema]: Schema[K] extends RelationshipType<any>
+        ? Schema[K]["type"] extends "belongsTo"
+          ? string
+          : Schema[K]["type"] extends "hasOne" | "hasOneWithFK"
+          ? string
+          : Schema[K]["type"] extends "hasMany"
+          ? string[]
+          : Schema[K]["type"] extends "manyToMany"
+          ? string[]
+          : never
+        : Schema[K]["$dataType"]
+    } & InferForeignKeys<Schema>
+  >
+
+/**
+ * Infers the schema properties without the relationships
+ */
+export type InferSchemaProperties<Schema extends DMLSchema> = Prettify<
+  {
+    [K in keyof Schema as Schema[K] extends { type: infer Type }
+      ? Type extends RelationshipTypes
+        ? never
+        : K
+      : K]: Schema[K]["$dataType"]
+  } & InferForeignKeys<Schema>
+>
 
 /**
  * Extracts names of relationships from a schema
@@ -225,15 +262,30 @@ export type ExtractEntityRelations<
 }[keyof Schema & string][]
 
 /**
+ * Helper to infer the schema type of a DmlEntity
+ */
+export type Infer<T> = T extends IDmlEntity<infer Schema, any>
+  ? EntityConstructor<InferSchemaFields<Schema>>
+  : never
+
+export type InferEntityForModuleService<T> = T extends IDmlEntity<
+  infer Schema,
+  any
+>
+  ? InferSchemaFieldsForModuleServices<Schema>
+  : never
+
+/**
  * The actions to cascade from a given entity to its
  * relationship.
  */
-export type EntityCascades<Relationships> = {
+export type EntityCascades<DeletableRelationships, DetachableRelationships> = {
   /**
    * The related models to delete when a record of this data model
    * is deleted.
    */
-  delete?: Relationships
+  delete?: DeletableRelationships
+  detach?: DetachableRelationships
 }
 
 /**
@@ -251,22 +303,33 @@ export type InferEntityType<T> = T extends IDmlEntity<any, any>
 /**
  * Infer all indexable properties from a DML entity including inferred foreign keys and excluding relationship
  */
-export type InferIndexableProperties<T> = keyof (T extends IDmlEntity<
-  infer Schema,
-  any
->
-  ? {
-      [K in keyof Schema as Schema[K] extends { type: infer Type }
-        ? Type extends RelationshipTypes
-          ? never
-          : K
-        : K]: string
-    } & InferForeignKeys<Schema>
-  : never)
+export type InferIndexableProperties<Schema extends DMLSchema> =
+  keyof InferSchemaProperties<Schema>
+
+/**
+ * Returns a list of columns that could be mentioned
+ * within the checks
+ */
+export type InferCheckConstraintsProperties<Schema extends DMLSchema> = {
+  [K in keyof InferSchemaProperties<Schema>]: string
+}
+
+/**
+ * Options supported when defining a PostgreSQL check
+ */
+export type CheckConstraint<Schema extends DMLSchema> =
+  | ((columns: InferCheckConstraintsProperties<Schema>) => string)
+  | {
+      name?: string
+      expression?:
+        | string
+        | ((columns: InferCheckConstraintsProperties<Schema>) => string)
+      property?: string
+    }
 
 export type EntityIndex<
-  TSchema extends DMLSchema = DMLSchema,
-  TWhere = string
+  Schema extends DMLSchema = DMLSchema,
+  Where = string
 > = {
   /**
    * The name of the index. If not provided,
@@ -281,11 +344,16 @@ export type EntityIndex<
   /**
    * The list of properties to create the index on.
    */
-  on: InferIndexableProperties<IDmlEntity<TSchema, any>>[]
+  on: InferIndexableProperties<Schema>[]
   /**
    * Conditions to restrict which records are indexed.
    */
-  where?: TWhere
+  where?: Where
+
+  /**
+   * The type of the index. (e.g: GIN)
+   */
+  type?: string
 }
 
 export type SimpleQueryValue = string | number | boolean | null

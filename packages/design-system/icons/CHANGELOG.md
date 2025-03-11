@@ -1,5 +1,53 @@
 # @medusajs/icons
 
+## 2.6.1
+
+### Patch Changes
+
+- [#11738](https://github.com/medusajs/medusa/pull/11738) [`3b470f41427e487c68f89b8ee8155de716ffe861`](https://github.com/medusajs/medusa/commit/3b470f41427e487c68f89b8ee8155de716ffe861) Thanks [@olivermrbl](https://github.com/olivermrbl)! - chore: Remove ranges on Medusa packages
+
+## 2.6.0
+
+## 2.5.1
+
+### Patch Changes
+
+- [#11414](https://github.com/medusajs/medusa/pull/11414) [`47edd01deec79b394552cea349f1e41b7b88723b`](https://github.com/medusajs/medusa/commit/47edd01deec79b394552cea349f1e41b7b88723b) Thanks [@kasperkristensen](https://github.com/kasperkristensen)! - fix(admin-vite-plugin,admin-bundler,ui,icons,dashboard,framework,types): Update Vite dependencies
+
+## 2.5.0
+
+### Patch Changes
+
+- [#11361](https://github.com/medusajs/medusa/pull/11361) [`3dbef519d95cf694d06843cb694c0d2abdac2146`](https://github.com/medusajs/medusa/commit/3dbef519d95cf694d06843cb694c0d2abdac2146) Thanks [@kasperkristensen](https://github.com/kasperkristensen)! - fix(admin-vite-plugin,icons,ui,dashboard): Upgrade vitest in all packages and align Vite version
+
+## 2.4.0
+
+## 2.3.1
+
+## 2.3.0
+
+### Patch Changes
+
+- [#10961](https://github.com/medusajs/medusa/pull/10961) [`2a25b4d95f2b7a4d53138718c94124f47f041b36`](https://github.com/medusajs/medusa/commit/2a25b4d95f2b7a4d53138718c94124f47f041b36) Thanks [@kasperkristensen](https://github.com/kasperkristensen)! - chore(icons,dashboard): Pull latest icons and update branch icon in category tree
+
+## 2.2.0
+
+### Patch Changes
+
+- [#10458](https://github.com/medusajs/medusa/pull/10458) [`f7aaf2c8bb243c8478a943285628ba8eb331feb6`](https://github.com/medusajs/medusa/commit/f7aaf2c8bb243c8478a943285628ba8eb331feb6) Thanks [@kasperkristensen](https://github.com/kasperkristensen)! - chore(ui,icons): Add React 19/19-rc to peer dependencies
+
+## 2.1.3
+
+## 2.1.2
+
+## 2.1.1
+
+## 2.1.0
+
+### Patch Changes
+
+- [#10369](https://github.com/medusajs/medusa/pull/10369) [`94f6265dfc074969f2f141a19f2fc33a6ab96af1`](https://github.com/medusajs/medusa/commit/94f6265dfc074969f2f141a19f2fc33a6ab96af1) Thanks [@kasperkristensen](https://github.com/kasperkristensen)! - feat(ui,icons,ui-preset): Sync with latest changes from Figma, and fix Code components
+
 ## 2.0.7
 
 ## 2.0.6

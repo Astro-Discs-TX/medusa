@@ -1,10 +1,19 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
+  ApplicationMethodAllocationValues,
+  ApplicationMethodTargetTypeValues,
+  ApplicationMethodTypeValues,
+  PromotionRuleOperatorValues,
+  PromotionStatusValues,
+  PromotionTypeValues,
+} from "@medusajs/types"
+import {
   Alert,
   Badge,
   Button,
   clx,
   CurrencyInput,
+  Divider,
   Heading,
   Input,
   ProgressStatus,
@@ -17,15 +26,6 @@ import { useEffect, useMemo, useState } from "react"
 import { useForm, useWatch } from "react-hook-form"
 import { Trans, useTranslation } from "react-i18next"
 import { z } from "zod"
-
-import {
-  ApplicationMethodAllocationValues,
-  ApplicationMethodTargetTypeValues,
-  ApplicationMethodTypeValues,
-  PromotionRuleOperatorValues,
-  PromotionTypeValues,
-} from "@medusajs/types"
-import { Divider } from "../../../../../components/common/divider"
 import { Form } from "../../../../../components/common/form"
 import { DeprecatedPercentageInput } from "../../../../../components/inputs/percentage-input"
 import {
@@ -50,6 +50,7 @@ const defaultValues = {
   is_automatic: "false",
   code: "",
   type: "standard" as PromotionTypeValues,
+  status: "draft" as PromotionStatusValues,
   rules: [],
   application_method: {
     allocation: "each" as ApplicationMethodAllocationValues,
@@ -79,6 +80,7 @@ export const CreatePromotionForm = () => {
     defaultValues,
     resolver: zodResolver(CreatePromotionSchema),
   })
+  const { setValue, reset, getValues } = form
 
   const { mutateAsync: createPromotion } = useCreatePromotion()
 
@@ -150,7 +152,7 @@ export const CreatePromotionForm = () => {
               })
             )
 
-            handleSuccess()
+            handleSuccess(`/promotions/${promotion.id}`)
           },
           onError: (e) => {
             toast.error(e.message)
@@ -244,20 +246,20 @@ export const CreatePromotionForm = () => {
       return
     }
 
-    form.reset({ ...defaultValues, template_id: watchTemplateId })
+    reset({ ...defaultValues, template_id: watchTemplateId })
 
     for (const [key, value] of Object.entries(currentTemplate.defaults)) {
       if (typeof value === "object") {
         for (const [subKey, subValue] of Object.entries(value)) {
-          form.setValue(`application_method.${subKey}`, subValue)
+          setValue(`application_method.${subKey}`, subValue)
         }
       } else {
-        form.setValue(key, value)
+        setValue(key, value)
       }
     }
 
     return currentTemplate
-  }, [watchTemplateId])
+  }, [watchTemplateId, setValue, reset])
 
   const watchValueType = useWatch({
     control: form.control,
@@ -272,9 +274,9 @@ export const CreatePromotionForm = () => {
 
   useEffect(() => {
     if (watchAllocation === "across") {
-      form.setValue("application_method.max_quantity", null)
+      setValue("application_method.max_quantity", null)
     }
-  }, [watchAllocation])
+  }, [watchAllocation, setValue])
 
   const watchType = useWatch({
     control: form.control,
@@ -307,19 +309,19 @@ export const CreatePromotionForm = () => {
   })
 
   useEffect(() => {
-    const formData = form.getValues()
+    const formData = getValues()
 
     if (watchCampaignChoice !== "existing") {
-      form.setValue("campaign_id", undefined)
+      setValue("campaign_id", undefined)
     }
 
     if (watchCampaignChoice !== "new") {
-      form.setValue("campaign", undefined)
+      setValue("campaign", undefined)
     }
 
     if (watchCampaignChoice === "new") {
       if (!formData.campaign || !formData.campaign?.budget?.type) {
-        form.setValue("campaign", {
+        setValue("campaign", {
           ...DEFAULT_CAMPAIGN_VALUES,
           budget: {
             ...DEFAULT_CAMPAIGN_VALUES.budget,
@@ -328,7 +330,7 @@ export const CreatePromotionForm = () => {
         })
       }
     }
-  }, [watchCampaignChoice])
+  }, [watchCampaignChoice, getValues, setValue])
 
   const watchRules = useWatch({
     control: form.control,
@@ -496,6 +498,48 @@ export const CreatePromotionForm = () => {
                                 )}
                                 description={t(
                                   "promotions.form.method.automatic.description"
+                                )}
+                                className={clx("basis-1/2")}
+                              />
+                            </RadioGroup>
+                          </Form.Control>
+                          <Form.ErrorMessage />
+                        </Form.Item>
+                      )
+                    }}
+                  />
+
+                  <Form.Field
+                    control={form.control}
+                    name="status"
+                    render={({ field }) => {
+                      return (
+                        <Form.Item>
+                          <Form.Label>
+                            {t("promotions.form.status.label")}
+                          </Form.Label>
+
+                          <Form.Control>
+                            <RadioGroup
+                              className="flex gap-y-3"
+                              {...field}
+                              value={field.value}
+                              onValueChange={field.onChange}
+                            >
+                              <RadioGroup.ChoiceBox
+                                value={"draft"}
+                                label={t("promotions.form.status.draft.title")}
+                                description={t(
+                                  "promotions.form.status.draft.description"
+                                )}
+                                className={clx("basis-1/2")}
+                              />
+
+                              <RadioGroup.ChoiceBox
+                                value={"active"}
+                                label={t("promotions.form.status.active.title")}
+                                description={t(
+                                  "promotions.form.status.active.description"
                                 )}
                                 className={clx("basis-1/2")}
                               />

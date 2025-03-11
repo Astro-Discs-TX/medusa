@@ -5,6 +5,8 @@ import {
   AuthTypes,
   Context,
   DAL,
+  ICacheService,
+  InferEntityType,
   InternalModuleDeclaration,
   Logger,
   ModuleJoinerConfig,
@@ -26,6 +28,7 @@ type InjectedDependencies = {
   providerIdentityService: ModulesSdkTypes.IMedusaInternalService<any>
   authProviderService: AuthProviderService
   logger?: Logger
+  cache?: ICacheService
 }
 export default class AuthModuleService
   extends MedusaService<{
@@ -35,16 +38,21 @@ export default class AuthModuleService
   implements AuthTypes.IAuthModuleService
 {
   protected baseRepository_: DAL.RepositoryService
-  protected authIdentityService_: ModulesSdkTypes.IMedusaInternalService<AuthIdentity>
-  protected providerIdentityService_: ModulesSdkTypes.IMedusaInternalService<ProviderIdentity>
+  protected authIdentityService_: ModulesSdkTypes.IMedusaInternalService<
+    InferEntityType<typeof AuthIdentity>
+  >
+  protected providerIdentityService_: ModulesSdkTypes.IMedusaInternalService<
+    InferEntityType<typeof ProviderIdentity>
+  >
   protected readonly authProviderService_: AuthProviderService
-
+  protected readonly cache_: ICacheService | undefined
   constructor(
     {
       authIdentityService,
       providerIdentityService,
       authProviderService,
       baseRepository,
+      cache,
     }: InjectedDependencies,
     protected readonly moduleDeclaration: InternalModuleDeclaration
   ) {
@@ -55,6 +63,7 @@ export default class AuthModuleService
     this.authIdentityService_ = authIdentityService
     this.authProviderService_ = authProviderService
     this.providerIdentityService_ = providerIdentityService
+    this.cache_ = cache
   }
 
   __joinerConfig(): ModuleJoinerConfig {
@@ -97,12 +106,14 @@ export default class AuthModuleService
     sharedContext?: Context
   ): Promise<AuthTypes.AuthIdentityDTO[]>
 
+  // @ts-expect-error
   updateAuthIdentities(
     data: AuthTypes.UpdateAuthIdentityDTO,
     sharedContext?: Context
   ): Promise<AuthTypes.AuthIdentityDTO>
 
   @InjectManager()
+  // @ts-expect-error
   async updateAuthIdentities(
     data: AuthTypes.UpdateAuthIdentityDTO | AuthTypes.UpdateAuthIdentityDTO[],
     @MedusaContext() sharedContext: Context = {}
@@ -142,12 +153,14 @@ export default class AuthModuleService
     sharedContext?: Context
   ): Promise<AuthTypes.ProviderIdentityDTO[]>
 
+  // @ts-expect-error
   createProviderIdentities(
     data: AuthTypes.CreateProviderIdentityDTO,
     sharedContext?: Context
   ): Promise<AuthTypes.ProviderIdentityDTO>
 
   @InjectManager()
+  // @ts-expect-error
   async createProviderIdentities(
     data:
       | AuthTypes.CreateProviderIdentityDTO[]
@@ -170,12 +183,14 @@ export default class AuthModuleService
     sharedContext?: Context
   ): Promise<AuthTypes.ProviderIdentityDTO[]>
 
+  // @ts-expect-error
   updateProviderIdentities(
     data: AuthTypes.UpdateProviderIdentityDTO,
     sharedContext?: Context
   ): Promise<AuthTypes.ProviderIdentityDTO>
 
   @InjectManager()
+  // @ts-expect-error
   async updateProviderIdentities(
     data:
       | AuthTypes.UpdateProviderIdentityDTO
@@ -366,6 +381,27 @@ export default class AuthModuleService
         ]
 
         return serializedResponse
+      },
+      setState: async (key: string, value: Record<string, unknown>) => {
+        if (!this.cache_) {
+          throw new MedusaError(
+            MedusaError.Types.INVALID_ARGUMENT,
+            "Cache module dependency is required when using OAuth providers that require state"
+          )
+        }
+
+        // 20 minutes. Can be made configurable if necessary, but this is a good default.
+        this.cache_.set(key, value, 1200)
+      },
+      getState: async (key: string) => {
+        if (!this.cache_) {
+          throw new MedusaError(
+            MedusaError.Types.INVALID_ARGUMENT,
+            "Cache module dependency is required when using OAuth providers that require state"
+          )
+        }
+
+        return await this.cache_.get(key)
       },
     }
   }

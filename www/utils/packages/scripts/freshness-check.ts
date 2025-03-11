@@ -4,7 +4,7 @@ import { LinearClient } from "@linear/sdk"
 import { Octokit } from "@octokit/core"
 import fs from "fs"
 import path from "path"
-import { fileURLToPath } from "url"
+import { getDirname } from "utils"
 
 const octokit = new Octokit({
   auth: process.env.GH_TOKEN,
@@ -14,19 +14,8 @@ const linearClient = new LinearClient({
   apiKey: process.env.LINEAR_API_KEY,
 })
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+const __dirname = getDirname(import.meta.url)
 
-const repoPath = path.join(
-  __dirname,
-  "..",
-  "..",
-  "..",
-  "..",
-  "apps",
-  "book",
-  "app"
-)
 let freshnessCheckLabelId = ""
 let documentationTeamId = ""
 
@@ -120,14 +109,14 @@ async function main() {
   const documentationTeam = await linearClient.teams({
     filter: {
       name: {
-        eqIgnoreCase: "Documentation",
+        eqIgnoreCase: "DX",
       },
     },
     first: 1,
   })
 
   if (!documentationTeam.nodes.length) {
-    console.log("Please add Documentation team in Linear first then try again")
+    console.log("Please add DX team in Linear first then try again")
     process.exit(1)
   }
 
@@ -149,14 +138,25 @@ async function main() {
 
   if (!freshnessCheckLabel.nodes.length) {
     console.log(
-      "Please add freshness check label in Linear under the documentation team first then try again"
+      "Please add freshness check label in Linear under the DX team first then try again"
     )
     process.exit(1)
   }
 
   freshnessCheckLabelId = freshnessCheckLabel.nodes[0].id
 
-  await scanDirectory(repoPath)
+  await scanDirectory(
+    path.join(__dirname, "..", "..", "..", "..", "apps", "book", "app")
+  )
+  await scanDirectory(
+    path.join(__dirname, "..", "..", "..", "..", "apps", "resources", "app")
+  )
+  await scanDirectory(
+    path.join(__dirname, "..", "..", "..", "..", "apps", "user-guide", "app")
+  )
+  await scanDirectory(
+    path.join(__dirname, "..", "..", "..", "..", "apps", "ui", "src", "content", "docs")
+  )
 }
 
 function getMonthDifference(startDate: Date, endDate: Date) {

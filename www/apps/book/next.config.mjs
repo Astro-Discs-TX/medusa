@@ -8,12 +8,32 @@ import {
   pageNumberRehypePlugin,
   crossProjectLinksPlugin,
 } from "remark-rehype-plugins"
-import { sidebar } from "./sidebar.mjs"
+import path from "path"
+import redirects from "./utils/redirects.mjs"
+import { generatedSidebars } from "./generated/sidebar.mjs"
 
 const withMDX = mdx({
   extension: /\.mdx?$/,
   options: {
     rehypePlugins: [
+      [
+        brokenLinkCheckerPlugin,
+        {
+          crossProjects: {
+            resources: {
+              projectPath: path.resolve("..", "resources"),
+              hasGeneratedSlugs: true,
+            },
+            ui: {
+              projectPath: path.resolve("..", "ui"),
+              contentPath: "src/content/docs",
+            },
+            "user-guide": {
+              projectPath: path.resolve("..", "user-guide"),
+            },
+          },
+        },
+      ],
       [
         crossProjectLinksPlugin,
         {
@@ -37,7 +57,6 @@ const withMDX = mdx({
             process.env.VERCEL_ENV === "production",
         },
       ],
-      [brokenLinkCheckerPlugin],
       [localLinksRehypePlugin],
       [
         rehypeMdxCodeProps,
@@ -63,7 +82,7 @@ const withMDX = mdx({
       [
         pageNumberRehypePlugin,
         {
-          sidebar: sidebar,
+          sidebar: generatedSidebars[0].items,
         },
       ],
     ],
@@ -136,43 +155,25 @@ const nextConfig = {
           }/v1/:path*`,
           basePath: false,
         },
-        // TODO comment out once we have the user guide published
-        // {
-        //   source: "/user-guide",
-        //   destination: `${process.env.NEXT_PUBLIC_USER_GUIDE_URL}/user-guide`,
-        //   basePath: false,
-        // },
-        // {
-        //   source: "/user-guide/:path*",
-        //   destination: `${process.env.NEXT_PUBLIC_USER_GUIDE_URL}/user-guide/:path*`,
-        //   basePath: false,
-        // },
+        {
+          source: "/user-guide",
+          destination: `${process.env.NEXT_PUBLIC_USER_GUIDE_URL || "https://localhost:3001"}/user-guide`,
+          basePath: false,
+        },
+        {
+          source: "/user-guide/:path*",
+          destination: `${process.env.NEXT_PUBLIC_USER_GUIDE_URL || "https://localhost:3001"}/user-guide/:path*`,
+          basePath: false,
+        },
       ],
     }
   },
-  async redirects() {
-    return [
-      {
-        source: "/v2/:path*",
-        destination: "/:path*",
-        permanent: true,
-      },
-      {
-        source: "/recipes/:path*",
-        destination: "/resources/recipes",
-        permanent: true
-      },
-      {
-        source: "/plugins/:path*",
-        destination: "/v1/plugins/:path*",
-        permanent: true
-      },
-      {
-        source: "/medusa-react/:path*",
-        destination: "/v1/medusa-react/:path*",
-        permanent: true
-      }
-    ]
+  redirects,
+  outputFileTracingExcludes: {
+    "*": ["node_modules/@medusajs/icons"],
+  },
+  experimental: {
+    optimizePackageImports: ["@medusajs/icons", "@medusajs/ui"],
   },
 }
 

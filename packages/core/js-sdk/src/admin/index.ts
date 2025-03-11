@@ -5,6 +5,7 @@ import { Claim } from "./claim"
 import { Currency } from "./currency"
 import { Customer } from "./customer"
 import { CustomerGroup } from "./customer-group"
+import { DraftOrder } from "./draft-order"
 import { Exchange } from "./exchange"
 import { Fulfillment } from "./fulfillment"
 import { FulfillmentProvider } from "./fulfillment-provider"
@@ -42,46 +43,173 @@ import { User } from "./user"
 import { WorkflowExecution } from "./workflow-execution"
 
 export class Admin {
+  /**
+   * @tags user
+   */
   public invite: Invite
+  /**
+   * @tags customer
+   */
   public customer: Customer
+  /**
+   * @tags product
+   */
   public productCollection: ProductCollection
+  /**
+   * @tags product
+   */
   public productCategory: ProductCategory
+  /**
+   * @tags pricing
+   */
   public priceList: PriceList
+  /**
+   * @tags pricing
+   */
   public pricePreference: PricePreference
+  /**
+   * @tags product
+   */
   public product: Product
+  /**
+   * @tags product
+   */
   public productType: ProductType
+  /**
+   * @tags file
+   */
   public upload: Upload
+  /**
+   * @tags region
+   */
   public region: Region
+  /**
+   * @tags order
+   */
   public returnReason: ReturnReason
+  /**
+   * @tags stock location
+   */
   public stockLocation: StockLocation
+  /**
+   * @tags sales channel
+   */
   public salesChannel: SalesChannel
+  /**
+   * @tags fulfillment
+   */
   public fulfillmentSet: FulfillmentSet
+  /**
+   * @tags fulfillment
+   */
   public fulfillment: Fulfillment
+  /**
+   * @tags fulfillment
+   */
   public fulfillmentProvider: FulfillmentProvider
+  /**
+   * @tags fulfillment
+   */
   public shippingOption: ShippingOption
+  /**
+   * @tags fulfillment
+   */
   public shippingProfile: ShippingProfile
+  /**
+   * @tags inventory
+   */
   public inventoryItem: InventoryItem
+  /**
+   * @tags notification
+   */
   public notification: Notification
+  /**
+   * @tags order
+   */
   public order: Order
+  /**
+   * @tags order
+   */
+  public draftOrder: DraftOrder
+  /**
+   * @tags order
+   */
   public orderEdit: OrderEdit
+  /**
+   * @tags order
+   */
   public return: Return
+  /**
+   * @tags order
+   */
   public claim: Claim
+  /**
+   * @tags order
+   */
   public exchange: Exchange
+  /**
+   * @tags tax
+   */
   public taxRate: TaxRate
+  /**
+   * @tags tax
+   */
   public taxRegion: TaxRegion
+  /**
+   * @tags store
+   */
   public store: Store
+  /**
+   * @tags product
+   */
   public productTag: ProductTag
+  /**
+   * @tags user
+   */
   public user: User
+  /**
+   * @tags currency
+   */
   public currency: Currency
+  /**
+   * @tags payment
+   */
   public payment: Payment
+  /**
+   * @tags product
+   */
   public productVariant: ProductVariant
+  /**
+   * @tags order
+   */
   public refundReason: RefundReason
+  /**
+   * @tags payment
+   */
   public paymentCollection: PaymentCollection
+  /**
+   * @tags api key
+   */
   public apiKey: ApiKey
+  /**
+   * @tags workflow
+   */
   public workflowExecution: WorkflowExecution
+  /**
+   * @tags inventory
+   */
   public reservation: Reservation
+  /**
+   * @tags customer
+   */
   public customerGroup: CustomerGroup
+  /**
+   * @tags promotion
+   */
   public promotion: Promotion
+  /**
+   * @tags promotion
+   */
   public campaign: Campaign
 
   constructor(client: Client) {
@@ -106,6 +234,7 @@ export class Admin {
     this.inventoryItem = new InventoryItem(client)
     this.notification = new Notification(client)
     this.order = new Order(client)
+    this.draftOrder = new DraftOrder(client)
     this.orderEdit = new OrderEdit(client)
     this.return = new Return(client)
     this.claim = new Claim(client)

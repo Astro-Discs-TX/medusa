@@ -1,19 +1,12 @@
 "use client"
 
 import { ExpandedDocument, SecuritySchemeObject } from "@/types/openapi"
-import {
-  ReactNode,
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-} from "react"
-import { SidebarItem, SidebarItemSections } from "types"
+import { ReactNode, createContext, useContext, useEffect, useMemo } from "react"
+import { Sidebar } from "types"
 import getSectionId from "../utils/get-section-id"
 import getTagChildSidebarItems from "../utils/get-tag-child-sidebar-items"
-import { usePathname, useRouter } from "next/navigation"
-import { usePrevious, useSidebar } from "docs-ui"
+import { useRouter } from "next/navigation"
+import { useSidebar } from "docs-ui"
 
 type BaseSpecsContextType = {
   baseSpecs: ExpandedDocument | undefined
@@ -29,10 +22,8 @@ type BaseSpecsProviderProps = {
 
 const BaseSpecsProvider = ({ children, baseSpecs }: BaseSpecsProviderProps) => {
   const router = useRouter()
-  const { items, activePath, addItems, setActivePath, resetItems } =
+  const { activePath, addItems, setActivePath, resetItems, shownSidebar } =
     useSidebar()
-  const pathname = usePathname()
-  const prevPathName = usePrevious(pathname)
 
   const getSecuritySchema = (
     securityName: string
@@ -58,7 +49,7 @@ const BaseSpecsProvider = ({ children, baseSpecs }: BaseSpecsProviderProps) => {
       return []
     }
 
-    const itemsToAdd: SidebarItem[] = [
+    const itemsToAdd: Sidebar.SidebarItem[] = [
       {
         type: "separator",
       },
@@ -77,6 +68,7 @@ const BaseSpecsProvider = ({ children, baseSpecs }: BaseSpecsProviderProps) => {
         children: childItems,
         loaded: childItems.length > 0,
         showLoadingIfEmpty: true,
+        initialOpen: false,
         onOpen: () => {
           if (location.hash !== tagPathName) {
             router.push(`#${tagPathName}`, {
@@ -94,14 +86,14 @@ const BaseSpecsProvider = ({ children, baseSpecs }: BaseSpecsProviderProps) => {
   }, [baseSpecs])
 
   useEffect(() => {
-    if (!itemsToAdd.length) {
+    if (!itemsToAdd.length || !shownSidebar) {
       return
     }
 
     addItems(itemsToAdd, {
-      section: SidebarItemSections.DEFAULT,
+      sidebar_id: shownSidebar.sidebar_id,
     })
-  }, [itemsToAdd])
+  }, [itemsToAdd, shownSidebar?.sidebar_id])
 
   useEffect(() => {
     return () => {

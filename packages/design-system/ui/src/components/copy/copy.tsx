@@ -8,8 +8,8 @@ import {
   SquareTwoStack,
   SquareTwoStackMini,
 } from "@medusajs/icons"
-import { Slot } from "@radix-ui/react-slot"
 import copy from "copy-to-clipboard"
+import { Slot } from "radix-ui"
 import React, { useState } from "react"
 
 type CopyProps = React.HTMLAttributes<HTMLButtonElement> & {
@@ -81,7 +81,7 @@ const Copy = React.forwardRef<HTMLButtonElement, CopyProps>(
 
     const isDefault = isDefaultVariant(variant)
 
-    const Component = asChild ? Slot : "button"
+    const Component = asChild ? Slot.Root : "button"
 
     return (
       <Tooltip content={text} open={done || open} onOpenChange={setOpen}>
@@ -89,7 +89,10 @@ const Copy = React.forwardRef<HTMLButtonElement, CopyProps>(
           ref={ref}
           aria-label="Copy code snippet"
           type="button"
-          className={clx("text-ui-code-icon h-fit w-fit", className)}
+          className={clx(
+            "h-fit w-fit",
+            className
+          )}
           onClick={copyToClipboard}
           {...props}
         >
@@ -97,14 +100,14 @@ const Copy = React.forwardRef<HTMLButtonElement, CopyProps>(
             children
           ) : done ? (
             isDefault ? (
-              <CheckCircleSolid />
+              <CheckCircleSolid className="text-ui-fg-subtle" />
             ) : (
-              <CheckCircleMiniSolid />
+              <CheckCircleMiniSolid className="text-ui-fg-subtle" />
             )
           ) : isDefault ? (
-            <SquareTwoStack />
+            <SquareTwoStack className="text-ui-fg-subtle" />
           ) : (
-            <SquareTwoStackMini />
+            <SquareTwoStackMini className="text-ui-fg-subtle" />
           )}
         </Component>
       </Tooltip>

@@ -8,11 +8,9 @@ In this chapter, you'll learn about Medusa's testing tools and how to install an
 
 ## @medusajs/test-utils Package
 
-Medusa provides a `@medusajs/test-utils` package with utility tools to create integration tests for your custom API routes, modules, or other Medusa customizations.
+Medusa provides a Testing Framework to create integration tests for your custom API routes, modules, or other Medusa customizations.
 
-### Install @medusajs/test-utils
-
-To use the `@medusajs/test-utils` package, install it as a `devDependency`:
+To use the Testing Framework, install `@medusajs/test-utils` as a `devDependency`:
 
 ```bash npm2yarn
 npm install --save-dev @medusajs/test-utils@latest
@@ -23,14 +21,6 @@ npm install --save-dev @medusajs/test-utils@latest
 ## Install and Configure Jest
 
 Writing tests with `@medusajs/test-utils`'s tools requires installing and configuring Jest in your project.
-
-{/* TODO remove this note at some point in the future */}
-
-<Note>
-
-If your Medusa project was created after September 3rd, Jest is already installed and configured.
-
-</Note>
 
 Run the following command to install the required Jest dependencies:
 
@@ -58,6 +48,7 @@ module.exports = {
   testEnvironment: "node",
   moduleFileExtensions: ["js", "ts", "json"],
   modulePathIgnorePatterns: ["dist/"],
+  setupFiles: ["./integration-tests/setup.js"],
 }
 
 if (process.env.TEST_TYPE === "integration:http") {
@@ -67,6 +58,14 @@ if (process.env.TEST_TYPE === "integration:http") {
 } else if (process.env.TEST_TYPE === "unit") {
   module.exports.testMatch = ["**/src/**/__tests__/**/*.unit.spec.[jt]s"]
 }
+```
+
+Next, create the `integration-tests/setup.js` file with the following content:
+
+```js title="integration-tests/setup.js"
+const { MetadataStorage } = require("@mikro-orm/core")
+
+MetadataStorage.clear()
 ```
 
 ---
@@ -92,7 +91,7 @@ You now have two commands:
 
 <Note>
 
-Medusa provides utility tools for integration tests only. You can write unit tests using Jest.
+Medusa's Testing Framework works for integration tests only. You can write unit tests using Jest.
 
 </Note>
 

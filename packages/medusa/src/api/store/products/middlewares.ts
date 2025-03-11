@@ -1,4 +1,7 @@
-import { validateAndTransformQuery } from "@medusajs/framework"
+import {
+  featureFlagRouter,
+  validateAndTransformQuery,
+} from "@medusajs/framework"
 import {
   applyDefaultFilters,
   applyParamsAsFilters,
@@ -6,7 +9,6 @@ import {
   clearFiltersByKey,
   maybeApplyLinkFilter,
   MiddlewareRoute,
-  setContext,
 } from "@medusajs/framework/http"
 import { isPresent, ProductStatus } from "@medusajs/framework/utils"
 import {
@@ -15,9 +17,9 @@ import {
   setPricingContext,
   setTaxContext,
 } from "../../utils/middlewares"
-import { maybeApplyStockLocationId } from "./helpers"
 import * as QueryConfig from "./query-config"
 import { StoreGetProductsParams } from "./validators"
+import IndexEngineFeatureFlag from "../../../loaders/feature-flags/index-engine"
 
 export const storeProductRoutesMiddlewares: MiddlewareRoute[] = [
   {
@@ -32,14 +34,17 @@ export const storeProductRoutesMiddlewares: MiddlewareRoute[] = [
         QueryConfig.listProductQueryConfig
       ),
       filterByValidSalesChannels(),
-      setContext({
-        stock_location_id: maybeApplyStockLocationId,
-      }),
-      maybeApplyLinkFilter({
-        entryPoint: "product_sales_channel",
-        resourceId: "product_id",
-        filterableField: "sales_channel_id",
-      }),
+      (req, res, next) => {
+        if (featureFlagRouter.isFeatureEnabled(IndexEngineFeatureFlag.key)) {
+          return next()
+        }
+
+        return maybeApplyLinkFilter({
+          entryPoint: "product_sales_channel",
+          resourceId: "product_id",
+          filterableField: "sales_channel_id",
+        })(req, res, next)
+      },
       applyDefaultFilters({
         status: ProductStatus.PUBLISHED,
         // TODO: the type here seems off and the implementation does not take into account $and and $or possible filters. Might be worth re working (original type used here was StoreGetProductsParamsType)
@@ -73,9 +78,6 @@ export const storeProductRoutesMiddlewares: MiddlewareRoute[] = [
       ),
       applyParamsAsFilters({ id: "id" }),
       filterByValidSalesChannels(),
-      setContext({
-        stock_location_id: maybeApplyStockLocationId,
-      }),
       maybeApplyLinkFilter({
         entryPoint: "product_sales_channel",
         resourceId: "product_id",

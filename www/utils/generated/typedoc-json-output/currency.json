@@ -1,12 +1,12 @@
 {
-	"id": 2032,
+	"id": 2493,
 	"name": "currency",
 	"variant": "project",
 	"kind": 1,
 	"flags": {},
 	"children": [
 		{
-			"id": 2134,
+			"id": 2596,
 			"name": "FindConfigOrder",
 			"variant": "declaration",
 			"kind": 2097152,
@@ -19,24 +19,45 @@
 					}
 				]
 			},
+			"sources": [
+				{
+					"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/common/common.ts",
+					"line": 55,
+					"character": 12
+				}
+			],
 			"type": {
 				"type": "reflection",
 				"declaration": {
-					"id": 2135,
+					"id": 2597,
 					"name": "__type",
 					"variant": "declaration",
 					"kind": 65536,
 					"flags": {},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/common/common.ts",
+							"line": 55,
+							"character": 30
+						}
+					],
 					"indexSignatures": [
 						{
-							"id": 2136,
+							"id": 2598,
 							"name": "__index",
 							"variant": "signature",
 							"kind": 8192,
 							"flags": {},
+							"sources": [
+								{
+									"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/common/common.ts",
+									"line": 56,
+									"character": 2
+								}
+							],
 							"parameters": [
 								{
-									"id": 2137,
+									"id": 2599,
 									"name": "Key",
 									"variant": "param",
 									"kind": 32768,
@@ -51,14 +72,6 @@
 								"type": "union",
 								"types": [
 									{
-										"type": "literal",
-										"value": "ASC"
-									},
-									{
-										"type": "literal",
-										"value": "DESC"
-									},
-									{
 										"type": "intersection",
 										"types": [
 											{
@@ -68,7 +81,7 @@
 											{
 												"type": "reflection",
 												"declaration": {
-													"id": 2138,
+													"id": 2600,
 													"name": "__type",
 													"variant": "declaration",
 													"kind": 65536,
@@ -79,9 +92,17 @@
 									},
 									{
 										"type": "reference",
-										"target": 2134,
+										"target": 2596,
 										"name": "FindConfigOrder",
 										"package": "@medusajs/types"
+									},
+									{
+										"type": "literal",
+										"value": "ASC"
+									},
+									{
+										"type": "literal",
+										"value": "DESC"
 									}
 								]
 							}
@@ -91,7 +112,7 @@
 			}
 		},
 		{
-			"id": 2076,
+			"id": 2537,
 			"name": "FindConfig",
 			"variant": "declaration",
 			"kind": 256,
@@ -114,7 +135,7 @@
 			},
 			"children": [
 				{
-					"id": 2077,
+					"id": 2538,
 					"name": "select",
 					"variant": "declaration",
 					"kind": 1024,
@@ -129,21 +150,43 @@
 							}
 						]
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/common/common.ts",
+							"line": 69,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "array",
 						"elementType": {
 							"type": "union",
 							"types": [
 								{
-									"type": "intrinsic",
-									"name": "string"
+									"type": "intersection",
+									"types": [
+										{
+											"type": "intrinsic",
+											"name": "string"
+										},
+										{
+											"type": "reflection",
+											"declaration": {
+												"id": 2539,
+												"name": "__type",
+												"variant": "declaration",
+												"kind": 65536,
+												"flags": {}
+											}
+										}
+									]
 								},
 								{
 									"type": "typeOperator",
 									"operator": "keyof",
 									"target": {
 										"type": "reference",
-										"target": 2085,
+										"target": 2547,
 										"name": "Entity",
 										"package": "@medusajs/types",
 										"qualifiedName": "FindConfig.Entity",
@@ -155,7 +198,7 @@
 					}
 				},
 				{
-					"id": 2078,
+					"id": 2540,
 					"name": "skip",
 					"variant": "declaration",
 					"kind": 1024,
@@ -170,6 +213,13 @@
 							}
 						]
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/common/common.ts",
+							"line": 74,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "union",
 						"types": [
@@ -185,7 +235,7 @@
 					}
 				},
 				{
-					"id": 2079,
+					"id": 2541,
 					"name": "take",
 					"variant": "declaration",
 					"kind": 1024,
@@ -200,6 +250,13 @@
 							}
 						]
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/common/common.ts",
+							"line": 79,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "union",
 						"types": [
@@ -215,7 +272,7 @@
 					}
 				},
 				{
-					"id": 2080,
+					"id": 2542,
 					"name": "relations",
 					"variant": "declaration",
 					"kind": 1024,
@@ -230,6 +287,13 @@
 							}
 						]
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/common/common.ts",
+							"line": 84,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "array",
 						"elementType": {
@@ -239,7 +303,7 @@
 					}
 				},
 				{
-					"id": 2081,
+					"id": 2543,
 					"name": "order",
 					"variant": "declaration",
 					"kind": 1024,
@@ -270,15 +334,22 @@
 							}
 						]
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/common/common.ts",
+							"line": 90,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "reference",
-						"target": 2134,
+						"target": 2596,
 						"name": "FindConfigOrder",
 						"package": "@medusajs/types"
 					}
 				},
 				{
-					"id": 2082,
+					"id": 2544,
 					"name": "withDeleted",
 					"variant": "declaration",
 					"kind": 1024,
@@ -301,13 +372,20 @@
 							}
 						]
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/common/common.ts",
+							"line": 96,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "intrinsic",
 						"name": "boolean"
 					}
 				},
 				{
-					"id": 2083,
+					"id": 2545,
 					"name": "filters",
 					"variant": "declaration",
 					"kind": 1024,
@@ -322,6 +400,13 @@
 							}
 						]
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/common/common.ts",
+							"line": 101,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "reference",
 						"target": {
@@ -343,7 +428,7 @@
 					}
 				},
 				{
-					"id": 2084,
+					"id": 2546,
 					"name": "options",
 					"variant": "declaration",
 					"kind": 1024,
@@ -358,6 +443,13 @@
 							}
 						]
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/common/common.ts",
+							"line": 106,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "reference",
 						"target": {
@@ -383,20 +475,27 @@
 				{
 					"title": "Properties",
 					"children": [
-						2077,
-						2078,
-						2079,
-						2080,
-						2081,
-						2082,
-						2083,
-						2084
+						2538,
+						2540,
+						2541,
+						2542,
+						2543,
+						2544,
+						2545,
+						2546
 					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/common/common.ts",
+					"line": 65,
+					"character": 17
 				}
 			],
 			"typeParameters": [
 				{
-					"id": 2085,
+					"id": 2547,
 					"name": "Entity",
 					"variant": "typeParam",
 					"kind": 131072,
@@ -405,7 +504,7 @@
 			]
 		},
 		{
-			"id": 2086,
+			"id": 2548,
 			"name": "CurrencyDTO",
 			"variant": "declaration",
 			"kind": 256,
@@ -420,7 +519,7 @@
 			},
 			"children": [
 				{
-					"id": 2087,
+					"id": 2549,
 					"name": "code",
 					"variant": "declaration",
 					"kind": 1024,
@@ -444,13 +543,20 @@
 							}
 						]
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/currency/common/currency.ts",
+							"line": 15,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "intrinsic",
 						"name": "string"
 					}
 				},
 				{
-					"id": 2088,
+					"id": 2550,
 					"name": "symbol",
 					"variant": "declaration",
 					"kind": 1024,
@@ -474,13 +580,20 @@
 							}
 						]
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/currency/common/currency.ts",
+							"line": 22,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "intrinsic",
 						"name": "string"
 					}
 				},
 				{
-					"id": 2089,
+					"id": 2551,
 					"name": "symbol_native",
 					"variant": "declaration",
 					"kind": 1024,
@@ -504,13 +617,20 @@
 							}
 						]
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/currency/common/currency.ts",
+							"line": 29,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "intrinsic",
 						"name": "string"
 					}
 				},
 				{
-					"id": 2090,
+					"id": 2552,
 					"name": "name",
 					"variant": "declaration",
 					"kind": 1024,
@@ -534,6 +654,13 @@
 							}
 						]
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/currency/common/currency.ts",
+							"line": 36,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "intrinsic",
 						"name": "string"
@@ -544,16 +671,23 @@
 				{
 					"title": "Properties",
 					"children": [
-						2087,
-						2088,
-						2089,
-						2090
+						2549,
+						2550,
+						2551,
+						2552
 					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/currency/common/currency.ts",
+					"line": 8,
+					"character": 17
 				}
 			]
 		},
 		{
-			"id": 2104,
+			"id": 2566,
 			"name": "FilterableCurrencyProps",
 			"variant": "declaration",
 			"kind": 256,
@@ -568,7 +702,7 @@
 			},
 			"children": [
 				{
-					"id": 2105,
+					"id": 2567,
 					"name": "q",
 					"variant": "declaration",
 					"kind": 1024,
@@ -583,13 +717,20 @@
 							}
 						]
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/currency/common/currency.ts",
+							"line": 49,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "intrinsic",
 						"name": "string"
 					}
 				},
 				{
-					"id": 2106,
+					"id": 2568,
 					"name": "code",
 					"variant": "declaration",
 					"kind": 1024,
@@ -604,6 +745,13 @@
 							}
 						]
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/currency/common/currency.ts",
+							"line": 53,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "array",
 						"elementType": {
@@ -613,7 +761,7 @@
 					}
 				},
 				{
-					"id": 2107,
+					"id": 2569,
 					"name": "$and",
 					"variant": "declaration",
 					"kind": 1024,
@@ -629,6 +777,13 @@
 							}
 						]
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/dal/index.ts",
+							"line": 15,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "array",
 						"elementType": {
@@ -636,17 +791,17 @@
 							"types": [
 								{
 									"type": "reference",
-									"target": 2104,
+									"target": 2566,
 									"name": "FilterableCurrencyProps",
 									"package": "@medusajs/types"
 								},
 								{
 									"type": "reference",
-									"target": 2153,
+									"target": 2615,
 									"typeArguments": [
 										{
 											"type": "reference",
-											"target": 2104,
+											"target": 2566,
 											"name": "FilterableCurrencyProps",
 											"package": "@medusajs/types"
 										}
@@ -659,12 +814,12 @@
 					},
 					"inheritedFrom": {
 						"type": "reference",
-						"target": 2154,
+						"target": 2616,
 						"name": "BaseFilterable.$and"
 					}
 				},
 				{
-					"id": 2108,
+					"id": 2570,
 					"name": "$or",
 					"variant": "declaration",
 					"kind": 1024,
@@ -680,6 +835,13 @@
 							}
 						]
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/dal/index.ts",
+							"line": 20,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "array",
 						"elementType": {
@@ -687,17 +849,17 @@
 							"types": [
 								{
 									"type": "reference",
-									"target": 2104,
+									"target": 2566,
 									"name": "FilterableCurrencyProps",
 									"package": "@medusajs/types"
 								},
 								{
 									"type": "reference",
-									"target": 2153,
+									"target": 2615,
 									"typeArguments": [
 										{
 											"type": "reference",
-											"target": 2104,
+											"target": 2566,
 											"name": "FilterableCurrencyProps",
 											"package": "@medusajs/types"
 										}
@@ -710,7 +872,7 @@
 					},
 					"inheritedFrom": {
 						"type": "reference",
-						"target": 2155,
+						"target": 2617,
 						"name": "BaseFilterable.$or"
 					}
 				}
@@ -719,21 +881,28 @@
 				{
 					"title": "Properties",
 					"children": [
-						2105,
-						2106,
-						2107,
-						2108
+						2567,
+						2568,
+						2569,
+						2570
 					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/currency/common/currency.ts",
+					"line": 44,
+					"character": 17
 				}
 			],
 			"extendedTypes": [
 				{
 					"type": "reference",
-					"target": 2153,
+					"target": 2615,
 					"typeArguments": [
 						{
 							"type": "reference",
-							"target": 2104,
+							"target": 2566,
 							"name": "FilterableCurrencyProps",
 							"package": "@medusajs/types"
 						}
@@ -744,7 +913,7 @@
 			]
 		},
 		{
-			"id": 2033,
+			"id": 2494,
 			"name": "ICurrencyModuleService",
 			"variant": "declaration",
 			"kind": 256,
@@ -759,14 +928,22 @@
 			},
 			"children": [
 				{
-					"id": 2034,
+					"id": 2495,
 					"name": "retrieveCurrency",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
+					"sources": [
+						{
+							"fileName": "currency/service.ts",
+							"line": 23,
+							"character": 2,
+							"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/types/src/currency/service.ts#L23"
+						}
+					],
 					"signatures": [
 						{
-							"id": 2035,
+							"id": 2496,
 							"name": "retrieveCurrency",
 							"variant": "signature",
 							"kind": 4096,
@@ -799,9 +976,17 @@
 									}
 								]
 							},
+							"sources": [
+								{
+									"fileName": "currency/service.ts",
+									"line": 23,
+									"character": 2,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/types/src/currency/service.ts#L23"
+								}
+							],
 							"parameters": [
 								{
-									"id": 2036,
+									"id": 2497,
 									"name": "code",
 									"variant": "param",
 									"kind": 32768,
@@ -820,7 +1005,7 @@
 									}
 								},
 								{
-									"id": 2037,
+									"id": 2498,
 									"name": "config",
 									"variant": "param",
 									"kind": 32768,
@@ -853,11 +1038,11 @@
 									},
 									"type": {
 										"type": "reference",
-										"target": 2076,
+										"target": 2537,
 										"typeArguments": [
 											{
 												"type": "reference",
-												"target": 2086,
+												"target": 2548,
 												"name": "CurrencyDTO",
 												"package": "@medusajs/types"
 											}
@@ -867,7 +1052,7 @@
 									}
 								},
 								{
-									"id": 2038,
+									"id": 2499,
 									"name": "sharedContext",
 									"variant": "param",
 									"kind": 32768,
@@ -884,7 +1069,7 @@
 									},
 									"type": {
 										"type": "reference",
-										"target": 2091,
+										"target": 2553,
 										"name": "Context",
 										"package": "@medusajs/types"
 									}
@@ -899,7 +1084,7 @@
 								"typeArguments": [
 									{
 										"type": "reference",
-										"target": 2086,
+										"target": 2548,
 										"name": "CurrencyDTO",
 										"package": "@medusajs/types"
 									}
@@ -911,14 +1096,22 @@
 					]
 				},
 				{
-					"id": 2039,
+					"id": 2500,
 					"name": "listCurrencies",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
+					"sources": [
+						{
+							"fileName": "currency/service.ts",
+							"line": 63,
+							"character": 2,
+							"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/types/src/currency/service.ts#L63"
+						}
+					],
 					"signatures": [
 						{
-							"id": 2040,
+							"id": 2501,
 							"name": "listCurrencies",
 							"variant": "signature",
 							"kind": 4096,
@@ -995,9 +1188,17 @@
 									}
 								]
 							},
+							"sources": [
+								{
+									"fileName": "currency/service.ts",
+									"line": 63,
+									"character": 2,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/types/src/currency/service.ts#L63"
+								}
+							],
 							"parameters": [
 								{
-									"id": 2041,
+									"id": 2502,
 									"name": "filters",
 									"variant": "param",
 									"kind": 32768,
@@ -1014,13 +1215,13 @@
 									},
 									"type": {
 										"type": "reference",
-										"target": 2104,
+										"target": 2566,
 										"name": "FilterableCurrencyProps",
 										"package": "@medusajs/types"
 									}
 								},
 								{
-									"id": 2042,
+									"id": 2503,
 									"name": "config",
 									"variant": "param",
 									"kind": 32768,
@@ -1053,11 +1254,11 @@
 									},
 									"type": {
 										"type": "reference",
-										"target": 2076,
+										"target": 2537,
 										"typeArguments": [
 											{
 												"type": "reference",
-												"target": 2086,
+												"target": 2548,
 												"name": "CurrencyDTO",
 												"package": "@medusajs/types"
 											}
@@ -1067,7 +1268,7 @@
 									}
 								},
 								{
-									"id": 2043,
+									"id": 2504,
 									"name": "sharedContext",
 									"variant": "param",
 									"kind": 32768,
@@ -1084,7 +1285,7 @@
 									},
 									"type": {
 										"type": "reference",
-										"target": 2091,
+										"target": 2553,
 										"name": "Context",
 										"package": "@medusajs/types"
 									}
@@ -1101,7 +1302,7 @@
 										"type": "array",
 										"elementType": {
 											"type": "reference",
-											"target": 2086,
+											"target": 2548,
 											"name": "CurrencyDTO",
 											"package": "@medusajs/types"
 										}
@@ -1114,14 +1315,22 @@
 					]
 				},
 				{
-					"id": 2044,
+					"id": 2505,
 					"name": "listAndCountCurrencies",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
+					"sources": [
+						{
+							"fileName": "currency/service.ts",
+							"line": 105,
+							"character": 2,
+							"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/types/src/currency/service.ts#L105"
+						}
+					],
 					"signatures": [
 						{
-							"id": 2045,
+							"id": 2506,
 							"name": "listAndCountCurrencies",
 							"variant": "signature",
 							"kind": 4096,
@@ -1198,9 +1407,17 @@
 									}
 								]
 							},
+							"sources": [
+								{
+									"fileName": "currency/service.ts",
+									"line": 105,
+									"character": 2,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/types/src/currency/service.ts#L105"
+								}
+							],
 							"parameters": [
 								{
-									"id": 2046,
+									"id": 2507,
 									"name": "filters",
 									"variant": "param",
 									"kind": 32768,
@@ -1217,13 +1434,13 @@
 									},
 									"type": {
 										"type": "reference",
-										"target": 2104,
+										"target": 2566,
 										"name": "FilterableCurrencyProps",
 										"package": "@medusajs/types"
 									}
 								},
 								{
-									"id": 2047,
+									"id": 2508,
 									"name": "config",
 									"variant": "param",
 									"kind": 32768,
@@ -1256,11 +1473,11 @@
 									},
 									"type": {
 										"type": "reference",
-										"target": 2076,
+										"target": 2537,
 										"typeArguments": [
 											{
 												"type": "reference",
-												"target": 2086,
+												"target": 2548,
 												"name": "CurrencyDTO",
 												"package": "@medusajs/types"
 											}
@@ -1270,7 +1487,7 @@
 									}
 								},
 								{
-									"id": 2048,
+									"id": 2509,
 									"name": "sharedContext",
 									"variant": "param",
 									"kind": 32768,
@@ -1287,7 +1504,7 @@
 									},
 									"type": {
 										"type": "reference",
-										"target": 2091,
+										"target": 2553,
 										"name": "Context",
 										"package": "@medusajs/types"
 									}
@@ -1307,7 +1524,7 @@
 												"type": "array",
 												"elementType": {
 													"type": "reference",
-													"target": 2086,
+													"target": 2548,
 													"name": "CurrencyDTO",
 													"package": "@medusajs/types"
 												}
@@ -1330,23 +1547,31 @@
 				{
 					"title": "Methods",
 					"children": [
-						2034,
-						2039,
-						2044
+						2495,
+						2500,
+						2505
 					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "currency/service.ts",
+					"line": 9,
+					"character": 17,
+					"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/types/src/currency/service.ts#L9"
 				}
 			],
 			"extendedTypes": [
 				{
 					"type": "reference",
-					"target": 2062,
+					"target": 2523,
 					"name": "IModuleService",
 					"package": "@medusajs/types"
 				}
 			]
 		},
 		{
-			"id": 2153,
+			"id": 2615,
 			"name": "BaseFilterable",
 			"variant": "declaration",
 			"kind": 256,
@@ -1361,7 +1586,7 @@
 			},
 			"children": [
 				{
-					"id": 2154,
+					"id": 2616,
 					"name": "$and",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1376,6 +1601,13 @@
 							}
 						]
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/dal/index.ts",
+							"line": 15,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "array",
 						"elementType": {
@@ -1383,11 +1615,11 @@
 							"types": [
 								{
 									"type": "reference",
-									"target": 2153,
+									"target": 2615,
 									"typeArguments": [
 										{
 											"type": "reference",
-											"target": 2156,
+											"target": 2618,
 											"name": "T",
 											"package": "@medusajs/types",
 											"qualifiedName": "BaseFilterable.T",
@@ -1399,7 +1631,7 @@
 								},
 								{
 									"type": "reference",
-									"target": 2156,
+									"target": 2618,
 									"name": "T",
 									"package": "@medusajs/types",
 									"qualifiedName": "BaseFilterable.T",
@@ -1410,7 +1642,7 @@
 					}
 				},
 				{
-					"id": 2155,
+					"id": 2617,
 					"name": "$or",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1425,6 +1657,13 @@
 							}
 						]
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/dal/index.ts",
+							"line": 20,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "array",
 						"elementType": {
@@ -1432,11 +1671,11 @@
 							"types": [
 								{
 									"type": "reference",
-									"target": 2153,
+									"target": 2615,
 									"typeArguments": [
 										{
 											"type": "reference",
-											"target": 2156,
+											"target": 2618,
 											"name": "T",
 											"package": "@medusajs/types",
 											"qualifiedName": "BaseFilterable.T",
@@ -1448,7 +1687,7 @@
 								},
 								{
 									"type": "reference",
-									"target": 2156,
+									"target": 2618,
 									"name": "T",
 									"package": "@medusajs/types",
 									"qualifiedName": "BaseFilterable.T",
@@ -1463,14 +1702,21 @@
 				{
 					"title": "Properties",
 					"children": [
-						2154,
-						2155
+						2616,
+						2617
 					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/dal/index.ts",
+					"line": 11,
+					"character": 17
 				}
 			],
 			"typeParameters": [
 				{
-					"id": 2156,
+					"id": 2618,
 					"name": "T",
 					"variant": "typeParam",
 					"kind": 131072,
@@ -1480,17 +1726,24 @@
 			"extendedBy": [
 				{
 					"type": "reference",
-					"target": 2104,
+					"target": 2566,
 					"name": "FilterableCurrencyProps"
 				}
 			]
 		},
 		{
-			"id": 2222,
+			"id": 2684,
 			"name": "EventMetadata",
 			"variant": "declaration",
 			"kind": 2097152,
 			"flags": {},
+			"sources": [
+				{
+					"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/event-bus/common.ts",
+					"line": 14,
+					"character": 12
+				}
+			],
 			"type": {
 				"type": "intersection",
 				"types": [
@@ -1516,20 +1769,27 @@
 					{
 						"type": "reflection",
 						"declaration": {
-							"id": 2223,
+							"id": 2685,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"children": [
 								{
-									"id": 2224,
+									"id": 2686,
 									"name": "eventGroupId",
 									"variant": "declaration",
 									"kind": 1024,
 									"flags": {
 										"isOptional": true
 									},
+									"sources": [
+										{
+											"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/event-bus/common.ts",
+											"line": 15,
+											"character": 2
+										}
+									],
 									"type": {
 										"type": "intrinsic",
 										"name": "string"
@@ -1540,8 +1800,15 @@
 								{
 									"title": "Properties",
 									"children": [
-										2224
+										2686
 									]
+								}
+							],
+							"sources": [
+								{
+									"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/event-bus/common.ts",
+									"line": 14,
+									"character": 54
 								}
 							]
 						}
@@ -1550,14 +1817,21 @@
 			}
 		},
 		{
-			"id": 2216,
+			"id": 2678,
 			"name": "Event",
 			"variant": "declaration",
 			"kind": 2097152,
 			"flags": {},
+			"sources": [
+				{
+					"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/event-bus/common.ts",
+					"line": 18,
+					"character": 12
+				}
+			],
 			"typeParameters": [
 				{
-					"id": 2221,
+					"id": 2683,
 					"name": "TData",
 					"variant": "typeParam",
 					"kind": 131072,
@@ -1571,47 +1845,68 @@
 			"type": {
 				"type": "reflection",
 				"declaration": {
-					"id": 2217,
+					"id": 2679,
 					"name": "__type",
 					"variant": "declaration",
 					"kind": 65536,
 					"flags": {},
 					"children": [
 						{
-							"id": 2218,
+							"id": 2680,
 							"name": "name",
 							"variant": "declaration",
 							"kind": 1024,
 							"flags": {},
+							"sources": [
+								{
+									"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/event-bus/common.ts",
+									"line": 19,
+									"character": 2
+								}
+							],
 							"type": {
 								"type": "intrinsic",
 								"name": "string"
 							}
 						},
 						{
-							"id": 2219,
+							"id": 2681,
 							"name": "metadata",
 							"variant": "declaration",
 							"kind": 1024,
 							"flags": {
 								"isOptional": true
 							},
+							"sources": [
+								{
+									"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/event-bus/common.ts",
+									"line": 20,
+									"character": 2
+								}
+							],
 							"type": {
 								"type": "reference",
-								"target": 2222,
+								"target": 2684,
 								"name": "EventMetadata",
 								"package": "@medusajs/types"
 							}
 						},
 						{
-							"id": 2220,
+							"id": 2682,
 							"name": "data",
 							"variant": "declaration",
 							"kind": 1024,
 							"flags": {},
+							"sources": [
+								{
+									"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/event-bus/common.ts",
+									"line": 21,
+									"character": 2
+								}
+							],
 							"type": {
 								"type": "reference",
-								"target": 2221,
+								"target": 2683,
 								"name": "TData",
 								"package": "@medusajs/types",
 								"refersToTypeParameter": true
@@ -1622,24 +1917,38 @@
 						{
 							"title": "Properties",
 							"children": [
-								2218,
-								2219,
-								2220
+								2680,
+								2681,
+								2682
 							]
+						}
+					],
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/event-bus/common.ts",
+							"line": 18,
+							"character": 37
 						}
 					]
 				}
 			}
 		},
 		{
-			"id": 2181,
+			"id": 2643,
 			"name": "Message",
 			"variant": "declaration",
 			"kind": 2097152,
 			"flags": {},
+			"sources": [
+				{
+					"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/event-bus/common.ts",
+					"line": 24,
+					"character": 12
+				}
+			],
 			"typeParameters": [
 				{
-					"id": 2184,
+					"id": 2646,
 					"name": "TData",
 					"variant": "typeParam",
 					"kind": 131072,
@@ -1655,11 +1964,11 @@
 				"types": [
 					{
 						"type": "reference",
-						"target": 2216,
+						"target": 2678,
 						"typeArguments": [
 							{
 								"type": "reference",
-								"target": 2184,
+								"target": 2646,
 								"name": "TData",
 								"package": "@medusajs/types",
 								"refersToTypeParameter": true
@@ -1671,20 +1980,27 @@
 					{
 						"type": "reflection",
 						"declaration": {
-							"id": 2182,
+							"id": 2644,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"children": [
 								{
-									"id": 2183,
+									"id": 2645,
 									"name": "options",
 									"variant": "declaration",
 									"kind": 1024,
 									"flags": {
 										"isOptional": true
 									},
+									"sources": [
+										{
+											"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/event-bus/common.ts",
+											"line": 25,
+											"character": 2
+										}
+									],
 									"type": {
 										"type": "reference",
 										"target": {
@@ -1710,8 +2026,15 @@
 								{
 									"title": "Properties",
 									"children": [
-										2183
+										2645
 									]
+								}
+							],
+							"sources": [
+								{
+									"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/event-bus/common.ts",
+									"line": 24,
+									"character": 54
 								}
 							]
 						}
@@ -1720,14 +2043,21 @@
 			}
 		},
 		{
-			"id": 2192,
+			"id": 2654,
 			"name": "RawMessageFormat",
 			"variant": "declaration",
 			"kind": 2097152,
 			"flags": {},
+			"sources": [
+				{
+					"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/event-bus/common.ts",
+					"line": 28,
+					"character": 12
+				}
+			],
 			"typeParameters": [
 				{
-					"id": 2201,
+					"id": 2663,
 					"name": "TData",
 					"variant": "typeParam",
 					"kind": 131072,
@@ -1741,80 +2071,122 @@
 			"type": {
 				"type": "reflection",
 				"declaration": {
-					"id": 2193,
+					"id": 2655,
 					"name": "__type",
 					"variant": "declaration",
 					"kind": 65536,
 					"flags": {},
 					"children": [
 						{
-							"id": 2194,
+							"id": 2656,
 							"name": "eventName",
 							"variant": "declaration",
 							"kind": 1024,
 							"flags": {},
+							"sources": [
+								{
+									"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/event-bus/common.ts",
+									"line": 29,
+									"character": 2
+								}
+							],
 							"type": {
 								"type": "intrinsic",
 								"name": "string"
 							}
 						},
 						{
-							"id": 2195,
+							"id": 2657,
 							"name": "data",
 							"variant": "declaration",
 							"kind": 1024,
 							"flags": {},
+							"sources": [
+								{
+									"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/event-bus/common.ts",
+									"line": 30,
+									"character": 2
+								}
+							],
 							"type": {
 								"type": "reference",
-								"target": 2201,
+								"target": 2663,
 								"name": "TData",
 								"package": "@medusajs/types",
 								"refersToTypeParameter": true
 							}
 						},
 						{
-							"id": 2196,
+							"id": 2658,
 							"name": "source",
 							"variant": "declaration",
 							"kind": 1024,
 							"flags": {},
+							"sources": [
+								{
+									"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/event-bus/common.ts",
+									"line": 31,
+									"character": 2
+								}
+							],
 							"type": {
 								"type": "intrinsic",
 								"name": "string"
 							}
 						},
 						{
-							"id": 2197,
+							"id": 2659,
 							"name": "object",
 							"variant": "declaration",
 							"kind": 1024,
 							"flags": {},
+							"sources": [
+								{
+									"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/event-bus/common.ts",
+									"line": 32,
+									"character": 2
+								}
+							],
 							"type": {
 								"type": "intrinsic",
 								"name": "string"
 							}
 						},
 						{
-							"id": 2198,
+							"id": 2660,
 							"name": "action",
 							"variant": "declaration",
 							"kind": 1024,
 							"flags": {
 								"isOptional": true
 							},
+							"sources": [
+								{
+									"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/event-bus/common.ts",
+									"line": 33,
+									"character": 2
+								}
+							],
 							"type": {
 								"type": "intrinsic",
 								"name": "string"
 							}
 						},
 						{
-							"id": 2199,
+							"id": 2661,
 							"name": "context",
 							"variant": "declaration",
 							"kind": 1024,
 							"flags": {
 								"isOptional": true
 							},
+							"sources": [
+								{
+									"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/event-bus/common.ts",
+									"line": 34,
+									"character": 2
+								}
+							],
 							"type": {
 								"type": "reference",
 								"target": {
@@ -1824,7 +2196,7 @@
 								"typeArguments": [
 									{
 										"type": "reference",
-										"target": 2091,
+										"target": 2553,
 										"name": "Context",
 										"package": "@medusajs/types"
 									},
@@ -1838,13 +2210,20 @@
 							}
 						},
 						{
-							"id": 2200,
+							"id": 2662,
 							"name": "options",
 							"variant": "declaration",
 							"kind": 1024,
 							"flags": {
 								"isOptional": true
 							},
+							"sources": [
+								{
+									"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/event-bus/common.ts",
+									"line": 35,
+									"character": 2
+								}
+							],
 							"type": {
 								"type": "reference",
 								"target": {
@@ -1870,93 +2249,142 @@
 						{
 							"title": "Properties",
 							"children": [
-								2194,
-								2195,
-								2196,
-								2197,
-								2198,
-								2199,
-								2200
+								2656,
+								2657,
+								2658,
+								2659,
+								2660,
+								2661,
+								2662
 							]
+						}
+					],
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/event-bus/common.ts",
+							"line": 28,
+							"character": 44
 						}
 					]
 				}
 			}
 		},
 		{
-			"id": 2206,
+			"id": 2668,
 			"name": "JoinerRelationship",
 			"variant": "declaration",
 			"kind": 2097152,
 			"flags": {},
+			"sources": [
+				{
+					"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/joiner/index.ts",
+					"line": 1,
+					"character": 12
+				}
+			],
 			"type": {
 				"type": "reflection",
 				"declaration": {
-					"id": 2207,
+					"id": 2669,
 					"name": "__type",
 					"variant": "declaration",
 					"kind": 65536,
 					"flags": {},
 					"children": [
 						{
-							"id": 2208,
+							"id": 2670,
 							"name": "alias",
 							"variant": "declaration",
 							"kind": 1024,
 							"flags": {},
+							"sources": [
+								{
+									"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/joiner/index.ts",
+									"line": 2,
+									"character": 2
+								}
+							],
 							"type": {
 								"type": "intrinsic",
 								"name": "string"
 							}
 						},
 						{
-							"id": 2209,
+							"id": 2671,
 							"name": "foreignKey",
 							"variant": "declaration",
 							"kind": 1024,
 							"flags": {},
+							"sources": [
+								{
+									"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/joiner/index.ts",
+									"line": 3,
+									"character": 2
+								}
+							],
 							"type": {
 								"type": "intrinsic",
 								"name": "string"
 							}
 						},
 						{
-							"id": 2210,
+							"id": 2672,
 							"name": "primaryKey",
 							"variant": "declaration",
 							"kind": 1024,
 							"flags": {},
+							"sources": [
+								{
+									"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/joiner/index.ts",
+									"line": 4,
+									"character": 2
+								}
+							],
 							"type": {
 								"type": "intrinsic",
 								"name": "string"
 							}
 						},
 						{
-							"id": 2211,
+							"id": 2673,
 							"name": "serviceName",
 							"variant": "declaration",
 							"kind": 1024,
 							"flags": {},
+							"sources": [
+								{
+									"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/joiner/index.ts",
+									"line": 5,
+									"character": 2
+								}
+							],
 							"type": {
 								"type": "intrinsic",
 								"name": "string"
 							}
 						},
 						{
-							"id": 2212,
+							"id": 2674,
 							"name": "entity",
 							"variant": "declaration",
 							"kind": 1024,
 							"flags": {
 								"isOptional": true
 							},
+							"sources": [
+								{
+									"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/joiner/index.ts",
+									"line": 6,
+									"character": 2
+								}
+							],
 							"type": {
 								"type": "intrinsic",
 								"name": "string"
 							}
 						},
 						{
-							"id": 2213,
+							"id": 2675,
 							"name": "inverse",
 							"variant": "declaration",
 							"kind": 1024,
@@ -1971,13 +2399,20 @@
 									}
 								]
 							},
+							"sources": [
+								{
+									"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/joiner/index.ts",
+									"line": 10,
+									"character": 2
+								}
+							],
 							"type": {
 								"type": "intrinsic",
 								"name": "boolean"
 							}
 						},
 						{
-							"id": 2214,
+							"id": 2676,
 							"name": "isList",
 							"variant": "declaration",
 							"kind": 1024,
@@ -1992,13 +2427,20 @@
 									}
 								]
 							},
+							"sources": [
+								{
+									"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/joiner/index.ts",
+									"line": 14,
+									"character": 2
+								}
+							],
 							"type": {
 								"type": "intrinsic",
 								"name": "boolean"
 							}
 						},
 						{
-							"id": 2215,
+							"id": 2677,
 							"name": "args",
 							"variant": "declaration",
 							"kind": 1024,
@@ -2013,6 +2455,13 @@
 									}
 								]
 							},
+							"sources": [
+								{
+									"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/joiner/index.ts",
+									"line": 18,
+									"character": 2
+								}
+							],
 							"type": {
 								"type": "reference",
 								"target": {
@@ -2038,33 +2487,47 @@
 						{
 							"title": "Properties",
 							"children": [
-								2208,
-								2209,
-								2210,
-								2211,
-								2212,
-								2213,
-								2214,
-								2215
+								2670,
+								2671,
+								2672,
+								2673,
+								2674,
+								2675,
+								2676,
+								2677
 							]
+						}
+					],
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/joiner/index.ts",
+							"line": 1,
+							"character": 33
 						}
 					]
 				}
 			}
 		},
 		{
-			"id": 2202,
+			"id": 2664,
 			"name": "JoinerServiceConfigAlias",
 			"variant": "declaration",
 			"kind": 256,
 			"flags": {},
 			"children": [
 				{
-					"id": 2203,
+					"id": 2665,
 					"name": "name",
 					"variant": "declaration",
 					"kind": 1024,
 					"flags": {},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/joiner/index.ts",
+							"line": 22,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "union",
 						"types": [
@@ -2083,20 +2546,27 @@
 					}
 				},
 				{
-					"id": 2204,
+					"id": 2666,
 					"name": "entity",
 					"variant": "declaration",
 					"kind": 1024,
 					"flags": {
 						"isOptional": true
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/joiner/index.ts",
+							"line": 23,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "intrinsic",
 						"name": "string"
 					}
 				},
 				{
-					"id": 2205,
+					"id": 2667,
 					"name": "args",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2111,6 +2581,13 @@
 							}
 						]
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/joiner/index.ts",
+							"line": 27,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "reference",
 						"target": {
@@ -2136,33 +2613,47 @@
 				{
 					"title": "Properties",
 					"children": [
-						2203,
-						2204,
-						2205
+						2665,
+						2666,
+						2667
 					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/joiner/index.ts",
+					"line": 21,
+					"character": 17
 				}
 			]
 		},
 		{
-			"id": 2157,
+			"id": 2619,
 			"name": "JoinerServiceConfig",
 			"variant": "declaration",
 			"kind": 256,
 			"flags": {},
 			"children": [
 				{
-					"id": 2158,
+					"id": 2620,
 					"name": "serviceName",
 					"variant": "declaration",
 					"kind": 1024,
 					"flags": {},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/joiner/index.ts",
+							"line": 31,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "intrinsic",
 						"name": "string"
 					}
 				},
 				{
-					"id": 2159,
+					"id": 2621,
 					"name": "alias",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2177,12 +2668,19 @@
 							}
 						]
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/joiner/index.ts",
+							"line": 35,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "union",
 						"types": [
 							{
 								"type": "reference",
-								"target": 2202,
+								"target": 2664,
 								"name": "JoinerServiceConfigAlias",
 								"package": "@medusajs/types"
 							},
@@ -2190,7 +2688,7 @@
 								"type": "array",
 								"elementType": {
 									"type": "reference",
-									"target": 2202,
+									"target": 2664,
 									"name": "JoinerServiceConfigAlias",
 									"package": "@medusajs/types"
 								}
@@ -2199,7 +2697,7 @@
 					}
 				},
 				{
-					"id": 2160,
+					"id": 2622,
 					"name": "fieldAlias",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2214,6 +2712,13 @@
 							}
 						]
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/joiner/index.ts",
+							"line": 39,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "reference",
 						"target": {
@@ -2235,29 +2740,43 @@
 									{
 										"type": "reflection",
 										"declaration": {
-											"id": 2161,
+											"id": 2623,
 											"name": "__type",
 											"variant": "declaration",
 											"kind": 65536,
 											"flags": {},
 											"children": [
 												{
-													"id": 2162,
+													"id": 2624,
 													"name": "path",
 													"variant": "declaration",
 													"kind": 1024,
 													"flags": {},
+													"sources": [
+														{
+															"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/joiner/index.ts",
+															"line": 43,
+															"character": 8
+														}
+													],
 													"type": {
 														"type": "intrinsic",
 														"name": "string"
 													}
 												},
 												{
-													"id": 2163,
+													"id": 2625,
 													"name": "forwardArgumentsOnPath",
 													"variant": "declaration",
 													"kind": 1024,
 													"flags": {},
+													"sources": [
+														{
+															"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/joiner/index.ts",
+															"line": 44,
+															"character": 8
+														}
+													],
 													"type": {
 														"type": "array",
 														"elementType": {
@@ -2271,9 +2790,16 @@
 												{
 													"title": "Properties",
 													"children": [
-														2162,
-														2163
+														2624,
+														2625
 													]
+												}
+											],
+											"sources": [
+												{
+													"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/joiner/index.ts",
+													"line": 42,
+													"character": 6
 												}
 											]
 										}
@@ -2286,11 +2812,18 @@
 					}
 				},
 				{
-					"id": 2164,
+					"id": 2626,
 					"name": "primaryKeys",
 					"variant": "declaration",
 					"kind": 1024,
 					"flags": {},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/joiner/index.ts",
+							"line": 47,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "array",
 						"elementType": {
@@ -2300,75 +2833,110 @@
 					}
 				},
 				{
-					"id": 2165,
+					"id": 2627,
 					"name": "relationships",
 					"variant": "declaration",
 					"kind": 1024,
 					"flags": {
 						"isOptional": true
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/joiner/index.ts",
+							"line": 48,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "array",
 						"elementType": {
 							"type": "reference",
-							"target": 2206,
+							"target": 2668,
 							"name": "JoinerRelationship",
 							"package": "@medusajs/types"
 						}
 					}
 				},
 				{
-					"id": 2166,
+					"id": 2628,
 					"name": "extends",
 					"variant": "declaration",
 					"kind": 1024,
 					"flags": {
 						"isOptional": true
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/joiner/index.ts",
+							"line": 49,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "array",
 						"elementType": {
 							"type": "reflection",
 							"declaration": {
-								"id": 2167,
+								"id": 2629,
 								"name": "__type",
 								"variant": "declaration",
 								"kind": 65536,
 								"flags": {},
 								"children": [
 									{
-										"id": 2168,
+										"id": 2630,
 										"name": "serviceName",
 										"variant": "declaration",
 										"kind": 1024,
 										"flags": {},
+										"sources": [
+											{
+												"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/joiner/index.ts",
+												"line": 50,
+												"character": 4
+											}
+										],
 										"type": {
 											"type": "intrinsic",
 											"name": "string"
 										}
 									},
 									{
-										"id": 2169,
+										"id": 2631,
 										"name": "entity",
 										"variant": "declaration",
 										"kind": 1024,
 										"flags": {
 											"isOptional": true
 										},
+										"sources": [
+											{
+												"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/joiner/index.ts",
+												"line": 51,
+												"character": 4
+											}
+										],
 										"type": {
 											"type": "intrinsic",
 											"name": "string"
 										}
 									},
 									{
-										"id": 2170,
+										"id": 2632,
 										"name": "relationship",
 										"variant": "declaration",
 										"kind": 1024,
 										"flags": {},
+										"sources": [
+											{
+												"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/joiner/index.ts",
+												"line": 52,
+												"character": 4
+											}
+										],
 										"type": {
 											"type": "reference",
-											"target": 2206,
+											"target": 2668,
 											"name": "JoinerRelationship",
 											"package": "@medusajs/types"
 										}
@@ -2378,10 +2946,17 @@
 									{
 										"title": "Properties",
 										"children": [
-											2168,
-											2169,
-											2170
+											2630,
+											2631,
+											2632
 										]
+									}
+								],
+								"sources": [
+									{
+										"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/joiner/index.ts",
+										"line": 49,
+										"character": 12
 									}
 								]
 							}
@@ -2389,7 +2964,7 @@
 					}
 				},
 				{
-					"id": 2171,
+					"id": 2633,
 					"name": "args",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2404,6 +2979,13 @@
 							}
 						]
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/joiner/index.ts",
+							"line": 57,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "reference",
 						"target": {
@@ -2429,23 +3011,37 @@
 				{
 					"title": "Properties",
 					"children": [
-						2158,
-						2159,
-						2160,
-						2164,
-						2165,
-						2166,
-						2171
+						2620,
+						2621,
+						2622,
+						2626,
+						2627,
+						2628,
+						2633
 					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/joiner/index.ts",
+					"line": 30,
+					"character": 17
 				}
 			]
 		},
 		{
-			"id": 2175,
+			"id": 2637,
 			"name": "LinkModulesExtraFields",
 			"variant": "declaration",
 			"kind": 2097152,
 			"flags": {},
+			"sources": [
+				{
+					"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+					"line": 143,
+					"character": 12
+				}
+			],
 			"type": {
 				"type": "reference",
 				"target": {
@@ -2460,18 +3056,25 @@
 					{
 						"type": "reflection",
 						"declaration": {
-							"id": 2176,
+							"id": 2638,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"children": [
 								{
-									"id": 2177,
+									"id": 2639,
 									"name": "type",
 									"variant": "declaration",
 									"kind": 1024,
 									"flags": {},
+									"sources": [
+										{
+											"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+											"line": 146,
+											"character": 4
+										}
+									],
 									"type": {
 										"type": "union",
 										"types": [
@@ -2563,33 +3166,47 @@
 									}
 								},
 								{
-									"id": 2178,
+									"id": 2640,
 									"name": "defaultValue",
 									"variant": "declaration",
 									"kind": 1024,
 									"flags": {
 										"isOptional": true
 									},
+									"sources": [
+										{
+											"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+											"line": 168,
+											"character": 4
+										}
+									],
 									"type": {
 										"type": "intrinsic",
 										"name": "string"
 									}
 								},
 								{
-									"id": 2179,
+									"id": 2641,
 									"name": "nullable",
 									"variant": "declaration",
 									"kind": 1024,
 									"flags": {
 										"isOptional": true
 									},
+									"sources": [
+										{
+											"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+											"line": 169,
+											"character": 4
+										}
+									],
 									"type": {
 										"type": "intrinsic",
 										"name": "boolean"
 									}
 								},
 								{
-									"id": 2180,
+									"id": 2642,
 									"name": "options",
 									"variant": "declaration",
 									"kind": 1024,
@@ -2604,6 +3221,13 @@
 											}
 										]
 									},
+									"sources": [
+										{
+											"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+											"line": 173,
+											"character": 4
+										}
+									],
 									"type": {
 										"type": "reference",
 										"target": {
@@ -2629,11 +3253,18 @@
 								{
 									"title": "Properties",
 									"children": [
-										2177,
-										2178,
-										2179,
-										2180
+										2639,
+										2640,
+										2641,
+										2642
 									]
+								}
+							],
+							"sources": [
+								{
+									"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+									"line": 145,
+									"character": 2
 								}
 							]
 						}
@@ -2644,11 +3275,18 @@
 			}
 		},
 		{
-			"id": 2109,
+			"id": 2571,
 			"name": "ModuleJoinerConfig",
 			"variant": "declaration",
 			"kind": 2097152,
 			"flags": {},
+			"sources": [
+				{
+					"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+					"line": 191,
+					"character": 12
+				}
+			],
 			"type": {
 				"type": "intersection",
 				"types": [
@@ -2661,7 +3299,7 @@
 						"typeArguments": [
 							{
 								"type": "reference",
-								"target": 2157,
+								"target": 2619,
 								"name": "JoinerServiceConfig",
 								"package": "@medusajs/types"
 							},
@@ -2693,14 +3331,14 @@
 					{
 						"type": "reflection",
 						"declaration": {
-							"id": 2110,
+							"id": 2572,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"children": [
 								{
-									"id": 2111,
+									"id": 2573,
 									"name": "schema",
 									"variant": "declaration",
 									"kind": 1024,
@@ -2715,80 +3353,122 @@
 											}
 										]
 									},
+									"sources": [
+										{
+											"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+											"line": 198,
+											"character": 2
+										}
+									],
 									"type": {
 										"type": "intrinsic",
 										"name": "string"
 									}
 								},
 								{
-									"id": 2112,
+									"id": 2574,
 									"name": "relationships",
 									"variant": "declaration",
 									"kind": 1024,
 									"flags": {
 										"isOptional": true
 									},
+									"sources": [
+										{
+											"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+											"line": 199,
+											"character": 2
+										}
+									],
 									"type": {
 										"type": "array",
 										"elementType": {
 											"type": "reference",
-											"target": 2172,
+											"target": 2634,
 											"name": "ModuleJoinerRelationship",
 											"package": "@medusajs/types"
 										}
 									}
 								},
 								{
-									"id": 2113,
+									"id": 2575,
 									"name": "extends",
 									"variant": "declaration",
 									"kind": 1024,
 									"flags": {
 										"isOptional": true
 									},
+									"sources": [
+										{
+											"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+											"line": 200,
+											"character": 2
+										}
+									],
 									"type": {
 										"type": "array",
 										"elementType": {
 											"type": "reflection",
 											"declaration": {
-												"id": 2114,
+												"id": 2576,
 												"name": "__type",
 												"variant": "declaration",
 												"kind": 65536,
 												"flags": {},
 												"children": [
 													{
-														"id": 2115,
+														"id": 2577,
 														"name": "serviceName",
 														"variant": "declaration",
 														"kind": 1024,
 														"flags": {},
+														"sources": [
+															{
+																"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+																"line": 201,
+																"character": 4
+															}
+														],
 														"type": {
 															"type": "intrinsic",
 															"name": "string"
 														}
 													},
 													{
-														"id": 2116,
+														"id": 2578,
 														"name": "entity",
 														"variant": "declaration",
 														"kind": 1024,
 														"flags": {
 															"isOptional": true
 														},
+														"sources": [
+															{
+																"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+																"line": 202,
+																"character": 4
+															}
+														],
 														"type": {
 															"type": "intrinsic",
 															"name": "string"
 														}
 													},
 													{
-														"id": 2117,
+														"id": 2579,
 														"name": "fieldAlias",
 														"variant": "declaration",
 														"kind": 1024,
 														"flags": {
 															"isOptional": true
 														},
+														"sources": [
+															{
+																"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+																"line": 203,
+																"character": 4
+															}
+														],
 														"type": {
 															"type": "reference",
 															"target": {
@@ -2810,31 +3490,45 @@
 																		{
 																			"type": "reflection",
 																			"declaration": {
-																				"id": 2118,
+																				"id": 2580,
 																				"name": "__type",
 																				"variant": "declaration",
 																				"kind": 65536,
 																				"flags": {},
 																				"children": [
 																					{
-																						"id": 2119,
+																						"id": 2581,
 																						"name": "path",
 																						"variant": "declaration",
 																						"kind": 1024,
 																						"flags": {},
+																						"sources": [
+																							{
+																								"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+																								"line": 207,
+																								"character": 10
+																							}
+																						],
 																						"type": {
 																							"type": "intrinsic",
 																							"name": "string"
 																						}
 																					},
 																					{
-																						"id": 2120,
+																						"id": 2582,
 																						"name": "forwardArgumentsOnPath",
 																						"variant": "declaration",
 																						"kind": 1024,
 																						"flags": {
 																							"isOptional": true
 																						},
+																						"sources": [
+																							{
+																								"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+																								"line": 208,
+																								"character": 10
+																							}
+																						],
 																						"type": {
 																							"type": "array",
 																							"elementType": {
@@ -2844,13 +3538,20 @@
 																						}
 																					},
 																					{
-																						"id": 2121,
+																						"id": 2583,
 																						"name": "isList",
 																						"variant": "declaration",
 																						"kind": 1024,
 																						"flags": {
 																							"isOptional": true
 																						},
+																						"sources": [
+																							{
+																								"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+																								"line": 209,
+																								"character": 10
+																							}
+																						],
 																						"type": {
 																							"type": "intrinsic",
 																							"name": "boolean"
@@ -2861,10 +3562,17 @@
 																					{
 																						"title": "Properties",
 																						"children": [
-																							2119,
-																							2120,
-																							2121
+																							2581,
+																							2582,
+																							2583
 																						]
+																					}
+																				],
+																				"sources": [
+																					{
+																						"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+																						"line": 206,
+																						"character": 8
 																					}
 																				]
 																			}
@@ -2877,14 +3585,21 @@
 														}
 													},
 													{
-														"id": 2122,
+														"id": 2584,
 														"name": "relationship",
 														"variant": "declaration",
 														"kind": 1024,
 														"flags": {},
+														"sources": [
+															{
+																"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+																"line": 212,
+																"character": 4
+															}
+														],
 														"type": {
 															"type": "reference",
-															"target": 2172,
+															"target": 2634,
 															"name": "ModuleJoinerRelationship",
 															"package": "@medusajs/types"
 														}
@@ -2894,11 +3609,18 @@
 													{
 														"title": "Properties",
 														"children": [
-															2115,
-															2116,
-															2117,
-															2122
+															2577,
+															2578,
+															2579,
+															2584
 														]
+													}
+												],
+												"sources": [
+													{
+														"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+														"line": 200,
+														"character": 12
 													}
 												]
 											}
@@ -2906,26 +3628,40 @@
 									}
 								},
 								{
-									"id": 2123,
+									"id": 2585,
 									"name": "serviceName",
 									"variant": "declaration",
 									"kind": 1024,
 									"flags": {
 										"isOptional": true
 									},
+									"sources": [
+										{
+											"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+											"line": 214,
+											"character": 2
+										}
+									],
 									"type": {
 										"type": "intrinsic",
 										"name": "string"
 									}
 								},
 								{
-									"id": 2124,
+									"id": 2586,
 									"name": "primaryKeys",
 									"variant": "declaration",
 									"kind": 1024,
 									"flags": {
 										"isOptional": true
 									},
+									"sources": [
+										{
+											"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+											"line": 215,
+											"character": 2
+										}
+									],
 									"type": {
 										"type": "array",
 										"elementType": {
@@ -2935,7 +3671,7 @@
 									}
 								},
 								{
-									"id": 2125,
+									"id": 2587,
 									"name": "isLink",
 									"variant": "declaration",
 									"kind": 1024,
@@ -2950,13 +3686,20 @@
 											}
 										]
 									},
+									"sources": [
+										{
+											"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+											"line": 219,
+											"character": 2
+										}
+									],
 									"type": {
 										"type": "intrinsic",
 										"name": "boolean"
 									}
 								},
 								{
-									"id": 2126,
+									"id": 2588,
 									"name": "linkableKeys",
 									"variant": "declaration",
 									"kind": 1024,
@@ -2971,6 +3714,13 @@
 											}
 										]
 									},
+									"sources": [
+										{
+											"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+											"line": 223,
+											"character": 2
+										}
+									],
 									"type": {
 										"type": "reference",
 										"target": {
@@ -2992,7 +3742,7 @@
 									}
 								},
 								{
-									"id": 2127,
+									"id": 2589,
 									"name": "isReadOnlyLink",
 									"variant": "declaration",
 									"kind": 1024,
@@ -3007,13 +3757,20 @@
 											}
 										]
 									},
+									"sources": [
+										{
+											"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+											"line": 227,
+											"character": 2
+										}
+									],
 									"type": {
 										"type": "intrinsic",
 										"name": "boolean"
 									}
 								},
 								{
-									"id": 2128,
+									"id": 2590,
 									"name": "extraDataFields",
 									"variant": "declaration",
 									"kind": 1024,
@@ -3028,6 +3785,13 @@
 											}
 										]
 									},
+									"sources": [
+										{
+											"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+											"line": 232,
+											"character": 2
+										}
+									],
 									"type": {
 										"type": "array",
 										"elementType": {
@@ -3037,24 +3801,31 @@
 									}
 								},
 								{
-									"id": 2129,
+									"id": 2591,
 									"name": "databaseConfig",
 									"variant": "declaration",
 									"kind": 1024,
 									"flags": {
 										"isOptional": true
 									},
+									"sources": [
+										{
+											"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+											"line": 233,
+											"character": 2
+										}
+									],
 									"type": {
 										"type": "reflection",
 										"declaration": {
-											"id": 2130,
+											"id": 2592,
 											"name": "__type",
 											"variant": "declaration",
 											"kind": 65536,
 											"flags": {},
 											"children": [
 												{
-													"id": 2131,
+													"id": 2593,
 													"name": "tableName",
 													"variant": "declaration",
 													"kind": 1024,
@@ -3069,13 +3840,20 @@
 															}
 														]
 													},
+													"sources": [
+														{
+															"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+															"line": 237,
+															"character": 4
+														}
+													],
 													"type": {
 														"type": "intrinsic",
 														"name": "string"
 													}
 												},
 												{
-													"id": 2132,
+													"id": 2594,
 													"name": "idPrefix",
 													"variant": "declaration",
 													"kind": 1024,
@@ -3090,22 +3868,36 @@
 															}
 														]
 													},
+													"sources": [
+														{
+															"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+															"line": 241,
+															"character": 4
+														}
+													],
 													"type": {
 														"type": "intrinsic",
 														"name": "string"
 													}
 												},
 												{
-													"id": 2133,
+													"id": 2595,
 													"name": "extraFields",
 													"variant": "declaration",
 													"kind": 1024,
 													"flags": {
 														"isOptional": true
 													},
+													"sources": [
+														{
+															"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+															"line": 242,
+															"character": 4
+														}
+													],
 													"type": {
 														"type": "reference",
-														"target": 2175,
+														"target": 2637,
 														"name": "LinkModulesExtraFields",
 														"package": "@medusajs/types"
 													}
@@ -3115,10 +3907,17 @@
 												{
 													"title": "Properties",
 													"children": [
-														2131,
-														2132,
-														2133
+														2593,
+														2594,
+														2595
 													]
+												}
+											],
+											"sources": [
+												{
+													"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+													"line": 233,
+													"character": 19
 												}
 											]
 										}
@@ -3129,17 +3928,24 @@
 								{
 									"title": "Properties",
 									"children": [
-										2111,
-										2112,
-										2113,
-										2123,
-										2124,
-										2125,
-										2126,
-										2127,
-										2128,
-										2129
+										2573,
+										2574,
+										2575,
+										2585,
+										2586,
+										2587,
+										2588,
+										2589,
+										2590,
+										2591
 									]
+								}
+							],
+							"sources": [
+								{
+									"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+									"line": 194,
+									"character": 4
 								}
 							]
 						}
@@ -3148,31 +3954,38 @@
 			}
 		},
 		{
-			"id": 2172,
+			"id": 2634,
 			"name": "ModuleJoinerRelationship",
 			"variant": "declaration",
 			"kind": 2097152,
 			"flags": {},
+			"sources": [
+				{
+					"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+					"line": 246,
+					"character": 20
+				}
+			],
 			"type": {
 				"type": "intersection",
 				"types": [
 					{
 						"type": "reference",
-						"target": 2206,
+						"target": 2668,
 						"name": "JoinerRelationship",
 						"package": "@medusajs/types"
 					},
 					{
 						"type": "reflection",
 						"declaration": {
-							"id": 2173,
+							"id": 2635,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"children": [
 								{
-									"id": 2174,
+									"id": 2636,
 									"name": "deleteCascade",
 									"variant": "declaration",
 									"kind": 1024,
@@ -3187,6 +4000,13 @@
 											}
 										]
 									},
+									"sources": [
+										{
+											"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+											"line": 250,
+											"character": 2
+										}
+									],
 									"type": {
 										"type": "intrinsic",
 										"name": "boolean"
@@ -3197,8 +4017,15 @@
 								{
 									"title": "Properties",
 									"children": [
-										2174
+										2636
 									]
+								}
+							],
+							"sources": [
+								{
+									"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+									"line": 246,
+									"character": 68
 								}
 							]
 						}
@@ -3207,23 +4034,30 @@
 			}
 		},
 		{
-			"id": 2062,
+			"id": 2523,
 			"name": "IModuleService",
 			"variant": "declaration",
 			"kind": 256,
 			"flags": {},
 			"children": [
 				{
-					"id": 2063,
+					"id": 2524,
 					"name": "__joinerConfig",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {
 						"isOptional": true
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+							"line": 314,
+							"character": 2
+						}
+					],
 					"signatures": [
 						{
-							"id": 2064,
+							"id": 2525,
 							"name": "__joinerConfig",
 							"variant": "signature",
 							"kind": 4096,
@@ -3234,9 +4068,16 @@
 									"@ignore"
 								]
 							},
+							"sources": [
+								{
+									"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+									"line": 314,
+									"character": 2
+								}
+							],
 							"type": {
 								"type": "reference",
-								"target": 2109,
+								"target": 2571,
 								"name": "ModuleJoinerConfig",
 								"package": "@medusajs/types"
 							}
@@ -3244,7 +4085,7 @@
 					]
 				},
 				{
-					"id": 2065,
+					"id": 2526,
 					"name": "__hooks",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3257,38 +4098,66 @@
 							"@ignore"
 						]
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+							"line": 319,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 2066,
+							"id": 2527,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"children": [
 								{
-									"id": 2067,
+									"id": 2528,
 									"name": "onApplicationStart",
 									"variant": "declaration",
 									"kind": 1024,
 									"flags": {
 										"isOptional": true
 									},
+									"sources": [
+										{
+											"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+											"line": 320,
+											"character": 4
+										}
+									],
 									"type": {
 										"type": "reflection",
 										"declaration": {
-											"id": 2068,
+											"id": 2529,
 											"name": "__type",
 											"variant": "declaration",
 											"kind": 65536,
 											"flags": {},
+											"sources": [
+												{
+													"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+													"line": 320,
+													"character": 25
+												}
+											],
 											"signatures": [
 												{
-													"id": 2069,
+													"id": 2530,
 													"name": "__type",
 													"variant": "signature",
 													"kind": 4096,
 													"flags": {},
+													"sources": [
+														{
+															"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+															"line": 320,
+															"character": 25
+														}
+													],
 													"type": {
 														"type": "reference",
 														"target": {
@@ -3310,28 +4179,49 @@
 									}
 								},
 								{
-									"id": 2070,
+									"id": 2531,
 									"name": "onApplicationShutdown",
 									"variant": "declaration",
 									"kind": 1024,
 									"flags": {
 										"isOptional": true
 									},
+									"sources": [
+										{
+											"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+											"line": 321,
+											"character": 4
+										}
+									],
 									"type": {
 										"type": "reflection",
 										"declaration": {
-											"id": 2071,
+											"id": 2532,
 											"name": "__type",
 											"variant": "declaration",
 											"kind": 65536,
 											"flags": {},
+											"sources": [
+												{
+													"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+													"line": 321,
+													"character": 28
+												}
+											],
 											"signatures": [
 												{
-													"id": 2072,
+													"id": 2533,
 													"name": "__type",
 													"variant": "signature",
 													"kind": 4096,
 													"flags": {},
+													"sources": [
+														{
+															"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+															"line": 321,
+															"character": 28
+														}
+													],
 													"type": {
 														"type": "reference",
 														"target": {
@@ -3353,28 +4243,49 @@
 									}
 								},
 								{
-									"id": 2073,
+									"id": 2534,
 									"name": "onApplicationPrepareShutdown",
 									"variant": "declaration",
 									"kind": 1024,
 									"flags": {
 										"isOptional": true
 									},
+									"sources": [
+										{
+											"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+											"line": 322,
+											"character": 4
+										}
+									],
 									"type": {
 										"type": "reflection",
 										"declaration": {
-											"id": 2074,
+											"id": 2535,
 											"name": "__type",
 											"variant": "declaration",
 											"kind": 65536,
 											"flags": {},
+											"sources": [
+												{
+													"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+													"line": 322,
+													"character": 35
+												}
+											],
 											"signatures": [
 												{
-													"id": 2075,
+													"id": 2536,
 													"name": "__type",
 													"variant": "signature",
 													"kind": 4096,
 													"flags": {},
+													"sources": [
+														{
+															"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+															"line": 322,
+															"character": 35
+														}
+													],
 													"type": {
 														"type": "reference",
 														"target": {
@@ -3400,10 +4311,17 @@
 								{
 									"title": "Properties",
 									"children": [
-										2067,
-										2070,
-										2073
+										2528,
+										2531,
+										2534
 									]
+								}
+							],
+							"sources": [
+								{
+									"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+									"line": 319,
+									"character": 12
 								}
 							]
 						}
@@ -3414,39 +4332,53 @@
 				{
 					"title": "Properties",
 					"children": [
-						2065
+						2526
 					]
 				},
 				{
 					"title": "Methods",
 					"children": [
-						2063
+						2524
 					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/modules-sdk/index.ts",
+					"line": 310,
+					"character": 17
 				}
 			],
 			"extendedBy": [
 				{
 					"type": "reference",
-					"target": 2033,
+					"target": 2494,
 					"name": "ICurrencyModuleService"
 				}
 			]
 		},
 		{
-			"id": 2185,
+			"id": 2647,
 			"name": "MessageAggregatorFormat",
 			"variant": "declaration",
 			"kind": 256,
 			"flags": {},
 			"children": [
 				{
-					"id": 2186,
+					"id": 2648,
 					"name": "groupBy",
 					"variant": "declaration",
 					"kind": 1024,
 					"flags": {
 						"isOptional": true
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/shared-context.ts",
+							"line": 5,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "array",
 						"elementType": {
@@ -3456,31 +4388,52 @@
 					}
 				},
 				{
-					"id": 2187,
+					"id": 2649,
 					"name": "sortBy",
 					"variant": "declaration",
 					"kind": 1024,
 					"flags": {
 						"isOptional": true
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/shared-context.ts",
+							"line": 6,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 2188,
+							"id": 2650,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
+							"sources": [
+								{
+									"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/shared-context.ts",
+									"line": 6,
+									"character": 11
+								}
+							],
 							"indexSignatures": [
 								{
-									"id": 2189,
+									"id": 2651,
 									"name": "__index",
 									"variant": "signature",
 									"kind": 8192,
 									"flags": {},
+									"sources": [
+										{
+											"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/shared-context.ts",
+											"line": 6,
+											"character": 13
+										}
+									],
 									"parameters": [
 										{
-											"id": 2190,
+											"id": 2652,
 											"name": "key",
 											"variant": "param",
 											"kind": 32768,
@@ -3495,19 +4448,19 @@
 										"type": "union",
 										"types": [
 											{
-												"type": "array",
-												"elementType": {
-													"type": "intrinsic",
-													"name": "string"
-												}
-											},
-											{
 												"type": "intrinsic",
 												"name": "string"
 											},
 											{
 												"type": "intrinsic",
 												"name": "number"
+											},
+											{
+												"type": "array",
+												"elementType": {
+													"type": "intrinsic",
+													"name": "string"
+												}
 											}
 										]
 									}
@@ -3517,7 +4470,7 @@
 					}
 				},
 				{
-					"id": 2191,
+					"id": 2653,
 					"name": "internal",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3535,6 +4488,13 @@
 							"@internal"
 						]
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/shared-context.ts",
+							"line": 11,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "intrinsic",
 						"name": "boolean"
@@ -3545,36 +4505,57 @@
 				{
 					"title": "Properties",
 					"children": [
-						2186,
-						2187,
-						2191
+						2648,
+						2649,
+						2653
 					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/shared-context.ts",
+					"line": 4,
+					"character": 17
 				}
 			]
 		},
 		{
-			"id": 2139,
+			"id": 2601,
 			"name": "IMessageAggregator",
 			"variant": "declaration",
 			"kind": 256,
 			"flags": {},
 			"children": [
 				{
-					"id": 2140,
+					"id": 2602,
 					"name": "save",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/shared-context.ts",
+							"line": 15,
+							"character": 2
+						}
+					],
 					"signatures": [
 						{
-							"id": 2141,
+							"id": 2603,
 							"name": "save",
 							"variant": "signature",
 							"kind": 4096,
 							"flags": {},
+							"sources": [
+								{
+									"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/shared-context.ts",
+									"line": 15,
+									"character": 2
+								}
+							],
 							"parameters": [
 								{
-									"id": 2142,
+									"id": 2604,
 									"name": "msg",
 									"variant": "param",
 									"kind": 32768,
@@ -3584,7 +4565,7 @@
 										"types": [
 											{
 												"type": "reference",
-												"target": 2181,
+												"target": 2643,
 												"name": "Message",
 												"package": "@medusajs/types"
 											},
@@ -3592,7 +4573,7 @@
 												"type": "array",
 												"elementType": {
 													"type": "reference",
-													"target": 2181,
+													"target": 2643,
 													"name": "Message",
 													"package": "@medusajs/types"
 												}
@@ -3609,21 +4590,35 @@
 					]
 				},
 				{
-					"id": 2143,
+					"id": 2605,
 					"name": "getMessages",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/shared-context.ts",
+							"line": 16,
+							"character": 2
+						}
+					],
 					"signatures": [
 						{
-							"id": 2144,
+							"id": 2606,
 							"name": "getMessages",
 							"variant": "signature",
 							"kind": 4096,
 							"flags": {},
+							"sources": [
+								{
+									"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/shared-context.ts",
+									"line": 16,
+									"character": 2
+								}
+							],
 							"parameters": [
 								{
-									"id": 2145,
+									"id": 2607,
 									"name": "format",
 									"variant": "param",
 									"kind": 32768,
@@ -3632,7 +4627,7 @@
 									},
 									"type": {
 										"type": "reference",
-										"target": 2185,
+										"target": 2647,
 										"name": "MessageAggregatorFormat",
 										"package": "@medusajs/types"
 									}
@@ -3653,7 +4648,7 @@
 										"type": "array",
 										"elementType": {
 											"type": "reference",
-											"target": 2181,
+											"target": 2643,
 											"name": "Message",
 											"package": "@medusajs/types"
 										}
@@ -3666,18 +4661,32 @@
 					]
 				},
 				{
-					"id": 2146,
+					"id": 2608,
 					"name": "clearMessages",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/shared-context.ts",
+							"line": 17,
+							"character": 2
+						}
+					],
 					"signatures": [
 						{
-							"id": 2147,
+							"id": 2609,
 							"name": "clearMessages",
 							"variant": "signature",
 							"kind": 4096,
 							"flags": {},
+							"sources": [
+								{
+									"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/shared-context.ts",
+									"line": 17,
+									"character": 2
+								}
+							],
 							"type": {
 								"type": "intrinsic",
 								"name": "void"
@@ -3686,21 +4695,35 @@
 					]
 				},
 				{
-					"id": 2148,
+					"id": 2610,
 					"name": "saveRawMessageData",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/shared-context.ts",
+							"line": 18,
+							"character": 2
+						}
+					],
 					"signatures": [
 						{
-							"id": 2149,
+							"id": 2611,
 							"name": "saveRawMessageData",
 							"variant": "signature",
 							"kind": 4096,
 							"flags": {},
+							"sources": [
+								{
+									"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/shared-context.ts",
+									"line": 18,
+									"character": 2
+								}
+							],
 							"typeParameters": [
 								{
-									"id": 2150,
+									"id": 2612,
 									"name": "T",
 									"variant": "typeParam",
 									"kind": 131072,
@@ -3709,7 +4732,7 @@
 							],
 							"parameters": [
 								{
-									"id": 2151,
+									"id": 2613,
 									"name": "messageData",
 									"variant": "param",
 									"kind": 32768,
@@ -3719,11 +4742,11 @@
 										"types": [
 											{
 												"type": "reference",
-												"target": 2192,
+												"target": 2654,
 												"typeArguments": [
 													{
 														"type": "reference",
-														"target": 2150,
+														"target": 2612,
 														"name": "T",
 														"package": "@medusajs/types",
 														"refersToTypeParameter": true
@@ -3736,11 +4759,11 @@
 												"type": "array",
 												"elementType": {
 													"type": "reference",
-													"target": 2192,
+													"target": 2654,
 													"typeArguments": [
 														{
 															"type": "reference",
-															"target": 2150,
+															"target": 2612,
 															"name": "T",
 															"package": "@medusajs/types",
 															"refersToTypeParameter": true
@@ -3754,7 +4777,7 @@
 									}
 								},
 								{
-									"id": 2152,
+									"id": 2614,
 									"name": "options",
 									"variant": "param",
 									"kind": 32768,
@@ -3794,16 +4817,23 @@
 				{
 					"title": "Methods",
 					"children": [
-						2140,
-						2143,
-						2146,
-						2148
+						2602,
+						2605,
+						2608,
+						2610
 					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/shared-context.ts",
+					"line": 14,
+					"character": 17
 				}
 			]
 		},
 		{
-			"id": 2091,
+			"id": 2553,
 			"name": "Context",
 			"variant": "declaration",
 			"kind": 256,
@@ -3818,20 +4848,27 @@
 			},
 			"children": [
 				{
-					"id": 2092,
+					"id": 2554,
 					"name": "__type",
 					"variant": "declaration",
 					"kind": 1024,
 					"flags": {
 						"isOptional": true
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/shared-context.ts",
+							"line": 31,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "literal",
 						"value": "MedusaContext"
 					}
 				},
 				{
-					"id": 2093,
+					"id": 2555,
 					"name": "transactionManager",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3862,16 +4899,23 @@
 							}
 						]
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/shared-context.ts",
+							"line": 35,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "reference",
-						"target": 2103,
+						"target": 2565,
 						"name": "TManager",
 						"package": "@medusajs/types",
 						"refersToTypeParameter": true
 					}
 				},
 				{
-					"id": 2094,
+					"id": 2556,
 					"name": "manager",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3902,16 +4946,23 @@
 							}
 						]
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/shared-context.ts",
+							"line": 39,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "reference",
-						"target": 2103,
+						"target": 2565,
 						"name": "TManager",
 						"package": "@medusajs/types",
 						"refersToTypeParameter": true
 					}
 				},
 				{
-					"id": 2095,
+					"id": 2557,
 					"name": "isolationLevel",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3958,13 +5009,20 @@
 							}
 						]
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/shared-context.ts",
+							"line": 43,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "intrinsic",
 						"name": "string"
 					}
 				},
 				{
-					"id": 2096,
+					"id": 2558,
 					"name": "enableNestedTransactions",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3979,13 +5037,20 @@
 							}
 						]
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/shared-context.ts",
+							"line": 47,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "intrinsic",
 						"name": "boolean"
 					}
 				},
 				{
-					"id": 2097,
+					"id": 2559,
 					"name": "eventGroupId",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4000,13 +5065,20 @@
 							}
 						]
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/shared-context.ts",
+							"line": 51,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "intrinsic",
 						"name": "string"
 					}
 				},
 				{
-					"id": 2098,
+					"id": 2560,
 					"name": "transactionId",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4021,13 +5093,20 @@
 							}
 						]
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/shared-context.ts",
+							"line": 55,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "intrinsic",
 						"name": "string"
 					}
 				},
 				{
-					"id": 2099,
+					"id": 2561,
 					"name": "messageAggregator",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4042,15 +5121,22 @@
 							}
 						]
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/shared-context.ts",
+							"line": 60,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "reference",
-						"target": 2139,
+						"target": 2601,
 						"name": "IMessageAggregator",
 						"package": "@medusajs/types"
 					}
 				},
 				{
-					"id": 2100,
+					"id": 2562,
 					"name": "requestId",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4065,13 +5151,20 @@
 							}
 						]
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/shared-context.ts",
+							"line": 65,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "intrinsic",
 						"name": "string"
 					}
 				},
 				{
-					"id": 2101,
+					"id": 2563,
 					"name": "idempotencyKey",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4086,13 +5179,20 @@
 							}
 						]
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/shared-context.ts",
+							"line": 70,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "intrinsic",
 						"name": "string"
 					}
 				},
 				{
-					"id": 2102,
+					"id": 2564,
 					"name": "parentStepIdempotencyKey",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4107,6 +5207,13 @@
 							}
 						]
 					},
+					"sources": [
+						{
+							"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/shared-context.ts",
+							"line": 75,
+							"character": 2
+						}
+					],
 					"type": {
 						"type": "intrinsic",
 						"name": "string"
@@ -4117,23 +5224,30 @@
 				{
 					"title": "Properties",
 					"children": [
-						2092,
-						2093,
-						2094,
-						2095,
-						2096,
-						2097,
-						2098,
-						2099,
-						2100,
-						2101,
-						2102
+						2554,
+						2555,
+						2556,
+						2557,
+						2558,
+						2559,
+						2560,
+						2561,
+						2562,
+						2563,
+						2564
 					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "/home/runner/work/medusa/medusa/packages/core/types/src/shared-context.ts",
+					"line": 30,
+					"character": 12
 				}
 			],
 			"typeParameters": [
 				{
-					"id": 2103,
+					"id": 2565,
 					"name": "TManager",
 					"variant": "typeParam",
 					"kind": 131072,
@@ -4150,745 +5264,749 @@
 		{
 			"title": "Interfaces",
 			"children": [
-				2076,
-				2086,
-				2104,
-				2033,
-				2153,
-				2202,
-				2157,
-				2062,
-				2185,
-				2139,
-				2091
+				2537,
+				2548,
+				2566,
+				2494,
+				2615,
+				2664,
+				2619,
+				2523,
+				2647,
+				2601,
+				2553
 			]
 		},
 		{
 			"title": "Type Aliases",
 			"children": [
-				2134,
-				2222,
-				2216,
-				2181,
-				2192,
-				2206,
-				2175,
-				2109,
-				2172
+				2596,
+				2684,
+				2678,
+				2643,
+				2654,
+				2668,
+				2637,
+				2571,
+				2634
 			]
 		}
 	],
 	"packageName": "@medusajs/types",
 	"symbolIdMap": {
-		"2032": {
+		"2493": {
 			"sourceFileName": "../../../../packages/core/types/src/currency/service.ts",
 			"qualifiedName": ""
 		},
-		"2033": {
+		"2494": {
 			"sourceFileName": "../../../../packages/core/types/src/currency/service.ts",
 			"qualifiedName": "ICurrencyModuleService"
 		},
-		"2034": {
+		"2495": {
 			"sourceFileName": "../../../../packages/core/types/src/currency/service.ts",
 			"qualifiedName": "ICurrencyModuleService.retrieveCurrency"
 		},
-		"2035": {
+		"2496": {
 			"sourceFileName": "../../../../packages/core/types/src/currency/service.ts",
 			"qualifiedName": "ICurrencyModuleService.retrieveCurrency"
 		},
-		"2036": {
+		"2497": {
 			"sourceFileName": "../../../../packages/core/types/src/currency/service.ts",
 			"qualifiedName": "code"
 		},
-		"2037": {
+		"2498": {
 			"sourceFileName": "../../../../packages/core/types/src/currency/service.ts",
 			"qualifiedName": "config"
 		},
-		"2038": {
+		"2499": {
 			"sourceFileName": "../../../../packages/core/types/src/currency/service.ts",
 			"qualifiedName": "sharedContext"
 		},
-		"2039": {
+		"2500": {
 			"sourceFileName": "../../../../packages/core/types/src/currency/service.ts",
 			"qualifiedName": "ICurrencyModuleService.listCurrencies"
 		},
-		"2040": {
+		"2501": {
 			"sourceFileName": "../../../../packages/core/types/src/currency/service.ts",
 			"qualifiedName": "ICurrencyModuleService.listCurrencies"
 		},
-		"2041": {
+		"2502": {
 			"sourceFileName": "../../../../packages/core/types/src/currency/service.ts",
 			"qualifiedName": "filters"
 		},
-		"2042": {
+		"2503": {
 			"sourceFileName": "../../../../packages/core/types/src/currency/service.ts",
 			"qualifiedName": "config"
 		},
-		"2043": {
+		"2504": {
 			"sourceFileName": "../../../../packages/core/types/src/currency/service.ts",
 			"qualifiedName": "sharedContext"
 		},
-		"2044": {
+		"2505": {
 			"sourceFileName": "../../../../packages/core/types/src/currency/service.ts",
 			"qualifiedName": "ICurrencyModuleService.listAndCountCurrencies"
 		},
-		"2045": {
+		"2506": {
 			"sourceFileName": "../../../../packages/core/types/src/currency/service.ts",
 			"qualifiedName": "ICurrencyModuleService.listAndCountCurrencies"
 		},
-		"2046": {
+		"2507": {
 			"sourceFileName": "../../../../packages/core/types/src/currency/service.ts",
 			"qualifiedName": "filters"
 		},
-		"2047": {
+		"2508": {
 			"sourceFileName": "../../../../packages/core/types/src/currency/service.ts",
 			"qualifiedName": "config"
 		},
-		"2048": {
+		"2509": {
 			"sourceFileName": "../../../../packages/core/types/src/currency/service.ts",
 			"qualifiedName": "sharedContext"
 		},
-		"2062": {
+		"2523": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "IModuleService"
 		},
-		"2063": {
+		"2524": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "IModuleService.__joinerConfig"
 		},
-		"2064": {
+		"2525": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "IModuleService.__joinerConfig"
 		},
-		"2065": {
+		"2526": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "IModuleService.__hooks"
 		},
-		"2066": {
+		"2527": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type"
 		},
-		"2067": {
+		"2528": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type.onApplicationStart"
 		},
-		"2068": {
+		"2529": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type"
 		},
-		"2069": {
+		"2530": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type"
 		},
-		"2070": {
+		"2531": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type.onApplicationShutdown"
 		},
-		"2071": {
+		"2532": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type"
 		},
-		"2072": {
+		"2533": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type"
 		},
-		"2073": {
+		"2534": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type.onApplicationPrepareShutdown"
 		},
-		"2074": {
+		"2535": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type"
 		},
-		"2075": {
+		"2536": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type"
 		},
-		"2076": {
+		"2537": {
 			"sourceFileName": "../../../../packages/core/types/src/common/common.ts",
 			"qualifiedName": "FindConfig"
 		},
-		"2077": {
+		"2538": {
 			"sourceFileName": "../../../../packages/core/types/src/common/common.ts",
 			"qualifiedName": "FindConfig.select"
 		},
-		"2078": {
+		"2539": {
+			"sourceFileName": "",
+			"qualifiedName": "__type"
+		},
+		"2540": {
 			"sourceFileName": "../../../../packages/core/types/src/common/common.ts",
 			"qualifiedName": "FindConfig.skip"
 		},
-		"2079": {
+		"2541": {
 			"sourceFileName": "../../../../packages/core/types/src/common/common.ts",
 			"qualifiedName": "FindConfig.take"
 		},
-		"2080": {
+		"2542": {
 			"sourceFileName": "../../../../packages/core/types/src/common/common.ts",
 			"qualifiedName": "FindConfig.relations"
 		},
-		"2081": {
+		"2543": {
 			"sourceFileName": "../../../../packages/core/types/src/common/common.ts",
 			"qualifiedName": "FindConfig.order"
 		},
-		"2082": {
+		"2544": {
 			"sourceFileName": "../../../../packages/core/types/src/common/common.ts",
 			"qualifiedName": "FindConfig.withDeleted"
 		},
-		"2083": {
+		"2545": {
 			"sourceFileName": "../../../../packages/core/types/src/common/common.ts",
 			"qualifiedName": "FindConfig.filters"
 		},
-		"2084": {
+		"2546": {
 			"sourceFileName": "../../../../packages/core/types/src/common/common.ts",
 			"qualifiedName": "FindConfig.options"
 		},
-		"2085": {
+		"2547": {
 			"sourceFileName": "../../../../packages/core/types/src/common/common.ts",
 			"qualifiedName": "FindConfig.Entity"
 		},
-		"2086": {
+		"2548": {
 			"sourceFileName": "../../../../packages/core/types/src/currency/common/currency.ts",
 			"qualifiedName": "CurrencyDTO"
 		},
-		"2087": {
+		"2549": {
 			"sourceFileName": "../../../../packages/core/types/src/currency/common/currency.ts",
 			"qualifiedName": "CurrencyDTO.code"
 		},
-		"2088": {
+		"2550": {
 			"sourceFileName": "../../../../packages/core/types/src/currency/common/currency.ts",
 			"qualifiedName": "CurrencyDTO.symbol"
 		},
-		"2089": {
+		"2551": {
 			"sourceFileName": "../../../../packages/core/types/src/currency/common/currency.ts",
 			"qualifiedName": "CurrencyDTO.symbol_native"
 		},
-		"2090": {
+		"2552": {
 			"sourceFileName": "../../../../packages/core/types/src/currency/common/currency.ts",
 			"qualifiedName": "CurrencyDTO.name"
 		},
-		"2091": {
+		"2553": {
 			"sourceFileName": "../../../../packages/core/types/src/shared-context.ts",
 			"qualifiedName": "Context"
 		},
-		"2092": {
+		"2554": {
 			"sourceFileName": "../../../../packages/core/types/src/shared-context.ts",
 			"qualifiedName": "__type.__type"
 		},
-		"2093": {
+		"2555": {
 			"sourceFileName": "../../../../packages/core/types/src/shared-context.ts",
 			"qualifiedName": "__type.transactionManager"
 		},
-		"2094": {
+		"2556": {
 			"sourceFileName": "../../../../packages/core/types/src/shared-context.ts",
 			"qualifiedName": "__type.manager"
 		},
-		"2095": {
+		"2557": {
 			"sourceFileName": "../../../../packages/core/types/src/shared-context.ts",
 			"qualifiedName": "__type.isolationLevel"
 		},
-		"2096": {
+		"2558": {
 			"sourceFileName": "../../../../packages/core/types/src/shared-context.ts",
 			"qualifiedName": "__type.enableNestedTransactions"
 		},
-		"2097": {
+		"2559": {
 			"sourceFileName": "../../../../packages/core/types/src/shared-context.ts",
 			"qualifiedName": "__type.eventGroupId"
 		},
-		"2098": {
+		"2560": {
 			"sourceFileName": "../../../../packages/core/types/src/shared-context.ts",
 			"qualifiedName": "__type.transactionId"
 		},
-		"2099": {
+		"2561": {
 			"sourceFileName": "../../../../packages/core/types/src/shared-context.ts",
 			"qualifiedName": "__type.messageAggregator"
 		},
-		"2100": {
+		"2562": {
 			"sourceFileName": "../../../../packages/core/types/src/shared-context.ts",
 			"qualifiedName": "__type.requestId"
 		},
-		"2101": {
+		"2563": {
 			"sourceFileName": "../../../../packages/core/types/src/shared-context.ts",
 			"qualifiedName": "__type.idempotencyKey"
 		},
-		"2102": {
+		"2564": {
 			"sourceFileName": "../../../../packages/core/types/src/shared-context.ts",
 			"qualifiedName": "__type.parentStepIdempotencyKey"
 		},
-		"2103": {
+		"2565": {
 			"sourceFileName": "../../../../packages/core/types/src/shared-context.ts",
 			"qualifiedName": "TManager"
 		},
-		"2104": {
+		"2566": {
 			"sourceFileName": "../../../../packages/core/types/src/currency/common/currency.ts",
 			"qualifiedName": "FilterableCurrencyProps"
 		},
-		"2105": {
+		"2567": {
 			"sourceFileName": "../../../../packages/core/types/src/currency/common/currency.ts",
 			"qualifiedName": "FilterableCurrencyProps.q"
 		},
-		"2106": {
+		"2568": {
 			"sourceFileName": "../../../../packages/core/types/src/currency/common/currency.ts",
 			"qualifiedName": "FilterableCurrencyProps.code"
 		},
-		"2107": {
+		"2569": {
 			"sourceFileName": "../../../../packages/core/types/src/dal/index.ts",
 			"qualifiedName": "BaseFilterable.$and"
 		},
-		"2108": {
+		"2570": {
 			"sourceFileName": "../../../../packages/core/types/src/dal/index.ts",
 			"qualifiedName": "BaseFilterable.$or"
 		},
-		"2109": {
+		"2571": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "ModuleJoinerConfig"
 		},
-		"2110": {
+		"2572": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type"
 		},
-		"2111": {
+		"2573": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type.schema"
 		},
-		"2112": {
+		"2574": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type.relationships"
 		},
-		"2113": {
+		"2575": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type.extends"
 		},
-		"2114": {
+		"2576": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type"
 		},
-		"2115": {
+		"2577": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type.serviceName"
 		},
-		"2116": {
+		"2578": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type.entity"
 		},
-		"2117": {
+		"2579": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type.fieldAlias"
 		},
-		"2118": {
+		"2580": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type"
 		},
-		"2119": {
+		"2581": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type.path"
 		},
-		"2120": {
+		"2582": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type.forwardArgumentsOnPath"
 		},
-		"2121": {
+		"2583": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type.isList"
 		},
-		"2122": {
+		"2584": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type.relationship"
 		},
-		"2123": {
+		"2585": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type.serviceName"
 		},
-		"2124": {
+		"2586": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type.primaryKeys"
 		},
-		"2125": {
+		"2587": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type.isLink"
 		},
-		"2126": {
+		"2588": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type.linkableKeys"
 		},
-		"2127": {
+		"2589": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type.isReadOnlyLink"
 		},
-		"2128": {
+		"2590": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type.extraDataFields"
 		},
-		"2129": {
+		"2591": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type.databaseConfig"
 		},
-		"2130": {
+		"2592": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type"
 		},
-		"2131": {
+		"2593": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type.tableName"
 		},
-		"2132": {
+		"2594": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type.idPrefix"
 		},
-		"2133": {
+		"2595": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type.extraFields"
 		},
-		"2134": {
+		"2596": {
 			"sourceFileName": "../../../../packages/core/types/src/common/common.ts",
 			"qualifiedName": "FindConfigOrder"
 		},
-		"2135": {
+		"2597": {
 			"sourceFileName": "../../../../packages/core/types/src/common/common.ts",
 			"qualifiedName": "__type"
 		},
-		"2136": {
+		"2598": {
 			"sourceFileName": "../../../../packages/core/types/src/common/common.ts",
 			"qualifiedName": "__type.__index"
 		},
-		"2138": {
-			"sourceFileName": "../../../../packages/core/types/src/common/common.ts",
+		"2600": {
+			"sourceFileName": "",
 			"qualifiedName": "__type"
 		},
-		"2139": {
+		"2601": {
 			"sourceFileName": "../../../../packages/core/types/src/shared-context.ts",
 			"qualifiedName": "IMessageAggregator"
 		},
-		"2140": {
+		"2602": {
 			"sourceFileName": "../../../../packages/core/types/src/shared-context.ts",
 			"qualifiedName": "IMessageAggregator.save"
 		},
-		"2141": {
+		"2603": {
 			"sourceFileName": "../../../../packages/core/types/src/shared-context.ts",
 			"qualifiedName": "IMessageAggregator.save"
 		},
-		"2142": {
+		"2604": {
 			"sourceFileName": "../../../../packages/core/types/src/shared-context.ts",
 			"qualifiedName": "msg"
 		},
-		"2143": {
+		"2605": {
 			"sourceFileName": "../../../../packages/core/types/src/shared-context.ts",
 			"qualifiedName": "IMessageAggregator.getMessages"
 		},
-		"2144": {
+		"2606": {
 			"sourceFileName": "../../../../packages/core/types/src/shared-context.ts",
 			"qualifiedName": "IMessageAggregator.getMessages"
 		},
-		"2145": {
+		"2607": {
 			"sourceFileName": "../../../../packages/core/types/src/shared-context.ts",
 			"qualifiedName": "format"
 		},
-		"2146": {
+		"2608": {
 			"sourceFileName": "../../../../packages/core/types/src/shared-context.ts",
 			"qualifiedName": "IMessageAggregator.clearMessages"
 		},
-		"2147": {
+		"2609": {
 			"sourceFileName": "../../../../packages/core/types/src/shared-context.ts",
 			"qualifiedName": "IMessageAggregator.clearMessages"
 		},
-		"2148": {
+		"2610": {
 			"sourceFileName": "../../../../packages/core/types/src/shared-context.ts",
 			"qualifiedName": "IMessageAggregator.saveRawMessageData"
 		},
-		"2149": {
+		"2611": {
 			"sourceFileName": "../../../../packages/core/types/src/shared-context.ts",
 			"qualifiedName": "IMessageAggregator.saveRawMessageData"
 		},
-		"2150": {
+		"2612": {
 			"sourceFileName": "../../../../packages/core/types/src/shared-context.ts",
 			"qualifiedName": "T"
 		},
-		"2151": {
+		"2613": {
 			"sourceFileName": "../../../../packages/core/types/src/shared-context.ts",
 			"qualifiedName": "messageData"
 		},
-		"2152": {
+		"2614": {
 			"sourceFileName": "../../../../packages/core/types/src/shared-context.ts",
 			"qualifiedName": "options"
 		},
-		"2153": {
+		"2615": {
 			"sourceFileName": "../../../../packages/core/types/src/dal/index.ts",
 			"qualifiedName": "BaseFilterable"
 		},
-		"2154": {
+		"2616": {
 			"sourceFileName": "../../../../packages/core/types/src/dal/index.ts",
 			"qualifiedName": "BaseFilterable.$and"
 		},
-		"2155": {
+		"2617": {
 			"sourceFileName": "../../../../packages/core/types/src/dal/index.ts",
 			"qualifiedName": "BaseFilterable.$or"
 		},
-		"2156": {
+		"2618": {
 			"sourceFileName": "../../../../packages/core/types/src/dal/index.ts",
 			"qualifiedName": "BaseFilterable.T"
 		},
-		"2157": {
+		"2619": {
 			"sourceFileName": "../../../../packages/core/types/src/joiner/index.ts",
 			"qualifiedName": "JoinerServiceConfig"
 		},
-		"2158": {
+		"2620": {
 			"sourceFileName": "../../../../packages/core/types/src/joiner/index.ts",
 			"qualifiedName": "JoinerServiceConfig.serviceName"
 		},
-		"2159": {
+		"2621": {
 			"sourceFileName": "../../../../packages/core/types/src/joiner/index.ts",
 			"qualifiedName": "JoinerServiceConfig.alias"
 		},
-		"2160": {
+		"2622": {
 			"sourceFileName": "../../../../packages/core/types/src/joiner/index.ts",
 			"qualifiedName": "JoinerServiceConfig.fieldAlias"
 		},
-		"2161": {
+		"2623": {
 			"sourceFileName": "../../../../packages/core/types/src/joiner/index.ts",
 			"qualifiedName": "__type"
 		},
-		"2162": {
+		"2624": {
 			"sourceFileName": "../../../../packages/core/types/src/joiner/index.ts",
 			"qualifiedName": "__type.path"
 		},
-		"2163": {
+		"2625": {
 			"sourceFileName": "../../../../packages/core/types/src/joiner/index.ts",
 			"qualifiedName": "__type.forwardArgumentsOnPath"
 		},
-		"2164": {
+		"2626": {
 			"sourceFileName": "../../../../packages/core/types/src/joiner/index.ts",
 			"qualifiedName": "JoinerServiceConfig.primaryKeys"
 		},
-		"2165": {
+		"2627": {
 			"sourceFileName": "../../../../packages/core/types/src/joiner/index.ts",
 			"qualifiedName": "JoinerServiceConfig.relationships"
 		},
-		"2166": {
+		"2628": {
 			"sourceFileName": "../../../../packages/core/types/src/joiner/index.ts",
 			"qualifiedName": "JoinerServiceConfig.extends"
 		},
-		"2167": {
+		"2629": {
 			"sourceFileName": "../../../../packages/core/types/src/joiner/index.ts",
 			"qualifiedName": "__type"
 		},
-		"2168": {
+		"2630": {
 			"sourceFileName": "../../../../packages/core/types/src/joiner/index.ts",
 			"qualifiedName": "__type.serviceName"
 		},
-		"2169": {
+		"2631": {
 			"sourceFileName": "../../../../packages/core/types/src/joiner/index.ts",
 			"qualifiedName": "__type.entity"
 		},
-		"2170": {
+		"2632": {
 			"sourceFileName": "../../../../packages/core/types/src/joiner/index.ts",
 			"qualifiedName": "__type.relationship"
 		},
-		"2171": {
+		"2633": {
 			"sourceFileName": "../../../../packages/core/types/src/joiner/index.ts",
 			"qualifiedName": "JoinerServiceConfig.args"
 		},
-		"2172": {
+		"2634": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "ModuleJoinerRelationship"
 		},
-		"2173": {
+		"2635": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type"
 		},
-		"2174": {
+		"2636": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type.deleteCascade"
 		},
-		"2175": {
+		"2637": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "LinkModulesExtraFields"
 		},
-		"2176": {
+		"2638": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type"
 		},
-		"2177": {
+		"2639": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type.type"
 		},
-		"2178": {
+		"2640": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type.defaultValue"
 		},
-		"2179": {
+		"2641": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type.nullable"
 		},
-		"2180": {
+		"2642": {
 			"sourceFileName": "../../../../packages/core/types/src/modules-sdk/index.ts",
 			"qualifiedName": "__type.options"
 		},
-		"2181": {
+		"2643": {
 			"sourceFileName": "../../../../packages/core/types/src/event-bus/common.ts",
 			"qualifiedName": "Message"
 		},
-		"2182": {
+		"2644": {
 			"sourceFileName": "../../../../packages/core/types/src/event-bus/common.ts",
 			"qualifiedName": "__type"
 		},
-		"2183": {
+		"2645": {
 			"sourceFileName": "../../../../packages/core/types/src/event-bus/common.ts",
 			"qualifiedName": "__type.options"
 		},
-		"2184": {
+		"2646": {
 			"sourceFileName": "../../../../packages/core/types/src/event-bus/common.ts",
 			"qualifiedName": "TData"
 		},
-		"2185": {
+		"2647": {
 			"sourceFileName": "../../../../packages/core/types/src/shared-context.ts",
 			"qualifiedName": "MessageAggregatorFormat"
 		},
-		"2186": {
+		"2648": {
 			"sourceFileName": "../../../../packages/core/types/src/shared-context.ts",
 			"qualifiedName": "MessageAggregatorFormat.groupBy"
 		},
-		"2187": {
+		"2649": {
 			"sourceFileName": "../../../../packages/core/types/src/shared-context.ts",
 			"qualifiedName": "MessageAggregatorFormat.sortBy"
 		},
-		"2188": {
+		"2650": {
 			"sourceFileName": "../../../../packages/core/types/src/shared-context.ts",
 			"qualifiedName": "__type"
 		},
-		"2189": {
+		"2651": {
 			"sourceFileName": "../../../../packages/core/types/src/shared-context.ts",
 			"qualifiedName": "__type.__index"
 		},
-		"2191": {
+		"2653": {
 			"sourceFileName": "../../../../packages/core/types/src/shared-context.ts",
 			"qualifiedName": "MessageAggregatorFormat.internal"
 		},
-		"2192": {
+		"2654": {
 			"sourceFileName": "../../../../packages/core/types/src/event-bus/common.ts",
 			"qualifiedName": "RawMessageFormat"
 		},
-		"2193": {
+		"2655": {
 			"sourceFileName": "../../../../packages/core/types/src/event-bus/common.ts",
 			"qualifiedName": "__type"
 		},
-		"2194": {
+		"2656": {
 			"sourceFileName": "../../../../packages/core/types/src/event-bus/common.ts",
 			"qualifiedName": "__type.eventName"
 		},
-		"2195": {
+		"2657": {
 			"sourceFileName": "../../../../packages/core/types/src/event-bus/common.ts",
 			"qualifiedName": "__type.data"
 		},
-		"2196": {
+		"2658": {
 			"sourceFileName": "../../../../packages/core/types/src/event-bus/common.ts",
 			"qualifiedName": "__type.source"
 		},
-		"2197": {
+		"2659": {
 			"sourceFileName": "../../../../packages/core/types/src/event-bus/common.ts",
 			"qualifiedName": "__type.object"
 		},
-		"2198": {
+		"2660": {
 			"sourceFileName": "../../../../packages/core/types/src/event-bus/common.ts",
 			"qualifiedName": "__type.action"
 		},
-		"2199": {
+		"2661": {
 			"sourceFileName": "../../../../packages/core/types/src/event-bus/common.ts",
 			"qualifiedName": "__type.context"
 		},
-		"2200": {
+		"2662": {
 			"sourceFileName": "../../../../packages/core/types/src/event-bus/common.ts",
 			"qualifiedName": "__type.options"
 		},
-		"2201": {
+		"2663": {
 			"sourceFileName": "../../../../packages/core/types/src/event-bus/common.ts",
 			"qualifiedName": "TData"
 		},
-		"2202": {
+		"2664": {
 			"sourceFileName": "../../../../packages/core/types/src/joiner/index.ts",
 			"qualifiedName": "JoinerServiceConfigAlias"
 		},
-		"2203": {
+		"2665": {
 			"sourceFileName": "../../../../packages/core/types/src/joiner/index.ts",
 			"qualifiedName": "JoinerServiceConfigAlias.name"
 		},
-		"2204": {
+		"2666": {
 			"sourceFileName": "../../../../packages/core/types/src/joiner/index.ts",
 			"qualifiedName": "JoinerServiceConfigAlias.entity"
 		},
-		"2205": {
+		"2667": {
 			"sourceFileName": "../../../../packages/core/types/src/joiner/index.ts",
 			"qualifiedName": "JoinerServiceConfigAlias.args"
 		},
-		"2206": {
+		"2668": {
 			"sourceFileName": "../../../../packages/core/types/src/joiner/index.ts",
 			"qualifiedName": "JoinerRelationship"
 		},
-		"2207": {
+		"2669": {
 			"sourceFileName": "../../../../packages/core/types/src/joiner/index.ts",
 			"qualifiedName": "__type"
 		},
-		"2208": {
+		"2670": {
 			"sourceFileName": "../../../../packages/core/types/src/joiner/index.ts",
 			"qualifiedName": "__type.alias"
 		},
-		"2209": {
+		"2671": {
 			"sourceFileName": "../../../../packages/core/types/src/joiner/index.ts",
 			"qualifiedName": "__type.foreignKey"
 		},
-		"2210": {
+		"2672": {
 			"sourceFileName": "../../../../packages/core/types/src/joiner/index.ts",
 			"qualifiedName": "__type.primaryKey"
 		},
-		"2211": {
+		"2673": {
 			"sourceFileName": "../../../../packages/core/types/src/joiner/index.ts",
 			"qualifiedName": "__type.serviceName"
 		},
-		"2212": {
+		"2674": {
 			"sourceFileName": "../../../../packages/core/types/src/joiner/index.ts",
 			"qualifiedName": "__type.entity"
 		},
-		"2213": {
+		"2675": {
 			"sourceFileName": "../../../../packages/core/types/src/joiner/index.ts",
 			"qualifiedName": "__type.inverse"
 		},
-		"2214": {
+		"2676": {
 			"sourceFileName": "../../../../packages/core/types/src/joiner/index.ts",
 			"qualifiedName": "__type.isList"
 		},
-		"2215": {
+		"2677": {
 			"sourceFileName": "../../../../packages/core/types/src/joiner/index.ts",
 			"qualifiedName": "__type.args"
 		},
-		"2216": {
+		"2678": {
 			"sourceFileName": "../../../../packages/core/types/src/event-bus/common.ts",
 			"qualifiedName": "Event"
 		},
-		"2217": {
+		"2679": {
 			"sourceFileName": "../../../../packages/core/types/src/event-bus/common.ts",
 			"qualifiedName": "__type"
 		},
-		"2218": {
+		"2680": {
 			"sourceFileName": "../../../../packages/core/types/src/event-bus/common.ts",
 			"qualifiedName": "__type.name"
 		},
-		"2219": {
+		"2681": {
 			"sourceFileName": "../../../../packages/core/types/src/event-bus/common.ts",
 			"qualifiedName": "__type.metadata"
 		},
-		"2220": {
+		"2682": {
 			"sourceFileName": "../../../../packages/core/types/src/event-bus/common.ts",
 			"qualifiedName": "__type.data"
 		},
-		"2221": {
+		"2683": {
 			"sourceFileName": "../../../../packages/core/types/src/event-bus/common.ts",
 			"qualifiedName": "TData"
 		},
-		"2222": {
+		"2684": {
 			"sourceFileName": "../../../../packages/core/types/src/event-bus/common.ts",
 			"qualifiedName": "EventMetadata"
 		},
-		"2223": {
+		"2685": {
 			"sourceFileName": "../../../../packages/core/types/src/event-bus/common.ts",
 			"qualifiedName": "__type"
 		},
-		"2224": {
+		"2686": {
 			"sourceFileName": "../../../../packages/core/types/src/event-bus/common.ts",
 			"qualifiedName": "__type.eventGroupId"
 		}
@@ -4898,7 +6016,7 @@
 			"1": "../../../../packages/core/types/src/currency/service.ts"
 		},
 		"reflections": {
-			"1": 2032
+			"1": 2493
 		}
 	}
 }

@@ -1,35 +1,110 @@
 import {
   CreatePriceSetDTO,
+  CreatePriceSetPriceRules,
   IPricingModuleService,
   IRegionModuleService,
+  PriceRule,
 } from "@medusajs/framework/types"
-import { Modules } from "@medusajs/framework/utils"
-import { StepResponse, createStep } from "@medusajs/framework/workflows-sdk"
+import { isString, Modules } from "@medusajs/framework/utils"
+import { createStep, StepResponse } from "@medusajs/framework/workflows-sdk"
 
+/**
+ * The data to create price sets for a currency code.
+ */
 export interface ShippingOptionsPriceCurrencyCode {
+  /**
+   * The currency code of the price.
+   * 
+   * @example
+   * usd
+   */
   currency_code: string
+  /**
+   * The amount of the price.
+   */
   amount: number
+  /**
+   * The rules of the price.
+   */
+  rules?: PriceRule[]
 }
 
+/**
+ * The data to create price sets for a region ID.
+ */
 interface ShippingOptionsPriceRegionId {
+  /**
+   * The ID of the region that this price applies in.
+   */
   region_id: string
+  /**
+   * The amount of the price.
+   */
   amount: number
+  /**
+   * The rules of the price.
+   */
+  rules?: PriceRule[]
 }
 
+/**
+ * The data to create price sets for shipping options.
+ */
 export type CreateShippingOptionsPriceSetsStepInput = {
+  /**
+   * The ID of the shipping option.
+   */
   id: string
+  /**
+   * The prices to create for the shipping option.
+   */
   prices: (ShippingOptionsPriceCurrencyCode | ShippingOptionsPriceRegionId)[]
 }[]
 
-function buildPriceSet(
+/**
+ * The result of creating price sets for shipping options.
+ */
+export type CreateShippingOptionsPriceSetsStepOutput = {
+  /**
+   * The ID of the shipping option.
+   */
+  id: string
+  /**
+   * The ID of the price set.
+   */
+  priceSetId: string
+}[]
+
+export function buildPriceSet(
   prices: CreateShippingOptionsPriceSetsStepInput[0]["prices"],
   regionToCurrencyMap: Map<string, string>
 ): CreatePriceSetDTO {
   const shippingOptionPrices = prices.map((price) => {
+    const { rules = [] } = price
+    const additionalRules: CreatePriceSetPriceRules = {}
+
+    for (const rule of rules) {
+      let existingPriceRules = additionalRules[rule.attribute]
+
+      if (isString(existingPriceRules)) {
+        continue
+      }
+
+      existingPriceRules ||= []
+
+      existingPriceRules.push({
+        operator: rule.operator,
+        value: rule.value,
+      })
+
+      additionalRules[rule.attribute] = existingPriceRules
+    }
+
     if ("currency_code" in price) {
       return {
         currency_code: price.currency_code,
         amount: price.amount,
+        rules: additionalRules,
       }
     }
 
@@ -38,6 +113,7 @@ function buildPriceSet(
       amount: price.amount,
       rules: {
         region_id: price.region_id,
+        ...additionalRules,
       },
     }
   })
@@ -100,7 +176,7 @@ export const createShippingOptionsPriceSetsStep = createStep(
         id: input.id,
         priceSetId: priceSets[index].id,
       }
-    })
+    }) as CreateShippingOptionsPriceSetsStepOutput
 
     return new StepResponse(
       shippingOptionPriceSetLinData,

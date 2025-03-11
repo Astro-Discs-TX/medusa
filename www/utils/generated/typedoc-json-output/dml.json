@@ -1,23 +1,31 @@
 {
-	"id": 36890,
+	"id": 38796,
 	"name": "dml",
 	"variant": "project",
 	"kind": 1,
 	"flags": {},
 	"children": [
 		{
-			"id": 36891,
+			"id": 38797,
 			"name": "entity-builder",
 			"variant": "declaration",
 			"kind": 2,
 			"flags": {},
 			"children": [
 				{
-					"id": 36892,
+					"id": 38798,
 					"name": "DefineOptions",
 					"variant": "declaration",
 					"kind": 2097152,
 					"flags": {},
+					"sources": [
+						{
+							"fileName": "utils/src/dml/entity-builder.ts",
+							"line": 31,
+							"character": 12,
+							"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L31"
+						}
+					],
 					"type": {
 						"type": "union",
 						"types": [
@@ -28,14 +36,14 @@
 							{
 								"type": "reflection",
 								"declaration": {
-									"id": 36893,
+									"id": 38799,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"children": [
 										{
-											"id": 36894,
+											"id": 38800,
 											"name": "name",
 											"variant": "declaration",
 											"kind": 1024,
@@ -50,13 +58,21 @@
 													}
 												]
 											},
+											"sources": [
+												{
+													"fileName": "utils/src/dml/entity-builder.ts",
+													"line": 37,
+													"character": 6,
+													"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L37"
+												}
+											],
 											"type": {
 												"type": "intrinsic",
 												"name": "string"
 											}
 										},
 										{
-											"id": 36895,
+											"id": 38801,
 											"name": "tableName",
 											"variant": "declaration",
 											"kind": 1024,
@@ -69,6 +85,14 @@
 													}
 												]
 											},
+											"sources": [
+												{
+													"fileName": "utils/src/dml/entity-builder.ts",
+													"line": 41,
+													"character": 6,
+													"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L41"
+												}
+											],
 											"type": {
 												"type": "intrinsic",
 												"name": "string"
@@ -79,9 +103,17 @@
 										{
 											"title": "Properties",
 											"children": [
-												36894,
-												36895
+												38800,
+												38801
 											]
+										}
+									],
+									"sources": [
+										{
+											"fileName": "utils/src/dml/entity-builder.ts",
+											"line": 33,
+											"character": 4,
+											"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L33"
 										}
 									]
 								}
@@ -90,11 +122,19 @@
 					}
 				},
 				{
-					"id": 36896,
+					"id": 38802,
 					"name": "ManyToManyOptions",
 					"variant": "declaration",
 					"kind": 2097152,
 					"flags": {},
+					"sources": [
+						{
+							"fileName": "utils/src/dml/entity-builder.ts",
+							"line": 44,
+							"character": 12,
+							"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L44"
+						}
+					],
 					"type": {
 						"type": "intersection",
 						"types": [
@@ -113,14 +153,14 @@
 									{
 										"type": "reflection",
 										"declaration": {
-											"id": 36897,
+											"id": 38803,
 											"name": "__type",
 											"variant": "declaration",
 											"kind": 65536,
 											"flags": {},
 											"children": [
 												{
-													"id": 36898,
+													"id": 38804,
 													"name": "pivotTable",
 													"variant": "declaration",
 													"kind": 1024,
@@ -135,13 +175,21 @@
 															}
 														]
 													},
+													"sources": [
+														{
+															"fileName": "utils/src/dml/entity-builder.ts",
+															"line": 51,
+															"character": 8,
+															"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L51"
+														}
+													],
 													"type": {
 														"type": "intrinsic",
 														"name": "string"
 													}
 												},
 												{
-													"id": 36900,
+													"id": 38806,
 													"name": "joinColumn",
 													"variant": "declaration",
 													"kind": 1024,
@@ -156,13 +204,33 @@
 															}
 														]
 													},
+													"sources": [
+														{
+															"fileName": "utils/src/dml/entity-builder.ts",
+															"line": 59,
+															"character": 8,
+															"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L59"
+														}
+													],
 													"type": {
-														"type": "intrinsic",
-														"name": "string"
+														"type": "union",
+														"types": [
+															{
+																"type": "intrinsic",
+																"name": "string"
+															},
+															{
+																"type": "array",
+																"elementType": {
+																	"type": "intrinsic",
+																	"name": "string"
+																}
+															}
+														]
 													}
 												},
 												{
-													"id": 36901,
+													"id": 38807,
 													"name": "inverseJoinColumn",
 													"variant": "declaration",
 													"kind": 1024,
@@ -177,9 +245,29 @@
 															}
 														]
 													},
+													"sources": [
+														{
+															"fileName": "utils/src/dml/entity-builder.ts",
+															"line": 63,
+															"character": 8,
+															"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L63"
+														}
+													],
 													"type": {
-														"type": "intrinsic",
-														"name": "string"
+														"type": "union",
+														"types": [
+															{
+																"type": "intrinsic",
+																"name": "string"
+															},
+															{
+																"type": "array",
+																"elementType": {
+																	"type": "intrinsic",
+																	"name": "string"
+																}
+															}
+														]
 													}
 												}
 											],
@@ -187,10 +275,18 @@
 												{
 													"title": "Properties",
 													"children": [
-														36898,
-														36900,
-														36901
+														38804,
+														38806,
+														38807
 													]
+												}
+											],
+											"sources": [
+												{
+													"fileName": "utils/src/dml/entity-builder.ts",
+													"line": 46,
+													"character": 6,
+													"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L46"
 												}
 											]
 										}
@@ -198,14 +294,14 @@
 									{
 										"type": "reflection",
 										"declaration": {
-											"id": 36902,
+											"id": 38808,
 											"name": "__type",
 											"variant": "declaration",
 											"kind": 65536,
 											"flags": {},
 											"children": [
 												{
-													"id": 36904,
+													"id": 38810,
 													"name": "pivotEntity",
 													"variant": "declaration",
 													"kind": 1024,
@@ -220,24 +316,40 @@
 															}
 														]
 													},
+													"sources": [
+														{
+															"fileName": "utils/src/dml/entity-builder.ts",
+															"line": 75,
+															"character": 8,
+															"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L75"
+														}
+													],
 													"type": {
 														"type": "reflection",
 														"declaration": {
-															"id": 36905,
+															"id": 38811,
 															"name": "__type",
 															"variant": "declaration",
 															"kind": 65536,
 															"flags": {},
+															"sources": [
+																{
+																	"fileName": "utils/src/dml/entity-builder.ts",
+																	"line": 75,
+																	"character": 22,
+																	"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L75"
+																}
+															],
 															"signatures": [
 																{
-																	"id": 36906,
+																	"id": 38812,
 																	"name": "__type",
 																	"variant": "signature",
 																	"kind": 4096,
 																	"flags": {},
 																	"type": {
 																		"type": "reference",
-																		"target": 36964,
+																		"target": 38897,
 																		"typeArguments": [
 																			{
 																				"type": "intrinsic",
@@ -255,14 +367,106 @@
 															]
 														}
 													}
+												},
+												{
+													"id": 38813,
+													"name": "joinColumn",
+													"variant": "declaration",
+													"kind": 1024,
+													"flags": {
+														"isOptional": true
+													},
+													"comment": {
+														"summary": [
+															{
+																"kind": "text",
+																"text": "The column name in the pivot table that for the current entity"
+															}
+														]
+													},
+													"sources": [
+														{
+															"fileName": "utils/src/dml/entity-builder.ts",
+															"line": 79,
+															"character": 8,
+															"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L79"
+														}
+													],
+													"type": {
+														"type": "union",
+														"types": [
+															{
+																"type": "intrinsic",
+																"name": "string"
+															},
+															{
+																"type": "array",
+																"elementType": {
+																	"type": "intrinsic",
+																	"name": "string"
+																}
+															}
+														]
+													}
+												},
+												{
+													"id": 38814,
+													"name": "inverseJoinColumn",
+													"variant": "declaration",
+													"kind": 1024,
+													"flags": {
+														"isOptional": true
+													},
+													"comment": {
+														"summary": [
+															{
+																"kind": "text",
+																"text": "The column name in the pivot table for the opposite entity"
+															}
+														]
+													},
+													"sources": [
+														{
+															"fileName": "utils/src/dml/entity-builder.ts",
+															"line": 83,
+															"character": 8,
+															"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L83"
+														}
+													],
+													"type": {
+														"type": "union",
+														"types": [
+															{
+																"type": "intrinsic",
+																"name": "string"
+															},
+															{
+																"type": "array",
+																"elementType": {
+																	"type": "intrinsic",
+																	"name": "string"
+																}
+															}
+														]
+													}
 												}
 											],
 											"groups": [
 												{
 													"title": "Properties",
 													"children": [
-														36904
+														38810,
+														38813,
+														38814
 													]
+												}
+											],
+											"sources": [
+												{
+													"fileName": "utils/src/dml/entity-builder.ts",
+													"line": 65,
+													"character": 6,
+													"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L65"
 												}
 											]
 										}
@@ -273,7 +477,7 @@
 					}
 				},
 				{
-					"id": 36907,
+					"id": 38815,
 					"name": "EntityBuilder",
 					"variant": "declaration",
 					"kind": 128,
@@ -288,21 +492,21 @@
 					},
 					"children": [
 						{
-							"id": 36908,
+							"id": 38816,
 							"name": "constructor",
 							"variant": "declaration",
 							"kind": 512,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 36909,
-									"name": "new EntityBuilder",
+									"id": 38817,
+									"name": "EntityBuilder",
 									"variant": "signature",
 									"kind": 16384,
 									"flags": {},
 									"type": {
 										"type": "reference",
-										"target": 36907,
+										"target": 38815,
 										"name": "EntityBuilder",
 										"package": "@medusajs/utils"
 									}
@@ -310,14 +514,22 @@
 							]
 						},
 						{
-							"id": 36913,
+							"id": 38821,
 							"name": "define",
 							"variant": "declaration",
 							"kind": 2048,
 							"flags": {},
+							"sources": [
+								{
+									"fileName": "utils/src/dml/entity-builder.ts",
+									"line": 125,
+									"character": 2,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L125"
+								}
+							],
 							"signatures": [
 								{
-									"id": 36914,
+									"id": 38822,
 									"name": "define",
 									"variant": "signature",
 									"kind": 4096,
@@ -341,9 +553,17 @@
 											}
 										]
 									},
+									"sources": [
+										{
+											"fileName": "utils/src/dml/entity-builder.ts",
+											"line": 125,
+											"character": 2,
+											"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L125"
+										}
+									],
 									"typeParameters": [
 										{
-											"id": 36915,
+											"id": 38823,
 											"name": "Schema",
 											"variant": "typeParam",
 											"kind": 131072,
@@ -367,7 +587,7 @@
 											}
 										},
 										{
-											"id": 36916,
+											"id": 38824,
 											"name": "TConfig",
 											"variant": "typeParam",
 											"kind": 131072,
@@ -387,7 +607,7 @@
 									],
 									"parameters": [
 										{
-											"id": 36917,
+											"id": 38825,
 											"name": "nameOrConfig",
 											"variant": "param",
 											"kind": 32768,
@@ -402,14 +622,14 @@
 											},
 											"type": {
 												"type": "reference",
-												"target": 36916,
+												"target": 38824,
 												"name": "TConfig",
 												"package": "@medusajs/utils",
 												"refersToTypeParameter": true
 											}
 										},
 										{
-											"id": 36918,
+											"id": 38826,
 											"name": "schema",
 											"variant": "param",
 											"kind": 32768,
@@ -424,7 +644,7 @@
 											},
 											"type": {
 												"type": "reference",
-												"target": 36915,
+												"target": 38823,
 												"name": "Schema",
 												"package": "@medusajs/utils",
 												"refersToTypeParameter": true
@@ -433,282 +653,26 @@
 									],
 									"type": {
 										"type": "reference",
-										"target": 36964,
+										"target": 38897,
 										"typeArguments": [
 											{
-												"type": "intersection",
-												"types": [
+												"type": "reference",
+												"target": 38895,
+												"typeArguments": [
 													{
 														"type": "reference",
-														"target": 36915,
+														"target": 38823,
 														"name": "Schema",
 														"package": "@medusajs/utils",
 														"refersToTypeParameter": true
-													},
-													{
-														"type": "mapped",
-														"parameter": "K",
-														"parameterType": {
-															"type": "union",
-															"types": [
-																{
-																	"type": "intrinsic",
-																	"name": "string"
-																},
-																{
-																	"type": "intrinsic",
-																	"name": "number"
-																},
-																{
-																	"type": "intrinsic",
-																	"name": "symbol"
-																}
-															]
-														},
-														"templateType": {
-															"type": "indexedAccess",
-															"indexType": {
-																"type": "reference",
-																"target": {
-																	"sourceFileName": "../../../../packages/core/utils/src/dml/helpers/entity-builder/create-big-number-properties.ts",
-																	"qualifiedName": "K"
-																},
-																"name": "K",
-																"package": "@medusajs/utils",
-																"refersToTypeParameter": true
-															},
-															"objectType": {
-																"type": "reference",
-																"target": 36915,
-																"name": "Schema",
-																"package": "@medusajs/utils",
-																"refersToTypeParameter": true
-															}
-														}
-													},
-													{
-														"type": "mapped",
-														"parameter": "K",
-														"parameterType": {
-															"type": "union",
-															"types": [
-																{
-																	"type": "intrinsic",
-																	"name": "string"
-																},
-																{
-																	"type": "intrinsic",
-																	"name": "number"
-																},
-																{
-																	"type": "intrinsic",
-																	"name": "symbol"
-																}
-															]
-														},
-														"templateType": {
-															"type": "conditional",
-															"checkType": {
-																"type": "indexedAccess",
-																"indexType": {
-																	"type": "reference",
-																	"target": {
-																		"sourceFileName": "../../../../packages/core/utils/src/dml/helpers/entity-builder/create-big-number-properties.ts",
-																		"qualifiedName": "K"
-																	},
-																	"name": "K",
-																	"package": "@medusajs/utils",
-																	"refersToTypeParameter": true
-																},
-																"objectType": {
-																	"type": "reference",
-																	"target": 36915,
-																	"name": "Schema",
-																	"package": "@medusajs/utils",
-																	"refersToTypeParameter": true
-																}
-															},
-															"extendsType": {
-																"type": "reference",
-																"target": {
-																	"sourceFileName": "../../../../packages/core/utils/src/dml/properties/nullable.ts",
-																	"qualifiedName": "NullableModifier"
-																},
-																"typeArguments": [
-																	{
-																		"type": "intrinsic",
-																		"name": "number"
-																	},
-																	{
-																		"type": "reference",
-																		"target": {
-																			"sourceFileName": "../../../../packages/core/utils/src/dml/properties/big-number.ts",
-																			"qualifiedName": "BigNumberProperty"
-																		},
-																		"name": "BigNumberProperty",
-																		"package": "@medusajs/utils"
-																	}
-																],
-																"name": "NullableModifier",
-																"package": "@medusajs/utils"
-															},
-															"trueType": {
-																"type": "reference",
-																"target": {
-																	"sourceFileName": "../../../../packages/core/utils/src/dml/properties/nullable.ts",
-																	"qualifiedName": "NullableModifier"
-																},
-																"typeArguments": [
-																	{
-																		"type": "reference",
-																		"target": {
-																			"sourceFileName": "../../node_modules/typescript/lib/lib.es5.d.ts",
-																			"qualifiedName": "Record"
-																		},
-																		"typeArguments": [
-																			{
-																				"type": "intrinsic",
-																				"name": "string"
-																			},
-																			{
-																				"type": "intrinsic",
-																				"name": "unknown"
-																			}
-																		],
-																		"name": "Record",
-																		"package": "typescript"
-																	},
-																	{
-																		"type": "reference",
-																		"target": {
-																			"sourceFileName": "../../../../packages/core/utils/src/dml/properties/json.ts",
-																			"qualifiedName": "JSONProperty"
-																		},
-																		"name": "JSONProperty",
-																		"package": "@medusajs/utils"
-																	}
-																],
-																"name": "NullableModifier",
-																"package": "@medusajs/utils"
-															},
-															"falseType": {
-																"type": "reference",
-																"target": {
-																	"sourceFileName": "../../../../packages/core/utils/src/dml/properties/json.ts",
-																	"qualifiedName": "JSONProperty"
-																},
-																"name": "JSONProperty",
-																"package": "@medusajs/utils"
-															}
-														},
-														"nameType": {
-															"type": "conditional",
-															"checkType": {
-																"type": "indexedAccess",
-																"indexType": {
-																	"type": "reference",
-																	"target": {
-																		"sourceFileName": "../../../../packages/core/utils/src/dml/helpers/entity-builder/create-big-number-properties.ts",
-																		"qualifiedName": "K"
-																	},
-																	"name": "K",
-																	"package": "@medusajs/utils",
-																	"refersToTypeParameter": true
-																},
-																"objectType": {
-																	"type": "reference",
-																	"target": 36915,
-																	"name": "Schema",
-																	"package": "@medusajs/utils",
-																	"refersToTypeParameter": true
-																}
-															},
-															"extendsType": {
-																"type": "union",
-																"types": [
-																	{
-																		"type": "reference",
-																		"target": {
-																			"sourceFileName": "../../../../packages/core/utils/src/dml/properties/big-number.ts",
-																			"qualifiedName": "BigNumberProperty"
-																		},
-																		"name": "BigNumberProperty",
-																		"package": "@medusajs/utils"
-																	},
-																	{
-																		"type": "reference",
-																		"target": {
-																			"sourceFileName": "../../../../packages/core/utils/src/dml/properties/nullable.ts",
-																			"qualifiedName": "NullableModifier"
-																		},
-																		"typeArguments": [
-																			{
-																				"type": "intrinsic",
-																				"name": "number"
-																			},
-																			{
-																				"type": "reference",
-																				"target": {
-																					"sourceFileName": "../../../../packages/core/utils/src/dml/properties/big-number.ts",
-																					"qualifiedName": "BigNumberProperty"
-																				},
-																				"name": "BigNumberProperty",
-																				"package": "@medusajs/utils"
-																			}
-																		],
-																		"name": "NullableModifier",
-																		"package": "@medusajs/utils"
-																	}
-																]
-															},
-															"trueType": {
-																"type": "templateLiteral",
-																"head": "raw_",
-																"tail": [
-																	[
-																		{
-																			"type": "intersection",
-																			"types": [
-																				{
-																					"type": "intrinsic",
-																					"name": "string"
-																				},
-																				{
-																					"type": "reference",
-																					"target": {
-																						"sourceFileName": "../../../../packages/core/utils/src/dml/helpers/entity-builder/create-big-number-properties.ts",
-																						"qualifiedName": "K"
-																					},
-																					"name": "K",
-																					"package": "@medusajs/utils",
-																					"refersToTypeParameter": true
-																				}
-																			]
-																		},
-																		""
-																	]
-																]
-															},
-															"falseType": {
-																"type": "intrinsic",
-																"name": "never"
-															}
-														}
-													},
-													{
-														"type": "reference",
-														"target": {
-															"sourceFileName": "../../../../packages/core/utils/src/dml/helpers/entity-builder/create-default-properties.ts",
-															"qualifiedName": "DMLSchemaDefaults"
-														},
-														"name": "DMLSchemaDefaults",
-														"package": "@medusajs/utils"
 													}
-												]
+												],
+												"name": "DMLEntitySchemaBuilder",
+												"package": "@medusajs/utils"
 											},
 											{
 												"type": "reference",
-												"target": 36916,
+												"target": 38824,
 												"name": "TConfig",
 												"package": "@medusajs/utils",
 												"refersToTypeParameter": true
@@ -725,41 +689,59 @@
 						{
 							"title": "Constructors",
 							"children": [
-								36908
+								38816
 							]
 						},
 						{
 							"title": "Methods",
 							"children": [
-								36913,
-								36919,
-								36924,
-								36926,
-								36928,
-								36930,
-								36932,
-								36934,
-								36936,
-								36938,
-								36942,
-								36947,
-								36952,
-								36957
+								38821,
+								38827,
+								38832,
+								38834,
+								38836,
+								38838,
+								38840,
+								38842,
+								38844,
+								38846,
+								38848,
+								38850,
+								38854,
+								38873,
+								38883,
+								38888
 							]
+						}
+					],
+					"sources": [
+						{
+							"fileName": "utils/src/dml/entity-builder.ts",
+							"line": 91,
+							"character": 13,
+							"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L91"
 						}
 					]
 				},
 				{
-					"id": 36962,
+					"id": 38893,
 					"name": "model",
 					"variant": "declaration",
 					"kind": 32,
 					"flags": {
 						"isConst": true
 					},
+					"sources": [
+						{
+							"fileName": "utils/src/dml/entity-builder.ts",
+							"line": 510,
+							"character": 13,
+							"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L510"
+						}
+					],
 					"type": {
 						"type": "reference",
-						"target": 36907,
+						"target": 38815,
 						"name": "EntityBuilder",
 						"package": "@medusajs/utils"
 					},
@@ -770,33 +752,113 @@
 				{
 					"title": "Classes",
 					"children": [
-						36907
+						38815
 					]
 				},
 				{
 					"title": "Type Aliases",
 					"children": [
-						36892,
-						36896
+						38798,
+						38802
 					]
 				},
 				{
 					"title": "Variables",
 					"children": [
-						36962
+						38893
 					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "utils/src/dml/entity-builder.ts",
+					"line": 1,
+					"character": 0,
+					"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L1"
 				}
 			]
 		},
 		{
-			"id": 36963,
+			"id": 38894,
 			"name": "entity",
 			"variant": "declaration",
 			"kind": 2,
 			"flags": {},
 			"children": [
 				{
-					"id": 36964,
+					"id": 38895,
+					"name": "DMLEntitySchemaBuilder",
+					"variant": "declaration",
+					"kind": 2097152,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "utils/src/dml/entity.ts",
+							"line": 20,
+							"character": 12,
+							"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity.ts#L20"
+						}
+					],
+					"typeParameters": [
+						{
+							"id": 38896,
+							"name": "Schema",
+							"variant": "typeParam",
+							"kind": 131072,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"sourceFileName": "../../../../packages/core/types/src/dml/index.ts",
+									"qualifiedName": "DMLSchema"
+								},
+								"name": "DMLSchema",
+								"package": "@medusajs/types"
+							}
+						}
+					],
+					"type": {
+						"type": "intersection",
+						"types": [
+							{
+								"type": "reference",
+								"target": {
+									"sourceFileName": "../../../../packages/core/utils/src/dml/helpers/entity-builder/create-big-number-properties.ts",
+									"qualifiedName": "DMLSchemaWithBigNumber"
+								},
+								"typeArguments": [
+									{
+										"type": "reference",
+										"target": 38896,
+										"name": "Schema",
+										"package": "@medusajs/utils",
+										"refersToTypeParameter": true
+									}
+								],
+								"name": "DMLSchemaWithBigNumber",
+								"package": "@medusajs/utils"
+							},
+							{
+								"type": "reference",
+								"target": {
+									"sourceFileName": "../../../../packages/core/utils/src/dml/helpers/entity-builder/create-default-properties.ts",
+									"qualifiedName": "DMLSchemaDefaults"
+								},
+								"name": "DMLSchemaDefaults",
+								"package": "@medusajs/utils"
+							},
+							{
+								"type": "reference",
+								"target": 38896,
+								"name": "Schema",
+								"package": "@medusajs/utils",
+								"refersToTypeParameter": true
+							}
+						]
+					}
+				},
+				{
+					"id": 38897,
 					"name": "DmlEntity",
 					"variant": "declaration",
 					"kind": 128,
@@ -811,11 +873,19 @@
 					},
 					"children": [
 						{
-							"id": 36993,
+							"id": 38931,
 							"name": "[IsDmlEntity]",
 							"variant": "declaration",
 							"kind": 1024,
 							"flags": {},
+							"sources": [
+								{
+									"fileName": "utils/src/dml/entity.ts",
+									"line": 73,
+									"character": 2,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity.ts#L73"
+								}
+							],
 							"type": {
 								"type": "intrinsic",
 								"name": "boolean"
@@ -823,11 +893,19 @@
 							"defaultValue": "true"
 						},
 						{
-							"id": 36974,
+							"id": 38907,
 							"name": "name",
 							"variant": "declaration",
 							"kind": 1024,
 							"flags": {},
+							"sources": [
+								{
+									"fileName": "utils/src/dml/entity.ts",
+									"line": 75,
+									"character": 2,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity.ts#L75"
+								}
+							],
 							"type": {
 								"type": "reference",
 								"target": {
@@ -837,7 +915,7 @@
 								"typeArguments": [
 									{
 										"type": "reference",
-										"target": 36971,
+										"target": 38904,
 										"name": "TConfig",
 										"package": "@medusajs/utils",
 										"qualifiedName": "DmlEntity.TConfig",
@@ -854,14 +932,22 @@
 							}
 						},
 						{
-							"id": 36975,
+							"id": 38908,
 							"name": "schema",
 							"variant": "declaration",
 							"kind": 1024,
 							"flags": {},
+							"sources": [
+								{
+									"fileName": "utils/src/dml/entity.ts",
+									"line": 76,
+									"character": 2,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity.ts#L76"
+								}
+							],
 							"type": {
 								"type": "reference",
-								"target": 36970,
+								"target": 38903,
 								"name": "Schema",
 								"package": "@medusajs/utils",
 								"qualifiedName": "DmlEntity.Schema",
@@ -874,25 +960,43 @@
 							}
 						},
 						{
-							"id": 36968,
+							"id": 38901,
 							"name": "constructor",
 							"variant": "declaration",
 							"kind": 512,
 							"flags": {},
+							"sources": [
+								{
+									"fileName": "utils/src/dml/entity.ts",
+									"line": 84,
+									"character": 2,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity.ts#L84"
+								}
+							],
 							"signatures": [
 								{
-									"id": 36969,
-									"name": "new DmlEntity",
+									"id": 38902,
+									"name": "DmlEntity",
 									"variant": "signature",
 									"kind": 16384,
 									"flags": {},
+									"sources": [
+										{
+											"fileName": "utils/src/dml/entity.ts",
+											"line": 84,
+											"character": 2,
+											"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity.ts#L84"
+										}
+									],
 									"typeParameters": [
 										{
-											"id": 36970,
+											"id": 38903,
 											"name": "Schema",
 											"variant": "typeParam",
 											"kind": 131072,
-											"flags": {},
+											"flags": {
+												"isConst": true
+											},
 											"type": {
 												"type": "reference",
 												"target": {
@@ -904,7 +1008,7 @@
 											}
 										},
 										{
-											"id": 36971,
+											"id": 38904,
 											"name": "TConfig",
 											"variant": "typeParam",
 											"kind": 131072,
@@ -924,14 +1028,14 @@
 									],
 									"parameters": [
 										{
-											"id": 36972,
+											"id": 38905,
 											"name": "nameOrConfig",
 											"variant": "param",
 											"kind": 32768,
 											"flags": {},
 											"type": {
 												"type": "reference",
-												"target": 36971,
+												"target": 38904,
 												"name": "TConfig",
 												"package": "@medusajs/utils",
 												"qualifiedName": "DmlEntity.TConfig",
@@ -939,14 +1043,14 @@
 											}
 										},
 										{
-											"id": 36973,
+											"id": 38906,
 											"name": "schema",
 											"variant": "param",
 											"kind": 32768,
 											"flags": {},
 											"type": {
 												"type": "reference",
-												"target": 36970,
+												"target": 38903,
 												"name": "Schema",
 												"package": "@medusajs/utils",
 												"qualifiedName": "DmlEntity.Schema",
@@ -956,11 +1060,11 @@
 									],
 									"type": {
 										"type": "reference",
-										"target": 36964,
+										"target": 38897,
 										"typeArguments": [
 											{
 												"type": "reference",
-												"target": 36970,
+												"target": 38903,
 												"name": "Schema",
 												"package": "@medusajs/utils",
 												"qualifiedName": "DmlEntity.Schema",
@@ -968,7 +1072,7 @@
 											},
 											{
 												"type": "reference",
-												"target": 36971,
+												"target": 38904,
 												"name": "TConfig",
 												"package": "@medusajs/utils",
 												"qualifiedName": "DmlEntity.TConfig",
@@ -982,16 +1086,24 @@
 							]
 						},
 						{
-							"id": 36965,
+							"id": 38898,
 							"name": "isDmlEntity",
 							"variant": "declaration",
 							"kind": 2048,
 							"flags": {
 								"isStatic": true
 							},
+							"sources": [
+								{
+									"fileName": "utils/src/dml/entity.ts",
+									"line": 98,
+									"character": 9,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity.ts#L98"
+								}
+							],
 							"signatures": [
 								{
-									"id": 36966,
+									"id": 38899,
 									"name": "isDmlEntity",
 									"variant": "signature",
 									"kind": 4096,
@@ -1004,9 +1116,17 @@
 											}
 										]
 									},
+									"sources": [
+										{
+											"fileName": "utils/src/dml/entity.ts",
+											"line": 98,
+											"character": 9,
+											"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity.ts#L98"
+										}
+									],
 									"parameters": [
 										{
-											"id": 36967,
+											"id": 38900,
 											"name": "entity",
 											"variant": "param",
 											"kind": 32768,
@@ -1023,7 +1143,7 @@
 										"asserts": false,
 										"targetType": {
 											"type": "reference",
-											"target": 36964,
+											"target": 38897,
 											"typeArguments": [
 												{
 													"type": "intrinsic",
@@ -1042,14 +1162,22 @@
 							]
 						},
 						{
-							"id": 36979,
+							"id": 38913,
 							"name": "parse",
 							"variant": "declaration",
 							"kind": 2048,
 							"flags": {},
+							"sources": [
+								{
+									"fileName": "utils/src/dml/entity.ts",
+									"line": 105,
+									"character": 2,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity.ts#L105"
+								}
+							],
 							"signatures": [
 								{
-									"id": 36980,
+									"id": 38914,
 									"name": "parse",
 									"variant": "signature",
 									"kind": 4096,
@@ -1062,21 +1190,37 @@
 											}
 										]
 									},
+									"sources": [
+										{
+											"fileName": "utils/src/dml/entity.ts",
+											"line": 105,
+											"character": 2,
+											"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity.ts#L105"
+										}
+									],
 									"type": {
 										"type": "reflection",
 										"declaration": {
-											"id": 36981,
+											"id": 38915,
 											"name": "__type",
 											"variant": "declaration",
 											"kind": 65536,
 											"flags": {},
 											"children": [
 												{
-													"id": 36982,
+													"id": 38916,
 													"name": "name",
 													"variant": "declaration",
 													"kind": 1024,
 													"flags": {},
+													"sources": [
+														{
+															"fileName": "utils/src/dml/entity.ts",
+															"line": 106,
+															"character": 4,
+															"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity.ts#L106"
+														}
+													],
 													"type": {
 														"type": "reference",
 														"target": {
@@ -1086,7 +1230,7 @@
 														"typeArguments": [
 															{
 																"type": "reference",
-																"target": 36971,
+																"target": 38904,
 																"name": "TConfig",
 																"package": "@medusajs/utils",
 																"qualifiedName": "DmlEntity.TConfig",
@@ -1098,22 +1242,38 @@
 													}
 												},
 												{
-													"id": 36983,
+													"id": 38917,
 													"name": "tableName",
 													"variant": "declaration",
 													"kind": 1024,
 													"flags": {},
+													"sources": [
+														{
+															"fileName": "utils/src/dml/entity.ts",
+															"line": 107,
+															"character": 4,
+															"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity.ts#L107"
+														}
+													],
 													"type": {
 														"type": "intrinsic",
 														"name": "string"
 													}
 												},
 												{
-													"id": 36984,
+													"id": 38918,
 													"name": "schema",
 													"variant": "declaration",
 													"kind": 1024,
 													"flags": {},
+													"sources": [
+														{
+															"fileName": "utils/src/dml/entity.ts",
+															"line": 108,
+															"character": 4,
+															"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity.ts#L108"
+														}
+													],
 													"type": {
 														"type": "reference",
 														"target": {
@@ -1125,11 +1285,19 @@
 													}
 												},
 												{
-													"id": 36985,
+													"id": 38919,
 													"name": "cascades",
 													"variant": "declaration",
 													"kind": 1024,
 													"flags": {},
+													"sources": [
+														{
+															"fileName": "utils/src/dml/entity.ts",
+															"line": 109,
+															"character": 4,
+															"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity.ts#L109"
+														}
+													],
 													"type": {
 														"type": "reference",
 														"target": {
@@ -1143,6 +1311,13 @@
 																	"type": "intrinsic",
 																	"name": "string"
 																}
+															},
+															{
+																"type": "array",
+																"elementType": {
+																	"type": "intrinsic",
+																	"name": "string"
+																}
 															}
 														],
 														"name": "EntityCascades",
@@ -1150,11 +1325,19 @@
 													}
 												},
 												{
-													"id": 36986,
+													"id": 38920,
 													"name": "indexes",
 													"variant": "declaration",
 													"kind": 1024,
 													"flags": {},
+													"sources": [
+														{
+															"fileName": "utils/src/dml/entity.ts",
+															"line": 110,
+															"character": 4,
+															"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity.ts#L110"
+														}
+													],
 													"type": {
 														"type": "array",
 														"elementType": {
@@ -1166,7 +1349,7 @@
 															"typeArguments": [
 																{
 																	"type": "reference",
-																	"target": 36970,
+																	"target": 38903,
 																	"name": "Schema",
 																	"package": "@medusajs/utils",
 																	"qualifiedName": "DmlEntity.Schema",
@@ -1177,21 +1360,154 @@
 															"package": "@medusajs/types"
 														}
 													}
+												},
+												{
+													"id": 38921,
+													"name": "checks",
+													"variant": "declaration",
+													"kind": 1024,
+													"flags": {},
+													"sources": [
+														{
+															"fileName": "utils/src/dml/entity.ts",
+															"line": 111,
+															"character": 4,
+															"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity.ts#L111"
+														}
+													],
+													"type": {
+														"type": "array",
+														"elementType": {
+															"type": "reference",
+															"target": {
+																"sourceFileName": "../../../../packages/core/types/src/dml/index.ts",
+																"qualifiedName": "CheckConstraint"
+															},
+															"typeArguments": [
+																{
+																	"type": "reference",
+																	"target": 38903,
+																	"name": "Schema",
+																	"package": "@medusajs/utils",
+																	"qualifiedName": "DmlEntity.Schema",
+																	"refersToTypeParameter": true
+																}
+															],
+															"name": "CheckConstraint",
+															"package": "@medusajs/types"
+														}
+													}
 												}
 											],
 											"groups": [
 												{
 													"title": "Properties",
 													"children": [
-														36982,
-														36983,
-														36984,
-														36985,
-														36986
+														38916,
+														38917,
+														38918,
+														38919,
+														38920,
+														38921
 													]
+												}
+											],
+											"sources": [
+												{
+													"fileName": "utils/src/dml/entity.ts",
+													"line": 105,
+													"character": 11,
+													"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity.ts#L105"
 												}
 											]
 										}
+									}
+								}
+							]
+						},
+						{
+							"id": 38928,
+							"name": "checks",
+							"variant": "declaration",
+							"kind": 2048,
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "utils/src/dml/entity.ts",
+									"line": 253,
+									"character": 2,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity.ts#L253"
+								}
+							],
+							"signatures": [
+								{
+									"id": 38929,
+									"name": "checks",
+									"variant": "signature",
+									"kind": 4096,
+									"flags": {},
+									"sources": [
+										{
+											"fileName": "utils/src/dml/entity.ts",
+											"line": 253,
+											"character": 2,
+											"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity.ts#L253"
+										}
+									],
+									"parameters": [
+										{
+											"id": 38930,
+											"name": "checks",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "array",
+												"elementType": {
+													"type": "reference",
+													"target": {
+														"sourceFileName": "../../../../packages/core/types/src/dml/index.ts",
+														"qualifiedName": "CheckConstraint"
+													},
+													"typeArguments": [
+														{
+															"type": "reference",
+															"target": 38903,
+															"name": "Schema",
+															"package": "@medusajs/utils",
+															"qualifiedName": "DmlEntity.Schema",
+															"refersToTypeParameter": true
+														}
+													],
+													"name": "CheckConstraint",
+													"package": "@medusajs/types"
+												}
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"target": 38897,
+										"typeArguments": [
+											{
+												"type": "reference",
+												"target": 38903,
+												"name": "Schema",
+												"package": "@medusajs/utils",
+												"qualifiedName": "DmlEntity.Schema",
+												"refersToTypeParameter": true
+											},
+											{
+												"type": "reference",
+												"target": 38904,
+												"name": "TConfig",
+												"package": "@medusajs/utils",
+												"qualifiedName": "DmlEntity.TConfig",
+												"refersToTypeParameter": true
+											}
+										],
+										"name": "DmlEntity",
+										"package": "@medusajs/utils"
 									}
 								}
 							]
@@ -1201,34 +1517,45 @@
 						{
 							"title": "Constructors",
 							"children": [
-								36968
+								38901
 							]
 						},
 						{
 							"title": "Properties",
 							"children": [
-								36993,
-								36974,
-								36975
+								38931,
+								38907,
+								38908
 							]
 						},
 						{
 							"title": "Methods",
 							"children": [
-								36965,
-								36979,
-								36987,
-								36990
+								38898,
+								38913,
+								38922,
+								38925,
+								38928
 							]
+						}
+					],
+					"sources": [
+						{
+							"fileName": "utils/src/dml/entity.ts",
+							"line": 68,
+							"character": 13,
+							"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity.ts#L68"
 						}
 					],
 					"typeParameters": [
 						{
-							"id": 36994,
+							"id": 38932,
 							"name": "Schema",
 							"variant": "typeParam",
 							"kind": 131072,
-							"flags": {},
+							"flags": {
+								"isConst": true
+							},
 							"type": {
 								"type": "reference",
 								"target": {
@@ -1240,7 +1567,7 @@
 							}
 						},
 						{
-							"id": 36995,
+							"id": 38933,
 							"name": "TConfig",
 							"variant": "typeParam",
 							"kind": 131072,
@@ -1268,7 +1595,7 @@
 							"typeArguments": [
 								{
 									"type": "reference",
-									"target": 36970,
+									"target": 38903,
 									"name": "Schema",
 									"package": "@medusajs/utils",
 									"qualifiedName": "DmlEntity.Schema",
@@ -1276,7 +1603,7 @@
 								},
 								{
 									"type": "reference",
-									"target": 36971,
+									"target": 38904,
 									"name": "TConfig",
 									"package": "@medusajs/utils",
 									"qualifiedName": "DmlEntity.TConfig",
@@ -1293,20 +1620,34 @@
 				{
 					"title": "Classes",
 					"children": [
-						36964
+						38897
 					]
+				},
+				{
+					"title": "Type Aliases",
+					"children": [
+						38895
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "utils/src/dml/entity.ts",
+					"line": 1,
+					"character": 0,
+					"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity.ts#L1"
 				}
 			]
 		},
 		{
-			"id": 36996,
+			"id": 38934,
 			"name": "properties/base",
 			"variant": "declaration",
 			"kind": 2,
 			"flags": {},
 			"children": [
 				{
-					"id": 36997,
+					"id": 38935,
 					"name": "BaseProperty",
 					"variant": "declaration",
 					"kind": 128,
@@ -1323,21 +1664,21 @@
 					},
 					"children": [
 						{
-							"id": 36998,
+							"id": 38936,
 							"name": "constructor",
 							"variant": "declaration",
 							"kind": 512,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 36999,
-									"name": "new BaseProperty",
+									"id": 38937,
+									"name": "BaseProperty",
 									"variant": "signature",
 									"kind": 16384,
 									"flags": {},
 									"typeParameters": [
 										{
-											"id": 37000,
+											"id": 38938,
 											"name": "T",
 											"variant": "typeParam",
 											"kind": 131072,
@@ -1346,11 +1687,11 @@
 									],
 									"type": {
 										"type": "reference",
-										"target": 36997,
+										"target": 38935,
 										"typeArguments": [
 											{
 												"type": "reference",
-												"target": 37000,
+												"target": 38938,
 												"name": "T",
 												"package": "@medusajs/utils",
 												"qualifiedName": "BaseProperty.T",
@@ -1364,7 +1705,7 @@
 							]
 						},
 						{
-							"id": 37007,
+							"id": 38945,
 							"name": "dataType",
 							"variant": "declaration",
 							"kind": 1024,
@@ -1380,21 +1721,36 @@
 									}
 								]
 							},
+							"sources": [
+								{
+									"fileName": "utils/src/dml/properties/base.ts",
+									"line": 25,
+									"character": 21,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/properties/base.ts#L25"
+								}
+							],
 							"type": {
 								"type": "reflection",
 								"declaration": {
-									"id": 37008,
+									"id": 38946,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"children": [
 										{
-											"id": 37009,
+											"id": 38947,
 											"name": "name",
 											"variant": "declaration",
 											"kind": 1024,
 											"flags": {},
+											"sources": [
+												{
+													"fileName": "types/dist/dml/index.d.ts",
+													"line": 45,
+													"character": 8
+												}
+											],
 											"type": {
 												"type": "reference",
 												"target": {
@@ -1406,13 +1762,20 @@
 											}
 										},
 										{
-											"id": 37010,
+											"id": 38948,
 											"name": "options",
 											"variant": "declaration",
 											"kind": 1024,
 											"flags": {
 												"isOptional": true
 											},
+											"sources": [
+												{
+													"fileName": "types/dist/dml/index.d.ts",
+													"line": 46,
+													"character": 8
+												}
+											],
 											"type": {
 												"type": "reference",
 												"target": {
@@ -1438,16 +1801,23 @@
 										{
 											"title": "Properties",
 											"children": [
-												37009,
-												37010
+												38947,
+												38948
 											]
+										}
+									],
+									"sources": [
+										{
+											"fileName": "types/dist/dml/index.d.ts",
+											"line": 44,
+											"character": 14
 										}
 									]
 								}
 							}
 						},
 						{
-							"id": 37011,
+							"id": 38949,
 							"name": "$dataType",
 							"variant": "declaration",
 							"kind": 1024,
@@ -1460,9 +1830,17 @@
 									}
 								]
 							},
+							"sources": [
+								{
+									"fileName": "utils/src/dml/properties/base.ts",
+									"line": 31,
+									"character": 10,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/properties/base.ts#L31"
+								}
+							],
 							"type": {
 								"type": "reference",
-								"target": 37000,
+								"target": 38938,
 								"name": "T",
 								"package": "@medusajs/utils",
 								"qualifiedName": "BaseProperty.T",
@@ -1475,14 +1853,22 @@
 							}
 						},
 						{
-							"id": 37023,
+							"id": 38963,
 							"name": "parse",
 							"variant": "declaration",
 							"kind": 2048,
 							"flags": {},
+							"sources": [
+								{
+									"fileName": "utils/src/dml/properties/base.ts",
+									"line": 152,
+									"character": 2,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/properties/base.ts#L152"
+								}
+							],
 							"signatures": [
 								{
-									"id": 37024,
+									"id": 38964,
 									"name": "parse",
 									"variant": "signature",
 									"kind": 4096,
@@ -1495,9 +1881,17 @@
 											}
 										]
 									},
+									"sources": [
+										{
+											"fileName": "utils/src/dml/properties/base.ts",
+											"line": 152,
+											"character": 2,
+											"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/properties/base.ts#L152"
+										}
+									],
 									"parameters": [
 										{
-											"id": 37025,
+											"id": 38965,
 											"name": "fieldName",
 											"variant": "param",
 											"kind": 32768,
@@ -1535,30 +1929,39 @@
 						{
 							"title": "Constructors",
 							"children": [
-								36998
+								38936
 							]
 						},
 						{
 							"title": "Properties",
 							"children": [
-								37007,
-								37011
+								38945,
+								38949
 							]
 						},
 						{
 							"title": "Methods",
 							"children": [
-								37012,
-								37014,
-								37017,
-								37020,
-								37023
+								38950,
+								38952,
+								38954,
+								38957,
+								38960,
+								38963
 							]
+						}
+					],
+					"sources": [
+						{
+							"fileName": "utils/src/dml/properties/base.ts",
+							"line": 9,
+							"character": 22,
+							"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/properties/base.ts#L9"
 						}
 					],
 					"typeParameters": [
 						{
-							"id": 37026,
+							"id": 38966,
 							"name": "T",
 							"variant": "typeParam",
 							"kind": 131072,
@@ -1575,7 +1978,7 @@
 							"typeArguments": [
 								{
 									"type": "reference",
-									"target": 37000,
+									"target": 38938,
 									"name": "T",
 									"package": "@medusajs/utils",
 									"qualifiedName": "BaseProperty.T",
@@ -1592,27 +1995,43 @@
 				{
 					"title": "Classes",
 					"children": [
-						36997
+						38935
 					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "utils/src/dml/properties/base.ts",
+					"line": 1,
+					"character": 0,
+					"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/properties/base.ts#L1"
 				}
 			]
 		},
 		{
-			"id": 37027,
+			"id": 38967,
 			"name": "Property Types",
 			"variant": "declaration",
 			"kind": 4,
 			"flags": {},
 			"children": [
 				{
-					"id": 36919,
+					"id": 38827,
 					"name": "id",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
+					"sources": [
+						{
+							"fileName": "utils/src/dml/entity-builder.ts",
+							"line": 156,
+							"character": 2,
+							"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L156"
+						}
+					],
 					"signatures": [
 						{
-							"id": 36920,
+							"id": 38828,
 							"name": "id",
 							"variant": "signature",
 							"kind": 4096,
@@ -1636,9 +2055,17 @@
 									}
 								]
 							},
+							"sources": [
+								{
+									"fileName": "utils/src/dml/entity-builder.ts",
+									"line": 156,
+									"character": 2,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L156"
+								}
+							],
 							"parameters": [
 								{
-									"id": 36921,
+									"id": 38829,
 									"name": "options",
 									"variant": "param",
 									"kind": 32768,
@@ -1648,20 +2075,28 @@
 									"type": {
 										"type": "reflection",
 										"declaration": {
-											"id": 36922,
+											"id": 38830,
 											"name": "__type",
 											"variant": "declaration",
 											"kind": 65536,
 											"flags": {},
 											"children": [
 												{
-													"id": 36923,
+													"id": 38831,
 													"name": "prefix",
 													"variant": "declaration",
 													"kind": 1024,
 													"flags": {
 														"isOptional": true
 													},
+													"sources": [
+														{
+															"fileName": "utils/src/dml/entity-builder.ts",
+															"line": 156,
+															"character": 17,
+															"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L156"
+														}
+													],
 													"type": {
 														"type": "intrinsic",
 														"name": "string"
@@ -1672,8 +2107,16 @@
 												{
 													"title": "Properties",
 													"children": [
-														36923
+														38831
 													]
+												}
+											],
+											"sources": [
+												{
+													"fileName": "utils/src/dml/entity-builder.ts",
+													"line": 156,
+													"character": 15,
+													"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L156"
 												}
 											]
 										}
@@ -1693,14 +2136,22 @@
 					]
 				},
 				{
-					"id": 36924,
+					"id": 38832,
 					"name": "text",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
+					"sources": [
+						{
+							"fileName": "utils/src/dml/entity-builder.ts",
+							"line": 175,
+							"character": 2,
+							"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L175"
+						}
+					],
 					"signatures": [
 						{
-							"id": 36925,
+							"id": 38833,
 							"name": "text",
 							"variant": "signature",
 							"kind": 4096,
@@ -1724,6 +2175,14 @@
 									}
 								]
 							},
+							"sources": [
+								{
+									"fileName": "utils/src/dml/entity-builder.ts",
+									"line": 175,
+									"character": 2,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L175"
+								}
+							],
 							"type": {
 								"type": "reference",
 								"target": {
@@ -1737,14 +2196,22 @@
 					]
 				},
 				{
-					"id": 36926,
+					"id": 38834,
 					"name": "boolean",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
+					"sources": [
+						{
+							"fileName": "utils/src/dml/entity-builder.ts",
+							"line": 194,
+							"character": 2,
+							"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L194"
+						}
+					],
 					"signatures": [
 						{
-							"id": 36927,
+							"id": 38835,
 							"name": "boolean",
 							"variant": "signature",
 							"kind": 4096,
@@ -1768,6 +2235,14 @@
 									}
 								]
 							},
+							"sources": [
+								{
+									"fileName": "utils/src/dml/entity-builder.ts",
+									"line": 194,
+									"character": 2,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L194"
+								}
+							],
 							"type": {
 								"type": "reference",
 								"target": {
@@ -1781,14 +2256,22 @@
 					]
 				},
 				{
-					"id": 36928,
+					"id": 38836,
 					"name": "number",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
+					"sources": [
+						{
+							"fileName": "utils/src/dml/entity-builder.ts",
+							"line": 213,
+							"character": 2,
+							"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L213"
+						}
+					],
 					"signatures": [
 						{
-							"id": 36929,
+							"id": 38837,
 							"name": "number",
 							"variant": "signature",
 							"kind": 4096,
@@ -1812,6 +2295,14 @@
 									}
 								]
 							},
+							"sources": [
+								{
+									"fileName": "utils/src/dml/entity-builder.ts",
+									"line": 213,
+									"character": 2,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L213"
+								}
+							],
 							"type": {
 								"type": "reference",
 								"target": {
@@ -1825,14 +2316,22 @@
 					]
 				},
 				{
-					"id": 36930,
+					"id": 38838,
 					"name": "bigNumber",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
+					"sources": [
+						{
+							"fileName": "utils/src/dml/entity-builder.ts",
+							"line": 237,
+							"character": 2,
+							"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L237"
+						}
+					],
 					"signatures": [
 						{
-							"id": 36931,
+							"id": 38839,
 							"name": "bigNumber",
 							"variant": "signature",
 							"kind": 4096,
@@ -1856,6 +2355,14 @@
 									}
 								]
 							},
+							"sources": [
+								{
+									"fileName": "utils/src/dml/entity-builder.ts",
+									"line": 237,
+									"character": 2,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L237"
+								}
+							],
 							"type": {
 								"type": "reference",
 								"target": {
@@ -1869,14 +2376,91 @@
 					]
 				},
 				{
-					"id": 36932,
+					"id": 38840,
+					"name": "float",
+					"variant": "declaration",
+					"kind": 2048,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "utils/src/dml/entity-builder.ts",
+							"line": 259,
+							"character": 2,
+							"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L259"
+						}
+					],
+					"signatures": [
+						{
+							"id": 38841,
+							"name": "float",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "This method defines a float property that allows for\nvalues with decimal places"
+									}
+								],
+								"blockTags": [
+									{
+										"tag": "@version",
+										"content": [
+											{
+												"kind": "text",
+												"text": "2.1.2"
+											}
+										]
+									},
+									{
+										"tag": "@example",
+										"content": [
+											{
+												"kind": "code",
+												"text": "```ts\nimport { model } from \"@medusajs/framework/utils\"\n\nconst MyCustom = model.define(\"tax\", {\n  tax_rate: model.float(),\n  // ...\n})\n\nexport default MyCustom\n```"
+											}
+										]
+									}
+								]
+							},
+							"sources": [
+								{
+									"fileName": "utils/src/dml/entity-builder.ts",
+									"line": 259,
+									"character": 2,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L259"
+								}
+							],
+							"type": {
+								"type": "reference",
+								"target": {
+									"sourceFileName": "../../../../packages/core/utils/src/dml/properties/float.ts",
+									"qualifiedName": "FloatProperty"
+								},
+								"name": "FloatProperty",
+								"package": "@medusajs/utils"
+							}
+						}
+					]
+				},
+				{
+					"id": 38844,
 					"name": "array",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
+					"sources": [
+						{
+							"fileName": "utils/src/dml/entity-builder.ts",
+							"line": 298,
+							"character": 2,
+							"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L298"
+						}
+					],
 					"signatures": [
 						{
-							"id": 36933,
+							"id": 38845,
 							"name": "array",
 							"variant": "signature",
 							"kind": 4096,
@@ -1900,6 +2484,14 @@
 									}
 								]
 							},
+							"sources": [
+								{
+									"fileName": "utils/src/dml/entity-builder.ts",
+									"line": 298,
+									"character": 2,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L298"
+								}
+							],
 							"type": {
 								"type": "reference",
 								"target": {
@@ -1913,14 +2505,22 @@
 					]
 				},
 				{
-					"id": 36934,
+					"id": 38846,
 					"name": "dateTime",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
+					"sources": [
+						{
+							"fileName": "utils/src/dml/entity-builder.ts",
+							"line": 317,
+							"character": 2,
+							"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L317"
+						}
+					],
 					"signatures": [
 						{
-							"id": 36935,
+							"id": 38847,
 							"name": "dateTime",
 							"variant": "signature",
 							"kind": 4096,
@@ -1944,6 +2544,14 @@
 									}
 								]
 							},
+							"sources": [
+								{
+									"fileName": "utils/src/dml/entity-builder.ts",
+									"line": 317,
+									"character": 2,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L317"
+								}
+							],
 							"type": {
 								"type": "reference",
 								"target": {
@@ -1957,14 +2565,22 @@
 					]
 				},
 				{
-					"id": 36936,
+					"id": 38848,
 					"name": "json",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
+					"sources": [
+						{
+							"fileName": "utils/src/dml/entity-builder.ts",
+							"line": 336,
+							"character": 2,
+							"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L336"
+						}
+					],
 					"signatures": [
 						{
-							"id": 36937,
+							"id": 38849,
 							"name": "json",
 							"variant": "signature",
 							"kind": 4096,
@@ -1988,6 +2604,14 @@
 									}
 								]
 							},
+							"sources": [
+								{
+									"fileName": "utils/src/dml/entity-builder.ts",
+									"line": 336,
+									"character": 2,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L336"
+								}
+							],
 							"type": {
 								"type": "reference",
 								"target": {
@@ -2001,14 +2625,22 @@
 					]
 				},
 				{
-					"id": 36938,
+					"id": 38850,
 					"name": "enum",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
+					"sources": [
+						{
+							"fileName": "utils/src/dml/entity-builder.ts",
+							"line": 359,
+							"character": 2,
+							"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L359"
+						}
+					],
 					"signatures": [
 						{
-							"id": 36939,
+							"id": 38851,
 							"name": "enum",
 							"variant": "signature",
 							"kind": 4096,
@@ -2032,9 +2664,17 @@
 									}
 								]
 							},
+							"sources": [
+								{
+									"fileName": "utils/src/dml/entity-builder.ts",
+									"line": 359,
+									"character": 2,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L359"
+								}
+							],
 							"typeParameters": [
 								{
-									"id": 36940,
+									"id": 38852,
 									"name": "Values",
 									"variant": "typeParam",
 									"kind": 131072,
@@ -2082,7 +2722,7 @@
 							],
 							"parameters": [
 								{
-									"id": 36941,
+									"id": 38853,
 									"name": "values",
 									"variant": "param",
 									"kind": 32768,
@@ -2097,7 +2737,7 @@
 									},
 									"type": {
 										"type": "reference",
-										"target": 36940,
+										"target": 38852,
 										"name": "Values",
 										"package": "@medusajs/utils",
 										"refersToTypeParameter": true
@@ -2113,7 +2753,7 @@
 								"typeArguments": [
 									{
 										"type": "reference",
-										"target": 36940,
+										"target": 38852,
 										"name": "Values",
 										"package": "@medusajs/utils",
 										"refersToTypeParameter": true
@@ -2130,35 +2770,133 @@
 				{
 					"title": "Methods",
 					"children": [
-						36919,
-						36924,
-						36926,
-						36928,
-						36930,
-						36932,
-						36934,
-						36936,
-						36938
+						38827,
+						38832,
+						38834,
+						38836,
+						38838,
+						38840,
+						38844,
+						38846,
+						38848,
+						38850
 					]
 				}
 			]
 		},
 		{
-			"id": 37028,
+			"id": 38968,
+			"name": "Property",
+			"variant": "declaration",
+			"kind": 4,
+			"flags": {},
+			"children": [
+				{
+					"id": 38842,
+					"name": "autoincrement",
+					"variant": "declaration",
+					"kind": 2048,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "utils/src/dml/entity-builder.ts",
+							"line": 279,
+							"character": 2,
+							"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L279"
+						}
+					],
+					"signatures": [
+						{
+							"id": 38843,
+							"name": "autoincrement",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "This method defines an autoincrement property."
+									}
+								],
+								"blockTags": [
+									{
+										"tag": "@example",
+										"content": [
+											{
+												"kind": "code",
+												"text": "```ts\nimport { model } from \"@medusajs/framework/utils\"\n\nconst MyCustom = model.define(\"my_custom\", {\n  serial_id: model.autoincrement(),\n  // ...\n})\n\nexport default MyCustom\n```"
+											}
+										]
+									}
+								]
+							},
+							"sources": [
+								{
+									"fileName": "utils/src/dml/entity-builder.ts",
+									"line": 279,
+									"character": 2,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L279"
+								}
+							],
+							"type": {
+								"type": "reference",
+								"target": {
+									"sourceFileName": "../../../../packages/core/utils/src/dml/properties/autoincrement.ts",
+									"qualifiedName": "AutoIncrementProperty"
+								},
+								"name": "AutoIncrementProperty",
+								"package": "@medusajs/utils"
+							}
+						}
+					]
+				}
+			],
+			"groups": [
+				{
+					"title": "Methods",
+					"children": [
+						38842
+					]
+				}
+			]
+		},
+		{
+			"id": 38969,
 			"name": "Relationship Methods",
 			"variant": "declaration",
 			"kind": 4,
 			"flags": {},
 			"children": [
 				{
-					"id": 36942,
+					"id": 38854,
 					"name": "hasOne",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
+					"sources": [
+						{
+							"fileName": "utils/src/dml/entity-builder.ts",
+							"line": 389,
+							"character": 2,
+							"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L389"
+						},
+						{
+							"fileName": "utils/src/dml/entity-builder.ts",
+							"line": 396,
+							"character": 2,
+							"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L396"
+						},
+						{
+							"fileName": "utils/src/dml/entity-builder.ts",
+							"line": 402,
+							"character": 2,
+							"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L402"
+						}
+					],
 					"signatures": [
 						{
-							"id": 36943,
+							"id": 38855,
 							"name": "hasOne",
 							"variant": "signature",
 							"kind": 4096,
@@ -2173,8 +2911,7 @@
 										"kind": "inline-tag",
 										"tag": "@link",
 										"text": "belongsTo",
-										"target": 36947,
-										"tsLinkText": ""
+										"target": 38873
 									},
 									{
 										"kind": "text",
@@ -2193,9 +2930,344 @@
 									}
 								]
 							},
+							"sources": [
+								{
+									"fileName": "utils/src/dml/entity-builder.ts",
+									"line": 389,
+									"character": 2,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L389"
+								}
+							],
 							"typeParameters": [
 								{
-									"id": 36944,
+									"id": 38856,
+									"name": "T",
+									"variant": "typeParam",
+									"kind": 131072,
+									"flags": {},
+									"comment": {
+										"summary": [
+											{
+												"kind": "text",
+												"text": "The type of the entity builder passed as a first parameter. By default, it's\na function returning the related model."
+											}
+										]
+									}
+								},
+								{
+									"id": 38857,
+									"name": "ForeignKeyName",
+									"variant": "typeParam",
+									"kind": 131072,
+									"flags": {
+										"isConst": true
+									},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "intrinsic",
+												"name": "undefined"
+											},
+											{
+												"type": "intrinsic",
+												"name": "string"
+											}
+										]
+									},
+									"default": {
+										"type": "intrinsic",
+										"name": "undefined"
+									}
+								}
+							],
+							"parameters": [
+								{
+									"id": 38858,
+									"name": "entityBuilder",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"comment": {
+										"summary": [
+											{
+												"kind": "text",
+												"text": "A function that returns the data model this model is related to."
+											}
+										]
+									},
+									"type": {
+										"type": "reference",
+										"target": 38856,
+										"name": "T",
+										"package": "@medusajs/utils",
+										"refersToTypeParameter": true
+									}
+								},
+								{
+									"id": 38859,
+									"name": "options",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"comment": {
+										"summary": [
+											{
+												"kind": "text",
+												"text": "The relationship's options."
+											}
+										]
+									},
+									"type": {
+										"type": "intersection",
+										"types": [
+											{
+												"type": "reflection",
+												"declaration": {
+													"id": 38860,
+													"name": "__type",
+													"variant": "declaration",
+													"kind": 65536,
+													"flags": {},
+													"children": [
+														{
+															"id": 38861,
+															"name": "mappedBy",
+															"variant": "declaration",
+															"kind": 1024,
+															"flags": {
+																"isOptional": true
+															},
+															"comment": {
+																"summary": [
+																	{
+																		"kind": "text",
+																		"text": "The name of the relationship as defined in the other\ndata model. This is only required by the "
+																	},
+																	{
+																		"kind": "code",
+																		"text": "`belongsTo`"
+																	},
+																	{
+																		"kind": "text",
+																		"text": " and "
+																	},
+																	{
+																		"kind": "code",
+																		"text": "`manyToMany`"
+																	},
+																	{
+																		"kind": "text",
+																		"text": "\nrelationship method."
+																	}
+																]
+															},
+															"sources": [
+																{
+																	"fileName": "types/dist/dml/index.d.ts",
+																	"line": 73,
+																	"character": 4
+																}
+															],
+															"type": {
+																"type": "intrinsic",
+																"name": "string"
+															}
+														}
+													],
+													"groups": [
+														{
+															"title": "Properties",
+															"children": [
+																38861
+															]
+														}
+													],
+													"sources": [
+														{
+															"fileName": "types/dist/dml/index.d.ts",
+															"line": 67,
+															"character": 34
+														}
+													]
+												}
+											},
+											{
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../node_modules/typescript/lib/lib.es5.d.ts",
+													"qualifiedName": "Record"
+												},
+												"typeArguments": [
+													{
+														"type": "intrinsic",
+														"name": "string"
+													},
+													{
+														"type": "intrinsic",
+														"name": "any"
+													}
+												],
+												"name": "Record",
+												"package": "typescript"
+											},
+											{
+												"type": "reflection",
+												"declaration": {
+													"id": 38862,
+													"name": "__type",
+													"variant": "declaration",
+													"kind": 65536,
+													"flags": {},
+													"children": [
+														{
+															"id": 38863,
+															"name": "foreignKey",
+															"variant": "declaration",
+															"kind": 1024,
+															"flags": {},
+															"sources": [
+																{
+																	"fileName": "utils/src/dml/entity-builder.ts",
+																	"line": 392,
+																	"character": 6,
+																	"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L392"
+																}
+															],
+															"type": {
+																"type": "literal",
+																"value": true
+															}
+														},
+														{
+															"id": 38864,
+															"name": "foreignKeyName",
+															"variant": "declaration",
+															"kind": 1024,
+															"flags": {
+																"isOptional": true
+															},
+															"sources": [
+																{
+																	"fileName": "utils/src/dml/entity-builder.ts",
+																	"line": 393,
+																	"character": 6,
+																	"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L393"
+																}
+															],
+															"type": {
+																"type": "reference",
+																"target": 38857,
+																"name": "ForeignKeyName",
+																"package": "@medusajs/utils",
+																"refersToTypeParameter": true
+															}
+														}
+													],
+													"groups": [
+														{
+															"title": "Properties",
+															"children": [
+																38863,
+																38864
+															]
+														}
+													],
+													"sources": [
+														{
+															"fileName": "utils/src/dml/entity-builder.ts",
+															"line": 391,
+															"character": 35,
+															"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L391"
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"target": {
+									"sourceFileName": "../../../../packages/core/utils/src/dml/relations/has-one-fk.ts",
+									"qualifiedName": "HasOneWithForeignKey"
+								},
+								"typeArguments": [
+									{
+										"type": "reference",
+										"target": 38856,
+										"name": "T",
+										"package": "@medusajs/utils",
+										"refersToTypeParameter": true
+									},
+									{
+										"type": "reference",
+										"target": 38857,
+										"name": "ForeignKeyName",
+										"package": "@medusajs/utils",
+										"refersToTypeParameter": true
+									}
+								],
+								"name": "HasOneWithForeignKey",
+								"package": "@medusajs/utils"
+							}
+						},
+						{
+							"id": 38865,
+							"name": "hasOne",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "This method defines a relationship between two data models,\nwhere the owner of the relationship has one record of the related\ndata model.\n\nFor example: A user \"hasOne\" email.\n\nUse the "
+									},
+									{
+										"kind": "inline-tag",
+										"tag": "@link",
+										"text": "belongsTo",
+										"target": 38873
+									},
+									{
+										"kind": "text",
+										"text": " method to define the inverse of this relationship in\nthe other data model."
+									}
+								],
+								"blockTags": [
+									{
+										"tag": "@example",
+										"content": [
+											{
+												"kind": "code",
+												"text": "```ts\nimport { model } from \"@medusajs/framework/utils\"\n\nconst User = model.define(\"user\", {\n  id: model.id(),\n  email: model.hasOne(() => Email),\n})\n```"
+											}
+										]
+									},
+									{
+										"tag": "@customNamespace",
+										"content": [
+											{
+												"kind": "text",
+												"text": "Relationship Methods"
+											}
+										]
+									}
+								]
+							},
+							"sources": [
+								{
+									"fileName": "utils/src/dml/entity-builder.ts",
+									"line": 396,
+									"character": 2,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L396"
+								}
+							],
+							"typeParameters": [
+								{
+									"id": 38866,
 									"name": "T",
 									"variant": "typeParam",
 									"kind": 131072,
@@ -2212,7 +3284,7 @@
 							],
 							"parameters": [
 								{
-									"id": 36945,
+									"id": 38867,
 									"name": "entityBuilder",
 									"variant": "param",
 									"kind": 32768,
@@ -2227,14 +3299,14 @@
 									},
 									"type": {
 										"type": "reference",
-										"target": 36944,
+										"target": 38866,
 										"name": "T",
 										"package": "@medusajs/utils",
 										"refersToTypeParameter": true
 									}
 								},
 								{
-									"id": 36946,
+									"id": 38868,
 									"name": "options",
 									"variant": "param",
 									"kind": 32768,
@@ -2250,13 +3322,148 @@
 										]
 									},
 									"type": {
-										"type": "reference",
-										"target": {
-											"sourceFileName": "../../../../packages/core/types/src/dml/index.ts",
-											"qualifiedName": "RelationshipOptions"
-										},
-										"name": "RelationshipOptions",
-										"package": "@medusajs/types"
+										"type": "intersection",
+										"types": [
+											{
+												"type": "reflection",
+												"declaration": {
+													"id": 38869,
+													"name": "__type",
+													"variant": "declaration",
+													"kind": 65536,
+													"flags": {},
+													"children": [
+														{
+															"id": 38870,
+															"name": "mappedBy",
+															"variant": "declaration",
+															"kind": 1024,
+															"flags": {
+																"isOptional": true
+															},
+															"comment": {
+																"summary": [
+																	{
+																		"kind": "text",
+																		"text": "The name of the relationship as defined in the other\ndata model. This is only required by the "
+																	},
+																	{
+																		"kind": "code",
+																		"text": "`belongsTo`"
+																	},
+																	{
+																		"kind": "text",
+																		"text": " and "
+																	},
+																	{
+																		"kind": "code",
+																		"text": "`manyToMany`"
+																	},
+																	{
+																		"kind": "text",
+																		"text": "\nrelationship method."
+																	}
+																]
+															},
+															"sources": [
+																{
+																	"fileName": "types/dist/dml/index.d.ts",
+																	"line": 73,
+																	"character": 4
+																}
+															],
+															"type": {
+																"type": "intrinsic",
+																"name": "string"
+															}
+														}
+													],
+													"groups": [
+														{
+															"title": "Properties",
+															"children": [
+																38870
+															]
+														}
+													],
+													"sources": [
+														{
+															"fileName": "types/dist/dml/index.d.ts",
+															"line": 67,
+															"character": 34
+														}
+													]
+												}
+											},
+											{
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../node_modules/typescript/lib/lib.es5.d.ts",
+													"qualifiedName": "Record"
+												},
+												"typeArguments": [
+													{
+														"type": "intrinsic",
+														"name": "string"
+													},
+													{
+														"type": "intrinsic",
+														"name": "any"
+													}
+												],
+												"name": "Record",
+												"package": "typescript"
+											},
+											{
+												"type": "reflection",
+												"declaration": {
+													"id": 38871,
+													"name": "__type",
+													"variant": "declaration",
+													"kind": 65536,
+													"flags": {},
+													"children": [
+														{
+															"id": 38872,
+															"name": "foreignKey",
+															"variant": "declaration",
+															"kind": 1024,
+															"flags": {
+																"isOptional": true
+															},
+															"sources": [
+																{
+																	"fileName": "utils/src/dml/entity-builder.ts",
+																	"line": 399,
+																	"character": 6,
+																	"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L399"
+																}
+															],
+															"type": {
+																"type": "literal",
+																"value": false
+															}
+														}
+													],
+													"groups": [
+														{
+															"title": "Properties",
+															"children": [
+																38872
+															]
+														}
+													],
+													"sources": [
+														{
+															"fileName": "utils/src/dml/entity-builder.ts",
+															"line": 398,
+															"character": 36,
+															"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L398"
+														}
+													]
+												}
+											}
+										]
 									}
 								}
 							],
@@ -2269,7 +3476,7 @@
 								"typeArguments": [
 									{
 										"type": "reference",
-										"target": 36944,
+										"target": 38866,
 										"name": "T",
 										"package": "@medusajs/utils",
 										"refersToTypeParameter": true
@@ -2282,14 +3489,22 @@
 					]
 				},
 				{
-					"id": 36947,
+					"id": 38873,
 					"name": "belongsTo",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
+					"sources": [
+						{
+							"fileName": "utils/src/dml/entity-builder.ts",
+							"line": 441,
+							"character": 2,
+							"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L441"
+						}
+					],
 					"signatures": [
 						{
-							"id": 36948,
+							"id": 38874,
 							"name": "belongsTo",
 							"variant": "signature",
 							"kind": 4096,
@@ -2304,8 +3519,7 @@
 										"kind": "inline-tag",
 										"tag": "@link",
 										"text": "hasOne",
-										"target": 36942,
-										"tsLinkText": ""
+										"target": 38854
 									},
 									{
 										"kind": "text",
@@ -2315,8 +3529,7 @@
 										"kind": "inline-tag",
 										"tag": "@link",
 										"text": "hasMany",
-										"target": 36952,
-										"tsLinkText": ""
+										"target": 38883
 									},
 									{
 										"kind": "text",
@@ -2335,9 +3548,17 @@
 									}
 								]
 							},
+							"sources": [
+								{
+									"fileName": "utils/src/dml/entity-builder.ts",
+									"line": 441,
+									"character": 2,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L441"
+								}
+							],
 							"typeParameters": [
 								{
-									"id": 36949,
+									"id": 38875,
 									"name": "T",
 									"variant": "typeParam",
 									"kind": 131072,
@@ -2350,11 +3571,37 @@
 											}
 										]
 									}
+								},
+								{
+									"id": 38876,
+									"name": "ForeignKeyName",
+									"variant": "typeParam",
+									"kind": 131072,
+									"flags": {
+										"isConst": true
+									},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "intrinsic",
+												"name": "undefined"
+											},
+											{
+												"type": "intrinsic",
+												"name": "string"
+											}
+										]
+									},
+									"default": {
+										"type": "intrinsic",
+										"name": "undefined"
+									}
 								}
 							],
 							"parameters": [
 								{
-									"id": 36950,
+									"id": 38877,
 									"name": "entityBuilder",
 									"variant": "param",
 									"kind": 32768,
@@ -2369,14 +3616,14 @@
 									},
 									"type": {
 										"type": "reference",
-										"target": 36949,
+										"target": 38875,
 										"name": "T",
 										"package": "@medusajs/utils",
 										"refersToTypeParameter": true
 									}
 								},
 								{
-									"id": 36951,
+									"id": 38878,
 									"name": "options",
 									"variant": "param",
 									"kind": 32768,
@@ -2392,13 +3639,151 @@
 										]
 									},
 									"type": {
-										"type": "reference",
-										"target": {
-											"sourceFileName": "../../../../packages/core/types/src/dml/index.ts",
-											"qualifiedName": "RelationshipOptions"
-										},
-										"name": "RelationshipOptions",
-										"package": "@medusajs/types"
+										"type": "intersection",
+										"types": [
+											{
+												"type": "reflection",
+												"declaration": {
+													"id": 38879,
+													"name": "__type",
+													"variant": "declaration",
+													"kind": 65536,
+													"flags": {},
+													"children": [
+														{
+															"id": 38880,
+															"name": "mappedBy",
+															"variant": "declaration",
+															"kind": 1024,
+															"flags": {
+																"isOptional": true
+															},
+															"comment": {
+																"summary": [
+																	{
+																		"kind": "text",
+																		"text": "The name of the relationship as defined in the other\ndata model. This is only required by the "
+																	},
+																	{
+																		"kind": "code",
+																		"text": "`belongsTo`"
+																	},
+																	{
+																		"kind": "text",
+																		"text": " and "
+																	},
+																	{
+																		"kind": "code",
+																		"text": "`manyToMany`"
+																	},
+																	{
+																		"kind": "text",
+																		"text": "\nrelationship method."
+																	}
+																]
+															},
+															"sources": [
+																{
+																	"fileName": "types/dist/dml/index.d.ts",
+																	"line": 73,
+																	"character": 4
+																}
+															],
+															"type": {
+																"type": "intrinsic",
+																"name": "string"
+															}
+														}
+													],
+													"groups": [
+														{
+															"title": "Properties",
+															"children": [
+																38880
+															]
+														}
+													],
+													"sources": [
+														{
+															"fileName": "types/dist/dml/index.d.ts",
+															"line": 67,
+															"character": 34
+														}
+													]
+												}
+											},
+											{
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../node_modules/typescript/lib/lib.es5.d.ts",
+													"qualifiedName": "Record"
+												},
+												"typeArguments": [
+													{
+														"type": "intrinsic",
+														"name": "string"
+													},
+													{
+														"type": "intrinsic",
+														"name": "any"
+													}
+												],
+												"name": "Record",
+												"package": "typescript"
+											},
+											{
+												"type": "reflection",
+												"declaration": {
+													"id": 38881,
+													"name": "__type",
+													"variant": "declaration",
+													"kind": 65536,
+													"flags": {},
+													"children": [
+														{
+															"id": 38882,
+															"name": "foreignKeyName",
+															"variant": "declaration",
+															"kind": 1024,
+															"flags": {
+																"isOptional": true
+															},
+															"sources": [
+																{
+																	"fileName": "utils/src/dml/entity-builder.ts",
+																	"line": 444,
+																	"character": 6,
+																	"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L444"
+																}
+															],
+															"type": {
+																"type": "reference",
+																"target": 38876,
+																"name": "ForeignKeyName",
+																"package": "@medusajs/utils",
+																"refersToTypeParameter": true
+															}
+														}
+													],
+													"groups": [
+														{
+															"title": "Properties",
+															"children": [
+																38882
+															]
+														}
+													],
+													"sources": [
+														{
+															"fileName": "utils/src/dml/entity-builder.ts",
+															"line": 443,
+															"character": 36,
+															"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L443"
+														}
+													]
+												}
+											}
+										]
 									}
 								}
 							],
@@ -2411,8 +3796,15 @@
 								"typeArguments": [
 									{
 										"type": "reference",
-										"target": 36949,
+										"target": 38875,
 										"name": "T",
+										"package": "@medusajs/utils",
+										"refersToTypeParameter": true
+									},
+									{
+										"type": "reference",
+										"target": 38876,
+										"name": "ForeignKeyName",
 										"package": "@medusajs/utils",
 										"refersToTypeParameter": true
 									}
@@ -2424,14 +3816,22 @@
 					]
 				},
 				{
-					"id": 36952,
+					"id": 38883,
 					"name": "hasMany",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
+					"sources": [
+						{
+							"fileName": "utils/src/dml/entity-builder.ts",
+							"line": 473,
+							"character": 2,
+							"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L473"
+						}
+					],
 					"signatures": [
 						{
-							"id": 36953,
+							"id": 38884,
 							"name": "hasMany",
 							"variant": "signature",
 							"kind": 4096,
@@ -2455,9 +3855,17 @@
 									}
 								]
 							},
+							"sources": [
+								{
+									"fileName": "utils/src/dml/entity-builder.ts",
+									"line": 473,
+									"character": 2,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L473"
+								}
+							],
 							"typeParameters": [
 								{
-									"id": 36954,
+									"id": 38885,
 									"name": "T",
 									"variant": "typeParam",
 									"kind": 131072,
@@ -2474,7 +3882,7 @@
 							],
 							"parameters": [
 								{
-									"id": 36955,
+									"id": 38886,
 									"name": "entityBuilder",
 									"variant": "param",
 									"kind": 32768,
@@ -2489,14 +3897,14 @@
 									},
 									"type": {
 										"type": "reference",
-										"target": 36954,
+										"target": 38885,
 										"name": "T",
 										"package": "@medusajs/utils",
 										"refersToTypeParameter": true
 									}
 								},
 								{
-									"id": 36956,
+									"id": 38887,
 									"name": "options",
 									"variant": "param",
 									"kind": 32768,
@@ -2531,7 +3939,7 @@
 								"typeArguments": [
 									{
 										"type": "reference",
-										"target": 36954,
+										"target": 38885,
 										"name": "T",
 										"package": "@medusajs/utils",
 										"refersToTypeParameter": true
@@ -2544,14 +3952,22 @@
 					]
 				},
 				{
-					"id": 36957,
+					"id": 38888,
 					"name": "manyToMany",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
+					"sources": [
+						{
+							"fileName": "utils/src/dml/entity-builder.ts",
+							"line": 505,
+							"character": 2,
+							"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L505"
+						}
+					],
 					"signatures": [
 						{
-							"id": 36958,
+							"id": 38889,
 							"name": "manyToMany",
 							"variant": "signature",
 							"kind": 4096,
@@ -2575,9 +3991,17 @@
 									}
 								]
 							},
+							"sources": [
+								{
+									"fileName": "utils/src/dml/entity-builder.ts",
+									"line": 505,
+									"character": 2,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity-builder.ts#L505"
+								}
+							],
 							"typeParameters": [
 								{
-									"id": 36959,
+									"id": 38890,
 									"name": "T",
 									"variant": "typeParam",
 									"kind": 131072,
@@ -2594,7 +4018,7 @@
 							],
 							"parameters": [
 								{
-									"id": 36960,
+									"id": 38891,
 									"name": "entityBuilder",
 									"variant": "param",
 									"kind": 32768,
@@ -2609,14 +4033,14 @@
 									},
 									"type": {
 										"type": "reference",
-										"target": 36959,
+										"target": 38890,
 										"name": "T",
 										"package": "@medusajs/utils",
 										"refersToTypeParameter": true
 									}
 								},
 								{
-									"id": 36961,
+									"id": 38892,
 									"name": "options",
 									"variant": "param",
 									"kind": 32768,
@@ -2633,7 +4057,7 @@
 									},
 									"type": {
 										"type": "reference",
-										"target": 36896,
+										"target": 38802,
 										"name": "ManyToManyOptions",
 										"package": "@medusajs/utils"
 									}
@@ -2648,7 +4072,7 @@
 								"typeArguments": [
 									{
 										"type": "reference",
-										"target": 36959,
+										"target": 38890,
 										"name": "T",
 										"package": "@medusajs/utils",
 										"refersToTypeParameter": true
@@ -2665,30 +4089,38 @@
 				{
 					"title": "Methods",
 					"children": [
-						36942,
-						36947,
-						36952,
-						36957
+						38854,
+						38873,
+						38883,
+						38888
 					]
 				}
 			]
 		},
 		{
-			"id": 37029,
+			"id": 38970,
 			"name": "Model Methods",
 			"variant": "declaration",
 			"kind": 4,
 			"flags": {},
 			"children": [
 				{
-					"id": 36987,
+					"id": 38922,
 					"name": "cascades",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
+					"sources": [
+						{
+							"fileName": "utils/src/dml/entity.ts",
+							"line": 146,
+							"character": 2,
+							"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity.ts#L146"
+						}
+					],
 					"signatures": [
 						{
-							"id": 36988,
+							"id": 38923,
 							"name": "cascades",
 							"variant": "signature",
 							"kind": 4096,
@@ -2712,9 +4144,17 @@
 									}
 								]
 							},
+							"sources": [
+								{
+									"fileName": "utils/src/dml/entity.ts",
+									"line": 146,
+									"character": 2,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity.ts#L146"
+								}
+							],
 							"parameters": [
 								{
-									"id": 36989,
+									"id": 38924,
 									"name": "options",
 									"variant": "param",
 									"kind": 32768,
@@ -2751,7 +4191,7 @@
 												"typeArguments": [
 													{
 														"type": "reference",
-														"target": 36970,
+														"target": 38903,
 														"name": "Schema",
 														"package": "@medusajs/utils",
 														"qualifiedName": "DmlEntity.Schema",
@@ -2766,9 +4206,36 @@
 															},
 															{
 																"type": "literal",
+																"value": "hasOneWithFK"
+															},
+															{
+																"type": "literal",
 																"value": "hasMany"
 															}
 														]
+													}
+												],
+												"name": "ExtractEntityRelations",
+												"package": "@medusajs/types"
+											},
+											{
+												"type": "reference",
+												"target": {
+													"sourceFileName": "../../../../packages/core/types/src/dml/index.ts",
+													"qualifiedName": "ExtractEntityRelations"
+												},
+												"typeArguments": [
+													{
+														"type": "reference",
+														"target": 38903,
+														"name": "Schema",
+														"package": "@medusajs/utils",
+														"qualifiedName": "DmlEntity.Schema",
+														"refersToTypeParameter": true
+													},
+													{
+														"type": "literal",
+														"value": "manyToMany"
 													}
 												],
 												"name": "ExtractEntityRelations",
@@ -2782,11 +4249,11 @@
 							],
 							"type": {
 								"type": "reference",
-								"target": 36964,
+								"target": 38897,
 								"typeArguments": [
 									{
 										"type": "reference",
-										"target": 36970,
+										"target": 38903,
 										"name": "Schema",
 										"package": "@medusajs/utils",
 										"qualifiedName": "DmlEntity.Schema",
@@ -2794,7 +4261,7 @@
 									},
 									{
 										"type": "reference",
-										"target": 36971,
+										"target": 38904,
 										"name": "TConfig",
 										"package": "@medusajs/utils",
 										"qualifiedName": "DmlEntity.TConfig",
@@ -2808,14 +4275,22 @@
 					]
 				},
 				{
-					"id": 36990,
+					"id": 38925,
 					"name": "indexes",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
+					"sources": [
+						{
+							"fileName": "utils/src/dml/entity.ts",
+							"line": 243,
+							"character": 2,
+							"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity.ts#L243"
+						}
+					],
 					"signatures": [
 						{
-							"id": 36991,
+							"id": 38926,
 							"name": "indexes",
 							"variant": "signature",
 							"kind": 4096,
@@ -2887,9 +4362,17 @@
 									}
 								]
 							},
+							"sources": [
+								{
+									"fileName": "utils/src/dml/entity.ts",
+									"line": 243,
+									"character": 2,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/entity.ts#L243"
+								}
+							],
 							"parameters": [
 								{
-									"id": 36992,
+									"id": 38927,
 									"name": "indexes",
 									"variant": "param",
 									"kind": 32768,
@@ -2913,7 +4396,7 @@
 											"typeArguments": [
 												{
 													"type": "reference",
-													"target": 36970,
+													"target": 38903,
 													"name": "Schema",
 													"package": "@medusajs/utils",
 													"qualifiedName": "DmlEntity.Schema",
@@ -2935,7 +4418,7 @@
 															"typeArguments": [
 																{
 																	"type": "reference",
-																	"target": 36970,
+																	"target": 38903,
 																	"name": "Schema",
 																	"package": "@medusajs/utils",
 																	"qualifiedName": "DmlEntity.Schema",
@@ -2956,11 +4439,11 @@
 							],
 							"type": {
 								"type": "reference",
-								"target": 36964,
+								"target": 38897,
 								"typeArguments": [
 									{
 										"type": "reference",
-										"target": 36970,
+										"target": 38903,
 										"name": "Schema",
 										"package": "@medusajs/utils",
 										"qualifiedName": "DmlEntity.Schema",
@@ -2968,7 +4451,7 @@
 									},
 									{
 										"type": "reference",
-										"target": 36971,
+										"target": 38904,
 										"name": "TConfig",
 										"package": "@medusajs/utils",
 										"qualifiedName": "DmlEntity.TConfig",
@@ -2986,28 +4469,36 @@
 				{
 					"title": "Methods",
 					"children": [
-						36987,
-						36990
+						38922,
+						38925
 					]
 				}
 			]
 		},
 		{
-			"id": 37030,
+			"id": 38971,
 			"name": "Property Configuration Methods",
 			"variant": "declaration",
 			"kind": 4,
 			"flags": {},
 			"children": [
 				{
-					"id": 37012,
+					"id": 38950,
 					"name": "nullable",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
+					"sources": [
+						{
+							"fileName": "utils/src/dml/properties/base.ts",
+							"line": 48,
+							"character": 2,
+							"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/properties/base.ts#L48"
+						}
+					],
 					"signatures": [
 						{
-							"id": 37013,
+							"id": 38951,
 							"name": "nullable",
 							"variant": "signature",
 							"kind": 4096,
@@ -3039,6 +4530,14 @@
 									}
 								]
 							},
+							"sources": [
+								{
+									"fileName": "utils/src/dml/properties/base.ts",
+									"line": 48,
+									"character": 2,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/properties/base.ts#L48"
+								}
+							],
 							"type": {
 								"type": "reference",
 								"target": {
@@ -3048,7 +4547,7 @@
 								"typeArguments": [
 									{
 										"type": "reference",
-										"target": 37000,
+										"target": 38938,
 										"name": "T",
 										"package": "@medusajs/utils",
 										"qualifiedName": "BaseProperty.T",
@@ -3056,11 +4555,11 @@
 									},
 									{
 										"type": "reference",
-										"target": 36997,
+										"target": 38935,
 										"typeArguments": [
 											{
 												"type": "reference",
-												"target": 37000,
+												"target": 38938,
 												"name": "T",
 												"package": "@medusajs/utils",
 												"qualifiedName": "BaseProperty.T",
@@ -3078,14 +4577,117 @@
 					]
 				},
 				{
-					"id": 37014,
+					"id": 38952,
+					"name": "computed",
+					"variant": "declaration",
+					"kind": 2048,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "utils/src/dml/properties/base.ts",
+							"line": 69,
+							"character": 2,
+							"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/properties/base.ts#L69"
+						}
+					],
+					"signatures": [
+						{
+							"id": 38953,
+							"name": "computed",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "This method indicated that the property is a computed property.\nComputed properties are not stored in the database but are\ncomputed on the fly."
+									}
+								],
+								"blockTags": [
+									{
+										"tag": "@example",
+										"content": [
+											{
+												"kind": "code",
+												"text": "```ts\nimport { model } from \"@medusajs/framework/utils\"\n\nconst MyCustom = model.define(\"my_custom\", {\n calculated_price: model.bigNumber().computed(),\n // ...\n})\n\nexport default MyCustom\n```"
+											}
+										]
+									}
+								]
+							},
+							"sources": [
+								{
+									"fileName": "utils/src/dml/properties/base.ts",
+									"line": 69,
+									"character": 2,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/properties/base.ts#L69"
+								}
+							],
+							"type": {
+								"type": "reference",
+								"target": {
+									"sourceFileName": "../../../../packages/core/utils/src/dml/properties/computed.ts",
+									"qualifiedName": "ComputedProperty"
+								},
+								"typeArguments": [
+									{
+										"type": "union",
+										"types": [
+											{
+												"type": "literal",
+												"value": null
+											},
+											{
+												"type": "reference",
+												"target": 38938,
+												"name": "T",
+												"package": "@medusajs/utils",
+												"qualifiedName": "BaseProperty.T",
+												"refersToTypeParameter": true
+											}
+										]
+									},
+									{
+										"type": "reference",
+										"target": 38935,
+										"typeArguments": [
+											{
+												"type": "reference",
+												"target": 38938,
+												"name": "T",
+												"package": "@medusajs/utils",
+												"qualifiedName": "BaseProperty.T",
+												"refersToTypeParameter": true
+											}
+										],
+										"name": "BaseProperty",
+										"package": "@medusajs/utils"
+									}
+								],
+								"name": "ComputedProperty",
+								"package": "@medusajs/utils"
+							}
+						}
+					]
+				},
+				{
+					"id": 38954,
 					"name": "index",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
+					"sources": [
+						{
+							"fileName": "utils/src/dml/properties/base.ts",
+							"line": 93,
+							"character": 2,
+							"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/properties/base.ts#L93"
+						}
+					],
 					"signatures": [
 						{
-							"id": 37015,
+							"id": 38955,
 							"name": "index",
 							"variant": "signature",
 							"kind": 4096,
@@ -3109,9 +4711,17 @@
 									}
 								]
 							},
+							"sources": [
+								{
+									"fileName": "utils/src/dml/properties/base.ts",
+									"line": 93,
+									"character": 2,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/properties/base.ts#L93"
+								}
+							],
 							"parameters": [
 								{
-									"id": 37016,
+									"id": 38956,
 									"name": "name",
 									"variant": "param",
 									"kind": 32768,
@@ -3134,11 +4744,11 @@
 							],
 							"type": {
 								"type": "reference",
-								"target": 36997,
+								"target": 38935,
 								"typeArguments": [
 									{
 										"type": "reference",
-										"target": 37000,
+										"target": 38938,
 										"name": "T",
 										"package": "@medusajs/utils",
 										"qualifiedName": "BaseProperty.T",
@@ -3152,14 +4762,22 @@
 					]
 				},
 				{
-					"id": 37017,
+					"id": 38957,
 					"name": "unique",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
+					"sources": [
+						{
+							"fileName": "utils/src/dml/properties/base.ts",
+							"line": 117,
+							"character": 2,
+							"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/properties/base.ts#L117"
+						}
+					],
 					"signatures": [
 						{
-							"id": 37018,
+							"id": 38958,
 							"name": "unique",
 							"variant": "signature",
 							"kind": 4096,
@@ -3183,9 +4801,17 @@
 									}
 								]
 							},
+							"sources": [
+								{
+									"fileName": "utils/src/dml/properties/base.ts",
+									"line": 117,
+									"character": 2,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/properties/base.ts#L117"
+								}
+							],
 							"parameters": [
 								{
-									"id": 37019,
+									"id": 38959,
 									"name": "name",
 									"variant": "param",
 									"kind": 32768,
@@ -3208,11 +4834,11 @@
 							],
 							"type": {
 								"type": "reference",
-								"target": 36997,
+								"target": 38935,
 								"typeArguments": [
 									{
 										"type": "reference",
-										"target": 37000,
+										"target": 38938,
 										"name": "T",
 										"package": "@medusajs/utils",
 										"qualifiedName": "BaseProperty.T",
@@ -3226,14 +4852,22 @@
 					]
 				},
 				{
-					"id": 37020,
+					"id": 38960,
 					"name": "default",
 					"variant": "declaration",
 					"kind": 2048,
 					"flags": {},
+					"sources": [
+						{
+							"fileName": "utils/src/dml/properties/base.ts",
+							"line": 144,
+							"character": 2,
+							"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/properties/base.ts#L144"
+						}
+					],
 					"signatures": [
 						{
-							"id": 37021,
+							"id": 38961,
 							"name": "default",
 							"variant": "signature",
 							"kind": 4096,
@@ -3257,9 +4891,17 @@
 									}
 								]
 							},
+							"sources": [
+								{
+									"fileName": "utils/src/dml/properties/base.ts",
+									"line": 144,
+									"character": 2,
+									"url": "https://github.com/medusajs/medusa/blob/b9edc066c8486e8ec52e4f505968db1c558bc7b8/packages/core/utils/src/dml/properties/base.ts#L144"
+								}
+							],
 							"parameters": [
 								{
-									"id": 37022,
+									"id": 38962,
 									"name": "value",
 									"variant": "param",
 									"kind": 32768,
@@ -3274,7 +4916,7 @@
 									},
 									"type": {
 										"type": "reference",
-										"target": 37000,
+										"target": 38938,
 										"name": "T",
 										"package": "@medusajs/utils",
 										"qualifiedName": "BaseProperty.T",
@@ -3284,11 +4926,11 @@
 							],
 							"type": {
 								"type": "reference",
-								"target": 36997,
+								"target": 38935,
 								"typeArguments": [
 									{
 										"type": "reference",
-										"target": 37000,
+										"target": 38938,
 										"name": "T",
 										"package": "@medusajs/utils",
 										"qualifiedName": "BaseProperty.T",
@@ -3306,10 +4948,11 @@
 				{
 					"title": "Methods",
 					"children": [
-						37012,
-						37014,
-						37017,
-						37020
+						38950,
+						38952,
+						38954,
+						38957,
+						38960
 					]
 				}
 			]
@@ -3319,492 +4962,625 @@
 		{
 			"title": "Modules",
 			"children": [
-				36891,
-				36963,
-				36996
+				38797,
+				38894,
+				38934
 			]
 		},
 		{
 			"title": "Namespaces",
 			"children": [
-				37027,
-				37028,
-				37029,
-				37030
+				38967,
+				38968,
+				38969,
+				38970,
+				38971
 			]
 		}
 	],
 	"packageName": "@medusajs/utils",
 	"symbolIdMap": {
-		"36891": {
+		"38797": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": ""
 		},
-		"36892": {
+		"38798": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "DefineOptions"
 		},
-		"36893": {
+		"38799": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "__type"
 		},
-		"36894": {
+		"38800": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "__type.name"
 		},
-		"36895": {
+		"38801": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "__type.tableName"
 		},
-		"36896": {
+		"38802": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "ManyToManyOptions"
 		},
-		"36897": {
+		"38803": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "__type"
 		},
-		"36898": {
+		"38804": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "__type.pivotTable"
 		},
-		"36900": {
+		"38806": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "__type.joinColumn"
 		},
-		"36901": {
+		"38807": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "__type.inverseJoinColumn"
 		},
-		"36902": {
+		"38808": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "__type"
 		},
-		"36904": {
+		"38810": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "__type.pivotEntity"
 		},
-		"36905": {
+		"38811": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "__type"
 		},
-		"36906": {
+		"38812": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "__type"
 		},
-		"36907": {
+		"38813": {
+			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
+			"qualifiedName": "__type.joinColumn"
+		},
+		"38814": {
+			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
+			"qualifiedName": "__type.inverseJoinColumn"
+		},
+		"38815": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "EntityBuilder"
 		},
-		"36913": {
+		"38821": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "EntityBuilder.define"
 		},
-		"36914": {
+		"38822": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "EntityBuilder.define"
 		},
-		"36915": {
+		"38823": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "Schema"
 		},
-		"36916": {
+		"38824": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "TConfig"
 		},
-		"36917": {
+		"38825": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "nameOrConfig"
 		},
-		"36918": {
+		"38826": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "schema"
 		},
-		"36919": {
+		"38827": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "EntityBuilder.id"
 		},
-		"36920": {
+		"38828": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "EntityBuilder.id"
 		},
-		"36921": {
+		"38829": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "options"
 		},
-		"36922": {
+		"38830": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "__type"
 		},
-		"36923": {
+		"38831": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "__type.prefix"
 		},
-		"36924": {
+		"38832": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "EntityBuilder.text"
 		},
-		"36925": {
+		"38833": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "EntityBuilder.text"
 		},
-		"36926": {
+		"38834": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "EntityBuilder.boolean"
 		},
-		"36927": {
+		"38835": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "EntityBuilder.boolean"
 		},
-		"36928": {
+		"38836": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "EntityBuilder.number"
 		},
-		"36929": {
+		"38837": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "EntityBuilder.number"
 		},
-		"36930": {
+		"38838": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "EntityBuilder.bigNumber"
 		},
-		"36931": {
+		"38839": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "EntityBuilder.bigNumber"
 		},
-		"36932": {
+		"38840": {
+			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
+			"qualifiedName": "EntityBuilder.float"
+		},
+		"38841": {
+			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
+			"qualifiedName": "EntityBuilder.float"
+		},
+		"38842": {
+			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
+			"qualifiedName": "EntityBuilder.autoincrement"
+		},
+		"38843": {
+			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
+			"qualifiedName": "EntityBuilder.autoincrement"
+		},
+		"38844": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "EntityBuilder.array"
 		},
-		"36933": {
+		"38845": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "EntityBuilder.array"
 		},
-		"36934": {
+		"38846": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "EntityBuilder.dateTime"
 		},
-		"36935": {
+		"38847": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "EntityBuilder.dateTime"
 		},
-		"36936": {
+		"38848": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "EntityBuilder.json"
 		},
-		"36937": {
+		"38849": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "EntityBuilder.json"
 		},
-		"36938": {
+		"38850": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "EntityBuilder.enum"
 		},
-		"36939": {
+		"38851": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "EntityBuilder.enum"
 		},
-		"36940": {
+		"38852": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "Values"
 		},
-		"36941": {
+		"38853": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "values"
 		},
-		"36942": {
+		"38854": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "EntityBuilder.hasOne"
 		},
-		"36943": {
+		"38855": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "EntityBuilder.hasOne"
 		},
-		"36944": {
+		"38856": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "T"
 		},
-		"36945": {
+		"38857": {
+			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
+			"qualifiedName": "ForeignKeyName"
+		},
+		"38858": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "entityBuilder"
 		},
-		"36946": {
+		"38859": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "options"
 		},
-		"36947": {
+		"38860": {
+			"sourceFileName": "../../../../packages/core/types/src/dml/index.ts",
+			"qualifiedName": "__type"
+		},
+		"38861": {
+			"sourceFileName": "../../../../packages/core/types/src/dml/index.ts",
+			"qualifiedName": "__type.mappedBy"
+		},
+		"38862": {
+			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
+			"qualifiedName": "__type"
+		},
+		"38863": {
+			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
+			"qualifiedName": "__type.foreignKey"
+		},
+		"38864": {
+			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
+			"qualifiedName": "__type.foreignKeyName"
+		},
+		"38865": {
+			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
+			"qualifiedName": "EntityBuilder.hasOne"
+		},
+		"38866": {
+			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
+			"qualifiedName": "T"
+		},
+		"38867": {
+			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
+			"qualifiedName": "entityBuilder"
+		},
+		"38868": {
+			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
+			"qualifiedName": "options"
+		},
+		"38869": {
+			"sourceFileName": "../../../../packages/core/types/src/dml/index.ts",
+			"qualifiedName": "__type"
+		},
+		"38870": {
+			"sourceFileName": "../../../../packages/core/types/src/dml/index.ts",
+			"qualifiedName": "__type.mappedBy"
+		},
+		"38871": {
+			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
+			"qualifiedName": "__type"
+		},
+		"38872": {
+			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
+			"qualifiedName": "__type.foreignKey"
+		},
+		"38873": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "EntityBuilder.belongsTo"
 		},
-		"36948": {
+		"38874": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "EntityBuilder.belongsTo"
 		},
-		"36949": {
+		"38875": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "T"
 		},
-		"36950": {
+		"38876": {
+			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
+			"qualifiedName": "ForeignKeyName"
+		},
+		"38877": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "entityBuilder"
 		},
-		"36951": {
+		"38878": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "options"
 		},
-		"36952": {
+		"38879": {
+			"sourceFileName": "../../../../packages/core/types/src/dml/index.ts",
+			"qualifiedName": "__type"
+		},
+		"38880": {
+			"sourceFileName": "../../../../packages/core/types/src/dml/index.ts",
+			"qualifiedName": "__type.mappedBy"
+		},
+		"38881": {
+			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
+			"qualifiedName": "__type"
+		},
+		"38882": {
+			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
+			"qualifiedName": "__type.foreignKeyName"
+		},
+		"38883": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "EntityBuilder.hasMany"
 		},
-		"36953": {
+		"38884": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "EntityBuilder.hasMany"
 		},
-		"36954": {
+		"38885": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "T"
 		},
-		"36955": {
+		"38886": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "entityBuilder"
 		},
-		"36956": {
+		"38887": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "options"
 		},
-		"36957": {
+		"38888": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "EntityBuilder.manyToMany"
 		},
-		"36958": {
+		"38889": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "EntityBuilder.manyToMany"
 		},
-		"36959": {
+		"38890": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "T"
 		},
-		"36960": {
+		"38891": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "entityBuilder"
 		},
-		"36961": {
+		"38892": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "options"
 		},
-		"36962": {
+		"38893": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity-builder.ts",
 			"qualifiedName": "model"
 		},
-		"36963": {
+		"38894": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
 			"qualifiedName": ""
 		},
-		"36964": {
+		"38895": {
+			"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
+			"qualifiedName": "DMLEntitySchemaBuilder"
+		},
+		"38896": {
+			"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
+			"qualifiedName": "Schema"
+		},
+		"38897": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
 			"qualifiedName": "DmlEntity"
 		},
-		"36965": {
+		"38898": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
 			"qualifiedName": "DmlEntity.isDmlEntity"
 		},
-		"36966": {
+		"38899": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
 			"qualifiedName": "DmlEntity.isDmlEntity"
 		},
-		"36967": {
+		"38900": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
 			"qualifiedName": "entity"
 		},
-		"36968": {
+		"38901": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
 			"qualifiedName": "DmlEntity.__constructor"
 		},
-		"36969": {
+		"38902": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
 			"qualifiedName": "DmlEntity"
 		},
-		"36970": {
+		"38903": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
 			"qualifiedName": "DmlEntity.Schema"
 		},
-		"36971": {
+		"38904": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
 			"qualifiedName": "DmlEntity.TConfig"
 		},
-		"36972": {
+		"38905": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
 			"qualifiedName": "nameOrConfig"
 		},
-		"36973": {
+		"38906": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
 			"qualifiedName": "schema"
 		},
-		"36974": {
+		"38907": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
 			"qualifiedName": "DmlEntity.name"
 		},
-		"36975": {
+		"38908": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
 			"qualifiedName": "DmlEntity.schema"
 		},
-		"36979": {
+		"38913": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
 			"qualifiedName": "DmlEntity.parse"
 		},
-		"36980": {
+		"38914": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
 			"qualifiedName": "DmlEntity.parse"
 		},
-		"36981": {
+		"38915": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
 			"qualifiedName": "__type"
 		},
-		"36982": {
+		"38916": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
 			"qualifiedName": "__type.name"
 		},
-		"36983": {
+		"38917": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
 			"qualifiedName": "__type.tableName"
 		},
-		"36984": {
+		"38918": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
 			"qualifiedName": "__type.schema"
 		},
-		"36985": {
+		"38919": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
 			"qualifiedName": "__type.cascades"
 		},
-		"36986": {
+		"38920": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
 			"qualifiedName": "__type.indexes"
 		},
-		"36987": {
+		"38921": {
+			"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
+			"qualifiedName": "__type.checks"
+		},
+		"38922": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
 			"qualifiedName": "DmlEntity.cascades"
 		},
-		"36988": {
+		"38923": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
 			"qualifiedName": "DmlEntity.cascades"
 		},
-		"36989": {
+		"38924": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
 			"qualifiedName": "options"
 		},
-		"36990": {
+		"38925": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
 			"qualifiedName": "DmlEntity.indexes"
 		},
-		"36991": {
+		"38926": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
 			"qualifiedName": "DmlEntity.indexes"
 		},
-		"36992": {
+		"38927": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
 			"qualifiedName": "indexes"
 		},
-		"36993": {
+		"38928": {
+			"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
+			"qualifiedName": "DmlEntity.checks"
+		},
+		"38929": {
+			"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
+			"qualifiedName": "DmlEntity.checks"
+		},
+		"38930": {
+			"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
+			"qualifiedName": "checks"
+		},
+		"38931": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
 			"qualifiedName": "DmlEntity.[IsDmlEntity]"
 		},
-		"36994": {
+		"38932": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
 			"qualifiedName": "DmlEntity.Schema"
 		},
-		"36995": {
+		"38933": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/entity.ts",
 			"qualifiedName": "DmlEntity.TConfig"
 		},
-		"36996": {
+		"38934": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/properties/base.ts",
 			"qualifiedName": ""
 		},
-		"36997": {
+		"38935": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/properties/base.ts",
 			"qualifiedName": "BaseProperty"
 		},
-		"37000": {
+		"38938": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/properties/base.ts",
 			"qualifiedName": "BaseProperty.T"
 		},
-		"37007": {
+		"38945": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/properties/base.ts",
 			"qualifiedName": "BaseProperty.dataType"
 		},
-		"37008": {
+		"38946": {
 			"sourceFileName": "../../../../packages/core/types/src/dml/index.ts",
 			"qualifiedName": "__type"
 		},
-		"37009": {
+		"38947": {
 			"sourceFileName": "../../../../packages/core/types/src/dml/index.ts",
 			"qualifiedName": "__type.name"
 		},
-		"37010": {
+		"38948": {
 			"sourceFileName": "../../../../packages/core/types/src/dml/index.ts",
 			"qualifiedName": "__type.options"
 		},
-		"37011": {
+		"38949": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/properties/base.ts",
 			"qualifiedName": "BaseProperty.$dataType"
 		},
-		"37012": {
+		"38950": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/properties/base.ts",
 			"qualifiedName": "BaseProperty.nullable"
 		},
-		"37013": {
+		"38951": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/properties/base.ts",
 			"qualifiedName": "BaseProperty.nullable"
 		},
-		"37014": {
+		"38952": {
+			"sourceFileName": "../../../../packages/core/utils/src/dml/properties/base.ts",
+			"qualifiedName": "BaseProperty.computed"
+		},
+		"38953": {
+			"sourceFileName": "../../../../packages/core/utils/src/dml/properties/base.ts",
+			"qualifiedName": "BaseProperty.computed"
+		},
+		"38954": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/properties/base.ts",
 			"qualifiedName": "BaseProperty.index"
 		},
-		"37015": {
+		"38955": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/properties/base.ts",
 			"qualifiedName": "BaseProperty.index"
 		},
-		"37016": {
+		"38956": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/properties/base.ts",
 			"qualifiedName": "name"
 		},
-		"37017": {
+		"38957": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/properties/base.ts",
 			"qualifiedName": "BaseProperty.unique"
 		},
-		"37018": {
+		"38958": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/properties/base.ts",
 			"qualifiedName": "BaseProperty.unique"
 		},
-		"37019": {
+		"38959": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/properties/base.ts",
 			"qualifiedName": "name"
 		},
-		"37020": {
+		"38960": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/properties/base.ts",
 			"qualifiedName": "BaseProperty.default"
 		},
-		"37021": {
+		"38961": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/properties/base.ts",
 			"qualifiedName": "BaseProperty.default"
 		},
-		"37022": {
+		"38962": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/properties/base.ts",
 			"qualifiedName": "value"
 		},
-		"37023": {
+		"38963": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/properties/base.ts",
 			"qualifiedName": "BaseProperty.parse"
 		},
-		"37024": {
+		"38964": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/properties/base.ts",
 			"qualifiedName": "BaseProperty.parse"
 		},
-		"37025": {
+		"38965": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/properties/base.ts",
 			"qualifiedName": "fieldName"
 		},
-		"37026": {
+		"38966": {
 			"sourceFileName": "../../../../packages/core/utils/src/dml/properties/base.ts",
 			"qualifiedName": "BaseProperty.T"
 		}
@@ -3816,9 +5592,9 @@
 			"3": "../../../../packages/core/utils/src/dml/properties/base.ts"
 		},
 		"reflections": {
-			"1": 36891,
-			"2": 36963,
-			"3": 36996
+			"1": 38797,
+			"2": 38894,
+			"3": 38934
 		}
 	}
 }

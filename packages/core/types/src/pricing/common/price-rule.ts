@@ -138,3 +138,30 @@ export interface FilterablePriceRuleProps
  * The possible operators to use in a price rule.
  */
 export type PricingRuleOperatorValues = "gt" | "lt" | "eq" | "lte" | "gte"
+
+/**
+ * The rules of a price.
+ */
+export interface PriceRule {
+  /**
+   * The attribute to compare.
+   * 
+   * @example
+   * amount
+   */
+  attribute: string
+  /**
+   * The operator to use in the comparison.
+   * 
+   * @example
+   * gt
+   */
+  operator: PricingRuleOperatorValues
+  /**
+   * The value to compare against.
+   * 
+   * @example
+   * 100
+   */
+  value: number
+}

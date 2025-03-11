@@ -29,31 +29,19 @@ const step = createStep(
 /**
  * This step fetches data across modules using the Query.
  *
- * Learn more in the [Query documentation](https://docs.medusajs.com/learn/advanced-development/module-links/query).
+ * Learn more in the [Query documentation](https://docs.medusajs.com/learn/fundamentals/module-links/query).
  * 
  * @example
  * To retrieve a list of records of a data model:
  *
  * ```ts
- * import {
- *   createWorkflow
- * } from "@medusajs/framework/workflows-sdk"
- * import {
- *   useQueryGraphStep
- * } from "@medusajs/medusa/core-flows"
- *
- * const helloWorldWorkflow = createWorkflow(
- *   "hello-world",
- *   () => {
- *     const { data: products } = useQueryGraphStep({
- *       entity: "product",
- *       fields: [
- *         "*",
- *         "variants.*"
- *       ]
- *     })
- *   }
- * )
+ * const { data: products } = useQueryGraphStep({
+ *   entity: "product",
+ *   fields: [
+ *     "*",
+ *     "variants.*"
+ *   ]
+ * })
  * ```
  *
  * To retrieve a single item instead of a an array:

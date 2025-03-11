@@ -254,11 +254,14 @@ moduleIntegrationTestRunner<IPricingModuleService>({
               ends_at: "10/20/2030",
             },
           ])
-          expect(priceList).toEqual(
-            expect.objectContaining({
-              starts_at: new Date("10/10/2010").toISOString(),
-              ends_at: new Date("10/20/2030").toISOString(),
-            })
+
+          expect(priceList).toHaveProperty("starts_at")
+          expect(priceList).toHaveProperty("ends_at")
+          expect(priceList.starts_at?.toString()).toEqual(
+            new Date("10/10/2010").toISOString()
+          )
+          expect(priceList.ends_at?.toString()).toEqual(
+            new Date("10/20/2030").toISOString()
           )
         })
 
@@ -378,11 +381,14 @@ moduleIntegrationTestRunner<IPricingModuleService>({
               ends_at: "10/20/2030",
             },
           ])
-          expect(priceList).toEqual(
-            expect.objectContaining({
-              starts_at: new Date("10/10/2010").toISOString(),
-              ends_at: new Date("10/20/2030").toISOString(),
-            })
+
+          expect(priceList).toHaveProperty("starts_at")
+          expect(priceList).toHaveProperty("ends_at")
+          expect(priceList.starts_at?.toString()).toEqual(
+            new Date("10/10/2010").toString()
+          )
+          expect(priceList.ends_at?.toString()).toEqual(
+            new Date("10/20/2030").toString()
           )
         })
 
@@ -562,7 +568,6 @@ moduleIntegrationTestRunner<IPricingModuleService>({
                   currency_code: "EUR",
                 }),
                 expect.objectContaining({
-                  rules_count: 0,
                   price_rules: [],
                   amount: 600,
                   currency_code: "EUR",
@@ -819,6 +824,32 @@ moduleIntegrationTestRunner<IPricingModuleService>({
               ],
             },
           ])
+
+          const events = eventBusEmitSpy.mock.calls[2][0]
+          expect(events).toEqual(
+            expect.arrayContaining([
+              expect.objectContaining({
+                name: "pricing.price-rule.created",
+              }),
+              expect.objectContaining({
+                name: "pricing.price-rule.created",
+              }),
+              expect.objectContaining({
+                name: "pricing.price.updated",
+                metadata: {
+                  source: "pricing",
+                  object: "price",
+                  action: "updated",
+                },
+                data: {
+                  id: "test-price-id",
+                },
+              }),
+              expect.objectContaining({
+                name: "pricing.price-rule.deleted",
+              }),
+            ])
+          )
 
           const [priceList] = await service.listPriceLists(
             { id: ["price-list-1"] },

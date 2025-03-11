@@ -3,6 +3,7 @@ import {
   Context,
   DAL,
   IInventoryService,
+  InferEntityType,
   InternalModuleDeclaration,
   InventoryTypes,
   ModuleJoinerConfig,
@@ -25,10 +26,12 @@ import {
   MedusaContext,
   MedusaError,
   MedusaService,
+  Modules,
   partitionArray,
 } from "@medusajs/framework/utils"
 import { InventoryItem, InventoryLevel, ReservationItem } from "@models"
 import { joinerConfig } from "../joiner-config"
+import { applyEntityHooks } from "../utils/apply-decorators"
 import InventoryLevelService from "./inventory-level"
 
 type InjectedDependencies = {
@@ -45,6 +48,8 @@ type InventoryItemCheckLevel = {
   quantity?: BigNumberInput
   allow_backorder?: boolean
 }
+
+applyEntityHooks()
 
 export default class InventoryModuleService
   extends MedusaService<{
@@ -66,8 +71,12 @@ export default class InventoryModuleService
 {
   protected baseRepository_: DAL.RepositoryService
 
-  protected readonly inventoryItemService_: ModulesSdkTypes.IMedusaInternalService<InventoryItem>
-  protected readonly reservationItemService_: ModulesSdkTypes.IMedusaInternalService<ReservationItem>
+  protected readonly inventoryItemService_: ModulesSdkTypes.IMedusaInternalService<
+    typeof InventoryItem
+  >
+  protected readonly reservationItemService_: ModulesSdkTypes.IMedusaInternalService<
+    typeof ReservationItem
+  >
   protected readonly inventoryLevelService_: InventoryLevelService
 
   constructor(
@@ -214,11 +223,12 @@ export default class InventoryModuleService
     })
   }
 
-  // @ts-ignore
+  // @ts-expect-error
   async createReservationItems(
     input: InventoryTypes.CreateReservationItemInput[],
     context?: Context
   ): Promise<InventoryTypes.ReservationItemDTO[]>
+  // @ts-expect-error
   async createReservationItems(
     input: InventoryTypes.CreateReservationItemInput,
     context?: Context
@@ -226,6 +236,7 @@ export default class InventoryModuleService
 
   @InjectManager()
   @EmitEvents()
+  // @ts-expect-error
   async createReservationItems(
     input:
       | InventoryTypes.CreateReservationItemInput[]
@@ -240,7 +251,7 @@ export default class InventoryModuleService
     context.messageAggregator?.saveRawMessageData(
       created.map((reservationItem) => ({
         eventName: InventoryEvents.RESERVATION_ITEM_CREATED,
-        source: this.constructor.name,
+        source: Modules.INVENTORY,
         action: CommonEvents.CREATED,
         object: "reservation-item",
         context,
@@ -263,7 +274,7 @@ export default class InventoryModuleService
   async createReservationItems_(
     input: InventoryTypes.CreateReservationItemInput[],
     @MedusaContext() context: Context = {}
-  ): Promise<ReservationItem[]> {
+  ): Promise<InferEntityType<typeof ReservationItem>[]> {
     const inventoryLevels = await this.ensureInventoryLevels(
       input.map(
         ({ location_id, inventory_item_id, quantity, allow_backorder }) => ({
@@ -342,7 +353,7 @@ export default class InventoryModuleService
     context.messageAggregator?.saveRawMessageData(
       result.map((inventoryItem) => ({
         eventName: InventoryEvents.INVENTORY_ITEM_CREATED,
-        source: this.constructor.name,
+        source: Modules.INVENTORY,
         action: CommonEvents.CREATED,
         object: "inventory-item",
         context,
@@ -372,6 +383,7 @@ export default class InventoryModuleService
     input: InventoryTypes.CreateInventoryLevelInput,
     context?: Context
   ): Promise<InventoryTypes.InventoryLevelDTO>
+  // @ts-expect-error
   createInventoryLevels(
     input: InventoryTypes.CreateInventoryLevelInput[],
     context?: Context
@@ -379,6 +391,7 @@ export default class InventoryModuleService
 
   @InjectManager()
   @EmitEvents()
+  // @ts-expect-error
   async createInventoryLevels(
     input:
       | InventoryTypes.CreateInventoryLevelInput[]
@@ -396,7 +409,7 @@ export default class InventoryModuleService
     context.messageAggregator?.saveRawMessageData(
       created.map((inventoryLevel) => ({
         eventName: InventoryEvents.INVENTORY_LEVEL_CREATED,
-        source: this.constructor.name,
+        source: Modules.INVENTORY,
         action: CommonEvents.CREATED,
         object: "inventory-level",
         context,
@@ -417,7 +430,7 @@ export default class InventoryModuleService
   async createInventoryLevels_(
     input: InventoryTypes.CreateInventoryLevelInput[],
     @MedusaContext() context: Context = {}
-  ): Promise<InventoryLevel[]> {
+  ): Promise<InferEntityType<typeof InventoryLevel>[]> {
     return await this.inventoryLevelService_.create(input, context)
   }
 
@@ -426,6 +439,7 @@ export default class InventoryModuleService
     input: InventoryTypes.UpdateInventoryItemInput[],
     context?: Context
   ): Promise<InventoryTypes.InventoryItemDTO[]>
+  // @ts-expect-error
   updateInventoryItems(
     input: InventoryTypes.UpdateInventoryItemInput,
     context?: Context
@@ -433,6 +447,7 @@ export default class InventoryModuleService
 
   @InjectManager()
   @EmitEvents()
+  // @ts-expect-error
   async updateInventoryItems(
     input:
       | InventoryTypes.UpdateInventoryItemInput
@@ -450,7 +465,7 @@ export default class InventoryModuleService
     context.messageAggregator?.saveRawMessageData(
       result.map((inventoryItem) => ({
         eventName: InventoryEvents.INVENTORY_ITEM_UPDATED,
-        source: this.constructor.name,
+        source: Modules.INVENTORY,
         action: CommonEvents.UPDATED,
         object: "inventory-item",
         context,
@@ -473,7 +488,7 @@ export default class InventoryModuleService
       id: string
     })[],
     @MedusaContext() context: Context = {}
-  ): Promise<InventoryItem[]> {
+  ): Promise<InferEntityType<typeof InventoryItem>[]> {
     return await this.inventoryItemService_.update(input, context)
   }
 
@@ -491,7 +506,7 @@ export default class InventoryModuleService
     context.messageAggregator?.saveRawMessageData(
       result[0].map((inventoryLevel) => ({
         eventName: InventoryEvents.INVENTORY_LEVEL_DELETED,
-        source: this.constructor.name,
+        source: Modules.INVENTORY,
         action: CommonEvents.DELETED,
         object: "inventory-level",
         context,
@@ -522,7 +537,7 @@ export default class InventoryModuleService
 
     context.messageAggregator?.saveRawMessageData({
       eventName: InventoryEvents.INVENTORY_LEVEL_DELETED,
-      source: this.constructor.name,
+      source: Modules.INVENTORY,
       action: CommonEvents.DELETED,
       object: "inventory-level",
       context,
@@ -533,25 +548,27 @@ export default class InventoryModuleService
       return
     }
 
-    return await this.inventoryLevelService_.delete(inventoryLevel.id, context)
+    await this.inventoryLevelService_.delete(inventoryLevel.id, context)
   }
 
   // @ts-ignore
   async updateInventoryLevels(
-    updates: InventoryTypes.BulkUpdateInventoryLevelInput[],
+    updates: InventoryTypes.UpdateInventoryLevelInput[],
     context?: Context
   ): Promise<InventoryTypes.InventoryLevelDTO[]>
+  // @ts-expect-error
   async updateInventoryLevels(
-    updates: InventoryTypes.BulkUpdateInventoryLevelInput,
+    updates: InventoryTypes.UpdateInventoryLevelInput,
     context?: Context
   ): Promise<InventoryTypes.InventoryLevelDTO>
 
   @InjectManager()
   @EmitEvents()
+  // @ts-expect-error
   async updateInventoryLevels(
     updates:
-      | InventoryTypes.BulkUpdateInventoryLevelInput[]
-      | InventoryTypes.BulkUpdateInventoryLevelInput,
+      | InventoryTypes.UpdateInventoryLevelInput[]
+      | InventoryTypes.UpdateInventoryLevelInput,
     @MedusaContext() context: Context = {}
   ): Promise<
     InventoryTypes.InventoryLevelDTO | InventoryTypes.InventoryLevelDTO[]
@@ -565,7 +582,7 @@ export default class InventoryModuleService
     context.messageAggregator?.saveRawMessageData(
       levels.map((inventoryLevel) => ({
         eventName: InventoryEvents.INVENTORY_LEVEL_UPDATED,
-        source: this.constructor.name,
+        source: Modules.INVENTORY,
         action: CommonEvents.UPDATED,
         object: "inventory-level",
         context,
@@ -584,7 +601,7 @@ export default class InventoryModuleService
 
   @InjectTransactionManager()
   async updateInventoryLevels_(
-    updates: InventoryTypes.BulkUpdateInventoryLevelInput[],
+    updates: InventoryTypes.UpdateInventoryLevelInput[],
     @MedusaContext() context: Context = {}
   ) {
     const inventoryLevels = await this.ensureInventoryLevels(
@@ -603,16 +620,13 @@ export default class InventoryModuleService
       return acc
     }, new Map())
 
-    return await this.inventoryLevelService_.update(
-      updates.map((update) => {
-        const id = levelMap
-          .get(update.inventory_item_id)
-          .get(update.location_id)
+    const updatesWithIds = updates.map((update) => {
+      const id = levelMap.get(update.inventory_item_id).get(update.location_id)
 
-        return { id, ...update }
-      }),
-      context
-    )
+      return { id, ...update }
+    })
+
+    return await this.inventoryLevelService_.update(updatesWithIds, context)
   }
 
   /**
@@ -623,11 +637,12 @@ export default class InventoryModuleService
    * @param context
    * @return The updated inventory level
    */
-  // @ts-ignore
+  // @ts-expect-error
   async updateReservationItems(
     input: InventoryTypes.UpdateReservationItemInput[],
     context?: Context
   ): Promise<InventoryTypes.ReservationItemDTO[]>
+  // @ts-expect-error
   async updateReservationItems(
     input: InventoryTypes.UpdateReservationItemInput,
     context?: Context
@@ -635,6 +650,7 @@ export default class InventoryModuleService
 
   @InjectManager()
   @EmitEvents()
+  // @ts-expect-error
   async updateReservationItems(
     input:
       | InventoryTypes.UpdateReservationItemInput
@@ -648,8 +664,8 @@ export default class InventoryModuleService
 
     context.messageAggregator?.saveRawMessageData(
       result.map((reservationItem) => ({
-        eventName: InventoryEvents.INVENTORY_LEVEL_UPDATED,
-        source: this.constructor.name,
+        eventName: InventoryEvents.RESERVATION_ITEM_UPDATED,
+        source: Modules.INVENTORY,
         action: CommonEvents.UPDATED,
         object: "reservation-item",
         context,
@@ -670,7 +686,7 @@ export default class InventoryModuleService
   async updateReservationItems_(
     input: (InventoryTypes.UpdateReservationItemInput & { id: string })[],
     @MedusaContext() context: Context = {}
-  ): Promise<ReservationItem[]> {
+  ): Promise<InferEntityType<typeof ReservationItem>[]> {
     const ids = input.map((u) => u.id)
     const reservationItems = await this.listReservationItems(
       { id: ids },
@@ -854,7 +870,7 @@ export default class InventoryModuleService
     context.messageAggregator?.saveRawMessageData(
       reservations.map((reservationItem) => ({
         eventName: InventoryEvents.RESERVATION_ITEM_DELETED,
-        source: this.constructor.name,
+        source: Modules.INVENTORY,
         action: CommonEvents.DELETED,
         object: "reservation-item",
         context,
@@ -896,7 +912,7 @@ export default class InventoryModuleService
     context.messageAggregator?.saveRawMessageData(
       reservations.map((reservationItem) => ({
         eventName: InventoryEvents.RESERVATION_ITEM_DELETED,
-        source: this.constructor.name,
+        source: Modules.INVENTORY,
         action: CommonEvents.DELETED,
         object: "reservation-item",
         context,
@@ -933,7 +949,7 @@ export default class InventoryModuleService
     context.messageAggregator?.saveRawMessageData(
       reservations.map((reservationItem) => ({
         eventName: InventoryEvents.RESERVATION_ITEM_CREATED,
-        source: this.constructor.name,
+        source: Modules.INVENTORY,
         action: CommonEvents.CREATED,
         object: "reservation-item",
         context,
@@ -989,7 +1005,7 @@ export default class InventoryModuleService
       ]
     }
 
-    const results: InventoryLevel[] = []
+    const results: InferEntityType<typeof InventoryLevel>[] = []
 
     for (const data of all) {
       const result = await this.adjustInventory_(
@@ -1002,7 +1018,7 @@ export default class InventoryModuleService
 
       context.messageAggregator?.saveRawMessageData({
         eventName: InventoryEvents.INVENTORY_LEVEL_UPDATED,
-        source: this.constructor.name,
+        source: Modules.INVENTORY,
         action: CommonEvents.UPDATED,
         object: "inventory-level",
         context,
@@ -1024,7 +1040,7 @@ export default class InventoryModuleService
     locationId: string,
     adjustment: BigNumberInput,
     @MedusaContext() context: Context = {}
-  ): Promise<InventoryLevel> {
+  ): Promise<InferEntityType<typeof InventoryLevel>> {
     const inventoryLevel = await this.retrieveInventoryLevelByItemAndLocation(
       inventoryItemId,
       locationId,

@@ -6,7 +6,7 @@ export const metadata = {
 
 # {metadata.title}
 
-In this chapter, you'll learn about the `moduleIntegrationTestRunner` utility function and how to use it to write integration tests for a module's main service.
+In this chapter, you'll learn about `moduleIntegrationTestRunner` from Medusa's Testing Framework and how to use it to write integration tests for a module's main service.
 
 <Prerequisites
   items={[
@@ -19,7 +19,7 @@ In this chapter, you'll learn about the `moduleIntegrationTestRunner` utility fu
 
 ## moduleIntegrationTestRunner Utility
 
-The `moduleIntegrationTestRunner` utility function is provided by the `@medusajs/test-utils` package to create integration tests for a module. The integration tests run on a test Medusa application with only the specified module enabled.
+`moduleIntegrationTestRunner` creates integration tests for a module. The integration tests run on a test Medusa application with only the specified module enabled.
 
 For example, assuming you have a `hello` module, create a test file at `src/modules/hello/__tests__/service.spec.ts`:
 
@@ -37,6 +37,8 @@ moduleIntegrationTestRunner<HelloModuleService>({
     // TODO write tests
   },
 })
+
+jest.setTimeout(60 * 1000)
 ```
 
 The `moduleIntegrationTestRunner` function accepts as a parameter an object with the following properties:
@@ -63,12 +65,12 @@ The tests in the `testSuite` function are written using [Jest](https://jestjs.io
 Run the following command to run your module integration tests:
 
 ```bash npm2yarn
-npm run test:modules
+npm run test:integration:modules
 ```
 
 <Note title="Tip">
 
-If you don't have a `test:modules` script in `package.json`, refer to the [Medusa Testing Tools chapter](../page.mdx#add-test-commands).
+If you don't have a `test:integration:modules` script in `package.json`, refer to the [Medusa Testing Tools chapter](../page.mdx#add-test-commands).
 
 </Note>
 
@@ -115,6 +117,8 @@ moduleIntegrationTestRunner<HelloModuleService>({
   moduleModels: [DummyModel],
   // ...
 })
+
+jest.setTimeout(60 * 1000)
 ```
 
 ---

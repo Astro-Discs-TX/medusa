@@ -79,10 +79,13 @@ export const ProductCreateForm = ({
       return {}
     }
 
-    return regions.reduce((acc, reg) => {
-      acc[reg.id] = reg.currency_code
-      return acc
-    }, {} as Record<string, string>)
+    return regions.reduce(
+      (acc, reg) => {
+        acc[reg.id] = reg.currency_code
+        return acc
+      },
+      {} as Record<string, string>
+    )
   }, [regions])
 
   /**
@@ -208,7 +211,8 @@ export const ProductCreateForm = ({
     }
 
     setTabState({ ...currentState })
-  }, [tab, tabState])
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- we only want this effect to run when the tab changes
+  }, [tab])
 
   return (
     <RouteFocusModal.Form form={form}>
@@ -216,6 +220,13 @@ export const ProductCreateForm = ({
         onKeyDown={(e) => {
           // We want to continue to the next tab on enter instead of saving as draft immediately
           if (e.key === "Enter") {
+            if (
+              e.target instanceof HTMLTextAreaElement &&
+              !(e.metaKey || e.ctrlKey)
+            ) {
+              return
+            }
+
             e.preventDefault()
 
             if (e.metaKey || e.ctrlKey) {

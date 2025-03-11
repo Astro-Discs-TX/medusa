@@ -1,7 +1,35 @@
-import { de, enUS, es, fr, pl, ptBR, th, tr } from "date-fns/locale"
+import {
+  de,
+  bg,
+  enUS,
+  es,
+  fr,
+  it,
+  ja,
+  pl,
+  ptBR,
+  th,
+  tr,
+  uk,
+  ro,
+  mk,
+  mn,
+  ar,
+  zhCN,
+  faIR,
+  cs,
+  ru,
+  el
+} from "date-fns/locale"
 import { Language } from "./types"
 
 export const languages: Language[] = [
+  {
+    code: "bg",
+    display_name: "Български",
+    ltr: true,
+    date_locale: bg,
+  },
   {
     code: "en",
     display_name: "English",
@@ -15,6 +43,12 @@ export const languages: Language[] = [
     date_locale: es,
   },
   {
+    code: "el",
+    display_name: "Ελληνικά",
+    ltr: true,
+    date_locale: el,
+  },
+  {
     code: "de",
     display_name: "Deutsch",
     ltr: true,
@@ -25,6 +59,18 @@ export const languages: Language[] = [
     display_name: "Français",
     ltr: true,
     date_locale: fr,
+  },
+  {
+    code: "it",
+    display_name: "Italiano",
+    ltr: true,
+    date_locale: it,
+  },
+  {
+    code: "ja",
+    display_name: "日本語",
+    ltr: true,
+    date_locale: ja,
   },
   {
     code: "pl",
@@ -49,5 +95,59 @@ export const languages: Language[] = [
     display_name: "ไทย",
     ltr: true,
     date_locale: th,
+  },
+  {
+    code: "uk",
+    display_name: "Українська",
+    ltr: true,
+    date_locale: uk,
+  },
+  {
+    code: "ro",
+    display_name: "Română",
+    ltr: true,
+    date_locale: ro,
+  },
+  {
+    code: "mk",
+    display_name: "Македонски",
+    ltr: true,
+    date_locale: mk,
+  },
+  {
+    code: "mn",
+    display_name: "Монгол",
+    ltr: true,
+    date_locale: mn,
+  },
+  {
+    code: "ar",
+    display_name: "العربية",
+    ltr: false,
+    date_locale: ar,
+  },
+  {
+    code: "zhCN",
+    display_name: "简体中文",
+    ltr: true,
+    date_locale: zhCN,
+  },
+  {
+    code: "fa",
+    display_name: "فارسی",
+    ltr: false,
+    date_locale: faIR,
+  },
+  {
+    code: "cs",
+    display_name: "Čeština",
+    ltr: true,
+    date_locale: cs,
+  },
+  {
+    code: "ru",
+    display_name: "Русский",
+    ltr: true,
+    date_locale: ru,
   },
 ]

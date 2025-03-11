@@ -1,6 +1,7 @@
 import {
   Context,
   DAL,
+  InferEntityType,
   InternalModuleDeclaration,
   IStoreModuleService,
   ModulesSdkTypes,
@@ -34,7 +35,9 @@ export default class StoreModuleService
   implements IStoreModuleService
 {
   protected baseRepository_: DAL.RepositoryService
-  protected readonly storeService_: ModulesSdkTypes.IMedusaInternalService<Store>
+  protected readonly storeService_: ModulesSdkTypes.IMedusaInternalService<
+    InferEntityType<typeof Store>
+  >
 
   constructor(
     { baseRepository, storeService }: InjectedDependencies,
@@ -51,11 +54,13 @@ export default class StoreModuleService
     data: StoreTypes.CreateStoreDTO[],
     sharedContext?: Context
   ): Promise<StoreTypes.StoreDTO[]>
+  // @ts-expect-error
   async createStores(
     data: StoreTypes.CreateStoreDTO,
     sharedContext?: Context
   ): Promise<StoreTypes.StoreDTO>
   @InjectManager()
+  // @ts-expect-error
   async createStores(
     data: StoreTypes.CreateStoreDTO | StoreTypes.CreateStoreDTO[],
     @MedusaContext() sharedContext: Context = {}
@@ -73,7 +78,7 @@ export default class StoreModuleService
   async create_(
     data: StoreTypes.CreateStoreDTO[],
     @MedusaContext() sharedContext: Context = {}
-  ): Promise<Store[]> {
+  ): Promise<InferEntityType<typeof Store>[]> {
     let normalizedInput = StoreModuleService.normalizeInput(data)
     StoreModuleService.validateCreateRequest(normalizedInput)
 
@@ -107,7 +112,7 @@ export default class StoreModuleService
       (store): store is StoreTypes.CreateStoreDTO => !store.id
     )
 
-    const operations: Promise<Store[]>[] = []
+    const operations: Promise<InferEntityType<typeof Store>[]>[] = []
 
     if (forCreate.length) {
       operations.push(this.create_(forCreate, sharedContext))
@@ -128,12 +133,14 @@ export default class StoreModuleService
     data: StoreTypes.UpdateStoreDTO,
     sharedContext?: Context
   ): Promise<StoreTypes.StoreDTO>
+  // @ts-expect-error
   async updateStores(
     selector: StoreTypes.FilterableStoreProps,
     data: StoreTypes.UpdateStoreDTO,
     sharedContext?: Context
   ): Promise<StoreTypes.StoreDTO[]>
   @InjectManager()
+  // @ts-expect-error
   async updateStores(
     idOrSelector: string | StoreTypes.FilterableStoreProps,
     data: StoreTypes.UpdateStoreDTO,
@@ -168,7 +175,7 @@ export default class StoreModuleService
   protected async update_(
     data: UpdateStoreInput[],
     @MedusaContext() sharedContext: Context = {}
-  ): Promise<Store[]> {
+  ): Promise<InferEntityType<typeof Store>[]> {
     const normalizedInput = StoreModuleService.normalizeInput(data)
     StoreModuleService.validateUpdateRequest(normalizedInput)
 

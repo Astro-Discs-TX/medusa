@@ -1,5 +1,5 @@
 import { Kbd, Text, clx } from "@medusajs/ui"
-import * as Collapsible from "@radix-ui/react-collapsible"
+import { Collapsible as RadixCollapsible } from "radix-ui"
 import {
   PropsWithChildren,
   ReactNode,
@@ -26,6 +26,7 @@ export type INavItem = {
   items?: NestedItemProps[]
   type?: ItemType
   from?: string
+  nested?: string
 }
 
 const BASE_NAV_LINK_CLASSES =
@@ -154,8 +155,8 @@ export const NavItem = ({
         </NavLink>
       </NavItemTooltip>
       {items && items.length > 0 && (
-        <Collapsible.Root open={open} onOpenChange={setOpen}>
-          <Collapsible.Trigger
+        <RadixCollapsible.Root open={open} onOpenChange={setOpen}>
+          <RadixCollapsible.Trigger
             className={clx(
               "text-ui-fg-subtle hover:text-ui-fg-base transition-fg hover:bg-ui-bg-subtle-hover flex w-full items-center gap-x-2 rounded-md py-0.5 pl-0.5 pr-2 outline-none lg:hidden",
               { "pl-2": isSetting }
@@ -167,8 +168,8 @@ export const NavItem = ({
             <Text size="small" weight="plus" leading="compact">
               {label}
             </Text>
-          </Collapsible.Trigger>
-          <Collapsible.Content>
+          </RadixCollapsible.Trigger>
+          <RadixCollapsible.Content>
             <div className="flex flex-col gap-y-0.5 pb-2 pt-0.5">
               <ul className="flex flex-col gap-y-0.5">
                 <li className="flex w-full items-center gap-x-1 lg:hidden">
@@ -221,8 +222,8 @@ export const NavItem = ({
                 })}
               </ul>
             </div>
-          </Collapsible.Content>
-        </Collapsible.Root>
+          </RadixCollapsible.Content>
+        </RadixCollapsible.Root>
       )}
     </div>
   )

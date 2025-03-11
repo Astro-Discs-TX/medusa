@@ -9,6 +9,7 @@ import {
   Separator as PrimitiveSeparator,
 } from "@ariakit/react"
 import {
+  CheckMini,
   EllipseMiniSolid,
   PlusMini,
   TrianglesMini,
@@ -56,6 +57,7 @@ interface ComboboxProps<T extends Value = Value>
   isFetchingNextPage?: boolean
   onCreateOption?: (value: string) => void
   noResultsPlaceholder?: ReactNode
+  allowClear?: boolean
 }
 
 const ComboboxImpl = <T extends Value = string>(
@@ -71,6 +73,7 @@ const ComboboxImpl = <T extends Value = string>(
     isFetchingNextPage,
     onCreateOption,
     noResultsPlaceholder,
+    allowClear,
     ...inputProps
   }: ComboboxProps<T>,
   ref: ForwardedRef<HTMLInputElement>
@@ -290,7 +293,7 @@ const ComboboxImpl = <T extends Value = string>(
             ref={comboboxRef}
             onFocus={() => setOpen(true)}
             className={clx(
-              "txt-compact-small text-ui-fg-base placeholder:text-ui-fg-subtle transition-fg size-full cursor-pointer bg-transparent pl-2 pr-8 outline-none focus:cursor-text",
+              "txt-compact-small text-ui-fg-base !placeholder:text-ui-fg-muted transition-fg size-full cursor-pointer bg-transparent pl-2 pr-8 outline-none focus:cursor-text",
               "hover:bg-ui-bg-field-hover",
               {
                 "opacity-0": hideInput,
@@ -302,6 +305,18 @@ const ComboboxImpl = <T extends Value = string>(
             {...inputProps}
           />
         </div>
+        {allowClear && controlledValue && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault()
+              handleValueChange(undefined)
+            }}
+            className="bg-ui-bg-base hover:bg-ui-bg-base-hover txt-compact-small-plus text-ui-fg-subtle focus-within:border-ui-fg-interactive transition-fg absolute right-[28px] top-0.5 z-[1] flex h-[28px] items-center rounded-[4px] border px-1.5 py-[2px] outline-none"
+          >
+            <XMarkMini className="text-ui-fg-muted" />
+          </button>
+        )}
         <PrimitiveComboboxDisclosure
           render={(props) => {
             return (
@@ -349,7 +364,7 @@ const ComboboxImpl = <T extends Value = string>(
             )}
           >
             <PrimitiveComboboxItemCheck className="flex !size-5 items-center justify-center">
-              <EllipseMiniSolid />
+              {isArrayValue ? <CheckMini /> : <EllipseMiniSolid />}
             </PrimitiveComboboxItemCheck>
             <PrimitiveComboboxItemValue className="txt-compact-small">
               {label}

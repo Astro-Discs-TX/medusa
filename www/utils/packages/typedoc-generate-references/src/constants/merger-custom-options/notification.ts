@@ -1,9 +1,10 @@
 import { FormattingOptionsType } from "types"
+import baseSectionsOptions from "../base-section-options.js"
 
 const notificationOptions: FormattingOptionsType = {
   "^notification/.*AbstractNotificationProviderService": {
     reflectionGroups: {
-      Properties: false,
+      Constructors: false,
     },
     reflectionDescription: `In this document, you’ll learn how to create a notification provider module and the methods you must implement in it.`,
     frontmatterData: {
@@ -14,10 +15,26 @@ const notificationOptions: FormattingOptionsType = {
     },
     shouldIncrementAfterStartSections: true,
     expandMembers: true,
+    expandProperties: true,
+    sections: {
+      ...baseSectionsOptions,
+      member_declaration_title: false,
+      reflection_typeParameters: false,
+    },
     startSections: [
-      `## 1. Create Module Directory
+      `## 1. Create Module Provider Directory
 
-Start by creating a new directory for your module. For example, \`src/modules/my-notification\`.`,
+Start by creating a new directory for your module provider.
+
+If you're creating the module provider in a Medusa application, create it under the \`src/modules\` directory. For example, \`src/modules/my-notification\`.
+
+If you're creating the module provider in a plugin, create it under the \`src/providers\` directory. For example, \`src/providers/my-notification\`.
+
+<Note>
+
+The rest of this guide always uses the \`src/modules/my-notification\` directory as an example.
+
+</Note>`,
       `## 2. Create the Notification Provider Service
 
 Create the file \`src/modules/my-notification/service.ts\` that holds the implementation of the notification service.
@@ -65,10 +82,6 @@ The Notification Module accepts one provider per channel.
 </Note>
 
 \`\`\`ts title="medusa-config.ts"
-import { Modules } from "@medusajs/framework/utils"
-
-// ...
-
 module.exports = defineConfig({
   // ...
   modules: [
@@ -76,7 +89,17 @@ module.exports = defineConfig({
       resolve: "@medusajs/medusa/notification",
       options: {
         providers: [
+          // default provider
           {
+            resolve: "@medusajs/medusa/notification-local",
+            id: "local",
+            options: {
+              name: "Local Notification Provider",
+              channels: ["feed"],
+            },
+          },
+          {
+            // if module provider is in a plugin, use \`plugin-name/providers/my-notification\`
             resolve: "./src/modules/my-notification",
             id: "my-notification",
             options: {

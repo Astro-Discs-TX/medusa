@@ -1,10 +1,10 @@
 import {
+  AdminOrderChangesResponse,
   FindParams,
   HttpTypes,
   PaginatedResponse,
   SelectParams,
 } from "@medusajs/types"
-import { AdminOrderChangesResponse } from "@medusajs/types"
 
 import { Client } from "../client"
 import { ClientHeaders } from "../types"
@@ -60,6 +60,47 @@ export class Order {
       {
         query,
         headers,
+      }
+    )
+  }
+
+  /**
+   * This method updates an order. It sends a request to the
+   * [Update Order Email](https://docs.medusajs.com/api/admin#orders_postordersid)
+   * API route.
+   *
+   * @param id - The order's ID.
+   * @param body - The update details.
+   * @param headers - Headers to pass in the request
+   * @returns The order's details.
+   *
+   * @example
+   * sdk.admin.order.update(
+   *   "order_123",
+   *   {
+   *     email: "new_email@example.com",
+   *     shipping_address: {
+   *       first_name: "John",
+   *       last_name: "Doe",
+   *       address_1: "123 Main St",
+   *     }
+   *   }
+   * )
+   * .then(({ order }) => {
+   *   console.log(order)
+   * })
+   */
+  async update(
+    id: string,
+    body: HttpTypes.AdminUpdateOrder,
+    headers?: ClientHeaders
+  ) {
+    return await this.client.fetch<HttpTypes.AdminOrderResponse>(
+      `/admin/orders/${id}`,
+      {
+        method: "POST",
+        headers,
+        body,
       }
     )
   }
@@ -370,7 +411,6 @@ export class Order {
    *
    * @param id - The order's ID.
    * @param fulfillmentId - The fulfillment's ID.
-   * @param body - The delivery details.
    * @param query - Configure the fields to retrieve in the order.
    * @param headers - Headers to pass in the request
    * @returns The order's details.
@@ -379,7 +419,6 @@ export class Order {
    * sdk.admin.order.markAsDelivered(
    *   "order_123",
    *   "ful_123",
-   *   {}
    * )
    * .then(({ order }) => {
    *   console.log(order)
@@ -388,7 +427,6 @@ export class Order {
   async markAsDelivered(
     id: string,
     fulfillmentId: string,
-    body: HttpTypes.AdminMarkOrderFulfillmentAsDelivered,
     query?: SelectParams,
     headers?: ClientHeaders
   ) {
@@ -397,7 +435,6 @@ export class Order {
       {
         method: "POST",
         headers,
-        body,
         query,
       }
     )

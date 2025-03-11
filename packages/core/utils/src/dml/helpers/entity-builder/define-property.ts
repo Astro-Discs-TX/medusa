@@ -4,8 +4,6 @@ import {
   PropertyMetadata,
   PropertyType,
 } from "@medusajs/types"
-import { MikroOrmBigNumberProperty } from "../../../dal"
-import { generateEntityId, isDefined } from "../../../common"
 import {
   ArrayType,
   BeforeCreate,
@@ -15,6 +13,8 @@ import {
   Property,
   Utils,
 } from "@mikro-orm/core"
+import { generateEntityId, isDefined } from "../../../common"
+import { MikroOrmBigNumberProperty } from "../../../dal"
 import { PrimaryKeyModifier } from "../../properties/primary-key"
 import { applyEntityIndexes } from "../mikro-orm/apply-indexes"
 
@@ -32,6 +32,8 @@ const COLUMN_TYPES: {
   dateTime: "timestamptz",
   number: "integer",
   bigNumber: "numeric",
+  float: "real",
+  serial: "number",
   text: "text",
   json: "jsonb",
   array: "array",
@@ -51,6 +53,8 @@ const PROPERTY_TYPES: {
   dateTime: "date",
   number: "number",
   bigNumber: "number",
+  float: "number",
+  serial: "number",
   text: "string",
   json: "any",
   array: "string[]",
@@ -117,15 +121,27 @@ export function defineProperty(
 ) {
   const field = property.parse(propertyName)
   /**
-   * Here we initialize nullable properties with a null value
+   * Here we initialize all properties with their default values on before create
+   * which means when persist is called but not necessarely flush
    */
-  if (field.nullable) {
-    Object.defineProperty(MikroORMEntity.prototype, field.fieldName, {
-      value: null,
-      configurable: true,
-      enumerable: true,
-      writable: true,
-    })
+  if (isDefined(field.defaultValue) || field.nullable) {
+    const defaultValueSetterHookName = `${field.fieldName}_setDefaultValueOnBeforeCreate`
+    MikroORMEntity.prototype[defaultValueSetterHookName] = function () {
+      if (isDefined(field.defaultValue) && this[propertyName] === undefined) {
+        this[propertyName] = field.defaultValue
+        return
+      }
+
+      if (field.nullable && this[propertyName] === undefined) {
+        this[propertyName] = null
+        return
+      }
+    }
+    BeforeCreate()(MikroORMEntity.prototype, defaultValueSetterHookName)
+  }
+
+  if (field.computed) {
+    return
   }
 
   if (SPECIAL_PROPERTIES[field.fieldName]) {
@@ -195,19 +211,16 @@ export function defineProperty(
    * Defining an id property
    */
   if (field.dataType.name === "id") {
-    const IdDecorator = PrimaryKeyModifier.isPrimaryKeyModifier(property)
-      ? PrimaryKey({
-          columnType: "text",
-          type: "string",
-          nullable: false,
-          fieldName: field.fieldName,
-        })
-      : Property({
-          columnType: "text",
-          type: "string",
-          nullable: false,
-          fieldName: field.fieldName,
-        })
+    const Prop = PrimaryKeyModifier.isPrimaryKeyModifier(property)
+      ? PrimaryKey
+      : Property
+
+    const IdDecorator = Prop({
+      columnType: "text",
+      type: "string",
+      nullable: false,
+      fieldName: field.fieldName,
+    })
 
     IdDecorator(MikroORMEntity.prototype, field.fieldName)
 
@@ -249,6 +262,51 @@ export function defineProperty(
         default: JSON.stringify(field.defaultValue),
       }),
     })(MikroORMEntity.prototype, field.fieldName)
+    return
+  }
+
+  /**
+   * Handling serial property separately to set the column type
+   */
+  if (field.dataType.name === "serial") {
+    const Prop = PrimaryKeyModifier.isPrimaryKeyModifier(property)
+      ? PrimaryKey
+      : Property
+
+    Prop({
+      autoincrement: true,
+      type: "number",
+      runtimeType: "number",
+      nullable: field.nullable,
+      fieldName: field.fieldName,
+      serializer: (value) => (value == null ? value : Number(value)),
+    })(MikroORMEntity.prototype, field.fieldName)
+    return
+  }
+
+  /**
+   * Handling serial property separately to set the column type
+   */
+  if (field.dataType.name === "float") {
+    Property({
+      columnType: "real",
+      type: "number",
+      runtimeType: "number",
+      nullable: field.nullable,
+      fieldName: field.fieldName,
+      /**
+       * Applying number serializer to convert value back to a
+       * JavaScript number
+       */
+      serializer: (value) => (value == null ? value : Number(value)),
+      /**
+       * MikroORM does not ignore undefined values for default when generating
+       * the database schema SQL. Conditionally add it here to prevent undefined
+       * from being set as default value in SQL.
+       */
+      ...(isDefined(field.defaultValue) && { default: field.defaultValue }),
+    })(MikroORMEntity.prototype, field.fieldName)
+
     return
   }
 

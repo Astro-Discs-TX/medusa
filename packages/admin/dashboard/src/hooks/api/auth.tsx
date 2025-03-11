@@ -1,11 +1,14 @@
-import { UseMutationOptions, useMutation } from "@tanstack/react-query"
 import { FetchError } from "@medusajs/js-sdk"
-import { sdk } from "../../lib/client"
 import { HttpTypes } from "@medusajs/types"
+import { UseMutationOptions, useMutation } from "@tanstack/react-query"
+import { sdk } from "../../lib/client"
 
 export const useSignInWithEmailPass = (
   options?: UseMutationOptions<
-    string,
+    | string
+    | {
+        location: string
+      },
     FetchError,
     HttpTypes.AdminSignUpWithEmailPassword
   >
@@ -59,7 +62,7 @@ export const useLogout = (options?: UseMutationOptions<void, FetchError>) => {
 
 export const useUpdateProviderForEmailPass = (
   token: string,
-  options?: UseMutationOptions<void, FetchError, { password: string }>
+  options?: UseMutationOptions<void, FetchError, HttpTypes.AdminUpdateProvider>
 ) => {
   return useMutation({
     mutationFn: (payload) =>

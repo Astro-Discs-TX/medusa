@@ -1,6 +1,9 @@
+import "dotenv/config"
+
 import { defineDocumentType, makeSource } from "contentlayer/source-files"
-import { rehypeComponent } from "./src/lib/rehype-component"
 import rehypeSlug from "rehype-slug"
+import { uiRehypePlugin } from "../../packages/remark-rehype-plugins/src"
+import { ExampleRegistry } from "./src/registries/example-registry"
 
 export const Doc = defineDocumentType(() => ({
   name: "Doc",
@@ -27,6 +30,20 @@ export default makeSource({
   contentDirPath: "./src/content",
   documentTypes: [Doc],
   mdx: {
-    rehypePlugins: [[rehypeComponent], [rehypeSlug]],
+    rehypePlugins: [
+      [
+        uiRehypePlugin,
+        {
+          exampleRegistry: ExampleRegistry,
+        },
+      ],
+      [rehypeSlug],
+    ],
+    mdxOptions: (options) => {
+      return {
+        ...options,
+        development: process.env.NODE_ENV === "development",
+      }
+    },
   },
 })

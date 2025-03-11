@@ -298,6 +298,9 @@
     }
   },
   "filters": {
+    "sortLabel": "Sort",
+    "filterLabel": "Filter",
+    "searchLabel": "Search",
     "date": {
       "today": "Today",
       "lastSevenDays": "Last 7 days",
@@ -306,7 +309,9 @@
       "lastTwelveMonths": "Last 12 months",
       "custom": "Custom",
       "from": "From",
-      "to": "To"
+      "to": "To",
+      "starting": "Starting",
+      "ending": "Ending"
     },
     "compare": {
       "lessThan": "Less than",
@@ -316,6 +321,18 @@
       "lessThanLabel": "less than {{value}}",
       "greaterThanLabel": "greater than {{value}}",
       "andLabel": "and"
+    },
+    "sorting": {
+      "alphabeticallyAsc": "A to Z",
+      "alphabeticallyDesc": "Z to A",
+      "dateAsc": "Newest first",
+      "dateDesc": "Oldest first"
+    },
+    "radio": {
+      "yes": "Yes",
+      "no": "No",
+      "true": "True",
+      "false": "False"
     },
     "addFilter": "Add filter"
   },
@@ -468,7 +485,17 @@
       }
     },
     "deleteWarning": "You are about to delete the product {{title}}. This action cannot be undone.",
-    "variants": "Variants",
+    "variants": {
+      "header": "Variants",
+      "empty": {
+        "heading": "No variants",
+        "description": "There are no variants to display."
+      },
+      "filtered": {
+        "heading": "No results",
+        "description": "No variants match the current filter criteria."
+      }
+    },
     "attributes": "Attributes",
     "editAttributes": "Edit Attributes",
     "editOptions": "Edit Options",
@@ -526,6 +553,10 @@
       "discountable": {
         "label": "Discountable",
         "hint": "When unchecked, discounts will not be applied to this product"
+      },
+      "shipping_profile": {
+        "label": "Shipping profile",
+        "hint": "Connect the product to a shipping profile"
       },
       "type": {
         "label": "Type"
@@ -642,6 +673,29 @@
         "header": "Edit Organization",
         "toasts": {
           "success": "Successfully updated the organization of {{title}}."
+        }
+      }
+    },
+    "stock": {
+      "heading": "Manage product stock levels and locations",
+      "description": "Update the stocked inventory levels for all of the product's variants.",
+      "loading": "Hang on this may take a moment...",
+      "tooltips": {
+        "alreadyManaged": "This inventory item is already editable under {{title}}.",
+        "alreadyManagedWithSku": "This inventory item is already editable under {{title}} ({{sku}})."
+      }
+    },
+    "shippingProfile": {
+      "header": "Shipping configuration",
+      "edit": {
+        "header": "Shipping Configuration",
+        "toasts": {
+          "success": "Successfully updated the shipping profile for {{title}}."
+        }
+      },
+      "create": {
+        "errors": {
+          "required": "Shipping profile is required"
         }
       }
     },
@@ -790,10 +844,25 @@
         "quantityOutOfRange": "Minimum quantity is 1 and maximum quantity is {{max}}"
       }
     },
+    "adjustInventory": {
+      "errors": {
+        "stockedQuantity": "Stocked quantity cannot be updated to less than the reserved quantity of {{quantity}}."
+      }
+    },
     "toast": {
       "updateLocations": "Locations updated successfully.",
       "updateLevel": "Inventory level updated successfully.",
       "updateItem": "Inventory item updated successfully."
+    },
+    "stock": {
+      "title": "Update inventory levels",
+      "description": "Update the stocked inventory levels for the selected inventory items.",
+      "action": "Edit stock levels",
+      "placeholder": "Not enabled",
+      "disablePrompt_one": "You are about to disable {{count}} location level. This action cannot be undone.",
+      "disablePrompt_other": "You are about to disable {{count}} location levels. This action cannot be undone.",
+      "disabledToggleTooltip": "Cannot disable: clear incoming and/or reserved quantity before disabling.",
+      "successToast": "Inventory levels updated successfully."
     }
   },
   "giftCards": {
@@ -867,6 +936,16 @@
   "customerGroups": {
     "domain": "Customer Groups",
     "subtitle": "Organize customers into groups. Groups can have different promotions and prices.",
+    "list": {
+      "empty": {
+        "heading": "No customer groups",
+        "description": "There are no customer groups to display."
+      },
+      "filtered": {
+        "heading": "No results",
+        "description": "No customer groups match the current filter criteria."
+      }
+    },
     "create": {
       "header": "Create Customer Group",
       "hint": "Create a new customer group to segment your customers.",
@@ -907,9 +986,19 @@
     "exchange": "Exchange",
     "return": "Return",
     "cancelWarning": "You are about to cancel the order {{id}}. This action cannot be undone.",
+    "orderCanceled": "Order canceled successfully",
     "onDateFromSalesChannel": "{{date}} from {{salesChannel}}",
     "list": {
       "noRecordsMessage": "Your orders will show up here."
+    },
+    "status": {
+      "not_paid": "Not paid",
+      "pending": "Pending",
+      "completed": "Completed",
+      "draft": "Draft",
+      "archived": "Archived",
+      "canceled": "Canceled",
+      "requires_action": "Requires action"
     },
     "summary": {
       "requestReturn": "Request return",
@@ -995,6 +1084,20 @@
       },
       "validation": {
         "quantityLowerThanFulfillment": "Cannot set quantity to be less then or equal to fulfilled quantity"
+      }
+    },
+    "edit": {
+      "email": {
+        "title": "Edit email",
+        "requestSuccess": "Order email updated to {{email}}."
+      },
+      "shippingAddress": {
+        "title": "Edit shipping address",
+        "requestSuccess": "Order shipping address updated."
+      },
+      "billingAddress": {
+        "title": "Edit billing address",
+        "requestSuccess": "Order billing address updated."
       }
     },
     "returns": {
@@ -1164,6 +1267,8 @@
     "fulfillment": {
       "cancelWarning": "You are about to cancel a fulfillment. This action cannot be undone.",
       "markAsDeliveredWarning": "You are about to mark fulfillment as delivered. This action cannot be undone.",
+      "differentOptionSelected": "The selected shipping option is different from the one selected by the customer.",
+      "disabledItemTooltip": "The shipping option you have selected don’t allow fulfillment of this item",
       "unfulfilledItems": "Unfulfilled Items",
       "statusLabel": "Fulfillment status",
       "statusTitle": "Fulfillment Status",
@@ -1176,6 +1281,7 @@
       "available": "Available",
       "inStock": "In stock",
       "markAsShipped": "Mark as shipped",
+      "markAsPickedUp": "Mark as picked up",
       "markAsDelivered": "Mark as delivered",
       "itemsToFulfillDesc": "Choose items and quantities to fulfill",
       "locationDescription": "Choose which location you want to fulfill items from.",
@@ -1184,7 +1290,9 @@
       "error": {
         "wrongQuantity": "Only one item is available for fulfillment",
         "wrongQuantity_other": "Quantity should be a number between 1 and {{number}}",
-        "noItems": "No items to fulfill."
+        "noItems": "No items to fulfill.",
+        "noShippingOption": "Shipping option is required",
+        "noLocation": "Location is required"
       },
       "status": {
         "notFulfilled": "Not fulfilled",
@@ -1203,7 +1311,8 @@
         "created": "Fulfillment created successfully",
         "canceled": "Fulfillment successfully canceled",
         "fulfillmentShipped": "Cannot cancel an already shipped fulfillment",
-        "fulfillmentDelivered": "Fulfillment marked as delivered successfully"
+        "fulfillmentDelivered": "Fulfillment marked as delivered successfully",
+        "fulfillmentPickedUp": "Fulfillment marked as picked up successfully"
       },
       "trackingLabel": "Tracking",
       "shippingFromLabel": "Shipping from",
@@ -1296,6 +1405,11 @@
           "requested": "Order transfer #{{transferId}} requested",
           "confirmed": "Order transfer #{{transferId}} confirmed",
           "declined": "Order transfer #{{transferId}} declined"
+        },
+        "update_order": {
+          "shipping_address": "Shipping address updated",
+          "billing_address": "Billing address updated",
+          "email": "Email updated"
         }
       }
     },
@@ -1401,11 +1515,17 @@
     },
     "salesChannels": {
       "header": "Sales Channels",
+      "hint": "Manage the sales channels that are connected to this location.",
       "label": "Connected sales channels",
       "connectedTo": "Connected to {{count}} of {{total}} sales channels",
       "noChannels": "The location is not connected to any sales channels.",
       "action": "Connect sales channels",
       "successToast": "Sales channels were successfully updated."
+    },
+    "pickupOptions": {
+      "edit": {
+        "header": "Edit Pickup Option"
+      }
     },
     "shippingOptions": {
       "create": {
@@ -1414,6 +1534,12 @@
           "hint": "Create a new shipping option to define how products are shipped from this location.",
           "label": "Shipping options",
           "successToast": "Shipping option {{name}} was successfully created."
+        },
+        "pickup": {
+          "header": "Create Pickup Option for {{zone}}",
+          "hint": "Create a new pickup option to define how products are picked up from this location.",
+          "label": "Pickup options",
+          "successToast": "Pickup option {{name}} was successfully created."
         },
         "returns": {
           "header": "Create a Return Option for {{zone}}",
@@ -1439,10 +1565,47 @@
       "pricing": {
         "action": "Edit prices"
       },
+      "conditionalPrices": {
+        "header": "Conditional Prices for {{name}}",
+        "description": "Manage the conditional prices for this shipping option based on the cart item total.",
+        "attributes": {
+          "cartItemTotal": "Cart item total"
+        },
+        "summaries": {
+          "range": "If <0>{{attribute}}</0> is between <1>{{gte}}</1> and <2>{{lte}}</2>",
+          "greaterThan": "If <0>{{attribute}}</0> ≥ <1>{{gte}}</1>",
+          "lessThan": "If <0>{{attribute}}</0> ≤ <1>{{lte}}</1>"
+        },
+        "actions": {
+          "addPrice": "Add price",
+          "manageConditionalPrices": "Manage conditional prices"
+        },
+        "rules": {
+          "amount": "Shipping option price",
+          "gte": "Minimum cart item total",
+          "lte": "Maximum cart item total"
+        },
+        "customRules": {
+          "label": "Custom rules",
+          "tooltip": "This conditional price has rules that cannot be managed in the dashboard.",
+          "eq": "Cart item total must equal",
+          "gt": "Cart item total must be greater than",
+          "lt": "Cart item total must be less than"
+        },
+        "errors": {
+          "amountRequired": "Shipping option price is required",
+          "minOrMaxRequired": "At least one of minimum or maximum cart item total must be provided",
+          "minGreaterThanMax": "Minimum cart item total must be less than or equal to maximum cart item total",
+          "duplicateAmount": "Shipping option price must be unique for each condition",
+          "overlappingConditions": "Conditions must be unique across all price rules"
+        }
+      },
       "fields": {
         "count": {
           "shipping_one": "{{count}} shipping option",
           "shipping_other": "{{count}} shipping options",
+          "pickup_one": "{{count}} pickup option",
+          "pickup_other": "{{count}} pickup options",
           "returns_one": "{{count}} return option",
           "returns_other": "{{count}} return options"
         },
@@ -1464,7 +1627,8 @@
           "hint": "Whether customers can use this option during checkout."
         },
         "provider": "Fulfillment provider",
-        "profile": "Shipping profile"
+        "profile": "Shipping profile",
+        "fulfillmentOption": "Fulfillment option"
       }
     },
     "serviceZones": {
@@ -1844,7 +2008,19 @@
         }
       },
       "status": {
-        "title": "Status"
+        "label": "Status",
+        "draft": {
+          "title": "Draft",
+          "description": "Customers will not be able to use the code yet"
+        },
+        "active": {
+          "title": "Active",
+          "description": "Customers will be able to use the code"
+        },
+        "inactive": {
+          "title": "Inactive",
+          "description": "Customers will no longer be able to use the code"
+        }
       },
       "method": {
         "label": "Method",
@@ -2141,7 +2317,18 @@
       "developer": "Developer",
       "member": "Member"
     },
+    "list": {
+      "empty": {
+        "heading": "No users found",
+        "description": "Once a user has been invited, they will appear here."
+      },
+      "filtered": {
+        "heading": "No results",
+        "description": "No users match the current filter criteria."
+      }
+    },
     "deleteUserWarning": "You are about to delete the user {{name}}. This action cannot be undone.",
+    "deleteUserSuccess": "User {{name}} deleted successfully",
     "invite": "Invite"
   },
   "store": {
@@ -2150,6 +2337,8 @@
     "editStore": "Edit store",
     "defaultCurrency": "Default currency",
     "defaultRegion": "Default region",
+    "defaultSalesChannel": "Default sales channel",
+    "defaultLocation": "Default location",
     "swapLinkTemplate": "Swap link template",
     "paymentLinkTemplate": "Payment link template",
     "inviteLinkTemplate": "Invite link template",
@@ -2296,6 +2485,16 @@
   "salesChannels": {
     "domain": "Sales Channels",
     "subtitle": "Manage the online and offline channels you sell products on.",
+    "list": {
+      "empty": {
+        "heading": "No sales channels found",
+        "description": "Once a sales channel has been created, it will appear here."
+      },
+      "filtered": {
+        "heading": "No results",
+        "description": "No sales channels match the current filter criteria."
+      }
+    },
     "createSalesChannel": "Create Sales Channel",
     "createSalesChannelHint": "Create a new sales channel to sell your products on.",
     "enabledHint": "Specify whether the sales channel is enabled.",
@@ -2309,6 +2508,9 @@
       "create": "Sales channel created successfully",
       "update": "Sales channel updated successfully",
       "delete": "Sales channel deleted successfully"
+    },
+    "tooltip": {
+      "cannotDeleteDefault": "Cannot delete default sales channel"
     },
     "products": {
       "list": {
@@ -2584,6 +2786,8 @@
     "scheduled": "Scheduled",
     "expired": "Expired",
     "active": "Active",
+    "inactive": "Inactive",
+    "draft": "Draft",
     "enabled": "Enabled",
     "disabled": "Disabled"
   },
@@ -2593,7 +2797,11 @@
     "available": "Available",
     "inStock": "In stock",
     "added": "Added",
-    "removed": "Removed"
+    "removed": "Removed",
+    "from": "From",
+    "to": "To",
+    "beaware": "Be aware",
+    "loading": "Loading"
   },
   "fields": {
     "amount": "Amount",
@@ -2625,6 +2833,7 @@
     "discountable": "Discountable",
     "handle": "Handle",
     "subtitle": "Subtitle",
+    "by": "By",
     "item": "Item",
     "qty": "qty.",
     "limit": "Limit",

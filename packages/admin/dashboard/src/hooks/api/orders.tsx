@@ -51,6 +51,37 @@ export const useOrder = (
   return { ...data, ...rest }
 }
 
+export const useUpdateOrder = (
+  id: string,
+  options?: UseMutationOptions<
+    HttpTypes.AdminOrderResponse,
+    FetchError,
+    HttpTypes.AdminUpdateOrder
+  >
+) => {
+  return useMutation({
+    mutationFn: (payload: HttpTypes.AdminUpdateOrder) =>
+      sdk.admin.order.update(id, payload),
+    onSuccess: (data: any, variables: any, context: any) => {
+      queryClient.invalidateQueries({
+        queryKey: ordersQueryKeys.detail(id),
+      })
+
+      queryClient.invalidateQueries({
+        queryKey: ordersQueryKeys.changes(id),
+      })
+
+      // TODO: enable when needed
+      // queryClient.invalidateQueries({
+      //   queryKey: ordersQueryKeys.lists(),
+      // })
+
+      options?.onSuccess?.(data, variables, context)
+    },
+    ...options,
+  })
+}
+
 export const useOrderPreview = (
   id: string,
   query?: HttpTypes.AdminOrderFilters,
@@ -228,12 +259,11 @@ export const useMarkOrderFulfillmentAsDelivered = (
   options?: UseMutationOptions<
     { order: HttpTypes.AdminOrder },
     FetchError,
-    HttpTypes.AdminMarkOrderFulfillmentAsDelivered
+    void
   >
 ) => {
   return useMutation({
-    mutationFn: (payload: HttpTypes.AdminMarkOrderFulfillmentAsDelivered) =>
-      sdk.admin.order.markAsDelivered(orderId, fulfillmentId, payload),
+    mutationFn: () => sdk.admin.order.markAsDelivered(orderId, fulfillmentId),
     onSuccess: (data: any, variables: any, context: any) => {
       queryClient.invalidateQueries({
         queryKey: ordersQueryKeys.all,

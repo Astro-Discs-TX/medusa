@@ -12,18 +12,41 @@ import {
 } from "../steps"
 import { validateFulfillmentProvidersStep } from "../steps/validate-fulfillment-providers"
 import { validateShippingOptionPricesStep } from "../steps/validate-shipping-option-prices"
+import { ShippingOptionPriceType } from "@medusajs/framework/utils"
+
+/**
+ * The data to update the shipping options.
+ */
+export type UpdateShippingOptionsWorkflowInput = FulfillmentWorkflow.UpdateShippingOptionsWorkflowInput[]
 
 export const updateShippingOptionsWorkflowId =
   "update-shipping-options-workflow"
 /**
- * This workflow updates one or more shipping options.
+ * This workflow updates one or more shipping options. It's used by the
+ * [Update Shipping Options Admin API Route](https://docs.medusajs.com/api/admin#shipping-options_postshippingoptionsid).
+ * 
+ * You can use this workflow within your own customizations or custom workflows, allowing you to
+ * update shipping options within your custom flows.
+ * 
+ * @example
+ * const { result } = await updateShippingOptionsWorkflow(container)
+ * .run({
+ *   input: [
+ *     {
+ *       id: "so_123",
+ *       name: "Standard Shipping",
+ *     }
+ *   ]
+ * })
+ * 
+ * @summary
+ * 
+ * Update one or more shipping options.
  */
 export const updateShippingOptionsWorkflow = createWorkflow(
   updateShippingOptionsWorkflowId,
   (
-    input: WorkflowData<
-      FulfillmentWorkflow.UpdateShippingOptionsWorkflowInput[]
-    >
+    input: WorkflowData<UpdateShippingOptionsWorkflowInput>
   ): WorkflowResponse<FulfillmentWorkflow.UpdateShippingOptionsWorkflowOutput> => {
     parallelize(
       validateFulfillmentProvidersStep(input),
@@ -32,11 +55,22 @@ export const updateShippingOptionsWorkflow = createWorkflow(
 
     const data = transform(input, (data) => {
       const shippingOptionsIndexToPrices = data.map((option, index) => {
-        const prices = option.prices
-        delete option.prices
+        const prices = (
+          option as FulfillmentWorkflow.UpdateFlatRateShippingOptionInput
+        ).prices
+
+        delete (option as FulfillmentWorkflow.UpdateFlatRateShippingOptionInput)
+          .prices
+
+        /**
+         * When we are updating an option to be calculated, remove the prices.
+         */
+        const isCalculatedOption =
+          option.price_type === ShippingOptionPriceType.CALCULATED
+
         return {
           shipping_option_index: index,
-          prices,
+          prices: isCalculatedOption ? [] : prices,
         }
       })
 
@@ -58,8 +92,10 @@ export const updateShippingOptionsWorkflow = createWorkflow(
       (data) => {
         const shippingOptionsPrices = data.shippingOptionsIndexToPrices.map(
           ({ shipping_option_index, prices }) => {
+            const option = data.shippingOptions[shipping_option_index]
+
             return {
-              id: data.shippingOptions[shipping_option_index].id,
+              id: option.id,
               prices,
             }
           }

@@ -34,20 +34,6 @@ export type AsyncRouteHandler = (
 
 export type RouteHandler = SyncRouteHandler | AsyncRouteHandler
 
-export type RouteImplementation = {
-  method?: RouteVerb
-  handler: RouteHandler
-}
-
-export type RouteConfig = {
-  optedOutOfAuth?: boolean
-  routeType?: "admin" | "store" | "auth"
-  shouldAppendAdminCors?: boolean
-  shouldAppendStoreCors?: boolean
-  shouldAppendAuthCors?: boolean
-  routes?: RouteImplementation[]
-}
-
 export type MiddlewareFunction =
   | MedusaRequestHandler
   | ((...args: any[]) => any)
@@ -67,7 +53,11 @@ export type ParserConfigArgs = {
 export type ParserConfig = false | ParserConfigArgs
 
 export type MiddlewareRoute = {
+  /**
+   * @deprecated. Instead use {@link MiddlewareRoute.methods}
+   */
   method?: MiddlewareVerb | MiddlewareVerb[]
+  methods?: MiddlewareVerb[]
   matcher: string | RegExp
   bodyParser?: ParserConfig
   middlewares?: MiddlewareFunction[]
@@ -78,28 +68,50 @@ export type MiddlewaresConfig = {
   routes?: MiddlewareRoute[]
 }
 
+/**
+ * Route descriptor refers represents a route either scanned
+ * from the filesystem or registered manually. It does not
+ * represent a middleware
+ */
 export type RouteDescriptor = {
-  absolutePath: string
-  relativePath: string
-  route: string
-  priority: number
-  config?: RouteConfig
+  matcher: string
+  method: RouteVerb
+  handler: RouteHandler
+  optedOutOfAuth: boolean
+  isRoute: true
+  routeType?: "admin" | "store" | "auth"
+  absolutePath?: string
+  relativePath?: string
+  shouldAppendAdminCors: boolean
+  shouldAppendStoreCors: boolean
+  shouldAppendAuthCors: boolean
+}
+
+/**
+ * Represents a middleware
+ */
+export type MiddlewareDescriptor = {
+  matcher: string
+  methods?: MiddlewareVerb | MiddlewareVerb[]
+  handler: MiddlewareFunction
+}
+
+export type BodyParserConfigRoute = {
+  matcher: string
+  methods: MiddlewareVerb | MiddlewareVerb[]
+  config: ParserConfig
 }
 
 export type GlobalMiddlewareDescriptor = {
   config?: MiddlewaresConfig
 }
 
-export interface MedusaRequest<Body = unknown>
-  extends Request<
-    {
-      [key: string]: string
-    },
-    any,
-    Body
-  > {
+export interface MedusaRequest<
+  Body = unknown,
+  QueryFields = Record<string, unknown>
+> extends Request<{ [key: string]: string }, any, Body> {
   validatedBody: Body
-  validatedQuery: RequestQueryFields & Record<string, unknown>
+  validatedQuery: RequestQueryFields & QueryFields
   /**
    * TODO: shouldn't this correspond to returnable fields instead of allowed fields? also it is used by the cleanResponseData util
    */
@@ -112,17 +124,26 @@ export interface MedusaRequest<Body = unknown>
    * An object containing the select, relation to be used with medusa internal services
    */
   retrieveConfig: FindConfig<unknown>
+
   /**
    * An object containing fields and variables to be used with the remoteQuery
+   *
+   * @version 2.2.0
    */
-  remoteQueryConfig: {
+  queryConfig: {
     fields: string[]
     pagination: { order?: Record<string, string>; skip: number; take?: number }
   }
+
+  /**
+   * @deprecated Use {@link queryConfig} instead.
+   */
+  remoteQueryConfig: MedusaRequest["queryConfig"]
+
   /**
    * An object containing the fields that are filterable e.g `{ id: Any<String> }`
    */
-  filterableFields: Record<string, unknown>
+  filterableFields: QueryFields
   includes?: Record<string, boolean>
 
   /**
@@ -167,13 +188,18 @@ export interface PublishableKeyContext {
   sales_channel_ids: string[]
 }
 
-export interface AuthenticatedMedusaRequest<Body = never>
-  extends MedusaRequest<Body> {
+export interface AuthenticatedMedusaRequest<
+  Body = unknown,
+  QueryFields = Record<string, unknown>
+> extends MedusaRequest<Body, QueryFields> {
   auth_context: AuthContext
   publishable_key_context?: PublishableKeyContext
 }
 
-export interface MedusaStoreRequest<Body = never> extends MedusaRequest<Body> {
+export interface MedusaStoreRequest<
+  Body = unknown,
+  QueryFields = Record<string, unknown>
+> extends MedusaRequest<Body, QueryFields> {
   auth_context?: AuthContext
   publishable_key_context: PublishableKeyContext
 }

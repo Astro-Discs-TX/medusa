@@ -1,9 +1,11 @@
 import { CartWorkflowEvents, MedusaError } from "@medusajs/framework/utils"
 import {
+  createHook,
   createWorkflow,
   parallelize,
   transform,
   WorkflowData,
+  WorkflowResponse,
 } from "@medusajs/framework/workflows-sdk"
 import { emitEventStep } from "../../common/steps/emit-event"
 import { useRemoteQueryStep } from "../../common/steps/use-remote-query"
@@ -14,35 +16,85 @@ import {
 } from "../steps"
 import { validateCartStep } from "../steps/validate-cart"
 import { validateAndReturnShippingMethodsDataStep } from "../steps/validate-shipping-methods-data"
+import { validateCartShippingOptionsPriceStep } from "../steps/validate-shipping-options-price"
 import { cartFieldsForRefreshSteps } from "../utils/fields"
-import { updateCartPromotionsWorkflow } from "./update-cart-promotions"
-import { updateTaxLinesWorkflow } from "./update-tax-lines"
+import { listShippingOptionsForCartWithPricingWorkflow } from "./list-shipping-options-for-cart-with-pricing"
+import { refreshCartItemsWorkflow } from "./refresh-cart-items"
 
+/**
+ * The data to add a shipping method to a cart.
+ */
 export interface AddShippingMethodToCartWorkflowInput {
+  /**
+   * The ID of the cart to add the shipping method to.
+   */
   cart_id: string
+  /**
+   * The shipping options to create the shipping methods from and add to the cart.
+   */
   options: {
+    /**
+     * The ID of the shipping option.
+     */
     id: string
+    /**
+     * Custom data useful for the fulfillment provider processing the shipping option or method.
+     *
+     * Learn more in [this documentation](https://docs.medusajs.com/resources/commerce-modules/fulfillment/shipping-option#data-property).
+     */
     data?: Record<string, unknown>
   }[]
 }
 
 export const addShippingMethodToCartWorkflowId = "add-shipping-method-to-cart"
 /**
- * This workflow adds shipping methods to a cart.
+ * This workflow adds a shipping method to a cart. It's executed by the
+ * [Add Shipping Method Store API Route](https://docs.medusajs.com/api/store#carts_postcartsidshippingmethods).
+ *
+ * You can use this workflow within your own customizations or custom workflows, allowing you to wrap custom logic around adding a shipping method to the cart.
+ *
+ * @example
+ * const { result } = await addShippingMethodToCartWorkflow(container)
+ * .run({
+ *   input: {
+ *     cart_id: "cart_123",
+ *     options: [
+ *       {
+ *         id: "so_123",
+ *       },
+ *       {
+ *         id: "so_124",
+ *         data: {
+ *           carrier_code: "fedex",
+ *         }
+ *       }
+ *     ]
+ *   }
+ * })
+ *
+ * @summary
+ *
+ * Add a shipping method to a cart.
+ *
+ * @property hooks.validate - This hook is executed before all operations. You can consume this hook to perform any custom validation. If validation fails, you can throw an error to stop the workflow execution.
  */
 export const addShippingMethodToCartWorkflow = createWorkflow(
   addShippingMethodToCartWorkflowId,
-  (
-    input: WorkflowData<AddShippingMethodToCartWorkflowInput>
-  ): WorkflowData<void> => {
+  (input: WorkflowData<AddShippingMethodToCartWorkflowInput>) => {
     const cart = useRemoteQueryStep({
       entry_point: "cart",
       fields: cartFieldsForRefreshSteps,
       variables: { id: input.cart_id },
       list: false,
+      throw_if_key_not_found: true,
     })
 
     validateCartStep({ cart })
+
+    const validate = createHook("validate", {
+      input,
+      cart,
+    })
 
     const optionIds = transform({ input }, (data) => {
       return (data.input.options ?? []).map((i) => i.id)
@@ -54,47 +106,49 @@ export const addShippingMethodToCartWorkflow = createWorkflow(
       shippingOptionsContext: { is_return: "false", enabled_in_store: "true" },
     })
 
-    const shippingOptions = useRemoteQueryStep({
-      entry_point: "shipping_option",
-      fields: [
-        "id",
-        "name",
-        "calculated_price.calculated_amount",
-        "calculated_price.is_calculated_price_tax_inclusive",
-        "provider_id",
-      ],
-      variables: {
-        id: optionIds,
-        calculated_price: {
-          context: { currency_code: cart.currency_code },
+    const shippingOptions =
+      listShippingOptionsForCartWithPricingWorkflow.runAsStep({
+        input: {
+          options: input.options,
+          cart_id: cart.id,
+          is_return: false,
         },
-      },
-    }).config({ name: "fetch-shipping-option" })
+      })
+
+    validateCartShippingOptionsPriceStep({ shippingOptions })
 
     const validateShippingMethodsDataInput = transform(
-      { input, shippingOptions },
-      (data) => {
-        return data.input.options.map((inputOption) => {
-          const shippingOption = data.shippingOptions.find(
+      { input, shippingOptions, cart },
+      ({ input, shippingOptions, cart }) => {
+        return input.options.map((inputOption) => {
+          const shippingOption = shippingOptions.find(
             (so) => so.id === inputOption.id
           )
+
           return {
             id: inputOption.id,
             provider_id: shippingOption?.provider_id,
             option_data: shippingOption?.data ?? {},
             method_data: inputOption.data ?? {},
+            context: {
+              ...cart,
+              from_location: shippingOption?.stock_location ?? {},
+            },
           }
         })
       }
     )
 
-    const validatedMethodData = validateAndReturnShippingMethodsDataStep({
-      options_to_validate: validateShippingMethodsDataInput,
-      context: {}, // TODO: Add cart, when we have a better idea about what's appropriate to pass
-    })
+    const validatedMethodData = validateAndReturnShippingMethodsDataStep(
+      validateShippingMethodsDataInput
+    )
 
     const shippingMethodInput = transform(
-      { input, shippingOptions, validatedMethodData },
+      {
+        input,
+        shippingOptions,
+        validatedMethodData,
+      },
       (data) => {
         const options = (data.input.options ?? []).map((option) => {
           const shippingOption = data.shippingOptions.find(
@@ -128,11 +182,11 @@ export const addShippingMethodToCartWorkflow = createWorkflow(
       }
     )
 
-    const currentShippingMethods = transform({ cart }, ({ cart }) => {
-      return cart.shipping_methods.map((sm) => sm.id)
-    })
+    const currentShippingMethods = transform({ cart }, ({ cart }) =>
+      cart.shipping_methods.map((sm) => sm.id)
+    )
 
-    const [, shippingMethodsToAdd] = parallelize(
+    const [, createdShippingMethods] = parallelize(
       removeShippingMethodFromCartStep({
         shipping_method_ids: currentShippingMethods,
       }),
@@ -145,17 +199,12 @@ export const addShippingMethodToCartWorkflow = createWorkflow(
       })
     )
 
-    updateTaxLinesWorkflow.runAsStep({
-      input: {
-        cart_id: input.cart_id,
-        shipping_methods: shippingMethodsToAdd,
-      },
+    refreshCartItemsWorkflow.runAsStep({
+      input: { cart_id: cart.id, shipping_methods: createdShippingMethods },
     })
 
-    updateCartPromotionsWorkflow.runAsStep({
-      input: {
-        cart_id: input.cart_id,
-      },
+    return new WorkflowResponse(void 0, {
+      hooks: [validate],
     })
   }
 )

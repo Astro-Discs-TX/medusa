@@ -2,37 +2,38 @@
 
 // @refresh reset
 
-import React, { useEffect, useMemo, useRef, useState } from "react"
-import { SidebarItemCategory as SidebarItemCategoryType } from "types"
+import React, { useEffect, useMemo, useState } from "react"
+import { Sidebar } from "types"
 import { Loading, SidebarItem, useSidebar } from "../../../.."
 import clsx from "clsx"
 import { MinusMini, PlusMini } from "@medusajs/icons"
 
-export type SidebarItemCategory = {
-  item: SidebarItemCategoryType
-  expandItems?: boolean
+export type SidebarItemCategoryProps = {
+  item: Sidebar.SidebarItemCategory
 } & React.AllHTMLAttributes<HTMLDivElement>
 
 export const SidebarItemCategory = ({
   item,
-  expandItems = true,
   className,
-}: SidebarItemCategory) => {
+}: SidebarItemCategoryProps) => {
   const [showLoading, setShowLoading] = useState(false)
   const [open, setOpen] = useState(
-    item.initialOpen !== undefined ? item.initialOpen : expandItems
+    item.initialOpen !== undefined ? item.initialOpen : true
   )
-  const childrenRef = useRef<HTMLUListElement>(null)
   const {
-    isChildrenActive,
+    isItemActive,
     updatePersistedCategoryState,
     getPersistedCategoryState,
-    persistState,
-    activePath,
+    persistCategoryState,
   } = useSidebar()
   const itemShowLoading = useMemo(() => {
     return !item.loaded || (item.showLoadingIfEmpty && !item.children?.length)
   }, [item])
+  const isActive = useMemo(() => {
+    return isItemActive({
+      item,
+    })
+  }, [isItemActive, item])
 
   useEffect(() => {
     if (open && itemShowLoading) {
@@ -47,22 +48,20 @@ export const SidebarItemCategory = ({
   }, [itemShowLoading, showLoading])
 
   useEffect(() => {
-    const isActive = isChildrenActive(item)
-
     if (isActive && !open) {
       setOpen(true)
     }
-  }, [isChildrenActive, item.children])
+  }, [isActive, item.children])
 
   useEffect(() => {
-    if (!persistState) {
+    if (!persistCategoryState) {
       return
     }
     const persistedOpen = getPersistedCategoryState(item.title)
-    if (persistedOpen !== undefined) {
+    if (persistedOpen !== undefined && !isActive) {
       setOpen(persistedOpen)
     }
-  }, [persistState])
+  }, [persistCategoryState])
 
   const handleOpen = () => {
     item.onOpen?.()
@@ -92,7 +91,7 @@ export const SidebarItemCategory = ({
             if (!open) {
               handleOpen()
             }
-            if (persistState) {
+            if (persistCategoryState) {
               updatePersistedCategoryState(item.title, !open)
             }
             setOpen((prev) => !prev)
@@ -115,26 +114,31 @@ export const SidebarItemCategory = ({
           )}
         </div>
       </div>
-      <ul
-        className={clsx(
-          "ease-ease",
-          "flex flex-col gap-docs_0.125",
-          "z-[1] relative",
-          !open && "overflow-hidden m-0 h-0"
-        )}
-        ref={childrenRef}
-      >
-        {showLoading && (
-          <Loading
-            count={3}
-            className="!mb-0 !px-docs_0.5"
-            barClassName="h-[20px]"
-          />
-        )}
-        {item.children?.map((childItem, index) => (
-          <SidebarItem item={childItem} key={index} expandItems={expandItems} />
-        ))}
-      </ul>
+      {!item.hideChildren && (
+        <ul
+          className={clsx(
+            "ease-ease",
+            "flex flex-col gap-docs_0.125",
+            "z-[1] relative",
+            !open && "overflow-hidden m-0 h-0"
+          )}
+        >
+          {showLoading && (
+            <Loading
+              count={3}
+              className="!mb-0 !px-docs_0.5"
+              barClassName="h-[20px]"
+            />
+          )}
+          {item.children?.map((childItem, index) => (
+            <SidebarItem
+              item={childItem}
+              key={index}
+              isParentCategoryOpen={open}
+            />
+          ))}
+        </ul>
+      )}
     </div>
   )
 }

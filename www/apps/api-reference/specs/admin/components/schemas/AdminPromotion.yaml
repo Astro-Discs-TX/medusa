@@ -8,7 +8,7 @@ required:
   - deleted_at
 properties:
   application_method:
-    type: object
+    $ref: ./AdminApplicationMethod.yaml
   rules:
     type: array
     description: The promotion's rules.
@@ -56,3 +56,10 @@ properties:
     format: date-time
     title: deleted_at
     description: The date the promotion was deleted.
+  status:
+    type: string
+    description: The promotion's status.
+    enum:
+      - draft
+      - active
+      - inactive

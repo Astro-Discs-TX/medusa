@@ -1,4 +1,5 @@
 import { z } from "zod"
+import { AddressPayload } from "../../utils/common-validators"
 import {
   createFindParams,
   createOperatorMap,
@@ -49,8 +50,6 @@ export const AdminGetOrdersParams = createFindParams({
       .optional(),
     name: z.union([z.string(), z.array(z.string())]).optional(),
     sales_channel_id: z.array(z.string()).optional(),
-    fulfillment_status: z.array(z.string()).optional(),
-    payment_status: z.array(z.string()).optional(),
     region_id: z.union([z.string(), z.array(z.string())]).optional(),
     customer_id: z.union([z.string(), z.array(z.string())]).optional(),
     q: z.string().optional(),
@@ -72,8 +71,9 @@ export type AdminOrderCreateFulfillmentType = z.infer<
   typeof OrderCreateFulfillment
 >
 export const OrderCreateFulfillment = z.object({
-  items: z.array(Item),
+  items: z.array(Item).min(1),
   location_id: z.string().nullish(),
+  shipping_option_id: z.string().optional(),
   no_notification: z.boolean().optional(),
   metadata: z.record(z.unknown()).nullish(),
 })
@@ -136,3 +136,11 @@ export type AdminCancelOrderTransferRequestType = z.infer<
   typeof AdminCancelOrderTransferRequest
 >
 export const AdminCancelOrderTransferRequest = z.object({})
+
+export type AdminUpdateOrderType = z.infer<typeof AdminUpdateOrder>
+export const AdminUpdateOrder = z.object({
+  email: z.string().optional(),
+  shipping_address: AddressPayload.optional(),
+  billing_address: AddressPayload.optional(),
+  metadata: z.record(z.unknown()).nullish(),
+})

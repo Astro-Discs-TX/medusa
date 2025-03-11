@@ -4,6 +4,7 @@ import {
   DropdownMenu,
   Heading,
   IconButton,
+  InlineTip,
   clx,
   toast,
 } from "@medusajs/ui"
@@ -18,10 +19,9 @@ import {
   Trash,
 } from "@medusajs/icons"
 import { FetchError } from "@medusajs/js-sdk"
-import { ComponentPropsWithoutRef, forwardRef, useRef } from "react"
+import { ComponentPropsWithoutRef, forwardRef } from "react"
 import { ConditionalTooltip } from "../../common/conditional-tooltip"
 import { Form } from "../../common/form"
-import { InlineTip } from "../../common/inline-tip"
 import { Skeleton } from "../../common/skeleton"
 import { RouteDrawer, useRouteModal } from "../../modals"
 import { KeyboundForm } from "../../utilities/keybound-form"
@@ -78,7 +78,6 @@ const InnerForm = <TRes,>({
   const { t } = useTranslation()
   const { handleSuccess } = useRouteModal()
 
-  const deletedOriginalRows = useRef<string[]>([])
   const hasUneditableRows = getHasUneditableRows(metadata)
 
   const form = useForm<z.infer<typeof MetadataSchema>>({
@@ -89,7 +88,7 @@ const InnerForm = <TRes,>({
   })
 
   const handleSubmit = form.handleSubmit(async (data) => {
-    const parsedData = parseValues(data)
+    const parsedData = parseValues(data, metadata)
 
     await hook(
       {
@@ -114,6 +113,15 @@ const InnerForm = <TRes,>({
 
   function deleteRow(index: number) {
     remove(index)
+
+    // If the last row is deleted, add a new blank row
+    if (fields.length === 1) {
+      insert(0, {
+        key: "",
+        value: "",
+        disabled: false,
+      })
+    }
   }
 
   function insertRow(index: number, position: "above" | "below") {
@@ -356,7 +364,8 @@ function getDefaultValues(
 }
 
 function parseValues(
-  values: z.infer<typeof MetadataSchema>
+  values: z.infer<typeof MetadataSchema>,
+  original?: Record<string, any> | null
 ): Record<string, any> | null {
   const metadata = values.metadata
 
@@ -370,12 +379,22 @@ function parseValues(
 
   const update: Record<string, any> = {}
 
+  // First, handle removed keys from original
+  if (original) {
+    Object.keys(original).forEach((originalKey) => {
+      const exists = metadata.some((field) => field.key === originalKey)
+      if (!exists) {
+        update[originalKey] = ""
+      }
+    })
+  }
+
   metadata.forEach((field) => {
     let key = field.key
     let value = field.value
     const disabled = field.disabled
 
-    if (!key || !value) {
+    if (!key) {
       return
     }
 
@@ -385,7 +404,7 @@ function parseValues(
     }
 
     key = key.trim()
-    value = value.trim()
+    value = value?.trim() ?? ""
 
     // We try to cast the value to a boolean or number if possible
     if (value === "true") {
@@ -393,9 +412,9 @@ function parseValues(
     } else if (value === "false") {
       update[key] = false
     } else {
-      const parsedNumber = parseFloat(value)
-      if (!isNaN(parsedNumber)) {
-        update[key] = parsedNumber
+      const isNumeric = /^-?\d*\.?\d+$/.test(value)
+      if (isNumeric) {
+        update[key] = parseFloat(value)
       } else {
         update[key] = value
       }

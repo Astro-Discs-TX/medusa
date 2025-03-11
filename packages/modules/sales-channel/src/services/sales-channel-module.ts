@@ -3,6 +3,7 @@ import {
   CreateSalesChannelDTO,
   DAL,
   FilterableSalesChannelProps,
+  InferEntityType,
   InternalModuleDeclaration,
   ISalesChannelModuleService,
   ModuleJoinerConfig,
@@ -36,7 +37,9 @@ export default class SalesChannelModuleService
   implements ISalesChannelModuleService
 {
   protected baseRepository_: DAL.RepositoryService
-  protected readonly salesChannelService_: ModulesSdkTypes.IMedusaInternalService<SalesChannel>
+  protected readonly salesChannelService_: ModulesSdkTypes.IMedusaInternalService<
+    InferEntityType<typeof SalesChannel>
+  >
 
   constructor(
     { baseRepository, salesChannelService }: InjectedDependencies,
@@ -57,12 +60,14 @@ export default class SalesChannelModuleService
     data: CreateSalesChannelDTO[],
     sharedContext?: Context
   ): Promise<SalesChannelDTO[]>
+  // @ts-expect-error
   async createSalesChannels(
     data: CreateSalesChannelDTO,
     sharedContext?: Context
   ): Promise<SalesChannelDTO>
 
   @InjectManager()
+  // @ts-expect-error
   async createSalesChannels(
     data: CreateSalesChannelDTO | CreateSalesChannelDTO[],
     @MedusaContext() sharedContext: Context = {}
@@ -83,7 +88,7 @@ export default class SalesChannelModuleService
   async createSalesChannels_(
     data: CreateSalesChannelDTO[],
     @MedusaContext() sharedContext: Context
-  ): Promise<SalesChannel[]> {
+  ): Promise<InferEntityType<typeof SalesChannel>[]> {
     return await this.salesChannelService_.create(data, sharedContext)
   }
 
@@ -93,6 +98,7 @@ export default class SalesChannelModuleService
     data: UpdateSalesChannelDTO,
     sharedContext?: Context
   ): Promise<SalesChannelDTO>
+  // @ts-expect-error
   async updateSalesChannels(
     selector: FilterableSalesChannelProps,
     data: UpdateSalesChannelDTO,
@@ -100,6 +106,7 @@ export default class SalesChannelModuleService
   ): Promise<SalesChannelDTO[]>
 
   @InjectManager()
+  // @ts-expect-error
   async updateSalesChannels(
     idOrSelector: string | FilterableSalesChannelProps,
     data: UpdateSalesChannelDTO | UpdateSalesChannelDTO[],
@@ -163,7 +170,7 @@ export default class SalesChannelModuleService
       (channel): channel is CreateSalesChannelDTO => !channel.id
     )
 
-    const operations: Promise<SalesChannel[]>[] = []
+    const operations: Promise<InferEntityType<typeof SalesChannel>[]>[] = []
 
     if (forCreate.length) {
       operations.push(this.createSalesChannels_(forCreate, sharedContext))

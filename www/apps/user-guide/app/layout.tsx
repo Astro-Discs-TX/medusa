@@ -1,12 +1,11 @@
 import type { Metadata } from "next"
 import { Inter, Roboto_Mono } from "next/font/google"
 import Providers from "@/providers"
-import "../css/globals.css"
+import "./globals.css"
 import { BareboneLayout, TightLayout } from "docs-ui"
 import { config } from "@/config"
 import clsx from "clsx"
-import Feedback from "../components/Feedback"
-import EditButton from "../components/EditButton"
+import Footer from "../components/Footer"
 
 const ogImage =
   "https://res.cloudinary.com/dza7lstvk/image/upload/v1732200992/Medusa%20Resources/opengraph-image_daq6nx.jpg"
@@ -59,16 +58,12 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <BareboneLayout htmlClassName={clsx(inter.variable, robotoMono.variable)}>
-      <TightLayout
-        sidebarProps={{
-          expandItems: true,
-        }}
-        ProvidersComponent={Providers}
-      >
+    <BareboneLayout
+      htmlClassName={clsx(inter.variable, robotoMono.variable)}
+      gaId={process.env.NEXT_PUBLIC_GA_ID}
+    >
+      <TightLayout ProvidersComponent={Providers} footerComponent={<Footer />}>
         {children}
-        <Feedback className="my-2" />
-        <EditButton />
       </TightLayout>
     </BareboneLayout>
   )

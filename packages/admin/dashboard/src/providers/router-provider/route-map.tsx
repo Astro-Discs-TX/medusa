@@ -12,10 +12,10 @@ import { taxRegionLoader } from "../../routes/tax-regions/tax-region-detail/load
 import { RouteExtensions } from "./route-extensions"
 import { SettingsExtensions } from "./settings-extensions"
 
-// TODO: Add translations for all breadcrumbs
 export const RouteMap: RouteObject[] = [
   {
     element: <ProtectedRoute />,
+    errorElement: <ErrorBoundary />,
     children: [
       {
         element: <MainLayout />,
@@ -103,6 +103,13 @@ export const RouteMap: RouteObject[] = [
                           import("../../routes/products/product-organization"),
                       },
                       {
+                        path: "shipping-profile",
+                        lazy: () =>
+                          import(
+                            "../../routes/products/product-shipping-profile"
+                          ),
+                      },
+                      {
                         path: "media",
                         lazy: () =>
                           import("../../routes/products/product-media"),
@@ -128,6 +135,11 @@ export const RouteMap: RouteObject[] = [
                           import(
                             "../../routes/products/product-create-variant"
                           ),
+                      },
+                      {
+                        path: "stock",
+                        lazy: () =>
+                          import("../../routes/products/product-stock"),
                       },
                       {
                         path: "metadata/edit",
@@ -329,6 +341,24 @@ export const RouteMap: RouteObject[] = [
                     lazy: () =>
                       import("../../routes/orders/order-request-transfer"),
                   },
+                  {
+                    path: "email",
+                    lazy: () => import("../../routes/orders/order-edit-email"),
+                  },
+                  {
+                    path: "shipping-address",
+                    lazy: () =>
+                      import("../../routes/orders/order-edit-shipping-address"),
+                  },
+                  {
+                    path: "billing-address",
+                    lazy: () =>
+                      import("../../routes/orders/order-edit-billing-address"),
+                  },
+                  {
+                    path: "metadata/edit",
+                    lazy: () => import("../../routes/orders/order-metadata"),
+                  },
                 ],
               },
             ],
@@ -489,6 +519,11 @@ export const RouteMap: RouteObject[] = [
                       import(
                         "../../routes/collections/collection-add-products"
                       ),
+                  },
+                  {
+                    path: "metadata/edit",
+                    lazy: () =>
+                      import("../../routes/collections/collection-metadata"),
                   },
                 ],
               },
@@ -750,6 +785,11 @@ export const RouteMap: RouteObject[] = [
                     lazy: () =>
                       import("../../routes/inventory/inventory-create"),
                   },
+                  {
+                    path: "stock",
+                    lazy: () =>
+                      import("../../routes/inventory/inventory-stock"),
+                  },
                 ],
               },
               {
@@ -886,6 +926,10 @@ export const RouteMap: RouteObject[] = [
                     path: "countries/add",
                     lazy: () =>
                       import("../../routes/regions/region-add-countries"),
+                  },
+                  {
+                    path: "metadata/edit",
+                    lazy: () => import("../../routes/regions/region-metadata"),
                   },
                 ],
               },
@@ -1081,6 +1125,15 @@ export const RouteMap: RouteObject[] = [
                         },
                       }
                     },
+                    children: [
+                      {
+                        path: "metadata/edit",
+                        lazy: () =>
+                          import(
+                            "../../routes/shipping-profiles/shipping-profile-metadata"
+                          ),
+                      },
+                    ],
                   },
                 ],
               },
