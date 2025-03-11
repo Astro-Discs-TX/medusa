@@ -45,7 +45,9 @@ export function buildGenerateMigrationScript({
     const orm = await mikroOrmCreateConnection(
       {
         ...dbData,
-        snapshotName: kebabCase(moduleName.replace("Service", "")),
+        snapshotName: `.snapshot-${kebabCase(
+          moduleName.replace("Service", "")
+        )}`,
       },
       normalizedModels,
       pathToMigrations

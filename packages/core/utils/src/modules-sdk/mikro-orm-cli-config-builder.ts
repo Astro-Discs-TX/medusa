@@ -61,7 +61,7 @@ export function defineMikroOrmCliConfig(
     ...(options as any),
     entities: entities.filter(Boolean),
     migrations: {
-      snapshotName: databaseName,
+      snapshotName: `.snapshot-${databaseName}`,
       generator: CustomTsMigrationGenerator,
       ...options.migrations,
     },
