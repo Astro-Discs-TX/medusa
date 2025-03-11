@@ -12428,48 +12428,6 @@ paths:
               type: string
               title: sales_channel_id
               description: A sales channel's ID.
-        - name: fulfillment_status
-          in: query
-          description: Filter by the fulfillment status of the draft order.
-          required: false
-          schema:
-            type: array
-            description: Filter by the fulfillment status of the draft order.
-            items:
-              type: string
-              title: fulfillment_status
-              description: The fulfillment status's details.
-              enum:
-                - canceled
-                - not_fulfilled
-                - partially_fulfilled
-                - fulfilled
-                - partially_shipped
-                - shipped
-                - partially_delivered
-                - delivered
-        - name: payment_status
-          in: query
-          description: Filter by the payment status of the draft order.
-          required: false
-          schema:
-            type: array
-            description: Filter by the payment status of the draft order.
-            items:
-              type: string
-              title: payment_status
-              description: The payment status's details.
-              enum:
-                - canceled
-                - not_paid
-                - awaiting
-                - authorized
-                - partially_authorized
-                - captured
-                - partially_captured
-                - partially_refunded
-                - refunded
-                - requires_action
         - name: region_id
           in: query
           description: Filter by region IDs to retrieve their associated draft orders.
@@ -17485,7 +17443,7 @@ paths:
       operationId: GetInvites
       summary: List Invites
       description: Retrieve a list of invites. The invites can be filtered by fields such as `id`. The invites can also be sorted or paginated.
-      x-authenticated: false
+      x-authenticated: true
       parameters:
         - name: fields
           in: query
@@ -17992,11 +17950,15 @@ paths:
           $ref: '#/components/responses/invalid_request_error'
         '500':
           $ref: '#/components/responses/500_error'
+      security:
+        - api_token: []
+        - cookie_auth: []
+        - jwt_token: []
     post:
       operationId: PostInvites
       summary: Create Invite
       description: Create a invite.
-      x-authenticated: false
+      x-authenticated: true
       parameters:
         - name: fields
           in: query
@@ -18056,6 +18018,10 @@ paths:
         '500':
           $ref: '#/components/responses/500_error'
       x-workflow: createInvitesWorkflow
+      security:
+        - api_token: []
+        - cookie_auth: []
+        - jwt_token: []
   /admin/invites/accept:
     post:
       operationId: PostInvitesAccept
@@ -18063,7 +18029,7 @@ paths:
       description: |
         Accept an invite and create a new user.
         Since the user isn't created yet, the JWT token used in the authorization header is retrieved from the `/auth/user/emailpass/register` API route (or a provider other than `emailpass`). The user can then authenticate using the `/auth/user/emailpass` API route.
-      x-authenticated: false
+      x-authenticated: true
       requestBody:
         content:
           application/json:
@@ -18133,12 +18099,15 @@ paths:
         '500':
           $ref: '#/components/responses/500_error'
       x-workflow: acceptInviteWorkflow
+      security:
+        - cookie_auth: []
+        - jwt_token: []
   /admin/invites/{id}:
     get:
       operationId: GetInvitesId
       summary: Get an Invite
       description: Retrieve an invite by its ID. You can expand the invite's relations or select the fields that should be returned.
-      x-authenticated: false
+      x-authenticated: true
       parameters:
         - name: id
           in: path
@@ -18181,11 +18150,15 @@ paths:
           $ref: '#/components/responses/invalid_request_error'
         '500':
           $ref: '#/components/responses/500_error'
+      security:
+        - api_token: []
+        - cookie_auth: []
+        - jwt_token: []
     delete:
       operationId: DeleteInvitesId
       summary: Delete Invite
       description: Delete an invite.
-      x-authenticated: false
+      x-authenticated: true
       parameters:
         - name: id
           in: path
@@ -18238,12 +18211,16 @@ paths:
         '500':
           $ref: '#/components/responses/500_error'
       x-workflow: deleteInvitesWorkflow
+      security:
+        - api_token: []
+        - cookie_auth: []
+        - jwt_token: []
   /admin/invites/{id}/resend:
     post:
       operationId: PostInvitesIdResend
       summary: Refresh Invite Token
       description: Refresh the token of an invite.
-      x-authenticated: false
+      x-authenticated: true
       parameters:
         - name: id
           in: path
@@ -18287,6 +18264,10 @@ paths:
         '500':
           $ref: '#/components/responses/500_error'
       x-workflow: refreshInviteTokensWorkflow
+      security:
+        - api_token: []
+        - cookie_auth: []
+        - jwt_token: []
   /admin/notifications:
     get:
       operationId: GetNotifications
@@ -19174,46 +19155,6 @@ paths:
               type: string
               title: sales_channel_id
               description: A sales channel's ID.
-        - name: fulfillment_status
-          in: query
-          description: Filter by the order's fulfillment status.
-          required: false
-          schema:
-            type: array
-            description: Filter by the order's fulfillment status.
-            items:
-              type: string
-              description: A fulfillment status.
-              enum:
-                - canceled
-                - not_fulfilled
-                - partially_fulfilled
-                - fulfilled
-                - partially_shipped
-                - shipped
-                - partially_delivered
-                - delivered
-        - name: payment_status
-          in: query
-          description: Filter by the order's payment status.
-          required: false
-          schema:
-            type: array
-            description: Filter by the order's payment status.
-            items:
-              type: string
-              description: A payment status
-              enum:
-                - canceled
-                - not_paid
-                - awaiting
-                - authorized
-                - partially_authorized
-                - captured
-                - partially_captured
-                - partially_refunded
-                - refunded
-                - requires_action
         - name: region_id
           in: query
           description: Filter by region IDs to retrieve their associated orders.
@@ -33752,46 +33693,6 @@ paths:
               type: string
               title: sales_channel_id
               description: A sales channel's ID.
-        - name: fulfillment_status
-          in: query
-          description: Filter by fulfillment statuses.
-          required: false
-          schema:
-            type: array
-            description: Filter by fulfillment statuses.
-            items:
-              type: string
-              description: A fulfillment status.
-              enum:
-                - canceled
-                - not_fulfilled
-                - partially_fulfilled
-                - fulfilled
-                - partially_shipped
-                - shipped
-                - partially_delivered
-                - delivered
-        - name: payment_status
-          in: query
-          description: Filter by payment statuses.
-          required: false
-          schema:
-            type: array
-            description: Filter by payment statuses.
-            items:
-              type: string
-              description: A payment status.
-              enum:
-                - canceled
-                - not_paid
-                - awaiting
-                - authorized
-                - partially_authorized
-                - captured
-                - partially_captured
-                - partially_refunded
-                - refunded
-                - requires_action
         - name: region_id
           in: query
           description: Filter by region IDs to retrieve their associated returns.
@@ -42032,7 +41933,7 @@ paths:
       operationId: GetUsers
       summary: List Users
       description: Retrieve a list of users. The users can be filtered by fields such as `id`. The users can also be sorted or paginated.
-      x-authenticated: false
+      x-authenticated: true
       parameters:
         - name: fields
           in: query
@@ -42501,12 +42402,15 @@ paths:
           $ref: '#/components/responses/invalid_request_error'
         '500':
           $ref: '#/components/responses/500_error'
+      security:
+        - cookie_auth: []
+        - jwt_token: []
   /admin/users/me:
     get:
       operationId: GetUsersMe
       summary: Get Logged-In User
       description: Retrieve the logged-in user's details.
-      x-authenticated: false
+      x-authenticated: true
       parameters:
         - name: fields
           in: query
@@ -42543,12 +42447,15 @@ paths:
           $ref: '#/components/responses/invalid_request_error'
         '500':
           $ref: '#/components/responses/500_error'
+      security:
+        - cookie_auth: []
+        - jwt_token: []
   /admin/users/{id}:
     get:
       operationId: GetUsersId
       summary: Get a User
       description: Retrieve a user by its ID. You can expand the user's relations or select the fields that should be returned.
-      x-authenticated: false
+      x-authenticated: true
       parameters:
         - name: id
           in: path
@@ -42591,11 +42498,14 @@ paths:
           $ref: '#/components/responses/invalid_request_error'
         '500':
           $ref: '#/components/responses/500_error'
+      security:
+        - cookie_auth: []
+        - jwt_token: []
     post:
       operationId: PostUsersId
       summary: Update a User
       description: Update a user's details.
-      x-authenticated: false
+      x-authenticated: true
       parameters:
         - name: id
           in: path
@@ -42651,11 +42561,14 @@ paths:
         '500':
           $ref: '#/components/responses/500_error'
       x-workflow: updateUsersWorkflow
+      security:
+        - cookie_auth: []
+        - jwt_token: []
     delete:
       operationId: DeleteUsersId
       summary: Delete a User
       description: Delete a user.
-      x-authenticated: false
+      x-authenticated: true
       parameters:
         - name: id
           in: path
@@ -42689,6 +42602,9 @@ paths:
         '500':
           $ref: '#/components/responses/500_error'
       x-workflow: removeUserAccountWorkflow
+      security:
+        - cookie_auth: []
+        - jwt_token: []
   /admin/workflows-executions:
     get:
       operationId: GetWorkflowsExecutions
@@ -43604,11 +43520,11 @@ paths:
       operationId: PostActor_typeAuth_providerUpdate
       summary: Reset an Admin User's Password
       x-sidebar-summary: Reset Password
-      description: Reset an admin user's password using a reset-password token generated with the [Generate Reset Password Token API route](https://docs.medusajs.com/api/admin#auth_postactor_typeauth_providerresetpassword).
+      description: Reset an admin user's password using a reset-password token generated with the [Generate Reset Password Token API route](https://docs.medusajs.com/api/admin#auth_postactor_typeauth_providerresetpassword). You pass the token as a bearer token in the request's Authorization header.
       externalDocs:
         url: https://docs.medusajs.com/v2/resources/commerce-modules/auth/authentication-route#reset-password-route
         description: Learn more about this API route.
-      x-authenticated: false
+      x-authenticated: true
       parameters:
         - name: auth_provider
           in: path
@@ -43617,12 +43533,6 @@ paths:
           schema:
             type: string
             example: emailpass
-        - name: token
-          in: query
-          description: The reset password token received using the Get Reset Password API route.
-          required: true
-          schema:
-            type: string
       requestBody:
         content:
           application/json:
@@ -43637,12 +43547,15 @@ paths:
         - lang: Shell
           label: cURL
           source: |-
-            curl -X POST '{backend_url}/auth/user/emailpass/update?token=123' \
+            curl -X POST '{backend_url}/auth/user/emailpass/update' \
             -H 'Content-Type: application/json' \
+            -H 'Authorization: Bearer {token}' \
             --data-raw '{
               "email": "admin@medusa-test.com",
               "password": "supersecret"
             }'
+      security:
+        - reset_password: []
       tags:
         - Auth
       responses:
@@ -55717,6 +55630,8 @@ components:
         - id
         - calculated_amount
         - original_amount
+        - original_amount_with_tax
+        - original_amount_without_tax
         - currency_code
       properties:
         id:
@@ -55766,6 +55681,14 @@ components:
         original_price:
           type: object
           description: The original price's details.
+        original_amount_with_tax:
+          type: number
+          title: original_amount_with_tax
+          description: The amount of the original price with taxes applied.
+        original_amount_without_tax:
+          type: number
+          title: original_amount_without_tax
+          description: The amount of the original price without taxes.
     BaseCapture:
       type: object
       description: The details of a captured payment.
@@ -60060,6 +59983,7 @@ components:
         - id
         - order_id
         - order
+        - amount
         - reference
         - reference_id
         - metadata
@@ -60097,6 +60021,10 @@ components:
           format: date-time
           title: updated_at
           description: The date the credit line was updated.
+        amount:
+          type: number
+          title: amount
+          description: The credit line's amount.
     OrderExchange:
       type: object
       description: The order change's exchange.
@@ -60649,6 +60577,10 @@ components:
           format: date-time
           title: updated_at
           description: The date the item was updated.
+        damaged_quantity:
+          type: number
+          title: damaged_quantity
+          description: The item's damaged quantity.
     OrderShippingMethod:
       type: object
       description: The shipping method's details.
@@ -61149,6 +61081,8 @@ components:
         - id
         - calculated_amount
         - original_amount
+        - original_amount_with_tax
+        - original_amount_without_tax
         - currency_code
       properties:
         id:
@@ -61255,6 +61189,14 @@ components:
               type: number
               title: max_quantity
               description: The maximum quantity required in the cart for the price to apply.
+        original_amount_with_tax:
+          type: number
+          title: original_amount_with_tax
+          description: The original amount with taxes applied.
+        original_amount_without_tax:
+          type: number
+          title: original_amount_without_tax
+          description: The original amount without taxes.
     StoreCart:
       type: object
       description: The cart's details.
@@ -70571,3 +70513,8 @@ components:
       in: cookie
       name: connect.sid
       x-displayName: Cookie Session ID
+    reset_password:
+      type: http
+      x-displayName: Reset Password Token
+      scheme: bearer
+      x-is-auth: false
