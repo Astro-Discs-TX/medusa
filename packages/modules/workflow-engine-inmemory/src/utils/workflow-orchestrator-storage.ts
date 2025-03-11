@@ -321,9 +321,12 @@ export class InMemoryDistributedTransactionStorage
       return
     }
 
-    let nextExecution = !(job.expression as string).startsWith("interval:")
-      ? (job.expression as CronExpression).next().getTime() - Date.now()
-      : parseInt((job.expression as string).split(":")[1])
+    let nextExecution = 0
+    if (typeof job.expression === "string") {
+      nextExecution = parseInt(job.expression.split(":")[1])
+    } else {
+      nextExecution = job.expression.next().getTime() - Date.now()
+    }
 
     const timer = setTimeout(async () => {
       this.jobHandler(jobId)
