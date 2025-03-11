@@ -14,27 +14,6 @@ A module link forms an association between two data models of different modules 
 
 For example, the [Brand Customizations Tutorial](../../customization/extend-features/page.mdx) shows how to create a Brand Module that adds the concept of brands to your application, then link those brands to a product.
 
-### How Module Links are Stored
-
-When you define a module link, the Medusa application creates a table in the database for that link. The table's name is a combination of the names of the two data models linked in the format `module1_table1_module2_table2`, where:
-
-- `module1` and `module2` are the names of the modules.
-- `table1` and `table2` are the table names of the data models.
-
-For example, if you define a link between the `Product` data model from the [Product Module](!resources!/commerce-modules/product) and a `Post` data model from a Blog Module, the table name would be `product_product_blog_post`.
-
-The table has two columns, each storing the ID of a record from the linked data models. For example, the `product_product_blog_post` table would have columns `product_id` and `post_id`. These columns store only the IDs of the linked records and do not hold a foreign key constraint.
-
-Then, when you create links between records of the data models, the IDs of these data models are stored as a new record in the link's table.
-
-<Note title="Tip">
-
-You can also add custom columns in the link table as explained in the [Add Columns to Link Table chapter](./custom-columns/page.mdx).
-
-</Note>
-
-![Diagram illustration for links](https://res.cloudinary.com/dza7lstvk/image/upload/v1741696766/Medusa%20Book/custom-links_vezsx8.jpg)
-
 ---
 
 ## How to Define a Module Link?
@@ -78,6 +57,29 @@ The Medusa application creates a new table for your link to store the IDs of lin
 You can also use the `db:migrate` command, which runs both the migrations and syncs the links.
 
 Use either of these commands whenever you make changes to your link definitions. For example, run this command if you remove your link definition file.
+
+---
+
+### How Module Links are Stored
+
+When you define a module link, the Medusa application creates a table in the database for that link. The table's name is a combination of the names of the two data models linked in the format `module1_table1_module2_table2`, where:
+
+- `module1` and `module2` are the names of the modules.
+- `table1` and `table2` are the table names of the data models.
+
+For example, if you define a link between the `Product` data model from the [Product Module](!resources!/commerce-modules/product) and a `Post` data model from a Blog Module, the table name would be `product_product_blog_post`.
+
+The table has two columns, each storing the ID of a record from the linked data models. For example, the `product_product_blog_post` table would have columns `product_id` and `post_id`. These columns store only the IDs of the linked records and do not hold a foreign key constraint.
+
+Then, when you create links between records of the data models, the IDs of these data models are stored as a new record in the link's table.
+
+<Note title="Tip">
+
+You can also add custom columns in the link table as explained in the [Add Columns to Link Table chapter](./custom-columns/page.mdx).
+
+</Note>
+
+![Diagram illustration for links](https://res.cloudinary.com/dza7lstvk/image/upload/v1741696766/Medusa%20Book/custom-links_vezsx8.jpg)
 
 ---
 
