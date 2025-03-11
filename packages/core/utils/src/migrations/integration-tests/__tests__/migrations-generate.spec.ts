@@ -29,7 +29,7 @@ describe("Generate migrations", () => {
   })
 
   afterEach(async () => {
-    // await fs.cleanup()
+    await fs.cleanup()
     MetadataStorage.clear()
     mikroORMEntityBuilder.clear()
   })
@@ -164,7 +164,9 @@ describe("Generate migrations", () => {
     const run1 = await run([User])
     expect(await fs.exists(run1.fileName))
     expect(await fs.exists(".snapshot-foo.json")).toBeFalsy()
-    expect(await fs.exists("medusa-my-test-generate.json")).toBeTruthy()
+    expect(
+      await fs.exists(".snapshot-medusa-my-test-generate.json")
+    ).toBeTruthy()
 
     const Car = model.define("Car", {
       id: model.id().primaryKey(),
