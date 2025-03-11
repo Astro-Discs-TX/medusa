@@ -102,6 +102,11 @@ export class RedisDistributedTransactionStorage
     this.worker = new Worker(
       this.queueName,
       async (job) => {
+        this.logger_.debug(
+          `executing job ${job.name} from queue ${
+            this.queueName
+          } with the following data: ${JSON.stringify(job.data)}`
+        )
         if (allowedJobs.includes(job.name as JobType)) {
           await this.executeTransaction(
             job.data.workflowId,
@@ -121,6 +126,13 @@ export class RedisDistributedTransactionStorage
       this.jobWorker = new Worker(
         this.jobQueueName,
         async (job) => {
+          this.logger_.debug(
+            `executing scheduled job ${job.data.jobId} from queue ${
+              this.jobQueueName
+            } with the following options: ${JSON.stringify(
+              job.data.schedulerOptions
+            )}`
+          )
           await this.executeScheduledJob(
             job.data.jobId,
             job.data.schedulerOptions
