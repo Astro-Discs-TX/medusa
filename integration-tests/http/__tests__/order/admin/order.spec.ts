@@ -1283,6 +1283,8 @@ medusaIntegrationTestRunner({
           ])
         )
 
+        expect(fulOrder.items[0].detail.fulfilled_quantity).toEqual(1)
+
         reservations = (await api.get(`/admin/reservations`, adminHeaders)).data
           .reservations
 
@@ -1307,6 +1309,7 @@ medusaIntegrationTestRunner({
         )
 
         expect(data.order.fulfillments[0].canceled_at).toBeDefined()
+        expect(data.order.items[0].detail.fulfilled_quantity).toEqual(0)
 
         reservations = (await api.get(`/admin/reservations`, adminHeaders)).data
           .reservations
@@ -1356,6 +1359,8 @@ medusaIntegrationTestRunner({
             }),
           ])
         )
+
+        expect(fulOrderFull.items[0].detail.fulfilled_quantity).toEqual(2)
 
         // 7. cancel the entire fulfillment once again
         await api.post(

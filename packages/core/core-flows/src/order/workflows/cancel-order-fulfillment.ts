@@ -7,6 +7,7 @@ import {
   ReservationItemDTO,
 } from "@medusajs/framework/types"
 import {
+  MathBN,
   MedusaError,
   Modules,
   OrderWorkflowEvents,
@@ -124,14 +125,48 @@ function prepareCancelOrderFulfillmentData({
   order: OrderDTO
   fulfillment: FulfillmentDTO
 }) {
+  const lineItemIds = new Array(
+    ...new Set(fulfillment.items.map((i) => i.line_item_id))
+  )
+
   return {
     order_id: order.id,
     reference: Modules.FULFILLMENT,
     reference_id: fulfillment.id,
-    items: fulfillment.items!.map((i) => {
+    items: lineItemIds.map((lineItemId) => {
+      // find order item
+      const orderItem = order.items!.find((i) => i.id === lineItemId)
+      // find inventory items
+      const iitems = (orderItem as any)!.variant?.inventory_items
+      // find fulfillment item
+      const fitem = fulfillment.items.find(
+        (i) => i.line_item_id === lineItemId
+      )!
+
+      let quantity: any = fitem.quantity
+
+      // NOTE: if the order item has an inventory kit or `required_qunatity` > 1, fulfillment items wont't match 1:1 with order items.
+      // - for each inventory item in the kit, a fulfillment item will be created i.e. one line item could have multiple fulfillment items
+      // - the quantity of the fulfillment item will be the quantity of the order item multiplied by the required quantity of the inventory item
+      //
+      //   We need to take this into account when canceling the fulfillment to compute quantity of line items not being fulfilled based on fulfillment items and qunatities.
+      //   NOTE: for now we only need to find one inventory item of a line item to compute this since when a fulfillment is created all inventory items are fulfilled together.
+      //   If we allow to cancel partial fulfillments for an order item, we need to change this.
+      //
+      if (iitems.length) {
+        const iitem = iitems.find(
+          (i) => i.inventory.id === fitem.inventory_item_id
+        )
+
+        quantity = MathBN.div(
+          quantity as number,
+          iitem.required_quantity
+        ).toNumber()
+      }
+
       return {
-        id: i.line_item_id as string,
-        quantity: i.quantity,
+        id: lineItemId as string,
+        quantity,
       }
     }),
   }
