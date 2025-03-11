@@ -26,7 +26,7 @@ describe("defineMikroOrmCliConfig", () => {
       dbName: "medusa-fulfillment",
       migrations: {
         generator: expect.any(Function),
-        snapshotName: "medusa-my-test",
+        snapshotName: ".snapshot-medusa-my-test",
       },
     })
   })
@@ -45,7 +45,7 @@ describe("defineMikroOrmCliConfig", () => {
       password: "",
       migrations: {
         generator: expect.any(Function),
-        snapshotName: "medusa-my-test",
+        snapshotName: ".snapshot-medusa-my-test",
       },
     })
   })
