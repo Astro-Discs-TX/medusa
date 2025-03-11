@@ -104,9 +104,9 @@ export const updateDraftOrderWorkflow = createWorkflow(
       },
       list: false,
       throw_if_key_not_found: true,
-    })
+    }).config({ name: "order-query" })
 
-    validateDraftOrderStep(order)
+    validateDraftOrderStep({ order })
 
     const updateInput = transform(
       { input, order },

@@ -9,6 +9,8 @@ interface ValidateDraftOrderStepInput {
 export const validateDraftOrderStep = createStep(
   "validate-draft-order",
   async function ({ order }: ValidateDraftOrderStepInput) {
+    console.log("Received order", order)
+
     if (order.status !== OrderStatus.DRAFT && !order.is_draft_order) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
