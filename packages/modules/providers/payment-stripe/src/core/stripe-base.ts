@@ -263,14 +263,9 @@ abstract class StripeBase extends AbstractPaymentProvider<StripeOptions> {
         idempotencyKey: context?.idempotency_key,
       })
     )
-    if (sessionData === null) {
-      return {
-        id: data?.session_id as string,
-      }
-    }
 
     return {
-      id: sessionData.id,
+      id: sessionData?.id ?? data?.session_id as string,
       data: sessionData as unknown as Record<string, unknown>,
     }
   }

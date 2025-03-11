@@ -1,5 +1,3 @@
-import Stripe from "stripe"
-
 export interface StripeOptions {
   /**
    * The API key for the Stripe account
