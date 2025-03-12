@@ -133,13 +133,38 @@ const nextConfig = {
         destination: "/recipes/erp",
         permanent: true,
       },
+      {
+        source: "/contribution-guidelines/:path",
+        destination: `${process.env.NEXT_PUBLIC_BASE_URL}/learn/resources/contribution-guidelines/:path`,
+        permanent: true,
+      },
+      {
+        source: "/usage",
+        destination: `${process.env.NEXT_PUBLIC_BASE_URL}/learn/resources/usage`,
+        permanent: true,
+      },
+      {
+        source: "/plugins",
+        destination: "/integrations",
+        permanent: true,
+      },
+      {
+        source: "/resources",
+        destination: "/recipes",
+        permanent: true,
+      },
+      {
+        source: "/references/medusa-config",
+        destination: `${process.env.NEXT_PUBLIC_BASE_URL}/learn/configurations/medusa-config`,
+        permanent: true,
+      },
     ]
   },
   outputFileTracingExcludes: {
     "*": ["node_modules/@medusajs/icons"],
   },
   experimental: {
-    optimizePackageImports: ["@medusajs/icons", "@medusajs/ui"],
+    optimizePackageImports: ["@medusajs/icons", "@medusajs/ui", "elkjs"],
   },
 }
 

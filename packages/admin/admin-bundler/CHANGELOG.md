@@ -1,5 +1,25 @@
 # @medusajs/admin-bundler
 
+## 2.6.1
+
+### Patch Changes
+
+- [#11738](https://github.com/medusajs/medusa/pull/11738) [`3b470f41427e487c68f89b8ee8155de716ffe861`](https://github.com/medusajs/medusa/commit/3b470f41427e487c68f89b8ee8155de716ffe861) Thanks [@olivermrbl](https://github.com/olivermrbl)! - chore: Remove ranges on Medusa packages
+
+- Updated dependencies [[`4c28efaadc01fd0782721924c3c2eff0f6f9ba7a`](https://github.com/medusajs/medusa/commit/4c28efaadc01fd0782721924c3c2eff0f6f9ba7a), [`3b470f41427e487c68f89b8ee8155de716ffe861`](https://github.com/medusajs/medusa/commit/3b470f41427e487c68f89b8ee8155de716ffe861)]:
+  - @medusajs/dashboard@2.6.1
+  - @medusajs/admin-shared@2.6.1
+  - @medusajs/admin-vite-plugin@2.6.1
+
+## 2.6.0
+
+### Patch Changes
+
+- Updated dependencies [[`c28ae573e50b51bd3ef18de7c0e37b37963c423e`](https://github.com/medusajs/medusa/commit/c28ae573e50b51bd3ef18de7c0e37b37963c423e), [`954136f13a4ff00c0fa66d8159f43b2bce90355a`](https://github.com/medusajs/medusa/commit/954136f13a4ff00c0fa66d8159f43b2bce90355a), [`e23f204b7ca0f195e36fef2ba0bae7a686b8da4f`](https://github.com/medusajs/medusa/commit/e23f204b7ca0f195e36fef2ba0bae7a686b8da4f)]:
+  - @medusajs/dashboard@2.6.0
+  - @medusajs/admin-shared@2.6.0
+  - @medusajs/admin-vite-plugin@2.6.0
+
 ## 2.5.1
 
 ### Patch Changes

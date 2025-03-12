@@ -1,5 +1,34 @@
 # @medusajs/dashboard
 
+## 2.6.1
+
+### Patch Changes
+
+- [#11731](https://github.com/medusajs/medusa/pull/11731) [`4c28efaadc01fd0782721924c3c2eff0f6f9ba7a`](https://github.com/medusajs/medusa/commit/4c28efaadc01fd0782721924c3c2eff0f6f9ba7a) Thanks [@fPolic](https://github.com/fPolic)! - fix(dashboard): correctly format date cell time
+
+- [#11738](https://github.com/medusajs/medusa/pull/11738) [`3b470f41427e487c68f89b8ee8155de716ffe861`](https://github.com/medusajs/medusa/commit/3b470f41427e487c68f89b8ee8155de716ffe861) Thanks [@olivermrbl](https://github.com/olivermrbl)! - chore: Remove ranges on Medusa packages
+
+- Updated dependencies [[`3b470f41427e487c68f89b8ee8155de716ffe861`](https://github.com/medusajs/medusa/commit/3b470f41427e487c68f89b8ee8155de716ffe861)]:
+  - @medusajs/icons@2.6.1
+  - @medusajs/ui@4.0.7
+  - @medusajs/js-sdk@2.6.1
+  - @medusajs/admin-shared@2.6.1
+
+## 2.6.0
+
+### Patch Changes
+
+- [#11487](https://github.com/medusajs/medusa/pull/11487) [`c28ae573e50b51bd3ef18de7c0e37b37963c423e`](https://github.com/medusajs/medusa/commit/c28ae573e50b51bd3ef18de7c0e37b37963c423e) Thanks [@kasperkristensen](https://github.com/kasperkristensen)! - fix(dashboard): Use derrived state in DataTable
+
+- [#11690](https://github.com/medusajs/medusa/pull/11690) [`954136f13a4ff00c0fa66d8159f43b2bce90355a`](https://github.com/medusajs/medusa/commit/954136f13a4ff00c0fa66d8159f43b2bce90355a) Thanks [@riqwan](https://github.com/riqwan)! - fix(dashboard): bust variant inventory cache on inventory update
+
+- [#11664](https://github.com/medusajs/medusa/pull/11664) [`e23f204b7ca0f195e36fef2ba0bae7a686b8da4f`](https://github.com/medusajs/medusa/commit/e23f204b7ca0f195e36fef2ba0bae7a686b8da4f) Thanks [@fPolic](https://github.com/fPolic)! - fix(core-flows, dashboard, medusa): prevent creatiion of a fulfilment without items
+
+- Updated dependencies []:
+  - @medusajs/admin-shared@2.6.0
+  - @medusajs/js-sdk@2.6.0
+  - @medusajs/icons@2.6.0
+
 ## 2.5.1
 
 ### Patch Changes

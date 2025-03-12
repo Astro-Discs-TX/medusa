@@ -1,5 +1,19 @@
 # @medusajs/admin-vite-plugin
 
+## 2.6.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @medusajs/admin-shared@2.6.1
+
+## 2.6.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @medusajs/admin-shared@2.6.0
+
 ## 2.5.1
 
 ### Patch Changes
