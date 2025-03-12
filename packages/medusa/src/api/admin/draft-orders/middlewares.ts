@@ -9,6 +9,7 @@ import {
   AdminGetDraftOrderParams,
   AdminGetDraftOrdersParams,
   AdminUpdateDraftOrder,
+  AdminUpdateDraftOrderPromotions,
 } from "./validators"
 
 export const adminDraftOrderRoutesMiddlewares: MiddlewareRoute[] = [
@@ -58,6 +59,17 @@ export const adminDraftOrderRoutesMiddlewares: MiddlewareRoute[] = [
     method: ["POST"],
     matcher: "/admin/draft-orders/:id/convert",
     middlewares: [
+      validateAndTransformQuery(
+        AdminGetDraftOrderParams,
+        QueryConfig.retrieveTransformQueryConfig
+      ),
+    ],
+  },
+  {
+    method: ["POST"],
+    matcher: "/admin/draft-orders/:id/promotions",
+    middlewares: [
+      validateAndTransformBody(AdminUpdateDraftOrderPromotions),
       validateAndTransformQuery(
         AdminGetDraftOrderParams,
         QueryConfig.retrieveTransformQueryConfig

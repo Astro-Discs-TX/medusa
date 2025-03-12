@@ -106,7 +106,15 @@ export type AdminUpdateDraftOrderType = z.infer<typeof AdminUpdateDraftOrder>
 export const AdminUpdateDraftOrder = z.object({
   email: z.string().optional(),
   customer_id: z.string().optional(),
+  sales_channel_id: z.string().optional(),
   shipping_address: AddressPayload.optional(),
   billing_address: AddressPayload.optional(),
   metadata: z.record(z.unknown()).nullish(),
+})
+
+export type AdminUpdateDraftOrderPromotionsType = z.infer<
+  typeof AdminUpdateDraftOrderPromotions
+>
+export const AdminUpdateDraftOrderPromotions = z.object({
+  promo_codes: z.array(z.string()),
 })

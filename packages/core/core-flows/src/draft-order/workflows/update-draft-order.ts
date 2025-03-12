@@ -38,13 +38,17 @@ export interface UpdateDraftOrderWorkflowInput {
    */
   billing_address?: UpsertOrderAddressDTO
   /**
-   * The ID of the customer to update the draft order to.
+   * The ID of the customer to associate the draft order with.
    */
   customer_id?: string
   /**
    * The new email of the draft order.
    */
   email?: string
+  /**
+   * The ID of the sales channel to associate the draft order with.
+   */
+  sales_channel_id?: string
   /**
    * The new metadata of the draft order.
    */
@@ -93,6 +97,7 @@ export const updateDraftOrderWorkflow = createWorkflow(
         "customer_id",
         "status",
         "is_draft_order",
+        "sales_channel_id",
         "email",
         "customer_id",
         "shipping_address.*",
@@ -203,6 +208,20 @@ export const updateDraftOrderWorkflow = createWorkflow(
               type: "email",
               old: order.email,
               new: updatedOrder.email,
+            },
+          })
+        }
+
+        if (input.sales_channel_id) {
+          changes.push({
+            change_type: "update_order" as const,
+            order_id: input.id,
+            created_by: input.user_id,
+            confirmed_by: input.user_id,
+            details: {
+              type: "sales_channel_id",
+              old: order.sales_channel_id,
+              new: updatedOrder.sales_channel_id,
             },
           })
         }

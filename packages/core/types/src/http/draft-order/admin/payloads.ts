@@ -101,6 +101,14 @@ export interface AdminUpdateDraftOrder {
    */
   email?: string
   /**
+   * The ID of the customer to associate the draft order with.
+   */
+  customer_id?: string
+  /**
+   * The ID of the sales channel to associate the draft order with.
+   */
+  sales_channel_id?: string
+  /**
    * The draft order's shipping address.
    */
   shipping_address?: OrderAddress
