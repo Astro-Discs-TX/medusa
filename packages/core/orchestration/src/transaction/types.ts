@@ -125,6 +125,7 @@ export type TransactionModelOptions = {
 
   /**
    * If true, the execution details of each step will be stored.
+   * @deprecated no longer needed.
    */
   storeExecution?: boolean
 
