@@ -19,7 +19,7 @@ In this document, you’ll learn how to create a Locking Module Provider and the
       
 As you implement your Locking Module Provider, it can be useful to refer to an existing provider and how it's implemeted.
 
-If you need to refer to an existing implementation as an example, check the [Redis Locking Provider in the Medusa repository](https://github.com/medusajs/medusa/tree/develop/packages/modules/providers/locking-redis).
+If you need to refer to an existing implementation as an example, check the [Redis Locking Module Provider in the Medusa repository](https://github.com/medusajs/medusa/tree/develop/packages/modules/providers/locking-redis).
 
 ---
 
@@ -110,7 +110,7 @@ will be stored as `lp_{identifier}`.
 For example:
 
 ```ts
-class MyLockingProviderService extends ILockingProvider {
+class MyLockingProviderService implements ILockingProvider {
   static identifier = "my-lock"
   // ...
 }
@@ -282,7 +282,7 @@ This method assumes that the client you're integrating has a method called `acqu
 
 #### Returns
 
-<TypeList types={[{"name":"Promise","type":"Promise&#60;void&#62;","optional":false,"defaultValue":"","description":"This method acquires a lock on the given keys. The Locking Module uses this method when you call its `acquire` method and your provider is the default provider,\nor you pass your provider's identifier to its `acquire` method.\n\nIn this method, you should only aquire the lock if the timeout hasn't passed. As explained in the [execute](page.mdx#execute) method's example,\nyou can use a `cancellationToken` object to determine if the lock acquisition has timed out.\n\nIf the lock aquisition isn't canceled, you should aquire the lock, setting its expiry and owner. You should account for the following scenarios:\n\n- The lock doesn't have an owner and you don't pass an owner, in which case the lock can be extended or released by anyone.\n- The lock doesn't have an owner or has the same owner that you pass, in which case you can extend the lock's expiration time and set the owner.\n- The lock has an owner, but you pass a different owner, in which case the method should throw an error.","expandable":false,"children":[]}]} expandUrl="https://docs.medusajs.com/learn/fundamentals/data-models/manage-relationships#retrieve-records-of-relation" sectionTitle="acquire"/>
+<TypeList types={[{"name":"Promise","type":"Promise&#60;void&#62;","optional":false,"defaultValue":"","description":"Resolves when the lock is acquired.","expandable":false,"children":[]}]} expandUrl="https://docs.medusajs.com/learn/fundamentals/data-models/manage-relationships#retrieve-records-of-relation" sectionTitle="acquire"/>
 
 ### release
 

@@ -71,7 +71,7 @@ await lockingModuleService.execute("prod_123", async () => {
 
 ### Type Parameters
 
-<TypeList types={[{"name":"T","type":"`object`","description":"","optional":true,"defaultValue":"","expandable":false,"children":[]}]} expandUrl="https://docs.medusajs.com/learn/fundamentals/data-models/manage-relationships#retrieve-records-of-relation" sectionTitle="execute"/>
+<TypeList types={[{"name":"T","type":"`object`","description":"The type of the job's result.","optional":true,"defaultValue":"","expandable":false,"children":[]}]} expandUrl="https://docs.medusajs.com/learn/fundamentals/data-models/manage-relationships#retrieve-records-of-relation" sectionTitle="execute"/>
 
 ### Parameters
 
@@ -122,7 +122,7 @@ await lockingModuleService.acquire("prod_123", {
 
 ### Returns
 
-<TypeList types={[{"name":"Promise","type":"Promise&#60;void&#62;","optional":false,"defaultValue":"","description":"This method acquires a lock on the given keys. You can optionally pass a provider name to be used for locking. \nIf no provider is passed, the default provider (in-memory or the provider configuerd in `medusa-config.ts`) will be used.\n\nYou can pass an owner for the lock, which limits who can extend or release the acquired lock. Then, if you use this method again\npassing the same owner, the lock's expiration time is extended with the value passed in the `expire` argument. Otherwise, if you pass a\ndifferent owner, the method throws an error.","expandable":false,"children":[]}]} expandUrl="https://docs.medusajs.com/learn/fundamentals/data-models/manage-relationships#retrieve-records-of-relation" sectionTitle="acquire"/>
+<TypeList types={[{"name":"Promise","type":"Promise&#60;void&#62;","optional":false,"defaultValue":"","description":"Resolves when the lock is acquired.","expandable":false,"children":[]}]} expandUrl="https://docs.medusajs.com/learn/fundamentals/data-models/manage-relationships#retrieve-records-of-relation" sectionTitle="acquire"/>
 
 ___
 
