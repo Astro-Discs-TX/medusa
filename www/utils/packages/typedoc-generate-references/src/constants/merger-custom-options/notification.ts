@@ -24,6 +24,11 @@ const notificationOptions: FormattingOptionsType = {
       reflection_typeParameters: false,
     },
     startSections: [
+      `## Implementation Example
+      
+As you implement your Notification Module Provider, it can be useful to refer to an existing provider and how it's implemeted.
+
+If you need to refer to an existing implementation as an example, check the [SendGrid Notification Module Provider in the Medusa repository](https://github.com/medusajs/medusa/tree/develop/packages/modules/providers/notification-sendgrid).`,
       `## 1. Create Module Provider Directory
 
 Start by creating a new directory for your module provider.

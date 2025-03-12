@@ -22,6 +22,11 @@ const fileOptions: FormattingOptionsType = {
       reflection_typeParameters: false,
     },
     startSections: [
+      `## Implementation Example
+      
+As you implement your File Module Provider, it can be useful to refer to an existing provider and how it's implemeted.
+
+If you need to refer to an existing implementation as an example, check the [S3 File Module Provider in the Medusa repository](https://github.com/medusajs/medusa/tree/develop/packages/modules/providers/file-s3).`,
       `## Create Module Provider Directory
 
 Start by creating a new directory for your module provider.
