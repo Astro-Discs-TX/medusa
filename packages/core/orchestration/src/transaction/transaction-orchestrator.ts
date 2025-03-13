@@ -191,9 +191,7 @@ export class TransactionOrchestrator extends EventEmitter {
     const siblings = step.next.map((sib) => flow.steps[sib]).filter(Boolean)
     return (
       siblings.length === 0 ||
-      siblings.every((sib) => {
-        return states.includes(sib.compensate.state)
-      })
+      siblings.every((sib) => states.includes(sib.compensate.state))
     )
   }
 
