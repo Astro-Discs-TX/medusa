@@ -31,21 +31,17 @@ function parseNextExecution(
     if ("interval" in optionsOrExpression) {
       return optionsOrExpression.interval
     }
+
+    return optionsOrExpression.next().getTime() - Date.now()
   }
 
-  if (typeof optionsOrExpression === "string") {
-    const result = parseInt(optionsOrExpression)
-    if (!isNaN(result)) {
-      const expression = parseExpression(optionsOrExpression)
-      return expression.next().getTime() - Date.now()
-    }
+  const result = parseInt(`${optionsOrExpression}`)
+  if (isNaN(result)) {
+    const expression = parseExpression(`${optionsOrExpression}`)
+    return expression.next().getTime() - Date.now()
   }
 
-  return (
-    parseExpression(optionsOrExpression as string)
-      .next()
-      .getTime() - Date.now()
-  )
+  return result
 }
 
 export class InMemoryDistributedTransactionStorage
