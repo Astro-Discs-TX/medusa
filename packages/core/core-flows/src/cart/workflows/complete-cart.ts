@@ -162,10 +162,8 @@ export const completeCartWorkflow = createWorkflow(
 
       const authorizedPayment = when(
         "authorize-payment-session",
-        { paymentSessions },
-        ({ paymentSessions }) => {
-          return paymentSessions.length > 0
-        }
+        { input },
+        ({ input }) => !input.payment_id
       ).then(() => {
         return authorizePaymentSessionStep({
           // We choose the first payment session, as there will only be one active payment session
