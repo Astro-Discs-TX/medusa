@@ -7,7 +7,7 @@ export const GITHUB_ISSUES_LINK =
 export const navDropdownItems: NavigationItem[] = [
   {
     type: "link",
-    path: `/learn`,
+    link: `/learn`,
     title: "Get Started",
     project: "book",
   },
@@ -29,19 +29,9 @@ export const navDropdownItems: NavigationItem[] = [
   },
   {
     type: "dropdown",
-    title: "Resources",
+    title: "Build",
+    project: "resources",
     children: [
-      {
-        type: "link",
-        title: "Guides",
-        link: "/resources",
-        useAsFallback: true,
-      },
-      {
-        type: "link",
-        title: "Examples",
-        link: "/resources/examples",
-      },
       {
         type: "link",
         title: "Recipes",
@@ -49,37 +39,42 @@ export const navDropdownItems: NavigationItem[] = [
       },
       {
         type: "link",
-        title: "Plugin Guides",
-        link: "/resources/plugins",
-      },
-      {
-        type: "divider",
+        title: "How-to & Tutorials",
+        link: "/resources/how-to-tutorials",
       },
       {
         type: "link",
-        title: "Admin Components",
-        link: "/resources/admin-components",
+        title: "Integrations",
+        link: "/resources/integrations",
       },
       {
         type: "link",
-        title: "Storefront Development",
+        title: "Storefront",
         link: "/resources/storefront-development",
-      },
-      {
-        type: "link",
-        title: "UI Library",
-        link: "/ui",
       },
     ],
   },
   {
     type: "dropdown",
-    title: "Tools & SDKs",
+    title: "Tools",
+    link: "/resources/tools",
+    project: "resources",
     children: [
       {
-        type: "link",
-        title: "Medusa CLI",
-        link: "/resources/medusa-cli",
+        type: "sub-menu",
+        title: "CLI Tools",
+        items: [
+          {
+            type: "link",
+            title: "create-medusa-app",
+            link: "/resources/create-medusa-app",
+          },
+          {
+            type: "link",
+            title: "Medusa CLI",
+            link: "/resources/medusa-cli",
+          },
+        ],
       },
       {
         type: "link",
@@ -93,83 +88,16 @@ export const navDropdownItems: NavigationItem[] = [
       },
       {
         type: "link",
-        title: "create-medusa-app",
-        link: "/resources/create-medusa-app",
-      },
-      {
-        type: "divider",
-      },
-      {
-        type: "link",
-        title: "Integrations",
-        link: "/resources/integrations",
-      },
-    ],
-  },
-  {
-    type: "dropdown",
-    title: "Framework",
-    children: [
-      {
-        type: "link",
-        title: "Modules",
-        link: "/learn/fundamentals/modules",
-      },
-      {
-        type: "link",
-        title: "API Routes",
-        link: "/learn/fundamentals/api-routes",
-      },
-      {
-        type: "link",
-        title: "Workflows",
-        link: "/learn/fundamentals/workflows",
-      },
-      {
-        type: "link",
-        title: "Data Models",
-        link: "/learn/fundamentals/data-models",
-      },
-      {
-        type: "link",
-        title: "Subscribers",
-        link: "/learn/fundamentals/events-and-subscribers",
-      },
-      {
-        type: "link",
-        title: "Scheduled Jobs",
-        link: "/learn/fundamentals/scheduled-jobs",
-      },
-      {
-        type: "link",
-        title: "Loaders",
-        link: "/learn/fundamentals/modules/loaders",
-      },
-      {
-        type: "link",
-        title: "Admin Customizations",
-        link: "/learn/fundamentals/admin",
-      },
-      {
-        type: "link",
-        title: "Plugins",
-        link: "/learn/fundamentals/plugins",
-      },
-      {
-        type: "link",
-        title: "Links",
-        link: "/learn/fundamentals/module-links",
-      },
-      {
-        type: "link",
-        title: "Query",
-        link: "/learn/fundamentals/module-links/query",
+        title: "Medusa UI",
+        link: "/ui",
       },
     ],
   },
   {
     type: "dropdown",
     title: "Reference",
+    project: "resources",
+    link: "/resources/references-overview",
     children: [
       {
         type: "link",
@@ -186,6 +114,16 @@ export const navDropdownItems: NavigationItem[] = [
       },
       {
         type: "link",
+        title: "Admin Injection Zones",
+        link: "/resources/admin-widget-injection-zones",
+      },
+      {
+        type: "link",
+        title: "Container Resources",
+        link: "/resources/medusa-container-resources",
+      },
+      {
+        type: "link",
         title: "Core Workflows",
         link: "/resources/medusa-workflows-reference",
       },
@@ -196,20 +134,35 @@ export const navDropdownItems: NavigationItem[] = [
       },
       {
         type: "link",
-        title: "Service Factory",
-        link: "/resources/service-factory-reference",
-      },
-      {
-        type: "link",
         title: "Events Reference",
         link: "/resources/events-reference",
       },
       {
         type: "link",
-        title: "Admin Widget Injection Zones",
-        link: "/resources/admin-widget-injection-zones",
+        title: "Helper Steps",
+        link: "/resources/references/helper-steps",
+      },
+      {
+        type: "link",
+        title: "Service Factory",
+        link: "/resources/service-factory-reference",
+      },
+      {
+        type: "link",
+        title: "Testing Framework",
+        link: "/resources/test-tools-reference",
+      },
+      {
+        type: "link",
+        title: "Workflows SDK",
+        link: "/resources/references/workflows",
       },
     ],
+  },
+  {
+    type: "link",
+    title: "User Guide",
+    link: "/user-guide",
   },
 ]
 
@@ -224,15 +177,14 @@ export const searchFilters: OptionType[] = [
   },
   {
     value: "admin-v2",
-    label: "Admin API (v2)",
+    label: "Admin API",
   },
   {
     value: "store-v2",
-    label: "Store API (v2)",
+    label: "Store API",
   },
   {
     value: "ui",
     label: "Medusa UI",
   },
-  // TODO add more filters
 ]

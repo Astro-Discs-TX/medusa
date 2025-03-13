@@ -1,4 +1,7 @@
-import { AddToCartWorkflowInputDTO } from "@medusajs/framework/types"
+import {
+  AddToCartWorkflowInputDTO,
+  ConfirmVariantInventoryWorkflowInputDTO,
+} from "@medusajs/framework/types"
 import { CartWorkflowEvents, isDefined } from "@medusajs/framework/utils"
 import {
   createHook,
@@ -35,12 +38,12 @@ const cartFields = ["completed_at"].concat(cartFieldsForPricingContext)
 
 export const addToCartWorkflowId = "add-to-cart"
 /**
- * This workflow adds a product variant to a cart as a line item. It's executed by the 
+ * This workflow adds a product variant to a cart as a line item. It's executed by the
  * [Add Line Item Store API Route](https://docs.medusajs.com/api/store#carts_postcartsidlineitems).
- * 
+ *
  * You can use this workflow within your own customizations or custom workflows, allowing you to wrap custom logic around adding an item to the cart.
  * For example, you can use this workflow to add a line item to the cart with a custom price.
- * 
+ *
  * @example
  * const { result } = await addToCartWorkflow(container)
  * .run({
@@ -59,11 +62,11 @@ export const addToCartWorkflowId = "add-to-cart"
  *     ]
  *   }
  * })
- * 
+ *
  * @summary
- * 
+ *
  * Add a line item to a cart.
- * 
+ *
  * @property hooks.validate - This hook is executed before all operations. You can consume this hook to perform any custom validation. If validation fails, you can throw an error to stop the workflow execution.
  */
 export const addToCartWorkflow = createWorkflow(
@@ -124,7 +127,7 @@ export const addToCartWorkflow = createWorkflow(
           isCustomPrice: isDefined(item?.unit_price),
         }
 
-        if (variant && !input.unitPrice) {
+        if (variant && !isDefined(input.unitPrice)) {
           input.unitPrice = variant.calculated_price?.calculated_amount
         }
 
@@ -141,16 +144,36 @@ export const addToCartWorkflow = createWorkflow(
       items: lineItems,
     })
 
+    const itemsToConfirmInventory = transform(
+      { itemsToUpdate, itemsToCreate },
+      (data) => {
+        return (data.itemsToUpdate as [])
+          .concat(data.itemsToCreate as [])
+          .filter(
+            (
+              item:
+                | {
+                    data: { variant_id: string }
+                  }
+                | { variant_id?: string }
+            ) =>
+              isDefined(
+                "data" in item ? item.data?.variant_id : item.variant_id
+              )
+          ) as unknown as ConfirmVariantInventoryWorkflowInputDTO["itemsToUpdate"]
+      }
+    )
+
     confirmVariantInventoryWorkflow.runAsStep({
       input: {
         sales_channel_id: cart.sales_channel_id,
         variants,
         items: input.items,
-        itemsToUpdate,
+        itemsToUpdate: itemsToConfirmInventory,
       },
     })
 
-    parallelize(
+    const [createdLineItems, updatedLineItems] = parallelize(
       createLineItemsStep({
         id: cart.id,
         items: itemsToCreate,
@@ -161,8 +184,15 @@ export const addToCartWorkflow = createWorkflow(
       })
     )
 
+    const allItems = transform(
+      { createdLineItems, updatedLineItems },
+      ({ createdLineItems = [], updatedLineItems = [] }) => {
+        return createdLineItems.concat(updatedLineItems)
+      }
+    )
+
     refreshCartItemsWorkflow.runAsStep({
-      input: { cart_id: cart.id },
+      input: { cart_id: cart.id, items: allItems },
     })
 
     emitEventStep({

@@ -1,3 +1,4 @@
+import { createCartCreditLinesWorkflow } from "@medusajs/core-flows"
 import { medusaIntegrationTestRunner } from "@medusajs/test-utils"
 import {
   Modules,
@@ -1101,6 +1102,19 @@ medusaIntegrationTestRunner({
           })
 
           it("should successfully complete cart", async () => {
+            createCartCreditLinesWorkflow.run({
+              input: [
+                {
+                  cart_id: cart.id,
+                  amount: 100,
+                  currency_code: "usd",
+                  reference: "test",
+                  reference_id: "test",
+                },
+              ],
+              container: appContainer,
+            })
+
             const response = await api.post(
               `/store/carts/${cart.id}/complete`,
               {},
@@ -1112,11 +1126,114 @@ medusaIntegrationTestRunner({
               expect.objectContaining({
                 id: expect.any(String),
                 currency_code: "usd",
+                credit_lines: [
+                  expect.objectContaining({
+                    amount: 100,
+                    reference: "test",
+                    reference_id: "test",
+                  }),
+                ],
                 items: expect.arrayContaining([
                   expect.objectContaining({
                     unit_price: 1500,
                     compare_at_unit_price: null,
                     quantity: 1,
+                  }),
+                ]),
+              })
+            )
+          })
+
+          it("should successfully complete cart without shipping for digital products", async () => {
+            /**
+             * Product has a shipping profile so cart item should not require shipping
+             */
+            const product = (
+              await api.post(
+                `/admin/products`,
+                {
+                  title: "Product without inventory management",
+                  description: "test",
+                  options: [
+                    {
+                      title: "Size",
+                      values: ["S", "M", "L", "XL"],
+                    },
+                  ],
+                  variants: [
+                    {
+                      title: "S / Black",
+                      sku: "special-shirt",
+                      options: {
+                        Size: "S",
+                      },
+                      manage_inventory: false,
+                      prices: [
+                        {
+                          amount: 1500,
+                          currency_code: "usd",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                adminHeaders
+              )
+            ).data.product
+
+            let cart = (
+              await api.post(
+                `/store/carts`,
+                {
+                  currency_code: "usd",
+                  sales_channel_id: salesChannel.id,
+                  region_id: region.id,
+                  shipping_address: shippingAddressData,
+                },
+                storeHeadersWithCustomer
+              )
+            ).data.cart
+
+            cart = (
+              await api.post(
+                `/store/carts/${cart.id}/line-items`,
+                {
+                  variant_id: product.variants[0].id,
+                  quantity: 1,
+                },
+                storeHeaders
+              )
+            ).data.cart
+
+            const paymentCollection = (
+              await api.post(
+                `/store/payment-collections`,
+                { cart_id: cart.id },
+                storeHeaders
+              )
+            ).data.payment_collection
+
+            await api.post(
+              `/store/payment-collections/${paymentCollection.id}/payment-sessions`,
+              { provider_id: "pp_system_default" },
+              storeHeaders
+            )
+
+            expect(cart.items[0].requires_shipping).toEqual(false)
+
+            const response = await api.post(
+              `/store/carts/${cart.id}/complete`,
+              {},
+              storeHeaders
+            )
+
+            expect(response.status).toEqual(200)
+            expect(response.data.order).toEqual(
+              expect.objectContaining({
+                shipping_methods: [],
+                items: expect.arrayContaining([
+                  expect.objectContaining({
+                    requires_shipping: false,
                   }),
                 ]),
               })
@@ -1367,8 +1484,6 @@ medusaIntegrationTestRunner({
             })
 
             it("should complete a cart with inventory item shared between variants", async () => {
-              console.log(cart)
-
               const response = await api.post(
                 `/store/carts/${cart.id}/complete`,
                 {},

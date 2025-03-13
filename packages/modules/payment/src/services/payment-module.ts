@@ -36,6 +36,8 @@ import {
   WebhookActionResult,
   CreateAccountHolderOutput,
   InitiatePaymentOutput,
+  UpdateAccountHolderDTO,
+  UpdateAccountHolderOutput,
 } from "@medusajs/framework/types"
 import {
   BigNumber,
@@ -347,7 +349,10 @@ export default class PaymentModuleService
       providerPaymentSession = await this.paymentProviderService_.createSession(
         input.provider_id,
         {
-          context: input.context,
+          context: {
+            idempotency_key: paymentSession!.id,
+            ...input.context,
+          },
           data: { ...input.data, session_id: paymentSession!.id },
           amount: input.amount,
           currency_code: input.currency_code,
@@ -421,6 +426,7 @@ export default class PaymentModuleService
         data: data.data,
         amount: data.amount,
         currency_code: data.currency_code,
+        context: data.context,
       }
     )
 
@@ -490,7 +496,7 @@ export default class PaymentModuleService
       session.provider_id,
       {
         data: session.data,
-        context,
+        context: { idempotency_key: session.id, ...context },
       }
     )
 
@@ -498,6 +504,11 @@ export default class PaymentModuleService
       status !== PaymentSessionStatus.AUTHORIZED &&
       status !== PaymentSessionStatus.CAPTURED
     ) {
+      await this.paymentSessionService_.update({
+        id: session.id,
+        status,
+        data,
+    }, sharedContext);
       throw new MedusaError(
         MedusaError.Types.NOT_ALLOWED,
         `Session: ${session.id} was not authorized with the provider.`
@@ -515,6 +526,10 @@ export default class PaymentModuleService
     } catch (error) {
       await this.paymentProviderService_.cancelPayment(session.provider_id, {
         data,
+        context: {
+          idempotency_key: payment?.id,
+          ...context,
+        },
       })
 
       throw error
@@ -623,6 +638,7 @@ export default class PaymentModuleService
     try {
       await this.capturePaymentFromProvider_(
         payment,
+        capture,
         isFullyCaptured,
         sharedContext
       )
@@ -703,6 +719,7 @@ export default class PaymentModuleService
   @InjectManager()
   private async capturePaymentFromProvider_(
     payment: InferEntityType<typeof Payment>,
+    capture: InferEntityType<typeof Capture> | undefined,
     isFullyCaptured: boolean,
     @MedusaContext() sharedContext: Context = {}
   ) {
@@ -710,6 +727,9 @@ export default class PaymentModuleService
       payment.provider_id,
       {
         data: payment.data!,
+        context: {
+          idempotency_key: capture?.id,
+        },
       }
     )
 
@@ -818,6 +838,9 @@ export default class PaymentModuleService
       {
         data: payment.data!,
         amount: refund.raw_amount as BigNumberInput,
+        context: {
+          idempotency_key: refund.id,
+        },
       }
     )
 
@@ -842,6 +865,9 @@ export default class PaymentModuleService
 
     await this.paymentProviderService_.cancelPayment(payment.provider_id, {
       data: payment.data!,
+      context: {
+        idempotency_key: payment.id,
+      },
     })
 
     await this.paymentService_.update(
@@ -984,7 +1010,12 @@ export default class PaymentModuleService
     providerAccountHolder =
       await this.paymentProviderService_.createAccountHolder(
         input.provider_id,
-        { context: input.context }
+        {
+          context: {
+            idempotency_key: input.context?.customer?.id,
+            ...input.context,
+          },
+        }
       )
 
     // This can be empty when either the method is not supported or an account holder wasn't created
@@ -999,6 +1030,45 @@ export default class PaymentModuleService
         sharedContext
       )
     }
+
+    return await this.baseRepository_.serialize(accountHolder)
+  }
+
+  @InjectManager()
+  async updateAccountHolder(
+    input: UpdateAccountHolderDTO,
+    @MedusaContext() sharedContext?: Context
+  ): Promise<AccountHolderDTO> {
+    if (!input.context?.account_holder) {
+      throw new MedusaError(
+        MedusaError.Types.INVALID_DATA,
+        "Missing account holder data while updating account holder."
+      )
+    }
+
+    let accountHolder: InferEntityType<typeof AccountHolder> | undefined
+    let providerAccountHolder: UpdateAccountHolderOutput | undefined
+
+    providerAccountHolder =
+      await this.paymentProviderService_.updateAccountHolder(
+        input.provider_id,
+        {
+          context: input.context,
+        }
+      )
+
+    // The data field can be empty when either the method is not supported or an account holder wasn't updated
+    // We still want to do the update as we might only be updating the metadata
+    accountHolder = await this.accountHolderService_.update(
+      {
+        id: input.id,
+        ...(providerAccountHolder?.data
+          ? { data: providerAccountHolder.data }
+          : {}),
+        metadata: input.metadata,
+      },
+      sharedContext
+    )
 
     return await this.baseRepository_.serialize(accountHolder)
   }
