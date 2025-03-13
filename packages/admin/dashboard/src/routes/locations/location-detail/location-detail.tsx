@@ -43,10 +43,10 @@ export const LocationDetail = () => {
   return (
     <TwoColumnPage
       widgets={{
-        after: getWidgets("location.details.after"),
-        before: getWidgets("location.details.before"),
-        sideAfter: getWidgets("location.details.side.after"),
-        sideBefore: getWidgets("location.details.side.before"),
+        after: getWidgets("location.list.after"),
+        before: getWidgets("location.list.before"),
+        sideAfter: getWidgets("location.list.side.after"),
+        sideBefore: getWidgets("location.list.side.before"),
       }}
       data={location}
       showJSON
