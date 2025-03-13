@@ -126,12 +126,11 @@ export const completeCartWorkflow = createWorkflow(
     const order = when(
       "create-order",
       { orderId, paymentId: input.payment_id },
-      ({ orderId, paymentId }) => {
+      () => {
         return !orderId
       }
     ).then(() => {
       const existingPayment = when(
-        "compensate-payment-if-needed",
         { paymentId: input.payment_id },
         ({ paymentId }) => {
           return !!paymentId
