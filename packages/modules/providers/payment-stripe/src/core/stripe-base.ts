@@ -50,12 +50,10 @@ import {
   getSmallestUnit,
 } from "../utils/get-smallest-unit"
 
-type FailedCommunicationState = {
+type StripeIndeterminateState = {
   indeterminate_due_to: string,
 }
-
-type StripeErrorData = Stripe.PaymentIntent | FailedCommunicationState
-
+type StripeErrorData = Stripe.PaymentIntent | StripeIndeterminateState
 type HandledErrorType =
   | { retry: true; }
   | { retry: false; data: StripeErrorData };
@@ -128,9 +126,9 @@ abstract class StripeBase extends AbstractPaymentProvider<StripeOptions> {
   handleStripeError(error: any): HandledErrorType {
     switch (error.type) {
       case 'StripeCardError':
-        // For card errors, Stripe has already created a payment intent but it failed
+        // Stripe has created a payment intent but it failed
         // Extract and return paymentIntent object to be stored in payment_session
-        // This allows for reference to the failed intent and potential webhook reconciliation
+        // Allows for reference to the failed intent and potential webhook reconciliation
         const stripeError = error.raw as Stripe.errors.StripeCardError
         if (stripeError.payment_intent) {
           return {
@@ -157,7 +155,7 @@ abstract class StripeBase extends AbstractPaymentProvider<StripeOptions> {
         return {
           retry: false,
           data: {
-            indeterminate_due_to: "StripeAPIError"
+            indeterminate_due_to: "stripe_api_error"
           }
         }
       }
