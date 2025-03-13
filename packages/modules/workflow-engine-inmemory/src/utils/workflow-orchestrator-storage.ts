@@ -17,7 +17,36 @@ import {
   isPresent,
 } from "@medusajs/framework/utils"
 import { WorkflowOrchestratorService } from "@services"
-import { CronExpression, parseExpression } from "cron-parser"
+import { type CronExpression, parseExpression } from "cron-parser"
+
+function parseNextExecution(
+  optionsOrExpression: SchedulerOptions | CronExpression | string | number
+) {
+  if (typeof optionsOrExpression === "object") {
+    if ("cron" in optionsOrExpression) {
+      const expression = parseExpression(optionsOrExpression.cron)
+      return expression.next().getTime() - Date.now()
+    }
+
+    if ("interval" in optionsOrExpression) {
+      return optionsOrExpression.interval
+    }
+  }
+
+  if (typeof optionsOrExpression === "string") {
+    const result = parseInt(optionsOrExpression)
+    if (!isNaN(result)) {
+      const expression = parseExpression(optionsOrExpression)
+      return expression.next().getTime() - Date.now()
+    }
+  }
+
+  return (
+    parseExpression(optionsOrExpression as string)
+      .next()
+      .getTime() - Date.now()
+  )
+}
 
 export class InMemoryDistributedTransactionStorage
   implements IDistributedTransactionStorage, IDistributedSchedulerStorage
@@ -31,7 +60,7 @@ export class InMemoryDistributedTransactionStorage
     string,
     {
       timer: NodeJS.Timeout
-      expression: CronExpression | `interval:${string}`
+      expression: CronExpression | number
       numberOfExecutions: number
       config: SchedulerOptions
     }
@@ -383,17 +412,17 @@ export class InMemoryDistributedTransactionStorage
     // In order to ensure that the schedule configuration is always up to date, we first cancel an existing job, if there was one
     // any only then we add the new one.
     await this.remove(jobId)
-    const expression =
-      "cron" in schedulerOptions ? parseExpression(schedulerOptions.cron) : null
-    let nextExecution = 0
-    if (expression) {
-      nextExecution = expression.next().getTime() - Date.now()
+    let expression: CronExpression | number
+    let nextExecution = parseNextExecution(schedulerOptions)
+
+    if ("cron" in schedulerOptions) {
+      expression = parseExpression(schedulerOptions.cron)
     } else if ("interval" in schedulerOptions) {
-      nextExecution = schedulerOptions.interval
+      expression = schedulerOptions.interval
     } else {
       throw new MedusaError(
         MedusaError.Types.INVALID_ARGUMENT,
-        "Cron schedule cron or interval definition is required for scheduled jobs."
+        "Schedule cron or interval definition is required for scheduled jobs."
       )
     }
 
@@ -403,11 +432,7 @@ export class InMemoryDistributedTransactionStorage
 
     this.scheduled.set(jobId, {
       timer,
-      expression:
-        expression ??
-        `interval:${
-          "interval" in schedulerOptions ? schedulerOptions.interval : 0
-        }`,
+      expression,
       numberOfExecutions: 0,
       config: schedulerOptions,
     })
@@ -443,12 +468,7 @@ export class InMemoryDistributedTransactionStorage
       return
     }
 
-    let nextExecution = 0
-    if (typeof job.expression === "string") {
-      nextExecution = parseInt(job.expression.split(":")[1])
-    } else {
-      nextExecution = job.expression.next().getTime() - Date.now()
-    }
+    const nextExecution = parseNextExecution(job.expression)
 
     const timer = setTimeout(async () => {
       this.jobHandler(jobId)

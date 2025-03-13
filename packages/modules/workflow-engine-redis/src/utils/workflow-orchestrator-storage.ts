@@ -471,7 +471,10 @@ export class RedisDistributedTransactionStorage
           age: 86400,
           count: 1000,
         },
-        removeOnFail: false,
+        removeOnFail: {
+          age: 604800,
+          count: 5000,
+        },
       }
     )
   }
