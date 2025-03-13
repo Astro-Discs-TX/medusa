@@ -36,6 +36,7 @@ function parseNextExecution(
   }
 
   const result = parseInt(`${optionsOrExpression}`)
+
   if (isNaN(result)) {
     const expression = parseExpression(`${optionsOrExpression}`)
     return expression.next().getTime() - Date.now()
