@@ -1,6 +1,7 @@
 import {
   CartCreditLineDTO,
   CartWorkflowDTO,
+  PaymentDTO,
   UsageComputedActions,
 } from "@medusajs/framework/types"
 import {
@@ -40,7 +41,7 @@ import {
   PrepareLineItemDataInput,
   prepareTaxLinesData,
 } from "../utils/prepare-line-item-data"
-
+import { compensatePaymentIfNeededStep } from "../steps/compensate-payment-if-needed"
 /**
  * The data to complete a cart and place an order.
  */
@@ -49,6 +50,12 @@ export type CompleteCartWorkflowInput = {
    * The ID of the cart to complete.
    */
   id: string
+
+  /**
+   * The ID of the payment to complete.
+   * This will exist if cart is completed from the webhook.
+   */
+  payment_id?: string
 }
 
 export type CompleteCartWorkflowOutput = {
@@ -116,9 +123,26 @@ export const completeCartWorkflow = createWorkflow(
     })
 
     // If order ID does not exist, we are completing the cart for the first time
-    const order = when("create-order", { orderId }, ({ orderId }) => {
-      return !orderId
-    }).then(() => {
+    const order = when(
+      "create-order",
+      { orderId, paymentId: input.payment_id },
+      ({ orderId, paymentId }) => {
+        return !orderId
+      }
+    ).then(() => {
+      const existingPayment = when(
+        "compensate-payment-if-needed",
+        { paymentId: input.payment_id },
+        ({ paymentId }) => {
+          return !!paymentId
+        }
+      ).then(() => {
+        // this step's compensation is used to cancel the payment if it's already authorized but a following step in the workflow fails
+        return compensatePaymentIfNeededStep({
+          payment_id: input.payment_id as string,
+        })
+      })
+
       const cartOptionIds = transform({ cart }, ({ cart }) => {
         return cart.shipping_methods?.map((sm) => sm.shipping_option_id)
       })
@@ -136,11 +160,25 @@ export const completeCartWorkflow = createWorkflow(
 
       const paymentSessions = validateCartPaymentsStep({ cart })
 
-      const payment = authorizePaymentSessionStep({
-        // We choose the first payment session, as there will only be one active payment session
-        // This might change in the future.
-        id: paymentSessions[0].id,
+      const authorizedPayment = when(
+        "authorize-payment-session",
+        { paymentSessions },
+        ({ paymentSessions }) => {
+          return paymentSessions.length > 0
+        }
+      ).then(() => {
+        return authorizePaymentSessionStep({
+          // We choose the first payment session, as there will only be one active payment session
+          // This might change in the future.
+          id: paymentSessions[0].id,
+        })
       })
+
+      const payment = transform(
+        { authorizedPayment, existingPayment },
+        ({ authorizedPayment, existingPayment }) =>
+          (authorizedPayment ?? existingPayment) as PaymentDTO
+      )
 
       const { variants, sales_channel_id } = transform({ cart }, (data) => {
         const variantsMap: Record<string, any> = {}
