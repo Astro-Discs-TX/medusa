@@ -1,47 +1,41 @@
 import { createStep, StepResponse } from "@medusajs/framework/workflows-sdk"
-import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
+import {
+  ContainerRegistrationKeys,
+  PaymentSessionStatus,
+} from "@medusajs/framework/utils"
 import { Modules } from "@medusajs/framework/utils"
 import { Logger } from "@medusajs/framework/types"
 import { IPaymentModuleService } from "@medusajs/framework/types"
 
 /**
- * The cart's details.
+ * The payment session's details for compensation.
  */
 export interface CompensatePaymentIfNeededStepInput {
   /**
    * The payment to compensate.
    */
-  payment_id: string
+  payment_session_id: string
 }
 
 export const compensatePaymentIfNeededStepId = "compensate-payment-if-needed"
 /**
- * Purpose of this step is to be a last compensation in cart completion workflow.
- * If the cart completion fails, this steps tries to cancel the payment.
- * The step returns the payment with provided id.
+ * Purpose of this step is to be the last compensation in cart completion workflow.
+ * If the cart completion fails, this step tries to cancel or refund the payment.
  *
  * @example
  * const data = compensatePaymentIfNeededStep({
- *   payment_id: "pay_123"
+ *   payment_session_id: "pay_123"
  * })
  */
 export const compensatePaymentIfNeededStep = createStep(
   compensatePaymentIfNeededStepId,
   async (data: CompensatePaymentIfNeededStepInput, { container }) => {
-    const { payment_id } = data
+    const { payment_session_id } = data
 
-    const paymentModule = container.resolve<IPaymentModuleService>(
-      Modules.PAYMENT
-    )
-
-    const payment = await paymentModule.retrievePayment(payment_id, {
-      relations: ["payment", "payment.captures"],
-    })
-
-    return new StepResponse(payment)
+    return new StepResponse(payment_session_id)
   },
-  async (payment, { container }) => {
-    if (!payment) {
+  async (paymentSessionId, { container }) => {
+    if (!paymentSessionId) {
       return
     }
 
@@ -50,12 +44,37 @@ export const compensatePaymentIfNeededStep = createStep(
       Modules.PAYMENT
     )
 
-    try {
-      await paymentModule.cancelPayment(payment.id)
-    } catch (e) {
-      logger.error(
-        `Error was thrown trying to cancel payment - ${payment.id} - ${e}`
-      )
+    const paymentSession = await paymentModule.retrievePaymentSession(
+      paymentSessionId,
+      {
+        relations: ["payment", "payment.captures"],
+      }
+    )
+
+    if (paymentSession.status === PaymentSessionStatus.AUTHORIZED) {
+      try {
+        await paymentModule.cancelPayment(paymentSession.id)
+      } catch (e) {
+        logger.error(
+          `Error was thrown trying to cancel payment session - ${paymentSession.id} - ${e}`
+        )
+      }
+    }
+
+    if (
+      paymentSession.status === PaymentSessionStatus.CAPTURED &&
+      paymentSession.payment?.id
+    ) {
+      try {
+        await paymentModule.refundPayment({
+          payment_id: paymentSession.payment.id,
+          note: "Refunded due to cart completion failure",
+        })
+      } catch (e) {
+        logger.error(
+          `Error was thrown trying to refund payment - ${paymentSession.payment?.id} - ${e}`
+        )
+      }
     }
   }
 )

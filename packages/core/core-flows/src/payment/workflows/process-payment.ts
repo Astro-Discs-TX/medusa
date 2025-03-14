@@ -100,20 +100,10 @@ export const processPaymentWorkflow = createWorkflow(
     when({ cartPaymentCollection }, ({ cartPaymentCollection }) => {
       return !!cartPaymentCollection.data.length
     }).then(() => {
-      // at this payment is either captured or authorized
-      const paymentData = useQueryGraphStep({
-        entity: "payment",
-        fields: ["id"],
-        filters: { payment_session_id: input.data?.session_id },
-      }).config({
-        name: "payment-query-complete",
-      })
-
       completeCartWorkflow
         .runAsStep({
           input: {
             id: cartPaymentCollection.data[0].cart_id,
-            payment_id: paymentData.data?.[0]?.id,
           },
         })
         .config({

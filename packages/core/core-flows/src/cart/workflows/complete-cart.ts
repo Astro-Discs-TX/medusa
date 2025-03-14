@@ -117,6 +117,23 @@ export const completeCartWorkflow = createWorkflow(
       name: "cart-query",
     })
 
+    // this is only run when the cart is completed for the first time (same condition as below)
+    // but needs to be before the validation step
+    const paymentSessions = when(
+      "create-order-payment-compensation",
+      { orderId, paymentId: input.payment_id },
+      () => !orderId
+    ).then(() => {
+      const paymentSessions = validateCartPaymentsStep({ cart })
+      // purpose of this step is to run compensation if cart completion fails
+      // and tries to cancel or refund the payment depending on the status.
+      compensatePaymentIfNeededStep({
+        payment_session_id: paymentSessions[0].id,
+      })
+
+      return paymentSessions
+    })
+
     const validate = createHook("validate", {
       input,
       cart,
@@ -125,23 +142,11 @@ export const completeCartWorkflow = createWorkflow(
     // If order ID does not exist, we are completing the cart for the first time
     const order = when(
       "create-order",
-      { orderId, paymentId: input.payment_id },
+      { paymentSessions, orderId, paymentId: input.payment_id },
       () => {
         return !orderId
       }
     ).then(() => {
-      const existingPayment = when(
-        { paymentId: input.payment_id },
-        ({ paymentId }) => {
-          return !!paymentId
-        }
-      ).then(() => {
-        // this step's compensation is used to cancel the payment if it's already authorized but a following step in the workflow fails
-        return compensatePaymentIfNeededStep({
-          payment_id: input.payment_id as string,
-        })
-      })
-
       const cartOptionIds = transform({ cart }, ({ cart }) => {
         return cart.shipping_methods?.map((sm) => sm.shipping_option_id)
       })
@@ -157,25 +162,11 @@ export const completeCartWorkflow = createWorkflow(
 
       validateShippingStep({ cart, shippingOptions })
 
-      const paymentSessions = validateCartPaymentsStep({ cart })
-
-      const authorizedPayment = when(
-        "authorize-payment-session",
-        { input },
-        ({ input }) => !input.payment_id
-      ).then(() => {
-        return authorizePaymentSessionStep({
-          // We choose the first payment session, as there will only be one active payment session
-          // This might change in the future.
-          id: paymentSessions[0].id,
-        })
+      const payment = authorizePaymentSessionStep({
+        // We choose the first payment session, as there will only be one active payment session
+        // This might change in the future.
+        id: paymentSessions![0].id,
       })
-
-      const payment = transform(
-        { authorizedPayment, existingPayment },
-        ({ authorizedPayment, existingPayment }) =>
-          (authorizedPayment ?? existingPayment) as PaymentDTO
-      )
 
       const { variants, sales_channel_id } = transform({ cart }, (data) => {
         const variantsMap: Record<string, any> = {}
