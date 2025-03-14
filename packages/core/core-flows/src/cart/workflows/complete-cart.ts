@@ -1,7 +1,6 @@
 import {
   CartCreditLineDTO,
   CartWorkflowDTO,
-  PaymentDTO,
   UsageComputedActions,
 } from "@medusajs/framework/types"
 import {
