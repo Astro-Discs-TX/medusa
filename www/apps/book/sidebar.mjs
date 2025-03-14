@@ -6,7 +6,7 @@ export const sidebars = [
     items: [
       {
         type: "category",
-        title: "Get Started",
+        title: "Getting Started",
         children: [
           {
             type: "link",
@@ -218,7 +218,7 @@ export const sidebars = [
               {
                 type: "link",
                 path: "/learn/fundamentals/module-links/custom-columns",
-                title: "Custom Columns",
+                title: "Add Custom Columns",
               },
               {
                 type: "link",
@@ -597,20 +597,30 @@ export const sidebars = [
         ],
       },
       {
-        type: "link",
-        path: "/learn/build",
-        title: "Build",
-        chapterTitle: "Production",
+        type: "category",
+        title: "Production",
         children: [
+          {
+            type: "link",
+            path: "/learn/build",
+            title: "Build",
+          },
+          {
+            type: "link",
+            path: "/learn/production/worker-mode",
+            title: "Worker Mode",
+          },
           {
             type: "link",
             path: "/learn/deployment",
             title: "Deployment Overview",
-          },
-          {
-            type: "link",
-            path: "/learn/deployment/general",
-            title: "General Deployment",
+            children: [
+              {
+                type: "link",
+                path: "/learn/deployment/general",
+                title: "General Deployment",
+              },
+            ],
           },
         ],
       },
