@@ -54,7 +54,7 @@ export interface AdminCreateDraftOrder {
   /**
    * The ID of the sales channel to associate the draft order with.
    */
-  sales_channel_id?: string | null
+  sales_channel_id: string
   /**
    * The ID of the region to associate the draft order with.
    */
