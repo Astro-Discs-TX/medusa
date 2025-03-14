@@ -9,7 +9,7 @@ import {
 } from "@medusajs/framework/workflows-sdk"
 
 import { maybeRefreshShippingMethodsWorkflow } from "../../utils/maybe-refresh-shipping-methods"
-import { useRemoteQueryStep } from "../../../common"
+import { useQueryGraphStep } from "../../../common"
 
 /**
  * The data to refresh the shipping methods for an exchange.
@@ -43,8 +43,8 @@ export const refreshExchangeShippingWorkflow = createWorkflow(
   function (
     input: WorkflowData<RefreshExchangeShippingWorkflowInput>
   ): WorkflowResponse<void> {
-    const orderChange: OrderChangeDTO = useRemoteQueryStep({
-      entry_point: "order_change",
+    const orderChangeQuery = useQueryGraphStep({
+      entity: "order_change",
       fields: [
         "id",
         "status",
@@ -53,20 +53,23 @@ export const refreshExchangeShippingWorkflow = createWorkflow(
         "return_id",
         "actions.*",
       ],
-      variables: {
-        filters: {
-          order_id: input.order_id,
-          exchange_id: input.exchange_id,
-          status: [OrderChangeStatus.PENDING, OrderChangeStatus.REQUESTED],
-        },
+      filters: {
+        order_id: input.order_id,
+        exchange_id: input.exchange_id,
+        status: [OrderChangeStatus.PENDING, OrderChangeStatus.REQUESTED],
       },
-      list: false,
+      options: { throwIfKeyNotFound: true },
     }).config({ name: "order-change-query" })
 
-    const refreshArgs = transform(
+    const orderChange: OrderChangeDTO = transform(
+      orderChangeQuery,
+      (data) => data[0]
+    )
+
+    const shippingToRefresh = transform(
       { input, orderChange },
       ({ input, orderChange }) => {
-        const result: Record<string, any> = []
+        const shippingToRefresh: Record<"inbound" | "outbound", any> = {}
 
         const inboundShippingAction = orderChange.actions.find(
           (action) =>
@@ -87,7 +90,7 @@ export const refreshExchangeShippingWorkflow = createWorkflow(
               quantity: a.details?.quantity as number,
             }))
 
-          result.push({
+          shippingToRefresh.inbound = {
             shipping_method_id: inboundShippingAction.reference_id,
             order_id: orderChange.order_id,
             action_id: inboundShippingAction.id,
@@ -95,9 +98,7 @@ export const refreshExchangeShippingWorkflow = createWorkflow(
               return_id: inboundShippingAction.return_id,
               return_items: items,
             },
-          })
-        } else {
-          result.push(null)
+          }
         }
 
         if (outboundShippingAction) {
@@ -108,7 +109,7 @@ export const refreshExchangeShippingWorkflow = createWorkflow(
               quantity: a.details?.quantity as number,
             }))
 
-          result.push({
+          shippingToRefresh.outbound = {
             shipping_method_id: outboundShippingAction.reference_id,
             order_id: orderChange.order_id,
             action_id: outboundShippingAction.id,
@@ -116,33 +117,33 @@ export const refreshExchangeShippingWorkflow = createWorkflow(
               exchange_id: outboundShippingAction.exchange_id,
               exchange_items: items,
             },
-          })
-        } else {
-          result.push(null)
+          }
         }
 
-        return result
+        return shippingToRefresh
       }
     )
 
-    // Refresh inbound shipping method
-    when({ refreshArgs }, ({ refreshArgs }) => refreshArgs[0] !== null).then(
-      () =>
-        maybeRefreshShippingMethodsWorkflow
-          .runAsStep({
-            input: refreshArgs[0],
-          })
-          .config({ name: "refresh-inbound-shipping-method" })
+    when(
+      { shippingToRefresh },
+      ({ shippingToRefresh }) => !!shippingToRefresh.inbound
+    ).then(() =>
+      maybeRefreshShippingMethodsWorkflow
+        .runAsStep({
+          input: shippingToRefresh.inbound,
+        })
+        .config({ name: "refresh-inbound-shipping-method" })
     )
 
-    // Refresh outbound shipping method
-    when({ refreshArgs }, ({ refreshArgs }) => refreshArgs[1] !== null).then(
-      () =>
-        maybeRefreshShippingMethodsWorkflow
-          .runAsStep({
-            input: refreshArgs[1],
-          })
-          .config({ name: "refresh-outbound-shipping-method" })
+    when(
+      { shippingToRefresh },
+      ({ shippingToRefresh }) => !!shippingToRefresh.outbound
+    ).then(() =>
+      maybeRefreshShippingMethodsWorkflow
+        .runAsStep({
+          input: shippingToRefresh.outbound,
+        })
+        .config({ name: "refresh-outbound-shipping-method" })
     )
 
     return new WorkflowResponse(void 0)

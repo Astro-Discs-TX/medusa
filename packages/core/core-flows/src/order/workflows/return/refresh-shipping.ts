@@ -9,7 +9,7 @@ import {
 } from "@medusajs/framework/workflows-sdk"
 
 import { maybeRefreshShippingMethodsWorkflow } from "../../utils/maybe-refresh-shipping-methods"
-import { useRemoteQueryStep } from "../../../common"
+import { useQueryGraphStep } from "../../../common"
 
 /**
  * The data to validate that items can be added to a return.
@@ -42,18 +42,21 @@ export const refreshReturnShippingWorkflow = createWorkflow(
   function (
     input: WorkflowData<RequestItemReturnValidationStepInput>
   ): WorkflowResponse<void> {
-    const orderChange: OrderChangeDTO = useRemoteQueryStep({
-      entry_point: "order_change",
+    const orderChangeQuery = useQueryGraphStep({
+      entity: "order_change",
       fields: ["id", "status", "order_id", "return_id", "actions.*"],
-      variables: {
-        filters: {
-          order_id: input.order_id,
-          return_id: input.return_id,
-          status: [OrderChangeStatus.PENDING, OrderChangeStatus.REQUESTED],
-        },
+      filters: {
+        order_id: input.order_id,
+        return_id: input.return_id,
+        status: [OrderChangeStatus.PENDING, OrderChangeStatus.REQUESTED],
       },
-      list: false,
+      options: { throwIfKeyNotFound: true },
     }).config({ name: "order-change-query" })
+
+    const orderChange: OrderChangeDTO = transform(
+      orderChangeQuery,
+      (data) => data[0]
+    )
 
     const refreshArgs = transform(
       { input, orderChange },

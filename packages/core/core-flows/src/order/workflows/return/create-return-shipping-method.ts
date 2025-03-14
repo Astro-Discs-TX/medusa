@@ -145,7 +145,6 @@ export const createReturnShippingMethodWorkflow = createWorkflow(
         "claim_id",
         "exchange_id",
         "canceled_at",
-        "items.*",
       ],
       variables: { id: input.return_id },
       list: false,
