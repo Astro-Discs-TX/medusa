@@ -3433,7 +3433,7 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
           "isPathHref": true,
           "type": "category",
           "title": "Admin User Guides",
-          "autogenerate_tags": "userGuide+fulfillment",
+          "autogenerate_tags": "fulfillment+userGuide",
           "autogenerate_as_ref": true,
           "sort_sidebar": "alphabetize",
           "description": "Learn how to utilize and manage Fulfillment features in the Medusa Admin dashboard.",
@@ -3452,6 +3452,14 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "type": "ref",
               "title": "Manage Order Fulfillments",
               "path": "https://docs.medusajs.com/user-guide/orders/fulfillments",
+              "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "ref",
+              "title": "Manage Shipping Options",
+              "path": "https://docs.medusajs.com/user-guide/settings/locations-and-shipping/locations",
               "children": []
             },
             {
@@ -11079,7 +11087,7 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
           "isPathHref": true,
           "type": "category",
           "title": "Server Guides",
-          "autogenerate_tags": "server+product",
+          "autogenerate_tags": "product+server",
           "autogenerate_as_ref": true,
           "sort_sidebar": "alphabetize",
           "description": "Learn how to use the Product Module in your customizations on the Medusa application server.",
@@ -11138,6 +11146,14 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "type": "ref",
               "title": "Get Variant Prices",
               "path": "https://docs.medusajs.com/resources/commerce-modules/product/guides/price",
+              "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "ref",
+              "title": "Implement Product Reviews",
+              "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/product-reviews",
               "children": []
             }
           ]
