@@ -202,4 +202,27 @@ export class DraftOrder {
       }
     )
   }
+
+  /**
+   * This method converts a draft order to an order. It sends a request to the
+   * [Convert Draft Order to Order](https://docs.medusajs.com/api/admin#draft-orders_postdraftordersidconvert-to-order) API route.
+   *
+   * @param id - The draft order's ID.
+   * @param query - Configure the fields to retrieve in the order.
+   * @param headers - Headers to pass in the request.
+   */
+  async convertToOrder(
+    id: string,
+    query?: HttpTypes.AdminDraftOrderParams,
+    headers?: ClientHeaders
+  ) {
+    return await this.client.fetch<HttpTypes.AdminOrderResponse>(
+      `/admin/draft-orders/${id}/convert-to-order`,
+      {
+        method: "POST",
+        query,
+        headers,
+      }
+    )
+  }
 }

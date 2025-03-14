@@ -56,7 +56,7 @@ export const adminDraftOrderRoutesMiddlewares: MiddlewareRoute[] = [
   },
   {
     method: ["POST"],
-    matcher: "/admin/draft-orders/:id/convert",
+    matcher: "/admin/draft-orders/:id/convert-to-order",
     middlewares: [
       validateAndTransformQuery(
         AdminGetDraftOrderParams,
