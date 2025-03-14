@@ -69,7 +69,7 @@ export const refreshExchangeShippingWorkflow = createWorkflow(
     const shippingToRefresh = transform(
       { input, orderChange },
       ({ input, orderChange }) => {
-        const shippingToRefresh: Record<"inbound" | "outbound", any> = {}
+        const shippingToRefresh = {} as Record<"inbound" | "outbound", any>
 
         const inboundShippingAction = orderChange.actions.find(
           (action) =>

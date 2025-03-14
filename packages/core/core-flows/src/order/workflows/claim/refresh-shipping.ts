@@ -1,4 +1,3 @@
-import { OrderChangeDTO } from "@medusajs/framework/types"
 import { ChangeActionType, OrderChangeStatus } from "@medusajs/framework/utils"
 import {
   WorkflowData,
@@ -9,7 +8,7 @@ import {
 } from "@medusajs/framework/workflows-sdk"
 
 import { maybeRefreshShippingMethodsWorkflow } from "../../utils/maybe-refresh-shipping-methods"
-import { useRemoteQueryStep } from "../../../common"
+import { useQueryGraphStep } from "../../../common"
 
 /**
  * The data to refresh the shipping methods for an claim.
@@ -43,8 +42,8 @@ export const refreshClaimShippingWorkflow = createWorkflow(
   function (
     input: WorkflowData<RefreshClaimShippingWorkflowInput>
   ): WorkflowResponse<void> {
-    const orderChange: OrderChangeDTO = useRemoteQueryStep({
-      entry_point: "order_change",
+    const orderChangeQuery = useQueryGraphStep({
+      entity: "order_change",
       fields: [
         "id",
         "status",
@@ -53,15 +52,15 @@ export const refreshClaimShippingWorkflow = createWorkflow(
         "return_id",
         "actions.*",
       ],
-      variables: {
-        filters: {
-          order_id: input.order_id,
-          claim_id: input.claim_id,
-          status: [OrderChangeStatus.PENDING, OrderChangeStatus.REQUESTED],
-        },
+      filters: {
+        order_id: input.order_id,
+        claim_id: input.claim_id,
+        status: [OrderChangeStatus.PENDING, OrderChangeStatus.REQUESTED],
       },
-      list: false,
+      options: { throwIfKeyNotFound: true },
     }).config({ name: "order-change-query" })
+
+    const orderChange = transform(orderChangeQuery, (data) => data[0])
 
     const refreshArgs = transform(
       { input, orderChange },

@@ -15,7 +15,7 @@ import {
   updateOrderChangeActionsStep,
   updateOrderShippingMethodsStep,
 } from "../steps"
-import { useRemoteQueryStep } from "../../common"
+import { useQueryGraphStep } from "../../common"
 
 const COMMON_OPTIONS_FIELDS = [
   "id",
@@ -76,21 +76,23 @@ export const maybeRefreshShippingMethodsWorkflow = createWorkflow(
   function (
     input: MaybeRefreshShippingMethodsWorkflowInput
   ): WorkflowResponse<void> {
-    const shippingMethod = useRemoteQueryStep({
-      entry_point: "order_shipping_method",
+    const shippingMethodQuery = useQueryGraphStep({
+      entity: "order_shipping_method",
       fields: ["id", "shipping_option_id"],
-      variables: {
+      filters: {
         id: input.shipping_method_id,
       },
-      list: false,
     }).config({ name: "fetch-shipping-method" })
 
-    const shippingOption = useRemoteQueryStep({
-      entry_point: "shipping_option",
+    const shippingMethod = transform(shippingMethodQuery, (data) => data[0])
+
+    const shippingOptionQuery = useQueryGraphStep({
+      entity: "shipping_option",
       fields: [...COMMON_OPTIONS_FIELDS],
-      variables: { id: shippingMethod.shipping_option_id },
-      list: false,
+      filters: { id: shippingMethod.shipping_option_id },
     }).config({ name: "calculated-option" })
+
+    const shippingOption = transform(shippingOptionQuery, (data) => data[0])
 
     const isCalculatedPriceShippingOption = transform(
       shippingOption,
@@ -102,13 +104,14 @@ export const maybeRefreshShippingMethodsWorkflow = createWorkflow(
       ({ isCalculatedPriceShippingOption, shippingOption }) =>
         isCalculatedPriceShippingOption
     ).then(() => {
-      const order = useRemoteQueryStep({
-        entry_point: "orders",
+      const orderQuery = useQueryGraphStep({
+        entity: "order",
         fields: ["id", "shipping_address", "items.*", "items.variant.*"],
-        variables: { id: input.order_id },
-        list: false,
-        throw_if_key_not_found: true,
+        filters: { id: input.order_id },
+        options: { throwIfKeyNotFound: true },
       }).config({ name: "order-query" })
+
+      const order = transform(orderQuery, (data) => data[0])
 
       const calculateShippingOptionsPricesData = transform(
         {
