@@ -170,9 +170,9 @@ export class TransactionOrchestrator extends EventEmitter {
       TransactionStepState.SKIPPED_FAILURE,
     ]
 
-    const siblings = this.getPreviousStep(flow, previousStep)
-      .next.map((sib) => flow.steps[sib])
-      .filter(Boolean)
+    const siblings = this.getPreviousStep(flow, previousStep).next.map(
+      (sib) => flow.steps[sib]
+    )
 
     return (
       !!previousStep.definition.noWait ||
@@ -188,7 +188,8 @@ export class TransactionOrchestrator extends EventEmitter {
       TransactionStepState.DORMANT,
       TransactionStepState.SKIPPED,
     ]
-    const siblings = step.next.map((sib) => flow.steps[sib]).filter(Boolean)
+
+    const siblings = step.next.map((sib) => flow.steps[sib])
     return (
       siblings.length === 0 ||
       siblings.every((sib) => states.includes(sib.compensate.state))
@@ -1207,6 +1208,10 @@ export class TransactionOrchestrator extends EventEmitter {
 
     while (queue.length > 0) {
       const { obj, level } = queue.shift()
+
+      const next_ = obj.next
+      delete obj.next
+      obj.next = next_
 
       for (const key of Object.keys(obj)) {
         if (typeof obj[key] === "object" && obj[key] !== null) {
