@@ -116,5 +116,32 @@ export type AdminUpdateDraftOrderPromotionsType = z.infer<
   typeof AdminUpdateDraftOrderPromotions
 >
 export const AdminUpdateDraftOrderPromotions = z.object({
-  promo_codes: z.array(z.string()),
+  promo_code: z.string(),
+})
+
+const AddItem = z.object({
+  variant_id: z.string(),
+  quantity: z.number(),
+  unit_price: BigNumberInput.nullish(),
+  compare_at_unit_price: BigNumberInput.nullish(),
+  internal_note: z.string().nullish(),
+  metadata: z.record(z.unknown()).nullish(),
+})
+
+const UpdateItem = z.object({
+  id: z.string(),
+  quantity: z.number().nullish(),
+  unit_price: BigNumberInput.nullish(),
+  compare_at_unit_price: BigNumberInput.nullish(),
+  internal_note: z.string().nullish(),
+  metadata: z.record(z.unknown()).nullish(),
+})
+
+export type AdminBatchDraftOrderLineItemsType = z.infer<
+  typeof AdminBatchDraftOrderLineItems
+>
+export const AdminBatchDraftOrderLineItems = z.object({
+  add: z.array(AddItem).optional(),
+  update: z.array(UpdateItem).optional(),
+  remove: z.array(z.string()).optional(),
 })
