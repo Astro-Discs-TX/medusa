@@ -20,6 +20,7 @@ import {
 import {
   isDefined,
   isErrorLike,
+  isObject,
   MedusaError,
   promiseAll,
   serializeError,
@@ -1209,74 +1210,72 @@ export class TransactionOrchestrator extends EventEmitter {
     while (queue.length > 0) {
       const { obj, level } = queue.shift()
 
-      const next_ = obj.next
-      delete obj.next
-      obj.next = next_
-
-      for (const key of Object.keys(obj)) {
-        if (typeof obj[key] === "object" && obj[key] !== null) {
-          queue.push({ obj: obj[key], level: [...level] })
-        } else if (key === "action") {
-          if (actionNames.has(obj.action)) {
-            throw new Error(
-              `Step ${obj.action} is already defined in workflow.`
-            )
-          }
-
-          actionNames.add(obj.action)
-          level.push(obj.action)
-          const id = level.join(".")
-          const parent = level.slice(0, level.length - 1).join(".")
-
-          if (!existingSteps || parent === TransactionOrchestrator.ROOT_STEP) {
-            states[parent].next?.push(id)
-          }
-
-          const definitionCopy = { ...obj }
-          delete definitionCopy.next
-
-          if (definitionCopy.async) {
-            features.hasAsyncSteps = true
-          }
-
-          if (definitionCopy.timeout) {
-            features.hasStepTimeouts = true
-          }
-
-          if (
-            definitionCopy.retryInterval ||
-            definitionCopy.retryIntervalAwaiting
-          ) {
-            features.hasRetriesTimeout = true
-          }
-
-          if (definitionCopy.nested) {
-            features.hasNestedTransactions = true
-          }
-
-          states[id] = Object.assign(
-            new TransactionStep(),
-            existingSteps?.[id] || {
-              id,
-              uuid: definitionCopy.uuid,
-              depth: level.length - 1,
-              definition: definitionCopy,
-              saveResponse: definitionCopy.saveResponse ?? true,
-              invoke: {
-                state: TransactionStepState.NOT_STARTED,
-                status: TransactionStepStatus.IDLE,
-              },
-              compensate: {
-                state: TransactionStepState.DORMANT,
-                status: TransactionStepStatus.IDLE,
-              },
-              attempts: 0,
-              failures: 0,
-              lastAttempt: null,
-              next: [],
-            }
-          )
+      if (obj.action) {
+        if (actionNames.has(obj.action)) {
+          throw new Error(`Step ${obj.action} is already defined in workflow.`)
         }
+
+        actionNames.add(obj.action)
+        level.push(obj.action)
+        const id = level.join(".")
+        const parent = level.slice(0, level.length - 1).join(".")
+
+        if (!existingSteps || parent === TransactionOrchestrator.ROOT_STEP) {
+          states[parent].next?.push(id)
+        }
+
+        const definitionCopy = { ...obj }
+        delete definitionCopy.next
+
+        if (definitionCopy.async) {
+          features.hasAsyncSteps = true
+        }
+
+        if (definitionCopy.timeout) {
+          features.hasStepTimeouts = true
+        }
+
+        if (
+          definitionCopy.retryInterval ||
+          definitionCopy.retryIntervalAwaiting
+        ) {
+          features.hasRetriesTimeout = true
+        }
+
+        if (definitionCopy.nested) {
+          features.hasNestedTransactions = true
+        }
+
+        states[id] = Object.assign(
+          new TransactionStep(),
+          existingSteps?.[id] || {
+            id,
+            uuid: definitionCopy.uuid,
+            depth: level.length - 1,
+            definition: definitionCopy,
+            saveResponse: definitionCopy.saveResponse ?? true,
+            invoke: {
+              state: TransactionStepState.NOT_STARTED,
+              status: TransactionStepStatus.IDLE,
+            },
+            compensate: {
+              state: TransactionStepState.DORMANT,
+              status: TransactionStepStatus.IDLE,
+            },
+            attempts: 0,
+            failures: 0,
+            lastAttempt: null,
+            next: [],
+          }
+        )
+      }
+
+      if (Array.isArray(obj.next)) {
+        for (const next of obj.next) {
+          queue.push({ obj: next, level: [...level] })
+        }
+      } else if (isObject(obj.next)) {
+        queue.push({ obj: obj.next, level: [...level] })
       }
     }
 
