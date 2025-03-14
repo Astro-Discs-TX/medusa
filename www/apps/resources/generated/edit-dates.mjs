@@ -6044,10 +6044,11 @@ export const generatedEditDates = {
   "app/how-to-tutorials/page.mdx": "2025-03-10T09:33:49.208Z",
   "app/tools/page.mdx": "2025-03-10T12:38:56.520Z",
   "app/references-overview/page.mdx": "2025-03-10T12:55:49.803Z",
-  "app/architectural-modules/locking/page.mdx": "2025-03-12T11:40:25.695Z",
-  "app/architectural-modules/locking/postgres/page.mdx": "2025-03-12T10:07:48.820Z",
-  "app/architectural-modules/locking/redis/page.mdx": "2025-03-12T10:07:43.867Z",
+  "app/architectural-modules/locking/page.mdx": "2025-03-14T08:32:57.875Z",
+  "app/architectural-modules/locking/postgres/page.mdx": "2025-03-14T08:32:57.875Z",
+  "app/architectural-modules/locking/redis/page.mdx": "2025-03-14T08:32:57.876Z",
   "references/locking/interfaces/locking.ILockingModule/page.mdx": "2025-03-12T12:28:30.425Z",
   "references/locking/interfaces/locking.ILockingProvider/page.mdx": "2025-03-12T12:28:30.422Z",
-  "references/modules/locking/page.mdx": "2025-03-12T12:28:30.419Z"
+  "references/modules/locking/page.mdx": "2025-03-12T12:28:30.419Z",
+  "app/how-to-tutorials/tutorials/product-reviews/page.mdx": "2025-03-14T11:51:16.189Z"
 }
