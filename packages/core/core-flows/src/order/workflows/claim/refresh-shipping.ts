@@ -65,7 +65,7 @@ export const refreshClaimShippingWorkflow = createWorkflow(
     const refreshArgs = transform(
       { input, orderChange },
       ({ input, orderChange }) => {
-        const result: Record<string, any> = []
+        const shippingToRefresh = {} as Record<"inbound" | "outbound", any>
 
         const inboundShippingAction = orderChange.actions.find(
           (action) =>
@@ -86,7 +86,7 @@ export const refreshClaimShippingWorkflow = createWorkflow(
               quantity: a.details?.quantity as number,
             }))
 
-          result.push({
+          shippingToRefresh.inbound = {
             shipping_method_id: inboundShippingAction.reference_id,
             order_id: orderChange.order_id,
             action_id: inboundShippingAction.id,
@@ -94,9 +94,7 @@ export const refreshClaimShippingWorkflow = createWorkflow(
               return_id: inboundShippingAction.return_id,
               return_items: items,
             },
-          })
-        } else {
-          result.push(null)
+          }
         }
 
         if (outboundShippingAction) {
@@ -107,7 +105,7 @@ export const refreshClaimShippingWorkflow = createWorkflow(
               quantity: a.details?.quantity as number,
             }))
 
-          result.push({
+          shippingToRefresh.outbound = {
             shipping_method_id: outboundShippingAction.reference_id,
             order_id: orderChange.order_id,
             action_id: outboundShippingAction.id,
@@ -115,31 +113,26 @@ export const refreshClaimShippingWorkflow = createWorkflow(
               claim_id: outboundShippingAction.claim_id,
               claim_items: items,
             },
-          })
-        } else {
-          result.push(null)
+          }
         }
 
-        return result
+        return shippingToRefresh
       }
     )
 
-    // Refresh inbound shipping method
-    when({ refreshArgs }, ({ refreshArgs }) => refreshArgs[0] !== null).then(
-      () =>
-        maybeRefreshShippingMethodsWorkflow
-          .runAsStep({
-            input: refreshArgs[0],
-          })
-          .config({ name: "refresh-inbound-shipping-method" })
+    when({ refreshArgs }, ({ refreshArgs }) => !!refreshArgs.inbound).then(() =>
+      maybeRefreshShippingMethodsWorkflow
+        .runAsStep({
+          input: refreshArgs.inbound,
+        })
+        .config({ name: "refresh-inbound-shipping-method" })
     )
 
-    // Refresh outbound shipping method
-    when({ refreshArgs }, ({ refreshArgs }) => refreshArgs[1] !== null).then(
+    when({ refreshArgs }, ({ refreshArgs }) => !!refreshArgs.outbound).then(
       () =>
         maybeRefreshShippingMethodsWorkflow
           .runAsStep({
-            input: refreshArgs[1],
+            input: refreshArgs.outbound,
           })
           .config({ name: "refresh-outbound-shipping-method" })
     )
