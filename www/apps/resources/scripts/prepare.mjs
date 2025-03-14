@@ -7,9 +7,9 @@ async function main() {
   await generateSplitSidebars({
     sidebars: sidebar,
   })
-  // await generateSlugChanges()
-  // await generateFilesMap()
-  // await generateEditedDates()
+  await generateSlugChanges()
+  await generateFilesMap()
+  await generateEditedDates()
 }
 
 void main()
