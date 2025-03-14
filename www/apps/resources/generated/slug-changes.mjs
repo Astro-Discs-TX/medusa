@@ -405,6 +405,26 @@ export const slugChanges = [
     "filePath": "/www/apps/resources/references/cart/ICartModuleService/methods/cart.ICartModuleService.updateShippingMethods/page.mdx"
   },
   {
+    "origSlug": "/references/cart/ICartModuleService/methods/cart.ICartModuleService.upsertLineItemAdjustments",
+    "newSlug": "/references/cart/upsertLineItemAdjustments",
+    "filePath": "/www/apps/resources/references/cart/ICartModuleService/methods/cart.ICartModuleService.upsertLineItemAdjustments/page.mdx"
+  },
+  {
+    "origSlug": "/references/cart/ICartModuleService/methods/cart.ICartModuleService.upsertLineItemTaxLines",
+    "newSlug": "/references/cart/upsertLineItemTaxLines",
+    "filePath": "/www/apps/resources/references/cart/ICartModuleService/methods/cart.ICartModuleService.upsertLineItemTaxLines/page.mdx"
+  },
+  {
+    "origSlug": "/references/cart/ICartModuleService/methods/cart.ICartModuleService.upsertShippingMethodAdjustments",
+    "newSlug": "/references/cart/upsertShippingMethodAdjustments",
+    "filePath": "/www/apps/resources/references/cart/ICartModuleService/methods/cart.ICartModuleService.upsertShippingMethodAdjustments/page.mdx"
+  },
+  {
+    "origSlug": "/references/cart/ICartModuleService/methods/cart.ICartModuleService.upsertShippingMethodTaxLines",
+    "newSlug": "/references/cart/upsertShippingMethodTaxLines",
+    "filePath": "/www/apps/resources/references/cart/ICartModuleService/methods/cart.ICartModuleService.upsertShippingMethodTaxLines/page.mdx"
+  },
+  {
     "origSlug": "/references/cart/interfaces/cart.ICartModuleService",
     "newSlug": "/references/cart",
     "filePath": "/www/apps/resources/references/cart/interfaces/cart.ICartModuleService/page.mdx"
@@ -4683,6 +4703,16 @@ export const slugChanges = [
     "origSlug": "/references/js_sdk/store/classes/js_sdk.store.Store",
     "newSlug": "/references/js-sdk/store",
     "filePath": "/www/apps/resources/references/js_sdk/store/classes/js_sdk.store.Store/page.mdx"
+  },
+  {
+    "origSlug": "/references/locking/interfaces/locking.ILockingModule",
+    "newSlug": "/references/locking-service",
+    "filePath": "/www/apps/resources/references/locking/interfaces/locking.ILockingModule/page.mdx"
+  },
+  {
+    "origSlug": "/references/locking/interfaces/locking.ILockingProvider",
+    "newSlug": "/references/locking-module-provider",
+    "filePath": "/www/apps/resources/references/locking/interfaces/locking.ILockingProvider/page.mdx"
   },
   {
     "origSlug": "/references/medusa_config/interfaces/medusa_config.ConfigModule",

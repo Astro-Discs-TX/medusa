@@ -27,6 +27,11 @@ const customOptions: Record<string, Partial<TypeDocOptions>> = {
     name: "auth-provider",
     parentIgnore: true,
   }),
+  locking: getOptions({
+    entryPointPath: "packages/core/types/src/locking/index.ts",
+    tsConfigName: "types.json",
+    name: "locking",
+  }),
   dml: getOptions({
     entryPointPath: [
       "packages/core/utils/src/dml/entity-builder.ts",
@@ -71,12 +76,6 @@ const customOptions: Record<string, Partial<TypeDocOptions>> = {
         "packages/core/core-flows/src/common/workflows/**.ts"
       ),
     ],
-  }),
-  "medusa-config": getOptions({
-    entryPointPath: "packages/core/framework/src/config/types.ts",
-    tsConfigName: "framework.json",
-    name: "medusa-config",
-    exclude: [...(baseOptions.exclude || []), "**/dist/**"],
   }),
   medusa: getOptions({
     entryPointPath: "packages/medusa/src/index.ts",
