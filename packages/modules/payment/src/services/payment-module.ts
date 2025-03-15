@@ -97,8 +97,7 @@ export default class PaymentModuleService
     RefundReason: { dto: RefundReasonDTO }
     AccountHolder: { dto: AccountHolderDTO }
   }>(generateMethodForModels)
-  implements IPaymentModuleService
-{
+  implements IPaymentModuleService {
   protected baseRepository_: DAL.RepositoryService
 
   protected paymentService_: ModulesSdkTypes.IMedusaInternalService<
@@ -312,9 +311,9 @@ export default class PaymentModuleService
   ): Promise<PaymentCollectionDTO | PaymentCollectionDTO[]> {
     const input = Array.isArray(paymentCollectionId)
       ? paymentCollectionId.map((id) => ({
-          id,
-          completed_at: new Date(),
-        }))
+        id,
+        completed_at: new Date(),
+      }))
       : [{ id: paymentCollectionId, completed_at: new Date() }]
 
     // TODO: what checks should be done here? e.g. captured_amount === amount?
@@ -368,7 +367,21 @@ export default class PaymentModuleService
           sharedContext
         )
       )[0]
+
+      // If provider session is indeterminate, soft delete to maintain traceability for webhook reconciliation 
+      if (providerPaymentSession.indeterminate === true) {
+        await this.softDeletePaymentSessions(paymentSession!.id)
+        throw new MedusaError(MedusaError.Types.UNEXPECTED_STATE,
+          "Failed to create payment session on payment provider server"
+        )
+      }
     } catch (error) {
+      // If this is our own error from the indeterminate check, just rethrow it
+      if (error instanceof MedusaError &&
+        error.type === MedusaError.Types.UNEXPECTED_STATE) {
+        throw error
+      }
+
       if (providerPaymentSession) {
         await this.paymentProviderService_.deleteSession(input.provider_id, {
           data: input.data,
@@ -508,7 +521,7 @@ export default class PaymentModuleService
         id: session.id,
         status,
         data,
-    }, sharedContext);
+      }, sharedContext);
       throw new MedusaError(
         MedusaError.Types.NOT_ALLOWED,
         `Session: ${session.id} was not authorized with the provider.`
@@ -565,8 +578,8 @@ export default class PaymentModuleService
         status,
         ...(session.authorized_at === null
           ? {
-              authorized_at: new Date(),
-            }
+            authorized_at: new Date(),
+          }
           : {}),
       },
       sharedContext

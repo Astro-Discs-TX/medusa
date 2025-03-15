@@ -237,6 +237,10 @@ export interface InitiatePaymentOutput extends PaymentProviderOutput {
    * The ID of the payment session in the payment provider.
    */
   id: string
+  /**
+   * A flag to represent an indeterminate state after attempting to initiate payment.
+   */
+  indeterminate?: boolean;
 }
 
 /**

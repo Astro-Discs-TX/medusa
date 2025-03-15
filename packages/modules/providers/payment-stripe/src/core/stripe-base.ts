@@ -267,9 +267,13 @@ abstract class StripeBase extends AbstractPaymentProvider<StripeOptions> {
         idempotencyKey: context?.idempotency_key,
       })
     )
-    const isPaymentIntent = 'id' in sessionData;
+
+    // If "indeterminate_due_to" exists set the "indeterminate" flag to true, 
+    // Otherwise, return the payment intent
+    const isIndeterminate = 'indeterminate_due_to' in sessionData
     return {
-      id: isPaymentIntent ? sessionData.id : (data?.session_id as string),
+      indeterminate: isIndeterminate,
+      id: isIndeterminate ? (data?.session_id as string) : sessionData.id,
       data: sessionData as unknown as Record<string, unknown>,
     }
   }
