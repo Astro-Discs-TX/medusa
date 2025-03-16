@@ -49,6 +49,7 @@ import {
   MedusaContext,
   MedusaError,
   ModulesSdkUtils,
+  PaymentActions,
   PaymentCollectionStatus,
   PaymentSessionStatus,
   promiseAll,
@@ -1192,5 +1193,68 @@ export default class PaymentModuleService
       providerId,
       eventData.payload
     )
+  }
+
+  @InjectManager()
+  async validatePaymentSessionForWebhook(
+    processedWebhookData: WebhookActionResult,
+    rawWebhookData: Record<string, unknown>,
+    @MedusaContext() context?: Context
+  ): Promise<void> {
+
+    // If no session ID is available, nothing to validate
+    if (!processedWebhookData.data) return
+
+    // Retrieve payment_session even if it is soft-deleted
+    const session = await this.paymentSessionService_.retrieve(
+      processedWebhookData.data.session_id,
+      {
+        select: ['provider_id', 'deleted_at',], 
+        withDeleted: true 
+      }
+    )
+
+    // If session exists and is not deleted, it's valid - return immediately, 
+    if (!session.deleted_at) return
+    
+    // Session is deleted - handle the event based on payment action type
+    // Cancel/refund payment on provider server to avoid "ghost payments",
+    // then throw error to stop further processing of this webhook event
+    if (processedWebhookData.action === PaymentActions.AUTHORIZED) {
+      this.paymentProviderService_.cancelPayment(
+        session.provider_id,
+        {
+          data: rawWebhookData,
+          context: {
+            idempotency_key: processedWebhookData.data.session_id,
+            ...context
+          }
+        }
+      )
+      throw new MedusaError(MedusaError.Types.NOT_FOUND,
+        `Payment canceled: received payment for session ${processedWebhookData.data.session_id} which has been deleted.`)
+    
+    }
+
+    if (processedWebhookData.action === PaymentActions.SUCCESSFUL) {
+      this.paymentProviderService_.refundPayment(
+        session.provider_id,
+        {
+          data: rawWebhookData,
+          amount: processedWebhookData.data.amount,
+          context: {
+            idempotency_key: processedWebhookData.data.session_id,
+            ...context
+          }
+        }
+      )
+      throw new MedusaError(MedusaError.Types.NOT_FOUND,
+        `Payment refunded: received payment for session ${processedWebhookData.data.session_id} which has been deleted.`)
+    
+    }
+
+    // For other event types, simply prevent further processing
+    throw new MedusaError(MedusaError.Types.NOT_FOUND,
+      `Event ignored: received webhook event for session ${processedWebhookData.data.session_id} which has been deleted.`)
   }
 }

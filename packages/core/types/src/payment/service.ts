@@ -1369,7 +1369,7 @@ export interface IPaymentModuleService extends IModuleService {
    * Learn more about handling webhook events in [this guide](https://docs.medusajs.com/resources/commerce-modules/payment/webhook-events)
    *
    * @param {ProviderWebhookPayload} data - The webhook event's details.
-   * @returns {Promise<void>} Resolves when the webhook event is handled successfully.
+   * @returns {Promise<WebhookActionResult>} Returns normalized webhook data containing the action type and associated session details.
    *
    * @example
    * In the following example, `req` is an instance of `MedusaRequest`:
@@ -1388,6 +1388,45 @@ export interface IPaymentModuleService extends IModuleService {
   getWebhookActionAndData(
     data: ProviderWebhookPayload
   ): Promise<WebhookActionResult>
+  
+  /**
+   * This method validates a payment session for a webhook event and handles special cases.
+   * For deleted payment sessions, this will automatically cancel or refund payments
+   * based on the webhook action type.
+   *
+   * Learn more about handling webhook events in [this guide](https://docs.medusajs.com/resources/commerce-modules/payment/webhook-events)
+   *
+   * @param {WebhookActionResult} processedWebhookData - The normalized webhook data and action.
+   * @param {Record<string, unknown>} rawWebhookData - The raw webhook payload data.
+   * @param {Context} context - A context used to share resources, such as transaction manager, between the application and the module.
+   * @returns {Promise<void>} Resolves if the session is valid, throws error otherwise
+   * @throws {MedusaError} Throws NOT_FOUND error if payment session is deleted or doesn't exist
+   *
+   * @example
+   * In the following example, `req` is an instance of `MedusaRequest`:
+   *
+   * ```ts
+   * // First get the normalized webhook data
+   * const webhookData = await paymentModuleService.getWebhookActionAndData(webhookPayload)
+   * 
+   * try {
+   *   // Validate the payment session
+   *   await paymentModuleService.validatePaymentSessionForWebhook(
+   *     webhookData,
+   *     req.body
+   *   )
+   *   // Continue with webhook processing if validation passes
+   * } catch (error) {
+   *   // Session was deleted, payment was automatically canceled/refunded
+   *   logger.info(`Webhook handled for non existing session: ${error.message}`)
+   * }
+   * ```
+   */
+  validatePaymentSessionForWebhook(
+    processedWebhookData: WebhookActionResult,
+    rawWebhookData: Record<string, unknown>,
+    context?: Context
+  ): Promise<void>
 }
 
 /**

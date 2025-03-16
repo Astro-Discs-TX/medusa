@@ -34,6 +34,7 @@ export default async function paymentWebhookhandler({
   }
 
   const processedEvent = await paymentService.getWebhookActionAndData(input)
+  await paymentService.validatePaymentSessionForWebhook(processedEvent, input.payload.data)
 
   if (
     processedEvent?.action === PaymentActions.NOT_SUPPORTED ||
