@@ -169,14 +169,16 @@ export const completeCartWorkflow = createWorkflow(
 
       const cartToOrder = transform({ cart, payment }, ({ cart, payment }) => {
         const transactions =
-          payment?.captures?.map((capture) => {
-            return {
-              amount: capture.raw_amount ?? capture.amount,
-              currency_code: payment.currency_code,
-              reference: "capture",
-              reference_id: capture.id,
-            }
-          }) ?? []
+          (payment &&
+            payment?.captures?.map((capture) => {
+              return {
+                amount: capture.raw_amount ?? capture.amount,
+                currency_code: payment.currency_code,
+                reference: "capture",
+                reference_id: capture.id,
+              }
+            })) ??
+          []
 
         const allItems = (cart.items ?? []).map((item) => {
           const input: PrepareLineItemDataInput = {
@@ -282,19 +284,28 @@ export const completeCartWorkflow = createWorkflow(
         }
       })
 
-      parallelize(
-        createRemoteLinkStep([
+      const linksToCreate = transform({ cart }, ({ cart }) => {
+        const links: Record<string, any>[] = [
           {
             [Modules.ORDER]: { order_id: createdOrder.id },
             [Modules.CART]: { cart_id: cart.id },
           },
-          {
+        ]
+
+        if (cart.payment_collection) {
+          links.push({
             [Modules.ORDER]: { order_id: createdOrder.id },
             [Modules.PAYMENT]: {
               payment_collection_id: cart.payment_collection.id,
             },
-          },
-        ]),
+          })
+        }
+
+        return links
+      })
+
+      parallelize(
+        createRemoteLinkStep(linksToCreate),
         updateCartsStep([updateCompletedAt]),
         reserveInventoryStep(formatedInventoryItems),
         emitEventStep({

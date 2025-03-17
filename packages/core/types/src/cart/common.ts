@@ -1033,6 +1033,16 @@ export interface CartDTO {
    * The raw original shipping tax total of the cart.
    */
   raw_original_shipping_tax_total: BigNumberRawValue
+
+  /**
+   * The raw credit lines total of the cart.
+   */
+  raw_credit_lines_total: BigNumberRawValue
+
+  /**
+   * The credit lines total of the cart.
+   */
+  credit_lines_total: BigNumberValue
 }
 
 /**
