@@ -678,7 +678,7 @@ describe("Total calculation", function () {
 
   it("should calculate order with items + taxes + adjustments + credit lines", function () {
     const cart = {
-      credit_line: [
+      credit_lines: [
         {
           amount: 40,
           reference: "order",
@@ -714,7 +714,7 @@ describe("Total calculation", function () {
     const serialized = JSON.parse(JSON.stringify(decorateCartTotals(cart)))
 
     expect(serialized).toEqual({
-      credit_line: [
+      credit_lines: [
         {
           amount: 40,
           reference: "order",
