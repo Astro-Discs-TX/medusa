@@ -23,6 +23,7 @@ const AdminGetDraftOrdersParamsFields = z.object({
   q: z.string().optional(),
   region_id: z.union([z.string(), z.array(z.string())]).optional(),
   sales_channel_id: z.array(z.string()).optional(),
+  customer_id: z.union([z.string(), z.array(z.string())]).optional(),
 })
 
 export type AdminGetDraftOrdersParamsType = z.infer<
