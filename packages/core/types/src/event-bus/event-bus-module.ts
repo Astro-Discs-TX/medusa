@@ -8,7 +8,7 @@ export interface IEventBusModuleService {
    * @param options - Additional options for the event.
    * 
    * @example
-   * await eventBus.emit({ 
+   * await eventModuleService.emit({ 
    *   name: "user.created", 
    *   data: { 
    *     user_id: "user_123"
@@ -29,7 +29,7 @@ export interface IEventBusModuleService {
    * @returns The instance of the Event Module
    * 
    * @example
-   * eventBus.subscribe("user.created", async (data) => {
+   * eventModuleService.subscribe("user.created", async (data) => {
    *   console.log("User created", data)
    * })
    */
@@ -48,7 +48,7 @@ export interface IEventBusModuleService {
    * @returns The instance of the Event Module
    * 
    * @example
-   * eventBus.unsubscribe("user.created", async (data) => {
+   * eventModuleService.unsubscribe("user.created", async (data) => {
    *   console.log("User created", data)
    * })
    */
@@ -65,7 +65,7 @@ export interface IEventBusModuleService {
    * @param eventGroupId - The ID of the event group.
    * 
    * @example
-   * await eventBus.releaseGroupedEvents("group_123")
+   * await eventModuleService.releaseGroupedEvents("group_123")
    */
   releaseGroupedEvents(eventGroupId: string): Promise<void>
   /**
@@ -75,7 +75,7 @@ export interface IEventBusModuleService {
    * @param eventGroupId - The ID of the event group.
    * 
    * @example
-   * await eventBus.clearGroupedEvents("group_123")
+   * await eventModuleService.clearGroupedEvents("group_123")
    */
   clearGroupedEvents(eventGroupId: string): Promise<void>
 }

@@ -4,9 +4,6 @@ import { Context } from "../shared-context"
 import { FilterableNotificationProps, NotificationDTO } from "./common"
 import { CreateNotificationDTO } from "./mutations"
 
-/**
- * The main service interface for the Notification Module.
- */
 export interface INotificationModuleService extends IModuleService {
   /**
    * This method is used to send multiple notifications and store them in the database.

@@ -4,9 +4,6 @@ import { FindConfig } from "../common"
 import { Context } from "../shared-context"
 import { CreateFileDTO } from "./mutations"
 
-/**
- * The main service interface for the File Module.
- */
 export interface IFileModuleService extends IModuleService {
   /**
    * This method uploads files to the designated file storage system.

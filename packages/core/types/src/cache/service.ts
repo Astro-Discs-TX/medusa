@@ -6,7 +6,7 @@ export interface ICacheService {
    * @returns The item that was stored in the cache. If the item was not found, null is returned.
    * 
    * @example
-   * const data = await cache.get("my-key")
+   * const data = await cacheModuleService.get("my-key")
    */
   get<T>(key: string): Promise<T | null>
   /**
@@ -17,7 +17,7 @@ export interface ICacheService {
    * @param ttl - The time-to-live (TTL) value in seconds. If not provided, the default TTL value is used. The default value is based on the used Cache Module.
    * 
    * @example
-   * await cache.set("my-key", { product_id: "prod_123" }, 60)
+   * await cacheModuleService.set("my-key", { product_id: "prod_123" }, 60)
    */
   set(key: string, data: unknown, ttl?: number): Promise<void>
   /**
@@ -26,7 +26,7 @@ export interface ICacheService {
    * @param key - The key of the item to remove.
    * 
    * @example
-   * await cache.invalidate("my-key")
+   * await cacheModuleService.invalidate("my-key")
    */
   invalidate(key: string): Promise<void>
 }
