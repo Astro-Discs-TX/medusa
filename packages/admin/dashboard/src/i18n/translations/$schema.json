@@ -1349,14 +1349,6 @@
     "addresses": {
       "type": "object",
       "properties": {
-        "addressTypes": {
-          "shipping": {
-            "type": "string"
-          },
-          "billing": {
-            "type": "string"
-          }
-        },
         "title": {
           "type": "string"
         },
