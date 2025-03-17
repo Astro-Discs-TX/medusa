@@ -102,7 +102,11 @@ export const CreateCustomerAddressForm = () => {
                           {t("customers.addresses.fields.addressName")}
                         </Form.Label>
                         <Form.Control>
-                          <Input size="small" {...field} />
+                          <Input
+                            size="small"
+                            autoComplete="address_name"
+                            {...field}
+                          />
                         </Form.Control>
                         <Form.ErrorMessage />
                       </Form.Item>
@@ -119,7 +123,11 @@ export const CreateCustomerAddressForm = () => {
                       <Form.Item>
                         <Form.Label>{t("fields.address")}</Form.Label>
                         <Form.Control>
-                          <Input size="small" {...field} />
+                          <Input
+                            size="small"
+                            autoComplete="address_1"
+                            {...field}
+                          />
                         </Form.Control>
                         <Form.ErrorMessage />
                       </Form.Item>
@@ -134,7 +142,11 @@ export const CreateCustomerAddressForm = () => {
                       <Form.Item>
                         <Form.Label optional>{t("fields.address2")}</Form.Label>
                         <Form.Control>
-                          <Input size="small" {...field} />
+                          <Input
+                            size="small"
+                            autoComplete="address_2"
+                            {...field}
+                          />
                         </Form.Control>
                         <Form.ErrorMessage />
                       </Form.Item>
@@ -151,7 +163,11 @@ export const CreateCustomerAddressForm = () => {
                           {t("fields.postalCode")}
                         </Form.Label>
                         <Form.Control>
-                          <Input size="small" {...field} />
+                          <Input
+                            size="small"
+                            autoComplete="postal_code"
+                            {...field}
+                          />
                         </Form.Control>
                         <Form.ErrorMessage />
                       </Form.Item>
@@ -166,7 +182,7 @@ export const CreateCustomerAddressForm = () => {
                       <Form.Item>
                         <Form.Label optional>{t("fields.city")}</Form.Label>
                         <Form.Control>
-                          <Input size="small" {...field} />
+                          <Input size="small" autoComplete="city" {...field} />
                         </Form.Control>
                         <Form.ErrorMessage />
                       </Form.Item>
@@ -181,7 +197,10 @@ export const CreateCustomerAddressForm = () => {
                       <Form.Item>
                         <Form.Label>{t("fields.country")}</Form.Label>
                         <Form.Control>
-                          <CountrySelect {...field} />
+                          <CountrySelect
+                            autoComplete="country_code"
+                            {...field}
+                          />
                         </Form.Control>
                         <Form.ErrorMessage />
                       </Form.Item>
@@ -196,7 +215,11 @@ export const CreateCustomerAddressForm = () => {
                       <Form.Item>
                         <Form.Label optional>{t("fields.state")}</Form.Label>
                         <Form.Control>
-                          <Input size="small" {...field} />
+                          <Input
+                            size="small"
+                            autoComplete="province"
+                            {...field}
+                          />
                         </Form.Control>
                         <Form.ErrorMessage />
                       </Form.Item>
@@ -211,7 +234,11 @@ export const CreateCustomerAddressForm = () => {
                       <Form.Item>
                         <Form.Label optional>{t("fields.company")}</Form.Label>
                         <Form.Control>
-                          <Input size="small" {...field} />
+                          <Input
+                            size="small"
+                            autoComplete="company"
+                            {...field}
+                          />
                         </Form.Control>
                         <Form.ErrorMessage />
                       </Form.Item>
@@ -226,7 +253,7 @@ export const CreateCustomerAddressForm = () => {
                       <Form.Item>
                         <Form.Label optional>{t("fields.phone")}</Form.Label>
                         <Form.Control>
-                          <Input size="small" {...field} />
+                          <Input size="small" autoComplete="phone" {...field} />
                         </Form.Control>
                         <Form.ErrorMessage />
                       </Form.Item>

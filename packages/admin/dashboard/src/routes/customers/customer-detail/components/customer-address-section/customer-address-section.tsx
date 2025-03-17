@@ -1,10 +1,11 @@
 import { HttpTypes } from "@medusajs/types"
-import { Container, Heading, toast, usePrompt } from "@medusajs/ui"
+import { clx, Container, Heading, toast, usePrompt } from "@medusajs/ui"
 import { useTranslation } from "react-i18next"
 
 import { Trash } from "@medusajs/icons"
 import { Link, useNavigate } from "react-router-dom"
 import { ActionMenu } from "../../../../../components/common/action-menu"
+import { NoRecords } from "../../../../../components/common/empty-table-content"
 import { Listicle } from "../../../../../components/common/listicle"
 import { useDeleteCustomerAddress } from "../../../../../hooks/api/customers"
 
@@ -20,7 +21,7 @@ export const CustomerAddressSection = ({
   const navigate = useNavigate()
   const { mutateAsync: deleteAddress } = useDeleteCustomerAddress(customer.id)
 
-  const addresses = customer.addresses
+  const addresses = customer.addresses ?? []
 
   const handleDelete = async (address: HttpTypes.AdminCustomerAddress) => {
     const confirm = await prompt({
@@ -61,6 +62,17 @@ export const CustomerAddressSection = ({
           Add
         </Link>
       </div>
+
+      {addresses.length === 0 && (
+        <NoRecords
+          className={clx({
+            "flex h-full flex-col overflow-hidden border-t p-6": true,
+          })}
+          icon={null}
+          title={t("general.noRecordsTitle")}
+          message={t("general.noRecordsMessage")}
+        />
+      )}
 
       {addresses.map((address) => {
         return (
