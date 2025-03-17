@@ -27,7 +27,7 @@ import "../__fixtures__"
 import { createScheduled } from "../__fixtures__/workflow_scheduled"
 import { TestDatabase } from "../utils"
 
-jest.setTimeout(999900000)
+jest.setTimeout(300000)
 
 const failTrap = (done) => {
   setTimeoutSync(() => {
