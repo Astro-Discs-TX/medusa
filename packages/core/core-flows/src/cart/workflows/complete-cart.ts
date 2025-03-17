@@ -1,4 +1,5 @@
 import {
+  AdditionalData,
   CartCreditLineDTO,
   CartWorkflowDTO,
   UsageComputedActions,
@@ -49,7 +50,7 @@ export type CompleteCartWorkflowInput = {
    * The ID of the cart to complete.
    */
   id: string
-}
+} & AdditionalData
 
 export type CompleteCartWorkflowOutput = {
   /**
@@ -337,6 +338,7 @@ export const completeCartWorkflow = createWorkflow(
       createHook("orderCreated", {
         order_id: createdOrder.id,
         cart_id: cart.id,
+        additional_data: input.additional_data
       })
 
       return createdOrder
