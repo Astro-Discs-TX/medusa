@@ -83,7 +83,11 @@ export class WorkflowsModuleService<
     @MedusaContext() context: Context = {}
   ) {
     options ??= {}
-    options.context ??= context
+    options.context ??= {
+      eventGroupId: context.eventGroupId,
+      transactionId: context.transactionId,
+      requestId: context.requestId,
+    }
 
     const ret = await this.workflowOrchestratorService_.run<
       TWorkflow extends ReturnWorkflow<any, any, any>
