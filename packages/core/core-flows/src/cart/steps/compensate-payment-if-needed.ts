@@ -47,7 +47,7 @@ export const compensatePaymentIfNeededStep = createStep(
     const paymentSession = await paymentModule.retrievePaymentSession(
       paymentSessionId,
       {
-        relations: ["payment", "payment.captures"],
+        relations: ["payment"],
       }
     )
 
