@@ -351,10 +351,6 @@
   },
   "addresses": {
     "title": "Addresses",
-    "addressTypes": {
-      "shipping": "Shipping",
-      "billing": "Billing"
-    },
     "shippingAddress": {
       "header": "Shipping Address",
       "editHeader": "Edit Shipping Address",

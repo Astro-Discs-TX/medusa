@@ -39,15 +39,11 @@ export const validateCartPaymentsStep = createStep(
   validateCartPaymentsStepId,
   async (data: ValidateCartPaymentsStepInput) => {
     const {
-      cart: {
-        payment_collection: paymentCollection,
-        total,
-        credit_lines_total,
-      },
+      cart: { payment_collection: paymentCollection, total, credit_line_total },
     } = data
 
     const canSkipPayment =
-      MathBN.convert(credit_lines_total).gte(0) && MathBN.convert(total).lte(0)
+      MathBN.convert(credit_line_total).gte(0) && MathBN.convert(total).lte(0)
 
     if (canSkipPayment) {
       return new StepResponse([])

@@ -369,9 +369,9 @@ export default class OrderModuleService
       "original_shipping_tax_total",
       "original_shipping_subtotal",
       "original_shipping_total",
-      "credit_lines_total",
-      "credit_lines_tax_total",
-      "credit_lines_subtotal",
+      "credit_line_total",
+      "credit_line_tax_total",
+      "credit_line_subtotal",
     ]
 
     const includeTotals = (config?.select ?? []).some((field) =>
@@ -3104,7 +3104,7 @@ export default class OrderModuleService
     if (!ordersIds.length) {
       return {
         items: [],
-        shippingMethods: [],
+        shipping_methods: [],
         credit_lines: [],
       }
     }
@@ -3171,7 +3171,7 @@ export default class OrderModuleService
 
     return {
       items: orderItems ?? [],
-      shippingMethods: orderShippingMethods ?? [],
+      shipping_methods: orderShippingMethods ?? [],
       credit_lines: createdOrderCreditLines ?? ([] as any),
     }
   }

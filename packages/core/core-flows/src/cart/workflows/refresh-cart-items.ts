@@ -229,17 +229,12 @@ export const refreshCartItemsWorkflow = createWorkflow(
       },
     })
 
-    const beforeRefreshingPaymentCollection = createHook(
-      "beforeRefreshingPaymentCollection",
-      { input }
-    )
+    createHook("beforeRefreshingPaymentCollection", { input })
 
     refreshPaymentCollectionForCartWorkflow.runAsStep({
       input: { cart_id: input.cart_id },
     })
 
-    return new WorkflowResponse(refetchedCart, {
-      hooks: [beforeRefreshingPaymentCollection],
-    })
+    return new WorkflowResponse(refetchedCart)
   }
 )

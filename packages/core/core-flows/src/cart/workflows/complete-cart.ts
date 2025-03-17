@@ -4,6 +4,7 @@ import {
   UsageComputedActions,
 } from "@medusajs/framework/types"
 import {
+  isDefined,
   Modules,
   OrderStatus,
   OrderWorkflowEvents,
@@ -138,7 +139,7 @@ export const completeCartWorkflow = createWorkflow(
 
       const paymentSessions = validateCartPaymentsStep({ cart })
 
-      beforePaymentAuthorization = createHook("beforePaymentAuthorization", {
+      createHook("beforePaymentAuthorization", {
         input,
       })
 
@@ -284,25 +285,28 @@ export const completeCartWorkflow = createWorkflow(
         }
       })
 
-      const linksToCreate = transform({ cart }, ({ cart }) => {
-        const links: Record<string, any>[] = [
-          {
-            [Modules.ORDER]: { order_id: createdOrder.id },
-            [Modules.CART]: { cart_id: cart.id },
-          },
-        ]
-
-        if (cart.payment_collection) {
-          links.push({
-            [Modules.ORDER]: { order_id: createdOrder.id },
-            [Modules.PAYMENT]: {
-              payment_collection_id: cart.payment_collection.id,
+      const linksToCreate = transform(
+        { cart, createdOrder },
+        ({ cart, createdOrder }) => {
+          const links: Record<string, any>[] = [
+            {
+              [Modules.ORDER]: { order_id: createdOrder.id },
+              [Modules.CART]: { cart_id: cart.id },
             },
-          })
-        }
+          ]
 
-        return links
-      })
+          if (isDefined(cart.payment_collection?.id)) {
+            links.push({
+              [Modules.ORDER]: { order_id: createdOrder.id },
+              [Modules.PAYMENT]: {
+                payment_collection_id: cart.payment_collection.id,
+              },
+            })
+          }
+
+          return links
+        }
+      )
 
       parallelize(
         createRemoteLinkStep(linksToCreate),
@@ -347,7 +351,7 @@ export const completeCartWorkflow = createWorkflow(
 
       registerUsageStep(promotionUsage)
 
-      afterOrderCreated = createHook("afterOrderCreated", {
+      createHook("orderCreated", {
         order_id: createdOrder.id,
         cart_id: cart.id,
       })

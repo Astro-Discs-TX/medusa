@@ -1037,12 +1037,12 @@ export interface CartDTO {
   /**
    * The raw credit lines total of the cart.
    */
-  raw_credit_lines_total: BigNumberRawValue
+  raw_credit_line_total: BigNumberRawValue
 
   /**
    * The credit lines total of the cart.
    */
-  credit_lines_total: BigNumberValue
+  credit_line_total: BigNumberValue
 }
 
 /**
