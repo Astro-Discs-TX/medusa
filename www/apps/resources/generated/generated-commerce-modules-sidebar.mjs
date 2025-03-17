@@ -507,25 +507,9 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
             {
               "loaded": true,
               "isPathHref": true,
-              "type": "ref",
-              "title": "Create Actor Type",
-              "path": "https://docs.medusajs.com/resources/commerce-modules/auth/create-actor-type",
-              "children": []
-            },
-            {
-              "loaded": true,
-              "isPathHref": true,
               "type": "link",
               "path": "/commerce-modules/auth/create-actor-type",
               "title": "Create an Actor Type",
-              "children": []
-            },
-            {
-              "loaded": true,
-              "isPathHref": true,
-              "type": "ref",
-              "title": "Create Auth Provider",
-              "path": "https://docs.medusajs.com/resources/references/auth/provider",
               "children": []
             },
             {
@@ -1115,14 +1099,6 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
           "sort_sidebar": "alphabetize",
           "description": "Learn how to use the Cart Module in your customizations on the Medusa application server.",
           "children": [
-            {
-              "loaded": true,
-              "isPathHref": true,
-              "type": "ref",
-              "title": "Extend Cart",
-              "path": "https://docs.medusajs.com/resources/commerce-modules/cart/extend",
-              "children": []
-            },
             {
               "loaded": true,
               "isPathHref": true,
@@ -2436,14 +2412,6 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
             {
               "loaded": true,
               "isPathHref": true,
-              "type": "ref",
-              "title": "Extend Customer",
-              "path": "https://docs.medusajs.com/resources/commerce-modules/customer/extend",
-              "children": []
-            },
-            {
-              "loaded": true,
-              "isPathHref": true,
               "type": "link",
               "path": "/commerce-modules/customer/extend",
               "title": "Extend Module",
@@ -3374,14 +3342,6 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
           "sort_sidebar": "alphabetize",
           "description": "Learn how to use the Fulfillment Module in your customizations on the Medusa application server.",
           "children": [
-            {
-              "loaded": true,
-              "isPathHref": true,
-              "type": "ref",
-              "title": "Create Fulfillment Provider",
-              "path": "https://docs.medusajs.com/resources/references/fulfillment/provider",
-              "children": []
-            },
             {
               "loaded": true,
               "isPathHref": true,
@@ -4931,14 +4891,6 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "type": "link",
               "path": "/commerce-modules/inventory/links-to-other-modules",
               "title": "Links to Modules",
-              "children": []
-            },
-            {
-              "loaded": true,
-              "isPathHref": true,
-              "type": "ref",
-              "title": "Inventory Kits",
-              "path": "https://docs.medusajs.com/resources/commerce-modules/inventory/inventory-kit",
               "children": []
             },
             {
@@ -8876,14 +8828,6 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "path": "/references/payment/provider",
               "title": "Create Payment Provider",
               "children": []
-            },
-            {
-              "loaded": true,
-              "isPathHref": true,
-              "type": "ref",
-              "title": "Create Payment Provider",
-              "path": "https://docs.medusajs.com/resources/references/payment/provider",
-              "children": []
             }
           ]
         },
@@ -11103,14 +11047,6 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
             {
               "loaded": true,
               "isPathHref": true,
-              "type": "ref",
-              "title": "Extend Product",
-              "path": "https://docs.medusajs.com/resources/commerce-modules/product/extend",
-              "children": []
-            },
-            {
-              "loaded": true,
-              "isPathHref": true,
               "type": "link",
               "path": "/commerce-modules/product/guides/price-with-taxes",
               "title": "Get Variant Price with Taxes",
@@ -11119,33 +11055,9 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
             {
               "loaded": true,
               "isPathHref": true,
-              "type": "ref",
-              "title": "Get Variant Price with Taxes",
-              "path": "https://docs.medusajs.com/resources/commerce-modules/product/guides/price-with-taxes",
-              "children": []
-            },
-            {
-              "loaded": true,
-              "isPathHref": true,
               "type": "link",
               "path": "/commerce-modules/product/guides/price",
               "title": "Get Variant Prices",
-              "children": []
-            },
-            {
-              "loaded": true,
-              "isPathHref": true,
-              "type": "ref",
-              "title": "Get Variant Prices",
-              "path": "https://docs.medusajs.com/resources/commerce-modules/product/guides/price",
-              "children": []
-            },
-            {
-              "loaded": true,
-              "isPathHref": true,
-              "type": "ref",
-              "title": "Implement Product Reviews in Medusa",
-              "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/product-reviews",
               "children": []
             }
           ]
@@ -12825,14 +12737,6 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "type": "link",
               "path": "/commerce-modules/promotion/extend",
               "title": "Extend Module",
-              "children": []
-            },
-            {
-              "loaded": true,
-              "isPathHref": true,
-              "type": "ref",
-              "title": "Extend Promotion",
-              "path": "https://docs.medusajs.com/resources/commerce-modules/promotion/extend",
               "children": []
             }
           ]
@@ -15577,14 +15481,6 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
           "sort_sidebar": "alphabetize",
           "description": "Learn how to use the Tax Module in your customizations on the Medusa application server.",
           "children": [
-            {
-              "loaded": true,
-              "isPathHref": true,
-              "type": "ref",
-              "title": "Create Tax Provider",
-              "path": "https://docs.medusajs.com/resources/references/tax/provider",
-              "children": []
-            },
             {
               "loaded": true,
               "isPathHref": true,

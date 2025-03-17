@@ -65,6 +65,14 @@ const generatedgeneratedArchitecturalModulesSidebarSidebar = {
               "path": "/architectural-modules/cache/create",
               "title": "Create Cache Module",
               "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "link",
+              "path": "/references/cache-service",
+              "title": "Use Cache Module",
+              "children": []
             }
           ]
         }
@@ -122,6 +130,14 @@ const generatedgeneratedArchitecturalModulesSidebarSidebar = {
               "path": "/architectural-modules/event/create",
               "title": "Create Event Module",
               "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "link",
+              "path": "/references/event-service",
+              "title": "Use Event Module",
+              "children": []
             }
           ]
         }
@@ -178,6 +194,14 @@ const generatedgeneratedArchitecturalModulesSidebarSidebar = {
               "type": "link",
               "path": "/references/file-provider-module",
               "title": "Create File Provider",
+              "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "link",
+              "path": "/references/file-service",
+              "title": "Use File Module",
               "children": []
             }
           ]
@@ -316,6 +340,14 @@ const generatedgeneratedArchitecturalModulesSidebarSidebar = {
               "type": "link",
               "path": "/architectural-modules/notification/send-notification",
               "title": "Send Notification",
+              "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "link",
+              "path": "/references/notification-service",
+              "title": "Use Notification Module",
               "children": []
             }
           ]

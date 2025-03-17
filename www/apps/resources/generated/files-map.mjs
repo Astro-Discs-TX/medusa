@@ -1692,6 +1692,10 @@ export const filesMap = [
     "pathname": "/references/auth_provider/classes/auth_provider.AbstractAuthModuleProvider"
   },
   {
+    "filePath": "/www/apps/resources/references/cache/interfaces/cache.ICacheService/page.mdx",
+    "pathname": "/references/cache/interfaces/cache.ICacheService"
+  },
+  {
     "filePath": "/www/apps/resources/references/cart/IBigNumber/methods/cart.IBigNumber.toJSON/page.mdx",
     "pathname": "/references/cart/IBigNumber/methods/cart.IBigNumber.toJSON"
   },
@@ -9572,8 +9576,16 @@ export const filesMap = [
     "pathname": "/references/dml/properties_base/classes/dml.properties_base.BaseProperty"
   },
   {
+    "filePath": "/www/apps/resources/references/event/interfaces/event.IEventBusModuleService/page.mdx",
+    "pathname": "/references/event/interfaces/event.IEventBusModuleService"
+  },
+  {
     "filePath": "/www/apps/resources/references/file/classes/file.AbstractFileProviderService/page.mdx",
     "pathname": "/references/file/classes/file.AbstractFileProviderService"
+  },
+  {
+    "filePath": "/www/apps/resources/references/file_service/interfaces/file_service.IFileModuleService/page.mdx",
+    "pathname": "/references/file_service/interfaces/file_service.IFileModuleService"
   },
   {
     "filePath": "/www/apps/resources/references/fulfillment/IBigNumber/methods/fulfillment.IBigNumber.toJSON/page.mdx",
@@ -12968,6 +12980,10 @@ export const filesMap = [
     "pathname": "/references/modules/auth_provider"
   },
   {
+    "filePath": "/www/apps/resources/references/modules/cache/page.mdx",
+    "pathname": "/references/modules/cache"
+  },
+  {
     "filePath": "/www/apps/resources/references/modules/cart/page.mdx",
     "pathname": "/references/modules/cart"
   },
@@ -13000,8 +13016,16 @@ export const filesMap = [
     "pathname": "/references/modules/dml"
   },
   {
+    "filePath": "/www/apps/resources/references/modules/event/page.mdx",
+    "pathname": "/references/modules/event"
+  },
+  {
     "filePath": "/www/apps/resources/references/modules/file/page.mdx",
     "pathname": "/references/modules/file"
+  },
+  {
+    "filePath": "/www/apps/resources/references/modules/file_service/page.mdx",
+    "pathname": "/references/modules/file_service"
   },
   {
     "filePath": "/www/apps/resources/references/modules/fulfillment/page.mdx",
@@ -13050,6 +13074,10 @@ export const filesMap = [
   {
     "filePath": "/www/apps/resources/references/modules/notification/page.mdx",
     "pathname": "/references/modules/notification"
+  },
+  {
+    "filePath": "/www/apps/resources/references/modules/notification_service/page.mdx",
+    "pathname": "/references/modules/notification_service"
   },
   {
     "filePath": "/www/apps/resources/references/modules/order/page.mdx",
@@ -13238,6 +13266,10 @@ export const filesMap = [
   {
     "filePath": "/www/apps/resources/references/notification/classes/notification.AbstractNotificationProviderService/page.mdx",
     "pathname": "/references/notification/classes/notification.AbstractNotificationProviderService"
+  },
+  {
+    "filePath": "/www/apps/resources/references/notification_service/interfaces/notification_service.INotificationModuleService/page.mdx",
+    "pathname": "/references/notification_service/interfaces/notification_service.INotificationModuleService"
   },
   {
     "filePath": "/www/apps/resources/references/order/IBigNumber/methods/order.IBigNumber.toJSON/page.mdx",
