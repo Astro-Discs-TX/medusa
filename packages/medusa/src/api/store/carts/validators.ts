@@ -96,3 +96,7 @@ export type StoreUpdateCartCustomerType = z.infer<
   typeof StoreUpdateCartCustomer
 >
 export const StoreUpdateCartCustomer = z.object({}).strict()
+
+export const CompleteCart = z.object({})
+export type StoreCompleteCartType = z.infer<typeof CompleteCart>
+export const StoreCompleteCart = WithAdditionalData(CompleteCart)
