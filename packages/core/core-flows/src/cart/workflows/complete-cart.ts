@@ -91,8 +91,6 @@ export const completeCartWorkflow = createWorkflow(
     retentionTime: THREE_DAYS,
   },
   (input: WorkflowData<CompleteCartWorkflowInput>) => {
-    let beforePaymentAuthorization, cartCreated
-
     const orderCart = useQueryGraphStep({
       entity: "order_cart",
       fields: ["cart_id", "order_id"],
@@ -138,7 +136,7 @@ export const completeCartWorkflow = createWorkflow(
 
       const paymentSessions = validateCartPaymentsStep({ cart })
 
-      beforePaymentAuthorization = createHook("beforePaymentAuthorization", {
+      createHook("beforePaymentAuthorization", {
         input,
       })
 
@@ -336,7 +334,7 @@ export const completeCartWorkflow = createWorkflow(
 
       registerUsageStep(promotionUsage)
 
-      cartCreated = createHook("cartCreated", {
+      createHook("orderCreated", {
         order_id: createdOrder.id,
         cart_id: cart.id,
       })
@@ -349,7 +347,7 @@ export const completeCartWorkflow = createWorkflow(
     })
 
     return new WorkflowResponse(result, {
-      hooks: [validate, beforePaymentAuthorization, cartCreated],
+      hooks: [validate],
     })
   }
 )
