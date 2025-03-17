@@ -1173,7 +1173,7 @@ medusaIntegrationTestRunner({
               expect.objectContaining({
                 id: expect.any(String),
                 currency_code: "usd",
-                credit_lines_total: 2395,
+                credit_line_total: 2395,
                 discount_total: 100,
                 credit_lines: [
                   expect.objectContaining({
