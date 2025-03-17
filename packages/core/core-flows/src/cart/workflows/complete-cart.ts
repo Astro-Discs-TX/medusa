@@ -49,12 +49,6 @@ export type CompleteCartWorkflowInput = {
    * The ID of the cart to complete.
    */
   id: string
-
-  /**
-   * The ID of the payment to complete.
-   * This will exist if cart is completed from the webhook.
-   */
-  payment_id?: string
 }
 
 export type CompleteCartWorkflowOutput = {
@@ -120,7 +114,7 @@ export const completeCartWorkflow = createWorkflow(
     // but needs to be before the validation step
     const paymentSessions = when(
       "create-order-payment-compensation",
-      { orderId, paymentId: input.payment_id },
+      { orderId, cart },
       () => !orderId
     ).then(() => {
       const paymentSessions = validateCartPaymentsStep({ cart })
@@ -135,17 +129,12 @@ export const completeCartWorkflow = createWorkflow(
 
     const validate = createHook("validate", {
       input,
-      cart,
     })
 
     // If order ID does not exist, we are completing the cart for the first time
-    const order = when(
-      "create-order",
-      { paymentSessions, orderId, paymentId: input.payment_id },
-      () => {
-        return !orderId
-      }
-    ).then(() => {
+    const order = when("create-order", { paymentSessions, orderId }, () => {
+      return !orderId
+    }).then(() => {
       const cartOptionIds = transform({ cart }, ({ cart }) => {
         return cart.shipping_methods?.map((sm) => sm.shipping_option_id)
       })
