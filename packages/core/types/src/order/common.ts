@@ -2982,7 +2982,7 @@ export interface OrderChangeReturn {
   /**
    * The list of shipping methods created or updated.
    */
-  shippingMethods: any[]
+  shipping_methods: any[]
 
   /**
    * The list of credit lines created or updated.
