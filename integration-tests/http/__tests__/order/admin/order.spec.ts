@@ -1388,6 +1388,84 @@ medusaIntegrationTestRunner({
           ])
         )
       })
+
+      it("should throw an error if the quantity to fulfill exceeds the reserved quantity (inventory kit case)", async () => {
+        let reservations = (await api.get(`/admin/reservations`, adminHeaders))
+          .data.reservations
+
+        expect(reservations).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              inventory_item_id: inventoryItemDesk.id,
+              quantity: 2,
+            }),
+            expect.objectContaining({
+              inventory_item_id: inventoryItemLeg.id,
+              quantity: 8,
+            }),
+          ])
+        )
+
+        // 1. create a partial fulfillment
+        const fulOrder = (
+          await api.post(
+            `/admin/orders/${order.id}/fulfillments?fields=*fulfillments,*fulfillments.items`,
+            {
+              items: [{ id: order.items[0].id, quantity: 1 }],
+            },
+            adminHeaders
+          )
+        ).data.order
+
+        // 2. two fulfillment items are created for a single (inventory kit) line item
+        expect(fulOrder.fulfillments[0].items).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              inventory_item_id: inventoryItemDesk.id,
+              quantity: 1,
+            }),
+            expect.objectContaining({
+              inventory_item_id: inventoryItemLeg.id,
+              quantity: 4,
+            }),
+          ])
+        )
+
+        expect(fulOrder.items[0].detail.fulfilled_quantity).toEqual(1)
+
+        reservations = (await api.get(`/admin/reservations`, adminHeaders)).data
+          .reservations
+
+        // 3. reservations need to be reduced by half since we fulfilled 1 item out of 2 in the order
+        expect(reservations).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              inventory_item_id: inventoryItemDesk.id,
+              quantity: 1,
+            }),
+            expect.objectContaining({
+              inventory_item_id: inventoryItemLeg.id,
+              quantity: 4,
+            }),
+          ])
+        )
+
+        const res = await api
+          .post(
+            `/admin/orders/${order.id}/fulfillments?fields=*fulfillments,*fulfillments.items`,
+            {
+              items: [{ id: order.items[0].id, quantity: 2 }],
+            },
+            adminHeaders
+          )
+          .catch((e) => e)
+
+        expect(res.response.status).toBe(400)
+        expect(res.response.data).toEqual({
+          type: "invalid_data",
+          message: `Quantity to fulfill exceeds the reserved quantity for the item: ${order.items[0].id}`,
+        })
+      })
     })
 
     describe("POST /orders/:id/fulfillments/:id/mark-as-delivered", () => {
