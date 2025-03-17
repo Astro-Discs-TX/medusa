@@ -2,8 +2,11 @@ import {
   AdditionalData,
   BigNumberInput,
   FulfillmentDTO,
+  InventoryItemDTO,
   OrderDTO,
+  OrderLineItemDTO,
   OrderWorkflow,
+  ProductVariantDTO,
   ReservationItemDTO,
 } from "@medusajs/framework/types"
 import {
@@ -31,6 +34,17 @@ import {
 } from "../utils/order-validation"
 import { createReservationsStep } from "../../reservation"
 import { updateReservationsStep } from "../../reservation"
+
+type OrderItemWithVariantDTO = OrderLineItemDTO & {
+  variant?: ProductVariantDTO & {
+    inventory_items: {
+      inventory: InventoryItemDTO
+      variant_id: string
+      inventory_item_id: string
+      required_quantity: number
+    }[]
+  }
+}
 
 /**
  * The data to validate the order fulfillment cancelation.
@@ -135,9 +149,11 @@ function prepareCancelOrderFulfillmentData({
     reference_id: fulfillment.id,
     items: lineItemIds.map((lineItemId) => {
       // find order item
-      const orderItem = order.items!.find((i) => i.id === lineItemId)
+      const orderItem = order.items!.find(
+        (i) => i.id === lineItemId
+      ) as OrderItemWithVariantDTO
       // find inventory items
-      const iitems = (orderItem as any)!.variant?.inventory_items
+      const iitems = orderItem!.variant?.inventory_items
       // find fulfillment item
       const fitem = fulfillment.items.find(
         (i) => i.line_item_id === lineItemId
@@ -158,7 +174,7 @@ function prepareCancelOrderFulfillmentData({
           (i) => i.inventory.id === fitem.inventory_item_id
         )
 
-        quantity = MathBN.div(quantity, iitem.required_quantity)
+        quantity = MathBN.div(quantity, iitem!.required_quantity)
       }
 
       return {

@@ -2,10 +2,14 @@ import {
   AdditionalData,
   BigNumberInput,
   FulfillmentWorkflow,
+  InventoryItemDTO,
   OrderDTO,
   OrderLineItemDTO,
   OrderWorkflow,
+  ProductDTO,
+  ProductVariantDTO,
   ReservationItemDTO,
+  ShippingProfileDTO,
 } from "@medusajs/framework/types"
 import {
   MathBN,
@@ -40,6 +44,20 @@ import {
   throwIfOrderIsCancelled,
 } from "../utils/order-validation"
 import { buildReservationsMap } from "../utils/build-reservations-map"
+
+type OrderItemWithVariantDTO = OrderLineItemDTO & {
+  variant?: ProductVariantDTO & {
+    product?: ProductDTO & {
+      shipping_profile?: ShippingProfileDTO
+    }
+    inventory_items: {
+      inventory: InventoryItemDTO
+      variant_id: string
+      inventory_item_id: string
+      required_quantity: number
+    }[]
+  }
+}
 
 /**
  * The data to validate the order fulfillment creation.
@@ -158,13 +176,13 @@ function prepareFulfillmentData({
 
   const fulfillmentItems = fulfillableItems
     .map((i) => {
-      const orderItem = orderItemsMap.get(i.id)!
+      const orderItem = orderItemsMap.get(i.id)! as OrderItemWithVariantDTO
       const reservations = reservationItemMap.get(i.id)
 
       if (
         orderItem.requires_shipping &&
-        (orderItem as any).variant?.product &&
-        (orderItem as any).variant?.product.shipping_profile?.id !==
+        orderItem.variant?.product &&
+        orderItem.variant?.product.shipping_profile?.id !==
           shippingOption.shipping_profile_id
       ) {
         throw new MedusaError(
@@ -188,7 +206,7 @@ function prepareFulfillmentData({
 
       // if line item is from a managed variant, create a fulfillment item for each reservation item
       return reservations.map((r) => {
-        const iItem = (orderItem as any)?.variant?.inventory_items.find(
+        const iItem = orderItem?.variant?.inventory_items.find(
           (ii) => ii.inventory.id === r.inventory_item_id
         )
 
@@ -274,7 +292,7 @@ function prepareInventoryUpdate({
   // iterate over items that are being fulfilled
   for (const item of itemsToFulfill) {
     const reservations = reservationMap.get(item.id)
-    const orderItem = orderItemsMap.get(item.id)!
+    const orderItem = orderItemsMap.get(item.id)! as OrderItemWithVariantDTO
 
     if (!reservations?.length) {
       if (item.variant?.manage_inventory) {
@@ -295,7 +313,7 @@ function prepareInventoryUpdate({
         )
       }
 
-      const iItem = (orderItem as any)?.variant?.inventory_items.find(
+      const iItem = orderItem?.variant?.inventory_items.find(
         (ii) => ii.inventory.id === reservation.inventory_item_id
       )
 
