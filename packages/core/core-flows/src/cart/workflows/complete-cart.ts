@@ -114,8 +114,8 @@ export const completeCartWorkflow = createWorkflow(
     // but needs to be before the validation step
     const paymentSessions = when(
       "create-order-payment-compensation",
-      { orderId, cart },
-      () => !orderId
+      { orderId },
+      ({ orderId }) => !orderId
     ).then(() => {
       const paymentSessions = validateCartPaymentsStep({ cart })
       // purpose of this step is to run compensation if cart completion fails
@@ -132,7 +132,7 @@ export const completeCartWorkflow = createWorkflow(
     })
 
     // If order ID does not exist, we are completing the cart for the first time
-    const order = when("create-order", { paymentSessions, orderId }, () => {
+    const order = when("create-order", { orderId }, ({ orderId }) => {
       return !orderId
     }).then(() => {
       const cartOptionIds = transform({ cart }, ({ cart }) => {
