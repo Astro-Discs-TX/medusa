@@ -59,34 +59,6 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
           "loaded": true,
           "isPathHref": true,
           "type": "category",
-          "title": "Server Guides",
-          "autogenerate_tags": "server+auth",
-          "autogenerate_as_ref": true,
-          "sort_sidebar": "alphabetize",
-          "description": "Learn how to use the API Key Module in your customizations on the Medusa application server.",
-          "children": [
-            {
-              "loaded": true,
-              "isPathHref": true,
-              "type": "ref",
-              "title": "Create Actor Type",
-              "path": "https://docs.medusajs.com/resources/commerce-modules/auth/create-actor-type",
-              "children": []
-            },
-            {
-              "loaded": true,
-              "isPathHref": true,
-              "type": "ref",
-              "title": "Create Auth Provider",
-              "path": "https://docs.medusajs.com/resources/references/auth/provider",
-              "children": []
-            }
-          ]
-        },
-        {
-          "loaded": true,
-          "isPathHref": true,
-          "type": "category",
           "title": "Storefront Guides",
           "autogenerate_tags": "storefront+apiKey,-jsSdk",
           "autogenerate_as_ref": true,
@@ -509,7 +481,7 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "isPathHref": true,
               "type": "link",
               "path": "/commerce-modules/auth/create-actor-type",
-              "title": "Create an Actor Type",
+              "title": "Create Actor Type",
               "children": []
             },
             {
@@ -15484,17 +15456,17 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
             {
               "loaded": true,
               "isPathHref": true,
-              "type": "ref",
-              "title": "Get Variant Price with Taxes",
-              "path": "https://docs.medusajs.com/resources/commerce-modules/product/guides/price-with-taxes",
+              "type": "link",
+              "path": "/references/tax/provider",
+              "title": "Create Tax Provider",
               "children": []
             },
             {
               "loaded": true,
               "isPathHref": true,
-              "type": "link",
-              "path": "/references/tax/provider",
-              "title": "Tax Provider Reference",
+              "type": "ref",
+              "title": "Get Variant Price with Taxes",
+              "path": "https://docs.medusajs.com/resources/commerce-modules/product/guides/price-with-taxes",
               "children": []
             }
           ]
