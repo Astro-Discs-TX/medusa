@@ -114,7 +114,7 @@ export const generatedEditDates = {
   "app/recipes/digital-products/examples/standard/page.mdx": "2025-02-13T15:24:15.868Z",
   "app/recipes/digital-products/page.mdx": "2025-02-26T12:37:12.721Z",
   "app/recipes/ecommerce/page.mdx": "2025-02-26T12:20:52.092Z",
-  "app/recipes/marketplace/examples/vendors/page.mdx": "2025-02-20T07:20:47.970Z",
+  "app/recipes/marketplace/examples/vendors/page.mdx": "2025-03-17T10:10:58.268Z",
   "app/recipes/marketplace/page.mdx": "2024-10-03T13:07:44.153Z",
   "app/recipes/multi-region-store/page.mdx": "2025-02-26T12:38:50.292Z",
   "app/recipes/omnichannel/page.mdx": "2025-02-26T12:22:08.331Z",
@@ -5577,7 +5577,7 @@ export const generatedEditDates = {
   "references/modules/sales_channel_models/page.mdx": "2024-12-10T14:55:13.205Z",
   "references/types/DmlTypes/types/types.DmlTypes.KnownDataTypes/page.mdx": "2024-12-17T16:57:19.922Z",
   "references/types/DmlTypes/types/types.DmlTypes.RelationshipTypes/page.mdx": "2024-12-10T14:54:55.435Z",
-  "app/recipes/commerce-automation/restock-notification/page.mdx": "2025-02-11T13:29:56.235Z",
+  "app/recipes/commerce-automation/restock-notification/page.mdx": "2025-03-17T07:36:21.511Z",
   "app/troubleshooting/workflow-errors/page.mdx": "2024-12-11T08:44:36.598Z",
   "app/integrations/guides/shipstation/page.mdx": "2025-02-26T11:21:46.879Z",
   "app/nextjs-starter/guides/customize-stripe/page.mdx": "2024-12-25T14:48:55.877Z",
@@ -6049,5 +6049,13 @@ export const generatedEditDates = {
   "app/architectural-modules/locking/redis/page.mdx": "2025-03-12T10:07:43.867Z",
   "references/locking/interfaces/locking.ILockingModule/page.mdx": "2025-03-12T12:28:30.425Z",
   "references/locking/interfaces/locking.ILockingProvider/page.mdx": "2025-03-12T12:28:30.422Z",
-  "references/modules/locking/page.mdx": "2025-03-12T12:28:30.419Z"
+  "references/modules/locking/page.mdx": "2025-03-12T12:28:30.419Z",
+  "references/cache/interfaces/cache.ICacheService/page.mdx": "2025-03-17T15:24:02.574Z",
+  "references/event/interfaces/event.IEventBusModuleService/page.mdx": "2025-03-17T15:24:03.025Z",
+  "references/file_service/interfaces/file_service.IFileModuleService/page.mdx": "2025-03-17T15:24:03.031Z",
+  "references/modules/cache/page.mdx": "2025-03-17T15:24:02.572Z",
+  "references/modules/event/page.mdx": "2025-03-17T15:24:03.021Z",
+  "references/modules/file_service/page.mdx": "2025-03-17T15:24:03.025Z",
+  "references/modules/notification_service/page.mdx": "2025-03-17T15:24:05.164Z",
+  "references/notification_service/interfaces/notification_service.INotificationModuleService/page.mdx": "2025-03-17T15:24:05.173Z"
 }
