@@ -115,7 +115,10 @@ export const createCartWorkflow = createWorkflow(
       }
     )
 
-    const setPricingContext = createHook("setPricingContext", pricingContext)
+    const setPricingContext = createHook("setPricingContext", {
+      pricingContext,
+      additional_data: input.additional_data,
+    })
 
     const finalPricingContext = transform(
       { input, region, pricingContext },

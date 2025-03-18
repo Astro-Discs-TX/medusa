@@ -1,6 +1,11 @@
-import { OrderLineItemDTO, OrderWorkflow } from "@medusajs/framework/types"
+import {
+  AdditionalData,
+  OrderLineItemDTO,
+  OrderWorkflow,
+} from "@medusajs/framework/types"
 import { isDefined, MedusaError } from "@medusajs/framework/utils"
 import {
+  createHook,
   createWorkflow,
   parallelize,
   transform,
@@ -55,12 +60,12 @@ export type OrderAddLineItemWorkflowOutput = OrderLineItemDTO[]
 
 export const addOrderLineItemsWorkflowId = "order-add-line-items"
 /**
- * This workflow adds line items to an order. This is useful when making edits to 
+ * This workflow adds line items to an order. This is useful when making edits to
  * an order. It's used by other workflows, such as {@link orderEditAddNewItemWorkflow}.
- * 
+ *
  * You can use this workflow within your customizations or your own custom workflows, allowing you to wrap custom logic around adding items to
  * an order.
- * 
+ *
  * @example
  * const { result } = await addOrderLineItemsWorkflow(container)
  * .run({
@@ -74,16 +79,18 @@ export const addOrderLineItemsWorkflowId = "order-add-line-items"
  *     ]
  *   }
  * })
- * 
+ *
  * @summary
- * 
+ *
  * Add line items to an order.
  */
 export const addOrderLineItemsWorkflow = createWorkflow(
   addOrderLineItemsWorkflowId,
   (
-    input: WorkflowData<OrderWorkflow.OrderAddLineItemWorkflowInput>
-  ): WorkflowResponse<OrderAddLineItemWorkflowOutput> => {
+    input: WorkflowData<
+      OrderWorkflow.OrderAddLineItemWorkflowInput & AdditionalData
+    >
+  ) => {
     const order = useRemoteQueryStep({
       entry_point: "orders",
       fields: [
@@ -133,6 +140,25 @@ export const addOrderLineItemsWorkflow = createWorkflow(
       }
     )
 
+    const setPricingContext = createHook("setPricingContext", {
+      pricingContext,
+      additional_data: input.additional_data,
+    })
+    const finalPricingContext = transform(
+      { input, region, order, pricingContext },
+      (data) => {
+        return {
+          ...data.pricingContext,
+          /**
+           * The following properties must always be set from the original
+           * input and not from the hook return values.
+           */
+          currency_code: data.order.currency_code ?? data.region!.currency_code,
+          region_id: data.region!.id,
+        }
+      }
+    )
+
     const variants = when({ variantIds }, ({ variantIds }) => {
       return !!variantIds.length
     }).then(() => {
@@ -142,7 +168,7 @@ export const addOrderLineItemsWorkflow = createWorkflow(
         variables: {
           id: variantIds,
           calculated_price: {
-            context: pricingContext,
+            context: finalPricingContext,
           },
         },
       })
@@ -165,7 +191,10 @@ export const addOrderLineItemsWorkflow = createWorkflow(
     return new WorkflowResponse(
       createOrderLineItemsStep({
         items: lineItems,
-      })
+      }) satisfies OrderAddLineItemWorkflowOutput,
+      {
+        hooks: [setPricingContext] as const,
+      }
     )
   }
 )
