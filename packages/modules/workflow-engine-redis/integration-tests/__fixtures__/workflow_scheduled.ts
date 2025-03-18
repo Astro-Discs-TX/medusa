@@ -23,7 +23,7 @@ export const createScheduled = (
   const step = createStep("step_1", workflowScheduledStepInvoke)
 
   createWorkflow(
-    { name, schedule: schedule ?? "* * * * * *" },
+    { name, schedule: schedule ?? { interval: 1000 } },
     function (input) {
       return step(input)
     }

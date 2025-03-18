@@ -686,7 +686,7 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
         it("should stop executions after the set number of executions", async () => {
           const wait = times(2)
           const spy = createScheduled("num-executions", wait.next, {
-            cron: "* * * * * *",
+            interval: 1000,
             numberOfExecutions: 2,
           })
 
@@ -707,7 +707,7 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
           )
 
           const spy = createScheduled("remove-scheduled", wait.next, {
-            cron: "* * * * * *",
+            interval: 1000,
           })
           const logSpy = jest.spyOn(logger, "warn")
 
@@ -727,7 +727,7 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
           sharedContainer_.register("test-value", asValue("test"))
 
           const spy = await createScheduled("shared-container-job", wait.next, {
-            cron: "* * * * * *",
+            interval: 1000,
           })
           await wait.promise
 
