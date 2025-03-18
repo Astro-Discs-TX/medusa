@@ -39,6 +39,33 @@ const failTrap = (done) => {
   }, 5000)
 }
 
+function times(num) {
+  let resolver
+  let counter = 0
+  const promise = new Promise((resolve) => {
+    resolver = resolve
+  })
+
+  return {
+    next: () => {
+      counter += 1
+      if (counter === num) {
+        resolver()
+      }
+    },
+    // Force resolution after 10 seconds to prevent infinite awaiting
+    promise: Promise.race([
+      promise,
+      new Promise((_, reject) => {
+        setTimeoutSync(
+          () => reject("times has not been resolved after 10 seconds."),
+          1000
+        )
+      }),
+    ]),
+  }
+}
+
 // REF:https://stackoverflow.com/questions/78028715/jest-async-test-with-event-emitter-isnt-ending
 
 moduleIntegrationTestRunner<IWorkflowEngineService>({
@@ -55,24 +82,6 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
         await TestDatabase.clearTables()
         jest.clearAllMocks()
       })
-
-      function times(num) {
-        let resolver
-        let counter = 0
-        const promise = new Promise((resolve) => {
-          resolver = resolve
-        })
-
-        return {
-          next: () => {
-            counter += 1
-            if (counter === num) {
-              resolver()
-            }
-          },
-          promise,
-        }
-      }
 
       let query: RemoteQueryFunction
       let sharedContainer_: MedusaContainer
@@ -532,7 +541,7 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
 
         it("should stop executions after the set number of executions", async () => {
           const wait = times(2)
-          const spy = await createScheduled("num-executions", wait.next, {
+          const spy = createScheduled("num-executions", wait.next, {
             cron: "* * * * * *",
             numberOfExecutions: 2,
           })
@@ -553,7 +562,7 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
             ContainerRegistrationKeys.LOGGER
           )
 
-          const spy = await createScheduled("remove-scheduled", wait.next, {
+          const spy = createScheduled("remove-scheduled", wait.next, {
             cron: "* * * * * *",
           })
           const logSpy = jest.spyOn(logger, "warn")

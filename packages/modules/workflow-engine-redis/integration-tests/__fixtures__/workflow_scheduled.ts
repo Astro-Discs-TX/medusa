@@ -11,10 +11,13 @@ export const createScheduled = (
   schedule?: SchedulerOptions
 ) => {
   const workflowScheduledStepInvoke = jest.fn((input, { container }) => {
-    next()
-    return new StepResponse({
-      testValue: container.resolve("test-value"),
-    })
+    try {
+      return new StepResponse({
+        testValue: "test-value",
+      })
+    } finally {
+      next()
+    }
   })
 
   const step = createStep("step_1", workflowScheduledStepInvoke)
