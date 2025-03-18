@@ -36,6 +36,8 @@ const step1 = createStep(
 )
 \`\`\`
 
+This will resolve the service of the configured Event Module, which is the [Local Event Module](https://docs.medusajs.com/resources/architectural-modules/event/local) by default.
+
 You can then use the Event Module's service's methods in the step. The rest of this guide details these methods.
 
 ---

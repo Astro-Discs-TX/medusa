@@ -36,6 +36,8 @@ const step1 = createStep(
 )
 \`\`\`
 
+This will resolve the service of the configured Cache Module, which is the [In-Memory Cache Module](https://docs.medusajs.com/resources/architectural-modules/cache/in-memory) by default.
+
 You can then use the Cache Module's service's methods in the step. The rest of this guide details these methods.
 
 ---

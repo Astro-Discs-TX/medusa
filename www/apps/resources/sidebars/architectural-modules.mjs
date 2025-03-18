@@ -264,6 +264,17 @@ export const architecturalModulesSidebar = [
           },
         ],
       },
+      {
+        type: "sub-category",
+        title: "Guides",
+        children: [
+          {
+            type: "link",
+            path: "/architectural-modules/workflow-engine/how-to-use",
+            title: "Use Workflow Engine Module",
+          },
+        ],
+      },
     ],
   },
 ]
