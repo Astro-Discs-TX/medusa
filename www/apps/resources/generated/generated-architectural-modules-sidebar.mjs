@@ -392,6 +392,22 @@ const generatedgeneratedArchitecturalModulesSidebarSidebar = {
               "children": []
             }
           ]
+        },
+        {
+          "loaded": true,
+          "isPathHref": true,
+          "type": "sub-category",
+          "title": "Guides",
+          "children": [
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "link",
+              "path": "/architectural-modules/workflow-engine/how-to-use",
+              "title": "Use Workflow Engine Module",
+              "children": []
+            }
+          ]
         }
       ]
     }

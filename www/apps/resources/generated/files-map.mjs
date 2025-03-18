@@ -124,6 +124,10 @@ export const filesMap = [
     "pathname": "/architectural-modules"
   },
   {
+    "filePath": "/www/apps/resources/app/architectural-modules/workflow-engine/how-to-use/page.mdx",
+    "pathname": "/architectural-modules/workflow-engine/how-to-use"
+  },
+  {
     "filePath": "/www/apps/resources/app/architectural-modules/workflow-engine/in-memory/page.mdx",
     "pathname": "/architectural-modules/workflow-engine/in-memory"
   },
