@@ -103,6 +103,7 @@ export class WorkflowsModuleService<
     options.context ??= restContext
     options.context.preventReleaseEvents ??=
       !!options.context.parentStepIdempotencyKey
+    delete options.context.parentStepIdempotencyKey
 
     const ret = await this.workflowOrchestratorService_.run<
       TWorkflow extends ReturnWorkflow<any, any, any>

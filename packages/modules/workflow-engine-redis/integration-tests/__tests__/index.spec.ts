@@ -1,5 +1,6 @@
 import {
   DistributedTransactionType,
+  TransactionState,
   TransactionStep,
   TransactionStepTimeoutError,
   TransactionTimeoutError,
@@ -26,6 +27,12 @@ import { WorkflowsModuleService } from "../../src/services"
 import "../__fixtures__"
 import { createScheduled } from "../__fixtures__/workflow_scheduled"
 import { TestDatabase } from "../utils"
+import {
+  createStep,
+  createWorkflow,
+  StepResponse,
+  WorkflowResponse,
+} from "@medusajs/framework/workflows-sdk"
 
 jest.setTimeout(300000)
 
@@ -520,6 +527,143 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
           })
 
           failTrap(done)
+        })
+      })
+
+      describe("Testing complex workflows", function () {
+        it("should execute workflow + workflow as step + manual workflow within a step correctly", async () => {
+          const workflowA_id = "workflow_a"
+          const workflowB_id = "workflow_b"
+          const workflowC_id = "workflow_c"
+
+          const stepB_1 = createStep("stepB_1", async (input, context) => {
+            let results: any[] = []
+            for (let i = 0; i < 2; i++) {
+              const { result } = await workflowOrcModule.run(workflowC_id, {
+                input: {},
+              })
+
+              results.push(result)
+            }
+
+            return new StepResponse(results)
+          })
+
+          const stepC_1 = createStep("stepC_1", async (input, context) => {
+            return new StepResponse({
+              stepC_1_result: "stepC_1_result",
+            })
+          })
+
+          createWorkflow(workflowC_id, (input) => {
+            const result = stepC_1()
+            return new WorkflowResponse(result)
+          })
+
+          const workflowB = createWorkflow(workflowB_id, (input) => {
+            const result = stepB_1()
+            return new WorkflowResponse(result)
+          })
+
+          createWorkflow(workflowA_id, (input) => {
+            const workflowB_response = workflowB.runAsStep({
+              input: {},
+            })
+
+            return new WorkflowResponse({ workflowB_response })
+          })
+
+          const { result } = await workflowOrcModule.run(workflowA_id, {
+            input: {},
+            throwOnError: false,
+          })
+
+          expect(result).toEqual({
+            workflowB_response: [
+              {
+                stepC_1_result: "stepC_1_result",
+              },
+              {
+                stepC_1_result: "stepC_1_result",
+              },
+            ],
+          })
+        })
+
+        it("should execute workflow + workflow as step + manual workflow within a step that fail but do not fail the step", async () => {
+          const workflowA_id = "workflow_a"
+          const workflowB_id = "workflow_b"
+          const workflowC_id = "workflow_c"
+
+          const stepB_1 = createStep("stepB_1", async (input, context) => {
+            let results: any[] = []
+            for (let i = 0; i < 2; i++) {
+              const { errors } = await workflowOrcModule.run(workflowC_id, {
+                input: {},
+                throwOnError: false,
+              })
+
+              results.push(errors)
+            }
+
+            return new StepResponse(results)
+          })
+
+          const stepC_1 = createStep("stepC_1", async (input, context) => {
+            throw new Error("Workflow C failed")
+          })
+
+          createWorkflow(workflowC_id, (input) => {
+            const result = stepC_1()
+            return new WorkflowResponse(result)
+          })
+
+          const workflowB = createWorkflow(workflowB_id, (input) => {
+            const result = stepB_1()
+            return new WorkflowResponse(result)
+          })
+
+          createWorkflow(workflowA_id, (input) => {
+            const workflowB_response = workflowB.runAsStep({
+              input: {},
+            })
+
+            return new WorkflowResponse({ workflowB_response })
+          })
+
+          const { result, transaction } = await workflowOrcModule.run(
+            workflowA_id,
+            {
+              input: {},
+              throwOnError: false,
+            }
+          )
+
+          expect(
+            (transaction as DistributedTransactionType).getFlow().state
+          ).toEqual(TransactionState.DONE)
+          expect(result).toEqual({
+            workflowB_response: [
+              [
+                {
+                  action: "stepC_1",
+                  handlerType: TransactionHandlerType.INVOKE,
+                  error: expect.objectContaining({
+                    message: "Workflow C failed",
+                  }),
+                },
+              ],
+              [
+                {
+                  action: "stepC_1",
+                  handlerType: TransactionHandlerType.INVOKE,
+                  error: expect.objectContaining({
+                    message: "Workflow C failed",
+                  }),
+                },
+              ],
+            ],
+          })
         })
       })
 
