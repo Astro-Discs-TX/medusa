@@ -18,6 +18,7 @@ type InputSource = {
   alias?: string
   linkable: string
   primaryKey: string
+  filterable?: string[]
 }
 
 type ReadOnlyInputSource = {
@@ -42,6 +43,7 @@ type InputOptions = {
   field?: string
   isList?: boolean
   deleteCascade?: boolean
+  filterable?: string[]
 }
 
 type Shortcut = {
@@ -86,6 +88,7 @@ type ModuleLinkableKeyConfig = {
   primaryKey: string
   alias: string
   shortcut?: Shortcut | Shortcut[]
+  filterable?: string[]
 }
 
 function isInputOptions(input: any): input is InputOptions {
@@ -140,6 +143,7 @@ function prepareServiceConfig(
       primaryKey: source.primaryKey,
       isList: defaultOptions?.isList ?? false,
       deleteCascade: false,
+      filterable: source.filterable,
       module: source.serviceName,
       entity: source.entity,
     }
@@ -155,6 +159,7 @@ function prepareServiceConfig(
       primaryKey: source.primaryKey,
       isList: input.isList ?? defaultOptions?.isList ?? false,
       deleteCascade: input.deleteCascade ?? false,
+      filterable: source.filterable,
       module: source.serviceName,
       entity: source.entity,
     }
@@ -375,6 +380,7 @@ ${serviceBObj.module}: {
           },
           deleteCascade: serviceAObj.deleteCascade,
           isList: serviceAObj.isList,
+          filterable: serviceAObj.filterable,
         },
         {
           serviceName: serviceBObj.module,
@@ -387,6 +393,7 @@ ${serviceBObj.module}: {
           },
           deleteCascade: serviceBObj.deleteCascade,
           isList: serviceBObj.isList,
+          filterable: serviceBObj.filterable,
         },
       ],
       extends: [

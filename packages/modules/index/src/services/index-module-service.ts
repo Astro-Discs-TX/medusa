@@ -20,6 +20,7 @@ import {
   defaultSchema,
   gqlSchemaToTypes,
 } from "@utils"
+import { baseGraphqlSchema } from "../utils/base-graphql-schema"
 import { DataSynchronizer } from "./data-synchronizer"
 
 type InjectedDependencies = {
@@ -179,14 +180,8 @@ export default class IndexModuleService
       return this.schemaObjectRepresentation_
     }
 
-    const baseSchema = `
-      scalar DateTime
-      scalar Date
-      scalar Time
-      scalar JSON
-    `
     const [objectRepresentation, entityMap] = buildSchemaObjectRepresentation(
-      baseSchema + (this.moduleOptions_.schema ?? defaultSchema)
+      baseGraphqlSchema + (this.moduleOptions_.schema ?? defaultSchema)
     )
 
     this.schemaObjectRepresentation_ = objectRepresentation

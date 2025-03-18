@@ -5,8 +5,14 @@ import {
   ModuleJoinerConfig,
   ModuleJoinerRelationship,
 } from "@medusajs/framework/types"
-import { CommonEvents, GraphQLUtils } from "@medusajs/framework/utils"
+import {
+  CommonEvents,
+  GraphQLUtils,
+  kebabCase,
+  lowerCaseFirst,
+} from "@medusajs/framework/utils"
 import { schemaObjectRepresentationPropertiesToOmit } from "@types"
+import { baseGraphqlSchema } from "./base-graphql-schema"
 
 export const CustomDirectives = {
   Listeners: {
@@ -137,10 +143,15 @@ function retrieveLinkModuleAndAlias({
     const linkForeign =
       linkModuleJoinerConfig.relationships![1] as ModuleJoinerRelationship
 
-    if (
+    const isDirectMatch =
       linkPrimary.serviceName === primaryModuleConfig.serviceName &&
       linkForeign.serviceName === foreignModuleConfig.serviceName
-    ) {
+
+    const isReverseMatch =
+      linkPrimary.serviceName === foreignModuleConfig.serviceName &&
+      linkForeign.serviceName === primaryModuleConfig.serviceName
+
+    if (isDirectMatch || isReverseMatch) {
       const primaryEntityLinkableKey = linkPrimary.foreignKey
       const isTheForeignKeyEntityEqualPrimaryEntity =
         primaryModuleConfig.linkableKeys?.[primaryEntityLinkableKey] ===
@@ -153,8 +164,11 @@ function retrieveLinkModuleAndAlias({
 
       const linkName = linkModuleJoinerConfig.extends?.find((extend) => {
         return (
-          extend.serviceName === primaryModuleConfig.serviceName &&
-          extend.relationship.primaryKey === primaryEntityLinkableKey
+          (extend.serviceName === primaryModuleConfig.serviceName ||
+            extend.relationship.serviceName ===
+              foreignModuleConfig.serviceName) &&
+          (extend.relationship.primaryKey === primaryEntityLinkableKey ||
+            extend.relationship.primaryKey === foreignEntityLinkableKey)
         )
       })?.relationship.serviceName
 
@@ -185,8 +199,10 @@ function retrieveLinkModuleAndAlias({
           intermediateEntityNames: [],
         })
       } else {
-        const intermediateEntityName =
-          foreignModuleConfig.linkableKeys![foreignEntityLinkableKey]
+        const intermediateEntityNames = [
+          foreignModuleConfig.linkableKeys![foreignEntityLinkableKey],
+          foreignModuleConfig.linkableKeys![primaryEntityLinkableKey],
+        ]
 
         if (!foreignModuleConfig.schema) {
           throw new Error(
@@ -205,10 +221,16 @@ function retrieveLinkModuleAndAlias({
 
         let intermediateEntities: string[] = []
         let foundCount = 0
-
+        let foundName: string | null = null
         const isForeignEntityChildOfIntermediateEntity = (
-          entityName
+          entityName: string,
+          visited: Set<string> = new Set()
         ): boolean => {
+          if (visited.has(entityName)) {
+            return false
+          }
+          visited.add(entityName)
+
           for (const entityType of Object.values(entitiesMap)) {
             if (
               entityType.astNode?.kind === "ObjectTypeDefinition" &&
@@ -216,20 +238,22 @@ function retrieveLinkModuleAndAlias({
                 return (field.type as any)?.type?.name?.value === entityName
               })
             ) {
-              if (entityType.name === intermediateEntityName) {
+              if (intermediateEntityNames.includes(entityType.name)) {
+                foundName = entityType.name
                 ++foundCount
                 return true
               } else {
                 const test = isForeignEntityChildOfIntermediateEntity(
-                  entityType.name
+                  entityType.name,
+                  visited
                 )
                 if (test) {
                   intermediateEntities.push(entityType.name)
+                  return true
                 }
               }
             }
           }
-
           return false
         }
 
@@ -237,11 +261,11 @@ function retrieveLinkModuleAndAlias({
 
         if (foundCount !== 1) {
           throw new Error(
-            `Index Module error, unable to retrieve the intermediate entities for the services ${primaryModuleConfig.serviceName} - ${foreignModuleConfig.serviceName} between ${foreignEntity} and ${intermediateEntityName}. Multiple paths or no path found. Please check your schema in ${foreignModuleConfig.serviceName}`
+            `Index Module error, unable to retrieve the intermediate entities for the services ${primaryModuleConfig.serviceName} - ${foreignModuleConfig.serviceName} between ${foreignEntity} and ${intermediateEntityNames}. Multiple paths or no path found. Please check your schema in ${foreignModuleConfig.serviceName}`
           )
         }
 
-        intermediateEntities.push(intermediateEntityName!)
+        intermediateEntities.push(foundName!)
 
         /**
          * The link will become the parent of the foreign entity, that is why the alias must be the one that correspond to the extended foreign module
@@ -301,44 +325,34 @@ function setCustomDirectives(currentObjectRepresentationRef, directives) {
   }
 }
 
-function processEntity(
+function processEntityBasic(
   entityName: string,
   {
     entitiesMap,
     moduleJoinerConfigs,
     objectRepresentationRef,
+    processedEntities = new Set<string>(),
   }: {
     entitiesMap: any
     moduleJoinerConfigs: ModuleJoinerConfig[]
     objectRepresentationRef: IndexTypes.SchemaObjectRepresentation
+    processedEntities?: Set<string>
   }
 ) {
-  /**
-   * Get the reference to the object representation for the current entity.
-   */
+  if (processedEntities.has(entityName)) {
+    return
+  }
+  processedEntities.add(entityName)
 
   const currentObjectRepresentationRef = getObjectRepresentationRef(
     entityName,
-    {
-      objectRepresentationRef,
-    }
+    { objectRepresentationRef }
   )
-
-  /**
-   * Retrieve and set the custom directives for the current entity.
-   */
 
   setCustomDirectives(
     currentObjectRepresentationRef,
     entitiesMap[entityName].astNode?.directives ?? []
   )
-
-  currentObjectRepresentationRef.fields =
-    GraphQLUtils.gqlGetFieldsAndRelations(entitiesMap, entityName) ?? []
-
-  /**
-   * Retrieve the module and alias for the current entity.
-   */
 
   const { relatedModule: currentEntityModule, alias } = retrieveModuleAndAlias(
     entityName,
@@ -350,12 +364,7 @@ function processEntity(
     currentObjectRepresentationRef.listeners.length > 0
   ) {
     const example = JSON.stringify({
-      alias: [
-        {
-          name: "entity-alias",
-          entity: entityName,
-        },
-      ],
+      alias: [{ name: "entity-alias", entity: entityName }],
     })
     throw new Error(
       `Index Module error, unable to retrieve the module that corresponds to the entity ${entityName}.\nPlease add the entity to the module schema or add an alias to the joiner config like the example below:\n${example}`
@@ -369,9 +378,35 @@ function processEntity(
     currentObjectRepresentationRef.moduleConfig = currentEntityModule
     currentObjectRepresentationRef.alias = alias
   }
-  /**
-   * Retrieve the parent entities for the current entity.
-   */
+}
+
+function processEntityRelationships(
+  entityName: string,
+  {
+    entitiesMap,
+    moduleJoinerConfigs,
+    objectRepresentationRef,
+    processedEntities = new Set<string>(),
+  }: {
+    entitiesMap: any
+    moduleJoinerConfigs: ModuleJoinerConfig[]
+    objectRepresentationRef: IndexTypes.SchemaObjectRepresentation
+    processedEntities?: Set<string>
+  }
+) {
+  if (processedEntities.has(entityName)) {
+    return
+  }
+  processedEntities.add(entityName)
+
+  const currentObjectRepresentationRef = getObjectRepresentationRef(
+    entityName,
+    { objectRepresentationRef }
+  )
+
+  // Process fields first (this will include references to other entities)
+  currentObjectRepresentationRef.fields =
+    GraphQLUtils.gqlGetFieldsAndRelations(entitiesMap, entityName) ?? []
 
   const schemaParentEntity = Object.values(entitiesMap).filter((value: any) => {
     return (
@@ -382,7 +417,6 @@ function processEntity(
           while (currentType.type) {
             currentType = currentType.type
           }
-
           return currentType.name?.value === entityName
         }
       )
@@ -428,7 +462,6 @@ function processEntity(
     })
     const parentModuleConfig = parentObjectRepresentationRef.moduleConfig
 
-    // If the entity is not part of any module, just set the parent and continue
     if (!currentObjectRepresentationRef.moduleConfig) {
       currentObjectRepresentationRef.parents.push({
         ref: parentObjectRepresentationRef,
@@ -445,8 +478,8 @@ function processEntity(
 
     if (
       currentObjectRepresentationRef.moduleConfig.serviceName ===
-        parentModuleConfig.serviceName ||
-      parentModuleConfig.isLink
+        parentModuleConfig?.serviceName ||
+      parentModuleConfig?.isLink
     ) {
       currentObjectRepresentationRef.parents.push({
         ref: parentObjectRepresentationRef,
@@ -458,16 +491,11 @@ function processEntity(
         parentObjectRepresentationRef.alias + ".id"
       )
     } else {
-      /**
-       * If the parent entity and the current entity are not part of the same service then we need to
-       * find the link module that join them.
-       */
-
       const linkModuleMetadatas = retrieveLinkModuleAndAlias({
         primaryEntity: parentObjectRepresentationRef.entity,
         primaryModuleConfig: parentModuleConfig,
         foreignEntity: currentObjectRepresentationRef.entity,
-        foreignModuleConfig: currentEntityModule,
+        foreignModuleConfig: currentObjectRepresentationRef.moduleConfig,
         moduleJoinerConfigs,
       })
 
@@ -480,12 +508,10 @@ function processEntity(
         objectRepresentationRef._serviceNameModuleConfigMap[
           linkModuleMetadata.linkModuleConfig.serviceName ||
             linkModuleMetadata.entityName
-        ] = currentEntityModule
-
+        ] = currentObjectRepresentationRef.moduleConfig
         /**
          * Add the schema parent entity as a parent to the link module and configure it.
          */
-
         linkObjectRepresentationRef.parents = [
           {
             ref: parentObjectRepresentationRef,
@@ -507,7 +533,7 @@ function processEntity(
               (relationship) =>
                 [
                   parentModuleConfig.serviceName,
-                  currentEntityModule.serviceName,
+                  currentObjectRepresentationRef.moduleConfig.serviceName,
                 ].includes(relationship.serviceName) && relationship.foreignKey
             )
             .filter((v): v is string => Boolean(v)),
@@ -556,7 +582,7 @@ function processEntity(
           intermediateEntityObjectRepresentationRef.parents.push({
             ref: parentIntermediateEntityRef,
             targetProp: intermediateEntityAlias,
-            isList: true, // TODO: check if it is a list in retrieveLinkModuleAndAlias and return the intermediate entity names + isList for each
+            isList: true,
           })
 
           intermediateEntityObjectRepresentationRef.alias =
@@ -699,8 +725,117 @@ function buildAliasMap(
   return aliasMap
 }
 
+function buildSchemaFromFilterableLinks(
+  moduleJoinerConfigs: ModuleJoinerConfig[]
+): string {
+  const entityMap = makeSchemaExecutable(
+    baseGraphqlSchema +
+      moduleJoinerConfigs
+        .map((joinerConfig) => joinerConfig?.schema ?? "")
+        .join("\n")
+  )!.getTypeMap()
+
+  const allFilterable = moduleJoinerConfigs.flatMap((config) => {
+    const entities: any[] = []
+
+    const schema = config.schema
+
+    if (config.isLink) {
+      for (const relationship of config.relationships ?? []) {
+        if (!relationship.filterable?.length) {
+          continue
+        }
+
+        const fieldAliasMap: Record<string, string[]> = {}
+        for (const extend of config.extends ?? []) {
+          fieldAliasMap[extend.serviceName] = Object.keys(
+            extend.fieldAlias ?? {}
+          )
+          //TODO: Add full support for circular reference
+          break
+        }
+
+        const serviceName = relationship.serviceName
+        entities.push({
+          serviceName,
+          entity: relationship.entity,
+          fields: Array.from(
+            new Set(
+              relationship.filterable.concat(fieldAliasMap[serviceName] ?? [])
+            )
+          ),
+          schema,
+        })
+      }
+
+      return entities
+    }
+
+    let aliases = config.alias ?? []
+    aliases = (Array.isArray(aliases) ? aliases : [aliases]).filter(
+      (a) => a.filterable?.length && a.entity
+    )
+
+    for (const alias of aliases) {
+      entities.push({
+        serviceName: config.serviceName,
+        entity: alias.entity,
+        fields: Array.from(new Set(alias.filterable)),
+        schema,
+      })
+    }
+    return entities
+  })
+
+  const getGqlType = (entity, field) => {
+    const fieldRef = (entityMap[entity] as any)?._fields?.[field]
+
+    if (!fieldRef) {
+      return
+    }
+
+    let currentType = fieldRef.type
+    let isArray = false
+    while (currentType.ofType) {
+      if (currentType instanceof GraphQLUtils.GraphQLList) {
+        isArray = true
+      }
+
+      currentType = currentType.ofType
+    }
+    return currentType.name + (isArray ? "[]" : "")
+  }
+
+  const schema = allFilterable
+    .map(({ serviceName, entity, fields, schema }) => {
+      if (!schema) {
+        return
+      }
+
+      const normalizedEntity = lowerCaseFirst(kebabCase(entity))
+      const events = `@Listeners(values: ["${serviceName}.${normalizedEntity}.created", "${serviceName}.${normalizedEntity}.updated", "${serviceName}.${normalizedEntity}.deleted"])`
+
+      const fieldDefinitions = fields
+        .map((field) => {
+          const type = getGqlType(entity, field) ?? "String"
+
+          return `    ${field}: ${type}`
+        })
+        .join("\n")
+
+      return `type ${entity} ${events} {
+${fieldDefinitions}
+}`
+    })
+    .join("\n\n")
+
+  return schema
+}
+
 /**
  * This util build an internal representation object from the provided schema.
+ * It will resolve all modules, fields, link module representation to build
+ * the appropriate representation for the index module.
  * It will resolve all modules, fields, link module representation to build
  * the appropriate representation for the index module.
  *
@@ -713,7 +848,11 @@ export function buildSchemaObjectRepresentation(
   schema
 ): [IndexTypes.SchemaObjectRepresentation, Record<string, any>] {
   const moduleJoinerConfigs = MedusaModule.getAllJoinerConfigs()
-  const augmentedSchema = CustomDirectives.Listeners.definition + schema
+  const filterableEntities = buildSchemaFromFilterableLinks(moduleJoinerConfigs)
+
+  const augmentedSchema =
+    CustomDirectives.Listeners.definition + schema + filterableEntities
+
   const executableSchema = makeSchemaExecutable(augmentedSchema)!
   const entitiesMap = executableSchema.getTypeMap()
 
@@ -721,12 +860,24 @@ export function buildSchemaObjectRepresentation(
     _serviceNameModuleConfigMap: {},
   } as IndexTypes.SchemaObjectRepresentation
 
+  // Process basic entity information (skip relationships)
   Object.entries(entitiesMap).forEach(([entityName, entityMapValue]) => {
     if (!entityMapValue.astNode) {
       return
     }
+    processEntityBasic(entityName, {
+      entitiesMap,
+      moduleJoinerConfigs,
+      objectRepresentationRef: objectRepresentation,
+    })
+  })
 
-    processEntity(entityName, {
+  // Process relationships and fields (handling circular references)
+  Object.entries(entitiesMap).forEach(([entityName, entityMapValue]) => {
+    if (!entityMapValue.astNode) {
+      return
+    }
+    processEntityRelationships(entityName, {
       entitiesMap,
       moduleJoinerConfigs,
       objectRepresentationRef: objectRepresentation,
