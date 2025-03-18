@@ -108,14 +108,27 @@ export function getReflectionTypeParameters({
             return
           }
 
+          const reflectionTypeParameters = getReflectionTypeParameters({
+            reflectionType: reflectionTypeArg,
+            project,
+            level: level + 1,
+            maxLevel,
+            isReturn: false,
+          })
+
+          if (
+            typeArgs.length === 1 &&
+            reflectionTypeArg.type === "reference" &&
+            reflectionTypeParameters.length === 1
+          ) {
+            componentItem[parentKey - 1].children?.push(
+              ...(reflectionTypeParameters[0].children || [])
+            )
+            return
+          }
+
           componentItem[parentKey - 1].children?.push(
-            ...getReflectionTypeParameters({
-              reflectionType: reflectionTypeArg,
-              project,
-              level: level + 1,
-              maxLevel,
-              isReturn: false,
-            })
+            ...reflectionTypeParameters
           )
         })
       }
