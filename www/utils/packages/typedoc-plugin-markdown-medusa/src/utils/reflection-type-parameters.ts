@@ -185,11 +185,20 @@ export function getReflectionTypeParameters({
       const elementTypeItem = getReflectionTypeParameters({
         reflectionType: reflectionType.elementType,
         project,
-        level: level + 1,
+        level,
         maxLevel,
         isReturn: false,
       })
-      componentItem[parentKey - 1].children?.push(...elementTypeItem)
+      if (
+        reflectionType.elementType.type === "reference" &&
+        elementTypeItem.length === 1
+      ) {
+        componentItem[parentKey - 1].children?.push(
+          ...(elementTypeItem[0].children || [])
+        )
+      } else {
+        componentItem[parentKey - 1].children?.push(...elementTypeItem)
+      }
     }
   } else if (reflectionType.type === "tuple") {
     let pushTo: Parameter[] = []
