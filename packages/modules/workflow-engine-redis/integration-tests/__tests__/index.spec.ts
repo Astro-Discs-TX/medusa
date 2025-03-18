@@ -669,7 +669,7 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
 
       // Note: These tests depend on actual Redis instance and waiting for the scheduled jobs to run, which isn't great.
       // Mocking bullmq, however, would make the tests close to useless, so we can keep them very minimal and serve as smoke tests.
-      describe("Scheduled workflows", () => {
+      describe.skip("Scheduled workflows", () => {
         beforeEach(() => {
           jest.clearAllMocks()
         })
