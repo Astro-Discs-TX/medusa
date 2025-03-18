@@ -115,6 +115,23 @@ export const createCartWorkflow = createWorkflow(
       }
     )
 
+    const setPricingContext = createHook("setPricingContext", pricingContext)
+
+    const finalPricingContext = transform(
+      { input, region, pricingContext },
+      (data) => {
+        return {
+          ...data.pricingContext,
+          /**
+           * The following properties must always be set from the original
+           * input and not from the hook return values.
+           */
+          currency_code: data.input.currency_code ?? data.region!.currency_code,
+          region_id: data.region!.id,
+        }
+      }
+    )
+
     const variants = when({ variantIds }, ({ variantIds }) => {
       return !!variantIds.length
     }).then(() => {
@@ -124,7 +141,7 @@ export const createCartWorkflow = createWorkflow(
         variables: {
           id: variantIds,
           calculated_price: {
-            context: pricingContext,
+            context: finalPricingContext,
           },
         },
       })
@@ -248,7 +265,7 @@ export const createCartWorkflow = createWorkflow(
     })
 
     return new WorkflowResponse(cart, {
-      hooks: [validate, cartCreated],
+      hooks: [validate, cartCreated, setPricingContext],
     })
   }
 )
