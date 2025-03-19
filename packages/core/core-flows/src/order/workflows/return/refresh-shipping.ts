@@ -50,7 +50,6 @@ export const refreshReturnShippingWorkflow = createWorkflow(
         return_id: input.return_id,
         status: [OrderChangeStatus.PENDING, OrderChangeStatus.REQUESTED],
       },
-      options: { throwIfKeyNotFound: true },
     }).config({ name: "order-change-query" })
 
     const orderChange: OrderChangeDTO = transform(

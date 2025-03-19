@@ -57,7 +57,6 @@ export const refreshClaimShippingWorkflow = createWorkflow(
         claim_id: input.claim_id,
         status: [OrderChangeStatus.PENDING, OrderChangeStatus.REQUESTED],
       },
-      options: { throwIfKeyNotFound: true },
     }).config({ name: "order-change-query" })
 
     const orderChange = transform(orderChangeQuery, (data) => data[0])
