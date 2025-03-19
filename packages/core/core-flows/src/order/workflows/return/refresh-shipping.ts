@@ -54,7 +54,7 @@ export const refreshReturnShippingWorkflow = createWorkflow(
 
     const orderChange: OrderChangeDTO = transform(
       orderChangeQuery,
-      (data) => data[0]
+      ({ data }) => data[0]
     )
 
     const refreshArgs = transform(

@@ -59,11 +59,11 @@ export const refreshClaimShippingWorkflow = createWorkflow(
       },
     }).config({ name: "order-change-query" })
 
-    const orderChange = transform(orderChangeQuery, (data) => data[0])
+    const orderChange = transform(orderChangeQuery, ({ data }) => data[0])
 
     const refreshArgs = transform(
-      { input, orderChange },
-      ({ input, orderChange }) => {
+      { input, orderChange, orderChangeQuery },
+      ({ input, orderChange, orderChangeQuery }) => {
         const shippingToRefresh = {} as Record<"inbound" | "outbound", any>
 
         const inboundShippingAction = orderChange.actions.find(

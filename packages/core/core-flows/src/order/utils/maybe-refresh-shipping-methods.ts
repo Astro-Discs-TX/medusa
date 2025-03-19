@@ -84,7 +84,7 @@ export const maybeRefreshShippingMethodsWorkflow = createWorkflow(
       },
     }).config({ name: "fetch-shipping-method" })
 
-    const shippingMethod = transform(shippingMethodQuery, (data) => data[0])
+    const shippingMethod = transform(shippingMethodQuery, ({ data }) => data[0])
 
     const shippingOptionQuery = useQueryGraphStep({
       entity: "shipping_option",
@@ -92,7 +92,7 @@ export const maybeRefreshShippingMethodsWorkflow = createWorkflow(
       filters: { id: shippingMethod.shipping_option_id },
     }).config({ name: "calculated-option" })
 
-    const shippingOption = transform(shippingOptionQuery, (data) => data[0])
+    const shippingOption = transform(shippingOptionQuery, ({ data }) => data[0])
 
     const isCalculatedPriceShippingOption = transform(
       shippingOption,
