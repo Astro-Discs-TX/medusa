@@ -216,7 +216,7 @@ function prepareFulfillmentData({
           quantity: MathBN.mult(
             iItem?.required_quantity ?? 1,
             i.quantity
-          ).toNumber(), // TODO: type
+          ) as BigNumberInput,
           title:
             iItem?.inventory.title ||
             orderItem.variant_title ||
