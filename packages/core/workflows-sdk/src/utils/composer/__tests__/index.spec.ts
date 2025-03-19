@@ -406,4 +406,38 @@ describe("Workflow composer", () => {
       }),
     ])
   })
+
+  it("should allow reading results for a given step", async function () {
+    const step1 = createStep("step1", async (_, context) => {
+      return new StepResponse({ result: "step1" })
+    })
+    const step2 = createStep("step2", async (input: string, context) => {
+      return new StepResponse({ result: input })
+    })
+    const step3 = createStep("step3", async (input: string, context) => {
+      return new StepResponse({
+        input,
+        step2: context.getStepResult("step2"),
+        step1: context.getStepResult("step1"),
+        invalid: context.getStepResult("invalid"),
+      })
+    })
+
+    const workflow = createWorkflow(getNewWorkflowId(), function () {
+      step1()
+      step2("step2")
+      return new WorkflowResponse(step3("step-3"))
+    })
+
+    const { result } = await workflow.run({ input: {} })
+    expect(result).toEqual({
+      input: "step-3",
+      step1: {
+        result: "step1",
+      },
+      step2: {
+        result: "step2",
+      },
+    })
+  })
 })

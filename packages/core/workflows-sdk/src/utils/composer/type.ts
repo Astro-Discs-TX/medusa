@@ -170,6 +170,12 @@ export interface StepExecutionContext {
    * A string indicating the ID of the current transaction.
    */
   transactionId?: string
+
+  /**
+   * Get access to the result returned by a named step. Returns undefined
+   * when step is not found or when nothing was returned.
+   */
+  getStepResult(stepId: string, action?: "invoke" | "compensate"): any
 }
 
 export type WorkflowTransactionContext = StepExecutionContext &
