@@ -193,6 +193,12 @@ export function defineLink(
   const serviceBObj = prepareServiceConfig(rightService, { isList: false })
 
   if (linkServiceOptions?.readOnly) {
+    if (!leftService.linkable || !leftService.field) {
+      throw new Error(
+        `ReadOnly link requires "linkable" and "field" to be defined for the left service`
+      )
+    }
+
     return defineReadOnlyLink(
       serviceAObj,
       serviceBObj,
