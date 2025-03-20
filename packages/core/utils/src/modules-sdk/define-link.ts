@@ -159,7 +159,7 @@ function prepareServiceConfig(
       primaryKey: source.primaryKey,
       isList: input.isList ?? defaultOptions?.isList ?? false,
       deleteCascade: input.deleteCascade ?? false,
-      filterable: source.filterable,
+      filterable: input.filterable,
       module: source.serviceName,
       entity: source.entity,
     }

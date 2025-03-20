@@ -817,7 +817,8 @@ function buildSchemaFromFilterableLinks(
 
       currentType = currentType.ofType
     }
-    return currentType.name + (isArray ? "[]" : "")
+
+    return isArray ? `[${currentType.name}]` : currentType.name
   }
 
   const schema = allFilterable
