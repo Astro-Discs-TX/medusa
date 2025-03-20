@@ -27,10 +27,14 @@ export type StepFunctionReturnConfig<TOutput> = {
 type KeysOfUnion<T> = T extends T ? keyof T : never
 export type HookHandler = (...args: any[]) => void | Promise<void>
 
-type ConvertHookToObject<THook> = THook extends Hook<infer Name, infer Input>
+type ConvertHookToObject<THook> = THook extends Hook<
+  infer Name,
+  infer Input,
+  infer Output
+>
   ? {
-      [K in Name]: <TOutput, TCompensateInput>(
-        invoke: InvokeFn<Input, TOutput, TCompensateInput>,
+      [K in Name]: <TCompensateInput>(
+        invoke: InvokeFn<Input, Output, TCompensateInput>,
         compensate?: CompensateFn<TCompensateInput>
       ) => void
     }

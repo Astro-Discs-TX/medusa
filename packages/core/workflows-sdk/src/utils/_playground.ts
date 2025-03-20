@@ -1,8 +1,8 @@
+import { z } from "zod"
 import {
   createStep,
   createWorkflow,
   StepResponse,
-  when,
   WorkflowData,
 } from "./composer"
 import { createHook } from "./composer/create-hook"
@@ -27,22 +27,28 @@ const workflow = createWorkflow(
     step1()
     step2({ filters: { id: [] } })
 
-    let somethingHook: any
-    when({}, () => false).then(() => {
-      somethingHook = createHook("something", { id: "1" })
-    })
+    let somethingHook = createHook(
+      "something",
+      { id: "1" },
+      z.object({
+        id: z.number(),
+      })
+    )
+    // when({}, () => false).then(() => {
+    //   somethingHook = createHook("something", { id: "1" }, { id: "1" })
+    // })
 
     return new WorkflowResponse(
-      { r: somethingHook.getResults(), step3: step3() },
+      { r: somethingHook.getResult(), step3: step3() },
       { hooks: [somethingHook] }
     )
   }
 )
 
 workflow.hooks.something((input, context) => {
-  console.log("input>", input)
-  console.log("context>", context)
-  return new StepResponse({ id: 2, isHook: true })
+  // console.log("input>", input)
+  // console.log("context>", context)
+  return new StepResponse({ id: 2, foo: "bar" })
 })
 
 workflow.run().then((res) => {

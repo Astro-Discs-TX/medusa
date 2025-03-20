@@ -1,19 +1,21 @@
-import { CompensateFn, createStep, InvokeFn } from "./create-step"
+import { type ZodSchema } from "zod"
 import { OrchestrationUtils } from "@medusajs/utils"
 import { CreateWorkflowComposerContext } from "./type"
+import { CompensateFn, createStep, InvokeFn } from "./create-step"
 import { createStepHandler } from "./helpers/create-step-handler"
 
 /**
  * Representation of a hook definition.
  */
-export type Hook<Name extends string, Input> = {
+export type Hook<Name extends string, Input, Output> = {
+  __schema: ZodSchema
   __type: typeof OrchestrationUtils.SymbolWorkflowHook
   name: Name
 
   /**
    * Returns the result of the hook
    */
-  getResult(): any
+  getResult(): Output | undefined
 
   /**
    * By prefixing a key with a space, we remove it from the
@@ -21,6 +23,7 @@ export type Hook<Name extends string, Input> = {
    * input is not set at runtime. It is a type-only
    * property to infer input data type of a hook
    */
+  " output": Output
   " input": Input
 }
 
@@ -59,10 +62,11 @@ export type Hook<Name extends string, Input> = {
  *   }
  * )
  */
-export function createHook<Name extends string, TInvokeInput>(
+export function createHook<Name extends string, TInvokeInput, TInvokeOutput>(
   name: Name,
-  input: TInvokeInput
-): Hook<Name, TInvokeInput> {
+  input: TInvokeInput,
+  outputSchema?: ZodSchema<TInvokeOutput>
+): Hook<Name, TInvokeInput, TInvokeOutput> {
   const context = global[
     OrchestrationUtils.SymbolMedusaWorkflowComposerContext
   ] as CreateWorkflowComposerContext
@@ -103,15 +107,21 @@ export function createHook<Name extends string, TInvokeInput>(
 
   return {
     __type: OrchestrationUtils.SymbolWorkflowHook,
+    __schema: outputSchema,
     name,
     getResult() {
+      let schema = this.__schema
       return createStep(
         `get-${name}-result`,
-        ({ hookName }: any, context) => {
-          return context[" getStepResult"](hookName)
+        ({ hookName }: { hookName: string }, context) => {
+          const result = context[" getStepResult"](hookName)
+          if (schema && result) {
+            return schema.parse(result)
+          }
+          return result
         },
         () => void 0
-      )({ hookName: name })
+      )({ hookName: this.name })
     },
-  } as Hook<Name, TInvokeInput>
+  } as Hook<Name, TInvokeInput, TInvokeOutput>
 }
