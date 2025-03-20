@@ -38,6 +38,7 @@ type Product {
   updated_at: DateTime!
   deleted_at: DateTime
   metadata: JSON
+  brand: String
 }
 
 type ProductVariant {

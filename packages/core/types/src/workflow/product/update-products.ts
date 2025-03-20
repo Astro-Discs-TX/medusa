@@ -65,6 +65,7 @@ export interface UpdateProductInputDTO {
   thumbnail?: string
   handle?: string
   status?: ProductStatus
+  brand?: string
   type?: UpdateProductTypeInputDTO
   collection_id?: string
   tags?: UpdateProductTagInputDTO[]

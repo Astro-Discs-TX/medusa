@@ -34,7 +34,9 @@ export const remapKeysForProduct = (selectFields: string[]) => {
       fieldName.replace("variants.prices.", "variants.price_set.prices.")
     )
 
-  return [...productFields, ...pricingFields]
+    const defaultFields = ["brand"]
+    const all_field = [...new Set([...productFields, ...pricingFields, ...defaultFields])]
+    return all_field
 }
 
 export const remapKeysForVariant = (selectFields: string[]) => {

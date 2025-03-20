@@ -69,6 +69,7 @@ export interface CreateProductInputDTO {
   thumbnail?: string
   handle?: string
   status?: ProductStatus
+  brand?: string
   type?: CreateProductTypeInputDTO
   collection_id?: string
   tags?: CreateProductTagInputDTO[]

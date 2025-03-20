@@ -77,6 +77,7 @@ export interface ProductDTO {
    * The material of the product.
    */
   material: string | null
+  brand: string | null
   /**
    * The associated product collection.
    *
@@ -1489,6 +1490,9 @@ export interface CreateProductDTO {
    */
   status?: ProductStatus
   /**
+   * The brand of the product.
+   */
+  /**
    * The associated images to created or updated.
    */
   images?: UpsertProductImageDTO[]
@@ -1608,6 +1612,10 @@ export interface UpdateProductDTO {
    * The status of the product.
    */
   status?: ProductStatus
+  /**
+   * The brand of the product.
+   */
+  brand?: string | null
   /**
    * The associated images to create or update.
    */

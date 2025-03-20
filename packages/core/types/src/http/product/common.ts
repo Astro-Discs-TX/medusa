@@ -73,6 +73,10 @@ export interface BaseProduct {
    */
   material: string | null
   /**
+   * The product's brand.
+   */
+  brand: string | null
+  /**
    * The product's collection.
    */
   collection?: BaseCollection | null
