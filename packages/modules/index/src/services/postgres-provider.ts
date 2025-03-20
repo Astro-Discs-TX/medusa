@@ -68,37 +68,6 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
 
     this.schemaObjectRepresentation_ = options.schemaObjectRepresentation
     this.schemaEntitiesMap_ = options.entityMap
-
-    // Add a new column for each key that can be found in the jsonb data column to perform indexes and query on it.
-    // So far, the execution time is about the same
-    /*;(async () => {
-      const query = [
-        ...new Set(
-          Object.keys(this.schemaObjectRepresentation_)
-            .filter(
-              (key) =>
-                ![
-                  "_serviceNameModuleConfigMap",
-                  "_schemaPropertiesMap",
-                ].includes(key)
-            )
-            .map((key) => {
-              return this.schemaObjectRepresentation_[key].fields.filter(
-                (field) => !field.includes(".")
-              )
-            })
-            .flat()
-        ),
-      ].map(
-        (field) =>
-          "ALTER TABLE index_data ADD IF NOT EXISTS " +
-          field +
-          " text GENERATED ALWAYS AS (NEW.data->>'" +
-          field +
-          "') STORED"
-      )
-      await this.manager_.execute(query.join(";"))
-    })()*/
   }
 
   async onApplicationStart() {

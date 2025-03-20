@@ -116,12 +116,14 @@ function retrieveLinkModuleAndAlias({
   foreignEntity,
   foreignModuleConfig,
   moduleJoinerConfigs,
+  servicesEntityMap,
 }: {
   primaryEntity: string
   primaryModuleConfig: ModuleJoinerConfig
   foreignEntity: string
   foreignModuleConfig: ModuleJoinerConfig
   moduleJoinerConfigs: ModuleJoinerConfig[]
+  servicesEntityMap: Record<string, any>
 }): {
   entityName: string
   alias: string
@@ -151,133 +153,140 @@ function retrieveLinkModuleAndAlias({
       linkPrimary.serviceName === foreignModuleConfig.serviceName &&
       linkForeign.serviceName === primaryModuleConfig.serviceName
 
-    if (isDirectMatch || isReverseMatch) {
-      const primaryEntityLinkableKey = linkPrimary.foreignKey
-      const isTheForeignKeyEntityEqualPrimaryEntity =
-        primaryModuleConfig.linkableKeys?.[primaryEntityLinkableKey] ===
-        primaryEntity
+    if (!(isDirectMatch || isReverseMatch)) {
+      continue
+    }
 
-      const foreignEntityLinkableKey = linkForeign.foreignKey
-      const isTheForeignKeyEntityEqualForeignEntity =
-        foreignModuleConfig.linkableKeys?.[foreignEntityLinkableKey] ===
-        foreignEntity
+    const primaryEntityLinkableKey = isDirectMatch
+      ? linkPrimary.foreignKey
+      : linkForeign.foreignKey
+    const isTheForeignKeyEntityEqualPrimaryEntity =
+      primaryModuleConfig.linkableKeys?.[primaryEntityLinkableKey] ===
+      primaryEntity
 
-      const linkName = linkModuleJoinerConfig.extends?.find((extend) => {
-        return (
-          (extend.serviceName === primaryModuleConfig.serviceName ||
-            extend.relationship.serviceName ===
-              foreignModuleConfig.serviceName) &&
-          (extend.relationship.primaryKey === primaryEntityLinkableKey ||
-            extend.relationship.primaryKey === foreignEntityLinkableKey)
-        )
-      })?.relationship.serviceName
+    const foreignEntityLinkableKey = isDirectMatch
+      ? linkForeign.foreignKey
+      : linkPrimary.foreignKey
+    const isTheForeignKeyEntityEqualForeignEntity =
+      foreignModuleConfig.linkableKeys?.[foreignEntityLinkableKey] ===
+      foreignEntity
 
-      if (!linkName) {
+    const linkName = linkModuleJoinerConfig.extends?.find((extend) => {
+      return (
+        (extend.serviceName === primaryModuleConfig.serviceName ||
+          extend.relationship.serviceName ===
+            foreignModuleConfig.serviceName) &&
+        (extend.relationship.primaryKey === primaryEntityLinkableKey ||
+          extend.relationship.primaryKey === foreignEntityLinkableKey)
+      )
+    })?.relationship.serviceName
+
+    if (!linkName) {
+      throw new Error(
+        `Index Module error, unable to retrieve the link module name for the services ${primaryModuleConfig.serviceName} - ${foreignModuleConfig.serviceName}. Please be sure that the extend relationship service name is set correctly`
+      )
+    }
+
+    if (!linkModuleJoinerConfig.alias?.[0]?.entity) {
+      throw new Error(
+        `Index Module error, unable to retrieve the link module entity name for the services ${primaryModuleConfig.serviceName} - ${foreignModuleConfig.serviceName}. Please be sure that the link module alias has an entity property in the args.`
+      )
+    }
+
+    if (
+      isTheForeignKeyEntityEqualPrimaryEntity &&
+      isTheForeignKeyEntityEqualForeignEntity
+    ) {
+      /**
+       * The link will become the parent of the foreign entity, that is why the alias must be the one that correspond to the extended foreign module
+       */
+
+      linkModulesMetadata.push({
+        entityName: linkModuleJoinerConfig.alias[0].entity,
+        alias: extractNameFromAlias(linkModuleJoinerConfig.alias),
+        linkModuleConfig: linkModuleJoinerConfig,
+        intermediateEntityNames: [],
+      })
+    } else {
+      const intermediateEntityName =
+        foreignModuleConfig.linkableKeys![foreignEntityLinkableKey]
+
+      const moduleSchema = isDirectMatch
+        ? foreignModuleConfig.schema!
+        : primaryModuleConfig.schema!
+
+      if (!moduleSchema) {
         throw new Error(
-          `Index Module error, unable to retrieve the link module name for the services ${primaryModuleConfig.serviceName} - ${foreignModuleConfig.serviceName}. Please be sure that the extend relationship service name is set correctly`
+          `Index Module error, unable to retrieve the intermediate entity name for the services ${primaryModuleConfig.serviceName} - ${foreignModuleConfig.serviceName}. Please be sure that the foreign module ${foreignModuleConfig.serviceName} has a schema.`
         )
       }
 
-      if (!linkModuleJoinerConfig.alias?.[0]?.entity) {
-        throw new Error(
-          `Index Module error, unable to retrieve the link module entity name for the services ${primaryModuleConfig.serviceName} - ${foreignModuleConfig.serviceName}. Please be sure that the link module alias has an entity property in the args.`
-        )
-      }
-
-      if (
-        isTheForeignKeyEntityEqualPrimaryEntity &&
-        isTheForeignKeyEntityEqualForeignEntity
-      ) {
-        /**
-         * The link will become the parent of the foreign entity, that is why the alias must be the one that correspond to the extended foreign module
-         */
-
-        linkModulesMetadata.push({
-          entityName: linkModuleJoinerConfig.alias[0].entity,
-          alias: extractNameFromAlias(linkModuleJoinerConfig.alias),
-          linkModuleConfig: linkModuleJoinerConfig,
-          intermediateEntityNames: [],
-        })
-      } else {
-        const intermediateEntityNames = [
-          foreignModuleConfig.linkableKeys![foreignEntityLinkableKey],
-          foreignModuleConfig.linkableKeys![primaryEntityLinkableKey],
-        ]
-
-        if (!foreignModuleConfig.schema) {
-          throw new Error(
-            `Index Module error, unable to retrieve the intermediate entity name for the services ${primaryModuleConfig.serviceName} - ${foreignModuleConfig.serviceName}. Please be sure that the foreign module ${foreignModuleConfig.serviceName} has a schema.`
-          )
+      let intermediateEntities: string[] = []
+      let foundCount = 0
+      let foundName: string | null = null
+      const isForeignEntityChildOfIntermediateEntity = (
+        entityName: string,
+        visited: Set<string> = new Set()
+      ): boolean => {
+        if (visited.has(entityName)) {
+          return false
         }
+        visited.add(entityName)
 
-        const executableSchema = makeSchemaExecutable(
-          foreignModuleConfig.schema
-        )
-        if (!executableSchema) {
-          continue
-        }
-
-        const entitiesMap = executableSchema.getTypeMap()
-
-        let intermediateEntities: string[] = []
-        let foundCount = 0
-        let foundName: string | null = null
-        const isForeignEntityChildOfIntermediateEntity = (
-          entityName: string,
-          visited: Set<string> = new Set()
-        ): boolean => {
-          if (visited.has(entityName)) {
-            return false
-          }
-          visited.add(entityName)
-
-          for (const entityType of Object.values(entitiesMap)) {
-            if (
-              entityType.astNode?.kind === "ObjectTypeDefinition" &&
-              entityType.astNode?.fields?.some((field) => {
-                return (field.type as any)?.type?.name?.value === entityName
-              })
-            ) {
-              if (intermediateEntityNames.includes(entityType.name)) {
-                foundName = entityType.name
-                ++foundCount
+        for (const entityType of Object.values(servicesEntityMap)) {
+          if (
+            entityType.astNode?.kind === "ObjectTypeDefinition" &&
+            entityType.astNode?.fields?.some((field) => {
+              return (field.type as any)?.type?.name?.value === entityName
+            })
+          ) {
+            if (entityType.name === intermediateEntityName) {
+              foundName = entityType.name
+              ++foundCount
+              return true
+            } else {
+              const test = isForeignEntityChildOfIntermediateEntity(
+                entityType.name,
+                visited
+              )
+              if (test) {
+                intermediateEntities.push(entityType.name)
                 return true
-              } else {
-                const test = isForeignEntityChildOfIntermediateEntity(
-                  entityType.name,
-                  visited
-                )
-                if (test) {
-                  intermediateEntities.push(entityType.name)
-                  return true
-                }
               }
             }
           }
-          return false
         }
-
-        isForeignEntityChildOfIntermediateEntity(foreignEntity)
-
-        if (foundCount !== 1) {
-          throw new Error(
-            `Index Module error, unable to retrieve the intermediate entities for the services ${primaryModuleConfig.serviceName} - ${foreignModuleConfig.serviceName} between ${foreignEntity} and ${intermediateEntityNames}. Multiple paths or no path found. Please check your schema in ${foreignModuleConfig.serviceName}`
-          )
-        }
-
-        intermediateEntities.push(foundName!)
-
-        /**
-         * The link will become the parent of the foreign entity, that is why the alias must be the one that correspond to the extended foreign module
-         */
-
-        linkModulesMetadata.push({
-          entityName: linkModuleJoinerConfig.alias[0].entity,
-          alias: extractNameFromAlias(linkModuleJoinerConfig.alias),
-          linkModuleConfig: linkModuleJoinerConfig,
-          intermediateEntityNames: intermediateEntities,
-        })
+        return false
       }
+
+      isForeignEntityChildOfIntermediateEntity(
+        isDirectMatch ? foreignEntity : primaryEntity
+      )
+
+      if (foundCount !== 1) {
+        throw new Error(
+          `Index Module error, unable to retrieve the intermediate entities for the services ${
+            primaryModuleConfig.serviceName
+          } - ${foreignModuleConfig.serviceName} between ${
+            isDirectMatch ? foreignEntity : primaryEntity
+          } and ${intermediateEntityName}. Multiple paths or no path found. Please check your schema in ${
+            foreignModuleConfig.serviceName
+          }`
+        )
+      }
+
+      intermediateEntities.push(foundName!)
+
+      /**
+       * The link will become the parent of the foreign entity, that is why the alias must be the one that correspond to the extended foreign module
+       */
+
+      linkModulesMetadata.push({
+        entityName: linkModuleJoinerConfig.alias[0].entity,
+        alias: extractNameFromAlias(linkModuleJoinerConfig.alias),
+        linkModuleConfig: linkModuleJoinerConfig,
+        intermediateEntityNames: intermediateEntities,
+      })
     }
   }
 
@@ -383,12 +392,14 @@ function processEntityBasic(
 function processEntityRelationships(
   entityName: string,
   {
+    servicesEntityMap,
     entitiesMap,
     moduleJoinerConfigs,
     objectRepresentationRef,
     processedEntities = new Set<string>(),
   }: {
-    entitiesMap: any
+    servicesEntityMap: Record<string, any>
+    entitiesMap: Record<string, any>
     moduleJoinerConfigs: ModuleJoinerConfig[]
     objectRepresentationRef: IndexTypes.SchemaObjectRepresentation
     processedEntities?: Set<string>
@@ -497,6 +508,7 @@ function processEntityRelationships(
         foreignEntity: currentObjectRepresentationRef.entity,
         foreignModuleConfig: currentObjectRepresentationRef.moduleConfig,
         moduleJoinerConfigs,
+        servicesEntityMap,
       })
 
       for (const linkModuleMetadata of linkModuleMetadatas) {
@@ -512,12 +524,11 @@ function processEntityRelationships(
         /**
          * Add the schema parent entity as a parent to the link module and configure it.
          */
-        linkObjectRepresentationRef.parents = [
-          {
-            ref: parentObjectRepresentationRef,
-            targetProp: linkModuleMetadata.alias,
-          },
-        ]
+        linkObjectRepresentationRef.parents ??= []
+        linkObjectRepresentationRef.parents.push({
+          ref: parentObjectRepresentationRef,
+          targetProp: linkModuleMetadata.alias,
+        })
         linkObjectRepresentationRef.alias = linkModuleMetadata.alias
         linkObjectRepresentationRef.listeners = [
           `${linkModuleMetadata.entityName}.${CommonEvents.ATTACHED}`,
@@ -652,10 +663,16 @@ function buildAliasMap(
     {}
 
   function recursivelyBuildAliasPath(
-    current,
+    current: IndexTypes.SchemaObjectEntityRepresentation,
     alias = "",
-    aliases: { alias: string; shortCutOf?: string }[] = []
+    aliases: { alias: string; shortCutOf?: string }[] = [],
+    visited: Set<string> = new Set()
   ): { alias: string; shortCutOf?: string }[] {
+    if (visited.has(current.entity)) {
+      return []
+    }
+    visited.add(current.entity)
+
     if (current.parents?.length) {
       for (const parentEntity of current.parents) {
         /**
@@ -664,7 +681,9 @@ function buildAliasMap(
 
         const _aliases = recursivelyBuildAliasPath(
           parentEntity.ref,
-          `${parentEntity.targetProp}${alias ? "." + alias : ""}`
+          `${parentEntity.targetProp}${alias ? "." + alias : ""}`,
+          [],
+          new Set(visited) // copy of visited set to keep it scoped
         ).map((alias) => ({ alias: alias.alias }))
 
         aliases.push(..._aliases)
@@ -679,12 +698,15 @@ function buildAliasMap(
           const shortCutOf = _aliases.map((a) => a.alias)[0]
           const _aliasesShortCut = recursivelyBuildAliasPath(
             parentEntity.inSchemaRef,
-            `${parentEntity.targetProp}${alias ? "." + alias : ""}`
+            `${parentEntity.targetProp}${alias ? "." + alias : ""}`,
+            [],
+            new Set(visited) // copy of visited set to keep it scoped
           ).map((alias_) => {
             return {
               alias: alias_.alias,
               // It has to be the same entry point
               shortCutOf:
+                shortCutOf &&
                 shortCutOf.split(".")[0] === alias_.alias.split(".")[0]
                   ? shortCutOf
                   : undefined,
@@ -726,15 +748,9 @@ function buildAliasMap(
 }
 
 function buildSchemaFromFilterableLinks(
-  moduleJoinerConfigs: ModuleJoinerConfig[]
+  moduleJoinerConfigs: ModuleJoinerConfig[],
+  servicesEntityMap: Record<string, any>
 ): string {
-  const entityMap = makeSchemaExecutable(
-    baseGraphqlSchema +
-      moduleJoinerConfigs
-        .map((joinerConfig) => joinerConfig?.schema ?? "")
-        .join("\n")
-  )!.getTypeMap()
-
   const allFilterable = moduleJoinerConfigs.flatMap((config) => {
     const entities: any[] = []
 
@@ -751,8 +767,6 @@ function buildSchemaFromFilterableLinks(
           fieldAliasMap[extend.serviceName] = Object.keys(
             extend.fieldAlias ?? {}
           )
-          //TODO: Add full support for circular reference
-          break
         }
 
         const serviceName = relationship.serviceName
@@ -788,7 +802,7 @@ function buildSchemaFromFilterableLinks(
   })
 
   const getGqlType = (entity, field) => {
-    const fieldRef = (entityMap[entity] as any)?._fields?.[field]
+    const fieldRef = (servicesEntityMap[entity] as any)?._fields?.[field]
 
     if (!fieldRef) {
       return
@@ -846,7 +860,17 @@ export function buildSchemaObjectRepresentation(
   schema
 ): [IndexTypes.SchemaObjectRepresentation, Record<string, any>] {
   const moduleJoinerConfigs = MedusaModule.getAllJoinerConfigs()
-  const filterableEntities = buildSchemaFromFilterableLinks(moduleJoinerConfigs)
+  const servicesEntityMap = makeSchemaExecutable(
+    baseGraphqlSchema +
+      moduleJoinerConfigs
+        .map((joinerConfig) => joinerConfig?.schema ?? "")
+        .join("\n")
+  )!.getTypeMap()
+
+  const filterableEntities = buildSchemaFromFilterableLinks(
+    moduleJoinerConfigs,
+    servicesEntityMap
+  )
 
   const augmentedSchema =
     CustomDirectives.Listeners.definition + schema + filterableEntities
@@ -876,6 +900,7 @@ export function buildSchemaObjectRepresentation(
       return
     }
     processEntityRelationships(entityName, {
+      servicesEntityMap,
       entitiesMap,
       moduleJoinerConfigs,
       objectRepresentationRef: objectRepresentation,
