@@ -256,6 +256,13 @@ export class OrderChangeProcessing {
           item_.return_requested_total
         )
       }
+
+      if (MathBN.gt(item_.return_received_total, 0)) {
+        orderSummary.pending_difference = MathBN.sub(
+          orderSummary.pending_difference,
+          item_.return_received_total
+        )
+      }
     }
     orderSummary.pending_difference = new BigNumber(
       orderSummary.pending_difference
