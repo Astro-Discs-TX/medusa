@@ -9,6 +9,12 @@ import { createStepHandler } from "./helpers/create-step-handler"
 export type Hook<Name extends string, Input> = {
   __type: typeof OrchestrationUtils.SymbolWorkflowHook
   name: Name
+
+  /**
+   * Returns the result of the hook
+   */
+  getResult(): any
+
   /**
    * By prefixing a key with a space, we remove it from the
    * intellisense of TypeScript. This is needed because
@@ -98,5 +104,14 @@ export function createHook<Name extends string, TInvokeInput>(
   return {
     __type: OrchestrationUtils.SymbolWorkflowHook,
     name,
+    getResult() {
+      return createStep(
+        `get-${name}-result`,
+        ({ hookName }: any, context) => {
+          return context[" getStepResult"](hookName)
+        },
+        () => void 0
+      )({ hookName: name })
+    },
   } as Hook<Name, TInvokeInput>
 }

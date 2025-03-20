@@ -35,7 +35,10 @@ function buildStepContext({
     parentStepIdempotencyKey: flowMetadata?.parentStepIdempotencyKey as string,
     transactionId: stepArguments.context!.transactionId,
     context: stepArguments.context!,
-    getStepResult(stepId: string, action: "invoke" | "compensate" = "invoke") {
+    " getStepResult"(
+      stepId: string,
+      action: "invoke" | "compensate" = "invoke"
+    ) {
       return (stepArguments[action][stepId] as any)?.output?.output
     },
   }

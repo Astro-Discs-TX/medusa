@@ -6,6 +6,7 @@ import { WorkflowResponse } from "../helpers/workflow-response"
 import { transform } from "../transform"
 import { WorkflowData } from "../type"
 import { when } from "../when"
+import { createHook } from "../create-hook"
 
 let count = 1
 const getNewWorkflowId = () => `workflow-${count++}`
@@ -417,9 +418,9 @@ describe("Workflow composer", () => {
     const step3 = createStep("step3", async (input: string, context) => {
       return new StepResponse({
         input,
-        step2: context.getStepResult("step2"),
-        step1: context.getStepResult("step1"),
-        invalid: context.getStepResult("invalid"),
+        step2: context[" getStepResult"]("step2"),
+        step1: context[" getStepResult"]("step1"),
+        invalid: context[" getStepResult"]("invalid"),
       })
     })
 
@@ -437,6 +438,56 @@ describe("Workflow composer", () => {
       },
       step2: {
         result: "step2",
+      },
+    })
+  })
+
+  it("should allow reading results of a hook", async function () {
+    const step1 = createStep("step1", async (_, context) => {
+      return new StepResponse({ result: "step1" })
+    })
+
+    const workflow = createWorkflow(
+      getNewWorkflowId(),
+      function (input: { id: number }) {
+        const step1Result = step1()
+        const mutateInputHook = createHook("mutateInputHook", {
+          input,
+          step1Result,
+        })
+        return new WorkflowResponse(
+          {
+            input,
+            step1Result,
+            hookResult: mutateInputHook.getResult(),
+          },
+          {
+            hooks: [mutateInputHook],
+          }
+        )
+      }
+    )
+
+    workflow.hooks.mutateInputHook((data) => {
+      return new StepResponse({
+        input: {
+          id: data.input.id + 1,
+        },
+        step1Result: {
+          result: `mutated-${data.step1Result.result}`,
+        },
+      })
+    })
+
+    const { result } = await workflow.run({ input: { id: 1 } })
+    expect(result).toEqual({
+      input: { id: 1 },
+      step1Result: { result: "step1" },
+      hookResult: {
+        input: {
+          id: 2,
+        },
+        step1Result: { result: "mutated-step1" },
       },
     })
   })

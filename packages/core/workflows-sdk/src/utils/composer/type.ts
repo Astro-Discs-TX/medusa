@@ -174,8 +174,10 @@ export interface StepExecutionContext {
   /**
    * Get access to the result returned by a named step. Returns undefined
    * when step is not found or when nothing was returned.
+   *
+   * Adding a space hides the method from the autocomplete
    */
-  getStepResult(stepId: string, action?: "invoke" | "compensate"): any
+  " getStepResult"(stepId: string, action?: "invoke" | "compensate"): any
 }
 
 export type WorkflowTransactionContext = StepExecutionContext &
