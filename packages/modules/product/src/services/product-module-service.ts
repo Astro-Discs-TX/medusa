@@ -224,23 +224,19 @@ export default class ProductModuleService
   }
 
   protected getProductFindConfig_(
-    config?: FindConfig<ProductTypes.ProductDTO>
+    config: FindConfig<ProductTypes.ProductDTO> = {}
   ): FindConfig<ProductTypes.ProductDTO> {
-    const hasImagesRelation = config?.relations?.includes("images")
+    const relations = config.relations || []
+    if (!relations.includes("images")) {
+      relations.push("images")
+    }
+    if (!relations.includes("brand")) {
+      relations.push("brand")
+    }
 
     return {
       ...config,
-      order: {
-        ...(config?.order ?? { id: "ASC" }),
-        ...(hasImagesRelation
-          ? {
-              images: {
-                rank: "ASC",
-                ...((config?.order?.images as object) ?? {}),
-              },
-            }
-          : {}),
-      },
+      relations,
     }
   }
 

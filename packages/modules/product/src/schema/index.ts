@@ -6,6 +6,14 @@ enum ProductStatus {
   rejected
 }
 
+type Brand {
+  id: ID!
+  name: String!
+  created_at: DateTime!
+  updated_at: DateTime!
+  deleted_at: DateTime
+}
+
 type Product {
   id: ID!
   title: String!
@@ -38,6 +46,7 @@ type Product {
   updated_at: DateTime!
   deleted_at: DateTime
   metadata: JSON
+  brand: Brand
 }
 
 type ProductVariant {

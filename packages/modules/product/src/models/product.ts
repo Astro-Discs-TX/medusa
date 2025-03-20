@@ -7,6 +7,7 @@ import ProductOption from "./product-option"
 import ProductTag from "./product-tag"
 import ProductType from "./product-type"
 import ProductVariant from "./product-variant"
+import Brand from "./brand"
 
 const Product = model
   .define("Product", {
@@ -31,6 +32,11 @@ const Product = model
     discountable: model.boolean().default(true),
     external_id: model.text().nullable(),
     metadata: model.json().nullable(),
+    brand: model
+      .belongsTo(() => Brand, {
+        mappedBy: "products",
+      })
+      .nullable(),
     variants: model.hasMany(() => ProductVariant, {
       mappedBy: "product",
     }),

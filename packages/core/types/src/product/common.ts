@@ -152,6 +152,109 @@ export interface ProductDTO {
    * Holds custom data in key-value pairs.
    */
   metadata?: MetadataType
+  /**
+   * The associated brand.
+   *
+   * @expandable
+   */
+  brand: BrandDTO | null
+}
+
+/**
+ * @interface
+ *
+ * A brand's data.
+ */
+export interface BrandDTO {
+  /**
+   * The ID of the brand.
+   */
+  id: string
+  /**
+   * The name of the brand.
+   */
+  name: string
+  /**
+   * When the brand was created.
+   */
+  created_at: string | Date
+  /**
+   * When the brand was updated.
+   */
+  updated_at: string | Date
+  /**
+   * When the brand was deleted.
+   */
+  deleted_at?: string | Date
+  /**
+   * Holds custom data in key-value pairs.
+   */
+  metadata?: MetadataType
+}
+
+/**
+ * @interface
+ *
+ * A brand to create.
+ */
+export interface CreateBrandDTO {
+  /**
+   * The name of the brand.
+   */
+  name: string
+  /**
+   * Holds custom data in key-value pairs.
+   */
+  metadata?: MetadataType
+}
+
+/**
+ * @interface
+ *
+ * A brand to create or update.
+ */
+export interface UpsertBrandDTO extends UpdateBrandDTO {
+  /**
+   * The ID of the brand to update. If not provided, the brand
+   * is created instead. In that case, the `name` property is required.
+   */
+  id?: string
+}
+
+/**
+ * @interface
+ *
+ * The data to update in a brand.
+ */
+export interface UpdateBrandDTO {
+  /**
+   * The name of the brand.
+   */
+  name?: string
+  /**
+   * Holds custom data in key-value pairs.
+   */
+  metadata?: MetadataType
+}
+
+/**
+ * @interface
+ *
+ * The filters to apply on retrieved brands.
+ */
+export interface FilterableBrandProps extends BaseFilterable<FilterableBrandProps> {
+  /**
+   * Search through the brands' names.
+   */
+  q?: string
+  /**
+   * The IDs to filter brands by.
+   */
+  id?: string | string[]
+  /**
+   * The names to filter brands by.
+   */
+  name?: string | string[]
 }
 
 /**

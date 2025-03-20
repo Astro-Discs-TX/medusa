@@ -6077,7 +6077,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@medusajs/medusa@2.6.1, @medusajs/medusa@workspace:*, @medusajs/medusa@workspace:packages/medusa":
+"@medusajs/medusa@2.6.1, @medusajs/medusa@workspace:*, @medusajs/medusa@workspace:^, @medusajs/medusa@workspace:packages/medusa":
   version: 0.0.0-use.local
   resolution: "@medusajs/medusa@workspace:packages/medusa"
   dependencies:
@@ -24229,6 +24229,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jwa@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "jwa@npm:2.0.0"
+  dependencies:
+    buffer-equal-constant-time: 1.0.1
+    ecdsa-sig-formatter: 1.0.11
+    safe-buffer: ^5.0.1
+  checksum: 6baab823b93c038ba1d2a9e531984dcadbc04e9eb98d171f4901b7a40d2be15961a359335de1671d78cb6d987f07cbe5d350d8143255977a889160c4d90fcc3c
+  languageName: node
+  linkType: hard
+
 "jws@npm:^3.2.2":
   version: 3.2.2
   resolution: "jws@npm:3.2.2"
@@ -24236,6 +24247,16 @@ __metadata:
     jwa: ^1.4.1
     safe-buffer: ^5.0.1
   checksum: e770704533d92df358adad7d1261fdecad4d7b66fa153ba80d047e03ca0f1f73007ce5ed3fbc04d2eba09ba6e7e6e645f351e08e5ab51614df1b0aa4f384dfff
+  languageName: node
+  linkType: hard
+
+"jws@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "jws@npm:4.0.0"
+  dependencies:
+    jwa: ^2.0.0
+    safe-buffer: ^5.0.1
+  checksum: f1ca77ea5451e8dc5ee219cb7053b8a4f1254a79cb22417a2e1043c1eb8a569ae118c68f24d72a589e8a3dd1824697f47d6bd4fb4bebb93a3bdf53545e721661
   languageName: node
   linkType: hard
 
@@ -30124,6 +30145,7 @@ __metadata:
   dependencies:
     "@changesets/changelog-github": ^0.4.8
     "@changesets/cli": ^2.26.0
+    "@medusajs/medusa": "workspace:^"
     "@typescript-eslint/eslint-plugin": ^6.19.0
     "@typescript-eslint/parser": ^6.19.0
     axios: ^0.21.4
@@ -30144,6 +30166,8 @@ __metadata:
     global: ^4.4.0
     import-from: ^3.0.0
     jest: ^29.7.0
+    jsonwebtoken: ^9.0.2
+    jws: ^4.0.0
     lint-staged: ^11.2.6
     microbundle: ^0.13.3
     pg-god: ^1.0.12
@@ -30153,6 +30177,7 @@ __metadata:
     ts-jest: ^29.1.1
     ts-node: ^10.9.1
     turbo: ^1.6.3
+    yalc: ^1.0.0-pre.53
   languageName: unknown
   linkType: soft
 
@@ -34287,7 +34312,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yalc@npm:1.0.0-pre.53":
+"yalc@npm:1.0.0-pre.53, yalc@npm:^1.0.0-pre.53":
   version: 1.0.0-pre.53
   resolution: "yalc@npm:1.0.0-pre.53"
   dependencies:
