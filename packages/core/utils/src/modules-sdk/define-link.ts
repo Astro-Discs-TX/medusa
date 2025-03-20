@@ -195,8 +195,13 @@ export function defineLink(
   if (linkServiceOptions?.readOnly) {
     if (!leftService.linkable || !leftService.field) {
       throw new Error(
-        `ReadOnly link requires "linkable" and "field" to be defined for the left service`
+        `ReadOnly link requires "linkable" and "field" to be defined for the left service.`
       )
+    } else if (
+      (leftService as DefineLinkInputSource).filterable ||
+      (rightService as DefineLinkInputSource).filterable
+    ) {
+      throw new Error(`ReadOnly link does not support filterable fields.`)
     }
 
     return defineReadOnlyLink(
