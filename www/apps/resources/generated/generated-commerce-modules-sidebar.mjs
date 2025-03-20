@@ -1199,6 +1199,14 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "loaded": true,
               "isPathHref": true,
               "type": "ref",
+              "title": "Show Cart Totals",
+              "path": "https://docs.medusajs.com/resources/storefront-development/cart/totals",
+              "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "ref",
               "title": "Update Cart in Storefront",
               "path": "https://docs.medusajs.com/resources/storefront-development/cart/update",
               "children": []
@@ -3365,7 +3373,7 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
           "isPathHref": true,
           "type": "category",
           "title": "Admin User Guides",
-          "autogenerate_tags": "userGuide+fulfillment",
+          "autogenerate_tags": "fulfillment+userGuide",
           "autogenerate_as_ref": true,
           "sort_sidebar": "alphabetize",
           "description": "Learn how to utilize and manage Fulfillment features in the Medusa Admin dashboard.",
@@ -3384,6 +3392,14 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "type": "ref",
               "title": "Manage Order Fulfillments",
               "path": "https://docs.medusajs.com/user-guide/orders/fulfillments",
+              "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "ref",
+              "title": "Manage Shipping Options",
+              "path": "https://docs.medusajs.com/user-guide/settings/locations-and-shipping/locations",
               "children": []
             },
             {
@@ -5956,6 +5972,14 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "type": "ref",
               "title": "Implement Express Checkout with Medusa",
               "path": "https://docs.medusajs.com/resources/storefront-development/guides/express-checkout",
+              "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "ref",
+              "title": "Order Confirmation in Storefront",
+              "path": "https://docs.medusajs.com/resources/storefront-development/checkout/order-confirmation",
               "children": []
             }
           ]
@@ -10995,7 +11019,7 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
           "isPathHref": true,
           "type": "category",
           "title": "Server Guides",
-          "autogenerate_tags": "server+product",
+          "autogenerate_tags": "product+server",
           "autogenerate_as_ref": true,
           "sort_sidebar": "alphabetize",
           "description": "Learn how to use the Product Module in your customizations on the Medusa application server.",
@@ -11030,6 +11054,14 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "type": "link",
               "path": "/commerce-modules/product/guides/price",
               "title": "Get Variant Prices",
+              "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "ref",
+              "title": "Implement Product Reviews",
+              "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/product-reviews",
               "children": []
             }
           ]
