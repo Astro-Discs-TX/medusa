@@ -6061,5 +6061,6 @@ export const generatedEditDates = {
   "app/nextjs-starter/guides/revalidate-cache/page.mdx": "2025-03-18T08:47:59.628Z",
   "app/storefront-development/cart/totals/page.mdx": "2025-03-18T09:20:59.533Z",
   "app/storefront-development/checkout/order-confirmation/page.mdx": "2025-03-18T09:44:14.561Z",
-  "app/how-to-tutorials/tutorials/product-reviews/page.mdx": "2025-03-19T13:00:56.901Z"
+  "app/how-to-tutorials/tutorials/product-reviews/page.mdx": "2025-03-19T13:00:56.901Z",
+  "app/how-to-tutorials/tutorials/abandoned-cart/page.mdx": "2025-03-20T08:50:09.602Z"
 }
