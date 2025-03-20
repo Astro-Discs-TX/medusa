@@ -246,23 +246,24 @@ export class OrderChangeProcessing {
       orderSummary.transaction_total
     )
 
-    // return requested becomes pending difference
+    // return total becomes pending difference
     for (const item of order.items ?? []) {
       const item_ = item as any
 
-      if (MathBN.gt(item_.return_requested_total, 0)) {
-        orderSummary.pending_difference = MathBN.sub(
-          orderSummary.pending_difference,
-          item_.return_requested_total
-        )
-      }
+      ;[
+        "return_requested_total",
+        "return_received_total",
+        "return_dismissed_total",
+      ].forEach((returnTotalKey) => {
+        const returnTotal = item_[returnTotalKey]
 
-      if (MathBN.gt(item_.return_received_total, 0)) {
-        orderSummary.pending_difference = MathBN.sub(
-          orderSummary.pending_difference,
-          item_.return_received_total
-        )
-      }
+        if (MathBN.gt(returnTotal, 0)) {
+          orderSummary.pending_difference = MathBN.sub(
+            orderSummary.pending_difference,
+            returnTotal
+          )
+        }
+      })
     }
     orderSummary.pending_difference = new BigNumber(
       orderSummary.pending_difference
