@@ -1066,19 +1066,11 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
           "isPathHref": true,
           "type": "category",
           "title": "Server Guides",
-          "autogenerate_tags": "server+cart",
+          "autogenerate_tags": "cart+server",
           "autogenerate_as_ref": true,
           "sort_sidebar": "alphabetize",
           "description": "Learn how to use the Cart Module in your customizations on the Medusa application server.",
           "children": [
-            {
-              "loaded": true,
-              "isPathHref": true,
-              "type": "ref",
-              "title": "Abandoned Cart Notification",
-              "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/abandoned-cart",
-              "children": []
-            },
             {
               "loaded": true,
               "isPathHref": true,
@@ -1101,6 +1093,14 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "type": "ref",
               "title": "Implement Quote Management",
               "path": "https://docs.medusajs.com/resources/examples/guides/quote-management",
+              "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "ref",
+              "title": "Send Abandoned Cart Notification",
+              "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/abandoned-cart",
               "children": []
             }
           ]

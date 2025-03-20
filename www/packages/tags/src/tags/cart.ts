@@ -12,7 +12,7 @@ export const cart = [
     "path": "https://docs.medusajs.com/resources/examples/guides/quote-management"
   },
   {
-    "title": "Implement Abandoned Cart Notification",
+    "title": "Send Abandoned Cart Notification",
     "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/abandoned-cart"
   },
   {
