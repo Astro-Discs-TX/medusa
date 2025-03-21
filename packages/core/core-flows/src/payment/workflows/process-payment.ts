@@ -9,7 +9,7 @@ import { capturePaymentWorkflow } from "./capture-payment"
 /**
  * The data to process a payment from a webhook action.
  */
-interface ProcessPaymentWorkflowInput extends WebhookActionResult {}
+interface ProcessPaymentWorkflowInput extends WebhookActionResult { }
 
 export const processPaymentWorkflowId = "process-payment-workflow"
 /**
@@ -39,14 +39,7 @@ export const processPaymentWorkflowId = "process-payment-workflow"
 export const processPaymentWorkflow = createWorkflow(
   processPaymentWorkflowId,
   (input: ProcessPaymentWorkflowInput) => {
-    const paymentData = useQueryGraphStep({
-      entity: "payment",
-      fields: ["id"],
-      filters: { payment_session_id: input.data?.session_id },
-    }).config({
-      name: "payment-query",
-    })
-
+    // First we query payment session and check for cart
     const paymentSessionResult = useQueryGraphStep({
       entity: "payment_session",
       fields: ["payment_collection_id"],
@@ -66,6 +59,7 @@ export const processPaymentWorkflow = createWorkflow(
       name: "cart-payment-query",
     })
 
+    // If there is a cart, complete cart (which will handle authorization)
     when({ cartPaymentCollection }, ({ cartPaymentCollection }) => {
       return !!cartPaymentCollection.data.length
     }).then(() => {
@@ -80,6 +74,36 @@ export const processPaymentWorkflow = createWorkflow(
         })
     })
 
+    // If no cart is linked, we explicitly authorize the payment session
+    // This handles both regular authorization and auto-capture scenarios
+    when(
+      { input, cartPaymentCollection },
+      ({ input, cartPaymentCollection }) => {
+        // Authorize payment session for both AUTHORIZED and SUCCESSFUL actions
+        // This is necessary to handle auto-capture scenarios where payments skip
+        // the AUTHORIZED state and go directly from pending to captured
+        return (
+          !cartPaymentCollection.data.length &&
+          (input.action === PaymentActions.AUTHORIZED || input.action === PaymentActions.SUCCESSFUL) &&
+          !!input.data?.session_id
+        )
+      }
+    ).then(() => {
+      authorizePaymentSessionStep({
+        id: input.data!.session_id,
+        context: {},
+      })
+    })
+
+    // Finally, we check payment data and capture if action is SUCCESSFUL
+    const paymentData = useQueryGraphStep({
+      entity: "payment",
+      fields: ["id"],
+      filters: { payment_session_id: input.data?.session_id },
+    }).config({
+      name: "payment-query",
+    })
+
     when({ input, paymentData }, ({ input, paymentData }) => {
       return (
         input.action === PaymentActions.SUCCESSFUL && !!paymentData.data.length
@@ -90,24 +114,6 @@ export const processPaymentWorkflow = createWorkflow(
           payment_id: paymentData.data[0].id,
           amount: input.data?.amount,
         },
-      })
-    })
-
-    when(
-      { input, cartPaymentCollection },
-      ({ input, cartPaymentCollection }) => {
-        // Authorize payment session if no Cart is linked to the payment
-        // When associated with a Cart, the complete cart workflow will handle the authorization
-        return (
-          !cartPaymentCollection.data.length &&
-          input.action === PaymentActions.AUTHORIZED &&
-          !!input.data?.session_id
-        )
-      }
-    ).then(() => {
-      authorizePaymentSessionStep({
-        id: input.data!.session_id,
-        context: {},
       })
     })
   }
