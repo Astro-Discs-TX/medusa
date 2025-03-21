@@ -17,15 +17,15 @@ const nextConfig = {
     return {
       beforeFiles: [
         {
-          source: '/_next/static/chunks/app/:folder*/@login/:path*',
-          destination: '/_next/static/chunks/app/:folder*/%40login/:path*'
+          source: "/_next/static/chunks/app/:folder*/@login/:path*",
+          destination: "/_next/static/chunks/app/:folder*/%40login/:path*",
         },
         // Repeat this pattern if other similar errors occur
       ],
       afterFiles: [],
-      fallback: []
-    };
-  }
+      fallback: [],
+    }
+  },
 }
 ```
 

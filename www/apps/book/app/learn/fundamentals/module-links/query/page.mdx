@@ -335,7 +335,7 @@ const { data: posts } = await query.graph({
 })
 ```
 
-While it's not possible to filter by a linked data model's property, you can filter by a relation's property (i.e. the property of a related data model that is defined in the same module).
+While it's not possible to filter by a linked data model's property, you can filter by a relation's property (that is, the property of a related data model that is defined in the same module).
 
 In the example above, only posts that have an author with the name `John` are retrieved.
 
@@ -447,7 +447,7 @@ const { data: posts } = await query.graph({
   fields: ["id", "title", "author.*"],
   filters: {
     id: "post_123",
-    author_id: "author_123"
+    author_id: "author_123",
   },
 }, {
   throwIfKeyNotFound: true,
@@ -467,8 +467,8 @@ const { data: posts } = await query.graph({
   filters: {
     id: "author_123",
     posts: {
-      id: "post_123"
-    }
+      id: "post_123",
+    },
   },
 }, {
   throwIfKeyNotFound: true,
