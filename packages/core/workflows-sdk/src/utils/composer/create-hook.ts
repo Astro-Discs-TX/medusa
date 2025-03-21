@@ -1,6 +1,6 @@
 import { type ZodSchema } from "zod"
 import { OrchestrationUtils } from "@medusajs/utils"
-import type { CreateWorkflowComposerContext, StepFunction } from "./type"
+import type { CreateWorkflowComposerContext } from "./type"
 import { CompensateFn, createStep, InvokeFn } from "./create-step"
 import { createStepHandler } from "./helpers/create-step-handler"
 import { StepResponse } from "./helpers"
@@ -67,7 +67,9 @@ export type Hook<Name extends string, Input, Output> = {
 export function createHook<Name extends string, TInvokeInput, TInvokeOutput>(
   name: Name,
   input: TInvokeInput,
-  outputSchema?: ZodSchema<TInvokeOutput>
+  options: {
+    resultValidator?: ZodSchema<TInvokeOutput>
+  } = {}
 ): Hook<Name, TInvokeInput, TInvokeOutput> {
   const context = global[
     OrchestrationUtils.SymbolMedusaWorkflowComposerContext
@@ -80,8 +82,8 @@ export function createHook<Name extends string, TInvokeInput, TInvokeOutput>(
       if (result === NOOP_RESULT) {
         return new StepResponse(undefined)
       }
-      if (outputSchema) {
-        return outputSchema.parse(result)
+      if (options.resultValidator) {
+        return options.resultValidator.parse(result)
       }
       return result
     },

@@ -30,13 +30,12 @@ const workflow = createWorkflow(
     let somethingHook = createHook(
       "something",
       { id: "1" },
-      z.object({
-        id: z.number(),
-      })
+      {
+        resultValidator: z.object({
+          id: z.number(),
+        }),
+      }
     )
-    // when({}, () => false).then(() => {
-    //   somethingHook = createHook("something", { id: "1" }, { id: "1" })
-    // })
 
     return new WorkflowResponse(
       { r: somethingHook.getResult(), step3: step3() },
@@ -46,8 +45,8 @@ const workflow = createWorkflow(
 )
 
 workflow.hooks.something((input, context) => {
-  // console.log("input>", input)
-  // console.log("context>", context)
+  console.log("input>", input)
+  console.log("context>", context)
   return new StepResponse({ id: 2, foo: "bar" })
 })
 

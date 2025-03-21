@@ -500,10 +500,6 @@ describe("Workflow composer", () => {
       return new StepResponse({ result: "step1" })
     })
 
-    const mutateHookResponseSchema = z.object({
-      id: z.number(),
-    })
-
     const workflow = createWorkflow(
       getNewWorkflowId(),
 
@@ -515,7 +511,11 @@ describe("Workflow composer", () => {
             input,
             step1Result,
           },
-          mutateHookResponseSchema
+          {
+            resultValidator: z.object({
+              id: z.number(),
+            }),
+          }
         )
 
         expectTypeOf(mutateInputHook.getResult).returns.toMatchTypeOf<
@@ -556,10 +556,6 @@ describe("Workflow composer", () => {
       return new StepResponse({ result: "step1" })
     })
 
-    const mutateHookResponseSchema = z.object({
-      id: z.number(),
-    })
-
     const workflow = createWorkflow(
       getNewWorkflowId(),
 
@@ -571,7 +567,11 @@ describe("Workflow composer", () => {
             input,
             step1Result,
           },
-          mutateHookResponseSchema
+          {
+            resultValidator: z.object({
+              id: z.number(),
+            }),
+          }
         )
 
         expectTypeOf(mutateInputHook.getResult).returns.toMatchTypeOf<
@@ -617,10 +617,6 @@ describe("Workflow composer", () => {
       return new StepResponse({ result: "step1" })
     })
 
-    const mutateHookResponseSchema = z.object({
-      id: z.number(),
-    })
-
     const workflow = createWorkflow(
       getNewWorkflowId(),
 
@@ -632,7 +628,11 @@ describe("Workflow composer", () => {
             input,
             step1Result,
           },
-          mutateHookResponseSchema
+          {
+            resultValidator: z.object({
+              id: z.number(),
+            }),
+          }
         )
 
         expectTypeOf(mutateInputHook.getResult).returns.toMatchTypeOf<
@@ -665,10 +665,6 @@ describe("Workflow composer", () => {
       return new StepResponse({ result: "step1" })
     })
 
-    const mutateHookResponseSchema = z.object({
-      id: z.number(),
-    })
-
     const workflow = createWorkflow(
       getNewWorkflowId(),
 
@@ -680,7 +676,11 @@ describe("Workflow composer", () => {
             input,
             step1Result,
           },
-          mutateHookResponseSchema
+          {
+            resultValidator: z.object({
+              id: z.number(),
+            }),
+          }
         )
 
         expectTypeOf(mutateInputHook.getResult).returns.toMatchTypeOf<
