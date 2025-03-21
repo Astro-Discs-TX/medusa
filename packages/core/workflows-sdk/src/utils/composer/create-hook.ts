@@ -73,7 +73,20 @@ export function createHook<Name extends string, TInvokeInput, TInvokeOutput>(
     OrchestrationUtils.SymbolMedusaWorkflowComposerContext
   ] as CreateWorkflowComposerContext
 
-  let getHookResultStep: StepFunction<any, any>
+  const getHookResultStep = createStep(
+    `get-${name}-result`,
+    (_, context) => {
+      const result = context[" getStepResult"](name)
+      if (result === NOOP_RESULT) {
+        return new StepResponse(undefined)
+      }
+      if (outputSchema) {
+        return outputSchema.parse(result)
+      }
+      return result
+    },
+    () => void 0
+  )
 
   context.hookBinder(name, function (this: CreateWorkflowComposerContext) {
     /**
@@ -85,23 +98,6 @@ export function createHook<Name extends string, TInvokeInput, TInvokeOutput>(
       (_: TInvokeInput) => new StepResponse(NOOP_RESULT),
       () => void 0
     )(input)
-
-    getHookResultStep = createStep(
-      `get-${name}-result`,
-      (_, context) => {
-        const result = context[" getStepResult"](name)
-        if (result === NOOP_RESULT) {
-          return new StepResponse(undefined)
-        }
-
-        if (outputSchema) {
-          return outputSchema.parse(result)
-        }
-
-        return result
-      },
-      () => void 0
-    )
 
     function hook<
       TInvokeResultCompensateInput
@@ -130,7 +126,12 @@ export function createHook<Name extends string, TInvokeInput, TInvokeOutput>(
     __type: OrchestrationUtils.SymbolWorkflowHook,
     name,
     getResult() {
-      return getHookResultStep({})
+      if ("cachedResult" in this) {
+        return this.cachedResult
+      }
+      const result = getHookResultStep()
+      this["cachedResult"] = result
+      return result
     },
   } as Hook<Name, TInvokeInput, TInvokeOutput>
 }

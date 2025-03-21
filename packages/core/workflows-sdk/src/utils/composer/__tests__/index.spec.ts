@@ -639,7 +639,6 @@ describe("Workflow composer", () => {
           { id: number } | undefined
         >()
 
-        const hookResult = mutateInputHook.getResult()
         return new WorkflowResponse(
           {
             input,
