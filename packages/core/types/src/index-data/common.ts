@@ -59,6 +59,12 @@ export type SchemaObjectEntityRepresentation = {
    * refers to
    */
   moduleConfig: ModuleJoinerConfig
+
+  /**
+   * Whether the entity is the reference parent of the link (not the owner.):
+   * e.g: order -> cart, order is the owner, cart is the reference
+   */
+  isReferenceLink?: boolean
 }
 
 export type EntityNameModuleConfigMap = {

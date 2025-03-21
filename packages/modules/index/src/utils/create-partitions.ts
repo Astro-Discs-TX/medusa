@@ -23,6 +23,11 @@ export async function createPartitions(
       )
 
       for (const parent of schemaObjectRepresentation[key].parents) {
+        // skip partition for reference links
+        if (parent.isReferenceLink) {
+          continue
+        }
+
         const pKey = `${parent.ref.entity}-${key}`
         const pName = `${parent.ref.entity}${key}`.toLowerCase()
         part.push(
@@ -60,6 +65,10 @@ export async function createPartitions(
 
       // create child id index on pivot partitions
       for (const parent of schemaObjectRepresentation[key].parents) {
+        if (parent.isReferenceLink) {
+          continue
+        }
+
         const pName = `${parent.ref.entity}${key}`.toLowerCase()
         part.push(
           `CREATE INDEX CONCURRENTLY IF NOT EXISTS "IDX_cat_pivot_${pName}_child_id" ON ${activeSchema}cat_pivot_${pName} ("child_id")`

@@ -521,14 +521,35 @@ function processEntityRelationships(
           linkModuleMetadata.linkModuleConfig.serviceName ||
             linkModuleMetadata.entityName
         ] = currentObjectRepresentationRef.moduleConfig
+
         /**
-         * Add the schema parent entity as a parent to the link module and configure it.
+         * Add both relationships as parent to the link module and configure it.
          */
         linkObjectRepresentationRef.parents ??= []
-        linkObjectRepresentationRef.parents.push({
-          ref: parentObjectRepresentationRef,
-          targetProp: linkModuleMetadata.alias,
-        })
+
+        const linkRelationships =
+          linkModuleMetadata.linkModuleConfig.relationships!
+        for (let idx = 0; idx < linkRelationships.length; idx++) {
+          const parentRelationship = linkRelationships[idx]
+
+          const parentRelationshipRef = getObjectRepresentationRef(
+            parentRelationship.entity,
+            { objectRepresentationRef }
+          )
+
+          linkObjectRepresentationRef.parents.push({
+            ref: parentRelationshipRef,
+            targetProp: parentRelationshipRef.alias,
+            isReferenceLink: idx > 0,
+          })
+
+          parentRelationshipRef.parents.push({
+            ref: linkObjectRepresentationRef,
+            targetProp: linkModuleMetadata.alias,
+            isReferenceLink: idx > 0,
+          })
+        }
+
         linkObjectRepresentationRef.alias = linkModuleMetadata.alias
         linkObjectRepresentationRef.listeners = [
           `${linkModuleMetadata.entityName}.${CommonEvents.ATTACHED}`,
