@@ -2,7 +2,7 @@ import ts from "typescript"
 import { SyntaxKind } from "typescript"
 import DefaultKindGenerator, { GetDocBlockOptions } from "./default.js"
 import { API_ROUTE_PARAM_REGEX } from "../../constants.js"
-
+import type { RouteExamples } from "types"
 const EXAMPLE_CODEBLOCK_REGEX = /```(ts|typescript)\s*([.\s\S]*?)\s*```/
 
 type RouteData = {
@@ -59,8 +59,10 @@ class RouteExamplesKindGenerator extends DefaultKindGenerator<ts.MethodDeclarati
     )
 
     return JSON.stringify({
-      [this.formatRouteData(routeData)]: exampleText,
-    })
+      [this.formatRouteData(routeData)]: {
+        [this.getExampleType(node)]: exampleText,
+      },
+    } as RouteExamples)
   }
 
   getExampleText(comment: string): string {
