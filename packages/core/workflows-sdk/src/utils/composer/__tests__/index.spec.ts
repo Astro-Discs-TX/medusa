@@ -457,6 +457,7 @@ describe("Workflow composer", () => {
           input,
           step1Result,
         })
+
         return new WorkflowResponse(
           {
             input,
@@ -612,7 +613,7 @@ describe("Workflow composer", () => {
   })
 
   it("should not validate when no hook handler has been defined", async function () {
-    const step1 = createStep("step1", async (_, context) => {
+    const step1 = createStep("step1", async () => {
       return new StepResponse({ result: "step1" })
     })
 
@@ -638,6 +639,7 @@ describe("Workflow composer", () => {
           { id: number } | undefined
         >()
 
+        const hookResult = mutateInputHook.getResult()
         return new WorkflowResponse(
           {
             input,
@@ -651,7 +653,12 @@ describe("Workflow composer", () => {
       }
     )
 
-    await workflow.run({ input: { id: 1 } })
+    const { result } = await workflow.run({ input: { id: 1 } })
+    expect(result).toEqual({
+      input: { id: 1 },
+      step1Result: { result: "step1" },
+      hookResult: undefined,
+    })
   })
 
   it("should validate when hook returns undefined", async function () {

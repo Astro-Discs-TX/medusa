@@ -1,6 +1,6 @@
 import { type ZodSchema } from "zod"
 import { OrchestrationUtils } from "@medusajs/utils"
-import { CreateWorkflowComposerContext } from "./type"
+import type { CreateWorkflowComposerContext, StepFunction } from "./type"
 import { CompensateFn, createStep, InvokeFn } from "./create-step"
 import { createStepHandler } from "./helpers/create-step-handler"
 import { StepResponse } from "./helpers"
@@ -11,7 +11,6 @@ const NOOP_RESULT = Symbol.for("NOOP")
  * Representation of a hook definition.
  */
 export type Hook<Name extends string, Input, Output> = {
-  __schema: ZodSchema
   __type: typeof OrchestrationUtils.SymbolWorkflowHook
   name: Name
 
@@ -74,6 +73,8 @@ export function createHook<Name extends string, TInvokeInput, TInvokeOutput>(
     OrchestrationUtils.SymbolMedusaWorkflowComposerContext
   ] as CreateWorkflowComposerContext
 
+  let getHookResultStep: StepFunction<any, any>
+
   context.hookBinder(name, function (this: CreateWorkflowComposerContext) {
     /**
      * We start by registering a new step within the workflow. This will be a noop
@@ -84,6 +85,23 @@ export function createHook<Name extends string, TInvokeInput, TInvokeOutput>(
       (_: TInvokeInput) => new StepResponse(NOOP_RESULT),
       () => void 0
     )(input)
+
+    getHookResultStep = createStep(
+      `get-${name}-result`,
+      (_, context) => {
+        const result = context[" getStepResult"](name)
+        if (result === NOOP_RESULT) {
+          return new StepResponse(undefined)
+        }
+
+        if (outputSchema) {
+          return outputSchema.parse(result)
+        }
+
+        return result
+      },
+      () => void 0
+    )
 
     function hook<
       TInvokeResultCompensateInput
@@ -110,22 +128,9 @@ export function createHook<Name extends string, TInvokeInput, TInvokeOutput>(
 
   return {
     __type: OrchestrationUtils.SymbolWorkflowHook,
-    __schema: outputSchema,
     name,
     getResult() {
-      let schema = this.__schema
-      return createStep(
-        `get-${name}-result`,
-        ({ hookName }: { hookName: string }, context) => {
-          const result = context[" getStepResult"](hookName)
-          if (result === NOOP_RESULT || !schema) {
-            return result
-          }
-
-          return schema.parse(result)
-        },
-        () => void 0
-      )({ hookName: this.name })
+      return getHookResultStep({})
     },
   } as Hook<Name, TInvokeInput, TInvokeOutput>
 }
