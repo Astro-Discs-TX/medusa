@@ -3,6 +3,9 @@ import { OrchestrationUtils } from "@medusajs/utils"
 import { CreateWorkflowComposerContext } from "./type"
 import { CompensateFn, createStep, InvokeFn } from "./create-step"
 import { createStepHandler } from "./helpers/create-step-handler"
+import { StepResponse } from "./helpers"
+
+const NOOP_RESULT = Symbol.for("NOOP")
 
 /**
  * Representation of a hook definition.
@@ -78,7 +81,7 @@ export function createHook<Name extends string, TInvokeInput, TInvokeOutput>(
      */
     createStep(
       name,
-      (_: TInvokeInput) => void 0,
+      (_: TInvokeInput) => new StepResponse(NOOP_RESULT),
       () => void 0
     )(input)
 
@@ -115,10 +118,11 @@ export function createHook<Name extends string, TInvokeInput, TInvokeOutput>(
         `get-${name}-result`,
         ({ hookName }: { hookName: string }, context) => {
           const result = context[" getStepResult"](hookName)
-          if (schema && result) {
-            return schema.parse(result)
+          if (result === NOOP_RESULT || !schema) {
+            return result
           }
-          return result
+
+          return schema.parse(result)
         },
         () => void 0
       )({ hookName: this.name })

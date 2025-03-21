@@ -1,3 +1,5 @@
+import z from "zod"
+import { expectTypeOf } from "expect-type"
 import { TransactionState } from "@medusajs/utils"
 import { createStep } from "../create-step"
 import { createWorkflow } from "../create-workflow"
@@ -490,5 +492,223 @@ describe("Workflow composer", () => {
         step1Result: { result: "mutated-step1" },
       },
     })
+  })
+
+  it("should allow specifying a validation schema for the hook response", async function () {
+    const step1 = createStep("step1", async (_, context) => {
+      return new StepResponse({ result: "step1" })
+    })
+
+    const mutateHookResponseSchema = z.object({
+      id: z.number(),
+    })
+
+    const workflow = createWorkflow(
+      getNewWorkflowId(),
+
+      function (input: { id: number }) {
+        const step1Result = step1()
+        const mutateInputHook = createHook(
+          "mutateInputHook",
+          {
+            input,
+            step1Result,
+          },
+          mutateHookResponseSchema
+        )
+
+        expectTypeOf(mutateInputHook.getResult).returns.toMatchTypeOf<
+          { id: number } | undefined
+        >()
+
+        return new WorkflowResponse(
+          {
+            input,
+            step1Result,
+            hookResult: mutateInputHook.getResult(),
+          },
+          {
+            hooks: [mutateInputHook],
+          }
+        )
+      }
+    )
+
+    workflow.hooks.mutateInputHook((data) => {
+      return new StepResponse({
+        id: data.input.id + 1,
+      })
+    })
+
+    const { result } = await workflow.run({ input: { id: 1 } })
+    expect(result).toEqual({
+      input: { id: 1 },
+      step1Result: { result: "step1" },
+      hookResult: {
+        id: 2,
+      },
+    })
+  })
+
+  it("should validate and throw error when hook response is invalid", async function () {
+    const step1 = createStep("step1", async (_, context) => {
+      return new StepResponse({ result: "step1" })
+    })
+
+    const mutateHookResponseSchema = z.object({
+      id: z.number(),
+    })
+
+    const workflow = createWorkflow(
+      getNewWorkflowId(),
+
+      function (input: { id: number }) {
+        const step1Result = step1()
+        const mutateInputHook = createHook(
+          "mutateInputHook",
+          {
+            input,
+            step1Result,
+          },
+          mutateHookResponseSchema
+        )
+
+        expectTypeOf(mutateInputHook.getResult).returns.toMatchTypeOf<
+          { id: number } | undefined
+        >()
+
+        return new WorkflowResponse(
+          {
+            input,
+            step1Result,
+            hookResult: mutateInputHook.getResult(),
+          },
+          {
+            hooks: [mutateInputHook],
+          }
+        )
+      }
+    )
+
+    workflow.hooks.mutateInputHook((data) => {
+      return new StepResponse({} as any)
+    })
+
+    try {
+      await workflow.run({ input: { id: 1 } })
+      throw new Error("Expected workflow to fail")
+    } catch (error) {
+      expect(error).toHaveProperty("issues")
+      expect(error.issues).toEqual([
+        {
+          code: "invalid_type",
+          expected: "number",
+          message: "Required",
+          path: ["id"],
+          received: "undefined",
+        },
+      ])
+    }
+  })
+
+  it("should not validate when no hook handler has been defined", async function () {
+    const step1 = createStep("step1", async (_, context) => {
+      return new StepResponse({ result: "step1" })
+    })
+
+    const mutateHookResponseSchema = z.object({
+      id: z.number(),
+    })
+
+    const workflow = createWorkflow(
+      getNewWorkflowId(),
+
+      function (input: { id: number }) {
+        const step1Result = step1()
+        const mutateInputHook = createHook(
+          "mutateInputHook",
+          {
+            input,
+            step1Result,
+          },
+          mutateHookResponseSchema
+        )
+
+        expectTypeOf(mutateInputHook.getResult).returns.toMatchTypeOf<
+          { id: number } | undefined
+        >()
+
+        return new WorkflowResponse(
+          {
+            input,
+            step1Result,
+            hookResult: mutateInputHook.getResult(),
+          },
+          {
+            hooks: [mutateInputHook],
+          }
+        )
+      }
+    )
+
+    await workflow.run({ input: { id: 1 } })
+  })
+
+  it("should validate when hook returns undefined", async function () {
+    const step1 = createStep("step1", async (_, context) => {
+      return new StepResponse({ result: "step1" })
+    })
+
+    const mutateHookResponseSchema = z.object({
+      id: z.number(),
+    })
+
+    const workflow = createWorkflow(
+      getNewWorkflowId(),
+
+      function (input: { id: number }) {
+        const step1Result = step1()
+        const mutateInputHook = createHook(
+          "mutateInputHook",
+          {
+            input,
+            step1Result,
+          },
+          mutateHookResponseSchema
+        )
+
+        expectTypeOf(mutateInputHook.getResult).returns.toMatchTypeOf<
+          { id: number } | undefined
+        >()
+
+        return new WorkflowResponse(
+          {
+            input,
+            step1Result,
+            hookResult: mutateInputHook.getResult(),
+          },
+          {
+            hooks: [mutateInputHook],
+          }
+        )
+      }
+    )
+
+    workflow.hooks.mutateInputHook((data) => {})
+    try {
+      await workflow.run({ input: { id: 1 } })
+      throw new Error("Expected workflow to fail")
+    } catch (error) {
+      expect(error).toHaveProperty("issues")
+      expect(error.issues).toEqual([
+        {
+          code: "invalid_type",
+          expected: "object",
+          message: "Required",
+          path: [],
+          received: "undefined",
+        },
+      ])
+    }
   })
 })
