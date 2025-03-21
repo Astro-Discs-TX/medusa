@@ -1,14 +1,30 @@
-import * as ts from "typescript"
+import ts from "typescript"
 import { SyntaxKind } from "typescript"
 import DefaultKindGenerator, { GetDocBlockOptions } from "./default.js"
+import { API_ROUTE_PARAM_REGEX } from "../../constants.js"
 
 const EXAMPLE_CODEBLOCK_REGEX = /```(ts|typescript)\s*([.\s\S]*?)\s*```/
+
+type RouteData = {
+  route: string
+  method: string
+}
 
 // eslint-disable-next-line max-len
 class RouteExamplesKindGenerator extends DefaultKindGenerator<ts.MethodDeclaration> {
   public name = "route-examples"
-  protected allowedKinds: SyntaxKind[] = [SyntaxKind.MethodDeclaration]
+  protected allowedKinds: SyntaxKind[] = [
+    SyntaxKind.MethodDeclaration,
+    SyntaxKind.ArrowFunction,
+  ]
 
+  /**
+   * Gets the route examples from the specified node.
+   *
+   * @param node - The node to get the route examples from.
+   * @param options - The options for the route examples.
+   * @returns The route examples for the specified node.
+   */
   async getDocBlock(
     node: ts.MethodDeclaration,
     options?: GetDocBlockOptions
@@ -18,15 +34,13 @@ class RouteExamplesKindGenerator extends DefaultKindGenerator<ts.MethodDeclarati
     }
 
     // extract the route path from the node
-    let routePath = ""
-    node.body?.forEachChild((child) => {
-      if (child.kind === ts.SyntaxKind.StringLiteral) {
-        routePath = child.getText()
-      }
-    })
+    const routeData = this.findRoute(node.body as ts.Node)
 
-    if (!routePath) {
+    if (!routeData.route) {
       return ""
+    }
+    if (!routeData.method) {
+      routeData.method = "GET" // default method
     }
 
     // get examples from the comments
@@ -45,7 +59,7 @@ class RouteExamplesKindGenerator extends DefaultKindGenerator<ts.MethodDeclarati
     )
 
     return JSON.stringify({
-      [routePath]: exampleText,
+      [this.formatRouteData(routeData)]: exampleText,
     })
   }
 
@@ -67,8 +81,106 @@ class RouteExamplesKindGenerator extends DefaultKindGenerator<ts.MethodDeclarati
    * @param node - The node to get the example type for.
    * @returns The example type.
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getExampleType(node: ts.MethodDeclaration): string {
     return "js-sdk"
+  }
+
+  /**
+   * Finds the route data from the specified node.
+   *
+   * @param node - The node to find the route from.
+   * @returns The route data.
+   */
+  findRoute(node: ts.Node): RouteData {
+    const result = {
+      route: "",
+      method: "",
+    }
+
+    if (
+      node.kind === ts.SyntaxKind.StringLiteral ||
+      node.kind === ts.SyntaxKind.NoSubstitutionTemplateLiteral ||
+      node.kind === ts.SyntaxKind.TemplateExpression
+    ) {
+      const str = node
+        .getText()
+        .replace(/^["'`]|["'`]$/g, "")
+        .replace(API_ROUTE_PARAM_REGEX, `{$1}`)
+        .toLowerCase()
+      if (
+        str.startsWith("/store") ||
+        str.startsWith("/admin") ||
+        str.startsWith("/auth")
+      ) {
+        result.route = str
+      } else if (
+        str === "get" ||
+        str === "post" ||
+        str === "put" ||
+        str === "delete"
+      ) {
+        result.method = str.toUpperCase()
+      }
+    } else {
+      node.forEachChild((child) => {
+        if (result.route.length > 0 && result.method.length > 0) {
+          return
+        }
+
+        const childResult = this.findRoute(child)
+        if (result.route.length === 0) {
+          result.route = childResult.route
+        }
+        if (result.method.length === 0) {
+          result.method = childResult.method
+        }
+      })
+    }
+
+    return result
+  }
+
+  /**
+   * Formats the route data as a string.
+   *
+   * @param routeData - The route data to format.
+   * @returns The formatted route data as a string.
+   */
+  formatRouteData(routeData: RouteData): string {
+    return `${routeData.method} ${routeData.route}`
+  }
+
+  /**
+   * Checks whether a node can be documented.
+   *
+   * @param {ts.Node} node - The node to check for.
+   * @returns {boolean} Whether the node can be documented.
+   */
+  canDocumentNode(node: ts.Node): boolean {
+    // check if node has docblock
+    return ts.getJSDocCommentsAndTags(node).length > 0 && !this.isPrivate(node)
+  }
+
+  /**
+   * Checks whether a node is private.
+   *
+   * @param node - The node to check for.
+   * @returns Whether the node is private.
+   */
+  isPrivate(node: ts.Node): boolean {
+    // Check for explicit private keyword
+    if (ts.canHaveModifiers(node)) {
+      const modifiers = ts.getModifiers(node)
+      if (modifiers) {
+        return modifiers.some(
+          (modifier) => modifier.kind === ts.SyntaxKind.PrivateKeyword
+        )
+      }
+    }
+
+    // Check for private class member
+    return (node.flags & ts.ModifierFlags.Private) !== 0
   }
 }
 
