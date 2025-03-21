@@ -686,6 +686,11 @@ export interface FilterableProductProps
    * Search through the products' attributes, such as titles and descriptions, using this search term.
    */
   q?: string
+
+  /**
+   * The brand to filter products by.
+   */
+  brand?: string
   /**
    * The status to filter products by
    */
@@ -1492,6 +1497,7 @@ export interface CreateProductDTO {
   /**
    * The brand of the product.
    */
+  brand?: string | null
   /**
    * The associated images to created or updated.
    */

@@ -3,6 +3,7 @@ export const defaultStoreProductFields = [
   "title",
   "subtitle",
   "description",
+  "brand",
   "handle",
   "is_giftcard",
   "discountable",

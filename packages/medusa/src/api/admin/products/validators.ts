@@ -216,6 +216,7 @@ export type AdminCreateProductType = z.infer<typeof CreateProduct>
 export const CreateProduct = z
   .object({
     title: z.string(),
+    brand: z.string().nullish(),
     subtitle: z.string().nullish(),
     description: z.string().nullish(),
     is_giftcard: booleanString().optional().default(false),
@@ -256,6 +257,7 @@ export const UpdateProduct = z
     options: z.array(UpdateProductOption).optional(),
     variants: z.array(UpdateProductVariant).optional(),
     status: statusEnum.optional(),
+    brand: z.string().nullish(),
     subtitle: z.string().nullish(),
     description: z.string().nullish(),
     images: z.array(z.object({ url: z.string() })).optional(),

@@ -29,6 +29,7 @@ required:
   - discountable
   - external_id
   - deleted_at
+  - brand
 properties:
   collection:
     $ref: ./AdminCollection.yaml
@@ -83,6 +84,10 @@ properties:
     type: string
     title: id
     description: The product's ID.
+  brand:
+    type: string
+    title: brand
+    description: The product's brand.
   metadata:
     type: object
     description: The product's metadata, can hold custom key-value pairs.

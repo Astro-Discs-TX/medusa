@@ -56,6 +56,7 @@ export const defaultAdminProductFields = [
   "title",
   "subtitle",
   "status",
+  "brand",
   "external_id",
   "description",
   "handle",

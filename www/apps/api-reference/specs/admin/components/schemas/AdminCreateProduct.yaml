@@ -9,6 +9,10 @@ properties:
     type: string
     title: title
     description: The product's title.
+  brand:
+    type: string
+    title: brand
+    description: The product's brand.
   subtitle:
     type: string
     title: subtitle

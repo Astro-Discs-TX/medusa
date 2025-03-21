@@ -162,6 +162,10 @@ export interface AdminCreateProduct {
    */
   title: string
   /**
+   * The product's brand.
+   */
+  brand?: string
+  /**
    * The product's subtitle.
    */
   subtitle?: string
@@ -388,6 +392,10 @@ export interface AdminUpdateProduct {
    * The product's description.
    */
   description?: string | null
+  /**
+   * The product's brand.
+   */
+  brand?: string | null
   /**
    * Whether the product is a gift card.
    */
