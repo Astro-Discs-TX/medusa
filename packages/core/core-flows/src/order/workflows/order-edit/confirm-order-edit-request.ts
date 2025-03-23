@@ -196,7 +196,7 @@ export const confirmOrderEditRequestWorkflow = createWorkflow(
       (data) => {
         const previousItemIds = (data.previousOrderItems || []).map(
           ({ id }) => id
-        ) // items that have been removed with the change
+        ) 
         const newItemIds = data.orderItems.items.map(({ id }) => id)
         return [...new Set([...previousItemIds, ...newItemIds])]
       }
@@ -209,6 +209,11 @@ export const confirmOrderEditRequestWorkflow = createWorkflow(
       ({ orderItems, orderPreview }) => {
         const allItems: any[] = []
         const allVariants: any[] = []
+        
+        if (!orderItems.items || !orderItems.items.length || !orderPreview.items) {
+          return { variants: allVariants, items: allItems }
+        }
+        
         orderItems.items.forEach((ordItem) => {
           const itemAction = orderPreview.items?.find(
             (item) =>
@@ -246,19 +251,22 @@ export const confirmOrderEditRequestWorkflow = createWorkflow(
             return
           }
 
-          const reservationQuantity = MathBN.sub(
-            newQuantity,
-            ordItem.raw_fulfilled_quantity
-          )
+          const fulfilledQty = ordItem.raw_fulfilled_quantity || "0"
+          const reservationQuantity = MathBN.sub(newQuantity, fulfilledQty)
 
-          allItems.push({
-            id: ordItem.id,
-            variant_id: ordItem.variant_id,
-            quantity: reservationQuantity,
-            unit_price: unitPrice,
-            compare_at_unit_price: compareAtUnitPrice,
-          })
-          allVariants.push(ordItem.variant)
+          if (MathBN.gt(reservationQuantity, 0)) {
+            allItems.push({
+              id: ordItem.id,
+              variant_id: ordItem.variant_id,
+              quantity: reservationQuantity,
+              unit_price: unitPrice,
+              compare_at_unit_price: compareAtUnitPrice,
+            })
+            
+            if (ordItem.variant) {
+              allVariants.push(ordItem.variant)
+            }
+          }
         })
 
         return {
@@ -279,7 +287,9 @@ export const confirmOrderEditRequestWorkflow = createWorkflow(
       prepareConfirmInventoryInput
     )
 
-    reserveInventoryStep(formatedInventoryItems)
+    if (items && items.length > 0) {
+      reserveInventoryStep(formatedInventoryItems)
+    }
 
     createOrUpdateOrderPaymentCollectionWorkflow.runAsStep({
       input: {
