@@ -162,6 +162,7 @@ export const TaxRegionCreateForm = ({ parentId }: TaxRegionCreateFormProps) => {
                               <PercentageInput
                                 {...field}
                                 value={value?.value}
+                                decimalScale={4}
                                 onValueChange={(value, _name, values) =>
                                   onChange({
                                     value: value,
