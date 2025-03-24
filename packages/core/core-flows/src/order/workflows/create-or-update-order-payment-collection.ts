@@ -147,7 +147,11 @@ export const createOrUpdateOrderPaymentCollectionWorkflow = createWorkflow(
     when(
       { existingPaymentCollection, amountPending, shouldRecreate },
       ({ existingPaymentCollection, amountPending, shouldRecreate }) => {
-        return existingPaymentCollection?.id && shouldRecreate
+        return (
+          !!existingPaymentCollection?.id &&
+          shouldRecreate &&
+          MathBN.gt(amountPending, 0)
+        )
       }
     ).then(() => {
       cancelPaymentCollectionWorkflow.runAsStep({
@@ -161,8 +165,7 @@ export const createOrUpdateOrderPaymentCollectionWorkflow = createWorkflow(
       { existingPaymentCollection, amountPending, shouldRecreate },
       ({ existingPaymentCollection, amountPending, shouldRecreate }) => {
         return (
-          !existingPaymentCollection?.id &&
-          shouldRecreate &&
+          (!existingPaymentCollection?.id || shouldRecreate) &&
           MathBN.gt(amountPending, 0)
         )
       }
