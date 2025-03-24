@@ -152,12 +152,6 @@ export const requestOrderEditRequestWorkflow = createWorkflow(
     const updateOrderChangesData = getOrderChangesData({ input, orderChange })
     updateOrderChangesStep(updateOrderChangesData)
 
-    // createOrUpdateOrderPaymentCollectionWorkflow.runAsStep({
-    //   input: {
-    //     order_id: order.id,
-    //   },
-    // })
-
     return new WorkflowResponse(previewOrderChangeStep(order.id))
   }
 )
