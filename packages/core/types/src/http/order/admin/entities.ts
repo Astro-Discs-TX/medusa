@@ -1,3 +1,4 @@
+import { OrderCreditLineDTO } from "../../../order"
 import { AdminClaim } from "../../claim"
 import { AdminCustomer } from "../../customer"
 import { AdminExchange } from "../../exchange"
@@ -53,6 +54,10 @@ export interface AdminOrder extends Omit<BaseOrder, "items"> {
    * The order's shipping methods.
    */
   shipping_methods: AdminOrderShippingMethod[]
+  /**
+   * The order's credit lines.
+   */
+  credit_lines?: OrderCreditLineDTO[]
 }
 
 export interface AdminOrderChange
