@@ -60,14 +60,7 @@ export const cancelPaymentCollectionWorkflow = createWorkflow(
   ): WorkflowResponse<PaymentCollectionDTO> => {
     const paymentCollectionQuery = useQueryGraphStep({
       entity: "payment_collection",
-      fields: [
-        "id",
-        "status",
-        // "payment_sessions.*",
-        "payments.id",
-        "payments.captured_at",
-        // "payments.captures.id",
-      ],
+      fields: ["id", "status", "payments.id", "payments.captured_at"],
       filters: { id: input.payment_collection_id },
     }).config({ name: "get-payment-collection" })
 
