@@ -24,7 +24,7 @@ import { productVariantsFields } from "../utils/fields"
 
 function prepareLineItems(data) {
   const items = (data.input.items ?? []).map((item) => {
-    const variant = data.variants.find((v) => v.id === item.variant_id)!
+    const variant = data.variants?.find((v) => v.id === item.variant_id)!
 
     const input: PrepareLineItemDataInput = {
       item,
@@ -55,12 +55,12 @@ export type OrderAddLineItemWorkflowOutput = OrderLineItemDTO[]
 
 export const addOrderLineItemsWorkflowId = "order-add-line-items"
 /**
- * This workflow adds line items to an order. This is useful when making edits to 
+ * This workflow adds line items to an order. This is useful when making edits to
  * an order. It's used by other workflows, such as {@link orderEditAddNewItemWorkflow}.
- * 
+ *
  * You can use this workflow within your customizations or your own custom workflows, allowing you to wrap custom logic around adding items to
  * an order.
- * 
+ *
  * @example
  * const { result } = await addOrderLineItemsWorkflow(container)
  * .run({
@@ -74,9 +74,9 @@ export const addOrderLineItemsWorkflowId = "order-add-line-items"
  *     ]
  *   }
  * })
- * 
+ *
  * @summary
- * 
+ *
  * Add line items to an order.
  */
 export const addOrderLineItemsWorkflow = createWorkflow(

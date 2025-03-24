@@ -27,6 +27,8 @@ export type ChangeActionType =
   | "TRANSFER_CUSTOMER"
   | "UPDATE_ORDER_PROPERTIES"
   | "CREDIT_LINE_ADD"
+  | "PROMOTION_ADD"
+  | "PROMOTION_REMOVE"
 
 export type OrderChangeStatus =
   | "confirmed"

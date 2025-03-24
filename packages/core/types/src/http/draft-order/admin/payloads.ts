@@ -121,3 +121,89 @@ export interface AdminUpdateDraftOrder {
    */
   metadata?: Record<string, unknown> | null
 }
+
+export interface AdminUpdateDraftOrderItem {
+  /**
+   * The item's quantity.
+   */
+  quantity: number
+  /**
+   * The item's unit price.
+   */
+  unit_price?: number | null
+  /**
+   * The item's compare at unit price.
+   */
+  compare_at_unit_price?: number | null
+  /**
+   * The item's internal note.
+   */
+  internal_note?: string | null
+  /**
+   * The item's metadata.
+   */
+  metadata?: Record<string, unknown> | null
+}
+
+export interface AdminAddDraftOrderItem {
+  /**
+   * The item's variant ID.
+   *
+   * Either variant_id or title must be provided.
+   */
+  variant_id?: string
+  /**
+   * The item's title.
+   *
+   * Either variant_id or title must be provided.
+   */
+  title?: string
+  /**
+   * The item's quantity.
+   */
+  quantity: number
+  /**
+   * The item's unit price.
+   */
+  unit_price?: number | null
+  /**
+   * The item's compare at unit price.
+   */
+  compare_at_unit_price?: number | null
+  /**
+   * The item's internal note.
+   */
+  internal_note?: string | null
+  /**
+   * The item's metadata.
+   */
+  metadata?: Record<string, unknown> | null
+}
+
+export interface AdminAddDraftOrderItems {
+  items: AdminAddDraftOrderItem[]
+}
+
+export interface AdminAddDraftOrderPromotions {
+  promo_codes: string[]
+}
+
+export interface AdminRemoveDraftOrderPromotions {
+  promo_codes: string[]
+}
+
+export interface AdminAddDraftOrderShippingMethod {
+  shipping_option_id: string
+  custom_amount?: number
+  description?: string
+  internal_note?: string
+  metadata?: Record<string, unknown>
+}
+
+export interface AdminUpdateDraftOrderShippingMethod {
+  shipping_option_id: string
+  custom_amount?: number | null
+  description?: string | null
+  internal_note?: string | null
+  metadata?: Record<string, unknown> | null
+}
