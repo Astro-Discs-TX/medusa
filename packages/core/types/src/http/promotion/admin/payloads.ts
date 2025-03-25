@@ -78,6 +78,10 @@ export interface AdminCreateApplicationMethod {
    */
   allocation?: ApplicationMethodAllocationValues
   /**
+   * The target rules of the application method.
+   */
+  target_rules?: AdminCreatePromotionRule[]
+  /**
    * The buy rules of the application method.
    */
   buy_rules?: AdminCreatePromotionRule[]
@@ -85,6 +89,11 @@ export interface AdminCreateApplicationMethod {
    * The quantity of the application method.
    */
   apply_to_quantity?: number | null
+  /**
+   * The minimum quantity required for a `buyget` promotion to be applied. For example, 
+   * if the promotion is a "Buy 2 shirts get 1 free", the value of this attribute is 2.
+   */
+  buy_rules_min_quantity?: number | null
 }
 
 export interface AdminUpdateApplicationMethod {

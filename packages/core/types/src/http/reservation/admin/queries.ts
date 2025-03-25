@@ -42,6 +42,10 @@ export interface AdminGetReservationsParams {
    * Apply filters on the reservation's update date.
    */
   updated_at?: OperatorMap<string>
+  /**
+   * Apply filters on the reservation's deletion date.
+   */
+  deleted_at?: OperatorMap<string>
 }
 
 export interface AdminReservationParams extends SelectParams {}

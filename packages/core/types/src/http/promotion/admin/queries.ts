@@ -19,6 +19,15 @@ export interface AdminGetPromotionsParams
    */
   campaign_id?: string | string[]
   /**
+   * Filter by the promotion's application method.
+   */
+  application_method?: {
+    /**
+     * Filter by the promotion's application method currency code.
+     */
+    currency_code?: string | string[]
+  }
+  /**
    * Filter by the promotion's currency code.
    */
   currency_code?: string | string[]
