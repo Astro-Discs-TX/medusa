@@ -874,9 +874,17 @@ function buildSchemaFromFilterableLinks(
     const schema = config.schema
 
     if (config.isLink) {
-      for (const relationship of config.relationships ?? []) {
-        if (!relationship.filterable?.length) {
-          continue
+      if (!config.relationships?.some((r) => r.filterable?.length)) {
+        return []
+      }
+
+      for (const relationship of config.relationships) {
+        relationship.filterable ??= []
+        if (
+          !relationship.filterable?.length ||
+          !relationship.filterable?.includes("id")
+        ) {
+          relationship.filterable.push("id")
         }
 
         const fieldAliasMap: Record<string, string[]> = {}
