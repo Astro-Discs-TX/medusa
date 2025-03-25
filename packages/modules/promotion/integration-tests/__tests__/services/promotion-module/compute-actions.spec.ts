@@ -736,7 +736,7 @@ moduleIntegrationTestRunner({
               {
                 action: "addItemAdjustment",
                 item_id: "item_cotton_tshirt",
-                amount: 2,
+                amount: 5,
                 code: "PROMOTION_TEST_2",
               },
               {
@@ -744,6 +744,81 @@ moduleIntegrationTestRunner({
                 item_id: "item_cotton_sweater",
                 amount: 10.5,
                 code: "PROMOTION_TEST_2",
+              },
+            ])
+          })
+
+          it("should compute actions when 2 percentage promotions are applied to the same item", async () => {
+            await createDefaultPromotion(service, {
+              code: "PROMO_PERCENTAGE_1",
+              rules: [],
+              application_method: {
+                type: ApplicationMethodType.PERCENTAGE,
+                target_type: "items",
+                allocation: "each",
+                value: 100,
+                max_quantity: 1,
+                target_rules: [
+                  {
+                    attribute: "product.id",
+                    operator: "eq",
+                    values: ["prod_tshirt"],
+                  },
+                ],
+              },
+            })
+
+            await createDefaultPromotion(service, {
+              code: "PROMO_PERCENTAGE_2",
+              rules: [],
+              application_method: {
+                type: ApplicationMethodType.PERCENTAGE,
+                target_type: "items",
+                allocation: "each",
+                value: 100,
+                max_quantity: 1,
+                target_rules: [
+                  {
+                    attribute: "product.id",
+                    operator: "eq",
+                    values: ["prod_tshirt"],
+                  },
+                ],
+              },
+            })
+
+            const result = await service.computeActions(
+              ["PROMO_PERCENTAGE_1", "PROMO_PERCENTAGE_2"],
+              {
+                currency_code: "usd",
+                items: [
+                  {
+                    id: "item_cotton_tshirt",
+                    quantity: 4,
+                    subtotal: 200,
+                    product_category: {
+                      id: "catg_cotton",
+                    },
+                    product: {
+                      id: "prod_tshirt",
+                    },
+                  },
+                ],
+              }
+            )
+
+            expect(JSON.parse(JSON.stringify(result))).toEqual([
+              {
+                action: "addItemAdjustment",
+                item_id: "item_cotton_tshirt",
+                amount: 50,
+                code: "PROMO_PERCENTAGE_1",
+              },
+              {
+                action: "addItemAdjustment",
+                item_id: "item_cotton_tshirt",
+                amount: 50,
+                code: "PROMO_PERCENTAGE_2",
               },
             ])
           })
@@ -3937,7 +4012,7 @@ moduleIntegrationTestRunner({
                 },
               },
             ],
-          })
+          } as any)
 
           expect(JSON.parse(JSON.stringify(result))).toEqual([
             {
