@@ -35,6 +35,12 @@ export type SchemaObjectEntityRepresentation = {
      * Are the data expected to be a list or not
      */
     isList?: boolean
+
+    /**
+     * Whether the entity is the inverse of the link (not the owner.):
+     * e.g: order -> cart, order is the owner, cart is the inverse
+     */
+    isInverse?: boolean
   }[]
 
   /**
@@ -59,12 +65,6 @@ export type SchemaObjectEntityRepresentation = {
    * refers to
    */
   moduleConfig: ModuleJoinerConfig
-
-  /**
-   * Whether the entity is the reference parent of the link (not the owner.):
-   * e.g: order -> cart, order is the owner, cart is the reference
-   */
-  isReferenceLink?: boolean
 }
 
 export type EntityNameModuleConfigMap = {
@@ -75,6 +75,7 @@ export type SchemaPropertiesMap = {
   [key: string]: {
     shortCutOf?: string
     ref: SchemaObjectEntityRepresentation
+    isInverse?: boolean
   }
 }
 

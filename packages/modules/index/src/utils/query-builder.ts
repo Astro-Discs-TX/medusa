@@ -246,7 +246,7 @@ export class QueryBuilder {
             )
             const castType = this.getPostgresCastType(attr, [field]).cast
 
-            const val = operator === "IN" ? subValue : [subValue]
+            let val = operator === "IN" ? subValue : [subValue]
             if (operator === "=" && subValue === null) {
               operator = "IS"
             } else if (operator === "!=" && subValue === null) {
@@ -260,6 +260,19 @@ export class QueryBuilder {
                   field as string[],
                   subValue
                 )}'::jsonb`
+              )
+            } else if (operator === "IN") {
+              if (val && !Array.isArray(val)) {
+                val = [val]
+              }
+              if (!val || val.length === 0) {
+                return
+              }
+
+              const inPlaceholders = val.map(() => "?").join(",")
+              builder.whereRaw(
+                `(${aliasMapping[attr]}.data${nested}->>?)${castType} IN (${inPlaceholders})`,
+                [...field, ...val]
               )
             } else {
               builder.whereRaw(
@@ -327,7 +340,7 @@ export class QueryBuilder {
   private buildQueryParts(
     structure: Select,
     parentAlias: string,
-    parentEntity: string,
+    parentEntity: IndexTypes.SchemaObjectEntityRepresentation["parents"][0],
     parentProperty: string,
     aliasPath: string[] = [],
     level = 0,
@@ -337,23 +350,28 @@ export class QueryBuilder {
 
     const isSelectableField = this.allSchemaFields.has(parentProperty)
     const entities = this.getEntity(currentAliasPath, false)
-    const entityRef = entities?.ref!
 
     // !entityRef.alias means the object has not table, it's a nested object
-    if (isSelectableField || !entities || !entityRef?.alias) {
+    if (isSelectableField || !entities || !entities?.ref?.alias) {
       // We are currently selecting a specific field of the parent entity or the entity is not found on the index schema
       // We don't need to build the query parts for this as there is no join
       return []
     }
 
-    const mainEntity = entityRef.entity
+    const mainEntity = entities
     const mainAlias =
-      this.getShortAlias(aliasMapping, mainEntity.toLowerCase()) + level
+      this.getShortAlias(aliasMapping, mainEntity.ref.entity.toLowerCase()) +
+      level
 
-    const allEntities: any[] = []
+    const allEntities: {
+      entity: IndexTypes.SchemaPropertiesMap[0]
+      parEntity: IndexTypes.SchemaObjectEntityRepresentation["parents"][0]
+      parAlias: string
+      alias: string
+    }[] = []
     if (!entities.shortCutOf) {
       allEntities.push({
-        entity: mainEntity,
+        entity: entities,
         parEntity: parentEntity,
         parAlias: parentAlias,
         alias: mainAlias,
@@ -372,7 +390,7 @@ export class QueryBuilder {
 
         intermediateAlias.pop()
 
-        if (intermediateEntity.ref.entity === parentEntity) {
+        if (intermediateEntity.ref.entity === parentEntity?.ref.entity) {
           break
         }
 
@@ -390,7 +408,7 @@ export class QueryBuilder {
           x
 
         const parAlias =
-          parentIntermediateEntity.ref.entity === parentEntity
+          parentIntermediateEntity.ref.entity === parentEntity?.ref.entity
             ? parentAlias
             : this.getShortAlias(
                 aliasMapping,
@@ -405,8 +423,9 @@ export class QueryBuilder {
         }
 
         allEntities.unshift({
-          entity: intermediateEntity.ref.entity,
-          parEntity: parentIntermediateEntity.ref.entity,
+          entity: intermediateEntity as any,
+          parEntity:
+            parentIntermediateEntity as IndexTypes.SchemaObjectEntityRepresentation["parents"][0],
           parAlias,
           alias,
         })
@@ -421,18 +440,41 @@ export class QueryBuilder {
       aliasMapping[currentAliasPath] = alias
 
       if (level > 0) {
-        const cName = entity.toLowerCase()
-        const pName = `${parEntity}${entity}`.toLowerCase()
+        const cName = entity.ref.entity.toLowerCase()
 
         let joinTable = `cat_${cName} AS ${alias}`
 
-        const pivotTable = `cat_pivot_${pName}`
-        joinBuilder.leftJoin(
-          `${pivotTable} AS ${alias}_ref`,
-          `${alias}_ref.parent_id`,
-          `${parAlias}.id`
-        )
-        joinBuilder.leftJoin(joinTable, `${alias}.id`, `${alias}_ref.child_id`)
+        if (entity.isInverse || parEntity.isInverse) {
+          const pName =
+            `${entity.ref.entity}${parEntity.ref.entity}`.toLowerCase()
+          const pivotTable = `cat_pivot_${pName}`
+
+          joinBuilder.leftJoin(
+            `${pivotTable} AS ${alias}_ref`,
+            `${alias}_ref.child_id`,
+            `${parAlias}.id`
+          )
+          joinBuilder.leftJoin(
+            joinTable,
+            `${alias}.id`,
+            `${alias}_ref.parent_id`
+          )
+        } else {
+          const pName =
+            `${parEntity.ref.entity}${entity.ref.entity}`.toLowerCase()
+          const pivotTable = `cat_pivot_${pName}`
+
+          joinBuilder.leftJoin(
+            `${pivotTable} AS ${alias}_ref`,
+            `${alias}_ref.parent_id`,
+            `${parAlias}.id`
+          )
+          joinBuilder.leftJoin(
+            joinTable,
+            `${alias}.id`,
+            `${alias}_ref.child_id`
+          )
+        }
 
         const joinWhere = this.selector.joinWhere ?? {}
         const joinKey = Object.keys(joinWhere).find((key) => {
@@ -441,7 +483,7 @@ export class QueryBuilder {
           const curPath = k.join(".")
           if (curPath === currentAliasPath) {
             const relEntity = this.getEntity(curPath, false)
-            return relEntity?.ref?.entity === entity
+            return relEntity?.ref?.entity === entity.ref.entity
           }
 
           return false
@@ -469,7 +511,7 @@ export class QueryBuilder {
           this.buildQueryParts(
             childStructure,
             mainAlias,
-            mainEntity,
+            mainEntity as any,
             child,
             aliasPath.concat(parentProperty),
             level + 1,
@@ -588,8 +630,8 @@ export class QueryBuilder {
     const rootKey = this.getStructureKeys(structure)[0]
     const rootStructure = structure[rootKey] as Select
 
-    const entity = this.getEntity(rootKey)!.ref.entity
-    const rootEntity = entity.toLowerCase()
+    const entity = this.getEntity(rootKey)!
+    const rootEntity = entity.ref.entity.toLowerCase()
     const aliasMapping: { [path: string]: string } = {}
 
     let hasTextSearch: boolean = false
@@ -609,7 +651,7 @@ export class QueryBuilder {
     const joinParts = this.buildQueryParts(
       rootStructure,
       "",
-      entity,
+      entity as IndexTypes.SchemaObjectEntityRepresentation["parents"][0],
       rootKey,
       [],
       0,
@@ -738,14 +780,14 @@ export class QueryBuilder {
 
     const rootStructure = structure[rootKey] as Select
 
-    const entity = this.getEntity(rootKey)!.ref.entity
-    const rootEntity = entity.toLowerCase()
+    const entity = this.getEntity(rootKey)!
+    const rootEntity = entity.ref.entity.toLowerCase()
     const aliasMapping: { [path: string]: string } = {}
 
     const joinParts = this.buildQueryParts(
       rootStructure,
       "",
-      entity,
+      entity as IndexTypes.SchemaObjectEntityRepresentation["parents"][0],
       rootKey,
       [],
       0,
@@ -778,7 +820,6 @@ export class QueryBuilder {
       const path = aliasPath.split(".")
       const field = path.pop()
       const attr = path.join(".")
-
       const pgType = this.getPostgresCastType(attr, [field])
 
       const alias = aliasMapping[attr]
