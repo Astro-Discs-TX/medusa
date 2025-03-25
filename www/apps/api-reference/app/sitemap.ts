@@ -1,25 +1,26 @@
 import type { MetadataRoute } from "next"
 import path from "path"
-import { JSDOM } from "jsdom"
 import getUrl from "../utils/get-url"
-import { getSectionId } from "docs-utils"
+import { findAllPageHeadings, getSectionId } from "docs-utils"
 import OpenAPIParser from "@readme/openapi-parser"
 import { OpenAPI } from "types"
+import { readFile } from "fs/promises"
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const items: MetadataRoute.Sitemap = []
 
+  const markdownPath = path.join(process.cwd(), "markdown")
+
   for (const area of ["store", "admin"]) {
     // find and parse static headers from pages
-    const dom = await JSDOM.fromURL(getUrl(area))
-    const headers = dom.window.document.querySelectorAll("h2")
-    headers.forEach((header) => {
-      if (!header.textContent || !header.nextSibling?.textContent) {
-        return
-      }
-      const normalizedHeaderContent = header.textContent.replaceAll("#", "")
+    const markdownContent = await readFile(
+      path.join(markdownPath, `${area}.mdx`),
+      "utf-8"
+    )
 
-      const objectID = getSectionId([normalizedHeaderContent])
+    const headings = findAllPageHeadings({ content: markdownContent, level: 2 })
+    headings.forEach((heading) => {
+      const objectID = getSectionId([heading])
       const url = getUrl(area, objectID)
       items.push({
         url,
