@@ -21,17 +21,6 @@ export const updateDraftOrderShippingMethodStep = createStep(
   ) {
     const service = container.resolve<IOrderModuleService>(Modules.ORDER)
 
-    const allMethods = await service.listOrderShippingMethods(
-      {
-        order_id: input.order_id,
-      },
-      {
-        select: ["id", "shipping_option_id", "amount"],
-      }
-    )
-
-    console.log("allMethods", allMethods)
-
     const [beforeUpdate] = await service.listOrderShippingMethods(
       {
         id: input.shipping_method_id,
@@ -49,7 +38,7 @@ export const updateDraftOrderShippingMethodStep = createStep(
       )
     }
 
-    const updatedMethods = await service.updateOrderShippingMethods([
+    const [updatedMethod] = await service.updateOrderShippingMethods([
       {
         id: input.shipping_method_id,
         shipping_option_id: input.shipping_option_id,
@@ -57,9 +46,13 @@ export const updateDraftOrderShippingMethodStep = createStep(
       },
     ])
 
-    console.log("updatedMethods", updatedMethods)
-
-    return new StepResponse(void 0, beforeUpdate)
+    return new StepResponse(
+      {
+        before: beforeUpdate,
+        after: updatedMethod,
+      },
+      beforeUpdate
+    )
   },
   (input, { container }) => {
     const service = container.resolve<IOrderModuleService>(Modules.ORDER)

@@ -19,9 +19,6 @@ export const updateDraftOrderPromotionsStep = createStep(
   async function (data: UpdateDraftOrderPromotionsStepInput, { container }) {
     const { id, promo_codes = [], action = PromotionActions.ADD } = data
 
-    console.log("promo_codes", JSON.stringify(promo_codes, null, 2))
-    console.log("action", action)
-
     const remoteLink = container.resolve(ContainerRegistrationKeys.LINK)
     const remoteQuery = container.resolve(
       ContainerRegistrationKeys.REMOTE_QUERY
@@ -63,7 +60,6 @@ export const updateDraftOrderPromotionsStep = createStep(
           const link = promotionLinkMap.get(promotion.id)
 
           if (link) {
-            console.log("link", JSON.stringify(link, null, 2))
             linksToDismiss.push(linkObject)
           }
         }

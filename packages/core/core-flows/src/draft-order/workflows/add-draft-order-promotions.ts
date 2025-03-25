@@ -81,13 +81,15 @@ export const addDraftOrderPromotionWorkflow = createWorkflow(
     const orderChangeActionInput = transform(
       { order, orderChange, promotions },
       ({ order, orderChange, promotions }) => {
-        console.log("promotions", JSON.stringify(promotions, null, 2))
         return promotions.map((promotion) => ({
           action: ChangeActionType.PROMOTION_ADD,
           reference: "order_promotion",
           order_change_id: orderChange.id,
           reference_id: promotion.id,
           order_id: order.id,
+          details: {
+            added_code: promotion.code,
+          },
         }))
       }
     )

@@ -75,7 +75,7 @@ export const updateDraftOrderShippingMethodWorkflow = createWorkflow(
 
     validateDraftOrderChangeStep({ order, orderChange })
 
-    updateDraftOrderShippingMethodStep({
+    const { before, after } = updateDraftOrderShippingMethodStep({
       order_id: input.order_id,
       shipping_method_id: input.data.shipping_method_id,
       shipping_option_id: input.data.shipping_option_id,
@@ -125,8 +125,8 @@ export const updateDraftOrderShippingMethodWorkflow = createWorkflow(
     })
 
     const orderChangeActionInput = transform(
-      { order, orderChange, data: input.data },
-      ({ order, orderChange, data }) => {
+      { order, orderChange, data: input.data, before, after },
+      ({ order, orderChange, data, before, after }) => {
         return {
           order_change_id: orderChange.id,
           reference: "order_shipping_method",
@@ -136,9 +136,10 @@ export const updateDraftOrderShippingMethodWorkflow = createWorkflow(
           action: ChangeActionType.SHIPPING_UPDATE,
           internal_note: data.internal_note,
           details: {
-            reference_id: data.shipping_method_id,
-            shipping_option_id: data.shipping_option_id,
-            amount: data.custom_amount,
+            old_shipping_option_id: before.shipping_option_id,
+            new_shipping_option_id: after.shipping_option_id,
+            old_amount: before.amount,
+            new_amount: after.amount,
           },
         }
       }

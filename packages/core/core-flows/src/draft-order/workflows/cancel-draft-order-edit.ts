@@ -10,9 +10,10 @@ import {
   when,
   WorkflowData,
 } from "@medusajs/framework/workflows-sdk"
-import { OrderChangeDTO, OrderDTO, PromotionDTO } from "@medusajs/types"
+import { OrderChangeDTO, OrderDTO } from "@medusajs/types"
 import { useRemoteQueryStep } from "../../common"
 import { deleteOrderChangesStep, deleteOrderShippingMethods } from "../../order"
+import { restoreDraftOrderShippingMethodsStep } from "../steps/restore-draft-order-shipping-methods"
 import { validateDraftOrderChangeStep } from "../steps/validate-draft-order-change"
 import { draftOrderFieldsForRefreshSteps } from "../utils/fields"
 import { refreshDraftOrderAdjustmentsWorkflow } from "./refresh-draft-order-adjustments"
@@ -57,12 +58,70 @@ export const cancelDraftOrderEditWorkflow = createWorkflow(
       }
     )
 
+    const shippingToRestore = transform(
+      { orderChange, input },
+      ({ orderChange }) => {
+        return (orderChange.actions ?? [])
+          .filter((a) => a.action === ChangeActionType.SHIPPING_UPDATE)
+          .map(({ reference_id, details }) => ({
+            id: reference_id,
+            before: {
+              shipping_option_id: details?.old_shipping_option_id,
+              amount: details?.old_amount,
+            },
+            after: {
+              shipping_option_id: details?.new_shipping_option_id,
+              amount: details?.new_amount,
+            },
+          }))
+      }
+    )
+
     const promotionsToRemove = transform(
       { orderChange, input },
       ({ orderChange }) => {
         return (orderChange.actions ?? [])
           .filter((a) => a.action === ChangeActionType.PROMOTION_ADD)
-          .map(({ id }) => id)
+          .map(({ details }) => details?.added_code)
+          .filter(Boolean) as string[]
+      }
+    )
+
+    const promotionsToRestore = transform(
+      { orderChange, input },
+      ({ orderChange }) => {
+        return (orderChange.actions ?? [])
+          .filter((a) => a.action === ChangeActionType.PROMOTION_REMOVE)
+          .map(({ details }) => details?.removed_code)
+          .filter(Boolean) as string[]
+      }
+    )
+
+    const promotionsToRefresh = transform(
+      { order, promotionsToRemove, promotionsToRestore },
+      ({ order, promotionsToRemove, promotionsToRestore }) => {
+        const promotionLink = (order as any).promotion_link
+        const codes: Set<string> = new Set()
+
+        if (promotionLink) {
+          if (Array.isArray(promotionLink)) {
+            promotionLink.forEach((promo) => {
+              codes.add(promo.promotion.code)
+            })
+          } else {
+            codes.add(promotionLink.promotion.code)
+          }
+        }
+
+        for (const code of promotionsToRemove) {
+          codes.delete(code)
+        }
+
+        for (const code of promotionsToRestore) {
+          codes.add(code)
+        }
+
+        return Array.from(codes)
       }
     )
 
@@ -71,28 +130,19 @@ export const cancelDraftOrderEditWorkflow = createWorkflow(
       deleteOrderShippingMethods({ ids: shippingToRemove })
     )
 
-    when(promotionsToRemove, (ids) => {
-      return !!ids?.length
+    refreshDraftOrderAdjustmentsWorkflow.runAsStep({
+      input: {
+        order,
+        promo_codes: promotionsToRefresh,
+        action: PromotionActions.REPLACE,
+      },
+    })
+
+    when(shippingToRestore, (methods) => {
+      return !!methods?.length
     }).then(() => {
-      const promotions: PromotionDTO[] = useRemoteQueryStep({
-        entry_point: "promotions",
-        fields: ["id", "code"],
-        variables: { ids: promotionsToRemove },
-        list: true,
-      }).config({ name: "promotions-query" })
-
-      const promoCodes = transform(
-        { promotions },
-        ({ promotions }) =>
-          promotions.map(({ code }) => code).filter(Boolean) as string[]
-      )
-
-      refreshDraftOrderAdjustmentsWorkflow.runAsStep({
-        input: {
-          order: order,
-          promo_codes: promoCodes,
-          action: PromotionActions.REMOVE,
-        },
+      restoreDraftOrderShippingMethodsStep({
+        shippingMethods: shippingToRestore as any,
       })
     })
   }

@@ -88,6 +88,9 @@ export const removeDraftOrderPromotionsWorkflow = createWorkflow(
           order_change_id: orderChange.id,
           reference_id: promotion.id,
           order_id: order.id,
+          details: {
+            removed_code: promotion.code,
+          },
         }))
       }
     )
