@@ -253,7 +253,8 @@ export class OrderChangeProcessing {
       ;[
         "return_requested_total",
         "return_received_total",
-        "return_dismissed_total",
+        // TODO: revisit this when we settle on which dismissed items need to be refunded
+        // "return_dismissed_total",
       ].forEach((returnTotalKey) => {
         const returnTotal = item_[returnTotalKey]
 
