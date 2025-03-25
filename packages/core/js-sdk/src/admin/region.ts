@@ -1,7 +1,6 @@
 import {
   FindParams,
   HttpTypes,
-  PaginatedResponse,
   SelectParams,
 } from "@medusajs/types"
 import { Client } from "../client"
