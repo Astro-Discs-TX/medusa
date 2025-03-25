@@ -137,7 +137,7 @@ In this section, you'll create the Algolia Module's service and the methods nece
 To create the Algolia Module's service, create the file `src/modules/algolia/service.ts` with the following content:
 
 ```ts title="src/modules/algolia/service.ts"
-import { algoliasearch, SearchClient } from "algoliasearch";
+import { algoliasearch, SearchClient } from "algoliasearch"
 
 type AlgoliaOptions = {
   apiKey: string;
@@ -148,12 +148,12 @@ type AlgoliaOptions = {
 export type AlgoliaIndexType = "product"
 
 export default class AlgoliaModuleService {
-  private client: SearchClient;
-  private options: AlgoliaOptions;
+  private client: SearchClient
+  private options: AlgoliaOptions
 
   constructor({}, options: AlgoliaOptions) {
-    this.client = algoliasearch(options.appId, options.apiKey);
-    this.options = options;
+    this.client = algoliasearch(options.appId, options.apiKey)
+    this.options = options
   }
 
   // TODO add methods
@@ -194,21 +194,21 @@ export default class AlgoliaModuleService {
   async getIndexName(type: AlgoliaIndexType) {
     switch (type) {
       case "product":
-        return this.options.productIndexName;
+        return this.options.productIndexName
       default:
-        throw new Error(`Invalid index type: ${type}`);
+        throw new Error(`Invalid index type: ${type}`)
     }
   }
 
   async indexData(data: Record<string, unknown>[], type: AlgoliaIndexType = "product") {
-    const indexName = await this.getIndexName(type);
+    const indexName = await this.getIndexName(type)
     this.client.saveObjects({
       indexName,
       objects: data.map((item) => ({
         ...item,
         // set the object ID to allow updating later
-        objectID: item.id
-      }))
+        objectID: item.id,
+      })),
     })
   }
 }
@@ -232,20 +232,20 @@ export default class AlgoliaModuleService {
   // ...
 
   async retrieveFromIndex(objectIDs: string[], type: AlgoliaIndexType = "product") {
-    const indexName = await this.getIndexName(type);
+    const indexName = await this.getIndexName(type)
     return await this.client.getObjects<Record<string, unknown>>({
       requests: objectIDs.map((objectID) => ({
         indexName,
-        objectID
-      }))
+        objectID,
+      })),
     })
   }
 
   async deleteFromIndex(objectIDs: string[], type: AlgoliaIndexType = "product") {
-    const indexName = await this.getIndexName(type);
+    const indexName = await this.getIndexName(type)
     await this.client.deleteObjects({
       indexName,
-      objectIDs
+      objectIDs,
     })
   }
 }
@@ -267,14 +267,14 @@ export default class AlgoliaModuleService {
   // ...
 
   async search(query: string, type: AlgoliaIndexType = "product") {
-    const indexName = await this.getIndexName(type);
+    const indexName = await this.getIndexName(type)
     return await this.client.search({
       requests: [
         {
           indexName,
-          query
-        }
-      ]
+          query,
+        },
+      ],
     })
   }
 }
@@ -322,7 +322,7 @@ module.exports = defineConfig({
         appId: process.env.ALGOLIA_APP_ID!,
         apiKey: process.env.ALGOLIA_API_KEY!,
         productIndexName: process.env.ALGOLIA_PRODUCT_INDEX_NAME!,
-      }
+      },
     },
   ],
 })
@@ -441,9 +441,9 @@ export const syncProductsStep = createStep(
 
     return new StepResponse(undefined, {
       newProducts: newProducts.map((product) => product.id),
-      existingProducts
+      existingProducts,
     })
-  },
+  }
   // TODO add compensation
 )
 ```
@@ -532,22 +532,22 @@ export const syncProductsWorkflow = createWorkflow(
       fields: ["id", "title", "description", "handle", "thumbnail", "categories.*", "tags.*"],
       pagination: {
         take: limit,
-        skip: offset
+        skip: offset,
       },
       filters: {
         // @ts-ignore
         status: "published",
-        ...filters
-      }
+        ...filters,
+      },
     })
 
     syncProductsStep({
-      products: data
+      products: data,
     } as SyncProductsStepInput)
 
     return new WorkflowResponse({
       products: data,
-      metadata
+      metadata,
     })
   }
 )
@@ -614,8 +614,8 @@ export default async function algoliaSyncHandler({
       .run({
         input: {
           limit,
-          offset
-        }
+          offset,
+        },
       })
 
     hasMore = offset + limit < (metadata?.count ?? 0)
@@ -667,8 +667,8 @@ An API route is created in a `route.ts` file under a sub-directory of the `src/a
 So, to create an API route at the path `/admin/algolia/sync`, create the file `src/api/admin/algolia/sync/route.ts` with the following content:
 
 ```ts title="src/api/admin/algolia/sync/route.ts"
-import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
-import { Modules } from "@medusajs/framework/utils";
+import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { Modules } from "@medusajs/framework/utils"
 
 export async function POST(
   req: MedusaRequest,
@@ -677,11 +677,11 @@ export async function POST(
   const eventModuleService = req.scope.resolve(Modules.EVENT_BUS)
   await eventModuleService.emit({
     name: "algolia.sync",
-    data: {}
+    data: {},
   })
   res.send({
-    message: "Syncing data to Algolia"
-  });
+    message: "Syncing data to Algolia",
+  })
 }
 ```
 
@@ -748,7 +748,7 @@ const AlgoliaPage = () => {
   const { mutate, isPending } = useMutation({
     mutationFn: () => 
       sdk.client.fetch("/admin/algolia/sync", {
-        method: "POST"
+        method: "POST",
       }),
     onSuccess: () => {
       toast.success("Successfully triggered data sync to Algolia") 
@@ -756,7 +756,7 @@ const AlgoliaPage = () => {
     onError: (err) => {
       console.error(err)
       toast.error("Failed to sync data to Algolia") 
-    }
+    },
   })
 
   const handleSync = () => {
@@ -989,8 +989,8 @@ export default async function handleProductDeleted({
   await deleteProductsFromAlgoliaWorkflow(container)
     .run({
       input: {
-        ids: [data.id]
-      }
+        ids: [data.id],
+      },
     })
 }
 
@@ -1026,9 +1026,9 @@ While you can implement the search functionality directly in the storefront to i
 To implement the API Route, create the file `src/api/store/search/route.ts` with the following content:
 
 ```ts title="src/api/store/search/route.ts"
-import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
-import { ALGOLIA_MODULE } from "../../../../modules/algolia";
-import AlgoliaModuleService from "../../../../modules/algolia/service";
+import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { ALGOLIA_MODULE } from "../../../../modules/algolia"
+import AlgoliaModuleService from "../../../../modules/algolia/service"
 import { z } from "zod"
 
 export const SearchSchema = z.object({
@@ -1046,7 +1046,7 @@ export async function POST(
   const { query } = req.validatedBody
 
   const results = await algoliaModuleService.search(
-    query as string, 
+    query as string 
   )
 
   res.json(results)
@@ -1074,7 +1074,7 @@ Middlewares are created in the `src/api/middlewares.ts` file. So create the file
 ```ts title="src/api/middlewares.ts"
 import { 
   defineMiddlewares,
-  validateAndTransformBody 
+  validateAndTransformBody, 
 } from "@medusajs/framework/http"
 import { SearchSchema } from "./store/products/search/route"
 
@@ -1084,10 +1084,10 @@ export default defineMiddlewares({
       matcher: "/store/products/search",
       method: ["POST"],
       middlewares: [
-        validateAndTransformBody(SearchSchema)
-      ]
-    }
-  ]
+        validateAndTransformBody(SearchSchema),
+      ],
+    },
+  ],
 })
 ```
 
@@ -1107,7 +1107,7 @@ The last step is to provide the search functionalities to customers on your stor
 
 In this step, you'll customize the Next.js Starter Storefront to add the search functionality.
 
-<Note title="Reminder">
+<Note title="Reminder" forceMultiline>
 
 The Next.js Starter Storefront was installed in a separate directory from Medusa. The directory's name is `{your-project}-storefront`.
 
@@ -1140,8 +1140,8 @@ In `src/lib/config.ts`, add the following imports at the top of the file:
 ```ts title="src/lib/config.ts" badgeLabel="Storefront" badgeColor="blue"
 import { 
   liteClient as algoliasearch, 
-  LiteClient as SearchClient
-} from 'algoliasearch/lite';
+  LiteClient as SearchClient,
+} from "algoliasearch/lite"
 ```
 
 Then, add the following at the end of the file:
@@ -1149,8 +1149,8 @@ Then, add the following at the end of the file:
 ```ts title="src/lib/config.ts" badgeLabel="Storefront" badgeColor="blue"
 export const searchClient: SearchClient = {
   ...(algoliasearch(
-    process.env.NEXT_PUBLIC_ALGOLIA_APP_ID || '', 
-    process.env.NEXT_PUBLIC_ALGOLIA_API_KEY || ''
+    process.env.NEXT_PUBLIC_ALGOLIA_APP_ID || "", 
+    process.env.NEXT_PUBLIC_ALGOLIA_API_KEY || ""
   )),
   search: async (params) => {
     const request = Array.isArray(params) ? params[0] : params
@@ -1177,10 +1177,10 @@ export const searchClient: SearchClient = {
     return await sdk.client.fetch(`/store/products/search`, {
       method: "POST",
       body: {
-        query
+        query,
       },
     })
-  }
+  },
 }
 ```
 
@@ -1190,7 +1190,7 @@ You also define a `search` method that sends a `POST` request to the search API 
 
 ### Set Environment Variables
 
-In the storefront's `.env.local`, add the following Algolia-related environment variables:
+In the storefront's `.env.local` file, add the following Algolia-related environment variables:
 
 ```plain badgeLabel="Storefront" badgeColor="blue"
 NEXT_PUBLIC_ALGOLIA_APP_ID=your_algolia_app_id
@@ -1221,14 +1221,14 @@ Create the file `src/modules/search/components/modal/index.tsx` with the followi
 ```tsx title="src/modules/search/components/modal/index.tsx" badgeLabel="Storefront" badgeColor="blue"
 "use client"
 
-import React, { useEffect, useState } from 'react';
-import { Hits, InstantSearch, SearchBox } from 'react-instantsearch';
-import { searchClient } from '../../../../lib/config';
-import Modal from '../../../common/components/modal';
-import { Button } from '@medusajs/ui';
-import Image from 'next/image';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import React, { useEffect, useState } from "react"
+import { Hits, InstantSearch, SearchBox } from "react-instantsearch"
+import { searchClient } from "../../../../lib/config"
+import Modal from "../../../common/components/modal"
+import { Button } from "@medusajs/ui"
+import Image from "next/image"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 type Hit = {
   objectID: string;
@@ -1268,7 +1268,7 @@ export default function SearchModal() {
         </InstantSearch>
       </Modal>
     </>
-  );
+  )
 }
 
 const Hit = ({ hit }: { hit: Hit }) => {
@@ -1281,8 +1281,8 @@ const Hit = ({ hit }: { hit: Hit }) => {
       </div>
       <Link href={`/products/${hit.handle}`} className="absolute right-0 top-0 w-full h-full" aria-label={`View Product: ${hit.title}`} />
     </div>
-  );
-};
+  )
+}
 ```
 
 You create a `SearchModal` component that displays a search box and the search results using widgets from Algolia's `react-instantsearch` library.
@@ -1333,7 +1333,7 @@ Next, go to `localhost:8000`. You'll find a Search button at the top right of th
 
 You've now integrated Algolia with Medusa and added search functionality to your storefront. You can expand on these features to:
 
-- Add filters to the search results. You can do that using Algolia's [widgets](https://www.algolia.com/doc/guides/building-search-ui/widgets/showcase/react/). However, you'll need to customize the search API route to accept filter parameters.
+- Add filters to the search results. You can do that using Algolia's [widgets](https://www.algolia.com/doc/guides/building-search-ui/widgets/showcase/react/) and customizing the search API route in Medusa to accept filter parameters.
 - Support indexing other data types, such as product categories. You can create the subscribers and workflows for categories similar to products.
 
 If you're new to Medusa, check out the [main documentation](!docs!/learn), where you'll get a more in-depth learning of all the concepts you've used in this guide and more.
