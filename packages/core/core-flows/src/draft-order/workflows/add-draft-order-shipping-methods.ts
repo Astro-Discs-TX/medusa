@@ -127,9 +127,17 @@ export const addDraftOrderShippingMethodsWorkflow = createWorkflow(
       appliedPromoCodes,
       (appliedPromoCodes) => appliedPromoCodes.length > 0
     ).then(() => {
+      const refetchedOrder = useRemoteQueryStep({
+        entry_point: "orders",
+        fields: draftOrderFieldsForRefreshSteps,
+        variables: { id: input.order_id },
+        list: false,
+        throw_if_key_not_found: true,
+      }).config({ name: "refetched-order-query" })
+
       refreshDraftOrderAdjustmentsWorkflow.runAsStep({
         input: {
-          order,
+          order: refetchedOrder,
           promo_codes: appliedPromoCodes,
           action: PromotionActions.REPLACE,
         },

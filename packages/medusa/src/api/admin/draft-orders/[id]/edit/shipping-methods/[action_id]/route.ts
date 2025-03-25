@@ -1,18 +1,18 @@
 import {
-  removeDraftOrderShippingMethodWorkflow,
-  updateDraftOrderShippingMethodWorkflow,
+  removeDraftOrderActionShippingMethodWorkflow,
+  updateDraftOrderActionShippingMethodWorkflow,
 } from "@medusajs/core-flows"
 import { AuthenticatedMedusaRequest, MedusaResponse } from "@medusajs/framework"
 import { HttpTypes } from "@medusajs/types"
-import { AdminUpdateDraftOrderShippingMethodType } from "../../../../validators"
+import { AdminUpdateDraftOrderActionShippingMethodType } from "../../../../validators"
 
 export const POST = async (
-  req: AuthenticatedMedusaRequest<AdminUpdateDraftOrderShippingMethodType>,
+  req: AuthenticatedMedusaRequest<AdminUpdateDraftOrderActionShippingMethodType>,
   res: MedusaResponse
 ) => {
   const { id, action_id } = req.params
 
-  const { result } = await updateDraftOrderShippingMethodWorkflow(
+  const { result } = await updateDraftOrderActionShippingMethodWorkflow(
     req.scope
   ).run({
     input: {
@@ -33,7 +33,7 @@ export const DELETE = async (
 ) => {
   const { id, action_id } = req.params
 
-  const { result } = await removeDraftOrderShippingMethodWorkflow(
+  const { result } = await removeDraftOrderActionShippingMethodWorkflow(
     req.scope
   ).run({
     input: {

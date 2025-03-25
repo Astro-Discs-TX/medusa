@@ -26,11 +26,11 @@ import { validateDraftOrderShippingMethodActionStep } from "../steps/validate-dr
 import { draftOrderFieldsForRefreshSteps } from "../utils/fields"
 import { refreshDraftOrderAdjustmentsWorkflow } from "./refresh-draft-order-adjustments"
 
-export const removeDraftOrderShippingMethodWorkflowId =
-  "remove-draft-order-shipping-method"
+export const removeDraftOrderActionShippingMethodWorkflowId =
+  "remove-draft-order-action-shipping-method"
 
-export const removeDraftOrderShippingMethodWorkflow = createWorkflow(
-  removeDraftOrderShippingMethodWorkflowId,
+export const removeDraftOrderActionShippingMethodWorkflow = createWorkflow(
+  removeDraftOrderActionShippingMethodWorkflowId,
   function (
     input: WorkflowData<OrderWorkflow.DeleteOrderEditShippingMethodWorkflowInput>
   ): WorkflowResponse<OrderPreviewDTO> {
@@ -77,7 +77,6 @@ export const removeDraftOrderShippingMethodWorkflow = createWorkflow(
     )
 
     const context = getDraftOrderPromotionContextStep({
-      orderId: input.order_id,
       order,
     })
 

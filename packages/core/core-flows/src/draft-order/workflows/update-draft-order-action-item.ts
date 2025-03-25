@@ -69,7 +69,6 @@ export const updateDraftOrderActionItemWorkflow = createWorkflow(
 
         const data = input.data
 
-        console.log("Setting unit price to", data.unit_price)
         return {
           id: input.action_id,
           details: {
@@ -87,7 +86,6 @@ export const updateDraftOrderActionItemWorkflow = createWorkflow(
     updateOrderChangeActionsStep([updateData])
 
     const context = getDraftOrderPromotionContextStep({
-      orderId: input.order_id,
       order,
     })
 

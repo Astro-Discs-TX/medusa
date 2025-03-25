@@ -14,6 +14,7 @@ import {
   AdminRemoveDraftOrderPromotions,
   AdminUpdateDraftOrder,
   AdminUpdateDraftOrderActionItem,
+  AdminUpdateDraftOrderActionShippingMethod,
   AdminUpdateDraftOrderItem,
   AdminUpdateDraftOrderShippingMethod,
 } from "./validators"
@@ -103,9 +104,16 @@ export const adminDraftOrderRoutesMiddlewares: MiddlewareRoute[] = [
   },
   {
     method: ["POST"],
-    matcher: "/admin/draft-orders/:id/edit/shipping-methods/:action_id",
+    matcher: "/admin/draft-orders/:id/edit/shipping-methods/method/:method_id",
     middlewares: [
       validateAndTransformBody(AdminUpdateDraftOrderShippingMethod),
+    ],
+  },
+  {
+    method: ["POST"],
+    matcher: "/admin/draft-orders/:id/edit/shipping-methods/:action_id",
+    middlewares: [
+      validateAndTransformBody(AdminUpdateDraftOrderActionShippingMethod),
     ],
   },
 ]

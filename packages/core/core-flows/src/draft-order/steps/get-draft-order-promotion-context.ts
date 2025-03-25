@@ -3,19 +3,15 @@ import { createStep, StepResponse } from "@medusajs/framework/workflows-sdk"
 import { IOrderModuleService, OrderDTO } from "@medusajs/types"
 
 interface GetDraftOrderPromotionContextStepInput {
-  orderId: string
   order: OrderDTO
 }
 
 export const getDraftOrderPromotionContextStep = createStep(
   "get-draft-order-promotion-context",
-  async (
-    { orderId, order }: GetDraftOrderPromotionContextStepInput,
-    { container }
-  ) => {
+  async ({ order }: GetDraftOrderPromotionContextStepInput, { container }) => {
     const service = container.resolve<IOrderModuleService>(Modules.ORDER)
 
-    const preview = await service.previewOrderChange(orderId)
+    const preview = await service.previewOrderChange(order.id)
 
     const orderWithPreviewItemsAndAShipping: OrderDTO = {
       ...order,

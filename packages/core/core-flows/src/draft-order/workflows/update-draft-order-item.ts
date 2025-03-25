@@ -92,7 +92,6 @@ export const updateDraftOrderItemWorkflow = createWorkflow(
     })
 
     const context = getDraftOrderPromotionContextStep({
-      orderId: input.order_id,
       order,
     })
 

@@ -193,17 +193,62 @@ export interface AdminRemoveDraftOrderPromotions {
 }
 
 export interface AdminAddDraftOrderShippingMethod {
+  /**
+   * ID of the shipping option to associate with the shipping method.
+   */
   shipping_option_id: string
+  /**
+   * Custom amount for the shipping method.
+   */
   custom_amount?: number
+  /**
+   * Description of the shipping method.
+   */
   description?: string
+  /**
+   * Internal note for the shipping method.
+   */
   internal_note?: string
+  /**
+   * Metadata for the shipping method.
+   */
   metadata?: Record<string, unknown>
 }
 
-export interface AdminUpdateDraftOrderShippingMethod {
+export interface AdminUpdateDraftOrderActionShippingMethod {
+  /**
+   * ID of the shipping option to associate with the shipping method.
+   */
   shipping_option_id: string
+  /**
+   * Custom amount for the shipping method.
+   */
   custom_amount?: number | null
+  /**
+   * Description of the shipping method.
+   */
   description?: string | null
+  /**
+   * Internal note for the shipping method.
+   */
   internal_note?: string | null
+  /**
+   * Metadata for the shipping method.
+   */
   metadata?: Record<string, unknown> | null
+}
+
+export interface AdminUpdateDraftOrderShippingMethod {
+  /**
+   * ID of the shipping option to associate with the shipping method.
+   */
+  shipping_option_id?: string
+  /**
+   * Custom amount for the shipping method.
+   */
+  custom_amount?: number
+  /**
+   * Internal note for the shipping method.
+   */
+  internal_note?: string | null
 }

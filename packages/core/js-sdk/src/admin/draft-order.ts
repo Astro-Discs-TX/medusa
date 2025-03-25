@@ -504,10 +504,10 @@ export class DraftOrder {
    * })
    * ```
    */
-  async updateShippingMethod(
+  async updateActionShippingMethod(
     id: string,
     actionId: string,
-    body: HttpTypes.AdminUpdateDraftOrderShippingMethod,
+    body: HttpTypes.AdminUpdateDraftOrderActionShippingMethod,
     headers?: ClientHeaders
   ) {
     return await this.client.fetch<HttpTypes.AdminDraftOrderPreviewResponse>(
@@ -538,7 +538,7 @@ export class DraftOrder {
    * })
    * ```
    */
-  async removeShippingMethod(
+  async removeActionShippingMethod(
     id: string,
     actionId: string,
     headers?: ClientHeaders
@@ -552,6 +552,21 @@ export class DraftOrder {
     )
   }
 
+  async updateShippingMethod(
+    id: string,
+    methodId: string,
+    body: HttpTypes.AdminUpdateDraftOrderShippingMethod,
+    headers?: ClientHeaders
+  ) {
+    return await this.client.fetch<HttpTypes.AdminDraftOrderPreviewResponse>(
+      `/admin/draft-orders/${id}/edit/shipping-methods/method/${methodId}`,
+      {
+        method: "POST",
+        body,
+        headers,
+      }
+    )
+  }
   /**
    * This method begins an edit to a draft order. It sends a request to the
    * [Begin Draft Order Edit](https://docs.medusajs.com/api/admin#draft-orders_postordereditsid) API route.

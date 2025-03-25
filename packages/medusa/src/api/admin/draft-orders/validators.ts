@@ -185,12 +185,21 @@ export type AdminAddDraftOrderShippingMethodType = z.infer<
   typeof AdminAddDraftOrderShippingMethod
 >
 
-export const AdminUpdateDraftOrderShippingMethod = z.object({
+export const AdminUpdateDraftOrderActionShippingMethod = z.object({
   shipping_option_id: z.string(),
   custom_amount: z.number().nullish(),
   description: z.string().nullish(),
   internal_note: z.string().nullish(),
   metadata: z.record(z.unknown()).nullish(),
+})
+export type AdminUpdateDraftOrderActionShippingMethodType = z.infer<
+  typeof AdminUpdateDraftOrderActionShippingMethod
+>
+
+export const AdminUpdateDraftOrderShippingMethod = z.object({
+  shipping_option_id: z.string().optional(),
+  custom_amount: z.number().optional(),
+  internal_note: z.string().nullish(),
 })
 export type AdminUpdateDraftOrderShippingMethodType = z.infer<
   typeof AdminUpdateDraftOrderShippingMethod
