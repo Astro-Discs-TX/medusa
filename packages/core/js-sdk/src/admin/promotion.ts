@@ -66,7 +66,7 @@ export class Promotion {
    * [List Promotions](https://docs.medusajs.com/api/admin#promotions_getpromotions)
    * API route.
    * 
-   * @param query - Configure the fields to retrieve in the promotion.
+   * @param query - Filters and pagination configurations.
    * @param headers - Headers to pass in the request.
    * @returns The list of promotions.
    * 
@@ -106,7 +106,7 @@ export class Promotion {
    * })
    * ```
    * 
-   * Learn more about the `fields` property in the [API reference](https://docs.medusajs.com/api/store#select-fields-and-relations).
+   * Learn more about the `fields` property in the [API reference](https://docs.medusajs.com/api/admin#select-fields-and-relations).
    */
   async list(
     query?: HttpTypes.AdminGetPromotionsParams,
