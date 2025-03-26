@@ -25,8 +25,7 @@ export const ProductExport = () => {
 
 const ProductExportContent = () => {
   const { t } = useTranslation()
-  const { searchParams } = useProductTableQuery({})
-  const { mutateAsync } = useExportProducts(searchParams)
+  const { mutateAsync } = useExportProducts()
   const { handleSuccess } = useRouteModal()
 
   const handleExportRequest = async () => {
