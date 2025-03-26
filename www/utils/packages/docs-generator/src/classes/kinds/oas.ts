@@ -363,17 +363,17 @@ class OasKindGenerator extends FunctionKindGenerator {
     // retrieve code examples
     oas["x-codeSamples"] = []
 
-    if (curlExample) {
-      oas["x-codeSamples"].push({
-        ...OasExamplesGenerator.CURL_CODESAMPLE_DATA,
-        source: curlExample,
-      })
-    }
-
     if (jsSdkExample) {
       oas["x-codeSamples"].push({
         ...OasExamplesGenerator.JSCLIENT_CODESAMPLE_DATA,
         source: jsSdkExample,
+      })
+    }
+
+    if (curlExample) {
+      oas["x-codeSamples"].push({
+        ...OasExamplesGenerator.CURL_CODESAMPLE_DATA,
+        source: curlExample,
       })
     }
 
@@ -721,9 +721,20 @@ class OasKindGenerator extends FunctionKindGenerator {
         }
       }
     } else if (oldJsSdkExampleIndex !== -1) {
-      // remove the JS SDK example if it doesn't exist
-      oas["x-codeSamples"]!.splice(oldJsSdkExampleIndex, 1)
+      // output a warning that maybe the JS SDK should be updated
+      console.warn(
+        chalk.yellow(
+          `[WARNING] The JS SDK example of ${methodName} ${oasPath} is missing from generated route examples. Consider updating it.`
+        )
+      )
     }
+
+    // sort the code samples to show JS SDK first
+    oas["x-codeSamples"] = oas["x-codeSamples"]?.sort((a) => {
+      return a.label === OasExamplesGenerator.JSCLIENT_CODESAMPLE_DATA.label
+        ? -1
+        : 1
+    })
 
     // push new tags to the tags property
     if (tagName) {
