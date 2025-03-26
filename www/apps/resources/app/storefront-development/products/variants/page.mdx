@@ -124,8 +124,10 @@ export default function Product({ id }: Props) {
             </ul>
           )}
           {selectedVariant && (
-            <span>Selected Variant: {selectedVariant.id}</span>
-            {/* TODO: Show add to cart button */}
+            <>
+              <span>Selected Variant: {selectedVariant.id}</span>
+              {/* TODO: Show add to cart button */}
+            </>
           )}
           {product.images?.map((image) => (
             <img src={image.url} key={image.id} />

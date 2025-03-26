@@ -52,7 +52,7 @@ import {
   createContext, 
   useContext, 
   useEffect, 
-  useState
+  useState,
 } from "react"
 import { HttpTypes } from "@medusajs/types"
 import { sdk } from "../lib/sdk"
@@ -102,7 +102,7 @@ export const RegionProvider = ({ children }: RegionProviderProps) => {
   return (
     <RegionContext.Provider value={{
       region,
-      setRegion
+      setRegion,
     }}>
       {children}
     </RegionContext.Provider>

@@ -254,7 +254,7 @@ In this example, you:
 
 - Use the `useRegion` hook defined in the previous [Region React Context guide](../../../../regions/context/page.mdx) to retrieve the selected region's currency code. This is necessary to format the variant's price.
 - Pass the pricing query parameters, including the selected region's ID and the code of its first country, to the request retrieving the product. This retrieves for every variant a new `calculated_price` field holding details about the variant's price and taxes.
-    - You can pass other pricing query parameters for more accurate pricing. Refer to the [Retrieve Product Variant's Prices](../page.mdx#pricing-query-parameters) guide for more information.
+    - You can pass other pricing query parameters for more accurate pricing. Refer to the [Retrieve Product Variant's Prices](../../page.mdx#pricing-query-parameters) guide for more information.
 - Choose the variant to show its price:
     - If there's a selected variant, choose it.
     - If there isn't a selected variant, retrieve and choose the variant with the cheapest price.
