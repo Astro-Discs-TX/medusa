@@ -1,4 +1,5 @@
 import {
+  createHook,
   createWorkflow,
   transform,
   WorkflowData,
@@ -7,7 +8,10 @@ import {
 import { useQueryGraphStep, validatePresenceOfStep } from "../../common"
 import { useRemoteQueryStep } from "../../common/steps/use-remote-query"
 import { cartFieldsForPricingContext } from "../utils/fields"
-import { ListShippingOptionsForCartWorkflowInput } from "@medusajs/types"
+import {
+  AdditionalData,
+  ListShippingOptionsForCartWorkflowInput,
+} from "@medusajs/types"
 import { isDefined } from "@medusajs/framework/utils"
 
 export const listShippingOptionsForCartWorkflowId =
@@ -41,7 +45,11 @@ export const listShippingOptionsForCartWorkflowId =
  */
 export const listShippingOptionsForCartWorkflow = createWorkflow(
   listShippingOptionsForCartWorkflowId,
-  (input: WorkflowData<ListShippingOptionsForCartWorkflowInput>) => {
+  (
+    input: WorkflowData<
+      ListShippingOptionsForCartWorkflowInput & AdditionalData
+    >
+  ) => {
     const cartQuery = useQueryGraphStep({
       entity: "cart",
       filters: { id: input.cart_id },
@@ -96,9 +104,16 @@ export const listShippingOptionsForCartWorkflow = createWorkflow(
       }
     )
 
+    const setPricingContext = createHook("setPricingContext", {
+      cart: cart,
+      fulfillmentSetIds,
+      additional_data: input.additional_data,
+    })
+    const setPricingContextResult = setPricingContext.getResult() as any
+
     const queryVariables = transform(
-      { input, fulfillmentSetIds, cart },
-      ({ input, fulfillmentSetIds, cart }) => {
+      { input, fulfillmentSetIds, cart, setPricingContextResult },
+      ({ input, fulfillmentSetIds, cart, setPricingContextResult }) => {
         return {
           id: input.option_ids,
 
@@ -122,7 +137,12 @@ export const listShippingOptionsForCartWorkflow = createWorkflow(
             },
           },
 
-          calculated_price: { context: cart },
+          calculated_price: {
+            context: {
+              ...cart,
+              ...(setPricingContextResult ? setPricingContextResult : {}),
+            },
+          },
         }
       }
     )
@@ -202,6 +222,8 @@ export const listShippingOptionsForCartWorkflow = createWorkflow(
         })
     )
 
-    return new WorkflowResponse(shippingOptionsWithPrice)
+    return new WorkflowResponse(shippingOptionsWithPrice, {
+      hooks: [setPricingContext] as const,
+    })
   }
 )

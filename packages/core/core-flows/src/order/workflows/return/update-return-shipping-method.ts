@@ -1,4 +1,5 @@
 import {
+  AdditionalData,
   OrderChangeActionDTO,
   OrderChangeDTO,
   OrderPreviewDTO,
@@ -9,6 +10,7 @@ import { ChangeActionType, OrderChangeStatus } from "@medusajs/framework/utils"
 import {
   WorkflowData,
   WorkflowResponse,
+  createHook,
   createStep,
   createWorkflow,
   parallelize,
@@ -42,7 +44,10 @@ export type UpdateReturnShippingMethodValidationStepInput = {
   /**
    * The details of updating the shipping method.
    */
-  input: Pick<OrderWorkflow.UpdateReturnShippingMethodWorkflowInput, "return_id" | "action_id">
+  input: Pick<
+    OrderWorkflow.UpdateReturnShippingMethodWorkflowInput,
+    "return_id" | "action_id"
+  >
 }
 
 /**
@@ -50,14 +55,14 @@ export type UpdateReturnShippingMethodValidationStepInput = {
  * If the return is canceled, the order change is not active,
  * the shipping method isn't in the return, or the action isn't adding a shipping method,
  * the step will throw an error.
- * 
+ *
  * :::note
- * 
+ *
  * You can retrieve a return and order change details using [Query](https://docs.medusajs.com/learn/fundamentals/module-links/query),
  * or [useQueryGraphStep](https://docs.medusajs.com/resources/references/medusa-workflows/steps/useQueryGraphStep).
- * 
+ *
  * :::
- * 
+ *
  * @example
  * const data = updateReturnShippingMethodValidationStep({
  *   orderChange: {
@@ -105,10 +110,10 @@ export const updateReturnShippingMethodWorkflowId =
 /**
  * This workflow updates the shipping method of a return. It's used by the
  * [Update Shipping Method Admin API Route](https://docs.medusajs.com/api/admin#returns_postreturnsidshippingmethodaction_id).
- * 
+ *
  * You can use this workflow within your customizations or your own custom workflows, allowing you
  * to update the shipping method of a return in your custom flows.
- * 
+ *
  * @example
  * const { result } = await updateReturnShippingMethodWorkflow(container)
  * .run({
@@ -120,16 +125,18 @@ export const updateReturnShippingMethodWorkflowId =
  *     }
  *   }
  * })
- * 
+ *
  * @summary
- * 
+ *
  * Update the shipping method of a return.
  */
 export const updateReturnShippingMethodWorkflow = createWorkflow(
   updateReturnShippingMethodWorkflowId,
   function (
-    input: WorkflowData<OrderWorkflow.UpdateReturnShippingMethodWorkflowInput>
-  ): WorkflowResponse<OrderPreviewDTO> {
+    input: WorkflowData<
+      OrderWorkflow.UpdateReturnShippingMethodWorkflowInput & AdditionalData
+    >
+  ) {
     const orderReturn: ReturnDTO = useRemoteQueryStep({
       entry_point: "return",
       fields: [
@@ -157,6 +164,13 @@ export const updateReturnShippingMethodWorkflow = createWorkflow(
       list: false,
     }).config({ name: "order-change-query" })
 
+    const setPricingContext = createHook("setPricingContext", {
+      order_return: orderReturn,
+      order_change: orderChange,
+      additional_data: input.additional_data,
+    })
+    const setPricingContextResult = setPricingContext.getResult() as any
+
     const shippingOptions = when({ input }, ({ input }) => {
       return input.data?.custom_amount === null
     }).then(() => {
@@ -170,6 +184,18 @@ export const updateReturnShippingMethodWorkflow = createWorkflow(
           return {
             shipping_method_id: originalAction.reference_id,
             currency_code: (orderReturn as any).order.currency_code,
+          }
+        }
+      )
+
+      const pricingContext = transform(
+        { action, setPricingContextResult },
+        (data) => {
+          return {
+            ...(data.setPricingContextResult
+              ? data.setPricingContextResult
+              : {}),
+            currency_code: data.action.currency_code,
           }
         }
       )
@@ -194,7 +220,7 @@ export const updateReturnShippingMethodWorkflow = createWorkflow(
         variables: {
           id: shippingMethod.shipping_option_id,
           calculated_price: {
-            context: { currency_code: action.currency_code },
+            context: pricingContext,
           },
         },
       }).config({ name: "fetch-shipping-option" })
@@ -216,6 +242,11 @@ export const updateReturnShippingMethodWorkflow = createWorkflow(
       updateOrderShippingMethodsStep([updateData.shippingMethod!])
     )
 
-    return new WorkflowResponse(previewOrderChangeStep(orderReturn.order_id))
+    return new WorkflowResponse(
+      previewOrderChangeStep(orderReturn.order_id) as OrderPreviewDTO,
+      {
+        hooks: [setPricingContext] as const,
+      }
+    )
   }
 )

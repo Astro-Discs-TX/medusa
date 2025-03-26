@@ -1,4 +1,5 @@
 import {
+  AdditionalData,
   OrderChangeActionDTO,
   OrderChangeDTO,
   OrderClaimDTO,
@@ -9,6 +10,7 @@ import { ChangeActionType, OrderChangeStatus } from "@medusajs/framework/utils"
 import {
   WorkflowData,
   WorkflowResponse,
+  createHook,
   createStep,
   createWorkflow,
   parallelize,
@@ -42,21 +44,24 @@ export type UpdateClaimShippingMethodValidationStepInput = {
   /**
    * The details of updating the shipping method.
    */
-  input: Pick<OrderWorkflow.UpdateClaimShippingMethodWorkflowInput, "claim_id" | "action_id">
+  input: Pick<
+    OrderWorkflow.UpdateClaimShippingMethodWorkflowInput,
+    "claim_id" | "action_id"
+  >
 }
 
 /**
  * This step validates that a claim's shipping method can be updated.
  * If the claim is canceled, the order change is not active, the shipping method isn't added to the claim,
  * or the action is not adding a shipping method, the step will throw an error.
- * 
+ *
  * :::note
- * 
+ *
  * You can retrieve an order claim and order change details using [Query](https://docs.medusajs.com/learn/fundamentals/module-links/query),
  * or [useQueryGraphStep](https://docs.medusajs.com/resources/references/medusa-workflows/steps/useQueryGraphStep).
- * 
+ *
  * :::
- * 
+ *
  * @example
  * const data = updateClaimShippingMethodValidationStep({
  *   orderChange: {
@@ -105,10 +110,10 @@ export const updateClaimShippingMethodWorkflowId =
  * This workflow updates a claim's inbound (return) or outbound (delivery of new items) shipping method.
  * It's used by the [Update Inbound Shipping Admin API Route](https://docs.medusajs.com/api/admin#claims_postclaimsidinboundshippingmethodaction_id),
  * and the [Update Outbound Shipping Admin API Route](https://docs.medusajs.com/api/admin#claims_postclaimsidoutboundshippingmethodaction_id).
- * 
+ *
  * You can use this workflow within your customizations or your own custom workflows, allowing you to update a claim's shipping method
  * in your own custom flows.
- * 
+ *
  * @example
  * const { result } = await updateClaimShippingMethodWorkflow(container)
  * .run({
@@ -120,16 +125,18 @@ export const updateClaimShippingMethodWorkflowId =
  *     }
  *   }
  * })
- * 
+ *
  * @summary
- * 
+ *
  * Update an inbound or outbound shipping method of a claim.
  */
 export const updateClaimShippingMethodWorkflow = createWorkflow(
   updateClaimShippingMethodWorkflowId,
   function (
-    input: WorkflowData<OrderWorkflow.UpdateClaimShippingMethodWorkflowInput>
-  ): WorkflowResponse<OrderPreviewDTO> {
+    input: WorkflowData<
+      OrderWorkflow.UpdateClaimShippingMethodWorkflowInput & AdditionalData
+    >
+  ) {
     const orderClaim: OrderClaimDTO = useRemoteQueryStep({
       entry_point: "order_claim",
       fields: [
@@ -157,6 +164,13 @@ export const updateClaimShippingMethodWorkflow = createWorkflow(
       list: false,
     }).config({ name: "order-change-query" })
 
+    const setPricingContext = createHook("setPricingContext", {
+      order_claim: orderClaim,
+      order_change: orderChange,
+      additional_data: input.additional_data,
+    })
+    const setPricingContextResult = setPricingContext.getResult() as any
+
     const shippingOptions = when({ input }, ({ input }) => {
       return input.data?.custom_amount === null
     }).then(() => {
@@ -170,6 +184,18 @@ export const updateClaimShippingMethodWorkflow = createWorkflow(
           return {
             shipping_method_id: originalAction.reference_id,
             currency_code: (orderClaim as any).order.currency_code,
+          }
+        }
+      )
+
+      const pricingContext = transform(
+        { action, setPricingContextResult },
+        (data) => {
+          return {
+            ...(data.setPricingContextResult
+              ? data.setPricingContextResult
+              : {}),
+            currency_code: data.action.currency_code,
           }
         }
       )
@@ -194,7 +220,7 @@ export const updateClaimShippingMethodWorkflow = createWorkflow(
         variables: {
           id: shippingMethod.shipping_option_id,
           calculated_price: {
-            context: { currency_code: action.currency_code },
+            context: pricingContext,
           },
         },
       }).config({ name: "fetch-shipping-option" })
@@ -212,6 +238,11 @@ export const updateClaimShippingMethodWorkflow = createWorkflow(
       updateOrderShippingMethodsStep([updateData.shippingMethod!])
     )
 
-    return new WorkflowResponse(previewOrderChangeStep(orderClaim.order_id))
+    return new WorkflowResponse(
+      previewOrderChangeStep(orderClaim.order_id) as OrderPreviewDTO,
+      {
+        hooks: [setPricingContext] as const,
+      }
+    )
   }
 )

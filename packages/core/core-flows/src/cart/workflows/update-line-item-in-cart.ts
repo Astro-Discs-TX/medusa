@@ -90,8 +90,8 @@ export const updateLineItemInCartWorkflow = createWorkflow(
       { cart, setPricingContextResult },
       (data) => {
         return {
-          ...(data.setPricingContextResult ? data.setPricingContextResult : {}),
           ...data.cart,
+          ...(data.setPricingContextResult ? data.setPricingContextResult : {}),
         }
       }
     )

@@ -257,7 +257,7 @@ export const createCartWorkflow = createWorkflow(
     })
 
     return new WorkflowResponse(cart, {
-      hooks: [validate, cartCreated, setPricingContext],
+      hooks: [validate, cartCreated, setPricingContext] as const,
     })
   }
 )

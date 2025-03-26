@@ -231,7 +231,7 @@ export const createOrderWorkflow = createWorkflow(
     })
 
     return new WorkflowResponse(order, {
-      hooks: [orderCreated, setPricingContext],
+      hooks: [orderCreated, setPricingContext] as const,
     })
   }
 )

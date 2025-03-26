@@ -1,4 +1,5 @@
 import {
+  AdditionalData,
   BigNumberInput,
   OrderChangeDTO,
   OrderDTO,
@@ -7,6 +8,7 @@ import {
 import { ChangeActionType, OrderChangeStatus } from "@medusajs/framework/utils"
 import {
   WorkflowResponse,
+  createHook,
   createStep,
   createWorkflow,
   transform,
@@ -114,8 +116,8 @@ export const createOrderEditShippingMethodWorkflowId =
 export const createOrderEditShippingMethodWorkflow = createWorkflow(
   createOrderEditShippingMethodWorkflowId,
   function (
-    input: CreateOrderEditShippingMethodWorkflowInput
-  ): WorkflowResponse<OrderPreviewDTO> {
+    input: CreateOrderEditShippingMethodWorkflowInput & AdditionalData
+  ) {
     const order: OrderDTO = useRemoteQueryStep({
       entry_point: "orders",
       fields: ["id", "status", "currency_code", "canceled_at"],
@@ -123,6 +125,23 @@ export const createOrderEditShippingMethodWorkflow = createWorkflow(
       list: false,
       throw_if_key_not_found: true,
     }).config({ name: "order-query" })
+
+    const setPricingContext = createHook("setPricingContext", {
+      order,
+      shipping_option_id: input.shipping_option_id,
+      additional_data: input.additional_data,
+    })
+    const setPricingContextResult = setPricingContext.getResult() as any
+
+    const pricingContext = transform(
+      { order, setPricingContextResult },
+      (data) => {
+        return {
+          ...(data.setPricingContextResult ? data.setPricingContextResult : {}),
+          currency_code: data.order.currency_code,
+        }
+      }
+    )
 
     const shippingOptions = useRemoteQueryStep({
       entry_point: "shipping_option",
@@ -135,7 +154,7 @@ export const createOrderEditShippingMethodWorkflow = createWorkflow(
       variables: {
         id: input.shipping_option_id,
         calculated_price: {
-          context: { currency_code: order.currency_code },
+          context: pricingContext,
         },
       },
     }).config({ name: "fetch-shipping-option" })
@@ -213,6 +232,11 @@ export const createOrderEditShippingMethodWorkflow = createWorkflow(
       input: [orderChangeActionInput],
     })
 
-    return new WorkflowResponse(previewOrderChangeStep(order.id))
+    return new WorkflowResponse(
+      previewOrderChangeStep(order.id) as OrderPreviewDTO,
+      {
+        hooks: [setPricingContext] as const,
+      }
+    )
   }
 )

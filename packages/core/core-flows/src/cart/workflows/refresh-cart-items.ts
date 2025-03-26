@@ -118,10 +118,10 @@ export const refreshCartItemsWorkflow = createWorkflow(
         { cart, setPricingContextResult },
         (data) => {
           return {
+            ...filterObjectByKeys(data.cart, cartFieldsForPricingContext),
             ...(data.setPricingContextResult
               ? data.setPricingContextResult
               : {}),
-            ...filterObjectByKeys(data.cart, cartFieldsForPricingContext),
           }
         }
       )
@@ -251,6 +251,8 @@ export const refreshCartItemsWorkflow = createWorkflow(
       input: { cart_id: input.cart_id },
     })
 
-    return new WorkflowResponse(refetchedCart)
+    return new WorkflowResponse(refetchedCart, {
+      hooks: [setPricingContext] as const,
+    })
   }
 )

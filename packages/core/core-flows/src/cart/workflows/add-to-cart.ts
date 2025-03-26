@@ -1,4 +1,5 @@
 import {
+  AdditionalData,
   AddToCartWorkflowInputDTO,
   ConfirmVariantInventoryWorkflowInputDTO,
 } from "@medusajs/framework/types"
@@ -71,7 +72,7 @@ export const addToCartWorkflowId = "add-to-cart"
  */
 export const addToCartWorkflow = createWorkflow(
   addToCartWorkflowId,
-  (input: WorkflowData<AddToCartWorkflowInputDTO>) => {
+  (input: WorkflowData<AddToCartWorkflowInputDTO & AdditionalData>) => {
     const cartQuery = useQueryGraphStep({
       entity: "cart",
       filters: { id: input.cart_id },
@@ -93,6 +94,24 @@ export const addToCartWorkflow = createWorkflow(
       return (data.input.items ?? []).map((i) => i.variant_id).filter(Boolean)
     })
 
+    const setPricingContext = createHook("setPricingContext", {
+      cart,
+      variantIds,
+      items: input.items,
+      additional_data: input.additional_data,
+    })
+
+    const setPricingContextResult = setPricingContext.getResult() as any
+    const pricingContext = transform(
+      { cart, setPricingContextResult },
+      (data) => {
+        return {
+          ...data.cart,
+          ...(data.setPricingContextResult ? data.setPricingContextResult : {}),
+        }
+      }
+    )
+
     const variants = when({ variantIds }, ({ variantIds }) => {
       return !!variantIds.length
     }).then(() => {
@@ -102,7 +121,7 @@ export const addToCartWorkflow = createWorkflow(
         variables: {
           id: variantIds,
           calculated_price: {
-            context: cart,
+            context: pricingContext,
           },
         },
       })

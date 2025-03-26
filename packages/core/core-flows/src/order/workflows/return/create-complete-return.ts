@@ -7,6 +7,7 @@ import {
   OrderWorkflow,
   ShippingOptionDTO,
   WithCalculatedPrice,
+  AdditionalData,
 } from "@medusajs/framework/types"
 import {
   MathBN,
@@ -18,6 +19,7 @@ import {
 import {
   WorkflowData,
   WorkflowResponse,
+  createHook,
   createStep,
   createWorkflow,
   parallelize,
@@ -186,6 +188,7 @@ function prepareFulfillmentData({
 function prepareReturnShippingOptionQueryVariables({
   order,
   input,
+  setPricingContextResult,
 }: {
   order: {
     currency_code: string
@@ -194,11 +197,13 @@ function prepareReturnShippingOptionQueryVariables({
   input: {
     return_shipping?: OrderWorkflow.CreateOrderReturnWorkflowInput["return_shipping"]
   }
+  setPricingContextResult?: any
 }) {
   const variables = {
     id: input.return_shipping?.option_id,
     calculated_price: {
       context: {
+        ...(setPricingContextResult ? setPricingContextResult : {}),
         currency_code: order.currency_code,
       },
     },
@@ -309,8 +314,10 @@ export const createAndCompleteReturnOrderWorkflowId =
 export const createAndCompleteReturnOrderWorkflow = createWorkflow(
   createAndCompleteReturnOrderWorkflowId,
   function (
-    input: WorkflowData<OrderWorkflow.CreateOrderReturnWorkflowInput>
-  ): WorkflowResponse<ReturnDTO> {
+    input: WorkflowData<
+      OrderWorkflow.CreateOrderReturnWorkflowInput & AdditionalData
+    >
+  ) {
     const order: OrderDTO = useRemoteQueryStep({
       entry_point: "orders",
       fields: [
@@ -329,8 +336,14 @@ export const createAndCompleteReturnOrderWorkflow = createWorkflow(
 
     createCompleteReturnValidationStep({ order, input })
 
+    const setPricingContext = createHook("setPricingContext", {
+      order,
+      additional_data: input.additional_data,
+    })
+    const setPricingContextResult = setPricingContext.getResult() as any
+
     const returnShippingOptionsVariables = transform(
-      { input, order },
+      { input, order, setPricingContextResult },
       prepareReturnShippingOptionQueryVariables
     )
 
@@ -415,6 +428,8 @@ export const createAndCompleteReturnOrderWorkflow = createWorkflow(
       }).config({ name: "emit-return-received-event" })
     )
 
-    return new WorkflowResponse(returnCreated)
+    return new WorkflowResponse(returnCreated as ReturnDTO, {
+      hooks: [setPricingContext] as const,
+    })
   }
 )
