@@ -28,6 +28,7 @@ import { refreshPaymentCollectionForCartWorkflow } from "./refresh-payment-colle
 import { updateCartPromotionsWorkflow } from "./update-cart-promotions"
 import { updateTaxLinesWorkflow } from "./update-tax-lines"
 import { upsertTaxLinesWorkflow } from "./upsert-tax-lines"
+import { AdditionalData } from "@medusajs/types"
 
 /**
  * The details of the cart to refresh.
@@ -91,7 +92,14 @@ export const refreshCartItemsWorkflowId = "refresh-cart-items"
  */
 export const refreshCartItemsWorkflow = createWorkflow(
   refreshCartItemsWorkflowId,
-  (input: WorkflowData<RefreshCartItemsWorkflowInput>) => {
+  (input: WorkflowData<RefreshCartItemsWorkflowInput & AdditionalData>) => {
+    const setPricingContext = createHook("setPricingContext", {
+      cart_id: input.cart_id,
+      items: input.items,
+      additional_data: input.additional_data,
+    })
+    const setPricingContextResult = setPricingContext.getResult() as any
+
     when({ input }, ({ input }) => {
       return !!input.force_refresh
     }).then(() => {
@@ -106,9 +114,17 @@ export const refreshCartItemsWorkflow = createWorkflow(
         return (data.cart.items ?? []).map((i) => i.variant_id).filter(Boolean)
       })
 
-      const cartPricingContext = transform({ cart }, ({ cart }) => {
-        return filterObjectByKeys(cart, cartFieldsForPricingContext)
-      })
+      const cartPricingContext = transform(
+        { cart, setPricingContextResult },
+        (data) => {
+          return {
+            ...(data.setPricingContextResult
+              ? data.setPricingContextResult
+              : {}),
+            ...filterObjectByKeys(data.cart, cartFieldsForPricingContext),
+          }
+        }
+      )
 
       const variants = useRemoteQueryStep({
         entry_point: "variants",

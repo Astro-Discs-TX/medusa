@@ -125,36 +125,27 @@ export const addOrderLineItemsWorkflow = createWorkflow(
       })
     )
 
+    const setPricingContext = createHook("setPricingContext", {
+      order,
+      variantIds,
+      region,
+      customerData,
+      additional_data: input.additional_data,
+    })
+    const setPricingContextResult = setPricingContext.getResult() as any
+
     const pricingContext = transform(
-      { input, region, customerData, order },
+      { input, region, customerData, order, setPricingContextResult },
       (data) => {
         if (!data.region) {
           throw new MedusaError(MedusaError.Types.NOT_FOUND, "Region not found")
         }
 
         return {
+          ...(data.setPricingContextResult ? data.setPricingContextResult : {}),
           currency_code: data.order.currency_code ?? data.region.currency_code,
           region_id: data.region.id,
           customer_id: data.customerData.customer?.id,
-        }
-      }
-    )
-
-    const setPricingContext = createHook("setPricingContext", {
-      pricingContext,
-      additional_data: input.additional_data,
-    })
-    const finalPricingContext = transform(
-      { input, region, order, pricingContext },
-      (data) => {
-        return {
-          ...data.pricingContext,
-          /**
-           * The following properties must always be set from the original
-           * input and not from the hook return values.
-           */
-          currency_code: data.order.currency_code ?? data.region!.currency_code,
-          region_id: data.region!.id,
         }
       }
     )
@@ -168,7 +159,7 @@ export const addOrderLineItemsWorkflow = createWorkflow(
         variables: {
           id: variantIds,
           calculated_price: {
-            context: finalPricingContext,
+            context: pricingContext,
           },
         },
       })

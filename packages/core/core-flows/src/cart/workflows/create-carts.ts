@@ -98,39 +98,28 @@ export const createCartWorkflow = createWorkflow(
     )
 
     validateSalesChannelStep({ salesChannel })
+    const setPricingContext = createHook("setPricingContext", {
+      region,
+      variantIds,
+      salesChannel,
+      customerData,
+      additional_data: input.additional_data,
+    })
+    const setPricingContextResult = setPricingContext.getResult() as any
 
     // TODO: This is on par with the context used in v1.*, but we can be more flexible.
     const pricingContext = transform(
-      { input, region, customerData },
+      { input, region, customerData, setPricingContextResult },
       (data) => {
         if (!data.region) {
           throw new MedusaError(MedusaError.Types.NOT_FOUND, "No regions found")
         }
 
         return {
+          ...(data.setPricingContextResult ? data.setPricingContextResult : {}),
           currency_code: data.input.currency_code ?? data.region.currency_code,
           region_id: data.region.id,
           customer_id: data.customerData.customer?.id,
-        }
-      }
-    )
-
-    const setPricingContext = createHook("setPricingContext", {
-      pricingContext,
-      additional_data: input.additional_data,
-    })
-
-    const finalPricingContext = transform(
-      { input, region, pricingContext },
-      (data) => {
-        return {
-          ...data.pricingContext,
-          /**
-           * The following properties must always be set from the original
-           * input and not from the hook return values.
-           */
-          currency_code: data.input.currency_code ?? data.region!.currency_code,
-          region_id: data.region!.id,
         }
       }
     )
@@ -144,7 +133,7 @@ export const createCartWorkflow = createWorkflow(
         variables: {
           id: variantIds,
           calculated_price: {
-            context: finalPricingContext,
+            context: pricingContext,
           },
         },
       })

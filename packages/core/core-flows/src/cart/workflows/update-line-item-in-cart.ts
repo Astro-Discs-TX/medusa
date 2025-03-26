@@ -80,8 +80,21 @@ export const updateLineItemInCartWorkflow = createWorkflow(
 
     const setPricingContext = createHook("setPricingContext", {
       cart,
+      item,
+      variantIds,
       additional_data: input.additional_data,
     })
+
+    const setPricingContextResult = setPricingContext.getResult() as any
+    const pricingContext = transform(
+      { cart, setPricingContextResult },
+      (data) => {
+        return {
+          ...(data.setPricingContextResult ? data.setPricingContextResult : {}),
+          ...data.cart,
+        }
+      }
+    )
 
     const variants = when({ variantIds }, ({ variantIds }) => {
       return !!variantIds.length
@@ -92,7 +105,7 @@ export const updateLineItemInCartWorkflow = createWorkflow(
         variables: {
           id: variantIds,
           calculated_price: {
-            context: cart,
+            context: pricingContext,
           },
         },
       }).config({ name: "fetch-variants" })
@@ -108,7 +121,7 @@ export const updateLineItemInCartWorkflow = createWorkflow(
 
     confirmVariantInventoryWorkflow.runAsStep({
       input: {
-        sales_channel_id: cart.sales_channel_id,
+        sales_channel_id: pricingContext.sales_channel_id,
         variants,
         items,
       },
