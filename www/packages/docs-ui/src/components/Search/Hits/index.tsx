@@ -11,8 +11,8 @@ import {
   useInstantSearch,
 } from "react-instantsearch"
 import { SearchNoResult } from "../NoResults"
-import { useSearch } from "@/providers"
-import { Link } from "@/components"
+import { AlgoliaIndex, useSearch } from "@/providers"
+import { Link, SearchHitGroupName } from "@/components"
 
 export type Hierarchy = "lvl0" | "lvl1" | "lvl2" | "lvl3" | "lvl4" | "lvl5"
 
@@ -42,7 +42,7 @@ export type GroupedHitType = {
 
 export type SearchHitWrapperProps = {
   configureProps: ConfigureProps
-  indices: string[]
+  indices: AlgoliaIndex[]
 } & Omit<SearchHitsProps, "indexName" | "setNoResults">
 
 export type IndexResults = {
@@ -56,8 +56,8 @@ export const SearchHitsWrapper = ({
 }: SearchHitWrapperProps) => {
   const { status } = useInstantSearch()
   const [hasNoResults, setHashNoResults] = useState<IndexResults>({
-    [indices[0]]: false,
-    [indices[1]]: false,
+    [indices[0].name]: false,
+    [indices[1].name]: false,
   })
   const showNoResults = useMemo(() => {
     return Object.values(hasNoResults).every((value) => value === true)
@@ -73,11 +73,14 @@ export const SearchHitsWrapper = ({
   return (
     <div className="h-full overflow-auto px-docs_0.5">
       {status !== "loading" && showNoResults && <SearchNoResult />}
-      {indices.map((indexName, index) => (
+      {indices.map((index, key) => (
         // @ts-expect-error React v19 doesn't see this type as a React element
-        <Index indexName={indexName} key={index}>
+        <Index indexName={index.name} key={key}>
+          {!hasNoResults[index.name] && (
+            <SearchHitGroupName name={index.title} />
+          )}
           <SearchHits
-            indexName={indexName}
+            indexName={index.name}
             setNoResults={setNoResults}
             {...rest}
           />
@@ -135,7 +138,7 @@ export const SearchHits = ({
               "overflow-x-hidden text-ellipsis whitespace-nowrap break-words",
               "hover:bg-medusa-bg-base-hover",
               "focus:bg-medusa-bg-base-hover",
-              "last:mb-docs_1 focus:outline-none"
+              "focus:outline-none"
             )}
             key={index}
             tabIndex={index}

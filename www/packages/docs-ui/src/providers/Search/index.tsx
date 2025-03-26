@@ -13,14 +13,10 @@ import { checkArraySameElms } from "../../utils"
 import {
   liteClient as algoliasearch,
   LiteClient as SearchClient,
-  type SearchResponses,
-  type SearchHits,
-  SearchResponse,
 } from "algoliasearch/lite"
 import clsx from "clsx"
 // @ts-expect-error can't install the types package because it doesn't support React v19
 import { CSSTransition, SwitchTransition } from "react-transition-group"
-import { searchFilters } from "../.."
 
 export type SearchCommand = {
   name: string
@@ -46,11 +42,16 @@ export type SearchContextType = {
 
 const SearchContext = createContext<SearchContextType | null>(null)
 
+export type AlgoliaIndex = {
+  name: string
+  title: string
+}
+
 export type AlgoliaProps = {
   appId: string
   apiKey: string
   mainIndexName: string
-  indices: string[]
+  indices: AlgoliaIndex[]
 }
 
 export type SearchProviderProps = {
