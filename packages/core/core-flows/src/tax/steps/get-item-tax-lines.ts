@@ -162,12 +162,14 @@ export const getItemTaxLinesStep = createStep(
   async (data: GetItemTaxLinesStepInput, { container }) => {
     const {
       orderOrCart,
-      items = [],
       shipping_methods: shippingMethods = [],
       force_tax_calculation: forceTaxCalculation = false,
       is_return: isReturn = false,
       shipping_address: shippingAddress,
     } = data
+
+    // TODO: Remove this once we have figured out tax calculations
+    const items = (orderOrCart.items ?? []).filter((item) => !item.is_giftcard)
     const taxService = container.resolve<ITaxModuleService>(Modules.TAX)
 
     const taxContext = normalizeTaxModuleContext(
@@ -188,7 +190,7 @@ export const getItemTaxLinesStep = createStep(
 
     if (items.length) {
       stepResponseData.lineItemTaxLines = (await taxService.getTaxLines(
-        normalizeLineItemsForTax(orderOrCart, items),
+        normalizeLineItemsForTax(orderOrCart, items as any[]),
         taxContext
       )) as ItemTaxLineDTO[]
     }
