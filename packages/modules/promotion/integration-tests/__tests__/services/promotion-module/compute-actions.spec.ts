@@ -1770,6 +1770,160 @@ moduleIntegrationTestRunner({
             ])
           })
 
+          it("should compute actions when 2 percentage promotions are applied to the same item", async () => {
+            await createDefaultPromotion(service, {
+              code: "PROMO_PERCENTAGE_1",
+              rules: [],
+              application_method: {
+                type: ApplicationMethodType.PERCENTAGE,
+                target_type: "items",
+                allocation: "across",
+                value: 50,
+                target_rules: [
+                  {
+                    attribute: "product.id",
+                    operator: "eq",
+                    values: ["prod_tshirt"],
+                  },
+                ],
+              },
+            })
+
+            await createDefaultPromotion(service, {
+              code: "PROMO_PERCENTAGE_2",
+              rules: [],
+              application_method: {
+                type: ApplicationMethodType.PERCENTAGE,
+                target_type: "items",
+                allocation: "across",
+                value: 50,
+                target_rules: [
+                  {
+                    attribute: "product.id",
+                    operator: "eq",
+                    values: ["prod_tshirt"],
+                  },
+                ],
+              },
+            })
+
+            const result = await service.computeActions(
+              ["PROMO_PERCENTAGE_1", "PROMO_PERCENTAGE_2"],
+              {
+                currency_code: "usd",
+                items: [
+                  {
+                    id: "item_cotton_tshirt",
+                    quantity: 4,
+                    subtotal: 300,
+                    product: {
+                      id: "prod_tshirt",
+                    },
+                  },
+                  {
+                    id: "item_wool_tshirt",
+                    quantity: 4,
+                    subtotal: 100,
+                    product: {
+                      id: "prod_tshirt",
+                    },
+                  },
+                ],
+              }
+            )
+
+            expect(JSON.parse(JSON.stringify(result))).toEqual([
+              {
+                action: "addItemAdjustment",
+                item_id: "item_cotton_tshirt",
+                amount: 150,
+                code: "PROMO_PERCENTAGE_1",
+              },
+              {
+                action: "addItemAdjustment",
+                item_id: "item_wool_tshirt",
+                amount: 50,
+                code: "PROMO_PERCENTAGE_1",
+              },
+              {
+                action: "addItemAdjustment",
+                item_id: "item_cotton_tshirt",
+                amount: 75,
+                code: "PROMO_PERCENTAGE_2",
+              },
+              {
+                action: "addItemAdjustment",
+                item_id: "item_wool_tshirt",
+                amount: 25,
+                code: "PROMO_PERCENTAGE_2",
+              },
+            ])
+
+            await createDefaultPromotion(service, {
+              code: "PROMO_PERCENTAGE_3",
+              rules: [],
+              application_method: {
+                type: ApplicationMethodType.PERCENTAGE,
+                target_type: "items",
+                allocation: "across",
+                value: 100,
+                target_rules: [
+                  {
+                    attribute: "product.id",
+                    operator: "eq",
+                    values: ["prod_tshirt"],
+                  },
+                ],
+              },
+            })
+
+            const result2 = await service.computeActions(
+              [
+                "PROMO_PERCENTAGE_1",
+                "PROMO_PERCENTAGE_2",
+                "PROMO_PERCENTAGE_3",
+              ],
+              {
+                currency_code: "usd",
+                items: [
+                  {
+                    id: "item_cotton_tshirt",
+                    quantity: 4,
+                    subtotal: 300,
+                    product: {
+                      id: "prod_tshirt",
+                    },
+                  },
+                  {
+                    id: "item_wool_tshirt",
+                    quantity: 4,
+                    subtotal: 100,
+                    product: {
+                      id: "prod_tshirt",
+                    },
+                  },
+                ],
+              }
+            )
+
+            // Should only apply the most valuable promotion (100% off - PROMO_PERCENTAGE_3) that covers
+            // the entire total of the line item
+            expect(JSON.parse(JSON.stringify(result2))).toEqual([
+              {
+                action: "addItemAdjustment",
+                item_id: "item_cotton_tshirt",
+                amount: 300,
+                code: "PROMO_PERCENTAGE_3",
+              },
+              {
+                action: "addItemAdjustment",
+                item_id: "item_wool_tshirt",
+                amount: 100,
+                code: "PROMO_PERCENTAGE_3",
+              },
+            ])
+          })
+
           it("should not compute actions when applicable total is 0", async () => {
             await createDefaultPromotion(service, {
               rules: [
