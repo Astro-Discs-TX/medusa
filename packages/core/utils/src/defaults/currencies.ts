@@ -972,6 +972,15 @@ export const defaultCurrencies: Record<string, Currency> = {
     code: "TWD",
     name_plural: "New Taiwan dollars",
   },
+  TJS: {
+    symbol: "SM",
+    name: "Tajikistani Somoni",
+    symbol_native: "SM",
+    decimal_digits: 2,
+    code: "TJS",
+    rounding: 0,
+    name_plural: "Tajikistani somoni",
+  },
   TZS: {
     symbol: "TSh",
     name: "Tanzanian Shilling",
