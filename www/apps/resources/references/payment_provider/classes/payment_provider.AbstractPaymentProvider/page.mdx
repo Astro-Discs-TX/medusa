@@ -16,7 +16,7 @@ In this document, you’ll learn how to create a Payment Module Provider to be u
 ---
 
 ## Implementation Example
-      
+
 As you implement your Payment Module Provider, it can be useful to refer to an existing provider and how it's implemeted.
 
 If you need to refer to an existing implementation as an example, check the [Stripe Payment Module Provider in the Medusa repository](https://github.com/medusajs/medusa/tree/develop/packages/modules/providers/payment-stripe).
@@ -328,7 +328,7 @@ class MyPaymentProviderService extends AbstractPaymentProvider<
     )
 
     return {
-      id: response.id
+      id: response.id,
       data: response,
     }
   }
@@ -371,7 +371,6 @@ class MyPaymentProviderService extends AbstractPaymentProvider<
     // assuming you have a client that cancels the payment
     await this.client.cancelPayment(externalId)
     return {}
-  }
   }
 
   // ...
@@ -644,8 +643,8 @@ Create the file `src/modules/my-payment/index.ts` with the following content:
 
 ```ts title="src/modules/my-payment/index.ts"
 import MyPaymentProviderService from "./service"
-import { 
-  ModuleProvider, 
+import {
+  ModuleProvider,
   Modules
 } from "@medusajs/framework/utils"
 
