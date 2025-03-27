@@ -820,6 +820,10 @@ export const filesMap = [
     "pathname": "/how-to-tutorials/tutorials/product-reviews"
   },
   {
+    "filePath": "/www/apps/resources/app/integrations/guides/magento/page.mdx",
+    "pathname": "/integrations/guides/magento"
+  },
+  {
     "filePath": "/www/apps/resources/app/integrations/guides/resend/page.mdx",
     "pathname": "/integrations/guides/resend"
   },
