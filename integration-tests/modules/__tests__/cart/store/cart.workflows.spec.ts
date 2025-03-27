@@ -2,9 +2,11 @@ import {
   addShippingMethodToCartWorkflow,
   addToCartWorkflow,
   completeCartWorkflow,
+  createCartCreditLinesWorkflow,
   createCartWorkflow,
   createPaymentCollectionForCartWorkflow,
   createPaymentSessionsWorkflow,
+  deleteCartCreditLinesWorkflow,
   deleteLineItemsStepId,
   deleteLineItemsWorkflow,
   findOrCreateCustomerStepId,
@@ -34,6 +36,7 @@ import {
   Modules,
   PriceListStatus,
   PriceListType,
+  remoteQueryObjectFromString,
   RuleOperator,
 } from "@medusajs/utils"
 import {
@@ -753,6 +756,16 @@ medusaIntegrationTestRunner({
                   },
                   quantity: 1,
                 },
+                {
+                  title: "zero price item",
+                  subtitle: "zero price item",
+                  thumbnail: "some-url",
+                  requires_shipping: false,
+                  is_discountable: false,
+                  is_tax_inclusive: false,
+                  unit_price: 0,
+                  quantity: 1,
+                },
               ],
               cart_id: cart.id,
             },
@@ -807,6 +820,7 @@ medusaIntegrationTestRunner({
                   deleted_at: null,
                   id: expect.any(String),
                   is_discountable: false,
+                  is_giftcard: false,
                   is_tax_inclusive: false,
                   is_custom_price: true,
                   metadata: {
@@ -838,8 +852,174 @@ medusaIntegrationTestRunner({
                   variant_sku: null,
                   variant_title: null,
                 },
+                expect.objectContaining({
+                  title: "zero price item",
+                  subtitle: "zero price item",
+                  is_custom_price: true,
+                  unit_price: 0,
+                }),
               ],
             })
+          )
+        })
+
+        it("should complete cart reserving inventory from available locations", async () => {
+          const salesChannel = await scModuleService.createSalesChannels({
+            name: "Webshop",
+          })
+
+          const location = await stockLocationModule.createStockLocations({
+            name: "Warehouse",
+          })
+
+          const location2 = await stockLocationModule.createStockLocations({
+            name: "Side Warehouse",
+          })
+
+          const [product] = await productModule.createProducts([
+            {
+              title: "Test product",
+              variants: [
+                {
+                  title: "Test variant",
+                },
+              ],
+            },
+          ])
+
+          const inventoryItem = await inventoryModule.createInventoryItems({
+            sku: "inv-1234",
+          })
+
+          await inventoryModule.createInventoryLevels([
+            {
+              inventory_item_id: inventoryItem.id,
+              location_id: location.id,
+              stocked_quantity: 1,
+              reserved_quantity: 0,
+            },
+          ])
+
+          await inventoryModule.createInventoryLevels([
+            {
+              inventory_item_id: inventoryItem.id,
+              location_id: location2.id,
+              stocked_quantity: 1,
+              reserved_quantity: 0,
+            },
+          ])
+
+          const priceSet = await pricingModule.createPriceSets({
+            prices: [
+              {
+                amount: 3000,
+                currency_code: "usd",
+              },
+            ],
+          })
+
+          await pricingModule.createPricePreferences({
+            attribute: "currency_code",
+            value: "usd",
+            is_tax_inclusive: true,
+          })
+
+          await remoteLink.create([
+            {
+              [Modules.PRODUCT]: {
+                variant_id: product.variants[0].id,
+              },
+              [Modules.PRICING]: {
+                price_set_id: priceSet.id,
+              },
+            },
+            {
+              [Modules.SALES_CHANNEL]: {
+                sales_channel_id: salesChannel.id,
+              },
+              [Modules.STOCK_LOCATION]: {
+                stock_location_id: location.id,
+              },
+            },
+            {
+              [Modules.SALES_CHANNEL]: {
+                sales_channel_id: salesChannel.id,
+              },
+              [Modules.STOCK_LOCATION]: {
+                stock_location_id: location2.id,
+              },
+            },
+            {
+              [Modules.PRODUCT]: {
+                variant_id: product.variants[0].id,
+              },
+              [Modules.INVENTORY]: {
+                inventory_item_id: inventoryItem.id,
+              },
+            },
+          ])
+
+          // complete 2 carts
+          for (let i = 1; i <= 2; i++) {
+            const cart = await cartModuleService.createCarts({
+              currency_code: "usd",
+              sales_channel_id: salesChannel.id,
+            })
+
+            await addToCartWorkflow(appContainer).run({
+              input: {
+                items: [
+                  {
+                    variant_id: product.variants[0].id,
+                    quantity: 1,
+                    requires_shipping: false,
+                  },
+                ],
+                cart_id: cart.id,
+              },
+            })
+
+            await createPaymentCollectionForCartWorkflow(appContainer).run({
+              input: {
+                cart_id: cart.id,
+              },
+            })
+
+            const [payCol] = await remoteQuery(
+              remoteQueryObjectFromString({
+                entryPoint: "cart_payment_collection",
+                variables: { filters: { cart_id: cart.id } },
+                fields: ["payment_collection_id"],
+              })
+            )
+
+            await createPaymentSessionsWorkflow(appContainer).run({
+              input: {
+                payment_collection_id: payCol.payment_collection_id,
+                provider_id: "pp_system_default",
+                context: {},
+                data: {},
+              },
+            })
+
+            await completeCartWorkflow(appContainer).run({
+              input: {
+                id: cart.id,
+              },
+            })
+          }
+
+          const reservations = await api.get(
+            `/admin/reservations`,
+            adminHeaders
+          )
+
+          const locations = reservations.data.reservations.map(
+            (r) => r.location_id
+          )
+
+          expect(locations).toEqual(
+            expect.arrayContaining([location.id, location2.id])
           )
         })
       })
@@ -990,7 +1170,7 @@ medusaIntegrationTestRunner({
                   is_tax_inclusive: true,
                   is_custom_price: false,
                   quantity: 1,
-                  requires_shipping: true,
+                  requires_shipping: false, // product doesn't have a shipping profile nor inventory items that require shipping
                   subtitle: "Test product",
                   title: "Test variant",
                   unit_price: 3000,
@@ -1000,13 +1180,14 @@ medusaIntegrationTestRunner({
                   // Custom line item
                   id: expect.any(String),
                   is_discountable: false,
+                  is_giftcard: false,
                   is_tax_inclusive: false,
                   is_custom_price: true,
                   quantity: 1,
                   metadata: {
                     foo: "bar",
                   },
-                  requires_shipping: true,
+                  requires_shipping: true, // overriden when adding to cart
                   subtitle: "Test subtitle",
                   thumbnail: "some-url",
                   title: "Test item",
@@ -1040,7 +1221,7 @@ medusaIntegrationTestRunner({
                   is_tax_inclusive: false,
                   is_custom_price: false,
                   quantity: 1,
-                  requires_shipping: true,
+                  requires_shipping: false,
                   subtitle: "Test product",
                   title: "Test variant",
                   unit_price: 2000,
@@ -1236,6 +1417,7 @@ medusaIntegrationTestRunner({
                   deleted_at: null,
                   id: expect.any(String),
                   is_discountable: false,
+                  is_giftcard: false,
                   is_tax_inclusive: false,
                   is_custom_price: true,
                   metadata: {
@@ -1697,6 +1879,7 @@ medusaIntegrationTestRunner({
                   deleted_at: null,
                   id: expect.any(String),
                   is_discountable: false,
+                  is_giftcard: false,
                   is_tax_inclusive: false,
                   is_custom_price: true,
                   metadata: {
@@ -1758,6 +1941,7 @@ medusaIntegrationTestRunner({
                   deleted_at: null,
                   id: expect.any(String),
                   is_discountable: false,
+                  is_giftcard: false,
                   is_tax_inclusive: false,
                   is_custom_price: true,
                   metadata: {
@@ -1905,7 +2089,7 @@ medusaIntegrationTestRunner({
               unit_price: 4000,
               is_custom_price: true,
               quantity: 2,
-              title: "Test variant",
+              title: "Test item",
             })
           )
         })
@@ -3346,6 +3530,108 @@ medusaIntegrationTestRunner({
           ).toEqual({
             testing_tax: true,
           })
+        })
+      })
+
+      describe("createCartCreditLinesWorkflow", () => {
+        it("should create credit lines for a cart", async () => {
+          const cart = await cartModuleService.createCarts({
+            currency_code: "dkk",
+            region_id: defaultRegion.id,
+            shipping_address: {
+              metadata: {
+                testing_tax: true,
+              },
+            },
+            items: [
+              {
+                quantity: 1,
+                unit_price: 5000,
+                title: "Test item",
+              },
+            ],
+          })
+
+          const { result: creditLines } =
+            await createCartCreditLinesWorkflow.run({
+              input: [
+                {
+                  cart_id: cart.id,
+                  amount: 1000,
+                  reference: "test",
+                  reference_id: "test",
+                  metadata: {
+                    test: "metadata",
+                  },
+                },
+              ],
+              container: appContainer,
+            })
+
+          expect(creditLines).toEqual([
+            expect.objectContaining({
+              cart_id: cart.id,
+              reference: "test",
+              reference_id: "test",
+              amount: 1000,
+              metadata: {
+                test: "metadata",
+              },
+            }),
+          ])
+        })
+      })
+
+      describe("deleteCartCreditLinesWorkflow", () => {
+        it("should delete credit lines from a cart", async () => {
+          const cart = await cartModuleService.createCarts({
+            currency_code: "dkk",
+            region_id: defaultRegion.id,
+            shipping_address: {
+              metadata: {
+                testing_tax: true,
+              },
+            },
+            items: [
+              {
+                quantity: 1,
+                unit_price: 5000,
+                title: "Test item",
+              },
+            ],
+          })
+
+          const {
+            result: [creditLine],
+          } = await createCartCreditLinesWorkflow.run({
+            input: [
+              {
+                cart_id: cart.id,
+                amount: 1000,
+                reference: "test",
+                reference_id: "test",
+                metadata: {
+                  test: "metadata",
+                },
+              },
+            ],
+            container: appContainer,
+          })
+
+          const { result } = await deleteCartCreditLinesWorkflow.run({
+            input: { id: [creditLine.id] },
+            container: appContainer,
+          })
+
+          const { data: creditLines } = await query.graph({
+            entity: "credit_line",
+            filters: {
+              id: creditLine.id,
+            },
+            fields: ["id"],
+          })
+
+          expect(creditLines).toEqual([])
         })
       })
     })

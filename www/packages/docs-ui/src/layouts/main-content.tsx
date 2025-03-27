@@ -1,9 +1,8 @@
 "use client"
 
 import React, { useEffect } from "react"
-import { useSidebar } from "../providers/Sidebar"
 import clsx from "clsx"
-import { MainNav, useIsBrowser, useLayout } from ".."
+import { MainNav, useIsBrowser, useLayout, useSidebar } from ".."
 
 export type MainContentLayoutProps = {
   mainWrapperClasses?: string
@@ -62,6 +61,7 @@ export const MainContentLayout = ({
             "pt-docs_4 lg:pt-docs_6 pb-docs_8 lg:pb-docs_4",
             contentClassName
           )}
+          id="content"
         >
           {children}
         </div>

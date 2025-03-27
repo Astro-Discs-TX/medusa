@@ -134,6 +134,9 @@
         "areYouSure": {
           "type": "string"
         },
+        "areYouSureDescription": {
+          "type": "string"
+        },
         "noRecordsFound": {
           "type": "string"
         },
@@ -1346,6 +1349,9 @@
     "addresses": {
       "type": "object",
       "properties": {
+        "title": {
+          "type": "string"
+        },
         "shippingAddress": {
           "type": "object",
           "properties": {
@@ -3491,6 +3497,84 @@
         },
         "hasAccount": {
           "type": "string"
+        },
+        "addresses": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "fields": {
+              "type": "object",
+              "properties": {
+                "addressName": {
+                  "type": "string"
+                },
+                "address1": {
+                  "type": "string"
+                },
+                "address2": {
+                  "type": "string"
+                },
+                "city": {
+                  "type": "string"
+                },
+                "province": {
+                  "type": "string"
+                },
+                "postalCode": {
+                  "type": "string"
+                },
+                "country": {
+                  "type": "string"
+                },
+                "phone": {
+                  "type": "string"
+                },
+                "company": {
+                  "type": "string"
+                },
+                "countryCode": {
+                  "type": "string"
+                },
+                "provinceCode": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "addressName",
+                "address1",
+                "address2",
+                "city",
+                "province",
+                "postalCode",
+                "country",
+                "phone",
+                "company",
+                "countryCode",
+                "provinceCode"
+              ],
+              "additionalProperties": false
+            },
+            "create": {
+              "type": "object",
+              "properties": {
+                "header": {
+                  "type": "string"
+                },
+                "hint": {
+                  "type": "string"
+                },
+                "successToast": {
+                  "type": "string"
+                }
+              },
+              "required": ["header", "hint", "successToast"],
+              "additionalProperties": false
+            }
+          },
+          "required": ["title", "create"],
+          "additionalProperties": false
         }
       },
       "required": [
@@ -4806,6 +4890,9 @@
             "markAsShipped": {
               "type": "string"
             },
+            "markAsPickedUp": {
+              "type": "string"
+            },
             "markAsDelivered": {
               "type": "string"
             },
@@ -4915,13 +5002,17 @@
                 },
                 "fulfillmentDelivered": {
                   "type": "string"
+                },
+                "fulfillmentPickedUp": {
+                  "type": "string"
                 }
               },
               "required": [
                 "created",
                 "canceled",
                 "fulfillmentShipped",
-                "fulfillmentDelivered"
+                "fulfillmentDelivered",
+                "fulfillmentPickedUp"
               ],
               "additionalProperties": false
             },
@@ -4952,6 +5043,7 @@
             "available",
             "inStock",
             "markAsShipped",
+            "markAsPickedUp",
             "markAsDelivered",
             "itemsToFulfillDesc",
             "locationDescription",
@@ -5754,6 +5846,23 @@
           ],
           "additionalProperties": false
         },
+        "pickupOptions": {
+          "type": "object",
+          "properties": {
+            "edit": {
+              "type": "object",
+              "properties": {
+                "header": {
+                  "type": "string"
+                }
+              },
+              "required": ["header"],
+              "additionalProperties": false
+            }
+          },
+          "required": ["edit"],
+          "additionalProperties": false
+        },
         "shippingOptions": {
           "type": "object",
           "properties": {
@@ -5761,6 +5870,25 @@
               "type": "object",
               "properties": {
                 "shipping": {
+                  "type": "object",
+                  "properties": {
+                    "header": {
+                      "type": "string"
+                    },
+                    "hint": {
+                      "type": "string"
+                    },
+                    "label": {
+                      "type": "string"
+                    },
+                    "successToast": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["header", "hint", "label", "successToast"],
+                  "additionalProperties": false
+                },
+                "pickup": {
                   "type": "object",
                   "properties": {
                     "header": {
@@ -5815,7 +5943,7 @@
                   "type": "string"
                 }
               },
-              "required": ["shipping", "returns", "tabs", "action"],
+              "required": ["shipping", "pickup", "returns", "tabs", "action"],
               "additionalProperties": false
             },
             "delete": {
@@ -5996,6 +6124,12 @@
                     "shipping_other": {
                       "type": "string"
                     },
+                    "pickup_one": {
+                      "type": "string"
+                    },
+                    "pickup_other": {
+                      "type": "string"
+                    },
                     "returns_one": {
                       "type": "string"
                     },
@@ -6006,6 +6140,8 @@
                   "required": [
                     "shipping_one",
                     "shipping_other",
+                    "pickup_one",
+                    "pickup_other",
                     "returns_one",
                     "returns_other"
                   ],
@@ -6201,6 +6337,7 @@
         "fulfillmentSets",
         "sidebar",
         "salesChannels",
+        "pickupOptions",
         "shippingOptions",
         "serviceZones"
       ],

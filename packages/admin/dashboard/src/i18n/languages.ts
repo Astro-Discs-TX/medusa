@@ -1,5 +1,6 @@
 import {
   de,
+  bg,
   enUS,
   es,
   fr,
@@ -18,11 +19,18 @@ import {
   faIR,
   cs,
   ru,
-  el
+  el,
+  lt,
 } from "date-fns/locale"
 import { Language } from "./types"
 
 export const languages: Language[] = [
+  {
+    code: "bg",
+    display_name: "Български",
+    ltr: true,
+    date_locale: bg,
+  },
   {
     code: "en",
     display_name: "English",
@@ -142,5 +150,11 @@ export const languages: Language[] = [
     display_name: "Русский",
     ltr: true,
     date_locale: ru,
+  },
+  {
+    code: "lt",
+    display_name: "Lietuviškai",
+    ltr: true,
+    date_locale: lt,
   },
 ]

@@ -1,7 +1,6 @@
 import {
   CommonEvents,
   ContainerRegistrationKeys,
-  groupBy,
   Modules,
   promiseAll,
 } from "@medusajs/framework/utils"
@@ -15,7 +14,7 @@ import {
   SchemaObjectEntityRepresentation,
 } from "@medusajs/types"
 import { IndexMetadataStatus, Orchestrator } from "@utils"
-
+import { setTimeout } from "timers/promises"
 export class DataSynchronizer {
   #container: Record<string, any>
   #isReady: boolean = false
@@ -39,10 +38,6 @@ export class DataSynchronizer {
 
   get #indexSyncService(): ModulesSdkTypes.IMedusaInternalService<any> {
     return this.#container.indexSyncService
-  }
-
-  get #indexDataService(): ModulesSdkTypes.IMedusaInternalService<any> {
-    return this.#container.indexDataService
   }
 
   // @ts-ignore
@@ -103,49 +98,20 @@ export class DataSynchronizer {
   async removeEntities(entities: string[], staleOnly: boolean = false) {
     this.#isReadyOrThrow()
 
-    const staleCondition = staleOnly ? { staled_at: { $ne: null } } : {}
+    const staleCondition = staleOnly ? "staled_at IS NOT NULL" : ""
 
-    const dataToDelete = await this.#indexDataService.list({
-      ...staleCondition,
-      name: entities,
-    })
-
-    const toDeleteByEntity = groupBy(dataToDelete, "name")
-
-    for (const entity of toDeleteByEntity.keys()) {
-      const records = toDeleteByEntity.get(entity)
-      const ids = records?.map(
-        (record: { data: { id: string } }) => record.data.id
+    for (const entity of entities) {
+      await this.#container.manager.execute(
+        `WITH deleted_data AS (
+          DELETE FROM "index_data"
+          WHERE "name" = ? ${staleCondition ? `AND ${staleCondition}` : ""}
+          RETURNING id
+        )
+        DELETE FROM "index_relation"
+        WHERE ("parent_name" = ? AND "parent_id" IN (SELECT id FROM deleted_data))
+           OR ("child_name" = ? AND "child_id" IN (SELECT id FROM deleted_data))`,
+        [entity, entity, entity]
       )
-      if (!ids?.length) {
-        continue
-      }
-
-      if (this.#schemaObjectRepresentation[entity]) {
-        // Here we assume that some data have been deleted from from the source and we are cleaning since they are still staled in the index and we remove them from the index
-
-        // TODO: expand storage provider interface
-        await (this.#storageProvider as any).onDelete({
-          entity,
-          data: ids,
-          schemaEntityObjectRepresentation:
-            this.#schemaObjectRepresentation[entity],
-        })
-      } else {
-        // Here we assume that the entity is not indexed anymore as it is not part of the schema object representation and we are cleaning the index
-        await promiseAll([
-          this.#indexDataService.delete({
-            selector: {
-              name: entity,
-            },
-          }),
-          this.#indexRelationService.delete({
-            selector: {
-              $or: [{ parent_id: entity }, { child_id: entity }],
-            },
-          }),
-        ])
-      }
     }
   }
 
@@ -161,6 +127,8 @@ export class DataSynchronizer {
   }
 
   async #taskRunner(entity: string) {
+    this.#logger.info(`[Index engine] syncing entity '${entity}'`)
+
     const [[lastCursor]] = await promiseAll([
       this.#indexSyncService.list(
         {
@@ -171,15 +139,14 @@ export class DataSynchronizer {
         }
       ),
       this.#updatedStatus(entity, IndexMetadataStatus.PROCESSING),
-      this.#indexDataService.update({
-        data: {
-          staled_at: new Date(),
-        },
-        selector: {
-          name: entity,
-        },
-      }),
+      this.#container.manager.execute(
+        `UPDATE "index_data" SET "staled_at" = NOW() WHERE "name" = ?`,
+        [entity]
+      ),
     ])
+
+    let startTime = performance.now()
+    let chunkStartTime = startTime
 
     const finalAcknoledgement = await this.syncEntity({
       entityName: entity,
@@ -187,9 +154,15 @@ export class DataSynchronizer {
         cursor: lastCursor?.last_key,
       },
       ack: async (ack) => {
+        const endTime = performance.now()
+        const chunkElapsedTime = (endTime - chunkStartTime).toFixed(2)
         const promises: Promise<any>[] = []
 
         if (ack.lastCursor) {
+          this.#logger.debug(
+            `[Index engine] syncing entity '${entity}' updating last cursor to ${ack.lastCursor} (+${chunkElapsedTime}ms)`
+          )
+
           promises.push(
             this.#indexSyncService.update({
               data: {
@@ -206,7 +179,22 @@ export class DataSynchronizer {
           }
         }
 
+        if (ack.err) {
+          this.#logger.error(
+            `[Index engine] syncing entity '${entity}' failed with error (+${chunkElapsedTime}ms):\n${ack.err.message}`
+          )
+        }
+
+        if (ack.done) {
+          const elapsedTime = (endTime - startTime).toFixed(2)
+          this.#logger.info(
+            `[Index engine] syncing entity '${entity}' done (+${elapsedTime}ms)`
+          )
+        }
+
         await promiseAll(promises)
+
+        chunkStartTime = performance.now()
       },
     })
 
@@ -258,18 +246,27 @@ export class DataSynchronizer {
       entityName
     ] as SchemaObjectEntityRepresentation
 
-    const { fields, alias, moduleConfig } = schemaEntityObjectRepresentation
+    const { alias, moduleConfig } = schemaEntityObjectRepresentation
     const isLink = !!moduleConfig?.isLink
 
-    const entityPrimaryKey = fields.find(
-      (field) => !!moduleConfig?.primaryKeys?.includes(field)
-    )
-
-    if (!entityPrimaryKey) {
-      // TODO: for now these are skiped
+    if (!alias) {
       const acknoledgement = {
         lastCursor: pagination.cursor ?? null,
         done: true,
+      }
+
+      await ack(acknoledgement)
+      return acknoledgement
+    }
+
+    const entityPrimaryKey = "id"
+    const moduleHasId = !!moduleConfig?.primaryKeys?.includes("id")
+    if (!moduleHasId) {
+      const acknoledgement = {
+        lastCursor: pagination.cursor ?? null,
+        err: new Error(
+          `Entity ${entityName} does not have a property 'id'. The 'id' must be provided and must be orderable (e.g ulid)`
+        ),
       }
 
       await ack(acknoledgement)
@@ -280,10 +277,9 @@ export class DataSynchronizer {
     let currentCursor = pagination.cursor!
     const batchSize = Math.min(pagination.batchSize ?? 100, 100)
     const limit = pagination.limit ?? Infinity
-    let done = false
     let error = null
 
-    while (processed < limit || !done) {
+    while (processed < limit) {
       const filters: Record<string, any> = {}
 
       if (currentCursor) {
@@ -306,8 +302,7 @@ export class DataSynchronizer {
         },
       })
 
-      done = !data.length
-      if (done) {
+      if (!data.length) {
         break
       }
 
@@ -327,13 +322,11 @@ export class DataSynchronizer {
 
         await ack({ lastCursor: currentCursor })
       } catch (err) {
-        this.#logger.error(
-          `Index engine] sync failed for entity ${entityName}`,
-          err
-        )
         error = err
         break
       }
+
+      await setTimeout(0)
     }
 
     let acknoledgement: { lastCursor: string; done?: boolean; err?: Error } = {

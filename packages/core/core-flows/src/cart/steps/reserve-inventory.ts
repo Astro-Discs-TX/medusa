@@ -2,7 +2,6 @@ import { MathBN, Modules } from "@medusajs/framework/utils"
 import { createStep, StepResponse } from "@medusajs/framework/workflows-sdk"
 import { BigNumberInput } from "@medusajs/types"
 
-
 /**
  * The details of the items and their quantity to reserve.
  */
@@ -45,7 +44,7 @@ export const reserveInventoryStepId = "reserve-inventory-step"
 /**
  * This step reserves the quantity of line items from the associated
  * variant's inventory.
- * 
+ *
  * @example
  * const data = reserveInventoryStep({
  *   "items": [{
@@ -62,8 +61,14 @@ export const reserveInventoryStepId = "reserve-inventory-step"
 export const reserveInventoryStep = createStep(
   reserveInventoryStepId,
   async (data: ReserveVariantInventoryStepInput, { container }) => {
-    const inventoryService = container.resolve(Modules.INVENTORY)
+    if (!data.items.length) {
+      return new StepResponse([], {
+        reservations: [],
+        inventoryItemIds: [],
+      })
+    }
 
+    const inventoryService = container.resolve(Modules.INVENTORY)
     const locking = container.resolve(Modules.LOCKING)
 
     const inventoryItemIds: string[] = []
@@ -80,7 +85,9 @@ export const reserveInventoryStep = createStep(
       }
     })
 
-    const reservations = await locking.execute(inventoryItemIds, async () => {
+    const lockingKeys = Array.from(new Set(inventoryItemIds))
+
+    const reservations = await locking.execute(lockingKeys, async () => {
       return await inventoryService.createReservationItems(items)
     })
 
@@ -98,7 +105,9 @@ export const reserveInventoryStep = createStep(
     const locking = container.resolve(Modules.LOCKING)
 
     const inventoryItemIds = data.inventoryItemIds
-    await locking.execute(inventoryItemIds, async () => {
+    const lockingKeys = Array.from(new Set(inventoryItemIds))
+
+    await locking.execute(lockingKeys, async () => {
       await inventoryService.deleteReservationItems(data.reservations)
     })
 
