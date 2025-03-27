@@ -1074,14 +1074,6 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
             {
               "loaded": true,
               "isPathHref": true,
-              "type": "ref",
-              "title": "Abandoned Cart Notification",
-              "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/abandoned-cart",
-              "children": []
-            },
-            {
-              "loaded": true,
-              "isPathHref": true,
               "type": "link",
               "path": "/commerce-modules/cart/extend",
               "title": "Extend Module",
@@ -11128,24 +11120,8 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "loaded": true,
               "isPathHref": true,
               "type": "ref",
-              "title": "List Product Categories in Storefront",
-              "path": "https://docs.medusajs.com/resources/storefront-development/products/categories/list",
-              "children": []
-            },
-            {
-              "loaded": true,
-              "isPathHref": true,
-              "type": "ref",
               "title": "List Product Collections in Storefront",
               "path": "https://docs.medusajs.com/resources/storefront-development/products/collections/list",
-              "children": []
-            },
-            {
-              "loaded": true,
-              "isPathHref": true,
-              "type": "ref",
-              "title": "List Products in Storefront",
-              "path": "https://docs.medusajs.com/resources/storefront-development/products/list",
               "children": []
             },
             {
@@ -11218,6 +11194,22 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "type": "ref",
               "title": "Select Product Variants in Storefront",
               "path": "https://docs.medusajs.com/resources/storefront-development/products/variants",
+              "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "ref",
+              "title": "Show Product Categories in Storefront",
+              "path": "https://docs.medusajs.com/resources/storefront-development/products/categories/list",
+              "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "ref",
+              "title": "Show Products in Storefront",
+              "path": "https://docs.medusajs.com/resources/storefront-development/products/list",
               "children": []
             }
           ]
@@ -13623,7 +13615,7 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "loaded": true,
               "isPathHref": true,
               "type": "ref",
-              "title": "Region Context in Storefront",
+              "title": "Region React Context in Storefront",
               "path": "https://docs.medusajs.com/resources/storefront-development/regions/context",
               "children": []
             },
@@ -13631,7 +13623,7 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "loaded": true,
               "isPathHref": true,
               "type": "ref",
-              "title": "Store and Retrieve Region",
+              "title": "Store Selected Region in Storefront",
               "path": "https://docs.medusajs.com/resources/storefront-development/regions/store-retrieve-region",
               "children": []
             }
