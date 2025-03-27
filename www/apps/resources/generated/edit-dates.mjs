@@ -6071,5 +6071,5 @@ export const generatedEditDates = {
   "app/troubleshooting/storefront-pak-sc/page.mdx": "2025-03-21T07:08:57.546Z",
   "app/troubleshooting/workflow-errors/step-x-defined/page.mdx": "2025-03-21T07:09:02.741Z",
   "app/troubleshooting/workflow-errors/when-then/page.mdx": "2025-03-21T08:35:45.145Z",
-  "app/integrations/guides/magento/page.mdx": "2025-03-27T14:55:13.270Z"
+  "app/integrations/guides/magento/page.mdx": "2025-03-27T15:13:31.309Z"
 }
