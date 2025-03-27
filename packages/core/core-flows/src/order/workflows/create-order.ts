@@ -23,6 +23,7 @@ import { useRemoteQueryStep } from "../../common"
 import { createOrdersStep } from "../steps"
 import { productVariantsFields } from "../utils/fields"
 import { updateOrderTaxLinesWorkflow } from "./update-tax-lines"
+import { pricingContextResult } from "../../cart/utils/schemas"
 
 function prepareLineItems(data) {
   const items = (data.input.items ?? []).map((item) => {
@@ -150,13 +151,19 @@ export const createOrderWorkflow = createWorkflow(
       })
     )
 
-    const setPricingContext = createHook("setPricingContext", {
-      variantIds,
-      region,
-      customerData,
-      additional_data: input.additional_data,
-    })
-    const setPricingContextResult = setPricingContext.getResult() as any
+    const setPricingContext = createHook(
+      "setPricingContext",
+      {
+        variantIds,
+        region,
+        customerData,
+        additional_data: input.additional_data,
+      },
+      {
+        resultValidator: pricingContextResult,
+      }
+    )
+    const setPricingContextResult = setPricingContext.getResult()
 
     // TODO: This is on par with the context used in v1.*, but we can be more flexible.
     const pricingContext = transform(

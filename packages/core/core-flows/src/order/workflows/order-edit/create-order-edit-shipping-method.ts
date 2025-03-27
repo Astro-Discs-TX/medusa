@@ -23,6 +23,7 @@ import {
 import { prepareShippingMethod } from "../../utils/prepare-shipping-method"
 import { createOrderChangeActionsWorkflow } from "../create-order-change-actions"
 import { updateOrderTaxLinesWorkflow } from "../update-tax-lines"
+import { pricingContextResult } from "../../../cart/utils/schemas"
 
 /**
  * The data to validate that a shipping method can be created for an order edit.
@@ -126,12 +127,18 @@ export const createOrderEditShippingMethodWorkflow = createWorkflow(
       throw_if_key_not_found: true,
     }).config({ name: "order-query" })
 
-    const setPricingContext = createHook("setPricingContext", {
-      order,
-      shipping_option_id: input.shipping_option_id,
-      additional_data: input.additional_data,
-    })
-    const setPricingContextResult = setPricingContext.getResult() as any
+    const setPricingContext = createHook(
+      "setPricingContext",
+      {
+        order,
+        shipping_option_id: input.shipping_option_id,
+        additional_data: input.additional_data,
+      },
+      {
+        resultValidator: pricingContextResult,
+      }
+    )
+    const setPricingContextResult = setPricingContext.getResult()
 
     const pricingContext = transform(
       { order, setPricingContextResult },

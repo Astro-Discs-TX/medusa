@@ -29,6 +29,7 @@ import { updateCartPromotionsWorkflow } from "./update-cart-promotions"
 import { updateTaxLinesWorkflow } from "./update-tax-lines"
 import { upsertTaxLinesWorkflow } from "./upsert-tax-lines"
 import { AdditionalData } from "@medusajs/types"
+import { pricingContextResult } from "../utils/schemas"
 
 /**
  * The details of the cart to refresh.
@@ -93,12 +94,18 @@ export const refreshCartItemsWorkflowId = "refresh-cart-items"
 export const refreshCartItemsWorkflow = createWorkflow(
   refreshCartItemsWorkflowId,
   (input: WorkflowData<RefreshCartItemsWorkflowInput & AdditionalData>) => {
-    const setPricingContext = createHook("setPricingContext", {
-      cart_id: input.cart_id,
-      items: input.items,
-      additional_data: input.additional_data,
-    })
-    const setPricingContextResult = setPricingContext.getResult() as any
+    const setPricingContext = createHook(
+      "setPricingContext",
+      {
+        cart_id: input.cart_id,
+        items: input.items,
+        additional_data: input.additional_data,
+      },
+      {
+        resultValidator: pricingContextResult,
+      }
+    )
+    const setPricingContextResult = setPricingContext.getResult()
 
     when({ input }, ({ input }) => {
       return !!input.force_refresh

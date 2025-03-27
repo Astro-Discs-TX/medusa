@@ -36,6 +36,7 @@ import { refreshPaymentCollectionForCartWorkflow } from "./refresh-payment-colle
 import { updateCartPromotionsWorkflow } from "./update-cart-promotions"
 import { updateTaxLinesWorkflow } from "./update-tax-lines"
 import { validateSalesChannelStep } from "../steps/validate-sales-channel"
+import { pricingContextResult } from "../utils/schemas"
 
 /**
  * The data to create the cart, along with custom data that's passed to the workflow's hooks.
@@ -98,14 +99,20 @@ export const createCartWorkflow = createWorkflow(
     )
 
     validateSalesChannelStep({ salesChannel })
-    const setPricingContext = createHook("setPricingContext", {
-      region,
-      variantIds,
-      salesChannel,
-      customerData,
-      additional_data: input.additional_data,
-    })
-    const setPricingContextResult = setPricingContext.getResult() as any
+    const setPricingContext = createHook(
+      "setPricingContext",
+      {
+        region,
+        variantIds,
+        salesChannel,
+        customerData,
+        additional_data: input.additional_data,
+      },
+      {
+        resultValidator: pricingContextResult,
+      }
+    )
+    const setPricingContextResult = setPricingContext.getResult()
 
     // TODO: This is on par with the context used in v1.*, but we can be more flexible.
     const pricingContext = transform(

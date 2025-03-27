@@ -15,6 +15,7 @@ import {
 import { BigNumber, ShippingOptionPriceType } from "@medusajs/framework/utils"
 import { calculateShippingOptionsPricesStep } from "../../fulfillment/steps"
 import { useRemoteQueryStep } from "../../common"
+import { pricingContextResult } from "../../cart/utils/schemas"
 
 const COMMON_OPTIONS_FIELDS = [
   "id",
@@ -170,8 +171,10 @@ export const fetchShippingOptionForOrderWorkflow = createWorkflow(
       return shippingOptionsWithPrice
     })
 
-    const setPricingContext = createHook("setPricingContext", input)
-    const setPricingContextResult = setPricingContext.getResult() as any
+    const setPricingContext = createHook("setPricingContext", input, {
+      resultValidator: pricingContextResult,
+    })
+    const setPricingContextResult = setPricingContext.getResult()
     const pricingContext = transform(
       { input, setPricingContextResult },
       (data) => {

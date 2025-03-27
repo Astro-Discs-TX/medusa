@@ -28,6 +28,7 @@ import {
   throwIfOrderChangeIsNotActive,
 } from "../../utils/order-validation"
 import { prepareShippingMethodUpdate } from "../../utils/prepare-shipping-method"
+import { pricingContextResult } from "../../../cart/utils/schemas"
 
 /**
  * The data to validate that an exchange's shipping method can be updated.
@@ -168,12 +169,18 @@ export const updateExchangeShippingMethodWorkflow = createWorkflow(
       list: false,
     }).config({ name: "order-change-query" })
 
-    const setPricingContext = createHook("setPricingContext", {
-      order_exchange: orderExchange,
-      order_change: orderChange,
-      additional_data: input.additional_data,
-    })
-    const setPricingContextResult = setPricingContext.getResult() as any
+    const setPricingContext = createHook(
+      "setPricingContext",
+      {
+        order_exchange: orderExchange,
+        order_change: orderChange,
+        additional_data: input.additional_data,
+      },
+      {
+        resultValidator: pricingContextResult,
+      }
+    )
+    const setPricingContextResult = setPricingContext.getResult()
 
     const shippingOptions = when({ input }, ({ input }) => {
       return input.data?.custom_amount === null

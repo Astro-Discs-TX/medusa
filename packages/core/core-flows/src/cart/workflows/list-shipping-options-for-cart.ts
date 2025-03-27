@@ -13,6 +13,7 @@ import {
   ListShippingOptionsForCartWorkflowInput,
 } from "@medusajs/types"
 import { isDefined } from "@medusajs/framework/utils"
+import { pricingContextResult } from "../utils/schemas"
 
 export const listShippingOptionsForCartWorkflowId =
   "list-shipping-options-for-cart"
@@ -104,12 +105,18 @@ export const listShippingOptionsForCartWorkflow = createWorkflow(
       }
     )
 
-    const setPricingContext = createHook("setPricingContext", {
-      cart: cart,
-      fulfillmentSetIds,
-      additional_data: input.additional_data,
-    })
-    const setPricingContextResult = setPricingContext.getResult() as any
+    const setPricingContext = createHook(
+      "setPricingContext",
+      {
+        cart: cart,
+        fulfillmentSetIds,
+        additional_data: input.additional_data,
+      },
+      {
+        resultValidator: pricingContextResult,
+      }
+    )
+    const setPricingContextResult = setPricingContext.getResult()
 
     const queryVariables = transform(
       { input, fulfillmentSetIds, cart, setPricingContextResult },

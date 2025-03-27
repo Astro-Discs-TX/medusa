@@ -967,6 +967,145 @@ medusaIntegrationTestRunner({
               })
             )
           })
+
+          it("should disallow non object response from the setPricingContext hook", async () => {
+            const region = await regionModuleService.createRegions({
+              name: "US",
+              currency_code: "usd",
+            })
+
+            const salesChannel = await scModuleService.createSalesChannels({
+              name: "Webshop",
+            })
+
+            const location = await stockLocationModule.createStockLocations({
+              name: "Warehouse",
+            })
+
+            const [product] = await productModule.createProducts([
+              {
+                title: "Test product",
+                variants: [
+                  {
+                    title: "Test variant",
+                  },
+                ],
+              },
+            ])
+
+            const inventoryItem = await inventoryModule.createInventoryItems({
+              sku: "inv-1234",
+            })
+
+            await inventoryModule.createInventoryLevels([
+              {
+                inventory_item_id: inventoryItem.id,
+                location_id: location.id,
+                stocked_quantity: 2,
+                reserved_quantity: 0,
+              },
+            ])
+
+            const priceSet = await pricingModule.createPriceSets({
+              prices: [
+                {
+                  amount: 3000,
+                  currency_code: "usd",
+                },
+              ],
+            })
+
+            await pricingModule.createPricePreferences({
+              attribute: "currency_code",
+              value: "usd",
+              is_tax_inclusive: true,
+            })
+
+            await remoteLink.create([
+              {
+                [Modules.PRODUCT]: {
+                  variant_id: product.variants[0].id,
+                },
+                [Modules.PRICING]: {
+                  price_set_id: priceSet.id,
+                },
+              },
+              {
+                [Modules.SALES_CHANNEL]: {
+                  sales_channel_id: salesChannel.id,
+                },
+                [Modules.STOCK_LOCATION]: {
+                  stock_location_id: location.id,
+                },
+              },
+              {
+                [Modules.PRODUCT]: {
+                  variant_id: product.variants[0].id,
+                },
+                [Modules.INVENTORY]: {
+                  inventory_item_id: inventoryItem.id,
+                },
+              },
+            ])
+
+            setPricingContextHook = function (input) {
+              expect(input.region).toEqual(
+                expect.objectContaining({
+                  id: region.id,
+                })
+              )
+              expect(input.variantIds).toEqual([product.variants[0].id])
+              expect(input.salesChannel).toEqual(
+                expect.objectContaining({
+                  id: salesChannel.id,
+                })
+              )
+              expect(input.customerData).toEqual(
+                expect.objectContaining({
+                  email: "tony@stark.com",
+                })
+              )
+
+              return new StepResponse([1])
+            }
+
+            const { errors } = await createCartWorkflow(appContainer).run({
+              throwOnError: false,
+              input: {
+                email: "tony@stark.com",
+                currency_code: "usd",
+                region_id: region.id,
+                sales_channel_id: salesChannel.id,
+                items: [
+                  {
+                    variant_id: product.variants[0].id,
+                    quantity: 1,
+                  },
+                ],
+              },
+            })
+
+            setPricingContextHook = undefined
+
+            expect(errors).toHaveLength(1)
+            expect(errors[0]).toEqual(
+              expect.objectContaining({
+                action: "get-setPricingContext-result",
+                handlerType: "invoke",
+                error: expect.objectContaining({
+                  issues: [
+                    {
+                      code: "invalid_type",
+                      expected: "object",
+                      message: "Expected object, received array",
+                      path: [],
+                      received: "array",
+                    },
+                  ],
+                }),
+              })
+            )
+          })
         })
 
         describe("compensation", () => {

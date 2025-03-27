@@ -22,6 +22,7 @@ import {
 } from "../utils/fields"
 import { confirmVariantInventoryWorkflow } from "./confirm-variant-inventory"
 import { refreshCartItemsWorkflow } from "./refresh-cart-items"
+import { pricingContextResult } from "../utils/schemas"
 
 const cartFields = cartFieldsForPricingContext.concat(["items.*"])
 
@@ -78,14 +79,20 @@ export const updateLineItemInCartWorkflow = createWorkflow(
       return [item.variant_id].filter(Boolean)
     })
 
-    const setPricingContext = createHook("setPricingContext", {
-      cart,
-      item,
-      variantIds,
-      additional_data: input.additional_data,
-    })
+    const setPricingContext = createHook(
+      "setPricingContext",
+      {
+        cart,
+        item,
+        variantIds,
+        additional_data: input.additional_data,
+      },
+      {
+        resultValidator: pricingContextResult,
+      }
+    )
 
-    const setPricingContextResult = setPricingContext.getResult() as any
+    const setPricingContextResult = setPricingContext.getResult()
     const pricingContext = transform(
       { cart, setPricingContextResult },
       (data) => {

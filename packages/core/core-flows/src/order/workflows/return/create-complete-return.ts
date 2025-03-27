@@ -38,6 +38,7 @@ import {
   throwIfOrderIsCancelled,
 } from "../../utils/order-validation"
 import { validateReturnReasons } from "../../utils/validate-return-reason"
+import { pricingContextResult } from "../../../cart/utils/schemas"
 
 function prepareShippingMethodData({
   orderId,
@@ -336,11 +337,17 @@ export const createAndCompleteReturnOrderWorkflow = createWorkflow(
 
     createCompleteReturnValidationStep({ order, input })
 
-    const setPricingContext = createHook("setPricingContext", {
-      order,
-      additional_data: input.additional_data,
-    })
-    const setPricingContextResult = setPricingContext.getResult() as any
+    const setPricingContext = createHook(
+      "setPricingContext",
+      {
+        order,
+        additional_data: input.additional_data,
+      },
+      {
+        resultValidator: pricingContextResult,
+      }
+    )
+    const setPricingContextResult = setPricingContext.getResult()
 
     const returnShippingOptionsVariables = transform(
       { input, order, setPricingContextResult },

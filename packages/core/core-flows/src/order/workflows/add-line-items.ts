@@ -26,6 +26,7 @@ import { confirmVariantInventoryWorkflow } from "../../cart/workflows/confirm-va
 import { useRemoteQueryStep } from "../../common"
 import { createOrderLineItemsStep } from "../steps"
 import { productVariantsFields } from "../utils/fields"
+import { pricingContextResult } from "../../cart/utils/schemas"
 
 function prepareLineItems(data) {
   const items = (data.input.items ?? []).map((item) => {
@@ -125,14 +126,20 @@ export const addOrderLineItemsWorkflow = createWorkflow(
       })
     )
 
-    const setPricingContext = createHook("setPricingContext", {
-      order,
-      variantIds,
-      region,
-      customerData,
-      additional_data: input.additional_data,
-    })
-    const setPricingContextResult = setPricingContext.getResult() as any
+    const setPricingContext = createHook(
+      "setPricingContext",
+      {
+        order,
+        variantIds,
+        region,
+        customerData,
+        additional_data: input.additional_data,
+      },
+      {
+        resultValidator: pricingContextResult,
+      }
+    )
+    const setPricingContextResult = setPricingContext.getResult()
 
     const pricingContext = transform(
       { input, region, customerData, order, setPricingContextResult },
