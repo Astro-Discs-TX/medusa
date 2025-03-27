@@ -148,6 +148,8 @@ export function OrderCreateFulfillmentForm({
       toast.success(t("orders.fulfillment.toast.created"))
       handleSuccess(`/orders/${order.id}`)
     } catch (e) {
+      console.log(e)
+
       toast.error(e.message)
     }
   })

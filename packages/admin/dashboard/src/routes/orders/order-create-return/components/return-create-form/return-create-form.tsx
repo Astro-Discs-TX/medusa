@@ -392,8 +392,6 @@ export const ReturnCreateForm = ({
     return method?.total || 0
   }, [preview.shipping_methods])
 
-  const refundAmount = returnTotal - shippingTotal
-
   return (
     <RouteFocusModal.Form
       form={form}
@@ -700,7 +698,7 @@ export const ReturnCreateForm = ({
                 </span>
                 <span className="txt-small font-medium">
                   {getStylizedAmount(
-                    refundAmount ? -1 * refundAmount : refundAmount,
+                    preview.summary.pending_difference,
                     order.currency_code
                   )}
                 </span>
