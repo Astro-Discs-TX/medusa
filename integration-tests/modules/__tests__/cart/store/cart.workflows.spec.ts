@@ -1162,6 +1162,7 @@ medusaIntegrationTestRunner({
                   deleted_at: null,
                   id: expect.any(String),
                   is_discountable: false,
+                  is_giftcard: false,
                   is_tax_inclusive: false,
                   is_custom_price: true,
                   metadata: {
@@ -1521,6 +1522,7 @@ medusaIntegrationTestRunner({
                   // Custom line item
                   id: expect.any(String),
                   is_discountable: false,
+                  is_giftcard: false,
                   is_tax_inclusive: false,
                   is_custom_price: true,
                   quantity: 1,
@@ -1757,6 +1759,7 @@ medusaIntegrationTestRunner({
                   deleted_at: null,
                   id: expect.any(String),
                   is_discountable: false,
+                  is_giftcard: false,
                   is_tax_inclusive: false,
                   is_custom_price: true,
                   metadata: {
@@ -2218,6 +2221,7 @@ medusaIntegrationTestRunner({
                   deleted_at: null,
                   id: expect.any(String),
                   is_discountable: false,
+                  is_giftcard: false,
                   is_tax_inclusive: false,
                   is_custom_price: true,
                   metadata: {
@@ -2279,6 +2283,7 @@ medusaIntegrationTestRunner({
                   deleted_at: null,
                   id: expect.any(String),
                   is_discountable: false,
+                  is_giftcard: false,
                   is_tax_inclusive: false,
                   is_custom_price: true,
                   metadata: {
