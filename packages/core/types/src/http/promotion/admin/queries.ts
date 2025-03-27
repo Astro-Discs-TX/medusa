@@ -7,7 +7,7 @@ export interface AdminGetPromotionsParams
   extends FindParams,
     BaseFilterable<AdminGetPromotionsParams> {
   q?: string
-  code?: string | string[]
+  code?: string | string[] | OperatorMap<string>
   campaign_id?: string | string[]
   application_method?: {
     currency_code?: string | string[]

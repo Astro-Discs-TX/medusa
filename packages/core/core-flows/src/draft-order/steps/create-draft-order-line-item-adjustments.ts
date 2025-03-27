@@ -27,8 +27,19 @@ export const createDraftOrderLineItemAdjustmentsStep = createStep(
 
     const service = container.resolve<IOrderModuleService>(Modules.ORDER)
 
+    /**
+     * If an items quantity has been changed to 0, it will result in an undefined amount.
+     * In this case, we don't want to create an adjustment, as the item will be removed,
+     * and trying to create an adjustment will throw an error.
+     */
+    const filteredAdjustments = lineItemAdjustmentsToCreate.filter(
+      (adjustment) => {
+        return !!adjustment.amount
+      }
+    )
+
     const lineItemAdjustments = await service.createOrderLineItemAdjustments(
-      lineItemAdjustmentsToCreate.map((adjustment) => ({
+      filteredAdjustments.map((adjustment) => ({
         ...adjustment,
         order_id,
       }))
