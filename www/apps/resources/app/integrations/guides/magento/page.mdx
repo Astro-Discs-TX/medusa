@@ -7,15 +7,15 @@ export const metadata = {
 
 # {metadata.title}
 
-In this guide, you'll learn how to build a [plugin](!docs!/learn/fundamentals/plugins) that migrates data, such as products, from Magento to Medusa.
+In this tutorial, you'll learn how to build a [plugin](!docs!/learn/fundamentals/plugins) that migrates data, such as products, from Magento to Medusa.
 
 Magento is known for its customization capabilities. However, its monolithic architecture imposes limitations on business requirements, often forcing development teams to implement hacky workarounds. Over time, these customizations become challenging to maintain, especially as the business scales, leading to increased technical debt and slower feature delivery.
 
 Medusa's modular architecture allows you to build a custom digital commerce platform that meets your business requirements without the limitations of a monolithic system. By migrating from Magento to Medusa, you can take advantage of Medusa's modern technology stack to build a scalable and flexible commerce platform that grows with your business.
 
-By following this guide, you'll create a Medusa plugin that migrates data from a Magento server to a Medusa application with minimal time. You can re-use this plugin across multiple Medusa applications, allowing you to adopt Medusa across your projects.
+By following this tutorial, you'll create a Medusa plugin that migrates data from a Magento server to a Medusa application in minimal time. You can re-use this plugin across multiple Medusa applications, allowing you to adopt Medusa across your projects.
 
-## Guide Summary
+## Summary
 
 <Prerequisites
   items={[
@@ -25,7 +25,7 @@ By following this guide, you'll create a Medusa plugin that migrates data from a
   ]}
 />
 
-This guide will teach you how to:
+This tutorial will teach you how to:
 
 - Install and set up a Medusa application project.
 - Install and set up a Medusa plugin.
@@ -33,13 +33,13 @@ This guide will teach you how to:
     - This guide will only focus on migrating product data from Magento to Medusa. You can extend the implementation to migrate other data, such as customers, orders, and more.
 - Trigger data migration from Magento to Medusa in a scheduled job.
 
-You can follow this guide whether you're new to Medusa or an advanced Medusa developer.
+You can follow this tutorial whether you're new to Medusa or an advanced Medusa developer.
 
 ![Diagram showcasing the flow of migrating data from Magento to Medusa](https://res.cloudinary.com/dza7lstvk/image/upload/v1739360550/Medusa%20Resources/magento-summary_hsewci.jpg)
 
 <Card
   title="Example Repository"
-  text="Find the full code of the guide in this repository."
+  text="Find the full code of the guide in this repository. The repository also includes additional features, such as triggering migrations from the Medusa Admin dashboard."
   href="https://github.com/medusajs/examples/tree/main/migrate-from-magento"
   icon={Github}
 />
@@ -77,7 +77,7 @@ Afterward, the installation process will start, which will install the Medusa ap
 
 <Note title="Why is the storefront installed separately?">
 
-The Medusa application is composed of a headless Node.js server and an admin dashboard. The storefront is installed or custom-built separately and connects to the Medusa application through its REST endpoints, called [API routes](!docs!/learn/fundamentals/api-routes). Learn more about Medusa's architecture in [this documentation](!docs!/learn/introduction/architecture).
+The Medusa application is composed of a headless Node.js server and an admin dashboard. The storefront is installed or custom-built separately and connects to the Medusa application through its REST endpoints, called [API routes](!docs!/learn/fundamentals/api-routes). Refer to the [Medusa Architecture](!docs!/learn/introduction/architecture) documentation to learn more.
 
 </Note>
 
@@ -97,7 +97,7 @@ A plugin is a package of reusable Medusa customizations that you can install in 
 
 <Note>
 
-Learn more about plugins in [this documentation](!docs!/learn/fundamentals/plugins).
+Refer to the [Plugins](!docs!/learn/fundamentals/plugins) documentation to learn more about plugins.
 
 </Note>
 
@@ -179,7 +179,7 @@ In this step, you'll create a Magento Module in the Magento plugin that connects
 
 <Note>
 
-Learn more about modules in [this documentation](!docs!/learn/fundamentals/modules).
+Refer to the [Modules](!docs!/learn/fundamentals/modules) documentation to learn more about modules.
 
 </Note>
 
@@ -646,7 +646,7 @@ Where:
 
 <Note title="Tip">
 
-Medusa supports integrating third-party services, such as [S3](../../../architectural-modules/file/s3/page.mdx), in a File Module Provider. Find other module providers and how to create a custom provider in [this documentation](../../../architectural-modules/file/page.mdx).
+Medusa supports integrating third-party services, such as [S3](../../../architectural-modules/file/s3/page.mdx), in a File Module Provider. Refer to the [File Module](../../../architectural-modules/file/page.mdx) documentation to find other module providers and how to create a custom provider.
 
 </Note>
 
@@ -664,7 +664,7 @@ By implementing the migration feature in a workflow, you ensure that the data re
 
 <Note>
 
-Learn more about workflows in [this documentation](!docs!/learn/fundamentals/workflows)
+Refer to the [Workflows](!docs!/learn/fundamentals/workflows) documentation to learn more about workflows.
 
 </Note>
 
@@ -875,7 +875,7 @@ Since the Medusa application creates an internal representation of the workflow'
 
 <Note>
 
-Learn more about the workflow constructor function's constraints in [this documentation](!docs!/learn/fundamentals/workflows/constructor-constraints).
+Refer to the [Workflows](!docs!/learn/fundamentals/workflows/constructor-constraints) documentation to learn more about the workflow constructor function's constraints.
 
 </Note>
 
@@ -1063,7 +1063,7 @@ In this guide, you'll learn how to schedule the product migration at a specified
 
 <Note>
 
-Learn more about scheduled jobs in [this documentation](!docs!/learn/fundamentals/scheduled-jobs).
+Refer to the [Scheduled Jobs](!docs!/learn/fundamentals/scheduled-jobs) documentation to learn more about scheduled jobs.
 
 </Note>
 
@@ -1165,8 +1165,8 @@ To confirm that the products were migrated, open the Medusa Admin dashboard at `
 
 You've now implemented the logic to migrate products from Magento to Medusa. You can re-use the plugin across Medusa applications. You can also expand on the plugin to:
 
-- Migrate other entities, such as orders, customers, and categories.
-- Allow triggering migrations from the Medusa Admin dashboard using [Admin Customizations](!docs!/learn/fundamentals/admin).
+- Migrate other entities, such as orders, customers, and categories. Migrating other entities follows the same pattern as migrating products, using workflows and scheduled jobs. You only need to format the data to be migrated as needed.
+- Allow triggering migrations from the Medusa Admin dashboard using [Admin Customizations](!docs!/learn/fundamentals/admin). This feature is available in the [Example Repository](https://github.com/medusajs/example-repository/tree/main/src/admin).
 
 If you're new to Medusa, check out the [main documentation](!docs!/learn), where you'll get a more in-depth learning of all the concepts you've used in this guide and more.
 
