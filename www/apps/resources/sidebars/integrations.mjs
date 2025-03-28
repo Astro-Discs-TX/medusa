@@ -114,4 +114,16 @@ export const integrationsSidebar = [
       },
     ],
   },
+  {
+    type: "category",
+    title: "Search",
+    initialOpen: true,
+    children: [
+      {
+        type: "ref",
+        path: "/integrations/guides/algolia",
+        title: "Algolia",
+      },
+    ],
+  },
 ]
