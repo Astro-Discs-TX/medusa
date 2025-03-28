@@ -148,6 +148,11 @@ export const listShippingOptionsForCartWorkflow = createWorkflow(
             context: {
               ...cart,
               ...(setPricingContextResult ? setPricingContextResult : {}),
+              currency_code: cart.currency_code,
+              region_id: cart.region_id,
+              region: cart.region,
+              customer_id: cart.customer_id,
+              customer: cart.customer,
             },
           },
         }

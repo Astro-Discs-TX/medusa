@@ -101,6 +101,22 @@ medusaIntegrationTestRunner({
           },
           () => {}
         )
+        addToCartWorkflow.hooks.setPricingContext(
+          (input) => {
+            if (setPricingContextHook) {
+              return setPricingContextHook(input)
+            }
+          },
+          () => {}
+        )
+        listShippingOptionsForCartWorkflow.hooks.setPricingContext(
+          (input) => {
+            if (setPricingContextHook) {
+              return setPricingContextHook(input)
+            }
+          },
+          () => {}
+        )
       })
 
       beforeEach(async () => {
@@ -2166,6 +2182,309 @@ medusaIntegrationTestRunner({
             },
           ])
         })
+
+        describe("setPricingContext hook", () => {
+          it("should use context provided by the hook", async () => {
+            const salesChannel = await scModuleService.createSalesChannels({
+              name: "Webshop",
+            })
+
+            const location = await stockLocationModule.createStockLocations({
+              name: "Warehouse",
+            })
+
+            let cart = await cartModuleService.createCarts({
+              currency_code: "usd",
+              sales_channel_id: salesChannel.id,
+            })
+
+            const [product] = await productModule.createProducts([
+              {
+                title: "Test product",
+                variants: [
+                  {
+                    title: "Test variant",
+                  },
+                ],
+              },
+            ])
+
+            const inventoryItem = await inventoryModule.createInventoryItems({
+              sku: "inv-1234",
+            })
+
+            await inventoryModule.createInventoryLevels([
+              {
+                inventory_item_id: inventoryItem.id,
+                location_id: location.id,
+                stocked_quantity: 2,
+                reserved_quantity: 0,
+              },
+            ])
+
+            const priceSet = await pricingModule.createPriceSets({
+              prices: [
+                {
+                  amount: 3000,
+                  currency_code: "usd",
+                },
+              ],
+            })
+
+            await pricingModule.createPricePreferences({
+              attribute: "currency_code",
+              value: "usd",
+              is_tax_inclusive: true,
+            })
+
+            await remoteLink.create([
+              {
+                [Modules.PRODUCT]: {
+                  variant_id: product.variants[0].id,
+                },
+                [Modules.PRICING]: {
+                  price_set_id: priceSet.id,
+                },
+              },
+              {
+                [Modules.SALES_CHANNEL]: {
+                  sales_channel_id: salesChannel.id,
+                },
+                [Modules.STOCK_LOCATION]: {
+                  stock_location_id: location.id,
+                },
+              },
+              {
+                [Modules.PRODUCT]: {
+                  variant_id: product.variants[0].id,
+                },
+                [Modules.INVENTORY]: {
+                  inventory_item_id: inventoryItem.id,
+                },
+              },
+            ])
+
+            cart = await cartModuleService.retrieveCart(cart.id, {
+              select: ["id", "region_id", "currency_code", "sales_channel_id"],
+            })
+
+            setPricingContextHook = function (input) {
+              expect(input.cart).toEqual(expect.objectContaining(cart))
+              expect(input.variantIds).toEqual([product.variants[0].id])
+              return new StepResponse({
+                unit_price: 100,
+              })
+            }
+
+            /**
+             * Tried jest, but for some reasons it is not able to provide
+             * correct arguments passed to the function
+             */
+            let pricingContext: any
+            const originalFn = pricingModule.listPriceSets.bind(pricingModule)
+            pricingModule.listPriceSets = function () {
+              pricingContext = { ...arguments[0].context }
+              return originalFn.bind(pricingModule)(...arguments)
+            }
+
+            await addToCartWorkflow(appContainer).run({
+              input: {
+                items: [
+                  {
+                    variant_id: product.variants[0].id,
+                    quantity: 1,
+                  },
+                ],
+                cart_id: cart.id,
+              },
+            })
+
+            setPricingContextHook = undefined
+            pricingModule.listPriceSets = originalFn
+
+            expect(pricingContext).toEqual(
+              expect.objectContaining({
+                unit_price: 100,
+                currency_code: "usd",
+              })
+            )
+
+            cart = await cartModuleService.retrieveCart(cart.id, {
+              relations: ["items"],
+            })
+
+            expect(cart).toEqual(
+              expect.objectContaining({
+                id: cart.id,
+                currency_code: "usd",
+                items: expect.arrayContaining([
+                  expect.objectContaining({
+                    unit_price: 3000,
+                    is_tax_inclusive: true,
+                    quantity: 1,
+                    title: "Test variant",
+                  }),
+                ]),
+              })
+            )
+          })
+
+          it("should not be able to override the 'customer_id', 'region_id', and the 'currency_code' from the setPricingContext hook", async () => {
+            const salesChannel = await scModuleService.createSalesChannels({
+              name: "Webshop",
+            })
+
+            const location = await stockLocationModule.createStockLocations({
+              name: "Warehouse",
+            })
+
+            let cart = await cartModuleService.createCarts({
+              currency_code: "usd",
+              sales_channel_id: salesChannel.id,
+            })
+
+            const [product] = await productModule.createProducts([
+              {
+                title: "Test product",
+                variants: [
+                  {
+                    title: "Test variant",
+                  },
+                ],
+              },
+            ])
+
+            const inventoryItem = await inventoryModule.createInventoryItems({
+              sku: "inv-1234",
+            })
+
+            await inventoryModule.createInventoryLevels([
+              {
+                inventory_item_id: inventoryItem.id,
+                location_id: location.id,
+                stocked_quantity: 2,
+                reserved_quantity: 0,
+              },
+            ])
+
+            const priceSet = await pricingModule.createPriceSets({
+              prices: [
+                {
+                  amount: 3000,
+                  currency_code: "usd",
+                },
+              ],
+            })
+
+            await pricingModule.createPricePreferences({
+              attribute: "currency_code",
+              value: "usd",
+              is_tax_inclusive: true,
+            })
+
+            await remoteLink.create([
+              {
+                [Modules.PRODUCT]: {
+                  variant_id: product.variants[0].id,
+                },
+                [Modules.PRICING]: {
+                  price_set_id: priceSet.id,
+                },
+              },
+              {
+                [Modules.SALES_CHANNEL]: {
+                  sales_channel_id: salesChannel.id,
+                },
+                [Modules.STOCK_LOCATION]: {
+                  stock_location_id: location.id,
+                },
+              },
+              {
+                [Modules.PRODUCT]: {
+                  variant_id: product.variants[0].id,
+                },
+                [Modules.INVENTORY]: {
+                  inventory_item_id: inventoryItem.id,
+                },
+              },
+            ])
+
+            cart = await cartModuleService.retrieveCart(cart.id, {
+              select: [
+                "id",
+                "region_id",
+                "currency_code",
+                "sales_channel_id",
+                "customer_id",
+              ],
+            })
+
+            setPricingContextHook = function (input) {
+              expect(input.cart).toEqual(expect.objectContaining(cart))
+              expect(input.variantIds).toEqual([product.variants[0].id])
+              return new StepResponse({
+                unit_price: 200,
+                currency_code: "inr",
+                customer_id: "1",
+                region_id: "1",
+              })
+            }
+
+            /**
+             * Tried jest, but for some reasons it is not able to provide
+             * correct arguments passed to the function
+             */
+            let pricingContext: any
+            const originalFn = pricingModule.listPriceSets.bind(pricingModule)
+            pricingModule.listPriceSets = function () {
+              pricingContext = { ...arguments[0].context }
+              return originalFn.bind(pricingModule)(...arguments)
+            }
+
+            await addToCartWorkflow(appContainer).run({
+              input: {
+                items: [
+                  {
+                    variant_id: product.variants[0].id,
+                    quantity: 1,
+                  },
+                ],
+                cart_id: cart.id,
+              },
+            })
+
+            setPricingContextHook = undefined
+            pricingModule.listPriceSets = originalFn
+
+            expect(pricingContext).toEqual(
+              expect.objectContaining({
+                unit_price: 200,
+                region_id: cart.region_id,
+                customer_id: cart.customer_id,
+                currency_code: "usd",
+              })
+            )
+
+            cart = await cartModuleService.retrieveCart(cart.id, {
+              relations: ["items"],
+            })
+
+            expect(cart).toEqual(
+              expect.objectContaining({
+                id: cart.id,
+                currency_code: "usd",
+                items: expect.arrayContaining([
+                  expect.objectContaining({
+                    unit_price: 3000,
+                    is_tax_inclusive: true,
+                    quantity: 1,
+                    title: "Test variant",
+                  }),
+                ]),
+              })
+            )
+          })
+        })
       })
 
       describe("updateLineItemInCartWorkflow", () => {
@@ -3973,6 +4292,174 @@ medusaIntegrationTestRunner({
           })
 
           expect(result).toEqual([])
+        })
+
+        describe("setPricingContext hook", () => {
+          it("should use context provided by the hook", async () => {
+            const shippingOption = (
+              await api.post(
+                `/admin/shipping-options`,
+                {
+                  name: "Test shipping option",
+                  service_zone_id: fulfillmentSet.service_zones[0].id,
+                  shipping_profile_id: shippingProfile.id,
+                  provider_id: "manual_test-provider",
+                  price_type: "flat",
+                  type: {
+                    label: "Test type",
+                    description: "Test description",
+                    code: "test-code",
+                  },
+                  prices: [
+                    {
+                      amount: 3000,
+                      currency_code: "usd",
+                    },
+                  ],
+                  rules: [
+                    {
+                      operator: RuleOperator.EQ,
+                      attribute: "is_return",
+                      value: "false",
+                    },
+                    {
+                      operator: RuleOperator.EQ,
+                      attribute: "enabled_in_store",
+                      value: "true",
+                    },
+                  ],
+                },
+                adminHeaders
+              )
+            ).data.shipping_option
+
+            cart = (await api.get(`/store/carts/${cart.id}`, storeHeaders)).data
+              .cart
+
+            setPricingContextHook = function (input) {
+              expect(input.cart.id).toEqual(cart.id)
+              return new StepResponse({
+                unit_price: 100,
+              })
+            }
+
+            /**
+             * Tried jest, but for some reasons it is not able to provide
+             * correct arguments passed to the function
+             */
+            let pricingContext: any
+            const originalFn = pricingModule.listPriceSets.bind(pricingModule)
+            pricingModule.listPriceSets = function () {
+              pricingContext = { ...arguments[0].context }
+              return originalFn.bind(pricingModule)(...arguments)
+            }
+
+            const { result } = await listShippingOptionsForCartWorkflow(
+              appContainer
+            ).run({ input: { cart_id: cart.id } })
+
+            setPricingContextHook = undefined
+            pricingModule.listPriceSets = originalFn
+
+            expect(pricingContext).toEqual(
+              expect.objectContaining({
+                unit_price: 100,
+              })
+            )
+
+            expect(result).toEqual([
+              expect.objectContaining({
+                amount: 3000,
+                id: shippingOption.id,
+              }),
+            ])
+          })
+
+          it("should not be able to override the 'customer_id', 'region_id', and the 'currency_code' from the setPricingContext hook", async () => {
+            const shippingOption = (
+              await api.post(
+                `/admin/shipping-options`,
+                {
+                  name: "Test shipping option",
+                  service_zone_id: fulfillmentSet.service_zones[0].id,
+                  shipping_profile_id: shippingProfile.id,
+                  provider_id: "manual_test-provider",
+                  price_type: "flat",
+                  type: {
+                    label: "Test type",
+                    description: "Test description",
+                    code: "test-code",
+                  },
+                  prices: [
+                    {
+                      amount: 3000,
+                      currency_code: "usd",
+                    },
+                  ],
+                  rules: [
+                    {
+                      operator: RuleOperator.EQ,
+                      attribute: "is_return",
+                      value: "false",
+                    },
+                    {
+                      operator: RuleOperator.EQ,
+                      attribute: "enabled_in_store",
+                      value: "true",
+                    },
+                  ],
+                },
+                adminHeaders
+              )
+            ).data.shipping_option
+
+            cart = (await api.get(`/store/carts/${cart.id}`, storeHeaders)).data
+              .cart
+
+            setPricingContextHook = function (input) {
+              expect(input.cart.id).toEqual(cart.id)
+              return new StepResponse({
+                unit_price: 200,
+                currency_code: "inr",
+                customer_id: "1",
+                region_id: "1",
+              })
+            }
+
+            /**
+             * Tried jest, but for some reasons it is not able to provide
+             * correct arguments passed to the function
+             */
+            let pricingContext: any
+            const originalFn = pricingModule.listPriceSets.bind(pricingModule)
+            pricingModule.listPriceSets = function () {
+              pricingContext = { ...arguments[0].context }
+              return originalFn.bind(pricingModule)(...arguments)
+            }
+
+            const { result } = await listShippingOptionsForCartWorkflow(
+              appContainer
+            ).run({ input: { cart_id: cart.id } })
+
+            setPricingContextHook = undefined
+            pricingModule.listPriceSets = originalFn
+
+            expect(pricingContext).toEqual(
+              expect.objectContaining({
+                unit_price: 200,
+                region_id: cart.region_id,
+                customer_id: cart.customer_id,
+                currency_code: "usd",
+              })
+            )
+
+            expect(result).toEqual([
+              expect.objectContaining({
+                amount: 3000,
+                id: shippingOption.id,
+              }),
+            ])
+          })
         })
       })
 

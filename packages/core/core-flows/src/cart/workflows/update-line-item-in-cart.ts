@@ -99,6 +99,11 @@ export const updateLineItemInCartWorkflow = createWorkflow(
         return {
           ...data.cart,
           ...(data.setPricingContextResult ? data.setPricingContextResult : {}),
+          currency_code: data.cart.currency_code,
+          region_id: data.cart.region_id,
+          region: data.cart.region,
+          customer_id: data.cart.customer_id,
+          customer: data.cart.customer,
         }
       }
     )

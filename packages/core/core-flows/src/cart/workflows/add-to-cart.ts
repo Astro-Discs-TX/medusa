@@ -115,6 +115,11 @@ export const addToCartWorkflow = createWorkflow(
         return {
           ...data.cart,
           ...(data.setPricingContextResult ? data.setPricingContextResult : {}),
+          currency_code: data.cart.currency_code,
+          region_id: data.cart.region_id,
+          region: data.cart.region,
+          customer_id: data.cart.customer_id,
+          customer: data.cart.customer,
         }
       }
     )
@@ -227,7 +232,7 @@ export const addToCartWorkflow = createWorkflow(
     })
 
     return new WorkflowResponse(void 0, {
-      hooks: [validate],
+      hooks: [validate, setPricingContext] as const,
     })
   }
 )
