@@ -13,10 +13,10 @@ export const POST = async (req: MedusaRequest, res: MedusaResponse) => {
   })
 
   const result = await query.graph({
-    entity: "order",
+    entity: "orders",
     filters: { id: req.params.id },
     fields: req.queryConfig.fields,
   })
 
-  res.status(200).json({ order: result[0] as HttpTypes.AdminOrder })
+  res.status(200).json({ order: result.data[0] as HttpTypes.AdminOrder })
 }
