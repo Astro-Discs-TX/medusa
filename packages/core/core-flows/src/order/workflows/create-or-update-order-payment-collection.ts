@@ -144,23 +144,6 @@ export const createOrUpdateOrderPaymentCollectionWorkflow = createWorkflow(
       }) as PaymentCollectionDTO[]
     })
 
-    when(
-      { existingPaymentCollection, amountPending, shouldRecreate },
-      ({ existingPaymentCollection, amountPending, shouldRecreate }) => {
-        return (
-          !!existingPaymentCollection?.id &&
-          shouldRecreate &&
-          MathBN.gt(amountPending, 0)
-        )
-      }
-    ).then(() => {
-      cancelPaymentCollectionWorkflow.runAsStep({
-        input: {
-          payment_collection_id: existingPaymentCollection.id,
-        },
-      })
-    })
-
     const createdPaymentCollection = when(
       { existingPaymentCollection, amountPending, shouldRecreate },
       ({ existingPaymentCollection, amountPending, shouldRecreate }) => {
@@ -176,6 +159,23 @@ export const createOrUpdateOrderPaymentCollectionWorkflow = createWorkflow(
           amount: amountPending,
         },
       }) as PaymentCollectionDTO[]
+    })
+
+    when(
+      { existingPaymentCollection, amountPending, shouldRecreate },
+      ({ existingPaymentCollection, amountPending, shouldRecreate }) => {
+        return (
+          !!existingPaymentCollection?.id &&
+          shouldRecreate &&
+          MathBN.gt(amountPending, 0)
+        )
+      }
+    ).then(() => {
+      cancelPaymentCollectionWorkflow.runAsStep({
+        input: {
+          payment_collection_id: existingPaymentCollection.id,
+        },
+      })
     })
 
     const paymentCollections = transform(

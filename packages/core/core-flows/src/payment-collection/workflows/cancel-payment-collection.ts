@@ -60,7 +60,13 @@ export const cancelPaymentCollectionWorkflow = createWorkflow(
   ): WorkflowResponse<PaymentCollectionDTO> => {
     const paymentCollectionQuery = useQueryGraphStep({
       entity: "payment_collection",
-      fields: ["id", "status", "payments.id", "payments.captured_at"],
+      fields: [
+        "id",
+        "status",
+        "payments.id",
+        "payments.captured_at",
+        "captured_amount",
+      ],
       filters: { id: input.payment_collection_id },
     }).config({ name: "get-payment-collection" })
 
@@ -84,15 +90,21 @@ export const cancelPaymentCollectionWorkflow = createWorkflow(
           .map((p) => p.id) ?? []
     )
 
-    cancelPaymentStep({
-      ids: authorizedPaymentIds,
-    })
+    const status = transform({ paymentCollection }, ({ paymentCollection }) =>
+      paymentCollection.captured_amount > 0
+        ? PaymentCollectionStatus.PARTIALLY_CAPTURED
+        : PaymentCollectionStatus.CANCELED
+    )
 
     const updatedPaymentCollections = updatePaymentCollectionStep({
       selector: { id: paymentCollection.id },
       update: {
-        status: PaymentCollectionStatus.CANCELED, // TODO: should it be PARTIALLY_CAPTURED if there is caputred amount?
+        status: status,
       },
+    })
+
+    cancelPaymentStep({
+      ids: authorizedPaymentIds,
     })
 
     const resultPaymentCollection = transform(
