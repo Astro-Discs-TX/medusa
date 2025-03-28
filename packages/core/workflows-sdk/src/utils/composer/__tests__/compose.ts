@@ -12,6 +12,7 @@ import {
   promiseAll,
 } from "@medusajs/utils"
 import { asValue } from "awilix"
+import { setTimeout } from "timers/promises"
 import {
   createStep,
   createWorkflow,
@@ -24,7 +25,6 @@ import {
 } from ".."
 import { MedusaWorkflow } from "../../../medusa-workflow"
 import { createHook } from "../create-hook"
-import { setTimeout } from "timers/promises"
 
 jest.setTimeout(30000)
 
@@ -1295,6 +1295,69 @@ describe("Workflow composer", function () {
         ],
         obj: "return from 3",
       })
+    })
+
+    it("should skip all steps in case of permanent failure", async () => {
+      const logStepFn = jest.fn(async ({ input }: { input: object }) => {
+        return new StepResponse("done")
+      })
+
+      const errorStep = createStep("perma-fail-step", async () => {
+        return StepResponse.permanentFailure("FAIL")
+      })
+
+      const logStep = createStep("log-step", logStepFn)
+
+      const fakeStepWorkflow = createWorkflow("fake-workflow", () => {
+        const result = errorStep().config({
+          skipOnPermanentFailure: true,
+        })
+        logStep({ input: { A: "123" } })
+        logStep({ input: { A: "123 a" } }).config({ name: "other" })
+        logStep({ input: { A: "123 b" } }).config({ name: "other_2" })
+        logStep({ input: { A: "123 c" } }).config({ name: "other_3" })
+        return result
+      })
+
+      const { transaction } = await fakeStepWorkflow().run({
+        input: 1,
+      })
+
+      expect(transaction.getState()).toEqual("done")
+      expect(logStepFn).toHaveBeenCalledTimes(0)
+    })
+
+    it("should skip steps until the named step in case of permanent failure", async () => {
+      const logStepFn = jest.fn(async ({ input }: { input: object }) => {
+        return new StepResponse("done and returned")
+      })
+
+      const errorStep = createStep("perma-fail-step", async () => {
+        return StepResponse.permanentFailure("FAIL")
+      })
+
+      const logStep = createStep("log-step", logStepFn)
+
+      const fakeStepWorkflow = createWorkflow("fake-workflow", () => {
+        errorStep().config({
+          skipOnPermanentFailure: "other_2",
+        })
+        logStep({ input: { A: "123" } })
+        logStep({ input: { A: "123 a" } }).config({ name: "other" })
+        logStep({ input: { A: "123 b" } }).config({ name: "other_2" })
+        const ret = logStep({ input: { A: "123 c" } }).config({
+          name: "other_3",
+        })
+        return new WorkflowResponse(ret)
+      })
+
+      const { result, transaction } = await fakeStepWorkflow().run({
+        input: 1,
+      })
+
+      expect(transaction.getState()).toEqual("done")
+      expect(result).toEqual("done and returned")
+      expect(logStepFn).toHaveBeenCalledTimes(2)
     })
 
     it("should compose a new workflow and skip steps depending on the input", async () => {
