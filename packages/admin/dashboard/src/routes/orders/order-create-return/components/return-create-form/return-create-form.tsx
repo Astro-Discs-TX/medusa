@@ -694,7 +694,7 @@ export const ReturnCreateForm = ({
 
               <div className="mt-4 flex items-center justify-between border-t border-dotted pt-4">
                 <span className="txt-small font-medium">
-                  {t("orders.returns.refundAmount")}
+                  {t("orders.returns.estDifference")}
                 </span>
                 <span className="txt-small font-medium">
                   {getStylizedAmount(
