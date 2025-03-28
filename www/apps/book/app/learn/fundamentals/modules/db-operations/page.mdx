@@ -1,4 +1,4 @@
-import { CodeTabs, CodeTab } from "docs-ui"
+import { CodeTabs, CodeTab, TypeList } from "docs-ui"
 
 export const metadata = {
   title: `${pageNumber} Perform Database Operations in a Service`,
@@ -258,36 +258,50 @@ The `anotherMethod` now runs in the same transaction as the `update_` method.
 
 ---
 
-## Configure Transactions
+## Use Base Repository for Database Operations
 
-To configure the transaction, such as its [isolation level](https://www.postgresql.org/docs/current/transaction-iso.html), use the `baseRepository` dependency registered in your module's container.
+The base repository is an instance of a repository class that provides methods to create transactions, run database operations, and more.
 
-The `baseRepository` is an instance of a repository class that provides methods to create transactions, run database operations, and more.
+Your module has two types of repositories in its container:
 
-The `baseRepository` has a `transaction` method that allows you to run a function within a transaction and configure that transaction.
+- `baseRepository` that can be used to configure transactions, such as their isolation level.
+- A repository for every data model in your module. For example, if your module has a `Post` model, it has a `postRepository` in the container. This repository is a wrapper around the entity manager that provides a higher-level API for performing database operations.
+    - To format the registration key of the repository in the module's container, Medusa takes the data model's name that's passed as the first parameter of `model.define`, lower cases the first character, then suffixes it with `Repository`. For example:
+        - `Post` model: `postRepository`
+        - `My_Custom` model: `my_CustomRepository`
 
-For example, resolve the `baseRepository` in your service's constructor:
+To resolve the `baseRepository` and the repositories of your module's data models in your service, pass their registration keys in the first parameter object of the service's constructor.
+
+For example:
 
 <CodeTabs group="service-type">
   <CodeTab label="Extending Service Factory" value="service-factory">
 
 ```ts highlights={[["14"]]}
 import { MedusaService } from "@medusajs/framework/utils"
+import { InferTypeOf, DAL } from "@medusajs/framework/types"
 import Post from "./models/post"
-import { DAL } from "@medusajs/framework/types"
+
+type Post = InferTypeOf<typeof Post>
 
 type InjectedDependencies = {
   baseRepository: DAL.RepositoryService
+  postRepository: DAL.RepositoryService<Post>
 }
 
 class BlogModuleService extends MedusaService({
   Post,
 }){
   protected baseRepository_: DAL.RepositoryService
+  protected postRepository_: DAL.RepositoryService<Post>
 
-  constructor({ baseRepository }: InjectedDependencies) {
+  constructor({ 
+    baseRepository,
+    postRepository 
+  }: InjectedDependencies) {
     super(...arguments)
     this.baseRepository_ = baseRepository
+    this.postRepository_ = postRepository
   }
 }
 
@@ -297,17 +311,27 @@ export default BlogModuleService
   <CodeTab label="Without Service Factory" value="no-service-factory">
 
 ```ts highlights={[["10"]]}
-import { DAL } from "@medusajs/framework/types"
+import { InferTypeOf, DAL } from "@medusajs/framework/types"
+import Post from "./models/post"
+
+type Post = InferTypeOf<typeof Post>
 
 type InjectedDependencies = {
   baseRepository: DAL.RepositoryService
+  postRepository: DAL.RepositoryService<Post>
 }
 
 class BlogModuleService {
   protected baseRepository_: DAL.RepositoryService
+  protected postRepository_: DAL.RepositoryService<Post>
 
-  constructor({ baseRepository }: InjectedDependencies) {
+  constructor({ 
+    baseRepository,
+    postRepository 
+  }: InjectedDependencies) {
+    super(...arguments)
     this.baseRepository_ = baseRepository
+    this.postRepository_ = postRepository
   }
 }
 
@@ -317,7 +341,77 @@ export default BlogModuleService
   </CodeTab>
 </CodeTabs>
 
-Then, add the following method that uses it:
+You can then use the repositories in your service to perform database operations or configure transactions.
+
+### Find Records
+
+Using a data model repository's `find` method, you can find records in the database matching a set of filters.
+
+For example:
+
+```ts
+// other imports...
+import { 
+  InjectTransactionManager,
+  InjectManager,
+  MedusaContext,
+} from "@medusajs/framework/utils"
+import { Context } from "@medusajs/framework/types"
+import { EntityManager } from "@mikro-orm/knex"
+
+class BlogModuleService extends MedusaService({
+  Post,
+}){
+  // ...
+  @InjectTransactionManager()
+  protected async doSomething_(
+    id: string,
+    @MedusaContext() sharedContext?: Context<EntityManager>
+  ): Promise<any> {
+    const post = await this.postRepository_.find({
+      where: {
+        id,
+      },
+    })
+
+    return post
+  }
+
+  @InjectManager()
+  async doSomething(
+    id: string,
+    @MedusaContext() sharedContext?: Context<EntityManager>
+  ): Promise<any> {
+    return await this.doSomething_(id, sharedContext)
+  }
+}
+```
+
+The `find` method accepts the following parameters:
+
+<TypeList
+  types={[
+    {
+      name: "options",
+      type: "`object`",
+      description: "Options to filter and configure the query retrieving the records.",
+      optional: true,
+      children: [
+        {
+          name: "where",
+          type: "`object`",
+          description: "An object of "
+        }
+      ]
+    }
+  ]}
+/>
+
+### Configure Transactions
+
+You can configure transactions, such as their [isolation level](https://www.postgresql.org/docs/current/transaction-iso.html), using the `baseRepository`'s `transaction` method.
+
+For example:
 
 export const repoHighlights = [
   ["20", "transaction", "Wrap the function parameter in a transaction."]
@@ -393,7 +487,7 @@ Refer to [MikroORM's reference](https://mikro-orm.io/api/knex/class/EntityManage
 
 </Note>
 
-### Transaction Options
+#### Transaction Options
 
 The second parameter of the `baseRepository_.transaction` method is an object of options that accepts the following properties:
 
