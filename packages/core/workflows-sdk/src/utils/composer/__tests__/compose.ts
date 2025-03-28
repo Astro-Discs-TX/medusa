@@ -1316,7 +1316,7 @@ describe("Workflow composer", function () {
         logStep({ input: { A: "123 a" } }).config({ name: "other" })
         logStep({ input: { A: "123 b" } }).config({ name: "other_2" })
         logStep({ input: { A: "123 c" } }).config({ name: "other_3" })
-        return result
+        return new WorkflowResponse(result)
       })
 
       const { transaction } = await fakeStepWorkflow().run({
