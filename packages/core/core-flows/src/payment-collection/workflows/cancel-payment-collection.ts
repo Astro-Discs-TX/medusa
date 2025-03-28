@@ -46,7 +46,7 @@ export const cancelPaymentCollectionWorkflowId = "cancel-payment-collection"
 /**
  * This workflow cancels a payment collection that is either not paid or authorized.
  *
- * Payment colelction that is completed or has payments cannot be canceled.
+ * Payment colelction that is completed or already canceled cannot be canceled.
  *
  * @example
  * const data = cancelPaymentCollectionStep({

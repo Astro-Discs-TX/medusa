@@ -18,9 +18,7 @@ export interface CancelPaymentStepInput {
 
 export const cancelPaymentStepId = "cancel-payment"
 /**
- * This step cancels one or more payments authorized payments.
- *
- * Note: This step only cancels authorized payments, should not be used for captured payments.
+ * This step cancels one or more authorized payments.
  */
 export const cancelPaymentStep = createStep(
   cancelPaymentStepId,
