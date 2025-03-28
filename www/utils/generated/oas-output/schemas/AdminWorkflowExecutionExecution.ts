@@ -76,9 +76,9 @@
  *               title: continueOnPermanentFailure
  *               description: Whether the workflow should continue executing even if its status is changed to failed.
  *             skipOnPermanentFailure:
- *               type: boolean | string
+ *               type: boolean
  *               title: skipOnPermanentFailure
- *               description: Whether the workflow should skip all subsequent steps in case of a permanent failure in this step. If a string is provided, it will resume the workflow from that step name.
+ *               description: Whether the workflow should skip subsequent steps in case of a permanent failure.
  *             maxRetries:
  *               type: number
  *               title: maxRetries
