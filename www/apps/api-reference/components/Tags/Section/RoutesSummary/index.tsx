@@ -3,6 +3,7 @@ import { getSectionId } from "docs-utils"
 import Link from "next/link"
 import React, { useMemo } from "react"
 import { OpenAPI } from "types"
+import { compareOperations } from "../../../../utils/sort-operations-utils"
 
 type RoutesSummaryProps = {
   tagName: string
@@ -10,11 +11,36 @@ type RoutesSummaryProps = {
 }
 
 export const RoutesSummary = ({ tagName, paths }: RoutesSummaryProps) => {
-  const hasPaths = useMemo(() => {
-    return Object.keys(paths).length > 0
+  const sortedOperations = useMemo(() => {
+    const sortedOperations: {
+      endpointPath: string
+      method: string
+      operation: OpenAPI.Operation
+    }[] = []
+
+    Object.entries(paths).forEach(([endpointPath, operations]) => {
+      Object.entries(operations).forEach(([method, operation]) => {
+        sortedOperations.push({
+          endpointPath,
+          method,
+          operation: operation as OpenAPI.Operation,
+        })
+      })
+    })
+
+    sortedOperations.sort((a, b) => {
+      return compareOperations({
+        httpMethodA: a.method,
+        httpMethodB: b.method,
+        summaryA: a.operation.summary,
+        summaryB: b.operation.summary,
+      })
+    })
+
+    return sortedOperations
   }, [paths])
 
-  if (!hasPaths) {
+  if (!sortedOperations.length) {
     return <></>
   }
 
@@ -38,43 +64,34 @@ export const RoutesSummary = ({ tagName, paths }: RoutesSummaryProps) => {
             "p-0.75 text-code-body w-full flex flex-col gap-y-0.25"
           )}
         >
-          {Object.entries(paths).map(([path, pathItem], pathIndex) => {
-            return (
-              <React.Fragment key={path}>
-                {Object.entries(pathItem).map(
-                  ([method, operation], methodIndex) => {
-                    const operationId = getSectionId([
-                      tagName,
-                      (operation as OpenAPI.Operation).operationId,
-                    ])
-                    return (
-                      <span
-                        className={clsx("flex gap-x-0.25")}
-                        key={`${pathIndex}-${methodIndex}`}
-                      >
-                        <span
-                          className={clsx(
-                            "w-[15%]",
-                            method === "get" && "text-medusa-tag-green-icon",
-                            method === "post" && "text-medusa-tag-blue-icon",
-                            method === "delete" && "text-medusa-tag-red-icon"
-                          )}
-                        >
-                          {method.toUpperCase()}
-                        </span>
-                        <Link
-                          href={`#${operationId}`}
-                          className="text-medusa-contrast-fg-secondary hover:text-medusa-contrast-fg-primary w-[85%]"
-                        >
-                          {path}
-                        </Link>
-                      </span>
-                    )
-                  }
-                )}
-              </React.Fragment>
-            )
-          })}
+          {sortedOperations.map(
+            ({ endpointPath, method, operation }, operationIndex) => {
+              const operationId = getSectionId([
+                tagName,
+                (operation as OpenAPI.Operation).operationId,
+              ])
+              return (
+                <span className={clsx("flex gap-x-0.25")} key={operationIndex}>
+                  <span
+                    className={clsx(
+                      "w-[15%]",
+                      method === "get" && "text-medusa-tag-green-icon",
+                      method === "post" && "text-medusa-tag-blue-icon",
+                      method === "delete" && "text-medusa-tag-red-icon"
+                    )}
+                  >
+                    {method.toUpperCase()}
+                  </span>
+                  <Link
+                    href={`#${operationId}`}
+                    className="text-medusa-contrast-fg-secondary hover:text-medusa-contrast-fg-primary w-[85%]"
+                  >
+                    {endpointPath}
+                  </Link>
+                </span>
+              )
+            }
+          )}
         </div>
       </div>
     </div>
