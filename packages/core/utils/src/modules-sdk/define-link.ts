@@ -126,19 +126,23 @@ function buildFieldAlias(fieldAliases?: Shortcut | Shortcut[]) {
 
 function prepareServiceConfig(
   input: DefineLinkInputSource | DefineReadOnlyLinkInputSource,
-  defaultOptions?: { isList?: boolean }
+  defaultOptions?: { createMultiple?: boolean }
 ) {
-  let serviceConfig = {} as ModuleLinkableKeyConfig
+  let serviceConfig = {} as ModuleLinkableKeyConfig & {
+    createMultiple: boolean
+  }
 
   if (isInputSource(input)) {
     const source = isToJSON(input) ? input.toJSON() : input
+    const createMultiple = defaultOptions?.createMultiple ?? false
 
     serviceConfig = {
       key: source.linkable,
       alias: source.alias ?? camelToSnakeCase(source.field ?? ""),
       field: input.field ?? source.field,
       primaryKey: source.primaryKey,
-      isList: defaultOptions?.isList ?? false,
+      isList: false,
+      createMultiple,
       deleteCascade: false,
       module: source.serviceName,
       entity: source.entity,
@@ -148,12 +152,16 @@ function prepareServiceConfig(
       ? input.linkable.toJSON()
       : input.linkable
 
+    const createMultiple =
+      input.isList ?? defaultOptions?.createMultiple ?? false
+
     serviceConfig = {
       key: source.linkable,
       alias: source.alias ?? camelToSnakeCase(source.field ?? ""),
       field: input.field ?? source.field,
       primaryKey: source.primaryKey,
-      isList: input.isList ?? defaultOptions?.isList ?? false,
+      isList: input.isList ?? false,
+      createMultiple,
       deleteCascade: input.deleteCascade ?? false,
       module: source.serviceName,
       entity: source.entity,
@@ -184,8 +192,12 @@ export function defineLink(
   rightService: DefineLinkInputSource | DefineReadOnlyLinkInputSource,
   linkServiceOptions?: ExtraOptions | ReadOnlyExtraOptions
 ): DefineLinkExport {
-  const serviceAObj = prepareServiceConfig(leftService, { isList: true })
-  const serviceBObj = prepareServiceConfig(rightService, { isList: false })
+  const serviceAObj = prepareServiceConfig(leftService, {
+    createMultiple: true,
+  })
+  const serviceBObj = prepareServiceConfig(rightService, {
+    createMultiple: false,
+  })
 
   if (linkServiceOptions?.readOnly) {
     return defineReadOnlyLink(
@@ -375,6 +387,7 @@ ${serviceBObj.module}: {
           },
           deleteCascade: serviceAObj.deleteCascade,
           isList: serviceAObj.isList,
+          createMultiple: serviceAObj.createMultiple,
         },
         {
           serviceName: serviceBObj.module,
@@ -387,6 +400,7 @@ ${serviceBObj.module}: {
           },
           deleteCascade: serviceBObj.deleteCascade,
           isList: serviceBObj.isList,
+          createMultiple: serviceBObj.createMultiple,
         },
       ],
       extends: [

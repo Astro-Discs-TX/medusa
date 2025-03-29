@@ -412,7 +412,7 @@ export class Link {
 
           /**
            * An array of objects to validate for uniqueness before persisting
-           * data to the pivot table. When a link uses "isList: false", we
+           * data to the pivot table. When a link uses "createMultiple: false", we
            * have to limit a relationship with this entity to be a one-to-one
            * or one-to-many
            */
@@ -431,20 +431,20 @@ export class Link {
         linksToValidateForUniqueness.services.push(relationship.serviceName)
 
         /**
-         * When isList is set on false on the relationship, then it means
+         * When createMultiple is set on false on the relationship, then it means
          * we have a one-to-one or many-to-one relationship with the
          * other side and we have limit duplicate entries from other
          * entity. For example:
          *
          * - A brand has a many to one relationship with a product.
-         * - A product can have only one brand. Aka (brand.isList = false)
-         * - A brand can have multiple products. Aka (products.isList = true)
+         * - A product can have only one brand. Aka (brand.createMultiple = false)
+         * - A brand can have multiple products. Aka (products.createMultiple = true)
          *
          * A result of this, we have to ensure that a product_id can only appear
          * once in the pivot table that is used for tracking "brand<>products"
          * relationship.
          */
-        if (relationship.isList === false) {
+        if (relationship.createMultiple === false) {
           const otherSide = relationships.find(
             (other) => other.foreignKey !== relationship.foreignKey
           )

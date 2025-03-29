@@ -9,6 +9,11 @@ export type JoinerRelationship = {
    */
   inverse?: boolean
   /**
+   * Allow multiple relationships to exist for this
+   * entity
+   */
+  createMultiple?: boolean
+  /**
    * Force the relationship to return a list
    */
   isList?: boolean
