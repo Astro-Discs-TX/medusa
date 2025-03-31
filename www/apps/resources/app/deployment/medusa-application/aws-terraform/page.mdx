@@ -92,7 +92,7 @@ See module inputs documentation for available configuration options.
 
 Example variables:
 ```hcl
-backend_container_image = "your-medusa-backend-image:v2.5.1"
+backend_container_image = "your-medusa-backend-image:v2.6.1"
 project     = "medusa"
 environment = "prod"
 owner       = "my-team"
@@ -124,8 +124,7 @@ Confirm the deployment by typing `yes` when prompted.
 
 ## Connecting Medusa to the Deployed Infrastructure
 
-Once the infrastructure is deployed, the Medusa backend URL will be available in the Terraform outputs. Use this URL to connect your Medusa application to the deployed backend.
-
+Once the infrastructure is deployed, the Medusa backend URL will be available in the Terraform outputs. Use this URL to connect your storefront application to the deployed backend.
 
 ### Configuring Medusa with Provisioned AWS Services
 In addition to the backend, the Terraform module provisions key AWS resources, including an Amazon S3 bucket for object storage and an Amazon ElastiCache (Redis) instance. To integrate these services with your Medusa application:
@@ -157,12 +156,12 @@ See [ECR Documentation](https://docs.aws.amazon.com/AmazonECR/latest/userguide/r
 ### Use an External Image Repository
 If you’re using an external image repository, provide the repository address and image tag as variables, optionally you might need to provide credentials for repository:
 ```hcl
-backend_container_image = "your-repo/medusa-backend:v2.5.1"
+backend_container_image = "your-repo/medusa-backend:v2.6.1"
 backend_container_registry_credentials = {
     username = "your-registry-username"
     password = "your-registry-password"
   }
-storefront_container_image = "your-repo/medusa-backend:v2.5.1"
+storefront_container_image = "your-repo/medusa-backend:v2.6.1"
 storefront_container_registry_credentials = {
     username = "your-registry-username"
     password = "your-registry-password"
@@ -189,17 +188,16 @@ terraform destroy
   - [Backend Starter Template](https://github.com/medusajs/medusa-starter-default).
   - [Frontend Starter Template](https://github.com/medusajs/nextjs-starter-medusa).
 
-
 ### Deploy the Frontend
 Medusa starter kits typically use the Next.js framework to build the storefront web application. Next.js requires that the Medusa backend is available and responsive during the build process to properly fetch data and create a fully functional storefront. This is important because storefront will be built using the API provided by the backend application.
 
 To deploy the frontend, provide the following variables:
 ```hcl
 storefront_create = true
-storefront_container_image  = "your-repo/frontend:v1.20.11"
+storefront_container_image  = "your-repo/frontend:v2.6.1"
 ```
 
-For a detailed step-by-step guide on building, pushing, and configuring the storefront container image, refer to the [Storefront Deployment Guide](../storefront/deploying-next-on-aws-using-terraform.md). Following this guide ensures that your storefront is correctly built, stored in AWS ECR, and integrated with the Terraform module.
+For a detailed step-by-step guide on building, pushing, and configuring the storefront container image, refer to the [Storefront Deployment Guide](../../storefront/aws-terraform/page.mdx). Following this guide ensures that your storefront is correctly built, stored in AWS ECR, and integrated with the Terraform module.
 
 ---
 

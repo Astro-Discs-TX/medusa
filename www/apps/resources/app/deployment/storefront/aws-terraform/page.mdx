@@ -25,19 +25,18 @@ Before proceeding, ensure you have the following:
 ## Setting Up the Storefront Repository
 
 1. Clone the [`medusa-starter`](https://github.com/u11d-com/medusa-starter/tree/v2) repository to your local machine:
-   ```bash
-   git clone https://github.com/u11d-com/medusa-starter.git
-   cd medusa-starter
-   ```
+  ```bash
+  git clone https://github.com/u11d-com/medusa-starter.git
+  cd medusa-starter
+  ```
 
 2. Navigate to the `storefront` directory and initialize the repository, this sets up the storefront based on the [Medusa Next.js starter template](https://github.com/medusajs/nextjs-starter-medusa)
-   ```bash
-   cd storefront
-   git init
-   git remote add origin https://github.com/medusajs/nextjs-starter-medusa.git
-   git checkout main
-   ```
+  ```bash
+  git clone https://github.com/medusajs/nextjs-starter-medusa.git
+  ```
+  Copy and replace files from storefront folder to created directory.
 
+  This sets up the Medusa storefront starter template (Medusa v2).
 
 ---
 
@@ -50,10 +49,12 @@ Before proceeding, ensure you have the following:
   * Copy default token value.
 
 2. Build the Docker container image for the storefront:
+  When building a Docker image on a macOS machine (which uses Apple Silicon, typically ARM-based chips), you need to specify the --platform=linux/amd64 flag to ensure compatibility with AWS ECS, which commonly runs on x86_64 architecture.
+
    ```bash
-   docker build --build-arg MEDUSA_BACKEND_URL="https://my.medusa.backend" --build-arg NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY="pk_testvalue123" -t medusa_storefront:1.0.0 .
+   docker build --build-arg MEDUSA_BACKEND_URL="https://my.medusa.backend" --build-arg NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY="pk_testvalue123" -t medusa_storefront:2.0.0 .
    ```
-   - Replace `medusa_storefront:1.0.0` with your preferred image tag in the format `<image_tag>:<version>`, e.g., `my-storefront:1.0.0`.
+   - Replace `medusa_storefront:2.0.0` with your preferred image tag in the format `<image_tag>:<version>`, e.g., `my-storefront:2.0.0`.
    - Replace `https://my.medusa.backend` with your existing Medusa backend URL address.
    - Replace `pk_testvalue123` with your existing publishable key.
 
