@@ -35,6 +35,7 @@ export const ReturnFulfillment: ModuleJoinerConfig = {
       args: {
         methodSuffix: "Fulfillments",
       },
+      isList: true,
     },
   ],
   extends: [

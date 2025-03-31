@@ -37,6 +37,7 @@ export const ProductSalesChannel: ModuleJoinerConfig = {
       args: {
         methodSuffix: "SalesChannels",
       },
+      isList: true,
     },
   ],
   extends: [

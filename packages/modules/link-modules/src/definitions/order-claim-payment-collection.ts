@@ -38,6 +38,7 @@ export const OrderClaimPaymentCollection: ModuleJoinerConfig = {
       args: {
         methodSuffix: "PaymentCollections",
       },
+      isList: true,
     },
   ],
   extends: [
