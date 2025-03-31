@@ -15,7 +15,13 @@ medusaIntegrationTestRunner({
         const currencyLinks = CurrencyModule.linkable
         const regionLinks = RegionModule.linkable
 
-        const link = defineLink(currencyLinks.currency, regionLinks.region)
+        const link = defineLink(
+          {
+            linkable: currencyLinks.currency,
+            isList: true,
+          },
+          regionLinks.region
+        )
 
         const linkDefinition = MedusaModule.getCustomLinks()
           .map((linkDefinition: any) => {

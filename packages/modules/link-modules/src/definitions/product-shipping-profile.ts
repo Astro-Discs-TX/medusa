@@ -27,6 +27,7 @@ export const ProductShippingProfile: ModuleJoinerConfig = {
       args: {
         methodSuffix: "Products",
       },
+      isList: true,
     },
     {
       serviceName: Modules.FULFILLMENT,

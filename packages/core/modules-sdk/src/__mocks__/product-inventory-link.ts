@@ -65,6 +65,7 @@ export const ProductInventoryLinkModule = {
     ],
   },
 
+  list: jest.fn(async () => []),
   create: jest.fn(
     async (
       primaryKeyOrBulkData: string | string[] | [string | string[], string][],

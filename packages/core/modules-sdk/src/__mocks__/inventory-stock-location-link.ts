@@ -59,6 +59,7 @@ export const InventoryStockLocationLink = {
     ],
   },
 
+  list: jest.fn(async () => []),
   create: jest.fn(
     async (
       primaryKeyOrBulkData: string | string[] | [string | string[], string][],
