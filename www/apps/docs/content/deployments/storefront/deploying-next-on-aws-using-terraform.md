@@ -27,7 +27,6 @@ Before proceeding, ensure you have the following:
    ```
 
 2. Navigate to the `storefront` directory and initialize the repository, this sets up the storefront based on the [Medusa Next.js starter template](https://github.com/medusajs/nextjs-starter-medusa) for version 1:
-2. Navigate to the `storefront` directory and initialize the repository, this sets up the storefront based on the [Medusa Next.js starter template](https://github.com/medusajs/nextjs-starter-medusa) for version 1:
    ```bash
    cd storefront
    git init
