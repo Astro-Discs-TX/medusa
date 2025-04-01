@@ -126,15 +126,15 @@ function buildFieldAlias(fieldAliases?: Shortcut | Shortcut[]) {
 
 function prepareServiceConfig(
   input: DefineLinkInputSource | DefineReadOnlyLinkInputSource,
-  defaultOptions?: { createMultiple?: boolean }
+  defaultOptions?: { hasMany?: boolean }
 ) {
   let serviceConfig = {} as ModuleLinkableKeyConfig & {
-    createMultiple: boolean
+    hasMany: boolean
   }
 
   if (isInputSource(input)) {
     const source = isToJSON(input) ? input.toJSON() : input
-    const createMultiple = defaultOptions?.createMultiple ?? false
+    const hasMany = defaultOptions?.hasMany ?? false
 
     serviceConfig = {
       key: source.linkable,
@@ -142,7 +142,7 @@ function prepareServiceConfig(
       field: input.field ?? source.field,
       primaryKey: source.primaryKey,
       isList: false,
-      createMultiple,
+      hasMany,
       deleteCascade: false,
       module: source.serviceName,
       entity: source.entity,
@@ -152,8 +152,7 @@ function prepareServiceConfig(
       ? input.linkable.toJSON()
       : input.linkable
 
-    const createMultiple =
-      input.isList ?? defaultOptions?.createMultiple ?? false
+    const hasMany = input.isList ?? defaultOptions?.hasMany ?? false
 
     serviceConfig = {
       key: source.linkable,
@@ -161,7 +160,7 @@ function prepareServiceConfig(
       field: input.field ?? source.field,
       primaryKey: source.primaryKey,
       isList: input.isList ?? false,
-      createMultiple,
+      hasMany,
       deleteCascade: input.deleteCascade ?? false,
       module: source.serviceName,
       entity: source.entity,
@@ -193,10 +192,10 @@ export function defineLink(
   linkServiceOptions?: ExtraOptions | ReadOnlyExtraOptions
 ): DefineLinkExport {
   const serviceAObj = prepareServiceConfig(leftService, {
-    createMultiple: true,
+    hasMany: true,
   })
   const serviceBObj = prepareServiceConfig(rightService, {
-    createMultiple: false,
+    hasMany: false,
   })
 
   if (linkServiceOptions?.readOnly) {
@@ -386,8 +385,7 @@ ${serviceBObj.module}: {
             methodSuffix: serviceAMethodSuffix,
           },
           deleteCascade: serviceAObj.deleteCascade,
-          isList: serviceAObj.isList,
-          createMultiple: serviceAObj.createMultiple,
+          hasMany: serviceAObj.hasMany,
         },
         {
           serviceName: serviceBObj.module,
@@ -399,8 +397,7 @@ ${serviceBObj.module}: {
             methodSuffix: serviceBMethodSuffix,
           },
           deleteCascade: serviceBObj.deleteCascade,
-          isList: serviceBObj.isList,
-          createMultiple: serviceBObj.createMultiple,
+          hasMany: serviceBObj.hasMany,
         },
       ],
       extends: [

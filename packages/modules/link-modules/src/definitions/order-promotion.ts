@@ -35,6 +35,7 @@ export const OrderPromotion: ModuleJoinerConfig = {
       args: {
         methodSuffix: "Promotions",
       },
+      hasMany: true,
     },
   ],
   extends: [

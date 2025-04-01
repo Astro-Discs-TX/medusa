@@ -35,6 +35,7 @@ export const CartPromotion: ModuleJoinerConfig = {
       args: {
         methodSuffix: "Promotions",
       },
+      hasMany: true,
     },
   ],
   extends: [
