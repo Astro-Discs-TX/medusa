@@ -25,6 +25,7 @@ export const CartPromotion: ModuleJoinerConfig = {
       args: {
         methodSuffix: "Carts",
       },
+      hasMany: true,
     },
     {
       serviceName: Modules.PROMOTION,

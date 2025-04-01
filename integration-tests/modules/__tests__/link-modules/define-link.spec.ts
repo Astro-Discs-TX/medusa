@@ -46,7 +46,7 @@ medusaIntegrationTestRunner({
               entity: "Currency",
               primaryKey: "code",
               foreignKey: "currency_code",
-              hasMany: true,
+              hasMany: false,
               alias: "currency",
               args: {
                 methodSuffix: "Currencies",
@@ -147,7 +147,7 @@ medusaIntegrationTestRunner({
               entity: "ProductVariant",
               primaryKey: "id",
               foreignKey: "product_variant_id",
-              hasMany: true,
+              hasMany: false,
               alias: "product_variant",
               args: {
                 methodSuffix: "ProductVariants",
@@ -253,7 +253,7 @@ medusaIntegrationTestRunner({
               entity: "Currency",
               primaryKey: "code",
               foreignKey: "currency_code",
-              hasMany: true,
+              hasMany: false,
               alias: "currency",
               args: {
                 methodSuffix: "Currencies",
@@ -353,7 +353,7 @@ medusaIntegrationTestRunner({
               entity: "Currency",
               primaryKey: "code",
               foreignKey: "currency_code",
-              hasMany: true,
+              hasMany: false,
               alias: "currency",
               args: {
                 methodSuffix: "Currencies",
