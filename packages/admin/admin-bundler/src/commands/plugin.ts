@@ -22,6 +22,7 @@ export async function plugin(options: PluginOptions) {
     ...Object.keys(pkg.peerDependencies || {}),
     ...Object.keys(pkg.devDependencies || {}),
     "react",
+    "@hookform/resolvers/zod",
     "react/jsx-runtime",
     "react-router-dom",
     "@medusajs/js-sdk",
