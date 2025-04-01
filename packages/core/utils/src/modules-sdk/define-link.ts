@@ -85,6 +85,7 @@ type ModuleLinkableKeyConfig = {
   deleteCascade?: boolean
   primaryKey: string
   alias: string
+  hasMany?: boolean
   shortcut?: Shortcut | Shortcut[]
 }
 
@@ -125,16 +126,12 @@ function buildFieldAlias(fieldAliases?: Shortcut | Shortcut[]) {
 }
 
 function prepareServiceConfig(
-  input: DefineLinkInputSource | DefineReadOnlyLinkInputSource,
-  defaultOptions?: { hasMany?: boolean }
+  input: DefineLinkInputSource | DefineReadOnlyLinkInputSource
 ) {
-  let serviceConfig = {} as ModuleLinkableKeyConfig & {
-    hasMany: boolean
-  }
+  let serviceConfig = {} as ModuleLinkableKeyConfig
 
   if (isInputSource(input)) {
     const source = isToJSON(input) ? input.toJSON() : input
-    const hasMany = defaultOptions?.hasMany ?? false
 
     serviceConfig = {
       key: source.linkable,
@@ -142,7 +139,7 @@ function prepareServiceConfig(
       field: input.field ?? source.field,
       primaryKey: source.primaryKey,
       isList: false,
-      hasMany,
+      hasMany: false,
       deleteCascade: false,
       module: source.serviceName,
       entity: source.entity,
@@ -152,7 +149,7 @@ function prepareServiceConfig(
       ? input.linkable.toJSON()
       : input.linkable
 
-    const hasMany = input.isList ?? defaultOptions?.hasMany ?? false
+    const hasMany = !!input.isList
 
     serviceConfig = {
       key: source.linkable,
@@ -191,12 +188,8 @@ export function defineLink(
   rightService: DefineLinkInputSource | DefineReadOnlyLinkInputSource,
   linkServiceOptions?: ExtraOptions | ReadOnlyExtraOptions
 ): DefineLinkExport {
-  const serviceAObj = prepareServiceConfig(leftService, {
-    hasMany: true,
-  })
-  const serviceBObj = prepareServiceConfig(rightService, {
-    hasMany: false,
-  })
+  const serviceAObj = prepareServiceConfig(leftService)
+  const serviceBObj = prepareServiceConfig(rightService)
 
   if (linkServiceOptions?.readOnly) {
     return defineReadOnlyLink(
