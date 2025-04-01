@@ -45,6 +45,7 @@ export const ProductVariantInventoryItem: ModuleJoinerConfig = {
       args: {
         methodSuffix: "InventoryItems",
       },
+      isList: true,
     },
   ],
   extends: [
