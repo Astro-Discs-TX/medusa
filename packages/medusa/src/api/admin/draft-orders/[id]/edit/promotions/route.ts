@@ -33,7 +33,6 @@ export const DELETE = async (
 ) => {
   const { id } = req.params
 
-  console.log("req.validatedBody", JSON.stringify(req.validatedBody, null, 2))
 
   const { result } = await removeDraftOrderPromotionsWorkflow(req.scope).run({
     input: {
