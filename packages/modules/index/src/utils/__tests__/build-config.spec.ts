@@ -788,7 +788,7 @@ describe("buildSchemaObjectRepresentation", () => {
     )
   })
 
-  it.only("should handle link modules between entities from different services specifying link relationships", () => {
+  it("should handle link modules between entities from different services specifying link relationships", () => {
     const productSchema = `
       type Product { 
         id: ID! 
@@ -1062,7 +1062,7 @@ describe("buildSchemaObjectRepresentation", () => {
     )
   })
 
-  it("should handle link modules between entities from different services without specifying link relationships", () => {
+  it.only("should handle link modules between entities from different services without specifying link relationships", () => {
     const productSchema = `
       type Product { 
         id: ID! 
