@@ -1,6 +1,6 @@
+import { medusaIntegrationTestRunner } from "@medusajs/test-utils"
 import { IndexTypes } from "@medusajs/types"
 import { defaultCurrencies, Modules } from "@medusajs/utils"
-import { medusaIntegrationTestRunner } from "@medusajs/test-utils"
 import { setTimeout } from "timers/promises"
 import {
   adminHeaders,
@@ -12,7 +12,7 @@ jest.setTimeout(120000)
 process.env.ENABLE_INDEX_MODULE = "true"
 
 medusaIntegrationTestRunner({
-  testSuite: ({ getContainer, dbConnection, api, dbConfig }) => {
+  testSuite: ({ getContainer, dbConnection, api }) => {
     let indexEngine: IndexTypes.IIndexService
     let appContainer
 
@@ -30,7 +30,7 @@ medusaIntegrationTestRunner({
     })
 
     describe("Index engine", () => {
-      it("should search through the indexed data and return the correct results ordered and filtered [1]", async () => {
+      it.only("should search through the indexed data and return the correct results ordered and filtered [1]", async () => {
         const shippingProfile = (
           await api.post(
             `/admin/shipping-profiles`,
@@ -68,11 +68,7 @@ medusaIntegrationTestRunner({
         await setTimeout(2000)
 
         const { data: results } = await indexEngine.query<"product">({
-          fields: [
-            "product.*",
-            "product.variants.*",
-            "product.variants.prices.*",
-          ],
+          fields: ["product.variants.prices.*"],
           filters: {
             product: {
               variants: {
@@ -94,6 +90,13 @@ medusaIntegrationTestRunner({
             },
           },
         })
+
+        const manager = (indexEngine as any).container_.baseRepository.manager_
+        const datas = await manager.execute(`
+          SELECT DISTINCT name FROM index_data
+        `)
+
+        console.log(JSON.stringify(datas, null, 2))
 
         expect(results.length).toBe(1)
 

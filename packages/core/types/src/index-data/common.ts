@@ -32,6 +32,11 @@ export type SchemaObjectEntityRepresentation = {
     targetProp: string
 
     /**
+     * The property the parent is assigned to in my side
+     */
+    inverseSideProp: string
+
+    /**
      * Are the data expected to be a list or not
      */
     isList?: boolean

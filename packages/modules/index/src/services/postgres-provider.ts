@@ -107,7 +107,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
         const parentAlias = field.split(".")[0]
         const parentSchemaObjectRepresentation =
           schemaEntityObjectRepresentation.parents.find(
-            (parent) => parent.ref.alias === parentAlias
+            (parent) => parent.inverseSideProp === parentAlias
           )
 
         if (!parentSchemaObjectRepresentation) {
