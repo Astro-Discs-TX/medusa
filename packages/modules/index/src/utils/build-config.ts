@@ -656,11 +656,6 @@ function processEntity(
         (parentPropertyNameWithinCurrentEntity?.name ??
           parentObjectRepresentationRef.alias) + ".id"
 
-      console.log("propertyToAdd", propertyToAdd, {
-        sourceEntityName: entityName,
-        targetEntityName: parent,
-      })
-
       if (
         parentPropertyNameWithinCurrentEntity &&
         !currentObjectRepresentationRef.fields.includes(propertyToAdd)
@@ -804,11 +799,6 @@ function processEntity(
               (parentPropertyNameWithinIntermediateEntity?.name ??
                 parentIntermediateEntityRef.alias) + ".id"
 
-            console.log("propertyToAdd", propertyToAdd, {
-              sourceEntityName: intermediateEntityName,
-              targetEntityName: parentIntermediateEntityRef.entity,
-            })
-
             if (
               parentPropertyNameWithinIntermediateEntity &&
               !intermediateEntityObjectRepresentationRef.fields.includes(
@@ -844,11 +834,6 @@ function processEntity(
           const propertyToAdd =
             (parentPropertyNameWithinCurrentEntity?.name ??
               currentParentIntermediateRef.alias) + ".id"
-
-          console.log("propertyToAdd", propertyToAdd, {
-            sourceEntityName: currentObjectRepresentationRef.entity,
-            targetEntityName: currentParentIntermediateRef.entity,
-          })
 
           if (
             parentPropertyNameWithinCurrentEntity &&

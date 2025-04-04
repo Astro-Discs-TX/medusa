@@ -1,6 +1,5 @@
 import { IndexTypes } from "@medusajs/framework/types"
 import {
-  GraphQLUtils,
   isDefined,
   isObject,
   isPresent,
@@ -91,17 +90,10 @@ export class QueryBuilder {
       throw new Error(`Field ${field} is not indexed.`)
     }
 
-    let currentType = fieldRef.type
-    let isArray = false
-    while (currentType.ofType) {
-      if (currentType instanceof GraphQLUtils.GraphQLList) {
-        isArray = true
-      }
-
-      currentType = currentType.ofType
-    }
-
-    return currentType.name + (isArray ? "[]" : "")
+    const fieldType = fieldRef.type.toString()
+    const isArray = fieldType.startsWith("[")
+    const currentType = fieldType.replace(/\[|\]|\!/g, "")
+    return currentType + (isArray ? "[]" : "")
   }
 
   private transformValueToType(path, field, value) {
