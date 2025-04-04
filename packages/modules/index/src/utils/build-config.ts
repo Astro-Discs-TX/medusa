@@ -312,13 +312,7 @@ function retrieveLinkModuleAndAlias({
         )
       }
 
-      const executableSchema = makeSchemaExecutable(moduleSchema)
-      if (!executableSchema) {
-        continue
-      }
-
-      const entitiesMap = executableSchema.getTypeMap()
-
+      const entitiesMap = servicesEntityMap
       let intermediateEntities: string[] = []
       let foundCount = 0
       let foundName: string | null = null
@@ -326,7 +320,6 @@ function retrieveLinkModuleAndAlias({
         entityName: string,
         visited: Set<string> = new Set()
       ): boolean => {
-        //}: { name: string; isArray: boolean } => {
         if (visited.has(entityName)) {
           return false
         }
