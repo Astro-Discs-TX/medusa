@@ -1,7 +1,7 @@
 export const schema = `
 type PriceSet {
   id: ID!
-  prices: [Price]
+  prices: [Price]!
   calculated_price: CalculatedPriceSet
 }
 
