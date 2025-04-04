@@ -424,10 +424,12 @@ function retrieveLinkModuleAndAlias({
   }
 
   if (!linkModulesMetadata.length) {
-    // TODO: change to use the logger
+    // TODO: revisit this part
+    /*
     console.warn(
       `Index Module warning, unable to retrieve the link module that correspond to the entities ${primaryEntity} - ${foreignEntity}.`
     )
+    */
   }
 
   return linkModulesMetadata
@@ -712,15 +714,22 @@ function processEntity(
          * Add the schema parent entity as a parent to the link module and configure it.
          */
 
-        linkObjectRepresentationRef.parents = [
-          {
+        linkObjectRepresentationRef.parents ??= []
+
+        if (
+          !linkObjectRepresentationRef.parents.some(
+            (parent) =>
+              parent.ref.entity === parentObjectRepresentationRef.entity
+          )
+        ) {
+          linkObjectRepresentationRef.parents.push({
             ref: parentObjectRepresentationRef,
             targetProp: linkModuleMetadata.alias,
             inverseSideProp: linkModuleMetadata.inverseSideProp ?? "",
             isList: linkModuleMetadata.isList,
             isInverse: linkModuleMetadata.isInverse,
-          },
-        ]
+          })
+        }
         linkObjectRepresentationRef.alias = linkModuleMetadata.alias
         linkObjectRepresentationRef.listeners = [
           `${linkModuleMetadata.entityName}.${CommonEvents.ATTACHED}`,
