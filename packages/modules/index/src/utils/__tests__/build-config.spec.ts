@@ -240,7 +240,7 @@ describe("buildSchemaObjectRepresentation", () => {
           ref: productRefExpectation,
           targetProp: "variants",
           inverseSideProp: "product",
-          isList: false,
+          isList: true,
         },
       ],
       alias: "variant",
@@ -490,7 +490,7 @@ describe("buildSchemaObjectRepresentation", () => {
           ref: categoryRefExpectation,
           targetProp: "products",
           inverseSideProp: "category",
-          isList: false,
+          isList: true,
         },
       ],
       alias: "product",
@@ -506,7 +506,7 @@ describe("buildSchemaObjectRepresentation", () => {
           ref: productRefExpectation,
           targetProp: "variants",
           inverseSideProp: "product",
-          isList: false,
+          isList: true,
         },
       ],
       alias: "variant",
@@ -522,7 +522,7 @@ describe("buildSchemaObjectRepresentation", () => {
           ref: variantRefExpectation,
           targetProp: "options",
           inverseSideProp: "product_variant",
-          isList: false,
+          isList: true,
         },
       ],
       alias: "option",
@@ -991,7 +991,7 @@ describe("buildSchemaObjectRepresentation", () => {
         }),
         targetProp: "product",
         inverseSideProp: "order_items",
-        isList: true,
+        isList: false,
       },
     ])
     expect(objectRepresentation["Product"].listeners).toEqual([
@@ -1016,7 +1016,7 @@ describe("buildSchemaObjectRepresentation", () => {
         }),
         targetProp: "order",
         inverseSideProp: "product_items",
-        isList: true,
+        isList: false,
       },
     ])
     expect(objectRepresentation["Order"].listeners).toEqual(["order.created"])
@@ -1040,7 +1040,7 @@ describe("buildSchemaObjectRepresentation", () => {
           }),
           targetProp: "product_items",
           inverseSideProp: "order",
-          isList: false,
+          isList: true,
         },
         {
           ref: expect.objectContaining({
@@ -1048,7 +1048,7 @@ describe("buildSchemaObjectRepresentation", () => {
           }),
           targetProp: "order_items",
           inverseSideProp: "product",
-          isList: false,
+          isList: true,
         },
       ])
     )
@@ -1301,7 +1301,7 @@ describe("buildSchemaObjectRepresentation", () => {
         ref: objectRepresentation["Product"],
         targetProp: "variants",
         inverseSideProp: "product",
-        isList: false,
+        isList: true,
       },
     ])
     expect(objectRepresentation["ProductVariant"].listeners).toEqual([
@@ -1327,7 +1327,7 @@ describe("buildSchemaObjectRepresentation", () => {
         ref: objectRepresentation["ProductVariant"],
         inverseSideProp: "prices",
         targetProp: "product_variant_price_set_link",
-        isList: true,
+        isList: false,
         isInverse: false,
       },
     ])
@@ -1363,7 +1363,7 @@ describe("buildSchemaObjectRepresentation", () => {
         ref: objectRepresentation["PriceSet"],
         targetProp: "prices",
         inverseSideProp: "price_set",
-        isList: false,
+        isList: true,
       },
     ])
     expect(objectRepresentation["Price"].fields).toEqual([

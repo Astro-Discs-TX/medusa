@@ -66,7 +66,7 @@ function retrieveEntityPropByType({
   }
 
   const retrieveFieldNode = (node: any) => {
-    const astNode = node.astNode
+    const astNode = node?.astNode
     const fields = astNode?.fields ?? []
 
     for (const field of fields) {
@@ -367,7 +367,7 @@ function retrieveLinkModuleAndAlias({
         linkModuleConfig: linkModuleJoinerConfig,
         intermediateEntityNames: intermediateEntities,
         inverseSideProp: inverseSideProp.name,
-        isList: inverseSideProp.isArray,
+        isList: false,
         isInverse: isInverseMatch,
       })
     }
@@ -530,17 +530,15 @@ function processEntity(
      * Retrieve the parent entity field in the schema
      */
 
-    const entityFieldInParent = (
-      entitiesMap[parent].astNode as any
-    )?.fields?.find((field) => {
-      let currentType = field.type
-      while (currentType.type) {
-        currentType = currentType.type
-      }
-      return currentType.name?.value === entityName
-    })
+    const entityFieldInParent = retrieveEntityPropByType({
+      sourceEntityName: parent,
+      targetEntityName: entityName,
+      entitiesMap,
+      servicesEntityMap,
+    })!
 
-    const entityTargetPropertyNameInParent = entityFieldInParent.name.value
+    const entityTargetPropertyNameInParent = entityFieldInParent.name
+    const entityTargetPropertyIsListInParent = entityFieldInParent.isArray
 
     /**
      * Retrieve the parent entity object representation reference.
@@ -579,7 +577,7 @@ function processEntity(
           ref: parentObjectRepresentationRef,
           targetProp: entityTargetPropertyNameInParent,
           inverseSideProp: parentPropertyNameWithinCurrentEntity?.name!,
-          isList: parentPropertyNameWithinCurrentEntity?.isArray!,
+          isList: entityTargetPropertyIsListInParent,
         })
       } else {
         return
@@ -617,7 +615,7 @@ function processEntity(
           ref: parentObjectRepresentationRef,
           targetProp: entityTargetPropertyNameInParent,
           inverseSideProp: parentPropertyNameWithinCurrentEntity?.name!,
-          isList: parentPropertyNameWithinCurrentEntity?.isArray!,
+          isList: entityTargetPropertyIsListInParent,
         })
       }
 
@@ -741,14 +739,23 @@ function processEntity(
             retrieveEntityPropByType({
               sourceEntityName: intermediateEntityName,
               targetEntityName: parentIntermediateEntityRef.entity,
-              entitiesMap: servicesEntityMap,
+              entitiesMap: entitiesMap,
+              servicesEntityMap: servicesEntityMap,
             })
+
+          const intermediateEntityTargetPropertyIsListInParent =
+            retrieveEntityPropByType({
+              sourceEntityName: parentIntermediateEntityRef.entity,
+              targetEntityName: intermediateEntityName,
+              entitiesMap: entitiesMap,
+              servicesEntityMap: servicesEntityMap,
+            })?.isArray
 
           const parentRef = {
             ref: parentIntermediateEntityRef,
             targetProp: intermediateEntityAlias,
             inverseSideProp: parentPropertyNameWithinIntermediateEntity?.name!,
-            isList: parentPropertyNameWithinIntermediateEntity?.isArray!,
+            isList: intermediateEntityTargetPropertyIsListInParent,
           }
           intermediateEntityObjectRepresentationRef.parents.push(parentRef)
 
@@ -845,12 +852,19 @@ function processEntity(
           entitiesMap: servicesEntityMap,
         })
 
+        const entityTargetPropertyIsListInParent = retrieveEntityPropByType({
+          sourceEntityName: currentParentIntermediateRef.entity,
+          targetEntityName: currentObjectRepresentationRef.entity,
+          entitiesMap: entitiesMap,
+          servicesEntityMap: servicesEntityMap,
+        })?.isArray
+
         currentObjectRepresentationRef.parents.push({
           ref: currentParentIntermediateRef,
           inSchemaRef: parentObjectRepresentationRef,
           targetProp: entityTargetPropertyNameInParent,
           inverseSideProp: parentPropertyNameWithinCurrentEntity?.name!,
-          isList: parentPropertyNameWithinCurrentEntity?.isArray!,
+          isList: entityTargetPropertyIsListInParent,
         })
       }
     }

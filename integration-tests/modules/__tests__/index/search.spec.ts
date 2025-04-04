@@ -6,6 +6,8 @@ import {
   adminHeaders,
   createAdminUser,
 } from "../../../helpers/create-admin-user"
+import { writeFile } from "fs/promises"
+import path from "path"
 
 jest.setTimeout(120000)
 
@@ -92,11 +94,9 @@ medusaIntegrationTestRunner({
         })
 
         const manager = (indexEngine as any).container_.baseRepository.manager_
-        const datas = await manager.execute(`
-          SELECT DISTINCT name FROM index_data
+        let datas = await manager.execute(`
+          SELECT * FROM index_data
         `)
-
-        console.log(JSON.stringify(datas, null, 2))
 
         expect(results.length).toBe(1)
 
