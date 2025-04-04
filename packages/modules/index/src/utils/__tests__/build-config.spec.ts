@@ -1176,10 +1176,12 @@ describe("buildSchemaObjectRepresentation", () => {
         {
           serviceName: "ProductService",
           foreignKey: "product_variant_id",
+          entity: "ProductVariant",
         },
         {
           serviceName: "PriceService",
           foreignKey: "price_set_id",
+          entity: "PriceSet",
         },
       ],
       extends: [
@@ -1727,13 +1729,23 @@ describe("buildSchemaObjectRepresentation", () => {
     expect(objectRepresentation["ProductVariantPriceLink"].entity).toBe(
       "ProductVariantPriceLink"
     )
+
     expect(objectRepresentation["ProductVariantPriceLink"].parents).toEqual([
+      expect.objectContaining({
+        ref: expect.objectContaining({
+          entity: "Price",
+        }),
+        targetProp: "product_variant_price_link",
+        inverseSideProp: "price",
+        isList: false,
+        isInverse: true,
+      }),
       expect.objectContaining({
         ref: expect.objectContaining({
           entity: "ProductVariant",
         }),
-        inverseSideProp: "product_variant",
         targetProp: "product_variant_price_link",
+        inverseSideProp: "product_variant",
         isList: false,
         isInverse: false,
       }),
@@ -1748,6 +1760,7 @@ describe("buildSchemaObjectRepresentation", () => {
     expect(objectRepresentation["ProductPriceLink"].entity).toBe(
       "ProductPriceLink"
     )
+
     expect(objectRepresentation["ProductPriceLink"].parents).toEqual([
       expect.objectContaining({
         ref: expect.objectContaining({
@@ -1757,6 +1770,15 @@ describe("buildSchemaObjectRepresentation", () => {
         targetProp: "product_price_link",
         isList: false,
         isInverse: false,
+      }),
+      expect.objectContaining({
+        ref: expect.objectContaining({
+          entity: "Price",
+        }),
+        inverseSideProp: "price",
+        targetProp: "product_price_link",
+        isList: false,
+        isInverse: true,
       }),
     ])
     expect(objectRepresentation["ProductPriceLink"].fields).toEqual([

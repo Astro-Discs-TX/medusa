@@ -229,14 +229,12 @@ function retrieveLinkModuleAndAlias({
     const isDirectMatch =
       linkPrimary.serviceName === primaryModuleConfig.serviceName &&
       linkForeign.serviceName === foreignModuleConfig.serviceName &&
-      linkPrimary.entity === primaryEntity &&
-      linkForeign.entity === foreignEntity
+      linkPrimary.entity === primaryEntity
 
     const isInverseMatch =
       linkPrimary.serviceName === foreignModuleConfig.serviceName &&
       linkForeign.serviceName === primaryModuleConfig.serviceName &&
-      linkPrimary.entity === foreignEntity &&
-      linkForeign.entity === primaryEntity
+      linkPrimary.entity === foreignEntity
 
     if (!(isDirectMatch || isInverseMatch)) {
       continue
@@ -424,12 +422,9 @@ function retrieveLinkModuleAndAlias({
   }
 
   if (!linkModulesMetadata.length) {
-    // TODO: revisit this part
-    /*
     console.warn(
       `Index Module warning, unable to retrieve the link module that correspond to the entities ${primaryEntity} - ${foreignEntity}.`
     )
-    */
   }
 
   return linkModulesMetadata
