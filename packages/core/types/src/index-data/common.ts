@@ -81,6 +81,7 @@ export type SchemaPropertiesMap = {
     shortCutOf?: string
     ref: SchemaObjectEntityRepresentation
     isInverse?: boolean
+    isList?: boolean
   }
 }
 

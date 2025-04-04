@@ -181,12 +181,16 @@ function retrieveLinkModuleAndAlias({
   foreignEntity,
   foreignModuleConfig,
   moduleJoinerConfigs,
+  servicesEntityMap,
+  entitiesMap,
 }: {
   primaryEntity: string
   primaryModuleConfig: ModuleJoinerConfig
   foreignEntity: string
   foreignModuleConfig: ModuleJoinerConfig
   moduleJoinerConfigs: ModuleJoinerConfig[]
+  servicesEntityMap: Record<string, any>
+  entitiesMap: Record<string, any>
 }): {
   entityName: string
   alias: string
@@ -270,12 +274,21 @@ function retrieveLinkModuleAndAlias({
        * The link will become the parent of the foreign entity, that is why the alias must be the one that correspond to the extended foreign module
        */
 
+      const inverseSideProp = retrieveEntityPropByType({
+        targetEntityName: primaryEntity,
+        sourceEntityName: linkModuleJoinerConfig.alias[0].entity,
+        servicesEntityMap: servicesEntityMap,
+        entitiesMap: entitiesMap,
+      })
+
       linkModulesMetadata.push({
         entityName: linkModuleJoinerConfig.alias[0].entity,
         alias: extractNameFromAlias(linkModuleJoinerConfig.alias),
         linkModuleConfig: linkModuleJoinerConfig,
         intermediateEntityNames: [],
         isInverse: isInverseMatch,
+        isList: inverseSideProp?.isArray,
+        inverseSideProp: inverseSideProp?.name,
       })
     } else {
       const intermediateEntityName =
@@ -304,9 +317,10 @@ function retrieveLinkModuleAndAlias({
       const isForeignEntityChildOfIntermediateEntity = (
         entityName: string,
         visited: Set<string> = new Set()
-      ): { name: string; isArray: boolean } => {
+      ): boolean => {
+        //}: { name: string; isArray: boolean } => {
         if (visited.has(entityName)) {
-          return { name: "", isArray: false }
+          return false
         }
         visited.add(entityName)
 
@@ -323,7 +337,7 @@ function retrieveLinkModuleAndAlias({
             if (entityType.name === intermediateEntityName) {
               foundName = entityType.name
               ++foundCount
-              return inverseSideProp
+              return true
             } else {
               const inverseSideProp = isForeignEntityChildOfIntermediateEntity(
                 entityType.name,
@@ -331,15 +345,15 @@ function retrieveLinkModuleAndAlias({
               )
               if (inverseSideProp) {
                 intermediateEntities.push(entityType.name)
-                return inverseSideProp
+                return true
               }
             }
           }
         }
-        return { name: "", isArray: false }
+        return false
       }
 
-      const inverseSideProp = isForeignEntityChildOfIntermediateEntity(
+      isForeignEntityChildOfIntermediateEntity(
         isDirectMatch ? foreignEntity : primaryEntity
       )
 
@@ -361,13 +375,24 @@ function retrieveLinkModuleAndAlias({
        * The link will become the parent of the foreign entity, that is why the alias must be the one that correspond to the extended foreign module
        */
 
+      const directInverseSideProp = retrieveEntityPropByType({
+        targetEntityName: isDirectMatch
+          ? primaryEntity
+          : linkModuleJoinerConfig.alias[0].entity,
+        sourceEntityName: isDirectMatch
+          ? linkModuleJoinerConfig.alias[0].entity
+          : primaryEntity,
+        servicesEntityMap: servicesEntityMap,
+        entitiesMap: entitiesMap,
+      })
+
       linkModulesMetadata.push({
         entityName: linkModuleJoinerConfig.alias[0].entity,
         alias: extractNameFromAlias(linkModuleJoinerConfig.alias),
         linkModuleConfig: linkModuleJoinerConfig,
         intermediateEntityNames: intermediateEntities,
-        inverseSideProp: inverseSideProp.name,
-        isList: false,
+        inverseSideProp: directInverseSideProp?.name,
+        isList: directInverseSideProp?.isArray,
         isInverse: isInverseMatch,
       })
     }
@@ -648,6 +673,8 @@ function processEntity(
         foreignEntity: currentObjectRepresentationRef.entity,
         foreignModuleConfig: currentEntityModule,
         moduleJoinerConfigs,
+        servicesEntityMap,
+        entitiesMap,
       })
 
       for (const linkModuleMetadata of linkModuleMetadatas) {
@@ -908,10 +935,20 @@ function buildAliasMap(
   function recursivelyBuildAliasPath(
     current: IndexTypes.SchemaObjectEntityRepresentation,
     parentPath = "",
-    aliases: { alias: string; shortCutOf?: string; isInverse?: boolean }[] = [],
+    aliases: {
+      alias: string
+      shortCutOf?: string
+      isInverse?: boolean
+      isList?: boolean
+    }[] = [],
     visited: Set<string> = new Set(),
     pathStack: string[] = []
-  ): { alias: string; shortCutOf?: string; isInverse?: boolean }[] {
+  ): {
+    alias: string
+    shortCutOf?: string
+    isInverse?: boolean
+    isList?: boolean
+  }[] {
     const pathIdentifier = `${current.entity}:${parentPath}`
 
     if (pathStack.includes(pathIdentifier)) {
@@ -944,6 +981,7 @@ function buildAliasMap(
       ).map((aliasObj) => ({
         alias: aliasObj.alias,
         isInverse: parentEntity.isInverse,
+        isList: parentEntity.isList,
       }))
 
       aliases.push(...parentAliases)
@@ -967,6 +1005,7 @@ function buildAliasMap(
             shortCutOf.alias.split(".")[0] === aliasObj.alias.split(".")[0]
               ? shortCutOf.alias
               : undefined,
+          isList: parentEntity.isList ?? true,
           isInverse: shortCutOf.isInverse,
         }))
 
@@ -1016,6 +1055,7 @@ function buildAliasMap(
       aliasMap[alias.alias] = {
         ref: entityRepresentationRef,
         shortCutOf: alias.shortCutOf,
+        isList: alias.isList,
         isInverse: alias.isInverse,
       }
     }

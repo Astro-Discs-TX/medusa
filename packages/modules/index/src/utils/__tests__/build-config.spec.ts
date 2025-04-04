@@ -1154,6 +1154,16 @@ describe("buildSchemaObjectRepresentation", () => {
         id: ID!
         product_variant_id: ID!
         price_set_id: ID!
+        product_variant: ProductVariant!
+        price_set: [PriceSet!]
+       }
+
+       extend type ProductVariant {
+        product_variant_price_set_link: ProductVariantPriceSetLink!
+       }
+
+       extend type PriceSet {
+        product_variant_price_set_link: ProductVariantPriceSetLink!
        }
       `,
       alias: [
@@ -1325,7 +1335,7 @@ describe("buildSchemaObjectRepresentation", () => {
     expect(objectRepresentation["ProductVariantPriceSetLink"].parents).toEqual([
       {
         ref: objectRepresentation["ProductVariant"],
-        inverseSideProp: "prices",
+        inverseSideProp: "product_variant",
         targetProp: "product_variant_price_set_link",
         isList: false,
         isInverse: false,
@@ -1348,6 +1358,8 @@ describe("buildSchemaObjectRepresentation", () => {
       {
         ref: objectRepresentation["ProductVariantPriceSetLink"],
         targetProp: "price_set",
+        inverseSideProp: "product_variant_price_set_link",
+        isList: true,
       },
     ])
     expect(objectRepresentation["PriceSet"].fields).toEqual(["id"])
