@@ -1399,6 +1399,418 @@ describe("buildSchemaObjectRepresentation", () => {
     )
   })
 
+  it("should handle link modules between entities from different services without specifying link relationships and multiple field aliasees for the same entity type with cyclic relationships", () => {
+    const productSchema = `
+      type Product { 
+        id: ID! 
+        title: String!
+        variants: [ProductVariant!]
+      }
+
+      type ProductVariant {
+        id: ID!
+        title: String!
+        product_id: ID!
+        product: Product!
+      }
+    `
+
+    const priceSchema = `
+      type Price { 
+        id: ID!
+        amount: Float!
+        currency_code: String!
+      }
+    `
+
+    const productModuleJoinerConfig = {
+      serviceName: "ProductService",
+      schema: productSchema,
+      alias: [
+        {
+          name: "product",
+          entity: "Product",
+        },
+        {
+          name: "product_variant",
+          entity: "ProductVariant",
+        },
+      ],
+      linkableKeys: {
+        product_id: "Product",
+        variant_id: "ProductVariant",
+      },
+    }
+
+    const priceModuleJoinerConfig = {
+      serviceName: "PriceService",
+      schema: priceSchema,
+      alias: [
+        {
+          name: "price",
+          entity: "Price",
+        },
+      ],
+      linkableKeys: {
+        price_id: "Price",
+      },
+    }
+
+    const productPriceLinkModuleJoinerConfig = {
+      serviceName: "ProductPriceService",
+      isLink: true,
+      schema: `
+       type ProductPriceLink {
+        id: ID!
+        product_id: ID!
+        price_id: ID!
+        product: Product!
+        price: Price!
+       }
+
+       extend type Product {
+        product_price_link: ProductPriceLink!
+       }
+
+       extend type Price {
+        product_price_link: ProductPriceLink!
+       }
+      `,
+      alias: [
+        {
+          name: "product_price_link",
+          entity: "ProductPriceLink",
+        },
+      ],
+      relationships: [
+        {
+          serviceName: "ProductService",
+          foreignKey: "product_id",
+          entity: "Product",
+        },
+        {
+          serviceName: "PriceService",
+          foreignKey: "price_id",
+          entity: "Price",
+        },
+      ],
+      extends: [
+        {
+          serviceName: "ProductService",
+          relationship: {
+            fieldAlias: {
+              prices: "product_price_link.price",
+              isList: true,
+            },
+            serviceName: "ProductPriceService",
+            primaryKey: "product_id",
+            isList: true,
+          },
+        },
+        {
+          serviceName: "PriceService",
+          relationship: {
+            fieldAlias: {
+              product: "product_price_link.product",
+            },
+            serviceName: "ProductPriceService",
+            primaryKey: "price_id",
+          },
+        },
+      ],
+    }
+
+    const productVariantPriceLinkModuleJoinerConfig = {
+      serviceName: "ProductVariantPriceService",
+      isLink: true,
+      schema: `
+       type ProductVariantPriceLink {
+        id: ID!
+        product_variant_id: ID!
+        price_id: ID!
+        product_variant: ProductVariant!
+        price: Price!
+       }
+
+       extend type ProductVariant {
+        product_variant_price_link: ProductVariantPriceLink!
+       }
+
+       extend type Price {
+        product_variant_price_link: ProductVariantPriceLink!
+       }
+      `,
+      alias: [
+        {
+          name: "product_variant_price_link",
+          entity: "ProductVariantPriceLink",
+        },
+      ],
+      relationships: [
+        {
+          serviceName: "ProductService",
+          foreignKey: "variant_id",
+          entity: "ProductVariant",
+        },
+        {
+          serviceName: "PriceService",
+          foreignKey: "price_id",
+          entity: "Price",
+        },
+      ],
+      extends: [
+        {
+          serviceName: "ProductService",
+          relationship: {
+            fieldAlias: {
+              product_variant: "product_variant_price_link.product_variant",
+            },
+            serviceName: "ProductVariantPriceService",
+            primaryKey: "variant_id",
+            isList: true,
+          },
+        },
+        {
+          serviceName: "PriceService",
+          relationship: {
+            fieldAlias: {
+              price: "product_variant_price_link.price",
+            },
+            serviceName: "ProductVariantPriceService",
+            primaryKey: "price_id",
+          },
+        },
+      ],
+    }
+
+    ;(MedusaModule.getAllJoinerConfigs as jest.Mock).mockReturnValue([
+      productModuleJoinerConfig,
+      priceModuleJoinerConfig,
+      productPriceLinkModuleJoinerConfig,
+      productVariantPriceLinkModuleJoinerConfig,
+    ])
+
+    const indexSchema = `
+      type Product @Listeners(values: ["product.created"]) {
+        id: ID
+        title: String
+
+        prices: [Price]
+      }
+
+      type ProductVariant @Listeners(values: ["product_variant.created"]) {
+        id: ID
+        title: String
+
+        prices: [Price]
+      }
+      
+      type Price @Listeners(values: ["price.created"]) {
+        id: ID
+        amount: Float
+        currency_code: String
+        product_variant: ProductVariant
+        product: Product
+      }
+    `
+
+    const [objectRepresentation, entitiesMap] =
+      buildSchemaObjectRepresentation(indexSchema)
+
+    // Verify entitiesMap structure
+    expect(entitiesMap).toEqual(
+      expect.objectContaining({
+        Product: expect.objectContaining({
+          name: "Product",
+          _fields: {
+            id: expect.objectContaining({
+              name: "id",
+            }),
+            title: expect.objectContaining({
+              name: "title",
+            }),
+            prices: expect.objectContaining({
+              name: "prices",
+            }),
+          },
+        }),
+        ProductVariant: expect.objectContaining({
+          name: "ProductVariant",
+          _fields: {
+            id: expect.objectContaining({
+              name: "id",
+            }),
+            title: expect.objectContaining({
+              name: "title",
+            }),
+            prices: expect.objectContaining({
+              name: "prices",
+            }),
+          },
+        }),
+        Price: expect.objectContaining({
+          name: "Price",
+          _fields: {
+            id: expect.objectContaining({
+              name: "id",
+            }),
+            amount: expect.objectContaining({
+              name: "amount",
+            }),
+            currency_code: expect.objectContaining({
+              name: "currency_code",
+            }),
+            product_variant: expect.objectContaining({
+              name: "product_variant",
+            }),
+            product: expect.objectContaining({
+              name: "product",
+            }),
+          },
+        }),
+      })
+    )
+
+    // Verify that all entities exist in the objectRepresentation
+    expect(objectRepresentation["Product"]).toBeDefined()
+    expect(objectRepresentation["Product"].entity).toBe("Product")
+    expect(objectRepresentation["Product"].parents).toEqual([
+      expect.objectContaining({
+        inSchemaRef: expect.objectContaining({
+          entity: "Price",
+        }),
+        ref: expect.objectContaining({
+          entity: "ProductPriceLink",
+        }),
+        targetProp: "product",
+        inverseSideProp: "product_price_link",
+        isList: false,
+      }),
+    ])
+    expect(objectRepresentation["Product"].listeners).toEqual([
+      "product.created",
+    ])
+    expect(objectRepresentation["Product"].alias).toBe("product")
+    expect(objectRepresentation["Product"].moduleConfig).toBe(
+      productModuleJoinerConfig
+    )
+    expect(objectRepresentation["Product"].fields).toEqual(["id", "title"])
+
+    expect(objectRepresentation["ProductVariant"]).toBeDefined()
+    expect(objectRepresentation["ProductVariant"].entity).toBe("ProductVariant")
+    expect(objectRepresentation["ProductVariant"].parents).toEqual([
+      expect.objectContaining({
+        inSchemaRef: expect.objectContaining({
+          entity: "Price",
+        }),
+        ref: expect.objectContaining({
+          entity: "ProductVariantPriceLink",
+        }),
+        targetProp: "product_variant",
+        inverseSideProp: "product_variant_price_link",
+        isList: false,
+      }),
+    ])
+    expect(objectRepresentation["ProductVariant"].listeners).toEqual([
+      "product_variant.created",
+    ])
+    expect(objectRepresentation["ProductVariant"].alias).toBe("product_variant")
+    expect(objectRepresentation["ProductVariant"].moduleConfig).toBe(
+      productModuleJoinerConfig
+    )
+    expect(objectRepresentation["ProductVariant"].fields).toEqual([
+      "id",
+      "title",
+    ])
+
+    expect(objectRepresentation["ProductVariantPriceLink"]).toBeDefined()
+    expect(objectRepresentation["ProductVariantPriceLink"].entity).toBe(
+      "ProductVariantPriceLink"
+    )
+    expect(objectRepresentation["ProductVariantPriceLink"].parents).toEqual([
+      expect.objectContaining({
+        ref: expect.objectContaining({
+          entity: "ProductVariant",
+        }),
+        inverseSideProp: "product_variant",
+        targetProp: "product_variant_price_link",
+        isList: false,
+        isInverse: false,
+      }),
+    ])
+    expect(objectRepresentation["ProductVariantPriceLink"].fields).toEqual([
+      "id",
+      "variant_id",
+      "price_id",
+    ])
+
+    expect(objectRepresentation["ProductPriceLink"]).toBeDefined()
+    expect(objectRepresentation["ProductPriceLink"].entity).toBe(
+      "ProductPriceLink"
+    )
+    expect(objectRepresentation["ProductPriceLink"].parents).toEqual([
+      expect.objectContaining({
+        ref: expect.objectContaining({
+          entity: "Product",
+        }),
+        inverseSideProp: "product",
+        targetProp: "product_price_link",
+        isList: false,
+        isInverse: false,
+      }),
+    ])
+    expect(objectRepresentation["ProductPriceLink"].fields).toEqual([
+      "id",
+      "product_id",
+      "price_id",
+    ])
+
+    expect(objectRepresentation["Price"]).toBeDefined()
+    expect(objectRepresentation["Price"].entity).toBe("Price")
+    expect(objectRepresentation["Price"].parents).toEqual([
+      expect.objectContaining({
+        inSchemaRef: expect.objectContaining({
+          entity: "Product",
+        }),
+        ref: expect.objectContaining({
+          entity: "ProductPriceLink",
+        }),
+        targetProp: "prices",
+        inverseSideProp: "product_price_link",
+        isList: false,
+      }),
+      expect.objectContaining({
+        inSchemaRef: expect.objectContaining({
+          entity: "ProductVariant",
+        }),
+        ref: expect.objectContaining({
+          entity: "ProductVariantPriceLink",
+        }),
+        targetProp: "prices",
+        inverseSideProp: "product_variant_price_link",
+        isList: false,
+      }),
+    ])
+    expect(objectRepresentation["Price"].fields).toEqual([
+      "id",
+      "amount",
+      "currency_code",
+    ])
+    expect(objectRepresentation["Price"].moduleConfig).toBe(
+      priceModuleJoinerConfig
+    )
+
+    // Check that links between services are properly set up
+    expect(objectRepresentation._serviceNameModuleConfigMap).toEqual(
+      expect.objectContaining({
+        ProductService: productModuleJoinerConfig,
+        PriceService: priceModuleJoinerConfig,
+        ProductPriceService: productPriceLinkModuleJoinerConfig,
+        ProductVariantPriceService: productVariantPriceLinkModuleJoinerConfig,
+      })
+    )
+  })
+
   it("should throw an error when an entity with listeners doesn't have a corresponding module", () => {
     const indexSchema = `
       type Product @Listeners(values: ["product.created"]) { 

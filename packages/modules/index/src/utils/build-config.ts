@@ -228,11 +228,15 @@ function retrieveLinkModuleAndAlias({
 
     const isDirectMatch =
       linkPrimary.serviceName === primaryModuleConfig.serviceName &&
-      linkForeign.serviceName === foreignModuleConfig.serviceName
+      linkForeign.serviceName === foreignModuleConfig.serviceName &&
+      linkPrimary.entity === primaryEntity &&
+      linkForeign.entity === foreignEntity
 
     const isInverseMatch =
       linkPrimary.serviceName === foreignModuleConfig.serviceName &&
-      linkForeign.serviceName === primaryModuleConfig.serviceName
+      linkForeign.serviceName === primaryModuleConfig.serviceName &&
+      linkPrimary.entity === foreignEntity &&
+      linkForeign.entity === primaryEntity
 
     if (!(isDirectMatch || isInverseMatch)) {
       continue
@@ -251,6 +255,26 @@ function retrieveLinkModuleAndAlias({
     const isTheForeignKeyEntityEqualForeignEntity =
       foreignModuleConfig.linkableKeys?.[foreignEntityLinkableKey] ===
       foreignEntity
+
+    const relationshipsTypes =
+      linkModuleJoinerConfig.relationships
+        ?.map((relationship) => relationship.entity!)
+        .filter(Boolean) ?? []
+
+    const filteredEntitiesMap = {
+      [linkModuleJoinerConfig.alias?.[0].entity]:
+        entitiesMap[linkModuleJoinerConfig.alias?.[0].entity],
+    }
+    const filteredServicesEntityMap = {
+      [linkModuleJoinerConfig.alias?.[0].entity]:
+        servicesEntityMap[linkModuleJoinerConfig.alias?.[0].entity],
+    }
+
+    for (const relationshipType of relationshipsTypes) {
+      filteredEntitiesMap[relationshipType] = entitiesMap[relationshipType]
+      filteredServicesEntityMap[relationshipType] =
+        servicesEntityMap[relationshipType]
+    }
 
     const linkName = linkModuleJoinerConfig.extends?.find((extend) => {
       return (
@@ -285,8 +309,8 @@ function retrieveLinkModuleAndAlias({
       const inverseSideProp = retrieveEntityPropByType({
         targetEntityName: primaryEntity,
         sourceEntityName: linkModuleJoinerConfig.alias[0].entity,
-        servicesEntityMap: servicesEntityMap,
-        entitiesMap: entitiesMap,
+        servicesEntityMap: filteredServicesEntityMap,
+        entitiesMap: filteredEntitiesMap,
       })
 
       linkModulesMetadata.push({
@@ -383,8 +407,8 @@ function retrieveLinkModuleAndAlias({
         sourceEntityName: isDirectMatch
           ? linkModuleJoinerConfig.alias[0].entity
           : primaryEntity,
-        servicesEntityMap: servicesEntityMap,
-        entitiesMap: entitiesMap,
+        servicesEntityMap: filteredServicesEntityMap,
+        entitiesMap: filteredEntitiesMap,
       })
 
       linkModulesMetadata.push({
@@ -780,7 +804,18 @@ function processEntity(
             inverseSideProp: parentPropertyNameWithinIntermediateEntity?.name!,
             isList: intermediateEntityTargetPropertyIsListInParent,
           }
-          intermediateEntityObjectRepresentationRef.parents.push(parentRef)
+
+          const parentAlreadyExists =
+            intermediateEntityObjectRepresentationRef.parents.some(
+              (existingParent) =>
+                existingParent.ref?.entity ===
+                  parentIntermediateEntityRef.entity &&
+                existingParent.targetProp === intermediateEntityAlias
+            )
+
+          if (!parentAlreadyExists) {
+            intermediateEntityObjectRepresentationRef.parents.push(parentRef)
+          }
 
           intermediateEntityObjectRepresentationRef.alias =
             intermediateEntityAlias
@@ -872,13 +907,22 @@ function processEntity(
           servicesEntityMap: servicesEntityMap,
         })?.isArray
 
-        currentObjectRepresentationRef.parents.push({
-          ref: currentParentIntermediateRef,
-          inSchemaRef: parentObjectRepresentationRef,
-          targetProp: entityTargetPropertyNameInParent,
-          inverseSideProp: parentPropertyNameWithinCurrentEntity?.name!,
-          isList: entityTargetPropertyIsListInParent,
-        })
+        const parentAlreadyExists = currentObjectRepresentationRef.parents.some(
+          (existingParent) =>
+            existingParent.ref?.entity ===
+              currentParentIntermediateRef.entity &&
+            existingParent.targetProp === entityTargetPropertyNameInParent
+        )
+
+        if (!parentAlreadyExists) {
+          currentObjectRepresentationRef.parents.push({
+            ref: currentParentIntermediateRef,
+            inSchemaRef: parentObjectRepresentationRef,
+            targetProp: entityTargetPropertyNameInParent,
+            inverseSideProp: parentPropertyNameWithinCurrentEntity?.name!,
+            isList: entityTargetPropertyIsListInParent,
+          })
+        }
       }
     }
   }
