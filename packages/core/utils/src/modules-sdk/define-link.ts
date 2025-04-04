@@ -87,6 +87,7 @@ type ModuleLinkableKeyConfig = {
   deleteCascade?: boolean
   primaryKey: string
   alias: string
+  hasMany?: boolean
   shortcut?: Shortcut | Shortcut[]
   filterable?: string[]
 }
@@ -128,8 +129,7 @@ function buildFieldAlias(fieldAliases?: Shortcut | Shortcut[]) {
 }
 
 function prepareServiceConfig(
-  input: DefineLinkInputSource | DefineReadOnlyLinkInputSource,
-  defaultOptions?: { isList?: boolean }
+  input: DefineLinkInputSource | DefineReadOnlyLinkInputSource
 ) {
   let serviceConfig = {} as ModuleLinkableKeyConfig
 
@@ -141,7 +141,8 @@ function prepareServiceConfig(
       alias: source.alias ?? camelToSnakeCase(source.field ?? ""),
       field: input.field ?? source.field,
       primaryKey: source.primaryKey,
-      isList: defaultOptions?.isList ?? false,
+      isList: false,
+      hasMany: false,
       deleteCascade: false,
       filterable: source.filterable,
       module: source.serviceName,
@@ -152,12 +153,15 @@ function prepareServiceConfig(
       ? input.linkable.toJSON()
       : input.linkable
 
+    const hasMany = !!input.isList
+
     serviceConfig = {
       key: source.linkable,
       alias: source.alias ?? camelToSnakeCase(source.field ?? ""),
       field: input.field ?? source.field,
       primaryKey: source.primaryKey,
-      isList: input.isList ?? defaultOptions?.isList ?? false,
+      isList: input.isList ?? false,
+      hasMany,
       deleteCascade: input.deleteCascade ?? false,
       filterable: input.filterable,
       module: source.serviceName,
@@ -189,8 +193,8 @@ export function defineLink(
   rightService: DefineLinkInputSource | DefineReadOnlyLinkInputSource,
   linkServiceOptions?: ExtraOptions | ReadOnlyExtraOptions
 ): DefineLinkExport {
-  const serviceAObj = prepareServiceConfig(leftService, { isList: true })
-  const serviceBObj = prepareServiceConfig(rightService, { isList: false })
+  const serviceAObj = prepareServiceConfig(leftService)
+  const serviceBObj = prepareServiceConfig(rightService)
 
   if (linkServiceOptions?.readOnly) {
     if (!leftService.linkable || !leftService.field) {
@@ -390,8 +394,8 @@ ${serviceBObj.module}: {
             methodSuffix: serviceAMethodSuffix,
           },
           deleteCascade: serviceAObj.deleteCascade,
-          isList: serviceAObj.isList,
           filterable: serviceAObj.filterable,
+          hasMany: serviceAObj.hasMany,
         },
         {
           serviceName: serviceBObj.module,
@@ -403,8 +407,8 @@ ${serviceBObj.module}: {
             methodSuffix: serviceBMethodSuffix,
           },
           deleteCascade: serviceBObj.deleteCascade,
-          isList: serviceBObj.isList,
           filterable: serviceBObj.filterable,
+          hasMany: serviceBObj.hasMany,
         },
       ],
       extends: [
