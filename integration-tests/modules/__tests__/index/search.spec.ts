@@ -30,7 +30,7 @@ medusaIntegrationTestRunner({
     })
 
     describe("Index engine", () => {
-      it.only("should search through the indexed data and return the correct results ordered and filtered [1]", async () => {
+      it("should search through the indexed data and return the correct results ordered and filtered [1]", async () => {
         const shippingProfile = (
           await api.post(
             `/admin/shipping-profiles`,
@@ -91,12 +91,13 @@ medusaIntegrationTestRunner({
           },
         })
 
+        /*
         const manager = (indexEngine as any).container_.baseRepository.manager_
         const datas = await manager.execute(`
           SELECT DISTINCT name FROM index_data
         `)
-
         console.log(JSON.stringify(datas, null, 2))
+        */
 
         expect(results.length).toBe(1)
 
