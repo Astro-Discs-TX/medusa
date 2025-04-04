@@ -1,7 +1,7 @@
 export const schema = `
 type PriceSet {
   id: ID!
-  prices: [Price]
+  prices: [Price]!
   calculated_price: CalculatedPriceSet
 }
 
@@ -16,6 +16,7 @@ type Price {
   created_at: DateTime
   updated_at: DateTime
   deleted_at: DateTime
+  price_set: PriceSet
 }
 
 type PriceRule {
@@ -25,6 +26,7 @@ type PriceRule {
   attribute: String!
   value: String!
   priority: Int!
+  price: Price
   price_id: String!
   price_list_id: String!
   created_at: DateTime

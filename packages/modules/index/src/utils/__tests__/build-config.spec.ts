@@ -239,6 +239,8 @@ describe("buildSchemaObjectRepresentation", () => {
         {
           ref: productRefExpectation,
           targetProp: "variants",
+          inverseSideProp: "product",
+          isList: true,
         },
       ],
       alias: "variant",
@@ -419,7 +421,11 @@ describe("buildSchemaObjectRepresentation", () => {
       "product.created",
     ])
     expect(objectRepresentation["Product"].alias).toBe("product")
-    expect(objectRepresentation["Product"].fields).toEqual(["id", "title"])
+    expect(objectRepresentation["Product"].fields).toEqual([
+      "id",
+      "title",
+      "category.id",
+    ])
 
     expect(objectRepresentation["ProductVariant"]).toBeDefined()
     expect(objectRepresentation["ProductVariant"].entity).toBe("ProductVariant")
@@ -430,6 +436,7 @@ describe("buildSchemaObjectRepresentation", () => {
     expect(objectRepresentation["ProductVariant"].fields).toEqual([
       "id",
       "title",
+      "product.id",
     ])
 
     expect(objectRepresentation["VariantOption"]).toBeDefined()
@@ -441,6 +448,7 @@ describe("buildSchemaObjectRepresentation", () => {
     expect(objectRepresentation["VariantOption"].fields).toEqual([
       "id",
       "value",
+      "product_variant.id",
     ])
 
     // Check parent-child relationships
@@ -481,12 +489,14 @@ describe("buildSchemaObjectRepresentation", () => {
         {
           ref: categoryRefExpectation,
           targetProp: "products",
+          inverseSideProp: "category",
+          isList: true,
         },
       ],
       alias: "product",
       listeners: ["product.created"],
       moduleConfig: moduleJoinerConfig,
-      fields: ["id", "title"],
+      fields: ["id", "title", "category.id"],
     }
 
     const variantRefExpectation = {
@@ -495,12 +505,14 @@ describe("buildSchemaObjectRepresentation", () => {
         {
           ref: productRefExpectation,
           targetProp: "variants",
+          inverseSideProp: "product",
+          isList: true,
         },
       ],
       alias: "variant",
       listeners: ["variant.created"],
       moduleConfig: moduleJoinerConfig,
-      fields: ["id", "title"],
+      fields: ["id", "title", "product.id"],
     }
 
     const optionRefExpectation = {
@@ -509,12 +521,14 @@ describe("buildSchemaObjectRepresentation", () => {
         {
           ref: variantRefExpectation,
           targetProp: "options",
+          inverseSideProp: "product_variant",
+          isList: true,
         },
       ],
       alias: "option",
       listeners: ["option.created"],
       moduleConfig: moduleJoinerConfig,
-      fields: ["id", "value"],
+      fields: ["id", "value", "product_variant.id"],
     }
 
     // Check that aliases are correctly set in the schema properties map
@@ -976,6 +990,8 @@ describe("buildSchemaObjectRepresentation", () => {
           entity: "OrderItem",
         }),
         targetProp: "product",
+        inverseSideProp: "order_items",
+        isList: false,
       },
     ])
     expect(objectRepresentation["Product"].listeners).toEqual([
@@ -1000,7 +1016,7 @@ describe("buildSchemaObjectRepresentation", () => {
         }),
         targetProp: "order",
         inverseSideProp: "product_items",
-        isList: true,
+        isList: false,
       },
     ])
     expect(objectRepresentation["Order"].listeners).toEqual(["order.created"])
@@ -1024,7 +1040,7 @@ describe("buildSchemaObjectRepresentation", () => {
           }),
           targetProp: "product_items",
           inverseSideProp: "order",
-          isList: false,
+          isList: true,
         },
         {
           ref: expect.objectContaining({
@@ -1032,7 +1048,7 @@ describe("buildSchemaObjectRepresentation", () => {
           }),
           targetProp: "order_items",
           inverseSideProp: "product",
-          isList: false,
+          isList: true,
         },
       ])
     )
@@ -1062,7 +1078,7 @@ describe("buildSchemaObjectRepresentation", () => {
     )
   })
 
-  it.only("should handle link modules between entities from different services without specifying link relationships", () => {
+  it("should handle link modules between entities from different services without specifying link relationships", () => {
     const productSchema = `
       type Product { 
         id: ID! 
@@ -1138,6 +1154,16 @@ describe("buildSchemaObjectRepresentation", () => {
         id: ID!
         product_variant_id: ID!
         price_set_id: ID!
+        product_variant: ProductVariant!
+        price_set: [PriceSet!]
+       }
+
+       extend type ProductVariant {
+        product_variant_price_set_link: ProductVariantPriceSetLink!
+       }
+
+       extend type PriceSet {
+        product_variant_price_set_link: ProductVariantPriceSetLink!
        }
       `,
       alias: [
@@ -1299,6 +1325,7 @@ describe("buildSchemaObjectRepresentation", () => {
       "id",
       "product_id",
       "title",
+      "product.id",
     ])
 
     expect(objectRepresentation["ProductVariantPriceSetLink"]).toBeDefined()
@@ -1308,9 +1335,9 @@ describe("buildSchemaObjectRepresentation", () => {
     expect(objectRepresentation["ProductVariantPriceSetLink"].parents).toEqual([
       {
         ref: objectRepresentation["ProductVariant"],
-        inverseSideProp: "prices",
+        inverseSideProp: "product_variant",
         targetProp: "product_variant_price_set_link",
-        isList: true,
+        isList: false,
         isInverse: false,
       },
     ])
@@ -1323,12 +1350,16 @@ describe("buildSchemaObjectRepresentation", () => {
     expect(objectRepresentation["PriceSet"]).toBeDefined()
     expect(objectRepresentation["PriceSet"].entity).toBe("PriceSet")
     expect(objectRepresentation["PriceSet"].listeners).toEqual([
-      "price_set.created",
+      "price-service.price-set.created",
+      "price-service.price-set.updated",
+      "price-service.price-set.deleted",
     ])
     expect(objectRepresentation["PriceSet"].parents).toEqual([
       {
         ref: objectRepresentation["ProductVariantPriceSetLink"],
         targetProp: "price_set",
+        inverseSideProp: "product_variant_price_set_link",
+        isList: true,
       },
     ])
     expect(objectRepresentation["PriceSet"].fields).toEqual(["id"])
@@ -1343,12 +1374,15 @@ describe("buildSchemaObjectRepresentation", () => {
         inSchemaRef: objectRepresentation["ProductVariant"],
         ref: objectRepresentation["PriceSet"],
         targetProp: "prices",
+        inverseSideProp: "price_set",
+        isList: true,
       },
     ])
     expect(objectRepresentation["Price"].fields).toEqual([
       "id",
       "amount",
       "currency_code",
+      "price_set.id",
     ])
     expect(objectRepresentation["Price"].moduleConfig).toBe(
       priceModuleJoinerConfig
