@@ -65,19 +65,27 @@ function retrieveEntityPropByType({
     )
   }
 
-  const retrieveFieldNode = (node: any) => {
+  const retrieveFieldNode = (
+    node: any
+  ): { name: string; isArray: boolean } | undefined => {
     const astNode = node?.astNode
     const fields = astNode?.fields ?? []
 
     for (const field of fields) {
       let type = field.type
+      let isArray = false
       while (type.type) {
+        if (type.kind === GraphQLUtils.Kind.LIST_TYPE) {
+          isArray = true
+        }
         type = type.type
       }
       if (type.name?.value === targetEntityName) {
-        return field
+        return { name: field.name?.value, isArray }
       }
     }
+
+    return
   }
 
   let prop: any
@@ -95,8 +103,8 @@ function retrieveEntityPropByType({
 
   return (
     prop && {
-      name: prop?.name?.value,
-      isArray: prop?.type?.kind === GraphQLUtils.Kind.LIST_TYPE,
+      name: prop?.name,
+      isArray: prop?.isArray,
     }
   )
 }
@@ -1119,17 +1127,11 @@ function buildSchemaFromFilterableLinks(
       return
     }
 
-    let currentType = fieldRef.type
-    let isArray = false
-    while (currentType.ofType) {
-      if (currentType instanceof GraphQLUtils.GraphQLList) {
-        isArray = true
-      }
+    const fieldType = fieldRef.type.toString()
+    const isArray = fieldType.startsWith("[")
+    const currentType = fieldType.replace(/\[|\]|\!/g, "")
 
-      currentType = currentType.ofType
-    }
-
-    return isArray ? `[${currentType.name}]` : currentType.name
+    return isArray ? `[${currentType}]` : currentType
   }
 
   const schema = allFilterable
