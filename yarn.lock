@@ -5783,7 +5783,7 @@ __metadata:
     "@types/react": ^18.3.2
     tsup: ^8.0.1
     typescript: ^5.3.3
-    zod: 3.22.4
+    zod: 3.24.2
   languageName: unknown
   linkType: soft
 
@@ -6153,7 +6153,7 @@ __metadata:
     vite: ^5.4.14
     vite-plugin-inspect: ^0.8.7
     vitest: ^3.0.5
-    zod: 3.22.4
+    zod: 3.24.2
   languageName: unknown
   linkType: soft
 
@@ -6292,7 +6292,7 @@ __metadata:
     tsconfig-paths: ^4.2.0
     typescript: ^5.6.2
     vite: ^5.4.14
-    zod: 3.22.4
+    zod: 3.24.2
   peerDependencies:
     "@aws-sdk/client-dynamodb": ^3.218.0
     "@medusajs/cli": 2.8.2
@@ -6657,7 +6657,7 @@ __metadata:
     typescript: ^5.6.2
     uuid: ^9.0.0
     yalc: 1.0.0-pre.53
-    zod: 3.22.4
+    zod: 3.24.2
   peerDependencies:
     "@medusajs/framework": 2.8.2
     "@mikro-orm/core": 6.4.3
@@ -7405,7 +7405,7 @@ __metadata:
     rimraf: ^5.0.1
     typescript: ^5.6.2
     ulid: ^2.3.0
-    zod: 3.22.4
+    zod: 3.24.2
   peerDependencies:
     "@mikro-orm/core": 6.4.3
     "@mikro-orm/knex": 6.4.3
@@ -7414,7 +7414,7 @@ __metadata:
     awilix: ^8.0.1
     express: ^4.21.0
     pg: ^8.13.0
-    zod: 3.22.4
+    zod: 3.24.2
   languageName: unknown
   linkType: soft
 
@@ -35490,9 +35490,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:3.22.4":
-  version: 3.22.4
-  resolution: "zod@npm:3.22.4"
-  checksum: 7578ab283dac0eee66a0ad0fc4a7f28c43e6745aadb3a529f59a4b851aa10872b3890398b3160f257f4b6817b4ce643debdda4fb21a2c040adda7862cab0a587
+"zod@npm:3.24.2":
+  version: 3.24.2
+  resolution: "zod@npm:3.24.2"
+  checksum: c638c7220150847f13ad90635b3e7d0321b36cce36f3fc6050ed960689594c949c326dfe2c6fa87c14b126ee5d370ccdebd6efb304f41ef5557a4aaca2824565
   languageName: node
   linkType: hard
