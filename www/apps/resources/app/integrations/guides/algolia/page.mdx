@@ -1027,8 +1027,8 @@ To implement the API Route, create the file `src/api/store/search/route.ts` with
 
 ```ts title="src/api/store/search/route.ts"
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { ALGOLIA_MODULE } from "../../../../modules/algolia"
-import AlgoliaModuleService from "../../../../modules/algolia/service"
+import { ALGOLIA_MODULE } from "../../../modules/algolia"
+import AlgoliaModuleService from "../../../modules/algolia/service"
 import { z } from "zod"
 
 export const SearchSchema = z.object({
@@ -1076,12 +1076,12 @@ import {
   defineMiddlewares,
   validateAndTransformBody, 
 } from "@medusajs/framework/http"
-import { SearchSchema } from "./store/products/search/route"
+import { SearchSchema } from "./store/search/route"
 
 export default defineMiddlewares({
   routes: [
     {
-      matcher: "/store/products/search",
+      matcher: "/store/search",
       method: ["POST"],
       middlewares: [
         validateAndTransformBody(SearchSchema),
@@ -1174,7 +1174,7 @@ export const searchClient: SearchClient = {
       }
     }
 
-    return await sdk.client.fetch(`/store/products/search`, {
+    return await sdk.client.fetch(`/store/search`, {
       method: "POST",
       body: {
         query,
