@@ -1,6 +1,6 @@
 import { z } from "zod"
 import { AddressPayload } from "../../utils/common-validators"
-import { createFindParams, createSelectParams } from "../../utils/validators"
+import { createFindParams, createSelectParams, WithAdditionalData  } from "../../utils/validators"
 
 export const StoreGetCustomerParams = createSelectParams()
 
@@ -13,13 +13,14 @@ export const StoreCreateCustomer = z.object({
   metadata: z.record(z.unknown()).nullish(),
 })
 
-export const StoreUpdateCustomer = z.object({
+const UpdateCustomer = z.object({
   company_name: z.string().nullish(),
   first_name: z.string().nullish(),
   last_name: z.string().nullish(),
   phone: z.string().nullish(),
   metadata: z.record(z.unknown()).nullish(),
 })
+export const StoreUpdateCustomer = WithAdditionalData(UpdateCustomer)
 
 export const StoreGetCustomerAddressParams = createSelectParams()
 
