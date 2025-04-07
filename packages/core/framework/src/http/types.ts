@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express"
-import { ZodNullable, ZodObject, ZodOptional } from "zod"
+import { ZodNullable, ZodObject, ZodOptional, ZodRawShape  } from "zod"
 
 import {
   FindConfig,
@@ -60,6 +60,7 @@ export type MiddlewareRoute = {
   methods?: MiddlewareVerb[]
   matcher: string | RegExp
   bodyParser?: ParserConfig
+  additionalDataValidator?: ZodRawShape
   middlewares?: MiddlewareFunction[]
 }
 
