@@ -249,6 +249,7 @@ export default class LinkModuleService implements ILinkModule {
   }
 
   @InjectTransactionManager()
+  @EmitEvents()
   async delete(
     data: any,
     @MedusaContext() sharedContext: Context = {}
@@ -269,6 +270,8 @@ export default class LinkModuleService implements ILinkModule {
     })
   }
 
+  @InjectTransactionManager()
+  @EmitEvents()
   async softDelete(
     data: any,
     { returnLinkableKeys }: SoftDeleteReturn = {},
@@ -325,6 +328,8 @@ export default class LinkModuleService implements ILinkModule {
     return await this.linkService_.softDelete(data, sharedContext)
   }
 
+  @InjectTransactionManager()
+  @EmitEvents()
   async restore(
     data: any,
     { returnLinkableKeys }: RestoreReturn = {},
