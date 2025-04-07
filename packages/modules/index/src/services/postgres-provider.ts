@@ -217,6 +217,12 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
         ids = parsedMessage.ids
       }
 
+      const targetMethod = this.eventActionToMethodMap_[action]
+
+      if (!targetMethod) {
+        return
+      }
+
       const { fields, alias } = schemaEntityObjectRepresentation
 
       let withDeleted: boolean = false
@@ -248,12 +254,6 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
           entity: schemaEntityObjectRepresentation.entity,
           data: entityData,
           schemaEntityObjectRepresentation,
-        }
-
-        const targetMethod = this.eventActionToMethodMap_[action]
-
-        if (!targetMethod) {
-          return
         }
 
         await this[targetMethod](argument)
