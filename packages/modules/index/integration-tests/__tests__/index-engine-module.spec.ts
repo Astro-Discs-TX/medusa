@@ -196,6 +196,8 @@ describe("IndexModuleService", function () {
     await dbUtils.shutdown(dbName)
   })
 
+  afterEach(afterEach_)
+
   describe("on created or attached events", function () {
     let manager
 
@@ -730,7 +732,6 @@ describe("IndexModuleService", function () {
 
     beforeEach(async () => {
       await beforeEach_(eventDataToEmit)
-      afterEach(afterEach_)
 
       manager = (medusaApp.sharedContainer!.resolve(Modules.INDEX) as any)
         .container_.manager as EntityManager
