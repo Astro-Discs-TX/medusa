@@ -473,7 +473,6 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
           onConflictAction: "merge",
           onConflictFields: ["id", "name"],
           onConflictMergeFields: ["data", "staled_at"],
-          ctx: em,
         }
       )
     }
@@ -491,7 +490,6 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
             "child_name",
           ],
           onConflictMergeFields: ["staled_at"],
-          ctx: em,
         }
       )
     }
