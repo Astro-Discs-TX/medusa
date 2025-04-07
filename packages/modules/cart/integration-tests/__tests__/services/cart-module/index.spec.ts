@@ -2886,6 +2886,7 @@ moduleIntegrationTestRunner<ICartModuleService>({
             variant_option_values: null,
             requires_shipping: true,
             is_discountable: true,
+            is_giftcard: false,
             is_tax_inclusive: false,
             is_custom_price: false,
             raw_compare_at_unit_price: null,
@@ -2992,6 +2993,7 @@ moduleIntegrationTestRunner<ICartModuleService>({
             variant_option_values: null,
             requires_shipping: true,
             is_discountable: true,
+            is_giftcard: false,
             is_tax_inclusive: false,
             is_custom_price: false,
             raw_compare_at_unit_price: null,
@@ -3140,18 +3142,18 @@ moduleIntegrationTestRunner<ICartModuleService>({
           },
         ],
         credit_lines: [],
-        credit_lines_subtotal: 0,
-        credit_lines_tax_total: 0,
-        credit_lines_total: 0,
-        raw_credit_lines_subtotal: {
+        credit_line_subtotal: 0,
+        credit_line_tax_total: 0,
+        credit_line_total: 0,
+        raw_credit_line_subtotal: {
           precision: 20,
           value: "0",
         },
-        raw_credit_lines_tax_total: {
+        raw_credit_line_tax_total: {
           precision: 20,
           value: "0",
         },
-        raw_credit_lines_total: {
+        raw_credit_line_total: {
           precision: 20,
           value: "0",
         },

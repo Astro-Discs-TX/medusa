@@ -1,12 +1,12 @@
-import { BigNumberInput, BigNumberValue } from "../totals"
+import { BigNumberInput } from "../totals"
 import {
   ChangeActionType,
   OrderClaimDTO,
-  OrderCreditLineDTO,
   OrderExchangeDTO,
   OrderItemDTO,
   OrderLineItemDTO,
   OrderReturnReasonDTO,
+  OrderStatus,
   OrderTransactionDTO,
   ReturnDTO,
 } from "./common"
@@ -159,6 +159,11 @@ export interface CreateOrderDTO {
   billing_address?: CreateOrderAddressDTO | UpdateOrderAddressDTO
 
   /**
+   * The credit lines of the order.
+   */
+  credit_lines?: CreateOrderCreditLineDTO[]
+
+  /**
    * Whether the customer should receive notifications about
    * order updates.
    */
@@ -173,11 +178,6 @@ export interface CreateOrderDTO {
    * The shipping methods of the order.
    */
   shipping_methods?: Omit<CreateOrderShippingMethodDTO, "order_id">[]
-
-  /**
-   * The credit lines of the order.
-   */
-  credit_lines?: OrderCreditLineDTO[]
 
   /**
    * The transactions of the order.
@@ -223,6 +223,16 @@ export interface UpdateOrderDTO {
    * The associated sales channel's ID.
    */
   sales_channel_id?: string
+
+  /**
+   * The status of the order.
+   */
+  status?: OrderStatus
+
+  /**
+   * Whether the order is a draft order.
+   */
+  is_draft_order?: boolean
 
   /**
    * The items of the order.
@@ -2282,7 +2292,7 @@ export interface CreateOrderCreditLineDTO {
   /**
    * The amount of the credit line.
    */
-  amount: BigNumberValue
+  amount: BigNumberInput
 
   /**
    * The reference model name that the credit line is generated from

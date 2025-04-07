@@ -146,8 +146,48 @@ const generatedgeneratedHowToTutorialsSidebarSidebar = {
               "loaded": true,
               "isPathHref": true,
               "type": "ref",
+              "title": "Use Cache Module",
+              "path": "https://docs.medusajs.com/resources/references/cache-service",
+              "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "ref",
+              "title": "Use Event Module",
+              "path": "https://docs.medusajs.com/resources/references/event-service",
+              "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "ref",
+              "title": "Use File Module",
+              "path": "https://docs.medusajs.com/resources/references/file-service",
+              "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "ref",
               "title": "Use Locking Module",
               "path": "https://docs.medusajs.com/resources/references/locking-service",
+              "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "ref",
+              "title": "Use Notification Module",
+              "path": "https://docs.medusajs.com/resources/references/notification-service",
+              "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "ref",
+              "title": "Use Workflow Engine Module",
+              "path": "https://docs.medusajs.com/resources/architectural-modules/workflow-engine/how-to-use",
               "children": []
             }
           ]
@@ -304,9 +344,36 @@ const generatedgeneratedHowToTutorialsSidebarSidebar = {
           "loaded": true,
           "isPathHref": true,
           "type": "link",
+          "title": "Abandoned Cart",
+          "path": "/how-to-tutorials/tutorials/abandoned-cart",
+          "description": "Learn how to send abandoned cart notifications to customers.",
+          "children": []
+        },
+        {
+          "loaded": true,
+          "isPathHref": true,
+          "type": "link",
           "title": "Custom Item Pricing",
           "path": "/examples/guides/custom-item-price",
           "description": "Learn how to use prices from external systems for products.",
+          "children": []
+        },
+        {
+          "loaded": true,
+          "isPathHref": true,
+          "type": "ref",
+          "title": "Magento Migration",
+          "path": "/integrations/guides/magento",
+          "description": "Learn how to migrate data from Magento to Medusa.",
+          "children": []
+        },
+        {
+          "loaded": true,
+          "isPathHref": true,
+          "type": "link",
+          "title": "Product Reviews",
+          "path": "/how-to-tutorials/tutorials/product-reviews",
+          "description": "Learn how to implement product reviews in your Medusa store.",
           "children": []
         },
         {

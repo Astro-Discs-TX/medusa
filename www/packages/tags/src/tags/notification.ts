@@ -8,6 +8,10 @@ export const notification = [
     "path": "https://docs.medusajs.com/resources/commerce-modules/auth/reset-password"
   },
   {
+    "title": "Abandoned Cart Notification",
+    "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/abandoned-cart"
+  },
+  {
     "title": "notifyOnFailureStep",
     "path": "https://docs.medusajs.com/resources/references/medusa-workflows/steps/notifyOnFailureStep"
   },
@@ -30,5 +34,9 @@ export const notification = [
   {
     "title": "Create Notification Provider",
     "path": "https://docs.medusajs.com/resources/references/notification-provider-module"
+  },
+  {
+    "title": "Use Notification Module",
+    "path": "https://docs.medusajs.com/resources/references/notification-service"
   }
 ]

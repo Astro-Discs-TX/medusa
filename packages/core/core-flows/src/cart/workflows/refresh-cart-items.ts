@@ -4,6 +4,7 @@ import {
   PromotionActions,
 } from "@medusajs/framework/utils"
 import {
+  createHook,
   createWorkflow,
   transform,
   when,
@@ -27,6 +28,8 @@ import { refreshPaymentCollectionForCartWorkflow } from "./refresh-payment-colle
 import { updateCartPromotionsWorkflow } from "./update-cart-promotions"
 import { updateTaxLinesWorkflow } from "./update-tax-lines"
 import { upsertTaxLinesWorkflow } from "./upsert-tax-lines"
+import { AdditionalData } from "@medusajs/types"
+import { pricingContextResult } from "../utils/schemas"
 
 /**
  * The details of the cart to refresh.
@@ -90,7 +93,20 @@ export const refreshCartItemsWorkflowId = "refresh-cart-items"
  */
 export const refreshCartItemsWorkflow = createWorkflow(
   refreshCartItemsWorkflowId,
-  (input: WorkflowData<RefreshCartItemsWorkflowInput>) => {
+  (input: WorkflowData<RefreshCartItemsWorkflowInput & AdditionalData>) => {
+    const setPricingContext = createHook(
+      "setPricingContext",
+      {
+        cart_id: input.cart_id,
+        items: input.items,
+        additional_data: input.additional_data,
+      },
+      {
+        resultValidator: pricingContextResult,
+      }
+    )
+    const setPricingContextResult = setPricingContext.getResult()
+
     when({ input }, ({ input }) => {
       return !!input.force_refresh
     }).then(() => {
@@ -105,9 +121,22 @@ export const refreshCartItemsWorkflow = createWorkflow(
         return (data.cart.items ?? []).map((i) => i.variant_id).filter(Boolean)
       })
 
-      const cartPricingContext = transform({ cart }, ({ cart }) => {
-        return filterObjectByKeys(cart, cartFieldsForPricingContext)
-      })
+      const cartPricingContext = transform(
+        { cart, setPricingContextResult },
+        (data) => {
+          return {
+            ...filterObjectByKeys(data.cart, cartFieldsForPricingContext),
+            ...(data.setPricingContextResult
+              ? data.setPricingContextResult
+              : {}),
+            currency_code: data.cart.currency_code,
+            region_id: data.cart.region_id,
+            region: data.cart.region,
+            customer_id: data.cart.customer_id,
+            customer: data.cart.customer,
+          }
+        }
+      )
 
       const variants = useRemoteQueryStep({
         entry_point: "variants",
@@ -228,10 +257,14 @@ export const refreshCartItemsWorkflow = createWorkflow(
       },
     })
 
+    createHook("beforeRefreshingPaymentCollection", { input })
+
     refreshPaymentCollectionForCartWorkflow.runAsStep({
       input: { cart_id: input.cart_id },
     })
 
-    return new WorkflowResponse(refetchedCart)
+    return new WorkflowResponse(refetchedCart, {
+      hooks: [setPricingContext] as const,
+    })
   }
 )

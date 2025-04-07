@@ -43,6 +43,7 @@
     "plusCount": "+ {{count}}",
     "plusCountMore": "+ {{count}} more",
     "areYouSure": "Are you sure?",
+    "areYouSureDescription": "You are about to delete the {{entity}} {{title}}. This action cannot be undone.",
     "noRecordsFound": "No records found",
     "typeToConfirm": "Please type {val} to confirm:",
     "noResultsTitle": "No results",
@@ -349,6 +350,7 @@
     "backToDashboard": "Back to dashboard"
   },
   "addresses": {
+    "title": "Addresses",
     "shippingAddress": {
       "header": "Shipping Address",
       "editHeader": "Edit Shipping Address",
@@ -615,7 +617,7 @@
     "variant": {
       "edit": {
         "header": "Edit Variant",
-        "success": "Product variant edited sucessfully"
+        "success": "Product variant edited successfully"
       },
       "create": {
         "header": "Variant details"
@@ -651,7 +653,7 @@
           "levelsBatch": "Inventory levels updated.",
           "update": "Inventory item updated successfully.",
           "updateLevel": "Inventory level updated successfully.",
-          "itemsManageSuccess": "Inventory items sucessfully updated."
+          "itemsManageSuccess": "Inventory items successfully updated."
         }
       }
     },
@@ -809,6 +811,7 @@
     "locationLevels": "Locations",
     "associatedVariants": "Associated variants",
     "manageLocations": "Manage locations",
+    "manageLocationQuantity": "Manage location quantity",
     "deleteWarning": "You are about to delete an inventory item. This action cannot be undone.",
     "editItemDetails": "Edit item details",
     "create": {
@@ -896,7 +899,7 @@
     "groups": {
       "label": "Customer groups",
       "remove": "Are you sure you want to remove the customer from \"{{name}}\" customer group?",
-      "removeMany": "Are you sure you want to customer from following customer groups: {{groups}}?",
+      "removeMany": "Are you sure you want to remove customer from following customer groups: {{groups}}?",
       "alreadyAddedTooltip": "The customer is already in this customer group.",
       "list": {
         "noRecordsMessage": "This customer doesn't belong to any group."
@@ -931,7 +934,28 @@
     },
     "registered": "Registered",
     "guest": "Guest",
-    "hasAccount": "Has account"
+    "hasAccount": "Has account",
+    "addresses": {
+      "title": "Addresses",
+      "fields": {
+        "addressName": "Address name",
+        "address1": "Address 1",
+        "address2": "Address 2",
+        "city": "City",
+        "province": "Province",
+        "postalCode": "Postal code",
+        "country": "Country",
+        "phone": "Phone",
+        "company": "Company",
+        "countryCode": "Country code",
+        "provinceCode": "Province code"
+      },
+      "create": {
+        "header": "Create Address",
+        "hint": "Create a new address for the customer.",
+        "successToast": "Address was successfully created."
+      }
+    }
   },
   "customerGroups": {
     "domain": "Customer Groups",
@@ -1110,7 +1134,7 @@
       "sendNotificationHint": "Notify customer about return.",
       "returnTotal": "Return total",
       "inboundTotal": "Inbound total",
-      "refundAmount": "Refund amount",
+      "estDifference": "Estimated difference",
       "outstandingAmount": "Outstanding amount",
       "reason": "Reason",
       "reasonHint": "Choose why the customer want to return items.",
@@ -1478,7 +1502,7 @@
       "successToast": "Location {{name}} was successfully updated."
     },
     "delete": {
-      "confirmation": "You are about to delete the stock location {{name}}. This action cannot be undone."
+      "confirmation": "You are about to delete the stock location \"{{name}}\". This action cannot be undone."
     },
     "fulfillmentProviders": {
       "header": "Fulfillment Providers",
@@ -1497,7 +1521,7 @@
         "header": "Shipping"
       },
       "disable": {
-        "confirmation": "Are you sure that you want to disable {{name}}? This will delete all associated service zones and shipping options, and cannot be undone.",
+        "confirmation": "Are you sure that you want to disable \"{{name}}\"? This will delete all associated service zones and shipping options, and cannot be undone.",
         "pickup": "Pickup was successfully disabled.",
         "shipping": "Shipping was successfully disabled."
       },
@@ -1554,7 +1578,7 @@
         "action": "Create option"
       },
       "delete": {
-        "confirmation": "You are about to delete the shipping option {{name}}. This action cannot be undone.",
+        "confirmation": "You are about to delete the shipping option \"{{name}}\". This action cannot be undone.",
         "successToast": "Shipping option {{name}} was successfully deleted."
       },
       "edit": {
@@ -1643,7 +1667,7 @@
         "successToast": "Service zone {{name}} was successfully updated."
       },
       "delete": {
-        "confirmation": "You are about to delete the service zone {{name}}. This action cannot be undone.",
+        "confirmation": "You are about to delete the service zone \"{{name}}\". This action cannot be undone.",
         "successToast": "Service zone {{name}} was successfully deleted."
       },
       "manageAreas": {
@@ -1808,7 +1832,7 @@
         "successToast": "Tax rate was successfully updated."
       },
       "delete": {
-        "confirmation": "You are about to delete the tax rate {{name}}. This action cannot be undone.",
+        "confirmation": "You are about to delete the tax rate \"{{name}}\". This action cannot be undone.",
         "successToast": "Tax rate was successfully deleted."
       }
     },
@@ -2066,11 +2090,11 @@
       },
       "value_type": {
         "fixed": {
-          "title": "Promotion Value",
+          "title": "Fixed amount",
           "description": "The amount to be discounted. eg. 100"
         },
         "percentage": {
-          "title": "Promotion Value",
+          "title": "Percentage",
           "description": "The percentage to discount off the amount. eg. 8%"
         }
       }
@@ -2183,8 +2207,8 @@
     "domain": "Price Lists",
     "subtitle": "Create sales or override prices for specific conditions.",
     "delete": {
-      "confirmation": "You are about to delete the price list {{title}}. This action cannot be undone.",
-      "successToast": "Price list {{title}} was successfully deleted."
+      "confirmation": "You are about to delete the price list \"{{title}}\". This action cannot be undone.",
+      "successToast": "Price list \"{{title}}\" was successfully deleted."
     },
     "create": {
       "header": "Create Price List",
@@ -2361,7 +2385,7 @@
   },
   "regions": {
     "domain": "Regions",
-    "subtitle": "A region is an area that you sell products in. It can cover multipe countries, and has different tax rates, providers, and currency.",
+    "subtitle": "A region is an area that you sell products in. It can cover multiple countries, and has different tax rates, providers, and currency.",
     "createRegion": "Create Region",
     "createRegionHint": "Manage tax rates and providers for a set of countries.",
     "addCountries": "Add countries",
@@ -2373,7 +2397,7 @@
     "removeCountryWarning": "You are about to remove the country {{name}} from the region. This action cannot be undone.",
     "automaticTaxesHint": "When enabled, taxes will only be calculated at checkout based on the shipping address.",
     "taxInclusiveHint": "When enabled, prices in the region will be tax inclusive.",
-    "providersHint": " Add which payment providers are available in this region.",
+    "providersHint": "Add which payment providers are available in this region.",
     "shippingOptions": "Shipping Options",
     "deleteShippingOptionWarning": "You are about to delete the shipping option {{name}}. This action cannot be undone.",
     "return": "Return",
@@ -2472,9 +2496,9 @@
     "removeSalesChannelsWarning_one": "You are about to remove {{count}} sales channel from the location.",
     "removeSalesChannelsWarning_other": "You are about to remove {{count}} sales channels from the location.",
     "toast": {
-      "create": "Location created sucessfully",
-      "update": "Location updated sucessfully",
-      "removeChannel": "Sales channel removed sucessfully"
+      "create": "Location created successfully",
+      "update": "Location updated successfully",
+      "removeChannel": "Sales channel removed successfully"
     }
   },
   "reservations": {
@@ -2620,8 +2644,8 @@
       "successToast": "Return reason {{label}} was successfully updated."
     },
     "delete": {
-      "confirmation": "You are about to delete the return reason {{label}}. This action cannot be undone.",
-      "successToast": "Return reason {{label}} was successfully deleted."
+      "confirmation": "You are about to delete the return reason \"{{label}}\". This action cannot be undone.",
+      "successToast": "Return reason \"{{label}}\" was successfully deleted."
     },
     "fields": {
       "value": {
@@ -2741,8 +2765,8 @@
       "successToast": "Product type {{value}} was successfully updated."
     },
     "delete": {
-      "confirmation": "You are about to delete the product type {{value}}. This action cannot be undone.",
-      "successToast": "Product type {{value}} was successfully deleted."
+      "confirmation": "You are about to delete the product type \"{{value}}\". This action cannot be undone.",
+      "successToast": "Product type \"{{value}}\" was successfully deleted."
     },
     "fields": {
       "value": "Value"
@@ -2775,7 +2799,7 @@
       "description": "You don't have any notifications at the moment, but once you do they will live here."
     },
     "accessibility": {
-      "description": "notifications about Medusa activities will be listed here."
+      "description": "Notifications about Medusa activities will be listed here."
     }
   },
   "errors": {

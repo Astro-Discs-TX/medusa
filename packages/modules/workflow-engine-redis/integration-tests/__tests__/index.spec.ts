@@ -528,6 +528,26 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
 
           failTrap(done)
         })
+
+        it("should cancel and revert a completed workflow", async () => {
+          const workflowId = "workflow_sync"
+
+          const { acknowledgement, transaction: trx } =
+            await workflowOrcModule.run(workflowId, {
+              input: {
+                value: "123",
+              },
+            })
+
+          expect(trx.getFlow().state).toEqual("done")
+          expect(acknowledgement.hasFinished).toBe(true)
+
+          const { transaction } = await workflowOrcModule.cancel(workflowId, {
+            transactionId: acknowledgement.transactionId,
+          })
+
+          expect(transaction.getFlow().state).toEqual("reverted")
+        })
       })
 
       describe("Testing complex workflows", function () {
