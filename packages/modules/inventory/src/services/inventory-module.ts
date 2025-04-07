@@ -520,6 +520,7 @@ export default class InventoryModuleService
    * @param context
    */
   @InjectTransactionManager()
+  @EmitEvents()
   async deleteInventoryLevel(
     inventoryItemId: string,
     locationId: string,

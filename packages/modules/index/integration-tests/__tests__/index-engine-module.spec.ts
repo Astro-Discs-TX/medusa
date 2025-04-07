@@ -730,6 +730,7 @@ describe("IndexModuleService", function () {
 
     beforeEach(async () => {
       await beforeEach_(eventDataToEmit)
+      afterEach(afterEach_)
 
       manager = (medusaApp.sharedContainer!.resolve(Modules.INDEX) as any)
         .container_.manager as EntityManager
@@ -760,8 +761,6 @@ describe("IndexModuleService", function () {
 
       await eventBusMock.emit(deleteEventDataToEmit)
     })
-
-    afterEach(afterEach_)
 
     it("should consume all deleted events and delete the index entries", async () => {
       const indexEntries = await manager.find(toMikroORMEntity(IndexData), {})

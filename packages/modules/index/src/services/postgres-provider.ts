@@ -225,7 +225,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
 
       const { fields, alias } = schemaEntityObjectRepresentation
 
-      let withDeleted: boolean = false
+      let withDeleted: boolean | undefined
       if (action === CommonEvents.DELETED || action === CommonEvents.DETACHED) {
         withDeleted = true
       }
