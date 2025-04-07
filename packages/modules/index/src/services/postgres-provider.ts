@@ -392,7 +392,9 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
     @MedusaContext() sharedContext: Context<SqlEntityManager> = {}
   ) {
     const { transactionManager: em } = sharedContext
-    const indexRepository = em!.getRepository(toMikroORMEntity(IndexData))
+    const indexRepository = em!.getRepository(
+      toMikroORMEntity(IndexData)
+    ) as EntityRepository<any>
     const indexRelationRepository: EntityRepository<any> = em!.getRepository(
       toMikroORMEntity(IndexRelation)
     )
@@ -450,18 +452,9 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
           : [parentData]
 
         for (const parentData_ of parentDataCollection) {
-          entitiesToUpsert.add(
-            JSON.stringify({
-              id: (parentData_ as any).id,
-              name: parentEntity,
-              data: parentData_,
-              staled_at: null,
-            })
-          )
-
           relationsToUpsert.add(
             JSON.stringify({
-              parent_id: (parentData_ as any).id,
+              parent_id: parentData_.id,
               parent_name: parentEntity,
               child_id: entityData.id,
               child_name: entity,
@@ -480,6 +473,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
           onConflictAction: "merge",
           onConflictFields: ["id", "name"],
           onConflictMergeFields: ["data", "staled_at"],
+          ctx: em,
         }
       )
     }
@@ -497,6 +491,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
             "child_name",
           ],
           onConflictMergeFields: ["staled_at"],
+          ctx: em,
         }
       )
     }

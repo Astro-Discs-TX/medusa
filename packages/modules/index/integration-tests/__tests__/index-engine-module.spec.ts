@@ -141,6 +141,7 @@ const beforeAll_ = async () => {
     ;(index as any).eventBusModuleService_ = eventBusMock
 
     await globalApp.onApplicationStart()
+    await setTimeout(3000)
     ;(index as any).storageProvider_.query_ = queryMock
 
     return globalApp
@@ -249,7 +250,6 @@ describe("IndexModuleService", function () {
     ]
 
     beforeEach(async () => {
-      await setTimeout(1000)
       await beforeEach_(eventDataToEmit)
 
       manager = (medusaApp.sharedContainer!.resolve(Modules.INDEX) as any)
