@@ -64,7 +64,9 @@ export function moduleEventBuilderFactory({
       source,
       action,
       context: sharedContext,
-      data: { id: data.map((item) => item.id) },
+      data: {
+        id: data.length === 1 ? data[0].id : data.map((item) => item.id),
+      },
       eventName: eventName!,
       object,
     })
