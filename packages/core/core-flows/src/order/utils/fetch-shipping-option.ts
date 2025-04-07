@@ -52,7 +52,7 @@ export type FetchShippingOptionForOrderWorkflowInput = {
    */
   shipping_option_id: string
   /**
-   * The custom amount to create the shipping method with.
+   * The custom amount of the shipping option.
    * If not provided, the shipping option's amount is used.
    */
   custom_amount?: BigNumberInput | null
