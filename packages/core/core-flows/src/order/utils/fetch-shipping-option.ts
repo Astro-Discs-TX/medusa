@@ -1,5 +1,6 @@
 import {
   AdditionalData,
+  BigNumberInput,
   CalculatedRMAShippingContext,
   CalculateShippingOptionPriceDTO,
   ShippingOptionDTO,
@@ -50,6 +51,11 @@ export type FetchShippingOptionForOrderWorkflowInput = {
    * The ID of the shipping option to fetch.
    */
   shipping_option_id: string
+  /**
+   * The custom amount to create the shipping method with.
+   * If not provided, the shipping option's amount is used.
+   */
+  custom_amount?: BigNumberInput | null
   /**
    * The currency code of the order.
    */
