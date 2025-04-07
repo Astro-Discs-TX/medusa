@@ -163,9 +163,11 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
     }
   }
 
-  protected static parseMessageData<T>(message?: Event): {
+  protected static parseMessageData<TData extends { id: string | string[] }>(
+    message?: Event
+  ): {
     action: string
-    data: { id: string }[]
+    data: TData[]
     ids: string[]
   } | void {
     const isExpectedFormat =
@@ -177,7 +179,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
 
     const result: {
       action: string
-      data: { id: string }[]
+      data: TData[]
       ids: string[]
     } = {
       action: "",
@@ -186,23 +188,27 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
     }
 
     result.action = message!.metadata!.action as string
-    result.data = message!.data as { id: string }[]
+    result.data = message!.data as TData[]
     result.data = Array.isArray(result.data) ? result.data : [result.data]
-    result.ids = result.data.map((d) => d.id)
+    result.ids = result.data.flatMap((d) =>
+      Array.isArray(d.id) ? d.id : [d.id]
+    )
 
     return result
   }
 
   consumeEvent(
     schemaEntityObjectRepresentation: IndexTypes.SchemaObjectEntityRepresentation
-  ): Subscriber<{ id: string }> {
+  ): Subscriber<{ id: string | string[] }> {
     return async (data: Event) => {
       await this.#isReady_
 
       const data_: { id: string }[] = Array.isArray(data.data)
         ? data.data
         : [data.data]
-      let ids: string[] = data_.map((d) => d.id)
+      let ids: string[] = data_.flatMap((d) =>
+        Array.isArray(d.id) ? d.id : [d.id]
+      )
       let action = data.name.split(".").pop() || ""
 
       const parsedMessage = PostgresProvider.parseMessageData(data)
@@ -213,33 +219,45 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
 
       const { fields, alias } = schemaEntityObjectRepresentation
 
-      const graphConfig: Parameters<QueryGraphFunction>[0] = {
-        entity: alias,
-        filters: {
-          id: ids,
-        },
-        fields: [...new Set(["id", ...fields])],
-      }
-
+      let withDeleted: boolean = false
       if (action === CommonEvents.DELETED || action === CommonEvents.DETACHED) {
-        graphConfig.withDeleted = true
+        withDeleted = true
       }
 
-      const { data: entityData } = await this.query_.graph(graphConfig)
+      // Process ids in batches of 100
+      const batchSize = 100
+      const idsBatches: string[][] = []
 
-      const argument = {
-        entity: schemaEntityObjectRepresentation.entity,
-        data: entityData,
-        schemaEntityObjectRepresentation,
+      for (let i = 0; i < ids.length; i += batchSize) {
+        idsBatches.push(ids.slice(i, i + batchSize))
       }
 
-      const targetMethod = this.eventActionToMethodMap_[action]
+      for (const idsBatch of idsBatches) {
+        const graphConfig: Parameters<QueryGraphFunction>[0] = {
+          entity: alias,
+          filters: {
+            id: idsBatch,
+          },
+          fields: [...new Set(["id", ...fields])],
+          withDeleted,
+        }
 
-      if (!targetMethod) {
-        return
+        const { data: entityData } = await this.query_.graph(graphConfig)
+
+        const argument = {
+          entity: schemaEntityObjectRepresentation.entity,
+          data: entityData,
+          schemaEntityObjectRepresentation,
+        }
+
+        const targetMethod = this.eventActionToMethodMap_[action]
+
+        if (!targetMethod) {
+          return
+        }
+
+        await this[targetMethod](argument)
       }
-
-      await this[targetMethod](argument)
     }
   }
 
