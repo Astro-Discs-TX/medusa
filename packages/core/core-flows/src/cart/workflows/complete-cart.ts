@@ -1,8 +1,10 @@
 import {
+  CartCreditLineDTO,
   CartWorkflowDTO,
   UsageComputedActions,
 } from "@medusajs/framework/types"
 import {
+  isDefined,
   Modules,
   OrderStatus,
   OrderWorkflowEvents,
@@ -39,7 +41,7 @@ import {
   PrepareLineItemDataInput,
   prepareTaxLinesData,
 } from "../utils/prepare-line-item-data"
-
+import { compensatePaymentIfNeededStep } from "../steps/compensate-payment-if-needed"
 /**
  * The data to complete a cart and place an order.
  */
@@ -109,6 +111,23 @@ export const completeCartWorkflow = createWorkflow(
       name: "cart-query",
     })
 
+    // this is only run when the cart is completed for the first time (same condition as below)
+    // but needs to be before the validation step
+    const paymentSessions = when(
+      "create-order-payment-compensation",
+      { orderId },
+      ({ orderId }) => !orderId
+    ).then(() => {
+      const paymentSessions = validateCartPaymentsStep({ cart })
+      // purpose of this step is to run compensation if cart completion fails
+      // and tries to cancel or refund the payment depending on the status.
+      compensatePaymentIfNeededStep({
+        payment_session_id: paymentSessions[0].id,
+      })
+
+      return paymentSessions
+    })
+
     const validate = createHook("validate", {
       input,
       cart,
@@ -133,12 +152,14 @@ export const completeCartWorkflow = createWorkflow(
 
       validateShippingStep({ cart, shippingOptions })
 
-      const paymentSessions = validateCartPaymentsStep({ cart })
+      createHook("beforePaymentAuthorization", {
+        input,
+      })
 
       const payment = authorizePaymentSessionStep({
         // We choose the first payment session, as there will only be one active payment session
         // This might change in the future.
-        id: paymentSessions[0].id,
+        id: paymentSessions![0].id,
       })
 
       const { variants, sales_channel_id } = transform({ cart }, (data) => {
@@ -162,14 +183,16 @@ export const completeCartWorkflow = createWorkflow(
 
       const cartToOrder = transform({ cart, payment }, ({ cart, payment }) => {
         const transactions =
-          payment?.captures?.map((capture) => {
-            return {
-              amount: capture.raw_amount ?? capture.amount,
-              currency_code: payment.currency_code,
-              reference: "capture",
-              reference_id: capture.id,
-            }
-          }) ?? []
+          (payment &&
+            payment?.captures?.map((capture) => {
+              return {
+                amount: capture.raw_amount ?? capture.amount,
+                currency_code: payment.currency_code,
+                reference: "capture",
+                reference_id: capture.id,
+              }
+            })) ??
+          []
 
         const allItems = (cart.items ?? []).map((item) => {
           const input: PrepareLineItemDataInput = {
@@ -199,6 +222,18 @@ export const completeCartWorkflow = createWorkflow(
           }
         })
 
+        const creditLines = (cart.credit_lines ?? []).map(
+          (creditLine: CartCreditLineDTO) => {
+            return {
+              amount: creditLine.amount,
+              raw_amount: creditLine.raw_amount,
+              reference: creditLine.reference,
+              reference_id: creditLine.reference_id,
+              metadata: creditLine.metadata,
+            }
+          }
+        )
+
         const itemAdjustments = allItems
           .map((item) => item.adjustments ?? [])
           .flat(1)
@@ -225,6 +260,7 @@ export const completeCartWorkflow = createWorkflow(
           metadata: cart.metadata,
           promo_codes: promoCodes,
           transactions,
+          credit_lines: creditLines,
         }
       })
 
@@ -262,19 +298,31 @@ export const completeCartWorkflow = createWorkflow(
         }
       })
 
-      parallelize(
-        createRemoteLinkStep([
-          {
-            [Modules.ORDER]: { order_id: createdOrder.id },
-            [Modules.CART]: { cart_id: cart.id },
-          },
-          {
-            [Modules.ORDER]: { order_id: createdOrder.id },
-            [Modules.PAYMENT]: {
-              payment_collection_id: cart.payment_collection.id,
+      const linksToCreate = transform(
+        { cart, createdOrder },
+        ({ cart, createdOrder }) => {
+          const links: Record<string, any>[] = [
+            {
+              [Modules.ORDER]: { order_id: createdOrder.id },
+              [Modules.CART]: { cart_id: cart.id },
             },
-          },
-        ]),
+          ]
+
+          if (isDefined(cart.payment_collection?.id)) {
+            links.push({
+              [Modules.ORDER]: { order_id: createdOrder.id },
+              [Modules.PAYMENT]: {
+                payment_collection_id: cart.payment_collection.id,
+              },
+            })
+          }
+
+          return links
+        }
+      )
+
+      parallelize(
+        createRemoteLinkStep(linksToCreate),
         updateCartsStep([updateCompletedAt]),
         reserveInventoryStep(formatedInventoryItems),
         emitEventStep({
@@ -315,6 +363,11 @@ export const completeCartWorkflow = createWorkflow(
       )
 
       registerUsageStep(promotionUsage)
+
+      createHook("orderCreated", {
+        order_id: createdOrder.id,
+        cart_id: cart.id,
+      })
 
       return createdOrder
     })

@@ -46,7 +46,6 @@ global[OrchestrationUtils.SymbolMedusaWorkflowComposerContext] = null
  * import {
  *   createProductStep,
  *   getProductStep,
- *   createPricesStep
  * } from "./steps"
  *
  * interface WorkflowInput {
@@ -60,7 +59,6 @@ global[OrchestrationUtils.SymbolMedusaWorkflowComposerContext] = null
  *    // during the execution. Including the data access.
  *
  *     const product = createProductStep(input)
- *     const prices = createPricesStep(product)
  *     return new WorkflowResponse(getProductStep(product.id))
  *   }
  * )

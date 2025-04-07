@@ -1,3 +1,4 @@
+import { createCartCreditLinesWorkflow } from "@medusajs/core-flows"
 import { medusaIntegrationTestRunner } from "@medusajs/test-utils"
 import {
   Modules,
@@ -1084,7 +1085,9 @@ medusaIntegrationTestRunner({
               { option_id: shippingOption.id },
               storeHeaders
             )
+          })
 
+          it("should successfully complete cart", async () => {
             const paymentCollection = (
               await api.post(
                 `/store/payment-collections`,
@@ -1098,9 +1101,20 @@ medusaIntegrationTestRunner({
               { provider_id: "pp_system_default" },
               storeHeaders
             )
-          })
 
-          it("should successfully complete cart", async () => {
+            createCartCreditLinesWorkflow.run({
+              input: [
+                {
+                  cart_id: cart.id,
+                  amount: 100,
+                  currency_code: "usd",
+                  reference: "test",
+                  reference_id: "test",
+                },
+              ],
+              container: appContainer,
+            })
+
             const response = await api.post(
               `/store/carts/${cart.id}/complete`,
               {},
@@ -1112,6 +1126,60 @@ medusaIntegrationTestRunner({
               expect.objectContaining({
                 id: expect.any(String),
                 currency_code: "usd",
+                credit_lines: [
+                  expect.objectContaining({
+                    amount: 100,
+                    reference: "test",
+                    reference_id: "test",
+                  }),
+                ],
+                items: expect.arrayContaining([
+                  expect.objectContaining({
+                    unit_price: 1500,
+                    compare_at_unit_price: null,
+                    quantity: 1,
+                  }),
+                ]),
+              })
+            )
+          })
+
+          it("should successfully complete cart with credit lines alone", async () => {
+            const oldCart = (
+              await api.get(`/store/carts/${cart.id}`, storeHeaders)
+            ).data.cart
+
+            createCartCreditLinesWorkflow.run({
+              input: [
+                {
+                  cart_id: oldCart.id,
+                  amount: oldCart.total,
+                  currency_code: "usd",
+                  reference: "test",
+                  reference_id: "test",
+                },
+              ],
+              container: appContainer,
+            })
+
+            const response = await api.post(
+              `/store/carts/${cart.id}/complete`,
+              {},
+              storeHeaders
+            )
+
+            expect(response.status).toEqual(200)
+            expect(response.data.order).toEqual(
+              expect.objectContaining({
+                id: expect.any(String),
+                currency_code: "usd",
+                credit_line_total: 2395,
+                discount_total: 100,
+                credit_lines: [
+                  expect.objectContaining({
+                    amount: 2395,
+                  }),
+                ],
                 items: expect.arrayContaining([
                   expect.objectContaining({
                     unit_price: 1500,
@@ -1160,7 +1228,7 @@ medusaIntegrationTestRunner({
               )
             ).data.product
 
-            let cart = (
+            cart = (
               await api.post(
                 `/store/carts`,
                 {
@@ -1463,8 +1531,6 @@ medusaIntegrationTestRunner({
             })
 
             it("should complete a cart with inventory item shared between variants", async () => {
-              console.log(cart)
-
               const response = await api.post(
                 `/store/carts/${cart.id}/complete`,
                 {},
@@ -1931,6 +1997,72 @@ medusaIntegrationTestRunner({
                   tax_lines: [],
                 }),
               ],
+            })
+          )
+        })
+
+        it("should not generate tax lines for gift card products", async () => {
+          const giftCardProduct = (
+            await api.post(
+              `/admin/products`,
+              {
+                title: "Gift Card",
+                description: "test",
+                is_giftcard: true,
+                options: [
+                  {
+                    title: "Denomination",
+                    values: ["10", "20", "50", "100"],
+                  },
+                ],
+                variants: [
+                  {
+                    title: "10",
+                    sku: "special-shirt",
+                    options: {
+                      Denomination: "10",
+                    },
+                    manage_inventory: false,
+                    prices: [
+                      {
+                        amount: 1000,
+                        currency_code: "usd",
+                      },
+                    ],
+                  },
+                ],
+              },
+              adminHeaders
+            )
+          ).data.product
+
+          let updated = await api.post(
+            `/store/carts/${cart.id}/line-items?fields=+items.is_giftcard`,
+            { variant_id: giftCardProduct.variants[0].id, quantity: 1 },
+            storeHeaders
+          )
+
+          expect(updated.status).toEqual(200)
+          expect(updated.data.cart).toEqual(
+            expect.objectContaining({
+              id: cart.id,
+              items: expect.arrayContaining([
+                expect.objectContaining({
+                  is_giftcard: false,
+                  tax_lines: [
+                    expect.objectContaining({
+                      description: "CA Default Rate",
+                      code: "CADEFAULT",
+                      rate: 5,
+                      provider_id: "system",
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_giftcard: true,
+                  tax_lines: [],
+                }),
+              ]),
             })
           )
         })

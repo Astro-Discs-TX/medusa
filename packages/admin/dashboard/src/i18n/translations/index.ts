@@ -1,3 +1,4 @@
+import bg from "./bg.json"
 import de from "./de.json"
 import el from "./el.json"
 import en from "./en.json"
@@ -18,8 +19,14 @@ import zhCN from "./zhCN.json"
 import fa from "./fa.json"
 import cs from "./cs.json"
 import ru from "./ru.json"
+import lt from "./lt.json"
+import vi from "./vi.json"
+import ko from "./ko.json"
 
 export default {
+  bg: {
+    translation: bg,
+  },
   de: {
     translation: de,
   },
@@ -79,5 +86,14 @@ export default {
   },
   ru: {
     translation: ru,
+  },
+  lt: {
+    translation: lt,
+  },
+  vi: {
+    translation: vi,
+  },
+  ko: {
+    translation: ko,
   },
 }

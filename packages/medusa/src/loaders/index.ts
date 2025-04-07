@@ -15,9 +15,11 @@ import {
 } from "@medusajs/framework/types"
 import {
   ContainerRegistrationKeys,
+  getResolvedPlugins,
   GraphQLSchema,
   mergePluginModules,
   promiseAll,
+  validateModuleName,
 } from "@medusajs/framework/utils"
 import { WorkflowLoader } from "@medusajs/framework/workflows"
 import { asValue } from "awilix"
@@ -27,7 +29,6 @@ import requestIp from "request-ip"
 import { v4 } from "uuid"
 import adminLoader from "./admin"
 import apiLoader from "./api"
-import { getResolvedPlugins } from "./helpers/resolve-plugins"
 
 type Options = {
   directory: string
@@ -149,6 +150,10 @@ export default async ({
 
   const plugins = await getResolvedPlugins(rootDirectory, configModule, true)
   mergePluginModules(configModule, plugins)
+
+  Object.keys(configModule.modules ?? {}).forEach((key) => {
+    validateModuleName(key)
+  })
 
   const linksSourcePaths = plugins.map((plugin) =>
     join(plugin.resolve, "links")

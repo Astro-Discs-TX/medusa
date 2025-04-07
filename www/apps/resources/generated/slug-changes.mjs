@@ -150,6 +150,11 @@ export const slugChanges = [
     "filePath": "/www/apps/resources/references/auth_provider/classes/auth_provider.AbstractAuthModuleProvider/page.mdx"
   },
   {
+    "origSlug": "/references/cache/interfaces/cache.ICacheService",
+    "newSlug": "/references/cache-service",
+    "filePath": "/www/apps/resources/references/cache/interfaces/cache.ICacheService/page.mdx"
+  },
+  {
     "origSlug": "/references/cart/ICartModuleService/methods/cart.ICartModuleService.addLineItemAdjustments",
     "newSlug": "/references/cart/addLineItemAdjustments",
     "filePath": "/www/apps/resources/references/cart/ICartModuleService/methods/cart.ICartModuleService.addLineItemAdjustments/page.mdx"
@@ -405,6 +410,26 @@ export const slugChanges = [
     "filePath": "/www/apps/resources/references/cart/ICartModuleService/methods/cart.ICartModuleService.updateShippingMethods/page.mdx"
   },
   {
+    "origSlug": "/references/cart/ICartModuleService/methods/cart.ICartModuleService.upsertLineItemAdjustments",
+    "newSlug": "/references/cart/upsertLineItemAdjustments",
+    "filePath": "/www/apps/resources/references/cart/ICartModuleService/methods/cart.ICartModuleService.upsertLineItemAdjustments/page.mdx"
+  },
+  {
+    "origSlug": "/references/cart/ICartModuleService/methods/cart.ICartModuleService.upsertLineItemTaxLines",
+    "newSlug": "/references/cart/upsertLineItemTaxLines",
+    "filePath": "/www/apps/resources/references/cart/ICartModuleService/methods/cart.ICartModuleService.upsertLineItemTaxLines/page.mdx"
+  },
+  {
+    "origSlug": "/references/cart/ICartModuleService/methods/cart.ICartModuleService.upsertShippingMethodAdjustments",
+    "newSlug": "/references/cart/upsertShippingMethodAdjustments",
+    "filePath": "/www/apps/resources/references/cart/ICartModuleService/methods/cart.ICartModuleService.upsertShippingMethodAdjustments/page.mdx"
+  },
+  {
+    "origSlug": "/references/cart/ICartModuleService/methods/cart.ICartModuleService.upsertShippingMethodTaxLines",
+    "newSlug": "/references/cart/upsertShippingMethodTaxLines",
+    "filePath": "/www/apps/resources/references/cart/ICartModuleService/methods/cart.ICartModuleService.upsertShippingMethodTaxLines/page.mdx"
+  },
+  {
     "origSlug": "/references/cart/interfaces/cart.ICartModuleService",
     "newSlug": "/references/cart",
     "filePath": "/www/apps/resources/references/cart/interfaces/cart.ICartModuleService/page.mdx"
@@ -418,6 +443,11 @@ export const slugChanges = [
     "origSlug": "/references/cart_models/variables/cart_models.Cart",
     "newSlug": "/references/cart/models/Cart",
     "filePath": "/www/apps/resources/references/cart_models/variables/cart_models.Cart/page.mdx"
+  },
+  {
+    "origSlug": "/references/cart_models/variables/cart_models.CreditLine",
+    "newSlug": "/references/cart/models/CreditLine",
+    "filePath": "/www/apps/resources/references/cart_models/variables/cart_models.CreditLine/page.mdx"
   },
   {
     "origSlug": "/references/cart_models/variables/cart_models.LineItem",
@@ -705,6 +735,11 @@ export const slugChanges = [
     "filePath": "/www/apps/resources/references/core_flows/Cart/Workflows_Cart/functions/core_flows.Cart.Workflows_Cart.confirmVariantInventoryWorkflow/page.mdx"
   },
   {
+    "origSlug": "/references/core_flows/Cart/Workflows_Cart/functions/core_flows.Cart.Workflows_Cart.createCartCreditLinesWorkflow",
+    "newSlug": "/references/medusa-workflows/createCartCreditLinesWorkflow",
+    "filePath": "/www/apps/resources/references/core_flows/Cart/Workflows_Cart/functions/core_flows.Cart.Workflows_Cart.createCartCreditLinesWorkflow/page.mdx"
+  },
+  {
     "origSlug": "/references/core_flows/Cart/Workflows_Cart/functions/core_flows.Cart.Workflows_Cart.createCartWorkflow",
     "newSlug": "/references/medusa-workflows/createCartWorkflow",
     "filePath": "/www/apps/resources/references/core_flows/Cart/Workflows_Cart/functions/core_flows.Cart.Workflows_Cart.createCartWorkflow/page.mdx"
@@ -713,6 +748,11 @@ export const slugChanges = [
     "origSlug": "/references/core_flows/Cart/Workflows_Cart/functions/core_flows.Cart.Workflows_Cart.createPaymentCollectionForCartWorkflow",
     "newSlug": "/references/medusa-workflows/createPaymentCollectionForCartWorkflow",
     "filePath": "/www/apps/resources/references/core_flows/Cart/Workflows_Cart/functions/core_flows.Cart.Workflows_Cart.createPaymentCollectionForCartWorkflow/page.mdx"
+  },
+  {
+    "origSlug": "/references/core_flows/Cart/Workflows_Cart/functions/core_flows.Cart.Workflows_Cart.deleteCartCreditLinesWorkflow",
+    "newSlug": "/references/medusa-workflows/deleteCartCreditLinesWorkflow",
+    "filePath": "/www/apps/resources/references/core_flows/Cart/Workflows_Cart/functions/core_flows.Cart.Workflows_Cart.deleteCartCreditLinesWorkflow/page.mdx"
   },
   {
     "origSlug": "/references/core_flows/Cart/Workflows_Cart/functions/core_flows.Cart.Workflows_Cart.listShippingOptionsForCartWithPricingWorkflow",
@@ -3700,9 +3740,19 @@ export const slugChanges = [
     "filePath": "/www/apps/resources/references/dml/entity_builder/EntityBuilder/methods/dml.entity_builder.EntityBuilder.define/page.mdx"
   },
   {
+    "origSlug": "/references/event/interfaces/event.IEventBusModuleService",
+    "newSlug": "/references/event-service",
+    "filePath": "/www/apps/resources/references/event/interfaces/event.IEventBusModuleService/page.mdx"
+  },
+  {
     "origSlug": "/references/file/classes/file.AbstractFileProviderService",
     "newSlug": "/references/file-provider-module",
     "filePath": "/www/apps/resources/references/file/classes/file.AbstractFileProviderService/page.mdx"
+  },
+  {
+    "origSlug": "/references/file_service/interfaces/file_service.IFileModuleService",
+    "newSlug": "/references/file-service",
+    "filePath": "/www/apps/resources/references/file_service/interfaces/file_service.IFileModuleService/page.mdx"
   },
   {
     "origSlug": "/references/fulfillment/IFulfillmentModuleService/methods/fulfillment.IFulfillmentModuleService.calculateShippingOptionsPrices",
@@ -4395,6 +4445,11 @@ export const slugChanges = [
     "filePath": "/www/apps/resources/references/js_sdk/admin/Admin/properties/js_sdk.admin.Admin.customerGroup/page.mdx"
   },
   {
+    "origSlug": "/references/js_sdk/admin/Admin/properties/js_sdk.admin.Admin.draftOrder",
+    "newSlug": "/references/js-sdk/admin/draftOrder",
+    "filePath": "/www/apps/resources/references/js_sdk/admin/Admin/properties/js_sdk.admin.Admin.draftOrder/page.mdx"
+  },
+  {
     "origSlug": "/references/js_sdk/admin/Admin/properties/js_sdk.admin.Admin.exchange",
     "newSlug": "/references/js-sdk/admin/exchange",
     "filePath": "/www/apps/resources/references/js_sdk/admin/Admin/properties/js_sdk.admin.Admin.exchange/page.mdx"
@@ -4665,6 +4720,16 @@ export const slugChanges = [
     "filePath": "/www/apps/resources/references/js_sdk/store/classes/js_sdk.store.Store/page.mdx"
   },
   {
+    "origSlug": "/references/locking/interfaces/locking.ILockingModule",
+    "newSlug": "/references/locking-service",
+    "filePath": "/www/apps/resources/references/locking/interfaces/locking.ILockingModule/page.mdx"
+  },
+  {
+    "origSlug": "/references/locking/interfaces/locking.ILockingProvider",
+    "newSlug": "/references/locking-module-provider",
+    "filePath": "/www/apps/resources/references/locking/interfaces/locking.ILockingProvider/page.mdx"
+  },
+  {
     "origSlug": "/references/medusa_config/interfaces/medusa_config.ConfigModule",
     "newSlug": "/references/medusa-config",
     "filePath": "/www/apps/resources/references/medusa_config/interfaces/medusa_config.ConfigModule/page.mdx"
@@ -4780,6 +4845,11 @@ export const slugChanges = [
     "filePath": "/www/apps/resources/references/notification/classes/notification.AbstractNotificationProviderService/page.mdx"
   },
   {
+    "origSlug": "/references/notification_service/interfaces/notification_service.INotificationModuleService",
+    "newSlug": "/references/notification-service",
+    "filePath": "/www/apps/resources/references/notification_service/interfaces/notification_service.INotificationModuleService/page.mdx"
+  },
+  {
     "origSlug": "/references/order/IOrderModuleService/methods/order.IOrderModuleService.addOrderAction",
     "newSlug": "/references/order/addOrderAction",
     "filePath": "/www/apps/resources/references/order/IOrderModuleService/methods/order.IOrderModuleService.addOrderAction/page.mdx"
@@ -4868,6 +4938,11 @@ export const slugChanges = [
     "origSlug": "/references/order/IOrderModuleService/methods/order.IOrderModuleService.createOrderClaims",
     "newSlug": "/references/order/createOrderClaims",
     "filePath": "/www/apps/resources/references/order/IOrderModuleService/methods/order.IOrderModuleService.createOrderClaims/page.mdx"
+  },
+  {
+    "origSlug": "/references/order/IOrderModuleService/methods/order.IOrderModuleService.createOrderCreditLines",
+    "newSlug": "/references/order/createOrderCreditLines",
+    "filePath": "/www/apps/resources/references/order/IOrderModuleService/methods/order.IOrderModuleService.createOrderCreditLines/page.mdx"
   },
   {
     "origSlug": "/references/order/IOrderModuleService/methods/order.IOrderModuleService.createOrderExchangeItems",
@@ -5435,6 +5510,26 @@ export const slugChanges = [
     "filePath": "/www/apps/resources/references/order/IOrderModuleService/methods/order.IOrderModuleService.updateReturns/page.mdx"
   },
   {
+    "origSlug": "/references/order/IOrderModuleService/methods/order.IOrderModuleService.upsertOrderLineItemAdjustments",
+    "newSlug": "/references/order/upsertOrderLineItemAdjustments",
+    "filePath": "/www/apps/resources/references/order/IOrderModuleService/methods/order.IOrderModuleService.upsertOrderLineItemAdjustments/page.mdx"
+  },
+  {
+    "origSlug": "/references/order/IOrderModuleService/methods/order.IOrderModuleService.upsertOrderLineItemTaxLines",
+    "newSlug": "/references/order/upsertOrderLineItemTaxLines",
+    "filePath": "/www/apps/resources/references/order/IOrderModuleService/methods/order.IOrderModuleService.upsertOrderLineItemTaxLines/page.mdx"
+  },
+  {
+    "origSlug": "/references/order/IOrderModuleService/methods/order.IOrderModuleService.upsertOrderShippingMethodAdjustments",
+    "newSlug": "/references/order/upsertOrderShippingMethodAdjustments",
+    "filePath": "/www/apps/resources/references/order/IOrderModuleService/methods/order.IOrderModuleService.upsertOrderShippingMethodAdjustments/page.mdx"
+  },
+  {
+    "origSlug": "/references/order/IOrderModuleService/methods/order.IOrderModuleService.upsertOrderShippingMethodTaxLines",
+    "newSlug": "/references/order/upsertOrderShippingMethodTaxLines",
+    "filePath": "/www/apps/resources/references/order/IOrderModuleService/methods/order.IOrderModuleService.upsertOrderShippingMethodTaxLines/page.mdx"
+  },
+  {
     "origSlug": "/references/order/interfaces/order.IOrderModuleService",
     "newSlug": "/references/order",
     "filePath": "/www/apps/resources/references/order/interfaces/order.IOrderModuleService/page.mdx"
@@ -5723,6 +5818,11 @@ export const slugChanges = [
     "origSlug": "/references/payment/IPaymentModuleService/methods/payment.IPaymentModuleService.softDeleteRefundReasons",
     "newSlug": "/references/payment/softDeleteRefundReasons",
     "filePath": "/www/apps/resources/references/payment/IPaymentModuleService/methods/payment.IPaymentModuleService.softDeleteRefundReasons/page.mdx"
+  },
+  {
+    "origSlug": "/references/payment/IPaymentModuleService/methods/payment.IPaymentModuleService.updateAccountHolder",
+    "newSlug": "/references/payment/updateAccountHolder",
+    "filePath": "/www/apps/resources/references/payment/IPaymentModuleService/methods/payment.IPaymentModuleService.updateAccountHolder/page.mdx"
   },
   {
     "origSlug": "/references/payment/IPaymentModuleService/methods/payment.IPaymentModuleService.updatePayment",
