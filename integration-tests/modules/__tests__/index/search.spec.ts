@@ -30,7 +30,7 @@ medusaIntegrationTestRunner({
     })
 
     describe("Index engine", () => {
-      it.only("should search through the indexed data and return the correct results ordered and filtered [1]", async () => {
+      it("should search through the indexed data and return the correct results ordered and filtered [1]", async () => {
         const shippingProfile = (
           await api.post(
             `/admin/shipping-profiles`,
@@ -65,7 +65,7 @@ medusaIntegrationTestRunner({
           })
 
         // Timeout to allow indexing to finish
-        await setTimeout(3000)
+        await setTimeout(2000)
 
         const { data: results } = await indexEngine.query<"product">({
           fields: [
@@ -144,7 +144,7 @@ medusaIntegrationTestRunner({
           })
 
         // Timeout to allow indexing to finish
-        await setTimeout(3000)
+        await setTimeout(2000)
 
         const { data: results } = await indexEngine.query<"product">({
           fields: [

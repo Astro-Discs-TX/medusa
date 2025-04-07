@@ -404,32 +404,31 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
     } = PostgresProvider.parseData(data, schemaEntityObjectRepresentation)
 
     /**
+     * Clean the entity data to only keep the properties that are defined in the schema
+     */
+    const cleanedData = data_.map((entityData) => {
+      return entityProperties.reduce((acc, property) => {
+        acc[property] = entityData[property]
+        return acc
+      }, {}) as TData
+    })
+
+    /**
      * Loop through the data and create index entries for each entity as well as the
      * index relation entries if the entity has parents
      */
 
-    for (const entityData of data_) {
-      /**
-       * Clean the entity data to only keep the properties that are defined in the schema
-       */
+    const entitiesToUpsert: Set<string> = new Set()
+    const relationsToUpsert: Set<string> = new Set()
 
-      const cleanedEntityData = entityProperties.reduce((acc, property) => {
-        acc[property] = entityData[property]
-        return acc
-      }, {}) as TData
-
-      await indexRepository.upsert(
-        {
-          id: cleanedEntityData.id,
+    cleanedData.forEach((entityData, index) => {
+      entitiesToUpsert.add(
+        JSON.stringify({
+          id: entityData.id,
           name: entity,
-          data: cleanedEntityData,
+          data: entityData,
           staled_at: null,
-        },
-        {
-          onConflictAction: "merge",
-          onConflictFields: ["id", "name"],
-          onConflictMergeFields: ["data", "staled_at"],
-        }
+        })
       )
 
       /**
@@ -440,7 +439,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
         parentsProperties
       )) {
         const parentAlias = parentProperties[0].split(".")[0]
-        const parentData = entityData[parentAlias] as TData[]
+        const parentData = data_[index][parentAlias] as TData[]
 
         if (!parentData) {
           continue
@@ -451,43 +450,55 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
           : [parentData]
 
         for (const parentData_ of parentDataCollection) {
-          await indexRepository.upsert(
-            {
+          entitiesToUpsert.add(
+            JSON.stringify({
               id: (parentData_ as any).id,
               name: parentEntity,
               data: parentData_,
               staled_at: null,
-            },
-            {
-              onConflictAction: "merge",
-              onConflictFields: ["id", "name"],
-              onConflictMergeFields: ["staled_at"],
-            }
+            })
           )
 
-          await indexRelationRepository.upsert(
-            {
+          relationsToUpsert.add(
+            JSON.stringify({
               parent_id: (parentData_ as any).id,
               parent_name: parentEntity,
-              child_id: cleanedEntityData.id,
+              child_id: entityData.id,
               child_name: entity,
               pivot: `${parentEntity}-${entity}`,
               staled_at: null,
-            },
-            {
-              onConflictAction: "merge",
-              onConflictFields: [
-                "pivot",
-                "parent_id",
-                "child_id",
-                "parent_name",
-                "child_name",
-              ],
-              onConflictMergeFields: ["staled_at"],
-            }
+            })
           )
         }
       }
+    })
+
+    if (entitiesToUpsert.size) {
+      await indexRepository.upsertMany(
+        Array.from(entitiesToUpsert).map((entity) => JSON.parse(entity)),
+        {
+          onConflictAction: "merge",
+          onConflictFields: ["id", "name"],
+          onConflictMergeFields: ["data", "staled_at"],
+        }
+      )
+    }
+
+    if (relationsToUpsert.size) {
+      await indexRelationRepository.upsertMany(
+        Array.from(relationsToUpsert).map((relation) => JSON.parse(relation)),
+        {
+          onConflictAction: "merge",
+          onConflictFields: [
+            "pivot",
+            "parent_id",
+            "child_id",
+            "parent_name",
+            "child_name",
+          ],
+          onConflictMergeFields: ["staled_at"],
+        }
+      )
     }
   }
 
@@ -513,7 +524,9 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
     @MedusaContext() sharedContext: Context<SqlEntityManager> = {}
   ) {
     const { transactionManager: em } = sharedContext
-    const indexRepository = em!.getRepository(toMikroORMEntity(IndexData))
+    const indexRepository = em!.getRepository(
+      toMikroORMEntity(IndexData)
+    ) as EntityRepository<any>
 
     const { data: data_, entityProperties } = PostgresProvider.parseData(
       data,
@@ -521,24 +534,22 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
     )
 
     await indexRepository.upsertMany(
-      data_.map(
-        (entityData) => {
-          return {
-            id: entityData.id,
-            name: entity,
-            data: entityProperties.reduce((acc, property) => {
-              acc[property] = entityData[property]
-              return acc
-            }, {}),
-            staled_at: null,
-          }
-        },
-        {
-          onConflictAction: "merge",
-          onConflictFields: ["id", "name"],
-          onConflictMergeFields: ["data", "staled_at"],
+      data_.map((entityData) => {
+        return {
+          id: entityData.id,
+          name: entity,
+          data: entityProperties.reduce((acc, property) => {
+            acc[property] = entityData[property]
+            return acc
+          }, {}),
+          staled_at: null,
         }
-      )
+      }),
+      {
+        onConflictAction: "merge",
+        onConflictFields: ["id", "name"],
+        onConflictMergeFields: ["data", "staled_at"],
+      }
     )
   }
 
@@ -619,7 +630,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
     const indexRepository = em!.getRepository(toMikroORMEntity(IndexData))
     const indexRelationRepository = em!.getRepository(
       toMikroORMEntity(IndexRelation)
-    )
+    ) as EntityRepository<any>
 
     const { data: data_, entityProperties } = PostgresProvider.parseData(
       data,
@@ -670,77 +681,66 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
       )
     }
 
-    for (const entityData of data_) {
-      /**
-       * Clean the link entity data to only keep the properties that are defined in the schema
-       */
+    /**
+     * Clean the link entity data to only keep the properties that are defined in the schema
+     */
 
-      const cleanedEntityData = entityProperties.reduce((acc, property) => {
+    const cleanedData = data_.map((entityData) => {
+      return entityProperties.reduce((acc, property) => {
         acc[property] = entityData[property]
         return acc
       }, {}) as TData
+    })
 
-      await indexRepository.upsert(
-        {
-          id: cleanedEntityData.id,
-          name: entity,
-          data: cleanedEntityData,
-          staled_at: null,
-        },
-        {
-          onConflictAction: "merge",
-          onConflictFields: ["id", "name"],
-          onConflictMergeFields: ["data", "staled_at"],
-        }
-      )
-
-      /**
-       * Create the index relation entries for the parent entity and the child entity
-       */
-
-      await indexRelationRepository.upsert(
+    let relationsToUpsert: any[] = []
+    const entitiesToUpdate = cleanedData.map((entityData) => {
+      relationsToUpsert.push(
         {
           parent_id: entityData[parentPropertyId] as string,
           parent_name: parentEntityName,
-          child_id: cleanedEntityData.id,
+          child_id: entityData.id,
           child_name: entity,
           pivot: `${parentEntityName}-${entity}`,
           staled_at: null,
         },
         {
-          onConflictAction: "merge",
-          onConflictFields: [
-            "pivot",
-            "parent_id",
-            "child_id",
-            "parent_name",
-            "child_name",
-          ],
-          onConflictMergeFields: ["staled_at"],
-        }
-      )
-
-      await indexRelationRepository.upsert(
-        {
-          parent_id: cleanedEntityData.id,
+          parent_id: entityData.id,
           parent_name: entity,
           child_id: entityData[childPropertyId] as string,
           child_name: childEntityName,
           pivot: `${entity}-${childEntityName}`,
           staled_at: null,
-        },
-        {
-          onConflictAction: "merge",
-          onConflictFields: [
-            "pivot",
-            "parent_id",
-            "child_id",
-            "parent_name",
-            "child_name",
-          ],
-          onConflictMergeFields: ["staled_at"],
         }
       )
+
+      return {
+        id: entityData.id,
+        name: entity,
+        data: entityData,
+        staled_at: null,
+      }
+    })
+
+    if (entitiesToUpdate.length) {
+      await indexRepository.upsertMany(entitiesToUpdate, {
+        onConflictAction: "merge",
+        onConflictFields: ["id", "name"],
+        onConflictMergeFields: ["data", "staled_at"],
+      })
+    }
+
+    if (relationsToUpsert.length) {
+      await indexRelationRepository.upsertMany(relationsToUpsert, {
+        onConflictAction: "merge",
+        onConflictFields: [
+          "pivot",
+          "parent_id",
+          "child_id",
+          "parent_name",
+          "child_name",
+        ],
+        onConflictMergeFields: ["staled_at"],
+      })
     }
   }
 
