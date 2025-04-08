@@ -1008,28 +1008,46 @@ export default class PricingModuleService
       sharedContext
     )
 
-    const createdPriceRules: InferEntityType<typeof PriceRule>[] = []
-    const createdPrices: InferEntityType<typeof Price>[] = []
-    const createdPriceSets: InferEntityType<typeof PriceSet>[] = priceSets.map(
-      (priceSet) => {
-        const prices = priceSet.prices
-        const priceRules = [...prices].flatMap((price) => price.price_rules)
-        createdPrices.push(...prices)
-        createdPriceRules.push(...priceRules)
-        return priceSet
+    const eventsData = priceSets.reduce(
+      (eventsData, priceSet) => {
+        eventsData.priceSets.push({
+          id: priceSet.id,
+        })
+
+        priceSet.prices.map((price) => {
+          eventsData.prices.push({
+            id: price.id,
+          })
+          price.price_rules.map((priceRule) => {
+            eventsData.priceRules.push({
+              id: priceRule.id,
+            })
+          })
+        })
+
+        return eventsData
+      },
+      {
+        priceSets: [],
+        priceRules: [],
+        prices: [],
+      } as {
+        priceSets: { id: string }[]
+        priceRules: { id: string }[]
+        prices: { id: string }[]
       }
     )
 
     eventBuilders.createdPriceSet({
-      data: createdPriceSets,
+      data: eventsData.priceSets,
       sharedContext,
     })
     eventBuilders.createdPrice({
-      data: createdPrices,
+      data: eventsData.prices,
       sharedContext,
     })
     eventBuilders.createdPriceRule({
-      data: createdPriceRules,
+      data: eventsData.priceRules,
       sharedContext,
     })
 
