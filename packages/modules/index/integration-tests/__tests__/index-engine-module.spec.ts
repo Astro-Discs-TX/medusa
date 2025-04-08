@@ -225,7 +225,7 @@ describe("IndexModuleService", function () {
         },
       },
       {
-        name: "product.price-set.created",
+        name: "pricing.price-set.created",
         data: {
           id: priceSetId,
         },
@@ -394,7 +394,7 @@ describe("IndexModuleService", function () {
         },
       },
       {
-        name: "product.price-set.created",
+        name: "pricing.price-set.created",
         data: {
           id: priceSetId,
         },
@@ -691,7 +691,7 @@ describe("IndexModuleService", function () {
         },
       },
       {
-        name: "product.price-set.created",
+        name: "pricing.price-set.created",
         data: {
           id: priceSetId,
         },
