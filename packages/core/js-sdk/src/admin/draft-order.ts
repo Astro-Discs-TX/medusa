@@ -552,6 +552,20 @@ export class DraftOrder {
     )
   }
 
+  async removeShippingMethod(
+    id: string,
+    shippingMethodId: string,
+    headers?: ClientHeaders
+  ) {
+    return await this.client.fetch<HttpTypes.AdminDraftOrderPreviewResponse>(
+      `/admin/draft-orders/${id}/edit/shipping-methods/method/${shippingMethodId}`,
+      {
+        method: "DELETE",
+        headers,
+      }
+    )
+  }
+
   async updateShippingMethod(
     id: string,
     methodId: string,
