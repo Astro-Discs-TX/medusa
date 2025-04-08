@@ -1,8 +1,4 @@
-import {
-  arrayIntersection,
-  ContainerRegistrationKeys,
-  remoteQueryObjectFromString,
-} from "@medusajs/utils"
+import { ContainerRegistrationKeys } from "@medusajs/utils"
 import type {
   MedusaNextFunction,
   MedusaRequest,
@@ -34,32 +30,35 @@ export function maybeApplyLinkFilter({
 
     delete filterableFields[filterableField]
 
-    const remoteQuery = req.scope.resolve(
-      ContainerRegistrationKeys.REMOTE_QUERY
-    )
-
-    const queryObject = remoteQueryObjectFromString({
-      entryPoint,
-      fields: [resourceId],
-      variables: { filters: { [filterableField]: idsToFilterBy } },
-    })
-
-    const resources = await remoteQuery(queryObject)
     let existingFilters = filterableFields[filterByField] as
       | string[]
       | string
       | undefined
 
-    if (existingFilters) {
-      if (typeof existingFilters === "string") {
-        existingFilters = [existingFilters]
-      }
+    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
 
-      filterableFields[filterByField] = arrayIntersection(
-        existingFilters,
-        resources.map((p) => p[resourceId])
-      )
-    } else {
+    const filters: Record<string, unknown> = {
+      [filterableField]: idsToFilterBy,
+    }
+
+    if (existingFilters) {
+      filters[resourceId] = existingFilters
+    }
+
+    // const queryObject = remoteQueryObjectFromString({
+    //   entryPoint,
+    //   fields: [resourceId],
+    //   variables: { filters },
+    // })
+
+    // const resources = await remoteQuery(queryObject)
+    const { data: resources } = await query.graph({
+      entity: entryPoint,
+      fields: [resourceId],
+      filters,
+    })
+
+    if (!existingFilters) {
       filterableFields[filterByField] = resources.map((p) => p[resourceId])
     }
 
