@@ -45,13 +45,6 @@ export function maybeApplyLinkFilter({
       filters[resourceId] = existingFilters
     }
 
-    // const queryObject = remoteQueryObjectFromString({
-    //   entryPoint,
-    //   fields: [resourceId],
-    //   variables: { filters },
-    // })
-
-    // const resources = await remoteQuery(queryObject)
     const { data: resources } = await query.graph({
       entity: entryPoint,
       fields: [resourceId],
