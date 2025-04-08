@@ -1,4 +1,5 @@
-import createStore from "connect-redis"
+import { createStore as createRedisStore } from "connect-redis"
+import connectDynamoDBStore from "connect-dynamodb"
 import cookieParser from "cookie-parser"
 import express, { Express, RequestHandler } from "express"
 import session from "express-session"
@@ -50,8 +51,14 @@ export async function expressLoader({ app }: { app: Express }): Promise<{
 
   let redisClient: Redis
 
-  if (configModule?.projectConfig?.redisUrl) {
-    const RedisStore = createStore(session)
+  if (configModule?.projectConfig?.sessionStore === "redis") {
+    if (!configModule.projectConfig.redisUrl) {
+      throw new Error(
+        "redisUrl is required when sessionStore is set to 'redis'"
+      )
+    }
+
+    const RedisStore = createRedisStore(session)
     redisClient = new Redis(
       configModule.projectConfig.redisUrl,
       configModule.projectConfig.redisOptions ?? {}
@@ -60,6 +67,12 @@ export async function expressLoader({ app }: { app: Express }): Promise<{
       client: redisClient,
       prefix: `${configModule?.projectConfig?.redisPrefix ?? ""}sess:`,
     })
+  } else if (configModule?.projectConfig?.sessionStore === "dynamodb") {
+    const DynamoDBStore = connectDynamoDBStore(session)
+
+    sessionOpts.store = new DynamoDBStore(
+      configModule.projectConfig.dynamodbOpts
+    )
   }
 
   app.set("trust proxy", 1)

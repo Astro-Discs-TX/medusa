@@ -1,3 +1,4 @@
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb"
 import {
   ExternalModuleDeclaration,
   InternalModuleDeclaration,
@@ -397,6 +398,65 @@ export type ProjectConfigOptions = {
   redisOptions?: RedisOptions
 
   /**
+   * This configuration defines options to pass to [connect-dynamodb](https://www.npmjs.com/package/connect-dynamodb) for the DynamoDB connection used to store the Medusa server's sessions.
+   *
+   * @example
+   * ```ts title="medusa-config.ts"
+   * module.exports = defineConfig({
+   *   projectConfig: {
+   *     dynamodbOpts: {
+   *       table: "myapp-sessions",
+   *       client: new DynamoDBClient({ endpoint: "http://localhost:8000" }),
+   *       readCapacityUnits: 25,
+   *       writeCapacityUnits: 25,
+   *       specialKeys: [
+   *         { name: "userId", type: "S" },
+   *       ],
+   *       skipThrowMissingSpecialKeys: true,
+   *     }
+   *   }
+   * })
+   */
+  dynamodbOpts?: {
+    table?: string
+    client?: DynamoDBClient
+    readCapacityUnits?: number
+    writeCapacityUnits?: number
+    specialKeys?: {
+      name: string
+      type: string
+    }[]
+    skipThrowMissingSpecialKeys?: boolean
+  }
+
+  /**
+   * This configuration defines the session store to use.
+   *
+   * @example
+   * ```js title="medusa-config.js"
+   * module.exports = defineConfig({
+   *   projectConfig: {
+   *     sessionStore: "redis",
+   *     redisUrl: process.env.REDIS_URL || "redis://localhost:6379",
+   *     // ...
+   *   },
+   *   // ...
+   * })
+   * ```
+   *
+   * @example
+   * ```js title="medusa-config.js"
+   * module.exports = defineConfig({
+   *   projectConfig: {
+   *     sessionStore: "dynamodb",
+   *     // ...
+   *   },
+   *   // ...
+   * })
+   */
+  sessionStore?: "memory" | "redis" | "dynamodb"
+
+  /**
    * This configuration defines additional options to pass to [express-session](https://www.npmjs.com/package/express-session), which is used to store the Medusa server's session.
    *
    * @example
@@ -790,11 +850,11 @@ export type ProjectConfigOptions = {
  * @interface
  *
  * The configurations for your Medusa application are set in `medusa-config.ts` located in the root of your Medusa project. The configurations include configurations for database, modules, and more.
- * 
+ *
  * :::note
- * 
+ *
  * Some Medusa configurations are set through environment variables, which you can find in [this documentation](https://docs.medusajs.com/learn/fundamentals/environment-variables#predefined-medusa-environment-variables).
- * 
+ *
  * :::
  *
  * `medusa-config.ts` exports the value returned by the `defineConfig` utility function imported from `@medusajs/framework/utils`.

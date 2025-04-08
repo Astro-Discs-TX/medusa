@@ -310,14 +310,33 @@ function normalizeProjectConfig(
   projectConfig: InputConfig["projectConfig"],
   { isCloud }: { isCloud: boolean }
 ): ConfigModule["projectConfig"] {
-  const { http, redisOptions, ...restOfProjectConfig } = projectConfig || {}
+  const {
+    http,
+    redisOptions,
+    sessionStore,
+    dynamodbOpts,
+    ...restOfProjectConfig
+  } = projectConfig || {}
+
+  let _sessionStore = sessionStore
+  if (isCloud) {
+    _sessionStore = "dynamodb"
+  } else if (projectConfig?.redisUrl) {
+    _sessionStore = "redis"
+  }
+
+  let _dynamodbOpts: InputConfig["projectConfig"] | undefined = undefined
+  if (isCloud) {
+    _dynamodbOpts = {}
+  }
 
   /**
    * The defaults to use for the project config. They are shallow merged
    * with the user defined config.
    */
   return {
-    ...(isCloud ? { redisUrl: process.env.REDIS_URL } : {}),
+    sessionStore: _sessionStore,
+    dynamodbOpts: _dynamodbOpts,
     databaseUrl: process.env.DATABASE_URL || DEFAULT_DATABASE_URL,
     http: {
       storeCors: process.env.STORE_CORS || DEFAULT_STORE_CORS,

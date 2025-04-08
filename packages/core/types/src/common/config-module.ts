@@ -354,6 +354,44 @@ export type ProjectConfigOptions = {
    */
   redisOptions?: RedisOptions
 
+  dynamodbOpts?: {
+    table?: string
+    readCapacityUnits?: number
+    writeCapacityUnits?: number
+    specialKeys?: {
+      name: string
+      type: string
+    }[]
+    skipThrowMissingSpecialKeys?: boolean
+  }
+
+  /**
+   * This configuration defines the session store to use.
+   *
+   * @example
+   * ```js title="medusa-config.js"
+   * module.exports = defineConfig({
+   *   projectConfig: {
+   *     sessionStore: "redis",
+   *     redisUrl: process.env.REDIS_URL || "redis://localhost:6379",
+   *     // ...
+   *   },
+   *   // ...
+   * })
+   * ```
+   *
+   * @example
+   * ```js title="medusa-config.js"
+   * module.exports = defineConfig({
+   *   projectConfig: {
+   *     sessionStore: "dynamodb",
+   *     // ...
+   *   },
+   *   // ...
+   * })
+   */
+  sessionStore?: "memory" | "redis" | "dynamodb"
+
   /**
    * This configuration defines additional options to pass to [express-session](https://www.npmjs.com/package/express-session), which is used to store the Medusa server's session.
    *
