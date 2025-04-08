@@ -85,24 +85,11 @@ export const storeProductRoutesMiddlewares: MiddlewareRoute[] = [
       ),
       applyParamsAsFilters({ id: "id" }),
       filterByValidSalesChannels(),
-      (req, res, next) => {
-        const canUseIndex = !(
-          isPresent(req.filterableFields.tags) ||
-          isPresent(req.filterableFields.categories)
-        )
-        if (
-          featureFlagRouter.isFeatureEnabled(IndexEngineFeatureFlag.key) &&
-          canUseIndex
-        ) {
-          return next()
-        }
-
-        return maybeApplyLinkFilter({
-          entryPoint: "product_sales_channel",
-          resourceId: "product_id",
-          filterableField: "sales_channel_id",
-        })(req, res, next)
-      },
+      maybeApplyLinkFilter({
+        entryPoint: "product_sales_channel",
+        resourceId: "product_id",
+        filterableField: "sales_channel_id",
+      }),
       applyDefaultFilters({
         status: ProductStatus.PUBLISHED,
         categories: (_filters, fields: string[]) => {
