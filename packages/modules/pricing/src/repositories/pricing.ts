@@ -82,12 +82,6 @@ export class PricingRepository
 
     const hasComplexContext = flattenedContext.length > 0
 
-    // OPTIMIZATION: Use a direct indexed query approach without complex subqueries
-    // This query gets matching prices in one efficient step by:
-    // 1. First identifying which price sets we care about (using direct index on ps.id)
-    // 2. Then applying an efficient filter on currency_code (indexed)
-    // 3. Finally adding necessary rule conditions only when needed
-
     // Base query with efficient index lookups
     const query = knex
       .select({
