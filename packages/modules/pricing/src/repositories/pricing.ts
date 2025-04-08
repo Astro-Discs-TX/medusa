@@ -140,18 +140,18 @@ export class PricingRepository
 
     // OPTIMIZATION: Only add complex rule filtering when necessary
     if (hasComplexContext) {
-      // For price rules - more efficient approach with NOT EXISTS to check for any rule that doesn't match
+      // For price rules - direct check that ALL rules match
       const priceRuleConditions = knex.raw(
         `
         (
           price.rules_count = 0 OR
-          NOT EXISTS (
-            /* Find any rule that doesn't match the context */
-            SELECT 1 
+          (
+            /* Count all matching rules and compare to total rule count */
+            SELECT COUNT(*) 
             FROM price_rule pr
             WHERE pr.price_id = price.id 
             AND pr.deleted_at IS NULL
-            AND NOT (
+            AND (
               ${flattenedContext
                 .map(([key, value]) => {
                   if (typeof value === "number") {
@@ -174,6 +174,12 @@ export class PricingRepository
                 })
                 .join(" OR ")}
             )
+          ) = (
+            /* Get total rule count */
+            SELECT COUNT(*) 
+            FROM price_rule pr
+            WHERE pr.price_id = price.id 
+            AND pr.deleted_at IS NULL
           )
         )
         `,
@@ -187,23 +193,30 @@ export class PricingRepository
         })
       )
 
-      // For price list rules - using similar efficient pattern
+      // For price list rules - direct check that ALL rules match
       const priceListRuleConditions = knex.raw(
         `
         (
           pl.rules_count = 0 OR
-          NOT EXISTS (
-            SELECT 1
+          (
+            /* Count all matching rules and compare to total rule count */
+            SELECT COUNT(*) 
             FROM price_list_rule plr
             WHERE plr.price_list_id = pl.id
               AND plr.deleted_at IS NULL
-              AND NOT (
+              AND (
                 ${flattenedContext
                   .map(([key, value]) => {
                     return `(plr.attribute = ? AND plr.value @> ?)`
                   })
                   .join(" OR ")}
               )
+          ) = (
+            /* Get total rule count */
+            SELECT COUNT(*) 
+            FROM price_list_rule plr
+            WHERE plr.price_list_id = pl.id
+              AND plr.deleted_at IS NULL
           )
         )
         `,
@@ -235,7 +248,7 @@ export class PricingRepository
 
     // Optimized ordering to help query planner and preserve price list precedence
     query
-      .orderBy("price.price_list_id", "asc") // Non-price list prices last
+      .orderByRaw("price.price_list_id IS NOT NULL DESC")
       .orderByRaw("price.rules_count + COALESCE(pl.rules_count, 0) DESC") // More specific rules first
       .orderBy("pl.id", "asc") // Order by price list ID to ensure first created price list takes precedence
       .orderBy("price.amount", "asc") // For non-price list prices, cheaper ones first
