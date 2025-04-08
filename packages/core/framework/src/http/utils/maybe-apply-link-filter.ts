@@ -51,9 +51,7 @@ export function maybeApplyLinkFilter({
       filters,
     })
 
-    if (!existingFilters) {
-      filterableFields[filterByField] = resources.map((p) => p[resourceId])
-    }
+    filterableFields[filterByField] = resources.map((p) => p[resourceId])
 
     req.filterableFields = transformFilterableFields(filterableFields)
 
