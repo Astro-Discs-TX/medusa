@@ -1003,55 +1003,37 @@ export default class PricingModuleService
     })
 
     // Bulk create price sets
-    const createdPriceSets = await this.priceSetService_.create(
+    const priceSets = await this.priceSetService_.create(
       toCreate,
       sharedContext
     )
 
-    const eventsData = createdPriceSets.reduce(
-      (eventsData, priceSet) => {
-        eventsData.priceSets.push({
-          id: priceSet.id,
-        })
-
-        priceSet.prices.map((price) => {
-          eventsData.prices.push({
-            id: price.id,
-          })
-          price.price_rules.map((priceRule) => {
-            eventsData.priceRules.push({
-              id: priceRule.id,
-            })
-          })
-        })
-
-        return eventsData
-      },
-      {
-        priceSets: [],
-        priceRules: [],
-        prices: [],
-      } as {
-        priceSets: { id: string }[]
-        priceRules: { id: string }[]
-        prices: { id: string }[]
+    const createdPriceRules: InferEntityType<typeof PriceRule>[] = []
+    const createdPrices: InferEntityType<typeof Price>[] = []
+    const createdPriceSets: InferEntityType<typeof PriceSet>[] = priceSets.map(
+      (priceSet) => {
+        const prices = priceSet.prices
+        const priceRules = [...prices].flatMap((price) => price.price_rules)
+        createdPrices.push(...prices)
+        createdPriceRules.push(...priceRules)
+        return priceSet
       }
     )
 
     eventBuilders.createdPriceSet({
-      data: eventsData.priceSets,
+      data: createdPriceSets,
       sharedContext,
     })
     eventBuilders.createdPrice({
-      data: eventsData.prices,
+      data: createdPrices,
       sharedContext,
     })
     eventBuilders.createdPriceRule({
-      data: eventsData.priceRules,
+      data: createdPriceRules,
       sharedContext,
     })
 
-    return createdPriceSets
+    return priceSets
   }
 
   @InjectTransactionManager()

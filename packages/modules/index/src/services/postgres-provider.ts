@@ -200,18 +200,18 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
   consumeEvent(
     schemaEntityObjectRepresentation: IndexTypes.SchemaObjectEntityRepresentation
   ): Subscriber<{ id: string | string[] }> {
-    return async (data: Event) => {
+    return async (event: Event) => {
       await this.#isReady_
 
-      const data_: { id: string }[] = Array.isArray(data.data)
-        ? data.data
-        : [data.data]
+      const data_: { id: string }[] = Array.isArray(event.data)
+        ? event.data
+        : [event.data]
       let ids: string[] = data_.flatMap((d) =>
         Array.isArray(d.id) ? d.id : [d.id]
       )
-      let action = data.name.split(".").pop() || ""
+      let action = event.name.split(".").pop() || ""
 
-      const parsedMessage = PostgresProvider.parseMessageData(data)
+      const parsedMessage = PostgresProvider.parseMessageData(event)
       if (parsedMessage) {
         action = parsedMessage.action
         ids = parsedMessage.ids
