@@ -184,6 +184,22 @@ medusaIntegrationTestRunner({
                     },
                   ],
                 },
+                {
+                  title: "S shirt",
+                  options: { size: "small" },
+                  inventory_items: [
+                    {
+                      inventory_item_id: inventoryItem.id,
+                      required_quantity: 1,
+                    },
+                  ],
+                  prices: [
+                    {
+                      currency_code: "usd",
+                      amount: 10,
+                    },
+                  ],
+                },
               ],
             },
             adminHeaders
@@ -229,7 +245,7 @@ medusaIntegrationTestRunner({
         await api.post(
           `/admin/draft-orders/${testDraftOrder.id}/edit/items`,
           {
-            items: [{ variant_id: product.variants[0].id, quantity: 2 }],
+            items: [{ variant_id: product.variants[1].id, quantity: 2 }],
           },
           adminHeaders
         )
@@ -246,14 +262,24 @@ medusaIntegrationTestRunner({
           await api.get(`/admin/reservations`, adminHeaders)
         ).data.reservations
 
+        const lineItem1Id = edit.items.find(
+          (item) => item.variant_id === product.variants[0].id
+        )?.id
+
+        const lineItem2Id = edit.items.find(
+          (item) => item.variant_id === product.variants[1].id
+        )?.id
+
         // second edit didn't override the reservations for the first edit
         expect(reservations.length).toBe(2)
         expect(reservations).toEqual(
           expect.arrayContaining([
             expect.objectContaining({
+              line_item_id: lineItem1Id,
               quantity: 1,
             }),
             expect.objectContaining({
+              line_item_id: lineItem2Id,
               quantity: 2,
             }),
           ])
