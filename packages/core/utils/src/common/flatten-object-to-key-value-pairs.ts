@@ -38,17 +38,14 @@ export function flattenObjectToKeyValuePairs(obj: NestedObject): NestedObject {
       return false
     }
 
-    // Always preserve arrays of objects
     if (value.some((item) => isObject(item) && !Array.isArray(item))) {
       return true
     }
 
-    // Always preserve arrays that contain other arrays
     if (value.some((item) => Array.isArray(item))) {
       return true
     }
 
-    // For deeply nested paths, preserve the array structure
     if (path.length > 1) {
       return true
     }
@@ -106,7 +103,6 @@ export function flattenObjectToKeyValuePairs(obj: NestedObject): NestedObject {
       return
     }
 
-    // Handle arrays
     if (Array.isArray(value)) {
       if (value.length === 0) {
         if (currentPath.length > 0) {
@@ -115,12 +111,9 @@ export function flattenObjectToKeyValuePairs(obj: NestedObject): NestedObject {
         return
       }
 
-      // Process non-empty arrays
       if (value.some((item) => isObject(item) && !Array.isArray(item))) {
-        // If array contains objects, extract properties across all objects
         extractPropertiesFromArray(value, currentPath)
       } else if (value.some((item) => Array.isArray(item))) {
-        // If array contains other arrays, recursively process and collect all values
         const allValues: any[] = []
         const flattenedObjects: Record<string, any>[] = []
 
@@ -136,7 +129,6 @@ export function flattenObjectToKeyValuePairs(obj: NestedObject): NestedObject {
           })
         }
 
-        // Collect all objects from the nested arrays
         flattenArray(value, flattenedObjects)
 
         if (flattenedObjects.length > 0) {
@@ -195,7 +187,6 @@ export function flattenObjectToKeyValuePairs(obj: NestedObject): NestedObject {
       }
     })
 
-    // Process each key across all objects
     allKeys.forEach((key) => {
       const valuePath = [...basePath, key]
       const values: any[] = []
