@@ -4,7 +4,6 @@ import {
   MedusaError,
   MikroOrmBase,
   PriceListStatus,
-  promiseAll,
 } from "@medusajs/framework/utils"
 
 import {
@@ -53,25 +52,16 @@ export class PricingRepository
     }
 
     // Generate flatten key-value pairs for rule matching
-    const [ruleAttributes, priceListRuleAttributes] =
-      await this.getAttributesFromRuleTables(knex)
-
-    const allowedRuleAttributes = [
-      ...ruleAttributes,
-      ...priceListRuleAttributes,
-    ]
-
     const flattenedKeyValuePairs = flattenObjectToKeyValuePairs(context)
 
+    // Filter context entries directly without preloading attributes
+    // This approach skips the extra DB queries while still properly filtering the context
     const flattenedContext = Object.entries(flattenedKeyValuePairs).filter(
-      ([key, value]) => {
+      ([, value]) => {
         const isValuePresent = !Array.isArray(value) && isPresent(value)
         const isArrayPresent = Array.isArray(value) && value.flat(1).length
 
-        return (
-          allowedRuleAttributes.includes(key) &&
-          (isValuePresent || isArrayPresent)
-        )
+        return isValuePresent || isArrayPresent
       }
     )
 
@@ -250,22 +240,5 @@ export class PricingRepository
 
     // Execute the optimized query
     return await query
-  }
-
-  // Helper method to get attributes from rule tables
-  private async getAttributesFromRuleTables(knex: Knex) {
-    // Using distinct queries for better performance
-    const priceRuleAttributesQuery = knex("price_rule")
-      .distinct("attribute")
-      .pluck("attribute")
-
-    const priceListRuleAttributesQuery = knex("price_list_rule")
-      .distinct("attribute")
-      .pluck("attribute")
-
-    return await promiseAll([
-      priceRuleAttributesQuery,
-      priceListRuleAttributesQuery,
-    ])
   }
 }
