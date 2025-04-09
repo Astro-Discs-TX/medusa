@@ -2,12 +2,24 @@ import { setTimeout } from "timers/promises"
 
 export async function fetchAndRetry(
   func: () => Promise<any>,
-  retries = 3,
-  waitSeconds = 1
+  validation?: (data: any) => boolean,
+  {
+    retries = 3,
+    waitSeconds = 1,
+  }: {
+    retries?: number
+    waitSeconds?: number
+  } = {}
 ) {
   while (retries >= 0) {
     try {
-      return await func()
+      const res = await func()
+
+      if (validation && !validation(res)) {
+        throw new Error("Validation failed. Retry...")
+      }
+
+      return res
     } catch (err) {
       if (retries > 0) {
         retries--
