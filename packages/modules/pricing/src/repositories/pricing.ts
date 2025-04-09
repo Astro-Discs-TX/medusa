@@ -54,9 +54,8 @@ export class PricingRepository
     // Generate flatten key-value pairs for rule matching
     const flattenedKeyValuePairs = flattenObjectToKeyValuePairs(context)
 
-    // Filter context entries directly without preloading attributes
-    // This approach skips the extra DB queries while still properly filtering the context
-    const flattenedContext = Object.entries(flattenedKeyValuePairs).filter(
+    // First filter by value presence
+    const candidateContext = Object.entries(flattenedKeyValuePairs).filter(
       ([, value]) => {
         const isValuePresent = !Array.isArray(value) && isPresent(value)
         const isArrayPresent = Array.isArray(value) && value.flat(1).length
@@ -64,6 +63,37 @@ export class PricingRepository
         return isValuePresent || isArrayPresent
       }
     )
+
+    // If we have potential context keys, efficiently check which ones exist in rules
+    const flattenedContext = candidateContext
+    // if (candidateContext.length > 0) {
+    //   const contextKeys = candidateContext.map(([key]) => key)
+
+    //   // Efficient query to check if keys exist in either rule table
+    //   // This avoids fetching ALL rule attributes - only checks our specific keys
+    //   const existingKeys = await knex
+    //     .raw(
+    //       `
+    //     SELECT DISTINCT attribute
+    //     FROM (
+    //       SELECT attribute FROM price_rule WHERE attribute IN (${contextKeys
+    //         .map(() => "?")
+    //         .join(",")})
+    //       UNION
+    //       SELECT attribute FROM price_list_rule WHERE attribute IN (${contextKeys
+    //         .map(() => "?")
+    //         .join(",")})
+    //     ) AS combined_attributes
+    //   `,
+    //       [...contextKeys, ...contextKeys]
+    //     )
+    //     .then((result) => result.rows.map((row) => row.attribute))
+
+    //   // Filter context to only include keys that exist in rules
+    //   flattenedContext = candidateContext.filter(([key]) =>
+    //     existingKeys.includes(key)
+    //   )
+    // }
 
     const hasComplexContext = flattenedContext.length > 0
 
