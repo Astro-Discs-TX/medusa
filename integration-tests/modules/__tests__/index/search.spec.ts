@@ -91,14 +91,6 @@ medusaIntegrationTestRunner({
           },
         })
 
-        /*
-        const manager = (indexEngine as any).container_.baseRepository.manager_
-        const datas = await manager.execute(`
-          SELECT DISTINCT name FROM index_data
-        `)
-        console.log(JSON.stringify(datas, null, 2))
-        */
-
         expect(results.length).toBe(1)
 
         const variants = results[0].variants
