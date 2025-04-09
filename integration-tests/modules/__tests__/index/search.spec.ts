@@ -6,7 +6,7 @@ import {
   adminHeaders,
   createAdminUser,
 } from "../../../helpers/create-admin-user"
-import { fetchAndRetry } from "../../src/utils/retry"
+import { fetchAndRetry } from "../../../helpers/retry"
 
 jest.setTimeout(100000)
 
