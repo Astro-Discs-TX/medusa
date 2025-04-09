@@ -6059,7 +6059,7 @@ export const generatedEditDates = {
   "app/nextjs-starter/guides/revalidate-cache/page.mdx": "2025-03-18T08:47:59.628Z",
   "app/storefront-development/cart/totals/page.mdx": "2025-03-27T14:47:14.252Z",
   "app/storefront-development/checkout/order-confirmation/page.mdx": "2025-03-27T14:29:45.669Z",
-  "app/how-to-tutorials/tutorials/product-reviews/page.mdx": "2025-03-19T13:00:56.901Z",
+  "app/how-to-tutorials/tutorials/product-reviews/page.mdx": "2025-04-09T14:06:19.147Z",
   "app/troubleshooting/api-routes/page.mdx": "2025-03-21T07:17:56.248Z",
   "app/troubleshooting/data-models/default-fields/page.mdx": "2025-03-21T06:59:06.775Z",
   "app/troubleshooting/medusa-admin/blocked-request/page.mdx": "2025-03-21T06:53:34.854Z",
@@ -6073,5 +6073,6 @@ export const generatedEditDates = {
   "app/how-to-tutorials/tutorials/abandoned-cart/page.mdx": "2025-03-27T17:39:52.123Z",
   "app/integrations/guides/algolia/page.mdx": "2025-03-27T18:00:49.330Z",
   "app/integrations/guides/magento/page.mdx": "2025-03-28T06:46:40.800Z",
-  "app/js-sdk/auth/overview/page.mdx": "2025-03-28T08:05:32.622Z"
+  "app/js-sdk/auth/overview/page.mdx": "2025-03-28T08:05:32.622Z",
+  "app/how-to-tutorials/tutorials/loyalty-points/page.mdx": "2025-04-09T15:30:04.394Z"
 }
