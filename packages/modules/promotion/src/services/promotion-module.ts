@@ -144,7 +144,7 @@ export default class PromotionModuleService
     config?: FindConfig<PromotionDTO>,
     sharedContext?: Context
   ): Promise<PromotionDTO[]> {
-    // Optimize the query by constructing it more efficiently
+    // Ensure we share the same now date across all filters
     const now = new Date()
     const activeFilters = {
       status: PromotionStatus.ACTIVE,
@@ -273,7 +273,6 @@ export default class PromotionModuleService
       }
     }
 
-    // Move database update outside the loop to perform a single batch update
     if (campaignBudgetMap.size > 0) {
       const campaignBudgetsData: UpdateCampaignBudgetDTO[] = []
       for (const [_, campaignBudgetData] of campaignBudgetMap) {
@@ -369,7 +368,6 @@ export default class PromotionModuleService
       }
     }
 
-    // Move database update outside the loop to perform a single batch update
     if (campaignBudgetMap.size > 0) {
       const campaignBudgetsData: UpdateCampaignBudgetDTO[] = []
       for (const [_, campaignBudgetData] of campaignBudgetMap) {
@@ -395,7 +393,6 @@ export default class PromotionModuleService
     const { items = [], shipping_methods: shippingMethods = [] } =
       applicationContext
 
-    // Create a single map for code adjustments to avoid redundant operations
     const codeAdjustmentMap = new Map<
       string,
       {
@@ -405,7 +402,6 @@ export default class PromotionModuleService
     >()
 
     // Pre-process items and shipping methods to build adjustment map efficiently
-    // Use single iteration loops instead of nested forEach calls
     for (const item of items) {
       if (!item.adjustments?.length) continue
 
@@ -434,33 +430,27 @@ export default class PromotionModuleService
       }
     }
 
-    // Get all applied code strings in a single pass
     const appliedCodes = Array.from(codeAdjustmentMap.keys())
 
-    // Create methodIdPromoValueMap right away (reused across different calculations)
     const methodIdPromoValueMap = new Map<string, number>()
 
-    // Fetch automatic promotions if needed
     const automaticPromotions = preventAutoPromotions
       ? []
       : await this.listActivePromotions(
           { is_automatic: true },
-          { select: ["code"] }, // Only select what we need
+          { select: ["code"] },
           sharedContext
         )
 
-    // Combine the promotion codes we need to apply
     const automaticPromotionCodes = automaticPromotions.map((p) => p.code!)
     const promotionCodesToApply = [
       ...promotionCodes,
       ...automaticPromotionCodes,
-      ...appliedCodes, // Include applied codes to ensure they're in the query
+      ...appliedCodes,
     ]
 
-    // Deduplicate codes before database query to reduce query size
     const uniquePromotionCodes = Array.from(new Set(promotionCodesToApply))
 
-    // Fetch all needed promotions in a single query
     const promotions = await this.listActivePromotions(
       { code: uniquePromotionCodes },
       {
@@ -480,14 +470,11 @@ export default class PromotionModuleService
       }
     )
 
-    // Create promotion code lookup map once
     const existingPromotionsMap = new Map<string, PromotionTypes.PromotionDTO>(
       promotions.map((promotion) => [promotion.code!, promotion])
     )
 
-    // Process existing adjustments - recommend removing them to start fresh
     for (const [code, adjustments] of codeAdjustmentMap.entries()) {
-      // Create removal actions for item adjustments
       for (const adjustment of adjustments.items) {
         computedActions.push({
           action: ComputedActions.REMOVE_ITEM_ADJUSTMENT,
@@ -496,7 +483,6 @@ export default class PromotionModuleService
         })
       }
 
-      // Create removal actions for shipping adjustments
       for (const adjustment of adjustments.shipping) {
         computedActions.push({
           action: ComputedActions.REMOVE_SHIPPING_METHOD_ADJUSTMENT,
@@ -506,7 +492,6 @@ export default class PromotionModuleService
       }
     }
 
-    // Sort promotions by buy-get type first (most valuable)
     const sortedPromotionsToApply = promotions
       .filter(
         (p) =>
@@ -515,7 +500,6 @@ export default class PromotionModuleService
       )
       .sort(ComputeActionUtils.sortByBuyGetType)
 
-    // Create maps for eligible items only when needed for BuyGet promotions
     const eligibleBuyItemMap = new Map<
       string,
       ComputeActionUtils.EligibleItem[]
@@ -525,7 +509,6 @@ export default class PromotionModuleService
       ComputeActionUtils.EligibleItem[]
     >()
 
-    // Apply promotions
     for (const promotionToApply of sortedPromotionsToApply) {
       const promotion = existingPromotionsMap.get(promotionToApply.code!)!
       const {
@@ -537,7 +520,6 @@ export default class PromotionModuleService
         continue
       }
 
-      // Check if promotion rules are valid for context
       const isPromotionApplicable = areRulesValidForContext(
         promotionRules,
         applicationContext,
@@ -548,7 +530,6 @@ export default class PromotionModuleService
         continue
       }
 
-      // Process based on promotion type
       if (promotion.type === PromotionType.BUYGET) {
         const computedActionsForItems =
           ComputeActionUtils.getComputedActionsForBuyGet(
@@ -572,7 +553,6 @@ export default class PromotionModuleService
           ? ApplicationMethodAllocation.ACROSS
           : undefined
 
-        // Process items if applicable
         if (isTargetOrder || isTargetItems) {
           const computedActionsForItems =
             ComputeActionUtils.getComputedActionsForItems(
@@ -585,7 +565,6 @@ export default class PromotionModuleService
           computedActions.push(...computedActionsForItems)
         }
 
-        // Process shipping if applicable
         if (isTargetShipping) {
           const computedActionsForShippingMethods =
             ComputeActionUtils.getComputedActionsForShippingMethods(
@@ -599,7 +578,6 @@ export default class PromotionModuleService
       }
     }
 
-    // Transform properties once at the end
     transformPropertiesToBigNumber(computedActions, { include: ["amount"] })
 
     return computedActions
@@ -658,7 +636,6 @@ export default class PromotionModuleService
     const applicationMethodsData: CreateApplicationMethodDTO[] = []
     const campaignsData: CreateCampaignDTO[] = []
 
-    // Prepare campaign data first to reduce database queries
     const campaignIds = data
       .filter((d) => d.campaign_id)
       .map((d) => d.campaign_id)
@@ -694,7 +671,6 @@ export default class PromotionModuleService
       PromotionTypes.CreateCampaignDTO
     >()
 
-    // Preprocess input data to minimize validation inside loops
     for (const {
       application_method: applicationMethodData,
       rules: rulesData,
@@ -759,13 +735,11 @@ export default class PromotionModuleService
       })
     }
 
-    // Create all promotions in one batch operation
     const createdPromotions = await this.promotionService_.create(
       promotionsData,
       sharedContext
     )
 
-    // Process all promotions first and gather data for batch operations
     for (const promotion of createdPromotions) {
       const applMethodData = promotionCodeApplicationMethodDataMap.get(
         promotion.code
@@ -832,7 +806,6 @@ export default class PromotionModuleService
         }
       }
 
-      // Process promotion rules in parallel instead of sequential operations
       if (promotionCodeRulesDataMap.has(promotion.code)) {
         await this.createPromotionRulesAndValues_(
           promotionCodeRulesDataMap.get(promotion.code) || [],
@@ -843,7 +816,6 @@ export default class PromotionModuleService
       }
     }
 
-    // Batch create all application methods
     const createdApplicationMethods =
       applicationMethodsData.length > 0
         ? await this.applicationMethodService_.create(
@@ -852,13 +824,11 @@ export default class PromotionModuleService
           )
         : []
 
-    // Batch create all campaigns
     const createdCampaigns =
       campaignsData.length > 0
         ? await this.createCampaigns(campaignsData, sharedContext)
         : []
 
-    // Process campaigns
     for (const campaignData of campaignsData) {
       const promotions = campaignData.promotions
       const campaign = createdCampaigns.find(
@@ -873,7 +843,6 @@ export default class PromotionModuleService
       }
     }
 
-    // Process application methods
     for (const applicationMethod of createdApplicationMethods) {
       const targetRules = methodTargetRulesMap.get(
         applicationMethod.promotion.id
