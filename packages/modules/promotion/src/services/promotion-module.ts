@@ -171,12 +171,10 @@ export default class PromotionModuleService
     return this.listPromotions(activeFilters, config, sharedContext)
   }
 
-  @InjectManager()
+  @InjectTransactionManager()
   async registerUsage(
     computedActions: PromotionTypes.UsageComputedActions[],
-    @MedusaContext()
-    @MedusaContext()
-    sharedContext: Context = {}
+    @MedusaContext() sharedContext: Context = {}
   ): Promise<void> {
     const promotionCodes = computedActions
       .map((computedAction) => computedAction.code)
@@ -286,7 +284,7 @@ export default class PromotionModuleService
     }
   }
 
-  @InjectManager()
+  @InjectTransactionManager()
   async revertUsage(
     computedActions: PromotionTypes.UsageComputedActions[],
     @MedusaContext() sharedContext: Context = {}
@@ -467,7 +465,8 @@ export default class PromotionModuleService
           "campaign",
           "campaign.budget",
         ],
-      }
+      },
+      sharedContext
     )
 
     const existingPromotionsMap = new Map<string, PromotionTypes.PromotionDTO>(
