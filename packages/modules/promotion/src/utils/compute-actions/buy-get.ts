@@ -50,6 +50,17 @@ export function getComputedActionsForBuyGet(
 ): PromotionTypes.ComputeActions[] {
   const computedActions: PromotionTypes.ComputeActions[] = []
 
+  if (!itemsContext) {
+    throw new MedusaError(
+      MedusaError.Types.INVALID_DATA,
+      `"items" should be present as an array in the context to compute actions`
+    )
+  }
+
+  if (!itemsContext?.length) {
+    return computedActions
+  }
+
   const minimumBuyQuantity = MathBN.convert(
     promotion.application_method?.buy_rules_min_quantity ?? 0
   )
@@ -58,11 +69,11 @@ export function getComputedActionsForBuyGet(
     itemsContext.map((i) => [i.id, i])
   )
 
-  if (!itemsContext) {
-    throw new MedusaError(
-      MedusaError.Types.INVALID_DATA,
-      `"items" should be present as an array in the context to compute actions`
-    )
+  if (
+    MathBN.lte(minimumBuyQuantity, 0) ||
+    !promotion.application_method?.buy_rules?.length
+  ) {
+    return computedActions
   }
 
   const eligibleBuyItems = filterItemsByPromotionRules(
@@ -70,17 +81,24 @@ export function getComputedActionsForBuyGet(
     promotion.application_method?.buy_rules
   )
 
+  if (!eligibleBuyItems.length) {
+    return computedActions
+  }
+
   const eligibleBuyItemQuantity = MathBN.sum(
     ...eligibleBuyItems.map((item) => item.quantity)
   )
 
   /*
-    Get the total quantity of items where buy rules apply. If the total sum of eligible items 
+    Get the total quantity of items where buy rules apply. If the total sum of eligible items
     does not match up to the minimum buy quantity set on the promotion, return early.
   */
   if (MathBN.gt(minimumBuyQuantity, eligibleBuyItemQuantity)) {
-    return []
+    return computedActions
   }
+
+  const eligibleItemsByPromotion: EligibleItem[] = []
+  let accumulatedQuantity = MathBN.convert(0)
 
   /*
     Eligibility of a BuyGet promotion can span across line items. Once an item has been chosen
@@ -89,35 +107,19 @@ export function getComputedActionsForBuyGet(
 
     We build the map here to use when we apply promotions on the target items.
   */
+
   for (const eligibleBuyItem of eligibleBuyItems) {
-    const eligibleItemsByPromotion =
-      eligibleBuyItemMap.get(promotion.code!) || []
-
-    const accumulatedQuantity = eligibleItemsByPromotion.reduce(
-      (acc, item) => MathBN.sum(acc, item.quantity),
-      MathBN.convert(0)
-    )
-
-    // If we have reached the minimum buy quantity from the eligible items for this promotion,
-    // we can break early and continue to applying the target items
     if (MathBN.gte(accumulatedQuantity, minimumBuyQuantity)) {
       break
     }
 
-    const eligibleQuantity = MathBN.sum(
-      ...eligibleItemsByPromotion
-        .filter((buy) => buy.item_id === eligibleBuyItem.id)
-        .map((b) => b.quantity)
-    )
-
     const reservableQuantity = MathBN.min(
       eligibleBuyItem.quantity,
-      MathBN.sub(minimumBuyQuantity, eligibleQuantity)
+      MathBN.sub(minimumBuyQuantity, accumulatedQuantity)
     )
 
-    // If we have reached the required minimum quantity, we break the loop early
     if (MathBN.lte(reservableQuantity, 0)) {
-      break
+      continue
     }
 
     eligibleItemsByPromotion.push({
@@ -128,7 +130,21 @@ export function getComputedActionsForBuyGet(
       ).toNumber(),
     })
 
-    eligibleBuyItemMap.set(promotion.code!, eligibleItemsByPromotion)
+    accumulatedQuantity = MathBN.add(accumulatedQuantity, reservableQuantity)
+  }
+
+  eligibleBuyItemMap.set(promotion.code!, eligibleItemsByPromotion)
+
+  if (MathBN.lt(accumulatedQuantity, minimumBuyQuantity)) {
+    return computedActions
+  }
+
+  const targetQuantity = MathBN.convert(
+    promotion.application_method?.apply_to_quantity ?? 0
+  )
+
+  if (MathBN.lte(targetQuantity, 0)) {
+    return computedActions
   }
 
   const eligibleTargetItems = filterItemsByPromotionRules(
@@ -136,84 +152,83 @@ export function getComputedActionsForBuyGet(
     promotion.application_method?.target_rules
   )
 
-  const targetQuantity = MathBN.convert(
-    promotion.application_method?.apply_to_quantity ?? 0
-  )
+  if (!eligibleTargetItems.length) {
+    return computedActions
+  }
 
-  /*
-    In this loop, we build a map of eligible target items and quantity applicable to these items.
+  const inapplicableQuantityMap = new Map<string, BigNumberInput>()
 
-    Here we remove the quantity we used previously to identify eligible buy items
-    from the eligible target items.
-    
-    This is done to prevent applying promotion to the same item we use to qualify the buy rules.
-  */
-  for (const eligibleTargetItem of eligibleTargetItems) {
-    const inapplicableQuantity = MathBN.sum(
-      ...Array.from(eligibleBuyItemMap.values())
-        .flat(1)
-        .filter((buy) => buy.item_id === eligibleTargetItem.id)
-        .map((b) => b.quantity)
+  for (const buyItem of eligibleItemsByPromotion) {
+    const currentValue =
+      inapplicableQuantityMap.get(buyItem.item_id) || MathBN.convert(0)
+    inapplicableQuantityMap.set(
+      buyItem.item_id,
+      MathBN.add(currentValue, buyItem.quantity)
     )
+  }
 
+  const targetItemsByPromotion: EligibleItem[] = []
+  let targetableQuantity = MathBN.convert(0)
+
+  for (const eligibleTargetItem of eligibleTargetItems) {
+    const inapplicableQuantity =
+      inapplicableQuantityMap.get(eligibleTargetItem.id) || MathBN.convert(0)
     const applicableQuantity = MathBN.sub(
       eligibleTargetItem.quantity,
       inapplicableQuantity
     )
 
-    const fulfillableQuantity = MathBN.min(targetQuantity, applicableQuantity)
+    if (MathBN.lte(applicableQuantity, 0)) {
+      continue
+    }
 
-    // If we have reached the required quantity to target from this item, we
-    // move on to the next item
+    const remainingNeeded = MathBN.sub(targetQuantity, targetableQuantity)
+    const fulfillableQuantity = MathBN.min(remainingNeeded, applicableQuantity)
+
     if (MathBN.lte(fulfillableQuantity, 0)) {
       continue
     }
 
-    const targetItemsByPromotion =
-      eligibleTargetItemMap.get(promotion.code!) || []
-
     targetItemsByPromotion.push({
       item_id: eligibleTargetItem.id,
-      quantity: MathBN.min(fulfillableQuantity, targetQuantity).toNumber(),
+      quantity: fulfillableQuantity.toNumber(),
     })
 
-    eligibleTargetItemMap.set(promotion.code!, targetItemsByPromotion)
+    targetableQuantity = MathBN.add(targetableQuantity, fulfillableQuantity)
+
+    if (MathBN.gte(targetableQuantity, targetQuantity)) {
+      break
+    }
   }
 
-  const targetItemsByPromotion =
-    eligibleTargetItemMap.get(promotion.code!) || []
+  eligibleTargetItemMap.set(promotion.code!, targetItemsByPromotion)
 
-  const targettableQuantity = targetItemsByPromotion.reduce(
-    (sum, item) => MathBN.sum(sum, item.quantity),
-    MathBN.convert(0)
-  )
-
-  // If we were able to match the target requirements across all line items, we return early.
-  if (MathBN.lt(targettableQuantity, targetQuantity)) {
-    return []
+  if (MathBN.lt(targetableQuantity, targetQuantity)) {
+    return computedActions
   }
 
   let remainingQtyToApply = MathBN.convert(targetQuantity)
+  const applicablePercentage = promotion.application_method?.value ?? 100
 
   for (const targetItem of targetItemsByPromotion) {
+    if (MathBN.lte(remainingQtyToApply, 0)) {
+      break
+    }
+
     const item = itemsMap.get(targetItem.item_id)!
     const appliedPromoValue =
       methodIdPromoValueMap.get(item.id) ?? MathBN.convert(0)
     const multiplier = MathBN.min(targetItem.quantity, remainingQtyToApply)
-    const applicableAmount = MathBN.mult(
-      MathBN.div(item.subtotal, item.quantity),
-      multiplier
-    )
-    const applicablePercentage = promotion.application_method?.value ?? 100
+
+    const pricePerUnit = MathBN.div(item.subtotal, item.quantity)
+    const applicableAmount = MathBN.mult(pricePerUnit, multiplier)
     const amount = MathBN.mult(applicableAmount, applicablePercentage).div(100)
 
-    const newRemainingQtyToApply = MathBN.sub(remainingQtyToApply, multiplier)
-
-    if (MathBN.lt(newRemainingQtyToApply, 0) || MathBN.lte(amount, 0)) {
-      break
-    } else {
-      remainingQtyToApply = newRemainingQtyToApply
+    if (MathBN.lte(amount, 0)) {
+      continue
     }
+
+    remainingQtyToApply = MathBN.sub(remainingQtyToApply, multiplier)
 
     const budgetExceededAction = computeActionForBudgetExceeded(
       promotion,
@@ -222,7 +237,6 @@ export function getComputedActionsForBuyGet(
 
     if (budgetExceededAction) {
       computedActions.push(budgetExceededAction)
-
       continue
     }
 
