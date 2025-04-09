@@ -52,11 +52,6 @@ export class PricingRepository
       )
     }
 
-    // Early return if no context
-    if (!Object.keys(context).length && !currencyCode) {
-      return []
-    }
-
     // Generate flatten key-value pairs for rule matching
     const [ruleAttributes, priceListRuleAttributes] =
       await this.getAttributesFromRuleTables(knex)
@@ -157,7 +152,7 @@ export class PricingRepository
                   if (typeof value === "number") {
                     return `
                     (pr.attribute = ? AND (
-                      (pr.operator = 'eq' AND pr.value::numeric = ?) OR
+                      (pr.operator = 'eq' AND pr.value = ?) OR
                       (pr.operator = 'gt' AND ? > pr.value::numeric) OR
                       (pr.operator = 'gte' AND ? >= pr.value::numeric) OR
                       (pr.operator = 'lt' AND ? < pr.value::numeric) OR
@@ -185,7 +180,7 @@ export class PricingRepository
         `,
         flattenedContext.flatMap(([key, value]) => {
           if (typeof value === "number") {
-            return [key, value, value, value, value, value]
+            return [key, value.toString(), value, value, value, value]
           } else {
             const normalizeValue = Array.isArray(value) ? value : [value]
             return [key, ...normalizeValue]
