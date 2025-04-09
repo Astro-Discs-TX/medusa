@@ -14,7 +14,6 @@ import { OrderChangeDTO, OrderDTO } from "@medusajs/types"
 import { useRemoteQueryStep } from "../../common"
 import {
   createOrderChangeActionsWorkflow,
-  deleteOrderShippingMethods,
   previewOrderChangeStep,
   updateOrderTaxLinesWorkflow,
 } from "../../order"
@@ -106,25 +105,26 @@ export const removeDraftOrderShippingMethodWorkflow = createWorkflow(
 
     const orderChangeActionInput = transform(
       {
+        input,
         order,
         orderChange,
       },
-      ({ order, orderChange }) => {
-        return {
-          action: ChangeActionType.SHIPPING_REMOVE,
-          reference: "order_shipping_method",
-          order_change_id: orderChange.id,
-          reference_id: input.shipping_method_id,
-          order_id: order.id,
-        }
+      ({ order, orderChange, input }) => {
+        return [
+          {
+            action: ChangeActionType.SHIPPING_REMOVE,
+            reference: "order_shipping_method",
+            order_change_id: orderChange.id,
+            reference_id: input.shipping_method_id,
+            order_id: order.id,
+          },
+        ]
       }
     )
 
     createOrderChangeActionsWorkflow.runAsStep({
-      input: [orderChangeActionInput],
+      input: orderChangeActionInput,
     })
-
-    deleteOrderShippingMethods({ ids: [input.shipping_method_id] })
 
     return new WorkflowResponse(previewOrderChangeStep(order.id))
   }
