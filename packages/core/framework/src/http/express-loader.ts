@@ -56,8 +56,10 @@ export async function expressLoader({ app }: { app: Express }): Promise<{
     const client = await dynamicImport("@aws-sdk/client-dynamodb")
     const DynamoDBStore = storeFactory({ session })
     sessionOpts.store = new DynamoDBStore({
-      ...configModule?.projectConfig.dynamodbOptions,
-      client: new client.DynamoDBClient(),
+      ...configModule.projectConfig.dynamodbOptions,
+      client: new client.DynamoDBClient(
+        configModule.projectConfig.dynamodbOptions.clientOptions
+      ),
     })
   } else if (configModule?.projectConfig?.redisUrl) {
     const RedisStore = createStore(session)

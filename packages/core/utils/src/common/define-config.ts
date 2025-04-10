@@ -333,7 +333,10 @@ function normalizeProjectConfig(
     },
     ...(isCloud && !!process.env.USING_DYNAMO_DB
       ? {
-          dynamoDbOptions: {
+          dynamodbOptions: {
+            clientOptions: Object.assign({
+              endpoint: process.env.DYNAMO_DB_ENDPOINT,
+            }),
             table: process.env.DYNAMO_DB_SESSIONS_TABLE ?? "medusa-sessions",
             readCapacityUnits: toNumber(process.env.DYNAMO_DB_READ_UNITS, 5),
             writeCapacityUnits: toNumber(process.env.DYNAMO_DB_READ_UNITS, 5),

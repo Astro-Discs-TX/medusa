@@ -50,7 +50,7 @@ export interface AdminOptions {
    * })
    * ```
    */
-  path?: `/${string}`
+  path: `/${string}`
 
   /**
    * The URL of your Medusa application. Defaults to the browser origin. This is useful to set when running the admin on a separate domain.
@@ -379,6 +379,9 @@ export type ProjectConfigOptions = {
    * - AWS_SECRET_ACCESS_KEY=<value>
    */
   dynamodbOptions?: {
+    clientOptions?: {
+      endpoint?: string
+    }
     table?: string
     readCapacityUnits?: number
     writeCapacityUnits?: number
@@ -996,7 +999,7 @@ export type InputConfigModules = Partial<
  */
 export type InputConfig = Partial<
   Omit<ConfigModule, "admin" | "modules"> & {
-    admin: Partial<ConfigModule["admin"]>
+    admin?: Partial<ConfigModule["admin"]>
     modules:
       | InputConfigModules
       /**
