@@ -1162,7 +1162,7 @@ describe("defineConfig", function () {
     process.env.S3_REGION = "us-east-1"
     process.env.S3_BUCKET = "medusa-cloud-test"
     process.env.S3_ENDPOINT = "https://s3.amazonaws.com"
-    process.env.USING_DYNAMO_DB = "true"
+    process.env.SESSION_STORE = "dynamodb"
     const res = defineConfig({})
 
     process.env = { ...originalEnv }
@@ -1323,7 +1323,7 @@ describe("defineConfig", function () {
         "plugins": [],
         "projectConfig": {
           "databaseUrl": "postgres://localhost/medusa-starter-default",
-          "dynamoDbOptions": {
+          "dynamodbOptions": {
             "readCapacityUnits": 5,
             "skipThrowMissingSpecialKeys": true,
             "table": "medusa-sessions",

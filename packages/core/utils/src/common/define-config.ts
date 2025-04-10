@@ -331,7 +331,7 @@ function normalizeProjectConfig(
       },
       ...http,
     },
-    ...(isCloud && !!process.env.USING_DYNAMO_DB
+    ...(isCloud && process.env.SESSION_STORE === "dynamodb"
       ? {
           dynamodbOptions: {
             clientOptions: Object.assign({
