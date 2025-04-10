@@ -63,7 +63,6 @@ export const removeDraftOrderShippingMethodWorkflow = createWorkflow(
     updateOrderTaxLinesWorkflow.runAsStep({
       input: {
         order_id: order.id,
-        // shipping_method_ids: [input.shipping_method_id], // TODO: check
       },
     })
 
