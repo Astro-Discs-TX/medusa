@@ -68,8 +68,6 @@ export class PricingRepository
     const knex = manager.getKnex()
     const context = pricingContext.context || {}
 
-    await this.#getCachedAvailableAttributes()
-
     // Extract quantity and currency from context
     const quantity = context.quantity
     delete context.quantity
@@ -98,7 +96,8 @@ export class PricingRepository
       }
     )
 
-    if (flattenedContext.length > 0) {
+    if (flattenedContext.length > 10) {
+      await this.#getCachedAvailableAttributes()
       flattenedContext = flattenedContext.filter(([key]) =>
         this.#availableAttributes.has(key)
       )
