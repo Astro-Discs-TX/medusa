@@ -53,7 +53,7 @@ export class PricingRepository
     })
   }
 
-  async #getCachedAvailableAttributes() {
+  async #cacheAvailableAttributesIfNecessary() {
     if (this.#availableAttributes.size === 0) {
       await this.#cacheAvailableAttributes()
     }
@@ -97,7 +97,7 @@ export class PricingRepository
     )
 
     if (flattenedContext.length > 10) {
-      await this.#getCachedAvailableAttributes()
+      await this.#cacheAvailableAttributesIfNecessary()
       flattenedContext = flattenedContext.filter(([key]) =>
         this.#availableAttributes.has(key)
       )
