@@ -741,7 +741,7 @@ export class TransactionOrchestrator extends EventEmitter {
         this.emit(DistributedTransactionEvent.FINISH, { transaction })
       }
 
-      const asyncStepsToStart: any[] = []
+      let hasExecutedSyncSteps = false
       for (const step of nextSteps.next) {
         const curState = step.getStates()
         const type = step.isCompensating()
@@ -858,6 +858,7 @@ export class TransactionOrchestrator extends EventEmitter {
         ] as Parameters<TransactionStepHandler>
 
         if (!isAsync) {
+          hasExecutedSyncSteps = true
           const stepHandler = async () => {
             return await transaction.handler(...handlerArgs)
           }
@@ -924,8 +925,8 @@ export class TransactionOrchestrator extends EventEmitter {
             return await transaction.handler(...handlerArgs)
           }
 
-          asyncStepsToStart.push({
-            handler: async () => {
+          execution.push(
+            transaction.saveCheckpoint().then(() => {
               let promise: Promise<unknown>
 
               if (TransactionOrchestrator.traceStep) {
@@ -937,7 +938,7 @@ export class TransactionOrchestrator extends EventEmitter {
                 promise = stepHandler()
               }
 
-              return promise
+              promise
                 .then(async (response: any) => {
                   const output = response?.__type ? response.output : response
 
@@ -991,23 +992,21 @@ export class TransactionOrchestrator extends EventEmitter {
                     response,
                   })
                 })
-            },
-          })
+            })
+          )
         }
       }
 
       try {
-        await transaction.saveCheckpoint()
+        if (hasExecutedSyncSteps) {
+          await transaction.saveCheckpoint()
+        }
       } catch (error) {
         if (SkipExecutionError.isSkipExecutionError(error)) {
           break
         } else {
           throw error
         }
-      }
-
-      if (asyncStepsToStart.length > 0) {
-        execution.push(...asyncStepsToStart.map((step) => step.handler()))
       }
 
       await promiseAll(execution)
