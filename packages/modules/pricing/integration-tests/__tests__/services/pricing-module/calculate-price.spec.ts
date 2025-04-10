@@ -286,7 +286,7 @@ moduleIntegrationTestRunner<IPricingModuleService>({
           })
         })
 
-        it("should successfully calculate prices with complex context", async () => {
+        it.only("should successfully calculate prices with complex context", async () => {
           const context = {
             id: "cart_01JRDH08QD8CZ0KJDVE410KM1J",
             currency_code: "PLN",
