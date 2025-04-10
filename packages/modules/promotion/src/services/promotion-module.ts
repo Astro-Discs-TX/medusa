@@ -157,8 +157,10 @@ export default class PromotionModuleService
           ...filters,
           campaign: {
             ...filters?.campaign,
-            $or: [{ starts_at: null }, { starts_at: { $lte: now } }],
             $and: [
+              {
+                $or: [{ starts_at: null }, { starts_at: { $lte: now } }],
+              },
               {
                 $or: [{ ends_at: null }, { ends_at: { $gt: now } }],
               },
@@ -228,15 +230,7 @@ export default class PromotionModuleService
           computedAction.amount
         )
 
-        // Check if it exceeds the limit and cap it if necessary
-        if (
-          campaignBudget.limit &&
-          MathBN.gt(newUsedValue, campaignBudget.limit)
-        ) {
-          campaignBudgetData.used = campaignBudget.limit
-        } else {
-          campaignBudgetData.used = newUsedValue
-        }
+        campaignBudgetData.used = newUsedValue
 
         campaignBudgetMap.set(campaignBudget.id, campaignBudgetData)
       }

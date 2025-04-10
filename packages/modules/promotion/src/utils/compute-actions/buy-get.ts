@@ -133,31 +133,39 @@ export function getComputedActionsForBuyGet(
     accumulatedQuantity = MathBN.add(accumulatedQuantity, reservableQuantity)
   }
 
+  // Store the eligible buy items for this promotion code in the map
   eligibleBuyItemMap.set(promotion.code!, eligibleItemsByPromotion)
 
+  // If we couldn't accumulate enough items to meet the minimum buy quantity, return early
   if (MathBN.lt(accumulatedQuantity, minimumBuyQuantity)) {
     return computedActions
   }
 
+  // Get the number of target items that should receive the discount
   const targetQuantity = MathBN.convert(
     promotion.application_method?.apply_to_quantity ?? 0
   )
 
+  // If no target quantity is specified, return early
   if (MathBN.lte(targetQuantity, 0)) {
     return computedActions
   }
 
+  // Find all items that match the target rules criteria
   const eligibleTargetItems = filterItemsByPromotionRules(
     itemsContext,
     promotion.application_method?.target_rules
   )
 
+  // If no items match the target rules, return early
   if (!eligibleTargetItems.length) {
     return computedActions
   }
 
+  // Track quantities of items that can't be used as targets because they were used in buy rules
   const inapplicableQuantityMap = new Map<string, BigNumberInput>()
 
+  // Build map of quantities that are ineligible as targets because they were used to satisfy buy rules
   for (const buyItem of eligibleItemsByPromotion) {
     const currentValue =
       inapplicableQuantityMap.get(buyItem.item_id) || MathBN.convert(0)
@@ -167,10 +175,13 @@ export function getComputedActionsForBuyGet(
     )
   }
 
+  // Track items eligible for receiving the discount and total quantity that can be discounted
   const targetItemsByPromotion: EligibleItem[] = []
   let targetableQuantity = MathBN.convert(0)
 
+  // Find items eligible for discount, excluding quantities used in buy rules
   for (const eligibleTargetItem of eligibleTargetItems) {
+    // Calculate how much of this item's quantity can receive the discount
     const inapplicableQuantity =
       inapplicableQuantityMap.get(eligibleTargetItem.id) || MathBN.convert(0)
     const applicableQuantity = MathBN.sub(
@@ -182,6 +193,7 @@ export function getComputedActionsForBuyGet(
       continue
     }
 
+    // Calculate how many more items we need to fulfill target quantity
     const remainingNeeded = MathBN.sub(targetQuantity, targetableQuantity)
     const fulfillableQuantity = MathBN.min(remainingNeeded, applicableQuantity)
 
@@ -189,6 +201,7 @@ export function getComputedActionsForBuyGet(
       continue
     }
 
+    // Add this item to eligible targets
     targetItemsByPromotion.push({
       item_id: eligibleTargetItem.id,
       quantity: fulfillableQuantity.toNumber(),
@@ -196,20 +209,25 @@ export function getComputedActionsForBuyGet(
 
     targetableQuantity = MathBN.add(targetableQuantity, fulfillableQuantity)
 
+    // If we've found enough items to fulfill target quantity, stop looking
     if (MathBN.gte(targetableQuantity, targetQuantity)) {
       break
     }
   }
 
+  // Store eligible target items for this promotion
   eligibleTargetItemMap.set(promotion.code!, targetItemsByPromotion)
 
+  // If we couldn't find enough eligible target items, return early
   if (MathBN.lt(targetableQuantity, targetQuantity)) {
     return computedActions
   }
 
+  // Track remaining quantity to apply discount to and get discount percentage
   let remainingQtyToApply = MathBN.convert(targetQuantity)
   const applicablePercentage = promotion.application_method?.value ?? 100
 
+  // Apply discounts to eligible target items
   for (const targetItem of targetItemsByPromotion) {
     if (MathBN.lte(remainingQtyToApply, 0)) {
       break
@@ -220,6 +238,7 @@ export function getComputedActionsForBuyGet(
       methodIdPromoValueMap.get(item.id) ?? MathBN.convert(0)
     const multiplier = MathBN.min(targetItem.quantity, remainingQtyToApply)
 
+    // Calculate discount amount based on item price and applicable percentage
     const pricePerUnit = MathBN.div(item.subtotal, item.quantity)
     const applicableAmount = MathBN.mult(pricePerUnit, multiplier)
     const amount = MathBN.mult(applicableAmount, applicablePercentage).div(100)
@@ -230,6 +249,7 @@ export function getComputedActionsForBuyGet(
 
     remainingQtyToApply = MathBN.sub(remainingQtyToApply, multiplier)
 
+    // Check if applying this discount would exceed promotion budget
     const budgetExceededAction = computeActionForBudgetExceeded(
       promotion,
       amount
@@ -240,11 +260,13 @@ export function getComputedActionsForBuyGet(
       continue
     }
 
+    // Track total promotional value applied to this item
     methodIdPromoValueMap.set(
       item.id,
       MathBN.add(appliedPromoValue, amount).toNumber()
     )
 
+    // Add computed discount action
     computedActions.push({
       action: ComputedActions.ADD_ITEM_ADJUSTMENT,
       item_id: item.id,
