@@ -230,7 +230,14 @@ export default class PromotionModuleService
           computedAction.amount
         )
 
-        campaignBudgetData.used = newUsedValue
+        if (
+          campaignBudget.limit &&
+          MathBN.gt(newUsedValue, campaignBudget.limit)
+        ) {
+          continue
+        } else {
+          campaignBudgetData.used = newUsedValue
+        }
 
         campaignBudgetMap.set(campaignBudget.id, campaignBudgetData)
       }
