@@ -38,7 +38,7 @@ export async function expressLoader({ app }: { app: Express }): Promise<{
     name: sessionOptions?.name ?? "connect.sid",
     resave: sessionOptions?.resave ?? true,
     rolling: sessionOptions?.rolling ?? false,
-    saveUninitialized: sessionOptions?.saveUninitialized ?? true,
+    saveUninitialized: sessionOptions?.saveUninitialized ?? false,
     proxy: true,
     secret: sessionOptions?.secret ?? http?.cookieSecret,
     cookie: {
@@ -51,15 +51,18 @@ export async function expressLoader({ app }: { app: Express }): Promise<{
 
   let redisClient: Redis
 
-  if (true) {
-    const DynamoDBStore = await dynamicImport("connect-dynamodb")
+  if (configModule?.projectConfig.dynamodbOptions) {
+    const storeFactory = await dynamicImport("connect-dynamodb")
+    const client = await dynamicImport("@aws-sdk/client-dynamodb")
+    const DynamoDBStore = storeFactory({ session })
     sessionOpts.store = new DynamoDBStore({
-      table: "myapp-sessions",
+      ...configModule?.projectConfig.dynamodbOptions,
+      client: new client.DynamoDBClient(),
     })
   } else if (configModule?.projectConfig?.redisUrl) {
     const RedisStore = createStore(session)
     redisClient = new Redis(
-      configModule.projectConfig.redisUrl!,
+      configModule.projectConfig.redisUrl,
       configModule.projectConfig.redisOptions ?? {}
     )
     sessionOpts.store = new RedisStore({
