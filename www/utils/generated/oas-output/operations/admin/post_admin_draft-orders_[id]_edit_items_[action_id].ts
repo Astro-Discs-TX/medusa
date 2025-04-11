@@ -3,7 +3,7 @@
  * operationId: PostDraftOrdersIdEditItemsAction_id
  * summary: Update Item Changes in Draft Order
  * x-sidebar-summary: Update Item Changes
- * description:  |
+ * description: |
  *   Update changes made on an item (addition or update) in the draft order by the ID of the item's `ITEM_ADD` or `ITEM_UPDATE` action.
  * 
  *   Every item has an `actions` property, whose value is an array of actions. You can check the action's name using its `action` property, and use the value of the `id` property.
@@ -62,8 +62,6 @@
  * tags:
  *   - Draft Orders
  * responses:
- *   "200":
- *     description: OK
  *   "400":
  *     $ref: "#/components/responses/400_error"
  *   "401":

@@ -87,7 +87,7 @@
     "js-sdk": "sdk.admin.claim.removeOutboundItem(\n  \"claim_123\", \n  \"ordchact_123\",\n)\n.then(({ claim }) => {\n  console.log(claim)\n})"
   },
   "POST /admin/claims/{id}/outbound/shipping-method": {
-    "js-sdk": "   * sdk.admin.claim.addOutboundShipping(\n  \"claim_123\", \n  {\n    shipping_option_id: \"so_123\",\n    custom_amount: 10\n  },\n)\n.then(({ claim }) => {\n  console.log(claim)\n})"
+    "js-sdk": "sdk.admin.claim.addOutboundShipping(\n  \"claim_123\", \n  {\n    shipping_option_id: \"so_123\",\n    custom_amount: 10\n  },\n)\n.then(({ claim }) => {\n  console.log(claim)\n})"
   },
   "POST /admin/claims/{id}/outbound/shipping-method/{actionid}": {
     "js-sdk": "sdk.admin.claim.updateOutboundShipping(\n  \"claim_123\", \n  \"ordchact_123\",\n  {\n    custom_amount: 10\n  },\n)\n.then(({ claim }) => {\n  console.log(claim)\n})"
@@ -199,6 +199,9 @@
   },
   "DELETE /admin/draft-orders/{id}/edit/shipping-methods/{actionid}": {
     "js-sdk": "sdk.admin.draftOrder.removeShippingMethod(\"order_123\", \"action_123\")\n.then(({ draft_order_preview }) => {\n  console.log(draft_order_preview)\n})"
+  },
+  "POST /admin/draft-orders/{id}/edit/shipping-methods/method/{methodid}": {
+    "js-sdk": "sdk.admin.draftOrder.updateShippingMethod(\"order_123\", \"sm_123\", {\n shipping_option_id: \"so_123\",\n})\n.then(({ draft_order_preview }) => {\n  console.log(draft_order_preview)\n})"
   },
   "POST /admin/draft-orders/{id}/edit": {
     "js-sdk": "sdk.admin.draftOrder.beginEdit(\"order_123\")\n.then(({ draft_order_preview }) => {\n  console.log(draft_order_preview)\n})"
@@ -388,6 +391,9 @@
   },
   "GET /admin/orders/{id}/line-items": {
     "js-sdk": "sdk.admin.order.listLineItems(\"order_123\")\n.then(({ order_items }) => {\n  console.log(order_items)\n})"
+  },
+  "POST /admin/orders/{orderid}/credit-lines": {
+    "js-sdk": "sdk.admin.order.createCreditLine(\n  \"order_123\",\n  {\n    amount: 100,\n    reference: \"order\",\n    reference_id: \"order_123\",\n  }\n)\n.then(({ order }) => {\n  console.log(order)\n})"
   },
   "POST /admin/order-edits": {
     "js-sdk": "sdk.admin.orderEdit.initiateRequest({\n  order_id: \"order_123\"\n})\n.then(({ order_change }) => {\n  console.log(order_change)\n})"

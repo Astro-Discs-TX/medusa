@@ -28,6 +28,25 @@
  *       schema:
  *         $ref: "#/components/schemas/AdminUpdateDraftOrderShippingMethod"
  * x-codeSamples:
+ *   - lang: JavaScript
+ *     label: JS SDK
+ *     source: |-
+ *       import Medusa from "@medusajs/js-sdk"
+ * 
+ *       export const sdk = new Medusa({
+ *         baseUrl: import.meta.env.VITE_BACKEND_URL || "/",
+ *         debug: import.meta.env.DEV,
+ *         auth: {
+ *           type: "session",
+ *         },
+ *       })
+ * 
+ *       sdk.admin.draftOrder.updateShippingMethod("order_123", "sm_123", {
+ *        shipping_option_id: "so_123",
+ *       })
+ *       .then(({ draft_order_preview }) => {
+ *         console.log(draft_order_preview)
+ *       })
  *   - lang: Shell
  *     label: cURL
  *     source: |-
@@ -36,8 +55,6 @@
  * tags:
  *   - Draft Orders
  * responses:
- *   "200":
- *     description: OK
  *   "400":
  *     $ref: "#/components/responses/400_error"
  *   "401":

@@ -4,7 +4,6 @@
  * summary: List Plugins
  * description: Retrieve the list of plugins installed in the Medusa application.
  * x-authenticated: true
- * parameters: []
  * security:
  *   - api_token: []
  *   - cookie_auth: []
