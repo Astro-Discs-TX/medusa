@@ -6,13 +6,13 @@ export const metadata = {
 
 # {metadata.title}
 
-In this chapter, you'll learn about the Medusa Framework. You'll learn about the concepts and tools that facilitate building customizations into your Medusa application.
+In this chapter, you'll learn about the Medusa Framework and how it facilitates building customizations in your Medusa application.
 
 ## What is the Medusa Framework?
 
-The Medusa Framework is built for customizations. It provides the tools that allow you to build custom features, integrate third-party services, extend existing features, automate tasks, and more.
+The Medusa Framework is built with customizations in mind, allowing you to implement custom features, integrate third-party services, extend existing features, automate tasks, and more.
 
-While other ecommerce platforms limit your capabilities of building sophisticated customizations tailored for business use cases, the Medusa Framework is built to be flexible and extensible. It removes traditional limitations and unnecessary overheads, allowing you to focus on shipping new features.
+While other ecommerce platforms limit your ability to build sophisticated customizations tailored to business use cases, the Medusa Framework is designed to be flexible and extensible. It removes traditional limitations and unnecessary overhead, allowing you to focus on shipping new features.
 
 ### Framework Concepts and Tools
 
@@ -66,14 +66,18 @@ While other ecommerce platforms limit your capabilities of building sophisticate
 
 ## Build Custom Features
 
-The Medusa Framework allows you to build custom features that are tailored to your business needs.
+The Medusa Framework allows you to build custom features tailored to your business needs.
 
 To create a custom feature, you can create a [module](../modules/page.mdx) that contains your feature's data models and the logic to manage them. A module is integrated into your Medusa application without side effects.
 
 <CodeTabs group="module-customizations">
   <CodeTab label="Data Model" value="data-model">
 
-```ts
+export const modelHighlights = [
+  ["3", "Post", "Create a data model with Medusa's Data Modeling Language (DML)."]
+]
+
+```ts highlights={modelHighlights}
 import { model } from "@medusajs/framework/utils"
 
 export const Post = model.define("post", {
@@ -86,7 +90,11 @@ export const Post = model.define("post", {
 
   <CodeTab label="Service" value="service">
 
-```ts
+export const serviceHighlights = [
+  ["4", "MedusaService", "Save time by extending the `MedusaService` for basic CRUD operations."]
+]
+
+```ts highlights={serviceHighlights}
 import { MedusaService } from "@medusajs/framework/utils"
 import { Post } from "./post"
 
@@ -116,12 +124,16 @@ export default Module(BLOG_MODULE, {
 
 </CodeTabs>
 
-Then, you can build [workflows](../workflows/page.mdx) around your module that provide commerce features with rollback mechanism.
+Then, you can build commerce features and flows in [workflows](../workflows/page.mdx) that use your module. By using workflows, you benefit from features like [rollback mechanism](../workflows/compensation-function/page.mdx) and [retry configuration](../workflows/retry-failed-steps/page.mdx).
 
 <CodeTabs group="workflow-customizations">
   <CodeTab label="Step" value="step">
 
-```ts
+export const stepHighlights = [
+  ["19", "", "Define the rollback logic for any step."]
+]
+
+```ts highlights={stepHighlights}
 import { createStep, StepResponse } from "@medusajs/framework/workflows-sdk"
 import { BlogModuleService, BLOG_MODULE } from "../../modules/blog"
 
@@ -191,7 +203,7 @@ type PostRequestBody = {
   title: string
 }
 
-export const POST = (
+export const POST = async (
   req: MedusaRequest<PostRequestBody>,
   res: MedusaResponse
 ) => {
@@ -199,6 +211,8 @@ export const POST = (
     .run({
       input: result.validatedBody
     })
+
+  return res.json(result)
 }
 ```
 
@@ -210,12 +224,12 @@ The following tutorials are step-by-step guides that show you how to build custo
   items={[
     {
       title: "Product Reviews",
-      text: "Build product reviews feature in your Medusa application.",
+      text: "Build a product reviews feature in your Medusa application.",
       href: "!resources!/how-to-tutorials/tutorials/product-reviews",
     },
     {
       title: "Wishlist",
-      text: "Build wishlist feature in your Medusa application.",
+      text: "Build a wishlist feature in your Medusa application.",
       href: "!resources!/plugins/guides/wishlist",
     }
   ]}
@@ -244,16 +258,20 @@ To learn more about the different concepts useful for building custom features, 
 
 ---
 
-## Extend Existing Models and Features
+## Extend Existing Features
 
 The Medusa Framework is flexible and extensible, allowing you to extend and build on top of existing models and features.
 
-To extend an existing model, you can create a [module](../modules/page.mdx) that contains your additions to existing data models or features. Then, you can define a [module link](../module-links/page.mdx) that associates two data models from separate modules.
+To associate new properties and relations with an existing model, you can create a [module](../modules/page.mdx) with data models that define these additions. Then, you can define a [module link](../module-links/page.mdx) that associates two data models from separate modules.
 
 <CodeTabs group="module-extensions">
   <CodeTab label="Module Link" value="module-link">
 
-```ts
+export const defineLinkHighlights = [
+  ["5", "defineLink", "Define a link between products and brands."]
+]
+
+```ts highlights={defineLinkHighlights}
 import BrandModule from "../modules/brand"
 import ProductModule from "@medusajs/medusa/product"
 import { defineLink } from "@medusajs/framework/utils"
@@ -315,9 +333,14 @@ export default Module(BRAND_MODULE, {
   </CodeTab>
 </CodeTabs>
 
-Then, you can [hook into existing workflows](../workflows/workflow-hooks/page.mdx) to perform custom actions as part of existing features. For example, you can create a brand when a product is created.
+Then, you can [hook into existing workflows](../workflows/workflow-hooks/page.mdx) to perform custom actions as part of existing features and flows. For example, you can create a brand when a product is created.
 
-```ts title="Workflow Hook Example"
+export const hookHighlights = [
+  ["8", "productsCreated", "Perform a custom action within the product creation flow."],
+  ["9", "additional_data", "Custom data passed in the HTTP request body."]
+]
+
+```ts title="Workflow Hook Example" highlights={hookHighlights}
 import { createProductsWorkflow } from "@medusajs/medusa/core-flows"
 import { StepResponse } from "@medusajs/framework/workflows-sdk"
 import { Modules } from "@medusajs/framework/utils"
@@ -334,15 +357,15 @@ createProductsWorkflow.hooks.productsCreated(
     const brandModuleService: BrandModuleService = container.resolve(
       BRAND_MODULE
     )
-    // if the brand doesn't exist, an error is thrown.
-    await brandModuleService.retrieveBrand(additional_data.brand_id as string)
-
-    // TODO link brand to product
+    
+    const brand = await brandModuleService.createBrands({
+      name: additional_data.brand_name,
+    })
   })
 )
 ```
 
-You can also build custom workflows using your custom module and Medusa's modules. You can also use [existing workflows and steps](!resources!/medusa-workflows-reference) within your custom workflows.
+You can also build custom workflows using your custom module and Medusa's modules, and use [existing workflows and steps](!resources!/medusa-workflows-reference) within your custom workflows.
 
 ### Examples
 
@@ -352,7 +375,7 @@ The following tutorials are step-by-step guides that show you how to extend exis
   items={[
     {
       title: "Custom Item Pricing",
-      text: "Add products wth custom items to the cart.",
+      text: "Add products with custom items to the cart.",
       href: "!resources!/examples/guides/custom-item-price",
     },
     {
@@ -388,7 +411,7 @@ To learn more about the different concepts useful for extending features, check 
 
 ## Integrate Third-Party Services
 
-The Medusa Framework provides the tools and infrastructure to build a middleware solution for your commerce ecosystem.
+The Medusa Framework provides the tools and infrastructure to build a middleware solution for your commerce ecosystem. You can integrate third-party services, perform operations across systems, and query data from multiple sources.
 
 ### Orchestrate Operations Across Systems
 
@@ -399,7 +422,11 @@ You can integrate a third-party service in a [module](../modules/page.mdx). This
 <CodeTabs group="third-party-integration">
   <CodeTab label="Service" value="service">
 
-```ts
+export const erpServiceHighlights = [
+  ["5", "ErpModuleService", "Create a service that connects to the ERP system."],
+]
+
+```ts highlights={erpServiceHighlights}
 type Options = {
   apiKey: string
 }
@@ -440,35 +467,21 @@ export default Module(ERP_MODULE, {
   </CodeTab>
 </CodeTabs>
 
-Then, you can build [workflows](../workflows/page.mdx) that perform operations across systems using your custom modules. For example, you can create a workflow that syncs products from your ERP system to your Medusa application.
+Then, you can build [workflows](../workflows/page.mdx) that perform operations across systems. In the workflow, you can use your module to interact with the integrated third-party service.
+
+For example, you can create a workflow that syncs products from your ERP system to your Medusa application.
 
 <CodeTabs group="erp-sync-workflow">
-  <CodeTab label="Step" value="step">
-
-```ts
-import { createStep, StepResponse } from "@medusajs/framework/workflows-sdk"
-import { ERP_MODULE } from "../../modules/erp"
-import { ErpModuleService } from "../../modules/erp/service"
-
-const getProductsFromErpStep = createStep(
-  "get-products-from-erp",
-  async (_, { container }) => {
-    const erpModuleService: ErpModuleService = container.resolve(
-      ERP_MODULE
-    )
-
-    const products = await erpModuleService.getProducts()
-
-    return new StepResponse(products)
-  }
-)
-```
-
-  </CodeTab>
 
   <CodeTab label="Workflow" value="workflow">
 
-```ts
+export const erpWorkflowHighlights = [
+  ["11", "getProductsFromErpStep", "Get products from the ERP system."],
+  ["13", "transform", "Prepare the products to be created in Medusa."],
+  ["32", "createProductsWorkflow", "Create the ERP products in Medusa."],
+]
+
+```ts highlights={erpWorkflowHighlights}
 import { 
   createWorkflow, 
   WorkflowResponse,
@@ -514,16 +527,42 @@ export const syncFromErpWorkflow = createWorkflow(
 ```
 
   </CodeTab>
+  <CodeTab label="Step" value="step">
+
+```ts
+import { createStep, StepResponse } from "@medusajs/framework/workflows-sdk"
+import { ERP_MODULE } from "../../modules/erp"
+import { ErpModuleService } from "../../modules/erp/service"
+
+const getProductsFromErpStep = createStep(
+  "get-products-from-erp",
+  async (_, { container }) => {
+    const erpModuleService: ErpModuleService = container.resolve(
+      ERP_MODULE
+    )
+
+    const products = await erpModuleService.getProducts()
+
+    return new StepResponse(products)
+  }
+)
+```
+
+  </CodeTab>
 </CodeTabs>
 
-By using a workflow to manage operations across systems, you benefit from features like roll-back mechanism, background long-running execution, retry mechanism, and more. This is essential for building a middleware solution that orchestrates operations across systems, as you don't have to worry about data inconsistencies or failures.
+By using a workflow to manage operations across systems, you benefit from features like [rollback mechanism](../workflows/compensation-function/page.mdx), [background long-running execution](../workflows/long-running-workflow/page.mdx), [retry configuration](../workflows/retry-failed-steps/page.mdx), and more. This is essential for building a middleware solution that performs operations across systems, as you don't have to worry about data inconsistencies or failures.
 
-You can then execute this workflow on a schedule using [scheduled jobs](../scheduled-jobs/page.mdx), execute it when an event occurs using [events and subscribers](../events-and-subscribers/page.mdx), or expose it as a feature in an [API route](../api-routes/page.mdx).
+You can then execute this workflow at a specific interval using [scheduled jobs](../scheduled-jobs/page.mdx) or when an event occurs using [events and subscribers](../events-and-subscribers/page.mdx). You can also expose its features to client applications using an [API route](../api-routes/page.mdx).
 
 <CodeTabs group="erp-sync-api">
   <CodeTab label="Scheduled Job" value="scheduled-job">
 
-```ts
+export const syncProductsJobHighlights = [
+  ["6", "syncProductsJob", "Sync products once a day."],
+]
+
+```ts highlights={syncProductsJobHighlights}
 import {
   MedusaContainer,
 } from "@medusajs/framework/types"
@@ -543,7 +582,11 @@ export const config = {
 
   <CodeTab label="Event Subscriber" value="event-subscriber">
 
-```ts
+export const productsCreatedHandlerHighlights = [
+  ["4", "productsCreatedHandler", "Sync products when they are created."],
+]
+
+```ts highlights={productsCreatedHandlerHighlights}
 import { SubscriberArgs, type SubscriberConfig } from "@medusajs/framework"
 import { sendOrderConfirmationWorkflow } from "../workflows/send-order-confirmation"
 
@@ -563,7 +606,11 @@ export const config: SubscriberConfig = {
 
   <CodeTab label="API Route" value="api-route">
 
-```ts
+export const apiRouteHighlights = [
+  ["7", "POST", "Expose a REST API route to sync products."],
+]
+
+```ts highlights={apiRouteHighlights}
 import type {
   MedusaRequest,
   MedusaResponse,
@@ -600,6 +647,7 @@ The following tutorials are step-by-step guides that show you how to orchestrate
       href: "!resources!/integrations",
     }
   ]}
+  className="mb-2"
 />
 
 #### Start Learning
@@ -629,18 +677,23 @@ To learn more about the different concepts useful for integrating third-party se
       href: "/learn/fundamentals/scheduled-jobs",
     }
   ]}
+  className="mb-2"
 />
 
 ### Query Data Across Systems
 
-Another essential feature for integrating third-party services is the ability to query data across those systems efficiently.
+Another essential feature for integrating third-party services is querying data across those systems efficiently.
 
-The Medusa Framework allows you to build links not only between data models, but also virtual data models using [read-only module links](../module-links/read-only/page.mdx). You can build a module that provides the logic to query data from a third-party service, then create a read-only link between an existing data model and a virtual one from the third-party service.
+The Framework allows you to build links not only between Medusa data models, but also virtual data models using [read-only module links](../module-links/read-only/page.mdx). You can build a [module](../modules/page.mdx) that provides the logic to query data from a third-party service, then create a read-only link between an existing data model and a virtual one from the third-party service.
 
 <CodeTabs group="erp-query">
   <CodeTab label="Read-Only Link" value="read-only-link">
 
-```ts
+export const readOnlyLinkHighlights = [
+  ["5", "defineLink", "Define a read-only link between products and brands from a third-party service."],
+]
+
+```ts highlights={readOnlyLinkHighlights}
 import BrandModule from "../modules/brand"
 import ProductModule from "@medusajs/medusa/product"
 import { defineLink } from "@medusajs/framework/utils"
@@ -664,7 +717,11 @@ export default defineLink(
 
   <CodeTab label="Module Service" value="module-service">
 
-```ts
+export const brandModuleService = [
+  ["12", "list", "Provide a method in the service to retrieve\nthe data from the third-party service."],
+]
+
+```ts highlights={brandModuleService}
 type BrandModuleOptions = {
   apiKey: string
 }
@@ -722,7 +779,11 @@ export default Module(BRAND_MODULE, {
 
 Then, you can use [Query](../module-links/query/page.mdx) to retrieve a product and its brand from the third-party service in a single query.
 
-```ts title="Query Example"
+export const queryHighlights = [
+  ["1", "graph", "Query a product and its brand from the\nthird-party service in a single query."],
+]
+
+```ts title="Query Example" highlights={queryHighlights}
 const { result } = await query.graph({
   entity: "product",
   fields: ["id", "brand.*"],
@@ -742,7 +803,7 @@ const { result } = await query.graph({
 // }]
 ```
 
-This simplifies the process of querying data across systems, as you can retrieve data from multiple sources in a single query.
+Query simplifies the process of retrieving data across systems, as you can retrieve data from multiple sources in a single query.
 
 #### Examples
 
@@ -756,6 +817,7 @@ The following tutorials are step-by-step guides that show you how to query data 
       href: "!resources!/integrations/guides/sanity",
     }
   ]}
+  className="mb-2"
 />
 
 #### Start Learning
@@ -769,7 +831,7 @@ To learn more about the different concepts useful for querying data across syste
       href: "/learn/fundamentals/modules",
     },
     {
-      title: "Read-Only Module Links",
+      title: "Read-Only Links",
       href: "/learn/fundamentals/module-links/read-only",
     },
     {
@@ -777,6 +839,7 @@ To learn more about the different concepts useful for querying data across syste
       href: "/learn/fundamentals/module-links/query",
     }
   ]}
+  className="mb-2"
 />
 
 ---
@@ -785,7 +848,7 @@ To learn more about the different concepts useful for querying data across syste
 
 The Medusa Framework provides the tools to automate tasks in your Medusa application. Automation is useful when you want to perform a task periodically, such as syncing data, or when an event occurs, such as sending a confirmation email when an order is placed.
 
-To build the task, you first create a [workflow](../workflows/page.mdx) that contains the task's logic, such as syncing data or sending an email.
+To build the task to be automated, you first create a [workflow](../workflows/page.mdx) that contains the task's logic, such as syncing data or sending an email.
 
 <CodeTabs group="automate-tasks">
   <CodeTab label="Step" value="step">
@@ -863,7 +926,11 @@ Then, you can execute this workflow when an event occurs using a [subscriber](..
 <CodeTabs group="automate-tasks-examples">
   <CodeTab label="Event Subscriber" value="event-subscriber">
 
-```ts
+export const orderPlacedHandlerHighlights = [
+  ["7", "orderPlacedHandler", "Send an order confirmation email when an order is placed."],
+]
+
+```ts highlights={orderPlacedHandlerHighlights}
 import type {
   SubscriberArgs,
   SubscriberConfig,
@@ -891,7 +958,11 @@ export const config: SubscriberConfig = {
 
   <CodeTab label="Scheduled Job" value="scheduled-job">
 
-```ts
+export const orderConfirmationJobHighlights = [
+  ["6", "orderConfirmationJob", "Send an order confirmation email once a day."],
+]
+
+```ts highlights={orderConfirmationJobHighlights}
 import type {
   MedusaContainer,
 } from "@medusajs/framework/types"
@@ -917,7 +988,7 @@ export const config = {
 
 ### Examples
 
-The following tutorials are step-by-step guides that show you how to automate tasks using the Medusa Framework.
+The following guides are step-by-step guides that show you how to automate tasks using the Medusa Framework.
 
 <CardList
   items={[
@@ -961,7 +1032,7 @@ To learn more about the different concepts useful for automating tasks, check ou
 
 If you have custom features that you want to re-use across multiple Medusa applications, or you want to publish your customizations for the community to use, you can build a [plugin](../plugins/page.mdx).
 
-A plugin can encapsulate different customizations in a single package. That includes [modules](../modules/page.mdx), [workflows](../workflows/page.mdx), [API routes](../api-routes/page.mdx), and more.
+A plugin encapsulates your customizations in a single package. The customizations include [modules](../modules/page.mdx), [workflows](../workflows/page.mdx), [API routes](../api-routes/page.mdx), and more.
 
 ![Diagram showcasing a wishlist plugin installed in a Medusa application](https://res.cloudinary.com/dza7lstvk/image/upload/v1737540762/Medusa%20Book/plugin-diagram_oepiis.jpg)
 
