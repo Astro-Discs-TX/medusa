@@ -129,15 +129,6 @@ const generatedgeneratedToolsSidebarSidebar = {
                   "loaded": true,
                   "isPathHref": true,
                   "type": "link",
-                  "path": "/medusa-cli/commands/start-cluster",
-                  "title": "start-cluster",
-                  "description": "",
-                  "children": []
-                },
-                {
-                  "loaded": true,
-                  "isPathHref": true,
-                  "type": "link",
                   "path": "/medusa-cli/commands/telemtry",
                   "title": "telemetry",
                   "description": "",
@@ -174,13 +165,21 @@ const generatedgeneratedToolsSidebarSidebar = {
               "children": []
             },
             {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "link",
+              "path": "/js-sdk/auth/overview",
+              "title": "Authentication",
+              "children": []
+            },
+            {
               "type": "separator"
             },
             {
               "loaded": true,
               "isPathHref": true,
               "type": "category",
-              "title": "Auth",
+              "title": "auth Methods",
               "autogenerate_path": "/references/js_sdk/auth/Auth/methods",
               "children": [
                 {
@@ -252,7 +251,7 @@ const generatedgeneratedToolsSidebarSidebar = {
               "loaded": true,
               "isPathHref": true,
               "type": "category",
-              "title": "Store",
+              "title": "store Methods",
               "autogenerate_path": "/references/js_sdk/store/Store/properties",
               "children": [
                 {
@@ -342,7 +341,7 @@ const generatedgeneratedToolsSidebarSidebar = {
               "loaded": true,
               "isPathHref": true,
               "type": "category",
-              "title": "Admin",
+              "title": "admin Methods",
               "autogenerate_path": "/references/js_sdk/admin/Admin/properties",
               "children": [
                 {

@@ -36,6 +36,7 @@ import { refreshPaymentCollectionForCartWorkflow } from "./refresh-payment-colle
 import { updateCartPromotionsWorkflow } from "./update-cart-promotions"
 import { updateTaxLinesWorkflow } from "./update-tax-lines"
 import { validateSalesChannelStep } from "../steps/validate-sales-channel"
+import { pricingContextResult } from "../utils/schemas"
 
 /**
  * The data to create the cart, along with custom data that's passed to the workflow's hooks.
@@ -76,6 +77,40 @@ export const createCartWorkflowId = "create-cart"
  *
  * @property hooks.validate - This hook is executed before all operations. You can consume this hook to perform any custom validation. If validation fails, you can throw an error to stop the workflow execution.
  * @property hooks.cartCreated - This hook is executed after a cart is created. You can consume this hook to perform custom actions on the created cart.
+ * @property hooks.setPricingContext - This hook is executed after the cart is retrieved and before the line items are created. You can consume this hook to return any custom context useful for the prices retrieval of the variants to be added to the cart.
+ * 
+ * For example, assuming you have the following custom pricing rule:
+ * 
+ * ```json
+ * {
+ *   "attribute": "location_id",
+ *   "operator": "eq",
+ *   "value": "sloc_123",
+ * }
+ * ```
+ * 
+ * You can consume the `setPricingContext` hook to add the `location_id` context to the prices calculation:
+ * 
+ * ```ts
+ * import { createCartWorkflow } from "@medusajs/medusa/core-flows";
+ * import { StepResponse } from "@medusajs/workflows-sdk";
+ * 
+ * createCartWorkflow.hooks.setPricingContext((
+ *   { region, variantIds, salesChannel, customerData, additional_data }, { container }
+ * ) => {
+ *   return new StepResponse({
+ *     location_id: "sloc_123", // Special price for in-store purchases
+ *   });
+ * });
+ * ```
+ * 
+ * The variants' prices will now be retrieved using the context you return.
+ * 
+ * :::note
+ * 
+ * Learn more about prices calculation context in the [Prices Calculation](https://docs.medusajs.com/resources/commerce-modules/pricing/price-calculation) documentation.
+ * 
+ * :::
  */
 export const createCartWorkflow = createWorkflow(
   createCartWorkflowId,
@@ -98,16 +133,31 @@ export const createCartWorkflow = createWorkflow(
     )
 
     validateSalesChannelStep({ salesChannel })
+    const setPricingContext = createHook(
+      "setPricingContext",
+      {
+        region,
+        variantIds,
+        salesChannel,
+        customerData,
+        additional_data: input.additional_data,
+      },
+      {
+        resultValidator: pricingContextResult,
+      }
+    )
+    const setPricingContextResult = setPricingContext.getResult()
 
     // TODO: This is on par with the context used in v1.*, but we can be more flexible.
     const pricingContext = transform(
-      { input, region, customerData },
+      { input, region, customerData, setPricingContextResult },
       (data) => {
         if (!data.region) {
           throw new MedusaError(MedusaError.Types.NOT_FOUND, "No regions found")
         }
 
         return {
+          ...(data.setPricingContextResult ? data.setPricingContextResult : {}),
           currency_code: data.input.currency_code ?? data.region.currency_code,
           region_id: data.region.id,
           customer_id: data.customerData.customer?.id,
@@ -248,7 +298,7 @@ export const createCartWorkflow = createWorkflow(
     })
 
     return new WorkflowResponse(cart, {
-      hooks: [validate, cartCreated],
+      hooks: [validate, cartCreated, setPricingContext] as const,
     })
   }
 )
