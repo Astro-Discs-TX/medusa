@@ -49,8 +49,6 @@
  *     description: The total of the requested return.
  *   order_change:
  *     $ref: "#/components/schemas/AdminOrderChange"
- *   order_change:
- *     $ref: "#/components/schemas/AdminOrderChange"
  *   items:
  *     type: array
  *     description: The order's items.
