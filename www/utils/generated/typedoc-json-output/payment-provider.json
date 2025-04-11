@@ -27,7 +27,7 @@
 							"fileName": "utils/src/payment/abstract-payment-provider.ts",
 							"line": 52,
 							"character": 9,
-							"url": "https://github.com/medusajs/medusa/blob/af5918d03ff40cdffa40af90ea8a7528d47d601d/packages/core/utils/src/payment/abstract-payment-provider.ts#L52"
+							"url": "https://github.com/medusajs/medusa/blob/e096af8b1b72b19e01f8d09cc50c7222d8459af1/packages/core/utils/src/payment/abstract-payment-provider.ts#L52"
 						}
 					],
 					"signatures": [
@@ -69,7 +69,7 @@
 									"fileName": "utils/src/payment/abstract-payment-provider.ts",
 									"line": 52,
 									"character": 9,
-									"url": "https://github.com/medusajs/medusa/blob/af5918d03ff40cdffa40af90ea8a7528d47d601d/packages/core/utils/src/payment/abstract-payment-provider.ts#L52"
+									"url": "https://github.com/medusajs/medusa/blob/e096af8b1b72b19e01f8d09cc50c7222d8459af1/packages/core/utils/src/payment/abstract-payment-provider.ts#L52"
 								}
 							],
 							"parameters": [
@@ -128,7 +128,7 @@
 							"fileName": "utils/src/payment/abstract-payment-provider.ts",
 							"line": 102,
 							"character": 2,
-							"url": "https://github.com/medusajs/medusa/blob/af5918d03ff40cdffa40af90ea8a7528d47d601d/packages/core/utils/src/payment/abstract-payment-provider.ts#L102"
+							"url": "https://github.com/medusajs/medusa/blob/e096af8b1b72b19e01f8d09cc50c7222d8459af1/packages/core/utils/src/payment/abstract-payment-provider.ts#L102"
 						}
 					],
 					"signatures": [
@@ -162,7 +162,7 @@
 									"fileName": "utils/src/payment/abstract-payment-provider.ts",
 									"line": 102,
 									"character": 2,
-									"url": "https://github.com/medusajs/medusa/blob/af5918d03ff40cdffa40af90ea8a7528d47d601d/packages/core/utils/src/payment/abstract-payment-provider.ts#L102"
+									"url": "https://github.com/medusajs/medusa/blob/e096af8b1b72b19e01f8d09cc50c7222d8459af1/packages/core/utils/src/payment/abstract-payment-provider.ts#L102"
 								}
 							],
 							"typeParameters": [
@@ -321,7 +321,7 @@
 							"fileName": "utils/src/payment/abstract-payment-provider.ts",
 							"line": 137,
 							"character": 16,
-							"url": "https://github.com/medusajs/medusa/blob/af5918d03ff40cdffa40af90ea8a7528d47d601d/packages/core/utils/src/payment/abstract-payment-provider.ts#L137"
+							"url": "https://github.com/medusajs/medusa/blob/e096af8b1b72b19e01f8d09cc50c7222d8459af1/packages/core/utils/src/payment/abstract-payment-provider.ts#L137"
 						}
 					],
 					"type": {
@@ -342,7 +342,7 @@
 							"fileName": "utils/src/payment/abstract-payment-provider.ts",
 							"line": 188,
 							"character": 11,
-							"url": "https://github.com/medusajs/medusa/blob/af5918d03ff40cdffa40af90ea8a7528d47d601d/packages/core/utils/src/payment/abstract-payment-provider.ts#L188"
+							"url": "https://github.com/medusajs/medusa/blob/e096af8b1b72b19e01f8d09cc50c7222d8459af1/packages/core/utils/src/payment/abstract-payment-provider.ts#L188"
 						}
 					],
 					"signatures": [
@@ -411,7 +411,7 @@
 									"fileName": "utils/src/payment/abstract-payment-provider.ts",
 									"line": 188,
 									"character": 11,
-									"url": "https://github.com/medusajs/medusa/blob/af5918d03ff40cdffa40af90ea8a7528d47d601d/packages/core/utils/src/payment/abstract-payment-provider.ts#L188"
+									"url": "https://github.com/medusajs/medusa/blob/e096af8b1b72b19e01f8d09cc50c7222d8459af1/packages/core/utils/src/payment/abstract-payment-provider.ts#L188"
 								}
 							],
 							"parameters": [
@@ -494,7 +494,7 @@
 							"fileName": "utils/src/payment/abstract-payment-provider.ts",
 							"line": 233,
 							"character": 11,
-							"url": "https://github.com/medusajs/medusa/blob/af5918d03ff40cdffa40af90ea8a7528d47d601d/packages/core/utils/src/payment/abstract-payment-provider.ts#L233"
+							"url": "https://github.com/medusajs/medusa/blob/e096af8b1b72b19e01f8d09cc50c7222d8459af1/packages/core/utils/src/payment/abstract-payment-provider.ts#L233"
 						}
 					],
 					"signatures": [
@@ -563,7 +563,7 @@
 									"fileName": "utils/src/payment/abstract-payment-provider.ts",
 									"line": 233,
 									"character": 11,
-									"url": "https://github.com/medusajs/medusa/blob/af5918d03ff40cdffa40af90ea8a7528d47d601d/packages/core/utils/src/payment/abstract-payment-provider.ts#L233"
+									"url": "https://github.com/medusajs/medusa/blob/e096af8b1b72b19e01f8d09cc50c7222d8459af1/packages/core/utils/src/payment/abstract-payment-provider.ts#L233"
 								}
 							],
 							"parameters": [
@@ -646,7 +646,7 @@
 							"fileName": "utils/src/payment/abstract-payment-provider.ts",
 							"line": 267,
 							"character": 11,
-							"url": "https://github.com/medusajs/medusa/blob/af5918d03ff40cdffa40af90ea8a7528d47d601d/packages/core/utils/src/payment/abstract-payment-provider.ts#L267"
+							"url": "https://github.com/medusajs/medusa/blob/e096af8b1b72b19e01f8d09cc50c7222d8459af1/packages/core/utils/src/payment/abstract-payment-provider.ts#L267"
 						}
 					],
 					"signatures": [
@@ -697,7 +697,7 @@
 									"fileName": "utils/src/payment/abstract-payment-provider.ts",
 									"line": 267,
 									"character": 11,
-									"url": "https://github.com/medusajs/medusa/blob/af5918d03ff40cdffa40af90ea8a7528d47d601d/packages/core/utils/src/payment/abstract-payment-provider.ts#L267"
+									"url": "https://github.com/medusajs/medusa/blob/e096af8b1b72b19e01f8d09cc50c7222d8459af1/packages/core/utils/src/payment/abstract-payment-provider.ts#L267"
 								}
 							],
 							"parameters": [
@@ -780,7 +780,7 @@
 							"fileName": "utils/src/payment/abstract-payment-provider.ts",
 							"line": 312,
 							"character": 11,
-							"url": "https://github.com/medusajs/medusa/blob/af5918d03ff40cdffa40af90ea8a7528d47d601d/packages/core/utils/src/payment/abstract-payment-provider.ts#L312"
+							"url": "https://github.com/medusajs/medusa/blob/e096af8b1b72b19e01f8d09cc50c7222d8459af1/packages/core/utils/src/payment/abstract-payment-provider.ts#L312"
 						}
 					],
 					"signatures": [
@@ -820,7 +820,7 @@
 										"content": [
 											{
 												"kind": "code",
-												"text": "```ts\n// other imports...\nimport {\n  InitiatePaymentInput,\n  InitiatePaymentOutput,\n} from \"@medusajs/framework/types\"\n\n\nclass MyPaymentProviderService extends AbstractPaymentProvider<\n  Options\n> {\n  async initiatePayment(\n    input: InitiatePaymentInput\n  ): Promise<InitiatePaymentOutput> {\n    const {\n      amount,\n      currency_code,\n      context: customerDetails\n    } = input\n\n    // assuming you have a client that initializes the payment\n    const response = await this.client.init(\n      amount, currency_code, customerDetails\n    )\n\n    return {\n      id: response.id\n      data: response,\n    }\n  }\n\n  // ...\n}\n```"
+												"text": "```ts\n// other imports...\nimport {\n  InitiatePaymentInput,\n  InitiatePaymentOutput,\n} from \"@medusajs/framework/types\"\n\n\nclass MyPaymentProviderService extends AbstractPaymentProvider<\n  Options\n> {\n  async initiatePayment(\n    input: InitiatePaymentInput\n  ): Promise<InitiatePaymentOutput> {\n    const {\n      amount,\n      currency_code,\n      context: customerDetails\n    } = input\n\n    // assuming you have a client that initializes the payment\n    const response = await this.client.init(\n      amount, currency_code, customerDetails\n    )\n\n    return {\n      id: response.id,\n      data: response,\n    }\n  }\n\n  // ...\n}\n```"
 											}
 										]
 									}
@@ -831,7 +831,7 @@
 									"fileName": "utils/src/payment/abstract-payment-provider.ts",
 									"line": 312,
 									"character": 11,
-									"url": "https://github.com/medusajs/medusa/blob/af5918d03ff40cdffa40af90ea8a7528d47d601d/packages/core/utils/src/payment/abstract-payment-provider.ts#L312"
+									"url": "https://github.com/medusajs/medusa/blob/e096af8b1b72b19e01f8d09cc50c7222d8459af1/packages/core/utils/src/payment/abstract-payment-provider.ts#L312"
 								}
 							],
 							"parameters": [
@@ -904,9 +904,9 @@
 					"sources": [
 						{
 							"fileName": "utils/src/payment/abstract-payment-provider.ts",
-							"line": 349,
+							"line": 348,
 							"character": 11,
-							"url": "https://github.com/medusajs/medusa/blob/af5918d03ff40cdffa40af90ea8a7528d47d601d/packages/core/utils/src/payment/abstract-payment-provider.ts#L349"
+							"url": "https://github.com/medusajs/medusa/blob/e096af8b1b72b19e01f8d09cc50c7222d8459af1/packages/core/utils/src/payment/abstract-payment-provider.ts#L348"
 						}
 					],
 					"signatures": [
@@ -946,7 +946,7 @@
 										"content": [
 											{
 												"kind": "code",
-												"text": "```ts\n// other imports...\nimport {\n  DeletePaymentInput,\n  DeletePaymentOutput,\n} from \"@medusajs/framework/types\"\n\n\nclass MyPaymentProviderService extends AbstractPaymentProvider<\n  Options\n> {\n  async deletePayment(\n    input: DeletePaymentInput\n  ): Promise<DeletePaymentOutput> {\n    const externalId = input.data?.id\n\n    // assuming you have a client that cancels the payment\n    await this.client.cancelPayment(externalId)\n    return {}\n  }\n  }\n\n  // ...\n}\n```"
+												"text": "```ts\n// other imports...\nimport {\n  DeletePaymentInput,\n  DeletePaymentOutput,\n} from \"@medusajs/framework/types\"\n\n\nclass MyPaymentProviderService extends AbstractPaymentProvider<\n  Options\n> {\n  async deletePayment(\n    input: DeletePaymentInput\n  ): Promise<DeletePaymentOutput> {\n    const externalId = input.data?.id\n\n    // assuming you have a client that cancels the payment\n    await this.client.cancelPayment(externalId)\n    return {}\n  }\n\n  // ...\n}\n```"
 											}
 										]
 									}
@@ -955,9 +955,9 @@
 							"sources": [
 								{
 									"fileName": "utils/src/payment/abstract-payment-provider.ts",
-									"line": 349,
+									"line": 348,
 									"character": 11,
-									"url": "https://github.com/medusajs/medusa/blob/af5918d03ff40cdffa40af90ea8a7528d47d601d/packages/core/utils/src/payment/abstract-payment-provider.ts#L349"
+									"url": "https://github.com/medusajs/medusa/blob/e096af8b1b72b19e01f8d09cc50c7222d8459af1/packages/core/utils/src/payment/abstract-payment-provider.ts#L348"
 								}
 							],
 							"parameters": [
@@ -1038,9 +1038,9 @@
 					"sources": [
 						{
 							"fileName": "utils/src/payment/abstract-payment-provider.ts",
-							"line": 394,
+							"line": 393,
 							"character": 11,
-							"url": "https://github.com/medusajs/medusa/blob/af5918d03ff40cdffa40af90ea8a7528d47d601d/packages/core/utils/src/payment/abstract-payment-provider.ts#L394"
+							"url": "https://github.com/medusajs/medusa/blob/e096af8b1b72b19e01f8d09cc50c7222d8459af1/packages/core/utils/src/payment/abstract-payment-provider.ts#L393"
 						}
 					],
 					"signatures": [
@@ -1089,9 +1089,9 @@
 							"sources": [
 								{
 									"fileName": "utils/src/payment/abstract-payment-provider.ts",
-									"line": 394,
+									"line": 393,
 									"character": 11,
-									"url": "https://github.com/medusajs/medusa/blob/af5918d03ff40cdffa40af90ea8a7528d47d601d/packages/core/utils/src/payment/abstract-payment-provider.ts#L394"
+									"url": "https://github.com/medusajs/medusa/blob/e096af8b1b72b19e01f8d09cc50c7222d8459af1/packages/core/utils/src/payment/abstract-payment-provider.ts#L393"
 								}
 							],
 							"parameters": [
@@ -1172,9 +1172,9 @@
 					"sources": [
 						{
 							"fileName": "utils/src/payment/abstract-payment-provider.ts",
-							"line": 431,
+							"line": 430,
 							"character": 11,
-							"url": "https://github.com/medusajs/medusa/blob/af5918d03ff40cdffa40af90ea8a7528d47d601d/packages/core/utils/src/payment/abstract-payment-provider.ts#L431"
+							"url": "https://github.com/medusajs/medusa/blob/e096af8b1b72b19e01f8d09cc50c7222d8459af1/packages/core/utils/src/payment/abstract-payment-provider.ts#L430"
 						}
 					],
 					"signatures": [
@@ -1223,9 +1223,9 @@
 							"sources": [
 								{
 									"fileName": "utils/src/payment/abstract-payment-provider.ts",
-									"line": 431,
+									"line": 430,
 									"character": 11,
-									"url": "https://github.com/medusajs/medusa/blob/af5918d03ff40cdffa40af90ea8a7528d47d601d/packages/core/utils/src/payment/abstract-payment-provider.ts#L431"
+									"url": "https://github.com/medusajs/medusa/blob/e096af8b1b72b19e01f8d09cc50c7222d8459af1/packages/core/utils/src/payment/abstract-payment-provider.ts#L430"
 								}
 							],
 							"parameters": [
@@ -1306,9 +1306,9 @@
 					"sources": [
 						{
 							"fileName": "utils/src/payment/abstract-payment-provider.ts",
-							"line": 463,
+							"line": 462,
 							"character": 11,
-							"url": "https://github.com/medusajs/medusa/blob/af5918d03ff40cdffa40af90ea8a7528d47d601d/packages/core/utils/src/payment/abstract-payment-provider.ts#L463"
+							"url": "https://github.com/medusajs/medusa/blob/e096af8b1b72b19e01f8d09cc50c7222d8459af1/packages/core/utils/src/payment/abstract-payment-provider.ts#L462"
 						}
 					],
 					"signatures": [
@@ -1349,9 +1349,9 @@
 							"sources": [
 								{
 									"fileName": "utils/src/payment/abstract-payment-provider.ts",
-									"line": 463,
+									"line": 462,
 									"character": 11,
-									"url": "https://github.com/medusajs/medusa/blob/af5918d03ff40cdffa40af90ea8a7528d47d601d/packages/core/utils/src/payment/abstract-payment-provider.ts#L463"
+									"url": "https://github.com/medusajs/medusa/blob/e096af8b1b72b19e01f8d09cc50c7222d8459af1/packages/core/utils/src/payment/abstract-payment-provider.ts#L462"
 								}
 							],
 							"parameters": [
@@ -1432,9 +1432,9 @@
 					"sources": [
 						{
 							"fileName": "utils/src/payment/abstract-payment-provider.ts",
-							"line": 511,
+							"line": 510,
 							"character": 11,
-							"url": "https://github.com/medusajs/medusa/blob/af5918d03ff40cdffa40af90ea8a7528d47d601d/packages/core/utils/src/payment/abstract-payment-provider.ts#L511"
+							"url": "https://github.com/medusajs/medusa/blob/e096af8b1b72b19e01f8d09cc50c7222d8459af1/packages/core/utils/src/payment/abstract-payment-provider.ts#L510"
 						}
 					],
 					"signatures": [
@@ -1493,9 +1493,9 @@
 							"sources": [
 								{
 									"fileName": "utils/src/payment/abstract-payment-provider.ts",
-									"line": 511,
+									"line": 510,
 									"character": 11,
-									"url": "https://github.com/medusajs/medusa/blob/af5918d03ff40cdffa40af90ea8a7528d47d601d/packages/core/utils/src/payment/abstract-payment-provider.ts#L511"
+									"url": "https://github.com/medusajs/medusa/blob/e096af8b1b72b19e01f8d09cc50c7222d8459af1/packages/core/utils/src/payment/abstract-payment-provider.ts#L510"
 								}
 							],
 							"parameters": [
@@ -1576,9 +1576,9 @@
 					"sources": [
 						{
 							"fileName": "utils/src/payment/abstract-payment-provider.ts",
-							"line": 585,
+							"line": 584,
 							"character": 11,
-							"url": "https://github.com/medusajs/medusa/blob/af5918d03ff40cdffa40af90ea8a7528d47d601d/packages/core/utils/src/payment/abstract-payment-provider.ts#L585"
+							"url": "https://github.com/medusajs/medusa/blob/e096af8b1b72b19e01f8d09cc50c7222d8459af1/packages/core/utils/src/payment/abstract-payment-provider.ts#L584"
 						}
 					],
 					"signatures": [
@@ -1651,9 +1651,9 @@
 							"sources": [
 								{
 									"fileName": "utils/src/payment/abstract-payment-provider.ts",
-									"line": 585,
+									"line": 584,
 									"character": 11,
-									"url": "https://github.com/medusajs/medusa/blob/af5918d03ff40cdffa40af90ea8a7528d47d601d/packages/core/utils/src/payment/abstract-payment-provider.ts#L585"
+									"url": "https://github.com/medusajs/medusa/blob/e096af8b1b72b19e01f8d09cc50c7222d8459af1/packages/core/utils/src/payment/abstract-payment-provider.ts#L584"
 								}
 							],
 							"parameters": [
@@ -1894,7 +1894,7 @@
 					"fileName": "utils/src/payment/abstract-payment-provider.ts",
 					"line": 25,
 					"character": 22,
-					"url": "https://github.com/medusajs/medusa/blob/af5918d03ff40cdffa40af90ea8a7528d47d601d/packages/core/utils/src/payment/abstract-payment-provider.ts#L25"
+					"url": "https://github.com/medusajs/medusa/blob/e096af8b1b72b19e01f8d09cc50c7222d8459af1/packages/core/utils/src/payment/abstract-payment-provider.ts#L25"
 				}
 			],
 			"typeParameters": [
