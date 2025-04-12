@@ -4,17 +4,20 @@ import { glob } from "glob"
 import { join } from "path"
 import { logger } from "../logger"
 import { ContainerRegistrationKeys } from "../utils"
+import { configManager } from "../config"
 
 export abstract class Migrator {
   protected abstract migration_table_name: string
 
   protected container: MedusaContainer
   protected pgConnection: Knex<any>
+  protected schema: string
 
   #alreadyLoadedPaths: Map<string, any> = new Map()
 
   constructor({ container }: { container: MedusaContainer }) {
     this.container = container
+    this.schema = configManager.config.projectConfig.databaseSchema ?? 'public'
     this.pgConnection = this.container.resolve(
       ContainerRegistrationKeys.PG_CONNECTION
     )
@@ -59,7 +62,7 @@ export abstract class Migrator {
       const tableExists = await this.pgConnection.raw(`
         SELECT EXISTS (
           SELECT FROM information_schema.tables 
-          WHERE table_schema = 'public'
+          WHERE table_schema = '${this.schema}'
           AND table_name = '${this.migration_table_name}'
         );
       `)

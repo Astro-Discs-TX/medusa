@@ -84,29 +84,33 @@ export class MigrationScriptsMigrator extends Migrator {
     return all.filter((item) => !executedMigrations.has(basename(item)))
   }
 
+  protected getTableName(name: string) {
+    return `${this.schema}.${name}`
+  }
+
   protected async createMigrationTable(): Promise<void> {
     await this.pgConnection.raw(`
-      CREATE TABLE IF NOT EXISTS ${this.migration_table_name} (
+      CREATE TABLE IF NOT EXISTS ${this.getTableName(this.migration_table_name)} (
         id SERIAL PRIMARY KEY,
         script_name VARCHAR(255) NOT NULL,
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
         finished_at TIMESTAMP WITH TIME ZONE
       );
 
-      CREATE UNIQUE INDEX IF NOT EXISTS idx_script_name_unique ON ${this.migration_table_name} (script_name);
+      CREATE UNIQUE INDEX IF NOT EXISTS idx_script_name_unique ON ${this.getTableName(this.migration_table_name)} (script_name);
     `)
   }
 
   #updateMigrationFinishedAt(scriptName: string) {
     return this.pgConnection.raw(
-      `UPDATE ${this.migration_table_name} SET finished_at = NOW() WHERE script_name = ?`,
+      `UPDATE ${this.getTableName(this.migration_table_name)} SET finished_at = NOW() WHERE script_name = ?`,
       [scriptName]
     )
   }
 
   #deleteMigration(scriptName: string) {
     return this.pgConnection.raw(
-      `DELETE FROM ${this.migration_table_name} WHERE script_name = ?`,
+      `DELETE FROM ${this.getTableName(this.migration_table_name)} WHERE script_name = ?`,
       [scriptName]
     )
   }
