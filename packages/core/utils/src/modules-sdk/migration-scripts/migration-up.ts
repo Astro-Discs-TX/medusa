@@ -34,7 +34,7 @@ export function buildMigrationScript({ moduleName, pathToMigrations }) {
 
     const dbData = loadDatabaseConfig(moduleName, options)!
     const orm = await mikroOrmCreateConnection(dbData, [], pathToMigrations)
-    const migrations = new Migrations(orm)
+    const migrations = new Migrations(orm, options?.database.schema)
 
     migrations.on("migrating", (migration) => {
       logger.info(`  ● Migrating ${migration.name}`)

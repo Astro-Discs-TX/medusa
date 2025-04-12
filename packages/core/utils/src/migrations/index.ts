@@ -26,12 +26,15 @@ export type MigrationsEvents = {
  */
 export class Migrations extends EventEmitter<MigrationsEvents> {
   #configOrConnection: Partial<MikroORMOptions> | MikroORM<PostgreSqlDriver>
+  #schema?: string
 
   constructor(
-    configOrConnection: Partial<MikroORMOptions> | MikroORM<PostgreSqlDriver>
+    configOrConnection: Partial<MikroORMOptions> | MikroORM<PostgreSqlDriver>,
+    schema?: string
   ) {
     super()
     this.#configOrConnection = configOrConnection
+    this.#schema = schema
   }
 
   /**
@@ -78,6 +81,9 @@ export class Migrations extends EventEmitter<MigrationsEvents> {
     options?: string | string[] | MigrateOptions
   ): Promise<UmzugMigration[]> {
     const connection = await this.#getConnection()
+    if (this.#schema) {
+      await connection.em.execute(`SET search_path = '${this.#schema}'`)
+    }
     const migrator = connection.getMigrator()
 
     migrator["umzug"].on("migrating", (event: UmzugMigration) =>
@@ -103,6 +109,9 @@ export class Migrations extends EventEmitter<MigrationsEvents> {
     options?: string | string[] | MigrateOptions
   ): Promise<UmzugMigration[]> {
     const connection = await this.#getConnection()
+    if (this.#schema) {
+      await connection.em.execute(`SET search_path = '${this.#schema}'`)
+    }
     const migrator = connection.getMigrator()
 
     migrator["umzug"].on("reverting", (event: UmzugMigration) =>

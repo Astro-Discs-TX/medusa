@@ -53,7 +53,7 @@ export function buildGenerateMigrationScript({
       pathToMigrations
     )
 
-    const migrations = new Migrations(orm)
+    const migrations = new Migrations(orm, options?.database.schema)
 
     try {
       const { fileName } = await migrations.generate()
