@@ -17,7 +17,7 @@ export abstract class Migrator {
 
   constructor({ container }: { container: MedusaContainer }) {
     this.container = container
-    this.schema = configManager.config.projectConfig.databaseSchema ?? 'public'
+    this.schema = configManager.config?.projectConfig?.databaseSchema ?? 'public'
     this.pgConnection = this.container.resolve(
       ContainerRegistrationKeys.PG_CONNECTION
     )

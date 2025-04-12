@@ -69,7 +69,7 @@ describe("MigrationScriptsMigrator", () => {
       )
       expect(mockPgConnection.raw).toHaveBeenNthCalledWith(
         2,
-        expect.stringContaining("UPDATE script_migrations"),
+        expect.stringContaining("UPDATE public.script_migrations"),
         [path.basename(scriptPath)]
       )
     })
@@ -102,7 +102,7 @@ describe("MigrationScriptsMigrator", () => {
       )
 
       expect(mockPgConnection.raw).toHaveBeenCalledWith(
-        expect.stringContaining("DELETE FROM script_migrations"),
+        expect.stringContaining("DELETE FROM public.script_migrations"),
         [path.basename(scriptPath)]
       )
     })
@@ -135,7 +135,7 @@ describe("MigrationScriptsMigrator", () => {
 
       expect(mockScript).not.toHaveBeenCalled()
       expect(mockPgConnection.raw).not.toHaveBeenCalledWith(
-        expect.stringContaining("UPDATE script_migrations")
+        expect.stringContaining("UPDATE public.script_migrations")
       )
     })
   })
@@ -167,7 +167,7 @@ describe("MigrationScriptsMigrator", () => {
       await (migrator as any).createMigrationTable()
 
       expect(mockPgConnection.raw).toHaveBeenCalledWith(
-        expect.stringContaining("CREATE TABLE IF NOT EXISTS script_migrations")
+        expect.stringContaining("CREATE TABLE IF NOT EXISTS public.script_migrations")
       )
     })
   })
