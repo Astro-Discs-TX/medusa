@@ -192,7 +192,7 @@ export class InMemoryDistributedTransactionStorage
       }
 
       this.storage.delete(key)
-    } else if (retentionTime || idempotent) {
+    } else {
       await this.saveToDb(data, retentionTime)
     }
   }
