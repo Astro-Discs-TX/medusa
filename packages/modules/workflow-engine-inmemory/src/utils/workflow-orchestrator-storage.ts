@@ -434,12 +434,8 @@ export class InMemoryDistributedTransactionStorage
       )
     }
 
-    // Set a timer deadline with greater precision than setTimeout
     const timer = setTimeout(async () => {
-      // Use setImmediate to avoid blocking the event loop
-      setImmediate(() => {
-        this.jobHandler(jobId)
-      })
+      this.jobHandler(jobId)
     }, nextExecution)
 
     // Set the timer's unref to prevent it from keeping the process alive
@@ -486,8 +482,6 @@ export class InMemoryDistributedTransactionStorage
     const nextExecution = parseNextExecution(job.expression)
 
     try {
-      // Run the job first before scheduling the next execution to prevent
-      // timer stacking when executions are slow
       await this.workflowOrchestratorService_.run(jobId, {
         logOnError: true,
         throwOnError: false,
