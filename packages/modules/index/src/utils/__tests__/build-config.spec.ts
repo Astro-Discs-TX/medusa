@@ -28,39 +28,40 @@ describe("buildSchemaObjectRepresentation", () => {
 
     const output = buildSchemaObjectRepresentation(schema)
 
-    expect(output).toEqual(
-      expect.objectContaining({
-        objectRepresentation: {
-          _serviceNameModuleConfigMap: {},
-          Product: {
-            entity: "Product",
-            parents: [],
-            alias: "",
-            listeners: [],
-            moduleConfig: null,
-            fields: ["id"],
-          },
-          _schemaPropertiesMap: {
-            "": {
-              isInverse: false,
-              ref: {
-                entity: "Product",
-                parents: [],
-                alias: "",
-                listeners: [],
-                moduleConfig: null,
-                fields: ["id"],
-              },
+    delete output.executableSchema
+
+    expect(output).toEqual({
+      objectRepresentation: {
+        _serviceNameModuleConfigMap: {},
+        Product: {
+          entity: "Product",
+          parents: [],
+          alias: "",
+          listeners: [],
+          moduleConfig: null,
+          fields: ["id"],
+        },
+        _schemaPropertiesMap: {
+          "": {
+            isInverse: false,
+            isList: undefined,
+            ref: {
+              entity: "Product",
+              parents: [],
+              alias: "",
+              listeners: [],
+              moduleConfig: null,
+              fields: ["id"],
             },
           },
         },
-        entitiesMap: {
-          Product: expect.objectContaining({
-            name: "Product",
-          }),
-        },
-      })
-    )
+      },
+      entitiesMap: expect.objectContaining({
+        Product: expect.objectContaining({
+          name: "Product",
+        }),
+      }),
+    })
   })
 
   it("should process entities", () => {
