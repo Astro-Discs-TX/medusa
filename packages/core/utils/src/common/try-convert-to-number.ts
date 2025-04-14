@@ -2,9 +2,12 @@
  * Transforms a value to number or returns the default value
  * when original value cannot be casted to number
  */
-export function toNumber(value: unknown): number | undefined
-export function toNumber<T>(value: unknown, defaultValue: T): number | T
-export function toNumber<T>(
+export function tryConvertToNumber(value: unknown): number | undefined
+export function tryConvertToNumber<T>(
+  value: unknown,
+  defaultValue: T
+): number | T
+export function tryConvertToNumber<T>(
   value: unknown,
   defaultValue?: T
 ): number | undefined | T {

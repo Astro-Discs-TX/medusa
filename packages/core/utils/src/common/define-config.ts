@@ -12,7 +12,7 @@ import {
 } from "../modules-sdk"
 import { isObject } from "./is-object"
 import { isString } from "./is-string"
-import { toNumber } from "./to-number"
+import { tryConvertToNumber } from "./try-convert-to-number"
 import { normalizeImportPathWithSource } from "./normalize-import-path-with-source"
 import { resolveExports } from "./resolve-exports"
 
@@ -338,8 +338,14 @@ function normalizeProjectConfig(
               endpoint: process.env.DYNAMO_DB_ENDPOINT,
             }),
             table: process.env.DYNAMO_DB_SESSIONS_TABLE ?? "medusa-sessions",
-            readCapacityUnits: toNumber(process.env.DYNAMO_DB_READ_UNITS, 5),
-            writeCapacityUnits: toNumber(process.env.DYNAMO_DB_READ_UNITS, 5),
+            readCapacityUnits: tryConvertToNumber(
+              process.env.DYNAMO_DB_READ_UNITS,
+              5
+            ),
+            writeCapacityUnits: tryConvertToNumber(
+              process.env.DYNAMO_DB_READ_UNITS,
+              5
+            ),
             skipThrowMissingSpecialKeys: true,
           },
         }
