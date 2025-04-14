@@ -136,6 +136,34 @@ export type SessionOptions = {
    * Refer to [express-session’s documentation](https://www.npmjs.com/package/express-session#cookiemaxage) for details.
    */
   ttl?: number
+
+  /**
+   * Specify the options for storing session data to dynamoDB. Make
+   * sure to install the following dependencies and set the following
+   * variables too.
+   *
+   * - @aws-sdk/client-dynamodb@^3.218.0
+   * - connect-dynamodb@^3.0.5
+   *
+   * Environment variables to set
+   * - AWS_REGION=<value>
+   * - ENDPOINT=<value>
+   * - AWS_ACCESS_KEY_ID=<value>
+   * - AWS_SECRET_ACCESS_KEY=<value>
+   */
+  dynamodbOptions?: {
+    clientOptions?: {
+      endpoint?: string
+    }
+    table?: string
+    readCapacityUnits?: number
+    writeCapacityUnits?: number
+    specialKeys?: {
+      name: string
+      type: string
+    }[]
+    skipThrowMissingSpecialKeys?: boolean
+  }
 }
 
 /**
@@ -363,34 +391,6 @@ export type ProjectConfigOptions = {
    * ```
    */
   redisOptions?: RedisOptions
-
-  /**
-   * Specify the options for storing session data to dynamoDB. Make
-   * sure to install the following dependencies and set the following
-   * variables too.
-   *
-   * - @aws-sdk/client-dynamodb@^3.218.0
-   * - connect-dynamodb@^3.0.5
-   *
-   * Environment variables to set
-   * - AWS_REGION=<value>
-   * - ENDPOINT=<value>
-   * - AWS_ACCESS_KEY_ID=<value>
-   * - AWS_SECRET_ACCESS_KEY=<value>
-   */
-  dynamodbOptions?: {
-    clientOptions?: {
-      endpoint?: string
-    }
-    table?: string
-    readCapacityUnits?: number
-    writeCapacityUnits?: number
-    specialKeys?: {
-      name: string
-      type: string
-    }[]
-    skipThrowMissingSpecialKeys?: boolean
-  }
 
   /**
    * This configuration defines additional options to pass to [express-session](https://www.npmjs.com/package/express-session), which is used to store the Medusa server's session.

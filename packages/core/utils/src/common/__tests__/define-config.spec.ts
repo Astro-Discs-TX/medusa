@@ -145,6 +145,7 @@ describe("defineConfig", function () {
           "redisOptions": {
             "retryStrategy": [Function],
           },
+          "sessionOptions": {},
         },
       }
     `)
@@ -304,6 +305,7 @@ describe("defineConfig", function () {
           "redisOptions": {
             "retryStrategy": [Function],
           },
+          "sessionOptions": {},
         },
       }
     `)
@@ -471,6 +473,7 @@ describe("defineConfig", function () {
           "redisOptions": {
             "retryStrategy": [Function],
           },
+          "sessionOptions": {},
         },
       }
     `)
@@ -639,6 +642,7 @@ describe("defineConfig", function () {
           "redisOptions": {
             "retryStrategy": [Function],
           },
+          "sessionOptions": {},
         },
       }
     `)
@@ -795,6 +799,7 @@ describe("defineConfig", function () {
           "redisOptions": {
             "retryStrategy": [Function],
           },
+          "sessionOptions": {},
         },
       }
     `)
@@ -954,6 +959,7 @@ describe("defineConfig", function () {
           "redisOptions": {
             "retryStrategy": [Function],
           },
+          "sessionOptions": {},
         },
       }
     `)
@@ -1147,6 +1153,7 @@ describe("defineConfig", function () {
             "retryStrategy": [Function],
           },
           "redisUrl": "redis://localhost:6379",
+          "sessionOptions": {},
         },
       }
     `)
@@ -1324,15 +1331,6 @@ describe("defineConfig", function () {
         "plugins": [],
         "projectConfig": {
           "databaseUrl": "postgres://localhost/medusa-starter-default",
-          "dynamodbOptions": {
-            "clientOptions": {
-              "endpoint": "http://localhost:8000",
-            },
-            "readCapacityUnits": 5,
-            "skipThrowMissingSpecialKeys": true,
-            "table": "medusa-sessions",
-            "writeCapacityUnits": 5,
-          },
           "http": {
             "adminCors": "http://localhost:7000,http://localhost:7001,http://localhost:5173",
             "authCors": "http://localhost:7000,http://localhost:7001,http://localhost:5173",
@@ -1351,6 +1349,17 @@ describe("defineConfig", function () {
             "retryStrategy": [Function],
           },
           "redisUrl": "redis://localhost:6379",
+          "sessionOptions": {
+            "dynamodbOptions": {
+              "clientOptions": {
+                "endpoint": "http://localhost:8000",
+              },
+              "readCapacityUnits": 5,
+              "skipThrowMissingSpecialKeys": true,
+              "table": "medusa-sessions",
+              "writeCapacityUnits": 5,
+            },
+          },
         },
       }
     `)
@@ -1363,13 +1372,15 @@ describe("defineConfig", function () {
           http: {
             adminCors: "http://localhost:3000",
           } as any,
-          dynamodbOptions: {
-            clientOptions: {
-              endpoint: "http://localhost:8000",
+          sessionOptions: {
+            dynamodbOptions: {
+              clientOptions: {
+                endpoint: "http://localhost:8000",
+              },
+              table: "medusa-sessions",
+              writeCapacityUnits: 25,
+              readCapacityUnits: 25,
             },
-            table: "medusa-sessions",
-            writeCapacityUnits: 25,
-            readCapacityUnits: 25,
           },
         },
       })
@@ -1498,14 +1509,6 @@ describe("defineConfig", function () {
         "plugins": [],
         "projectConfig": {
           "databaseUrl": "postgres://localhost/medusa-starter-default",
-          "dynamodbOptions": {
-            "clientOptions": {
-              "endpoint": "http://localhost:8000",
-            },
-            "readCapacityUnits": 25,
-            "table": "medusa-sessions",
-            "writeCapacityUnits": 25,
-          },
           "http": {
             "adminCors": "http://localhost:3000",
             "authCors": "http://localhost:7000,http://localhost:7001,http://localhost:5173",
@@ -1522,6 +1525,16 @@ describe("defineConfig", function () {
           },
           "redisOptions": {
             "retryStrategy": [Function],
+          },
+          "sessionOptions": {
+            "dynamodbOptions": {
+              "clientOptions": {
+                "endpoint": "http://localhost:8000",
+              },
+              "readCapacityUnits": 25,
+              "table": "medusa-sessions",
+              "writeCapacityUnits": 25,
+            },
           },
         },
       }

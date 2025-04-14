@@ -51,14 +51,14 @@ export async function expressLoader({ app }: { app: Express }): Promise<{
 
   let redisClient: Redis
 
-  if (configModule?.projectConfig.dynamodbOptions) {
+  if (configModule?.projectConfig.sessionOptions?.dynamodbOptions) {
     const storeFactory = await dynamicImport("connect-dynamodb")
     const client = await dynamicImport("@aws-sdk/client-dynamodb")
     const DynamoDBStore = storeFactory({ session })
     sessionOpts.store = new DynamoDBStore({
-      ...configModule.projectConfig.dynamodbOptions,
+      ...configModule.projectConfig.sessionOptions.dynamodbOptions,
       client: new client.DynamoDBClient(
-        configModule.projectConfig.dynamodbOptions.clientOptions
+        configModule.projectConfig.sessionOptions.dynamodbOptions.clientOptions
       ),
     })
   } else if (configModule?.projectConfig?.redisUrl) {

@@ -311,7 +311,8 @@ function normalizeProjectConfig(
   projectConfig: InputConfig["projectConfig"],
   { isCloud }: { isCloud: boolean }
 ): ConfigModule["projectConfig"] {
-  const { http, redisOptions, ...restOfProjectConfig } = projectConfig || {}
+  const { http, redisOptions, sessionOptions, ...restOfProjectConfig } =
+    projectConfig || {}
 
   /**
    * The defaults to use for the project config. They are shallow merged
@@ -331,25 +332,6 @@ function normalizeProjectConfig(
       },
       ...http,
     },
-    ...(isCloud && process.env.SESSION_STORE === "dynamodb"
-      ? {
-          dynamodbOptions: {
-            clientOptions: Object.assign({
-              endpoint: process.env.DYNAMO_DB_ENDPOINT,
-            }),
-            table: process.env.DYNAMO_DB_SESSIONS_TABLE ?? "medusa-sessions",
-            readCapacityUnits: tryConvertToNumber(
-              process.env.DYNAMO_DB_READ_UNITS,
-              5
-            ),
-            writeCapacityUnits: tryConvertToNumber(
-              process.env.DYNAMO_DB_READ_UNITS,
-              5
-            ),
-            skipThrowMissingSpecialKeys: true,
-          },
-        }
-      : {}),
     redisOptions: {
       retryStrategy(retries) {
         /**
@@ -366,6 +348,28 @@ function normalizeProjectConfig(
         return delay + jitter
       },
       ...redisOptions,
+    },
+    sessionOptions: {
+      ...(isCloud && process.env.SESSION_STORE === "dynamodb"
+        ? {
+            dynamodbOptions: {
+              clientOptions: Object.assign({
+                endpoint: process.env.DYNAMO_DB_ENDPOINT,
+              }),
+              table: process.env.DYNAMO_DB_SESSIONS_TABLE ?? "medusa-sessions",
+              readCapacityUnits: tryConvertToNumber(
+                process.env.DYNAMO_DB_READ_UNITS,
+                5
+              ),
+              writeCapacityUnits: tryConvertToNumber(
+                process.env.DYNAMO_DB_READ_UNITS,
+                5
+              ),
+              skipThrowMissingSpecialKeys: true,
+            },
+          }
+        : {}),
+      ...sessionOptions,
     },
     ...restOfProjectConfig,
   } satisfies ConfigModule["projectConfig"]
