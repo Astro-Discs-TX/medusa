@@ -46,6 +46,14 @@ export class RedisDistributedTransactionStorage
   private worker: Worker
   private jobWorker?: Worker
 
+  // Least Recently Used cache for frequently accessed checkpoints
+  private cache: Map<
+    string,
+    { data: TransactionCheckpoint; timestamp: number }
+  > = new Map()
+  private readonly CACHE_SIZE = 1000
+  private readonly CACHE_TTL = 30000 // 30 seconds TTL
+
   #isWorkerMode: boolean = false
 
   constructor({
@@ -99,8 +107,7 @@ export class RedisDistributedTransactionStorage
     ]
 
     const workerOptions = {
-      connection:
-        this.redisWorkerConnection /*, runRetryDelay: 100000 for tests */,
+      connection: this.redisWorkerConnection,
     }
 
     // TODO: Remove this once we have released to all clients (Added: v2.6+)
@@ -216,12 +223,30 @@ export class RedisDistributedTransactionStorage
     key: string,
     options?: TransactionOptions
   ): Promise<TransactionCheckpoint | undefined> {
+    // Check cache first
+    const now = Date.now()
+    const cached = this.cache.get(key)
+
+    if (cached && now - cached.timestamp < this.CACHE_TTL) {
+      // Cache hit - move to the end of the map to implement LRU behavior
+      this.cache.delete(key)
+      this.cache.set(key, cached)
+      return cached.data
+    }
+
+    // Cache miss - try Redis
     const data = await this.redisClient.get(key)
 
     if (data) {
-      return JSON.parse(data)
+      const parsedData = JSON.parse(data) as TransactionCheckpoint
+
+      // Update cache
+      this.updateCache(key, parsedData)
+
+      return parsedData
     }
 
+    // Not in Redis either - check database if needed
     const { idempotent, store, retentionTime } = options ?? {}
     if (!idempotent && !(store && isDefined(retentionTime))) {
       return
@@ -241,26 +266,64 @@ export class RedisDistributedTransactionStorage
       .catch(() => undefined)
 
     if (trx) {
-      return {
+      const checkpointData = {
         flow: trx.execution,
         context: trx.context.data,
         errors: trx.context.errors,
       }
+
+      // Update cache with data from database
+      this.updateCache(key, checkpointData)
+
+      return checkpointData
     }
     return
   }
 
-  async list(): Promise<TransactionCheckpoint[]> {
-    const keys = await this.redisClient.keys(
-      DistributedTransaction.keyPrefix + ":*"
-    )
-    const transactions: any[] = []
-    for (const key of keys) {
-      const data = await this.redisClient.get(key)
-      if (data) {
-        transactions.push(JSON.parse(data))
-      }
+  // Helper method to update the cache with LRU behavior
+  private updateCache(key: string, data: TransactionCheckpoint): void {
+    // If cache is full, remove the oldest entry (first inserted)
+    if (this.cache.size >= this.CACHE_SIZE) {
+      const firstKey = this.cache.keys().next().value
+      this.cache.delete(firstKey)
     }
+
+    // Add new entry
+    this.cache.set(key, {
+      data,
+      timestamp: Date.now(),
+    })
+  }
+
+  async list(): Promise<TransactionCheckpoint[]> {
+    // Replace Redis KEYS with SCAN to avoid blocking the server
+    const transactions: TransactionCheckpoint[] = []
+    let cursor = "0"
+
+    do {
+      // Use SCAN instead of KEYS to avoid blocking Redis
+      const [nextCursor, keys] = await this.redisClient.scan(
+        cursor,
+        "MATCH",
+        DistributedTransaction.keyPrefix + ":*",
+        "COUNT",
+        100 // Fetch in reasonable batches
+      )
+
+      cursor = nextCursor
+
+      if (keys.length) {
+        // Use mget to batch retrieve multiple keys at once
+        const values = await this.redisClient.mget(keys)
+
+        for (const value of values) {
+          if (value) {
+            transactions.push(JSON.parse(value))
+          }
+        }
+      }
+    } while (cursor !== "0")
+
     return transactions
   }
 
@@ -288,30 +351,44 @@ export class RedisDistributedTransactionStorage
       options,
     })
 
-    if (hasFinished) {
+    // Only store retention time if needed and transaction is finished
+    if (hasFinished && retentionTime) {
       Object.assign(data, {
         retention_time: retentionTime,
       })
     }
 
+    // Prepare operations to be executed in batch or pipeline
     const stringifiedData = JSON.stringify(data)
+    const pipeline = this.redisClient.pipeline()
 
+    // Execute Redis operations
     if (!hasFinished) {
+      // If transaction is not finished, store in Redis with TTL if provided
       if (ttl) {
-        await this.redisClient.set(key, stringifiedData, "EX", ttl)
+        pipeline.set(key, stringifiedData, "EX", ttl)
       } else {
-        await this.redisClient.set(key, stringifiedData)
+        pipeline.set(key, stringifiedData)
       }
-    }
-
-    if (hasFinished && !retentionTime && !idempotent) {
-      await this.deleteFromDb(data)
     } else {
-      await this.saveToDb(data, retentionTime)
+      // If finished, we will clean it from Redis after DB operations
+      pipeline.unlink(key)
     }
 
+    // Database operations
+    if (hasFinished && !retentionTime && !idempotent) {
+      // If finished without retention, delete from DB
+      await promiseAll([pipeline.exec(), this.deleteFromDb(data)])
+    } else {
+      // Save to DB with retention time if needed
+      await promiseAll([pipeline.exec(), this.saveToDb(data, retentionTime)])
+    }
+
+    // Update cache with the latest data or invalidate it if transaction is finished
     if (hasFinished) {
-      await this.redisClient.unlink(key)
+      this.cache.delete(key)
+    } else {
+      this.updateCache(key, data)
     }
   }
 
@@ -504,11 +581,7 @@ export class RedisDistributedTransactionStorage
     key: string
     options?: TransactionOptions
   }) {
-    let isInitialCheckpoint = false
-
-    if (data.flow.state === TransactionState.NOT_STARTED) {
-      isInitialCheckpoint = true
-    }
+    const isInitialCheckpoint = data.flow.state === TransactionState.NOT_STARTED
 
     /**
      * In case many execution can succeed simultaneously, we need to ensure that the latest
@@ -529,49 +602,45 @@ export class RedisDistributedTransactionStorage
       throw new SkipExecutionError("Already finished by another execution")
     }
 
-    const currentFlowLastInvokingStepIndex = Object.values(
-      currentFlow.steps
-    ).findIndex((step) => {
-      return [
-        TransactionStepState.INVOKING,
-        TransactionStepState.NOT_STARTED,
-      ].includes(step.invoke?.state)
-    })
+    const currentFlowSteps = Object.values(currentFlow.steps || {})
+    const latestUpdatedFlowSteps = latestUpdatedFlow.steps
+      ? Object.values(
+          latestUpdatedFlow.steps as Record<string, TransactionStep>
+        )
+      : []
+
+    // Predefined states for quick lookup
+    const invokingStates = [
+      TransactionStepState.INVOKING,
+      TransactionStepState.NOT_STARTED,
+    ]
+
+    const compensatingStates = [
+      TransactionStepState.COMPENSATING,
+      TransactionStepState.NOT_STARTED,
+    ]
+
+    const isInvokingState = (step: TransactionStep) =>
+      invokingStates.includes(step.invoke?.state)
+
+    const isCompensatingState = (step: TransactionStep) =>
+      compensatingStates.includes(step.compensate?.state)
+
+    const currentFlowLastInvokingStepIndex =
+      currentFlowSteps.findIndex(isInvokingState)
 
     const latestUpdatedFlowLastInvokingStepIndex = !latestUpdatedFlow.steps
       ? 1 // There is no other execution, so the current execution is the latest
-      : Object.values(
-          (latestUpdatedFlow.steps as Record<string, TransactionStep>) ?? {}
-        ).findIndex((step) => {
-          return [
-            TransactionStepState.INVOKING,
-            TransactionStepState.NOT_STARTED,
-          ].includes(step.invoke?.state)
-        })
+      : latestUpdatedFlowSteps.findIndex(isInvokingState)
 
-    const currentFlowLastCompensatingStepIndex = Object.values(
-      currentFlow.steps
-    )
-      .reverse()
-      .findIndex((step) => {
-        return [
-          TransactionStepState.COMPENSATING,
-          TransactionStepState.NOT_STARTED,
-        ].includes(step.compensate?.state)
-      })
+    const reversedCurrentFlowSteps = [...currentFlowSteps].reverse()
+    const currentFlowLastCompensatingStepIndex =
+      reversedCurrentFlowSteps.findIndex(isCompensatingState)
 
+    const reversedLatestUpdatedFlowSteps = [...latestUpdatedFlowSteps].reverse()
     const latestUpdatedFlowLastCompensatingStepIndex = !latestUpdatedFlow.steps
       ? -1
-      : Object.values(
-          (latestUpdatedFlow.steps as Record<string, TransactionStep>) ?? {}
-        )
-          .reverse()
-          .findIndex((step) => {
-            return [
-              TransactionStepState.COMPENSATING,
-              TransactionStepState.NOT_STARTED,
-            ].includes(step.compensate?.state)
-          })
+      : reversedLatestUpdatedFlowSteps.findIndex(isCompensatingState)
 
     const isLatestExecutionFinishedIndex = -1
     const invokeShouldBeSkipped =
@@ -588,20 +657,29 @@ export class RedisDistributedTransactionStorage
       latestUpdatedFlowLastCompensatingStepIndex !==
         isLatestExecutionFinishedIndex
 
+    const isCompensatingMismatch =
+      latestUpdatedFlow.state === TransactionState.COMPENSATING &&
+      ![TransactionState.REVERTED, TransactionState.FAILED].includes(
+        currentFlow.state
+      ) &&
+      currentFlow.state !== latestUpdatedFlow.state
+
+    const isRevertedMismatch =
+      latestUpdatedFlow.state === TransactionState.REVERTED &&
+      currentFlow.state !== TransactionState.REVERTED
+
+    const isFailedMismatch =
+      latestUpdatedFlow.state === TransactionState.FAILED &&
+      currentFlow.state !== TransactionState.FAILED
+
     if (
       (data.flow.state !== TransactionState.COMPENSATING &&
         invokeShouldBeSkipped) ||
       (data.flow.state === TransactionState.COMPENSATING &&
         compensateShouldBeSkipped) ||
-      (latestUpdatedFlow.state === TransactionState.COMPENSATING &&
-        ![TransactionState.REVERTED, TransactionState.FAILED].includes(
-          currentFlow.state
-        ) &&
-        currentFlow.state !== latestUpdatedFlow.state) ||
-      (latestUpdatedFlow.state === TransactionState.REVERTED &&
-        currentFlow.state !== TransactionState.REVERTED) ||
-      (latestUpdatedFlow.state === TransactionState.FAILED &&
-        currentFlow.state !== TransactionState.FAILED)
+      isCompensatingMismatch ||
+      isRevertedMismatch ||
+      isFailedMismatch
     ) {
       throw new SkipExecutionError("Already finished by another execution")
     }
