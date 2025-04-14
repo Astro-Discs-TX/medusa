@@ -12,7 +12,7 @@ export async function gqlSchemaToTypes(
 ) {
   const filename = "index-service-entry-points"
   const filenameWithExt = filename + ".d.ts"
-  const dir = join(process.cwd(), ".medusa")
+  const dir = join(process.cwd(), ".medusa/types")
 
   await ModulesSdkGqlSchemaToTypes({
     schema: executableSchema,
