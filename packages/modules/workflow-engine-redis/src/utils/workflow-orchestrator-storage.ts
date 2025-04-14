@@ -46,14 +46,6 @@ export class RedisDistributedTransactionStorage
   private worker: Worker
   private jobWorker?: Worker
 
-  // Least Recently Used cache for frequently accessed checkpoints
-  private cache: Map<
-    string,
-    { data: TransactionCheckpoint; timestamp: number }
-  > = new Map()
-  private readonly CACHE_SIZE = 1000
-  private readonly CACHE_TTL = 30000 // 30 seconds TTL
-
   #isWorkerMode: boolean = false
 
   constructor({
@@ -223,25 +215,10 @@ export class RedisDistributedTransactionStorage
     key: string,
     options?: TransactionOptions
   ): Promise<TransactionCheckpoint | undefined> {
-    // Check cache first
-    const now = Date.now()
-    const cached = this.cache.get(key)
-
-    if (cached && now - cached.timestamp < this.CACHE_TTL) {
-      // Cache hit - move to the end of the map to implement LRU behavior
-      this.cache.delete(key)
-      this.cache.set(key, cached)
-      return cached.data
-    }
-
-    // Cache miss - try Redis
     const data = await this.redisClient.get(key)
 
     if (data) {
       const parsedData = JSON.parse(data) as TransactionCheckpoint
-
-      this.updateCache(key, parsedData)
-
       return parsedData
     }
 
@@ -271,25 +248,9 @@ export class RedisDistributedTransactionStorage
         errors: trx.context.errors,
       }
 
-      this.updateCache(key, checkpointData)
-
       return checkpointData
     }
     return
-  }
-
-  private updateCache(key: string, data: TransactionCheckpoint): void {
-    // If cache is full, remove the oldest entry (first inserted)
-    if (this.cache.size >= this.CACHE_SIZE) {
-      const firstKey = this.cache.keys().next().value
-      this.cache.delete(firstKey)
-    }
-
-    // Add new entry
-    this.cache.set(key, {
-      data,
-      timestamp: Date.now(),
-    })
   }
 
   async list(): Promise<TransactionCheckpoint[]> {
@@ -374,12 +335,6 @@ export class RedisDistributedTransactionStorage
       await promiseAll([pipeline.exec(), this.deleteFromDb(data)])
     } else {
       await promiseAll([pipeline.exec(), this.saveToDb(data, retentionTime)])
-    }
-
-    if (hasFinished) {
-      this.cache.delete(key)
-    } else {
-      this.updateCache(key, data)
     }
   }
 
