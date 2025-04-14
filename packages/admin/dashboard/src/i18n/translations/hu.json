@@ -43,6 +43,7 @@
     "plusCount": "+ {{count}}",
     "plusCountMore": "+ {{count}} további",
     "areYouSure": "Biztos benne?",
+    "areYouSureDescription": "A(z) {{entity}} {{title}} törlésére készül. Ez a művelet nem vonható vissza.",
     "noRecordsFound": "Nincs találat",
     "typeToConfirm": "Írja be a megerősítéshez: {val}",
     "noResultsTitle": "Nincs találat",
@@ -349,6 +350,7 @@
     "backToDashboard": "Vissza a vezérlőpulthoz"
   },
   "addresses": {
+    "title": "Címek",
     "shippingAddress": {
       "header": "Szállítási cím",
       "editHeader": "Szállítási cím szerkesztése",
@@ -809,8 +811,10 @@
     "locationLevels": "Helyszínek",
     "associatedVariants": "Kapcsolódó variánsok",
     "manageLocations": "Helyszínek kezelése",
+    "manageLocationQuantity": "Helyszíni mennyiség kezelése",
     "deleteWarning": "Egy készletelem törlésére készül. Ez a művelet nem vonható vissza.",
     "editItemDetails": "Készletelem részleteinek szerkesztése",
+    "quantityAcrossLocations": "{{quantity}} a {{locations}} helyszínen",
     "create": {
       "title": "Új készletelem",
       "details": "Részletek",
@@ -931,7 +935,28 @@
     },
     "registered": "Regisztrált",
     "guest": "Vendég",
-    "hasAccount": "Fiókkal rendelkezik"
+    "hasAccount": "Fiókkal rendelkezik",
+    "addresses": {
+      "title": "Címek",
+      "fields": {
+        "addressName": "Cím neve",
+        "address1": "Cím 1",
+        "address2": "Cím 2",
+        "city": "Város",
+        "province": "Megye",
+        "postalCode": "Irányítószám",
+        "country": "Ország",
+        "phone": "Telefon",
+        "company": "Cég",
+        "countryCode": "Országkód",
+        "provinceCode": "Megyekód"
+      },
+      "create": {
+        "header": "Cím létrehozása",
+        "hint": "Hozzon létre egy új címet a vásárlónak.",
+        "successToast": "A cím sikeresen létrehozva."
+      }
+    }
   },
   "customerGroups": {
     "domain": "Vásárlói csoportok",
@@ -1110,7 +1135,7 @@
       "sendNotificationHint": "Értesítés küldése a vásárlónak a visszaküldésről.",
       "returnTotal": "Visszaküldés összesen",
       "inboundTotal": "Bejövő összesen",
-      "refundAmount": "Visszatérítendő összeg",
+      "estDifference": "Becsült különbözet",
       "outstandingAmount": "Fennmaradó összeg",
       "reason": "Indok",
       "reasonHint": "Válasszon egy indokot a visszaküldéshez.",
