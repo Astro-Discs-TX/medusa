@@ -186,17 +186,13 @@ export class InMemoryDistributedTransactionStorage
     // Optimize DB operations - only perform when necessary
     if (hasFinished) {
       if (!retentionTime && !idempotent) {
-        // If transaction is finished and no retention needed, delete from DB
         await this.deleteFromDb(data)
       } else {
-        // Save to DB with retention time
         await this.saveToDb(data, retentionTime)
       }
 
-      // Remove from memory after DB operations
       this.storage.delete(key)
     } else if (retentionTime || idempotent) {
-      // If not finished but retention is needed, save to DB
       await this.saveToDb(data, retentionTime)
     }
   }
@@ -479,7 +475,6 @@ export class InMemoryDistributedTransactionStorage
       return
     }
 
-    // Check if we've reached the limit of executions
     if (
       job.config?.numberOfExecutions !== undefined &&
       job.config.numberOfExecutions <= job.numberOfExecutions

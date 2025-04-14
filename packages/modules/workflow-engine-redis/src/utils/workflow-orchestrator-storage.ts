@@ -240,7 +240,6 @@ export class RedisDistributedTransactionStorage
     if (data) {
       const parsedData = JSON.parse(data) as TransactionCheckpoint
 
-      // Update cache
       this.updateCache(key, parsedData)
 
       return parsedData
@@ -272,7 +271,6 @@ export class RedisDistributedTransactionStorage
         errors: trx.context.errors,
       }
 
-      // Update cache with data from database
       this.updateCache(key, checkpointData)
 
       return checkpointData
@@ -280,7 +278,6 @@ export class RedisDistributedTransactionStorage
     return
   }
 
-  // Helper method to update the cache with LRU behavior
   private updateCache(key: string, data: TransactionCheckpoint): void {
     // If cache is full, remove the oldest entry (first inserted)
     if (this.cache.size >= this.CACHE_SIZE) {
@@ -351,7 +348,6 @@ export class RedisDistributedTransactionStorage
       options,
     })
 
-    // Only store retention time if needed and transaction is finished
     if (hasFinished && retentionTime) {
       Object.assign(data, {
         retention_time: retentionTime,
@@ -364,27 +360,22 @@ export class RedisDistributedTransactionStorage
 
     // Execute Redis operations
     if (!hasFinished) {
-      // If transaction is not finished, store in Redis with TTL if provided
       if (ttl) {
         pipeline.set(key, stringifiedData, "EX", ttl)
       } else {
         pipeline.set(key, stringifiedData)
       }
     } else {
-      // If finished, we will clean it from Redis after DB operations
       pipeline.unlink(key)
     }
 
     // Database operations
     if (hasFinished && !retentionTime && !idempotent) {
-      // If finished without retention, delete from DB
       await promiseAll([pipeline.exec(), this.deleteFromDb(data)])
     } else {
-      // Save to DB with retention time if needed
       await promiseAll([pipeline.exec(), this.saveToDb(data, retentionTime)])
     }
 
-    // Update cache with the latest data or invalidate it if transaction is finished
     if (hasFinished) {
       this.cache.delete(key)
     } else {
