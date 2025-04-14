@@ -28,7 +28,7 @@ describe("buildSchemaObjectRepresentation", () => {
 
     const output = buildSchemaObjectRepresentation(schema)
 
-    delete output.executableSchema
+    delete (output as any).executableSchema
 
     expect(output).toEqual({
       objectRepresentation: {
