@@ -28,37 +28,39 @@ describe("buildSchemaObjectRepresentation", () => {
 
     const output = buildSchemaObjectRepresentation(schema)
 
-    expect(output).toEqual([
-      {
-        _serviceNameModuleConfigMap: {},
-        Product: {
-          entity: "Product",
-          parents: [],
-          alias: "",
-          listeners: [],
-          moduleConfig: null,
-          fields: ["id"],
-        },
-        _schemaPropertiesMap: {
-          "": {
-            isInverse: false,
-            ref: {
-              entity: "Product",
-              parents: [],
-              alias: "",
-              listeners: [],
-              moduleConfig: null,
-              fields: ["id"],
+    expect(output).toEqual(
+      expect.objectContaining({
+        objectRepresentation: {
+          _serviceNameModuleConfigMap: {},
+          Product: {
+            entity: "Product",
+            parents: [],
+            alias: "",
+            listeners: [],
+            moduleConfig: null,
+            fields: ["id"],
+          },
+          _schemaPropertiesMap: {
+            "": {
+              isInverse: false,
+              ref: {
+                entity: "Product",
+                parents: [],
+                alias: "",
+                listeners: [],
+                moduleConfig: null,
+                fields: ["id"],
+              },
             },
           },
         },
-      },
-      expect.objectContaining({
-        Product: expect.objectContaining({
-          name: "Product",
-        }),
-      }),
-    ])
+        entitiesMap: {
+          Product: expect.objectContaining({
+            name: "Product",
+          }),
+        },
+      })
+    )
   })
 
   it("should process entities", () => {
@@ -91,7 +93,7 @@ describe("buildSchemaObjectRepresentation", () => {
       }
     `
 
-    const [objectRepresentation, entitiesMap] =
+    const { objectRepresentation, entitiesMap } =
       buildSchemaObjectRepresentation(indexSchema)
 
     expect(entitiesMap).toEqual(
@@ -178,7 +180,7 @@ describe("buildSchemaObjectRepresentation", () => {
       }
     `
 
-    const [objectRepresentation, entitiesMap] =
+    const { objectRepresentation, entitiesMap } =
       buildSchemaObjectRepresentation(indexSchema)
 
     expect(entitiesMap).toEqual(
@@ -343,7 +345,7 @@ describe("buildSchemaObjectRepresentation", () => {
       }
     `
 
-    const [objectRepresentation, entitiesMap] =
+    const { objectRepresentation, entitiesMap } =
       buildSchemaObjectRepresentation(indexSchema)
 
     // Verify entitiesMap structure
@@ -620,7 +622,7 @@ describe("buildSchemaObjectRepresentation", () => {
       scalar DateTime
     `
 
-    const [objectRepresentation, entitiesMap] =
+    const { objectRepresentation, entitiesMap } =
       buildSchemaObjectRepresentation(indexSchema)
 
     // Verify entitiesMap structure
@@ -744,7 +746,7 @@ describe("buildSchemaObjectRepresentation", () => {
       }
     `
 
-    const [objectRepresentation, entitiesMap] =
+    const { objectRepresentation, entitiesMap } =
       buildSchemaObjectRepresentation(indexSchema)
 
     // Verify entitiesMap structure
@@ -921,7 +923,7 @@ describe("buildSchemaObjectRepresentation", () => {
       }
     `
 
-    const [objectRepresentation, entitiesMap] =
+    const { objectRepresentation, entitiesMap } =
       buildSchemaObjectRepresentation(indexSchema)
 
     // Verify entitiesMap structure
@@ -1239,7 +1241,7 @@ describe("buildSchemaObjectRepresentation", () => {
       }
     `
 
-    const [objectRepresentation, entitiesMap] =
+    const { objectRepresentation, entitiesMap } =
       buildSchemaObjectRepresentation(indexSchema)
 
     // Verify entitiesMap structure
@@ -1616,7 +1618,7 @@ describe("buildSchemaObjectRepresentation", () => {
       }
     `
 
-    const [objectRepresentation, entitiesMap] =
+    const { objectRepresentation, entitiesMap } =
       buildSchemaObjectRepresentation(indexSchema)
 
     // Verify entitiesMap structure

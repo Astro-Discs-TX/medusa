@@ -10,6 +10,7 @@ import {
 import {
   MikroOrmBaseRepository as BaseRepository,
   ContainerRegistrationKeys,
+  GraphQLUtils,
   Modules,
   ModulesSdkUtils,
 } from "@medusajs/framework/utils"
@@ -106,7 +107,7 @@ export default class IndexModuleService
 
   protected async onApplicationStart_() {
     try {
-      this.buildSchemaObjectRepresentation_()
+      const executableSchema = this.buildSchemaObjectRepresentation_()
 
       this.storageProvider_ = new this.storageProviderCtr_(
         this.container_,
@@ -123,7 +124,7 @@ export default class IndexModuleService
         await this.storageProvider_.onApplicationStart()
       }
 
-      await gqlSchemaToTypes(this.moduleOptions_.schema ?? defaultSchema)
+      await gqlSchemaToTypes(executableSchema!)
 
       this.dataSynchronizer_.onApplicationStart({
         schemaObjectRepresentation: this.schemaObjectRepresentation_,
@@ -175,18 +176,21 @@ export default class IndexModuleService
     }
   }
 
-  private buildSchemaObjectRepresentation_() {
+  private buildSchemaObjectRepresentation_():
+    | GraphQLUtils.GraphQLSchema
+    | undefined {
     if (this.schemaObjectRepresentation_) {
-      return this.schemaObjectRepresentation_
+      return
     }
 
-    const [objectRepresentation, entityMap] = buildSchemaObjectRepresentation(
-      baseGraphqlSchema + (this.moduleOptions_.schema ?? defaultSchema)
-    )
+    const { objectRepresentation, entitiesMap, executableSchema } =
+      buildSchemaObjectRepresentation(
+        baseGraphqlSchema + (this.moduleOptions_.schema ?? defaultSchema)
+      )
 
     this.schemaObjectRepresentation_ = objectRepresentation
-    this.schemaEntitiesMap_ = entityMap
+    this.schemaEntitiesMap_ = entitiesMap
 
-    return this.schemaObjectRepresentation_
+    return executableSchema
   }
 }

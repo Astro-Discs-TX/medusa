@@ -1211,9 +1211,11 @@ ${fieldDefinitions}
  *
  * @param schema
  */
-export function buildSchemaObjectRepresentation(
-  schema
-): [IndexTypes.SchemaObjectRepresentation, Record<string, any>] {
+export function buildSchemaObjectRepresentation(schema: string): {
+  objectRepresentation: IndexTypes.SchemaObjectRepresentation
+  entitiesMap: Record<string, any>
+  executableSchema: GraphQLUtils.GraphQLSchema
+} {
   const moduleJoinerConfigs = MedusaModule.getAllJoinerConfigs()
 
   const servicesEntityMap = getServicesEntityMap(moduleJoinerConfigs)
@@ -1252,5 +1254,9 @@ export function buildSchemaObjectRepresentation(
   objectRepresentation._schemaPropertiesMap =
     buildAliasMap(objectRepresentation)
 
-  return [objectRepresentation, entitiesMap]
+  return {
+    objectRepresentation,
+    entitiesMap,
+    executableSchema,
+  }
 }
