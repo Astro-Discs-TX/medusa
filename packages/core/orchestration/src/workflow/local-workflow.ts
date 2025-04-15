@@ -580,12 +580,13 @@ export class LocalWorkflow {
 
   private onLoad(transaction: DistributedTransactionType) {
     if (this.medusaContext) {
-      const flow = transaction.getFlow()
-      this.medusaContext.eventGroupId = flow.metadata?.eventGroupId
-      this.medusaContext.parentStepIdempotencyKey = flow.metadata
-        ?.parentStepIdempotencyKey as string | undefined
-      this.medusaContext.preventReleaseEvents = flow.metadata
-        ?.preventReleaseEvents as boolean | undefined
+      const flow = transaction.getFlow() ?? {}
+      const metadata = (flow.metadata ??
+        {}) as Required<TransactionFlow>["metadata"]
+      this.medusaContext.eventGroupId = metadata.eventGroupId
+      this.medusaContext.parentStepIdempotencyKey =
+        metadata.parentStepIdempotencyKey
+      this.medusaContext.preventReleaseEvents = metadata?.preventReleaseEvents
     }
   }
 }
