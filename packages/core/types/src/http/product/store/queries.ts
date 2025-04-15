@@ -9,6 +9,10 @@ export interface StoreProductOptionParams extends BaseProductOptionParams {}
 export interface StoreProductVariantParams extends BaseProductVariantParams {}
 export interface StoreProductPricingContext {
   /**
+   * The collection ID of customer's managed collections of products. This parameter must be included if you want to fetch a specific collection to display or other purposes.
+   */
+  collection_id?: string
+  /**
    * The ID of the customer's region. This parameter must be included if you want to apply taxes on the product variant's price.
    */
   region_id?: string
