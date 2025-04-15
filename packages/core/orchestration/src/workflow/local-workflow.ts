@@ -362,14 +362,7 @@ export class LocalWorkflow {
       handler: handler(this.container_, context),
       payload: input,
       flowMetadata,
-      onLoad: (transaction) => {
-        if (this.medusaContext) {
-          this.medusaContext.eventGroupId =
-            transaction.getFlow().metadata?.eventGroupId
-          this.medusaContext.parentStepIdempotencyKey = transaction.getFlow()
-            .metadata?.parentStepIdempotencyKey as string | undefined
-        }
-      },
+      onLoad: this.onLoad,
     })
 
     const { cleanUpEventListeners } = this.registerEventCallbacks({
@@ -451,14 +444,7 @@ export class LocalWorkflow {
       responseIdempotencyKey: idempotencyKey,
       handler: handler(this.container_, context),
       response,
-      onLoad: (transaction) => {
-        if (this.medusaContext) {
-          this.medusaContext.eventGroupId =
-            transaction.getFlow().metadata?.eventGroupId
-          this.medusaContext.parentStepIdempotencyKey = transaction.getFlow()
-            .metadata?.parentStepIdempotencyKey as string | undefined
-        }
-      },
+      onLoad: this.onLoad,
     })
 
     try {
@@ -487,14 +473,7 @@ export class LocalWorkflow {
       responseIdempotencyKey: idempotencyKey,
       error,
       handler: handler(this.container_, context),
-      onLoad: (transaction) => {
-        if (this.medusaContext) {
-          this.medusaContext.eventGroupId =
-            transaction.getFlow().metadata?.eventGroupId
-          this.medusaContext.parentStepIdempotencyKey = transaction.getFlow()
-            .metadata?.parentStepIdempotencyKey as string | undefined
-        }
-      },
+      onLoad: this.onLoad,
     })
 
     try {
@@ -596,6 +575,17 @@ export class LocalWorkflow {
       throw new Error(
         `Handler for action "${action}" is missing invoke function.`
       )
+    }
+  }
+
+  private onLoad(transaction: DistributedTransactionType) {
+    if (this.medusaContext) {
+      const flow = transaction.getFlow()
+      this.medusaContext.eventGroupId = flow.metadata?.eventGroupId
+      this.medusaContext.parentStepIdempotencyKey = flow.metadata
+        ?.parentStepIdempotencyKey as string | undefined
+      this.medusaContext.preventReleaseEvents = flow.metadata
+        ?.preventReleaseEvents as boolean | undefined
     }
   }
 }
