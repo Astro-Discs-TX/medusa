@@ -237,7 +237,7 @@ export class WorkflowsModuleService<
     options: WorkflowOrchestratorCancelOptions,
     @MedusaContext() context: Context = {}
   ) {
-    return this.workflowOrchestratorService_.cancel(
+    return await this.workflowOrchestratorService_.cancel(
       workflowIdOrWorkflow,
       options
     )
