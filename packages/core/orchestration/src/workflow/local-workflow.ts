@@ -125,8 +125,6 @@ export class LocalWorkflow {
 
                 args[ctxIndex] = context
               }
-            } else if (hasContext) {
-              args[ctxIndex!].eventGroupId ??= this_.medusaContext?.eventGroupId
             }
 
             const method = target[prop]
@@ -368,6 +366,8 @@ export class LocalWorkflow {
         if (this.medusaContext) {
           this.medusaContext.eventGroupId =
             transaction.getFlow().metadata?.eventGroupId
+          this.medusaContext.parentStepIdempotencyKey = transaction.getFlow()
+            .metadata?.parentStepIdempotencyKey as string | undefined
         }
       },
     })
@@ -455,6 +455,8 @@ export class LocalWorkflow {
         if (this.medusaContext) {
           this.medusaContext.eventGroupId =
             transaction.getFlow().metadata?.eventGroupId
+          this.medusaContext.parentStepIdempotencyKey = transaction.getFlow()
+            .metadata?.parentStepIdempotencyKey as string | undefined
         }
       },
     })
@@ -489,6 +491,8 @@ export class LocalWorkflow {
         if (this.medusaContext) {
           this.medusaContext.eventGroupId =
             transaction.getFlow().metadata?.eventGroupId
+          this.medusaContext.parentStepIdempotencyKey = transaction.getFlow()
+            .metadata?.parentStepIdempotencyKey as string | undefined
         }
       },
     })
