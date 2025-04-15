@@ -19,6 +19,12 @@ import {
   TransactionHandlerType,
   TransactionStepState,
 } from "@medusajs/framework/utils"
+import {
+  createStep,
+  createWorkflow,
+  StepResponse,
+  WorkflowResponse,
+} from "@medusajs/framework/workflows-sdk"
 import { moduleIntegrationTestRunner } from "@medusajs/test-utils"
 import { asValue } from "awilix"
 import { setTimeout as setTimeoutSync } from "timers"
@@ -27,12 +33,6 @@ import { WorkflowsModuleService } from "../../src/services"
 import "../__fixtures__"
 import { createScheduled } from "../__fixtures__/workflow_scheduled"
 import { TestDatabase } from "../utils"
-import {
-  createStep,
-  createWorkflow,
-  StepResponse,
-  WorkflowResponse,
-} from "@medusajs/framework/workflows-sdk"
 
 jest.setTimeout(300000)
 

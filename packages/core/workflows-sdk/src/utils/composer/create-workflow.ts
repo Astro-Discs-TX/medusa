@@ -206,7 +206,7 @@ export function createWorkflow<TData, TResult, THooks extends any[]>(
         }
 
         let transaction
-        if (workflowEngine) {
+        if (workflowEngine && context.isAsync) {
           transaction = await workflowEngine.run(name, {
             input: stepInput as any,
             context: executionContext,
@@ -227,6 +227,11 @@ export function createWorkflow<TData, TResult, THooks extends any[]>(
         )
       },
       async (transaction, stepContext) => {
+        // The step itself has failed, there is nothing to revert
+        if (!transaction) {
+          return
+        }
+
         const { container, ...sharedContext } = stepContext
 
         const workflowEngine = container.resolve(Modules.WORKFLOW_ENGINE, {
@@ -243,7 +248,7 @@ export function createWorkflow<TData, TResult, THooks extends any[]>(
 
         const transactionId = step.__step__ + "-" + stepContext.transactionId
 
-        if (workflowEngine) {
+        if (workflowEngine && context.isAsync) {
           await workflowEngine.cancel(name, {
             transactionId: transactionId,
             context: executionContext,
