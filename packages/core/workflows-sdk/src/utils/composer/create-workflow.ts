@@ -221,9 +221,7 @@ export function createWorkflow<TData, TResult, THooks extends any[]>(
 
         return new StepResponse(
           transaction.result,
-          context.isAsync
-            ? stepContext.transactionId
-            : transaction.transactionId
+          context.isAsync ? stepContext.transactionId : transaction
         )
       },
       async (transaction, stepContext) => {
