@@ -1351,9 +1351,9 @@ describe("defineConfig", function () {
           "redisUrl": "redis://localhost:6379",
           "sessionOptions": {
             "dynamodbOptions": {
-              "clientOptions": {
-                "endpoint": "http://localhost:8000",
-              },
+              "hashKey": "id",
+              "initialized": true,
+              "prefix": "sess:",
               "readCapacityUnits": 5,
               "skipThrowMissingSpecialKeys": true,
               "table": "medusa-sessions",

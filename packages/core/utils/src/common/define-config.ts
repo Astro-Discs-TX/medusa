@@ -353,16 +353,18 @@ function normalizeProjectConfig(
       ...(isCloud && process.env.SESSION_STORE === "dynamodb"
         ? {
             dynamodbOptions: {
-              clientOptions: Object.assign({
-                endpoint: process.env.DYNAMO_DB_ENDPOINT,
-              }),
+              prefix: process.env.DYNAMO_DB_SESSIONS_PREFIX ?? "sess:",
+              hashKey: process.env.DYNAMO_DB_SESSIONS_HASH_KEY ?? "id",
+              initialized: process.env.DYNAMO_DB_SESSIONS_CREATE_TABLE
+                ? false
+                : true,
               table: process.env.DYNAMO_DB_SESSIONS_TABLE ?? "medusa-sessions",
               readCapacityUnits: tryConvertToNumber(
-                process.env.DYNAMO_DB_READ_UNITS,
+                process.env.DYNAMO_DB_SESSIONS_READ_UNITS,
                 5
               ),
               writeCapacityUnits: tryConvertToNumber(
-                process.env.DYNAMO_DB_READ_UNITS,
+                process.env.DYNAMO_DB_SESSIONS_WRITE_UNITS,
                 5
               ),
               skipThrowMissingSpecialKeys: true,
