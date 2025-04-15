@@ -362,7 +362,7 @@ export class LocalWorkflow {
       handler: handler(this.container_, context),
       payload: input,
       flowMetadata,
-      onLoad: this.onLoad,
+      onLoad: this.onLoad.bind(this),
     })
 
     const { cleanUpEventListeners } = this.registerEventCallbacks({
@@ -444,7 +444,7 @@ export class LocalWorkflow {
       responseIdempotencyKey: idempotencyKey,
       handler: handler(this.container_, context),
       response,
-      onLoad: this.onLoad,
+      onLoad: this.onLoad.bind(this),
     })
 
     try {
@@ -473,7 +473,7 @@ export class LocalWorkflow {
       responseIdempotencyKey: idempotencyKey,
       error,
       handler: handler(this.container_, context),
-      onLoad: this.onLoad,
+      onLoad: this.onLoad.bind(this),
     })
 
     try {
