@@ -6073,7 +6073,7 @@ export const generatedEditDates = {
   "app/integrations/guides/algolia/page.mdx": "2025-03-27T18:00:49.330Z",
   "app/integrations/guides/magento/page.mdx": "2025-03-28T06:46:40.800Z",
   "app/js-sdk/auth/overview/page.mdx": "2025-03-28T08:05:32.622Z",
-  "app/how-to-tutorials/tutorials/loyalty-points/page.mdx": "2025-04-09T15:30:04.394Z",
+  "app/how-to-tutorials/tutorials/loyalty-points/page.mdx": "2025-04-16T07:10:11.789Z",
   "references/js_sdk/admin/Admin/properties/js_sdk.admin.Admin.plugin/page.mdx": "2025-04-11T09:04:55.084Z",
   "references/js_sdk/admin/Customer/methods/js_sdk.admin.Customer.createAddress/page.mdx": "2025-04-11T09:04:54.010Z",
   "references/js_sdk/admin/Customer/methods/js_sdk.admin.Customer.deleteAddress/page.mdx": "2025-04-11T09:04:54.015Z",

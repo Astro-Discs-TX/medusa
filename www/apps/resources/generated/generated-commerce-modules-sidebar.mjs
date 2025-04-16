@@ -2417,7 +2417,7 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "loaded": true,
               "isPathHref": true,
               "type": "ref",
-              "title": "Loyalty Points",
+              "title": "Implement Loyalty Points",
               "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/loyalty-points",
               "children": []
             }
@@ -5976,14 +5976,6 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "type": "ref",
               "title": "Implement Quote Management",
               "path": "https://docs.medusajs.com/resources/examples/guides/quote-management",
-              "children": []
-            },
-            {
-              "loaded": true,
-              "isPathHref": true,
-              "type": "ref",
-              "title": "Loyalty Points",
-              "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/loyalty-points",
               "children": []
             }
           ]
@@ -12796,7 +12788,7 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "loaded": true,
               "isPathHref": true,
               "type": "ref",
-              "title": "Loyalty Points",
+              "title": "Implement Loyalty Points",
               "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/loyalty-points",
               "children": []
             }
