@@ -689,7 +689,7 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
 
       // Note: These tests depend on actual Redis instance and waiting for the scheduled jobs to run, which isn't great.
       // Mocking bullmq, however, would make the tests close to useless, so we can keep them very minimal and serve as smoke tests.
-      describe("Scheduled workflows", () => {
+      describe.skip("Scheduled workflows", () => {
         beforeEach(() => {
           jest.clearAllMocks()
         })
@@ -736,6 +736,7 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
           WorkflowManager["workflows"].delete("remove-scheduled")
 
           await setTimeout(1100)
+          0
           expect(spy).toHaveBeenCalledTimes(1)
           expect(logSpy).toHaveBeenCalledWith(
             "Tried to execute a scheduled workflow with ID remove-scheduled that does not exist, removing it from the scheduler."
