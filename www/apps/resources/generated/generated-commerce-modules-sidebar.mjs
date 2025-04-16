@@ -2417,7 +2417,7 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "loaded": true,
               "isPathHref": true,
               "type": "ref",
-              "title": "Implement Loyalty Points",
+              "title": "Loyalty Points",
               "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/loyalty-points",
               "children": []
             }
@@ -5976,6 +5976,14 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "type": "ref",
               "title": "Implement Quote Management",
               "path": "https://docs.medusajs.com/resources/examples/guides/quote-management",
+              "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "ref",
+              "title": "Loyalty Points",
+              "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/loyalty-points",
               "children": []
             }
           ]
@@ -9712,6 +9720,15 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
                       "loaded": true,
                       "isPathHref": true,
                       "type": "link",
+                      "path": "/references/payment/retrievePayment",
+                      "title": "retrievePayment",
+                      "description": "",
+                      "children": []
+                    },
+                    {
+                      "loaded": true,
+                      "isPathHref": true,
+                      "type": "link",
                       "path": "/references/payment/retrievePaymentCollection",
                       "title": "retrievePaymentCollection",
                       "description": "",
@@ -12779,7 +12796,7 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "loaded": true,
               "isPathHref": true,
               "type": "ref",
-              "title": "Implement Loyalty Points",
+              "title": "Loyalty Points",
               "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/loyalty-points",
               "children": []
             }
