@@ -30,7 +30,7 @@ export const MenuSubMenu = ({ item, itemsOnClick }: MenuSubMenuProps) => {
           "text-medusa-fg-base justify-between"
         )}
         onClick={() => itemsOnClick?.(item)}
-        href={item.link || ""}
+        href={item.link || "#"}
       >
         <span className="text-compact-small">{item.title}</span>
         <span className="text-medusa-fg-subtle mt-[2.5px] block">
