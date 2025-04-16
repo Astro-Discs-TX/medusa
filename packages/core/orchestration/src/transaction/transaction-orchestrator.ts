@@ -297,6 +297,63 @@ export class TransactionOrchestrator extends EventEmitter {
     remaining: number
     completed: number
   }> {
+    const flow = transaction.getFlow()
+    const result = await this.computeCurrentTransactionState(transaction)
+
+    // Handle state transitions and emit events
+    if (
+      flow.state === TransactionState.WAITING_TO_COMPENSATE &&
+      result.next.length === 0 &&
+      !flow.hasWaitingSteps
+    ) {
+      flow.state = TransactionState.COMPENSATING
+      this.flagStepsToRevert(flow)
+
+      this.emit(DistributedTransactionEvent.COMPENSATE_BEGIN, { transaction })
+
+      return await this.checkAllSteps(transaction)
+    } else if (result.completed === result.total) {
+      if (result.hasSkippedOnFailure) {
+        flow.hasSkippedOnFailureSteps = true
+      }
+      if (result.hasSkipped) {
+        flow.hasSkippedSteps = true
+      }
+      if (result.hasIgnoredFailure) {
+        flow.hasFailedSteps = true
+      }
+      if (result.hasFailed) {
+        flow.state = TransactionState.FAILED
+      } else {
+        flow.state = result.hasReverted
+          ? TransactionState.REVERTED
+          : TransactionState.DONE
+      }
+    }
+
+    return {
+      current: result.current,
+      next: result.next,
+      total: result.total,
+      remaining: result.total - result.completed,
+      completed: result.completed,
+    }
+  }
+
+  private async computeCurrentTransactionState(
+    transaction: DistributedTransactionType
+  ): Promise<{
+    current: TransactionStep[]
+    next: TransactionStep[]
+    total: number
+    completed: number
+    hasSkipped: boolean
+    hasSkippedOnFailure: boolean
+    hasIgnoredFailure: boolean
+    hasFailed: boolean
+    hasWaiting: boolean
+    hasReverted: boolean
+  }> {
     let hasSkipped = false
     let hasSkippedOnFailure = false
     let hasIgnoredFailure = false
@@ -306,7 +363,6 @@ export class TransactionOrchestrator extends EventEmitter {
     let completedSteps = 0
 
     const flow = transaction.getFlow()
-
     const nextSteps: TransactionStep[] = []
     const currentSteps: TransactionStep[] = []
 
@@ -393,43 +449,17 @@ export class TransactionOrchestrator extends EventEmitter {
     flow.hasWaitingSteps = hasWaiting
     flow.hasRevertedSteps = hasReverted
 
-    const totalSteps = allSteps.length - 1
-    if (
-      flow.state === TransactionState.WAITING_TO_COMPENSATE &&
-      nextSteps.length === 0 &&
-      !hasWaiting
-    ) {
-      flow.state = TransactionState.COMPENSATING
-      this.flagStepsToRevert(flow)
-
-      this.emit(DistributedTransactionEvent.COMPENSATE_BEGIN, { transaction })
-
-      return await this.checkAllSteps(transaction)
-    } else if (completedSteps === totalSteps) {
-      if (hasSkippedOnFailure) {
-        flow.hasSkippedOnFailureSteps = true
-      }
-      if (hasSkipped) {
-        flow.hasSkippedSteps = true
-      }
-      if (hasIgnoredFailure) {
-        flow.hasFailedSteps = true
-      }
-      if (hasFailed) {
-        flow.state = TransactionState.FAILED
-      } else {
-        flow.state = hasReverted
-          ? TransactionState.REVERTED
-          : TransactionState.DONE
-      }
-    }
-
     return {
       current: currentSteps,
       next: nextSteps,
-      total: totalSteps,
-      remaining: totalSteps - completedSteps,
+      total: allSteps.length - 1,
       completed: completedSteps,
+      hasSkipped,
+      hasSkippedOnFailure,
+      hasIgnoredFailure,
+      hasFailed,
+      hasWaiting,
+      hasReverted,
     }
   }
 
@@ -755,6 +785,9 @@ export class TransactionOrchestrator extends EventEmitter {
         const isAsync = step.isCompensating()
           ? step.definition.compensateAsync
           : step.definition.async
+
+        // Compute current transaction state
+        await this.computeCurrentTransactionState(transaction)
 
         // Save checkpoint before executing step
         await transaction.saveCheckpoint().catch((error) => {
