@@ -163,7 +163,7 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
         )
       })
 
-      it("should compose nexted workflows w/ async steps", async () => {
+      it("should compose nested workflows w/ async steps", (done) => {
         const asyncResults: any[] = []
         const mockStep1Fn = jest.fn().mockImplementation(() => {
           const res = { obj: "return from 1" }
@@ -205,7 +205,8 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
           return new WorkflowResponse(ret3)
         })
 
-        createWorkflow("workflow1", function (input) {
+        const workflowId = "workflow1"
+        createWorkflow(workflowId, function (input) {
           step1(input)
           wf2.runAsStep({ input })
           const fourth = step3({})
@@ -213,20 +214,30 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
         })
 
         asyncResults.push("begin workflow")
-        await workflowOrcModule.run("workflow1", {
-          input: {},
-        })
-        asyncResults.push("returned workflow")
+        workflowOrcModule
+          .run(workflowId, {
+            input: {},
+          })
+          .then(() => {
+            asyncResults.push("returned workflow")
 
-        await setTimeoutPromise(5000)
+            void workflowOrcModule.subscribe({
+              workflowId,
+              subscriber: (event) => {
+                if (event.eventType === "onFinish") {
+                  expect(asyncResults).toEqual([
+                    "begin workflow",
+                    { obj: "return from 1" },
+                    "returned workflow",
+                    { obj: "return from 2" },
+                    { obj: "return from 3" },
+                  ])
+                }
+              },
+            })
+          })
 
-        expect(asyncResults).toEqual([
-          "begin workflow",
-          { obj: "return from 1" },
-          "returned workflow",
-          { obj: "return from 2" },
-          { obj: "return from 3" },
-        ])
+        failTrap(done)
       })
 
       describe("Testing basic workflow", function () {

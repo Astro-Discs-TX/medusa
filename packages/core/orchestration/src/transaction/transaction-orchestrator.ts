@@ -788,14 +788,6 @@ export class TransactionOrchestrator extends EventEmitter {
         continueExecution = false
       }
     }
-
-    // Recompute the current flow flags
-    await this.checkAllSteps(transaction)
-    await transaction.saveCheckpoint().catch((error) => {
-      if (!SkipExecutionError.isSkipExecutionError(error)) {
-        throw error
-      }
-    })
   }
 
   /**
