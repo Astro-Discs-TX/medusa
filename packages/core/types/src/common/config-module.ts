@@ -139,17 +139,10 @@ export type SessionOptions = {
 
   /**
    * Specify the options for storing session data to dynamoDB. Make
-   * sure to install the following dependencies and set the following
-   * variables too.
+   * sure to install the following dependencies first.
    *
    * - @aws-sdk/client-dynamodb@^3.218.0
    * - connect-dynamodb@^3.0.5
-   *
-   * Environment variables to set
-   * - AWS_REGION=<value>
-   * - ENDPOINT=<value>
-   * - AWS_ACCESS_KEY_ID=<value>
-   * - AWS_SECRET_ACCESS_KEY=<value>
    */
   dynamodbOptions?: {
     clientOptions?: {
