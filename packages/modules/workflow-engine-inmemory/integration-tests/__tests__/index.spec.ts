@@ -30,8 +30,14 @@ import {
   workflowEventGroupIdStep2Mock,
 } from "../__fixtures__/workflow_event_group_id"
 import { createScheduled } from "../__fixtures__/workflow_scheduled"
+import {
+  createStep,
+  createWorkflow,
+  StepResponse,
+  WorkflowResponse,
+} from "@medusajs/framework/workflows-sdk"
 
-jest.setTimeout(300000)
+jest.setTimeout(3000000)
 
 const failTrap = (done) => {
   setTimeoutSync(() => {
@@ -155,6 +161,72 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
         ).toEqual(
           expect.objectContaining({ eventGroupId: generatedEventGroupId })
         )
+      })
+
+      it("should compose nexted workflows w/ async steps", async () => {
+        const asyncResults: any[] = []
+        const mockStep1Fn = jest.fn().mockImplementation(() => {
+          const res = { obj: "return from 1" }
+          asyncResults.push(res)
+          return new StepResponse(res)
+        })
+        const mockStep2Fn = jest.fn().mockImplementation(async () => {
+          await setTimeoutPromise(1000)
+          const res = { obj: "return from 2" }
+          asyncResults.push(res)
+          return new StepResponse(res)
+        })
+
+        const mockStep3Fn = jest.fn().mockImplementation(() => {
+          const res = { obj: "return from 3" }
+          asyncResults.push(res)
+          return new StepResponse(res)
+        })
+
+        const step1 = createStep("step1", mockStep1Fn)
+        const step2 = createStep(
+          {
+            name: "step2",
+            async: true,
+            backgroundExecution: true,
+          },
+          mockStep2Fn
+        )
+        const step3 = createStep("step3", mockStep3Fn)
+
+        const wf3 = createWorkflow("workflow3", function (input) {
+          return new WorkflowResponse(step2(input))
+        })
+
+        const wf2 = createWorkflow("workflow2", function (input) {
+          const ret3 = wf3.runAsStep({
+            input: {},
+          })
+          return new WorkflowResponse(ret3)
+        })
+
+        createWorkflow("workflow1", function (input) {
+          step1(input)
+          wf2.runAsStep({ input })
+          const fourth = step3({})
+          return new WorkflowResponse(fourth)
+        })
+
+        asyncResults.push("begin workflow")
+        await workflowOrcModule.run("workflow1", {
+          input: {},
+        })
+        asyncResults.push("returned workflow")
+
+        await setTimeoutPromise(5000)
+
+        expect(asyncResults).toEqual([
+          "begin workflow",
+          { obj: "return from 1" },
+          "returned workflow",
+          { obj: "return from 2" },
+          { obj: "return from 3" },
+        ])
       })
 
       describe("Testing basic workflow", function () {

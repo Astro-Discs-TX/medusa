@@ -777,9 +777,8 @@ export class TransactionOrchestrator extends EventEmitter {
             this.executeSyncStep(promise, transaction, step, nextSteps)
           )
         } else {
-          execution.push(
-            this.executeAsyncStep(promise, transaction, step, nextSteps)
-          )
+          // Execute async step in background and continue the execution of the transaction
+          this.executeAsyncStep(promise, transaction, step, nextSteps)
         }
       }
 
@@ -1007,6 +1006,9 @@ export class TransactionOrchestrator extends EventEmitter {
             transaction,
             step,
           })
+          // Schedule to continue the execution of async steps because they are not awaited on purpose and can be handled by another machine
+          await transaction.scheduleRetry(step, 0)
+          return
         } else {
           if (!step.definition.backgroundExecution || step.definition.nested) {
             const eventName = DistributedTransactionEvent.STEP_AWAITING
@@ -1059,7 +1061,11 @@ export class TransactionOrchestrator extends EventEmitter {
     step: TransactionStep,
     response: unknown
   ): Promise<void> {
-    if (isDefined(response) && step.saveResponse) {
+    const isAsync = step.isCompensating()
+      ? step.definition.compensateAsync
+      : step.definition.async
+
+    if (isDefined(response) && step.saveResponse && !isAsync) {
       transaction.addResponse(
         step.definition.action!,
         step.isCompensating()
@@ -1069,7 +1075,16 @@ export class TransactionOrchestrator extends EventEmitter {
       )
     }
 
-    await TransactionOrchestrator.setStepSuccess(transaction, step, response)
+    const ret = await TransactionOrchestrator.setStepSuccess(
+      transaction,
+      step,
+      response
+    )
+
+    if (isAsync && !ret.stopExecution) {
+      // Schedule to continue the execution of async steps because they are not awaited on purpose and can be handled by another machine
+      await transaction.scheduleRetry(step, 0)
+    }
   }
 
   /**
