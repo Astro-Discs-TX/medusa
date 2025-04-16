@@ -211,7 +211,7 @@ export default async function syncContentModelsLoader({
       defaults: {
         spaceId: options.space_id,
         environmentId: options.environment,
-      }
+      },
     })
 
     const deliveryClient = createDeliveryClient({
@@ -275,21 +275,21 @@ try {
         name: "Title",
         type: "Symbol",
         required: true,
-        localized: true
+        localized: true,
       },
       {
         id: "handle",
         name: "Handle", 
         type: "Symbol",
         required: true,
-        localized: false
+        localized: false,
       },
       {
         id: "medusaId",
         name: "Medusa ID",
         type: "Symbol",
         required: true,
-        localized: false
+        localized: false,
       },
       {
         type: "RichText",
@@ -304,7 +304,7 @@ try {
               "code",
               "superscript",
               "subscript",
-              "strikethrough"
+              "strikethrough",
             ],
           },
           {
@@ -325,15 +325,15 @@ try {
               "asset-hyperlink",
               "embedded-entry-inline",
               "entry-hyperlink",
-              "hyperlink"
+              "hyperlink",
             ],
           },
           {
-            nodes: {}
-          }
+            nodes: {},
+          },
         ],
         localized: true,
-        required: true
+        required: true,
       },
       {
         type: "Symbol",
@@ -341,20 +341,20 @@ try {
         id: "subtitle",
         localized: true,
         required: false,
-        validations: []
+        validations: [],
       },
       {
         type: "Array",
         items: {
           type: "Link",
           linkType: "Asset",
-          validations: []
+          validations: [],
         },
         name: "images",
         id: "images",
         localized: true,
         required: false,
-        validations: []
+        validations: [],
       },
       {
         id: "productVariants",
@@ -366,10 +366,10 @@ try {
           type: "Link",
           validations: [
             {
-              linkContentType: ["productVariant"]
-            }
+              linkContentType: ["productVariant"],
+            },
           ],
-          linkType: "Entry"
+          linkType: "Entry",
         },
         disabled: false,
         omitted: false,
@@ -384,15 +384,15 @@ try {
           type: "Link",
           validations: [
             {
-              linkContentType: ["productOption"]
-            }
+              linkContentType: ["productOption"],
+            },
           ],
-          linkType: "Entry"
+          linkType: "Entry",
         },
         disabled: false,
         omitted: false,
-      }
-    ]
+      },
+    ],
   })
 
   await managementClient.contentType.publish({
@@ -439,7 +439,7 @@ try {
       name: "Title",
       type: "Symbol",
       required: true,
-      localized: true
+      localized: true,
     },
     {
       id: "product",
@@ -449,19 +449,19 @@ try {
       localized: false,
       validations: [
         {
-          linkContentType: ["product"]
-        }
+          linkContentType: ["product"],
+        },
       ],
       disabled: false,
       omitted: false,
-      linkType: "Entry"
+      linkType: "Entry",
     },
     {
       id: "medusaId",
       name: "Medusa ID",
       type: "Symbol",
       required: true,
-      localized: false
+      localized: false,
     },
     {
       id: "productOptionValues",
@@ -473,15 +473,15 @@ try {
         type: "Link",
         validations: [
           {
-            linkContentType: ["productOptionValue"]
-          }
+            linkContentType: ["productOptionValue"],
+          },
         ],
-        linkType: "Entry"
+        linkType: "Entry",
       },
       disabled: false,
       omitted: false,
-      }
-    ]
+      },
+    ],
   })
 
   await managementClient.contentType.publish({
@@ -520,7 +520,7 @@ try {
       name: "Title",
       type: "Symbol",
       required: true,
-      localized: true
+      localized: true,
     },
     {
       id: "product",
@@ -530,19 +530,19 @@ try {
       localized: false,
       validations: [
         {
-          linkContentType: ["product"]
-        }
+          linkContentType: ["product"],
+        },
       ],
       disabled: false,
       omitted: false,
-      linkType: "Entry"
+      linkType: "Entry",
     },
     {
       id: "medusaId",
       name: "Medusa ID",
       type: "Symbol",
       required: true,
-      localized: false
+      localized: false,
     },
     {
       id: "values",
@@ -554,15 +554,15 @@ try {
         type: "Link",
         validations: [
           {
-            linkContentType: ["productOptionValue"]
-          }
+            linkContentType: ["productOptionValue"],
+          },
         ],
-        linkType: "Entry"
+        linkType: "Entry",
       },
       disabled: false,
       omitted: false,
-      }
-    ]
+      },
+    ],
   })
 
   await managementClient.contentType.publish({
@@ -603,16 +603,16 @@ try {
       name: "Value",
       type: "Symbol",
       required: true,
-      localized: true
+      localized: true,
     },
     {
       id: "medusaId",
       name: "Medusa ID",
       type: "Symbol",
       required: true,
-      localized: false
-    }
-  ]
+      localized: false,
+    },
+  ],
 })
 
 await managementClient.contentType.publish({
@@ -665,8 +665,8 @@ export const serviceHighlights = [
 ]
 
 ```ts title="src/modules/contentful/service.ts" highlights={serviceHighlights}
-import { ModuleOptions } from "./loader/create-content-models";
-import { PlainClientAPI } from "contentful-management";
+import { ModuleOptions } from "./loader/create-content-models"
+import { PlainClientAPI } from "contentful-management"
 
 type InjectedDependencies = {
   contentfulManagementClient: PlainClientAPI;
@@ -674,19 +674,19 @@ type InjectedDependencies = {
 }
 
 export default class ContentfulModuleService {
-  private managementClient: PlainClientAPI;
-  private deliveryClient: any;
-  private options: ModuleOptions;
+  private managementClient: PlainClientAPI
+  private deliveryClient: any
+  private options: ModuleOptions
 
   constructor(
     { 
       contentfulManagementClient, 
-      contentfulDeliveryClient
+      contentfulDeliveryClient,
     }: InjectedDependencies, 
     options: ModuleOptions
   ) {
-    this.managementClient = contentfulManagementClient;
-    this.deliveryClient = contentfulDeliveryClient;
+    this.managementClient = contentfulManagementClient
+    this.deliveryClient = contentfulDeliveryClient
     this.options = {
       ...options,
       default_locale: options.default_locale || "en-US",
@@ -766,7 +766,7 @@ module.exports = defineConfig({
         space_id: process.env.CONTENTFUL_SPACE_ID,
         environment: process.env.CONTENTFUL_ENVIRONMENT,
         default_locale: "en-US",
-      }
+      },
     },
   ],
 })
@@ -889,30 +889,30 @@ export default class ContentfulModuleService {
         {
           fields: {
             medusaId: {
-              [this.options.default_locale!]: variant.id
+              [this.options.default_locale!]: variant.id,
             },
             title: {
-              [this.options.default_locale!]: variant.title
+              [this.options.default_locale!]: variant.title,
             },
             product: {
               [this.options.default_locale!]: {
                 sys: {
                   type: "Link",
                   linkType: "Entry",
-                  id: productEntry.sys.id
-                }
-              }
+                  id: productEntry.sys.id,
+                },
+              },
             },
             productOptionValues: {
-              [this.options.default_locale!]: variant.options.map(option => ({
+              [this.options.default_locale!]: variant.options.map((option) => ({
                 sys: {
                   type: "Link",
                   linkType: "Entry",
-                  id: option.id
-                }
-              }))
-            }
-          }
+                  id: option.id,
+                },
+              })),
+            },
+          },
         }
       )
     }
@@ -941,7 +941,7 @@ export const createProductOptionHighlights = [
 
 ```ts title="src/modules/contentful/service.ts" highlights={createProductOptionHighlights}
 // other imports...
-import { ProductOptionDTO } from "@medusajs/framework/types";
+import { ProductOptionDTO } from "@medusajs/framework/types"
 
 export default class ContentfulModuleService {
   // ...
@@ -966,20 +966,20 @@ export default class ContentfulModuleService {
           {
             fields: {
               value: {
-                [this.options.default_locale!]: value.value
+                [this.options.default_locale!]: value.value,
               },
               medusaId: {
-                [this.options.default_locale!]: value.id
-              }
-            }
+                [this.options.default_locale!]: value.id,
+              },
+            },
           }
         )
         valueIds.push({
           sys: {
             type: "Link",
             linkType: "Entry",
-            id: value.id
-          }
+            id: value.id,
+          },
         })
       }
       await this.managementClient.entry.createWithId(
@@ -990,24 +990,24 @@ export default class ContentfulModuleService {
         {
           fields: {
             medusaId: {
-              [this.options.default_locale!]: option.id
+              [this.options.default_locale!]: option.id,
             },
             title: {
-              [this.options.default_locale!]: option.title
+              [this.options.default_locale!]: option.title,
             },
             product: {
               [this.options.default_locale!]: {
                 sys: {
                   type: "Link",
                   linkType: "Entry",
-                  id: productEntry.sys.id
-                }
-              }
+                  id: productEntry.sys.id,
+                },
+              },
             },
             values: {
-              [this.options.default_locale!]: valueIds
-            }
-          }
+              [this.options.default_locale!]: valueIds,
+            },
+          },
         }
       )
     }
@@ -1036,7 +1036,7 @@ export const createProductHighlights = [
 
 ```ts title="src/modules/contentful/service.ts" highlights={createProductHighlights}
 // other imports...
-import { ProductDTO } from "@medusajs/framework/types";
+import { ProductDTO } from "@medusajs/framework/types"
 
 export default class ContentfulModuleService {
   // ...
@@ -1062,10 +1062,10 @@ export default class ContentfulModuleService {
       {
         fields: {
           medusaId: {
-            [this.options.default_locale!]: product.id
+            [this.options.default_locale!]: product.id,
           },
           title: {
-            [this.options.default_locale!]: product.title
+            [this.options.default_locale!]: product.title,
           },
           description: product.description ? {
             [this.options.default_locale!]: {
@@ -1080,20 +1080,20 @@ export default class ContentfulModuleService {
                       nodeType: "text",
                       value: product.description,
                       marks: [],
-                      data: {}
-                    }
-                  ]
-                }
-              ]
-            }
+                      data: {},
+                    },
+                  ],
+                },
+              ],
+            },
           } : undefined,
           subtitle: product.subtitle ? {
-            [this.options.default_locale!]: product.subtitle
+            [this.options.default_locale!]: product.subtitle,
           } : undefined,
           handle: product.handle ? {
-            [this.options.default_locale!]: product.handle
+            [this.options.default_locale!]: product.handle,
           } : undefined,
-        }
+        },
       }
     )
 
@@ -1117,24 +1117,24 @@ export default class ContentfulModuleService {
         fields: {
           ...productEntry.fields,
           productVariants: {
-            [this.options.default_locale!]: product.variants?.map(variant => ({
+            [this.options.default_locale!]: product.variants?.map((variant) => ({
               sys: {
                 type: "Link",
                 linkType: "Entry",
-                id: variant.id
-              }
-            }))
+                id: variant.id,
+              },
+            })),
           },
           productOptions: {
-            [this.options.default_locale!]: product.options?.map(option => ({
+            [this.options.default_locale!]: product.options?.map((option) => ({
               sys: {
                 type: "Link",
                 linkType: "Entry",
-                id: option.id
-              }
-            }))
-          }
-        }
+                id: option.id,
+              },
+            })),
+          },
+        },
       }
     )
 
@@ -1169,7 +1169,7 @@ export const deleteProductHighlights = [
 
 ```ts title="src/modules/contentful/service.ts" highlights={deleteProductHighlights}
 // other imports...
-import { MedusaError } from "@medusajs/framework/utils";
+import { MedusaError } from "@medusajs/framework/utils"
 
 export default class ContentfulModuleService {
   // ...
@@ -1476,7 +1476,7 @@ import {
   type SubscriberArgs,
 } from "@medusajs/framework"
 import { 
-  createProductsContentfulWorkflow
+  createProductsContentfulWorkflow,
 } from "../workflows/create-products-contentful"
 
 export default async function handleProductCreate({
@@ -1486,15 +1486,15 @@ export default async function handleProductCreate({
   await createProductsContentfulWorkflow(container)
     .run({
       input: {
-        product_ids: [data.id]
-      }
+        product_ids: [data.id],
+      },
     })
 
   console.log("Product created in Contentful")
 }
 
 export const config: SubscriberConfig = {
-  event: "product.created"
+  event: "product.created",
 }
 ```
 
@@ -1570,7 +1570,7 @@ import type {
 } from "@medusajs/framework"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 import { 
-  createProductsContentfulWorkflow
+  createProductsContentfulWorkflow,
 } from "../workflows/create-products-contentful"
 
 export default async function syncProductsHandler({
@@ -1737,11 +1737,11 @@ const ContentfulSettingsPage = () => {
   const { mutate, isPending } = useMutation({
     mutationFn: () => 
       sdk.client.fetch("/admin/contentful/sync", {
-        method: "POST"
+        method: "POST",
       }),
     onSuccess: () => {
       toast.success("Sync to Contentful triggered successfully")
-    }
+    },
   })
 
   return (
@@ -1826,7 +1826,7 @@ The first method retrieves all locales from Contentful. Add it to the service at
 export default class ContentfulModuleService {
   // ...
   async getLocales() {
-    return await this.managementClient.locale.getMany({});
+    return await this.managementClient.locale.getMany({})
   }
 }
 ```
@@ -2227,17 +2227,17 @@ import { CONTENTFUL_MODULE } from "../modules/contentful"
 export default defineLink(
   {
     linkable: ProductModule.linkable.product,
-    field: "id"
+    field: "id",
   },
   {
     linkable: {
       serviceName: CONTENTFUL_MODULE,
       alias: "contentful_product",
-      primaryKey: "product_id"
-    }
+      primaryKey: "product_id",
+    },
   },
   {
-    readOnly: true
+    readOnly: true,
   }
 )
 ```
@@ -2286,7 +2286,7 @@ export default class ContentfulModuleService {
       content_type: "product",
       "fields.medusaId": filter.id,
       locale: filter.context?.locale,
-      include: 3
+      include: 3,
     })
 
     return contentfulProducts.items.map((product) => {
@@ -2308,7 +2308,7 @@ export default class ContentfulModuleService {
                 ...optionFields,
                 product_option_id: option.fields.medusaId,
               }
-            })
+            }),
           }
         }),
         options: product.fields.productOptions.map((option) => {
@@ -2324,9 +2324,9 @@ export default class ContentfulModuleService {
                 ...valueFields,
                 product_option_value_id: value.fields.medusaId,
               }
-            })
+            }),
           }
-        })
+        }),
       }
     })
   }
@@ -2396,13 +2396,13 @@ export const GET = async (
       "contentful_product.*",
     ],
     filters: {
-      id
+      id,
     },
     context: {
       contentful_product: QueryContext({
         locale,
-      })
-    }
+      }),
+    },
   })
 
   res.json({
@@ -2558,7 +2558,7 @@ Finally, in the `ProductPage` component in the same file, pass the following pro
 ```tsx title="src/app/[countryCode]/(main)/products/[handle]/page.tsx" badgeLabel="Storefront" badgeColor="blue"
 return (
   <ProductTemplate
-    {/* ... */}
+    // ...
     productLocaleDetails={productLocaleDetails.product}
   />
 )
@@ -2596,7 +2596,7 @@ Finally, pass the `productLocaleDetails` prop to the `ProductInfo` component in 
 
 ```tsx title="src/modules/products/templates/index.tsx" badgeLabel="Storefront" badgeColor="blue"
 <ProductInfo
-  {/* ... */}
+  // ...
   productLocaleDetails={productLocaleDetails}
 />
 ```
@@ -2740,7 +2740,7 @@ First, add the webhook secret as an environment variable in the Medusa applicati
 CONTENTFUL_WEBHOOK_SECRET=aEl7...
 ```
 
-Next, add the webhook secret to the Contentful module options in the Medusa application's `medusa-config.ts` file:
+Next, add the webhook secret to the Contentful Module options in the Medusa application's `medusa-config.ts` file:
 
 ```ts title="medusa-config.ts"
 module.exports = defineConfig({
@@ -2751,9 +2751,9 @@ module.exports = defineConfig({
       options: {
         // ...
         webhook_secret: process.env.CONTENTFUL_WEBHOOK_SECRET,
-      }
-    }
-  ]
+      },
+    },
+  ],
 })
 ```
 
@@ -2784,8 +2784,8 @@ Then, add the following method to the Contentful Module's service in `src/module
 // other imports...
 import { 
   CanonicalRequest, 
-  verifyRequest
-} from "@contentful/node-apps-toolkit";
+  verifyRequest,
+} from "@contentful/node-apps-toolkit"
 
 export default class ContentfulModuleService {
   // ...
@@ -2881,10 +2881,10 @@ export const prepareUpdateDataStepHighlights = [
 ]
 
 ```ts title="src/workflows/steps/prepare-update-data.ts" highlights={prepareUpdateDataStepHighlights}
-import { createStep, StepResponse } from "@medusajs/framework/workflows-sdk";
-import { EntryProps } from "contentful-management";
-import ContentfulModuleService from "../../modules/contentful/service";
-import { CONTENTFUL_MODULE } from "../../modules/contentful";
+import { createStep, StepResponse } from "@medusajs/framework/workflows-sdk"
+import { EntryProps } from "contentful-management"
+import ContentfulModuleService from "../../modules/contentful/service"
+import { CONTENTFUL_MODULE } from "../../modules/contentful"
 
 type StepInput = {
   entry: EntryProps
@@ -2969,11 +2969,11 @@ import {
   updateProductOptionsWorkflow, 
   updateProductsWorkflow, 
   updateProductVariantsWorkflow, 
-  UpdateProductOptionsWorkflowInput
+  UpdateProductOptionsWorkflowInput,
 } from "@medusajs/medusa/core-flows"
 import { 
   UpsertProductDTO, 
-  UpsertProductVariantDTO
+  UpsertProductVariantDTO,
 } from "@medusajs/framework/types"
 
 export type WorkflowInput = {
@@ -2992,7 +2992,7 @@ export const handleContentfulHookWorkflow = createWorkflow(
         updateProductsWorkflow.runAsStep({
           input: {
             products: [prepareUpdateData as UpsertProductDTO],
-          }
+          },
         })
       })
 
@@ -3003,7 +3003,7 @@ export const handleContentfulHookWorkflow = createWorkflow(
       updateProductVariantsWorkflow.runAsStep({
         input: {
             product_variants: [prepareUpdateData as UpsertProductVariantDTO],
-          }
+          },
         })
       })
 
@@ -3012,7 +3012,7 @@ export const handleContentfulHookWorkflow = createWorkflow(
     )
     .then(() => {
       updateProductOptionsWorkflow.runAsStep({
-        input: prepareUpdateData as unknown as UpdateProductOptionsWorkflowInput
+        input: prepareUpdateData as unknown as UpdateProductOptionsWorkflowInput,
       })
     })
   }
@@ -3051,7 +3051,7 @@ export const contentfulHookRouteHighlights = [
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { 
   handleContentfulHookWorkflow, 
-  HandleContentfulHookWorkflowInput
+  HandleContentfulHookWorkflowInput,
 } from "../../../workflows/handle-contentful-hook"
 import { CONTENTFUL_MODULE } from "../../../modules/contentful"
 import { CanonicalRequest } from "@contentful/node-apps-toolkit"
@@ -3082,7 +3082,7 @@ export const POST = async (
   await handleContentfulHookWorkflow(req.scope).run({
     input: {
       entry: req.body,
-    } as unknown as HandleContentfulHookWorkflowInput
+    } as unknown as HandleContentfulHookWorkflowInput,
   })
 
   res.status(200).send("OK")
