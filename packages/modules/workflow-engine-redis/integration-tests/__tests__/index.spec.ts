@@ -66,7 +66,7 @@ function times(num) {
       new Promise((_, reject) => {
         setTimeoutSync(
           () => reject("times has not been resolved after 10 seconds."),
-          1000
+          10000
         )
       }),
     ]),
@@ -689,7 +689,7 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
 
       // Note: These tests depend on actual Redis instance and waiting for the scheduled jobs to run, which isn't great.
       // Mocking bullmq, however, would make the tests close to useless, so we can keep them very minimal and serve as smoke tests.
-      describe.skip("Scheduled workflows", () => {
+      describe("Scheduled workflows", () => {
         beforeEach(() => {
           jest.clearAllMocks()
         })
@@ -742,21 +742,32 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
           )
         })
 
-        it.skip("the scheduled workflow should have access to the shared container", async () => {
-          const wait = times(1)
-          sharedContainer_.register("test-value", asValue("test"))
-
-          const spy = await createScheduled("shared-container-job", wait.next, {
-            interval: 1000,
+        // TODO: investigate why sometimes flow doesn't have access to the new key registered
+        describe.skip("Scheduled workflows", () => {
+          beforeEach(() => {
+            sharedContainer_.register("test-value", asValue("test"))
           })
-          await wait.promise
 
-          expect(spy).toHaveBeenCalledTimes(1)
+          it("the scheduled workflow should have access to the shared container", async () => {
+            const wait = times(1)
 
-          expect(spy).toHaveReturnedWith(
-            expect.objectContaining({ output: { testValue: "test" } })
-          )
-          WorkflowManager.unregister("shared-container-job")
+            const spy = await createScheduled(
+              "shared-container-job",
+              wait.next,
+              {
+                interval: 1000,
+              }
+            )
+            await wait.promise
+
+            expect(spy).toHaveBeenCalledTimes(1)
+
+            console.log(spy.mock.results)
+            expect(spy).toHaveReturnedWith(
+              expect.objectContaining({ output: { testValue: "test" } })
+            )
+            WorkflowManager.unregister("shared-container-job")
+          })
         })
       })
     })

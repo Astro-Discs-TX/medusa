@@ -12,6 +12,12 @@ import {
   Modules,
   TransactionHandlerType,
 } from "@medusajs/framework/utils"
+import {
+  createStep,
+  createWorkflow,
+  StepResponse,
+  WorkflowResponse,
+} from "@medusajs/framework/workflows-sdk"
 import { moduleIntegrationTestRunner } from "@medusajs/test-utils"
 import { WorkflowsModuleService } from "@services"
 import { asFunction } from "awilix"
@@ -30,14 +36,8 @@ import {
   workflowEventGroupIdStep2Mock,
 } from "../__fixtures__/workflow_event_group_id"
 import { createScheduled } from "../__fixtures__/workflow_scheduled"
-import {
-  createStep,
-  createWorkflow,
-  StepResponse,
-  WorkflowResponse,
-} from "@medusajs/framework/workflows-sdk"
 
-jest.setTimeout(3000000)
+jest.setTimeout(60000)
 
 const failTrap = (done) => {
   setTimeoutSync(() => {
@@ -171,7 +171,7 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
           return new StepResponse(res)
         })
         const mockStep2Fn = jest.fn().mockImplementation(async () => {
-          await setTimeoutPromise(1000)
+          await setTimeoutPromise(100)
           const res = { obj: "return from 2" }
           asyncResults.push(res)
           return new StepResponse(res)
@@ -353,7 +353,7 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
           expect(transaction.getFlow().state).toEqual("reverted")
         })
 
-        it.skip("should subscribe to a async workflow and receive the response when it finishes", (done) => {
+        it("should subscribe to a async workflow and receive the response when it finishes", (done) => {
           const transactionId = "trx_123"
 
           const onFinish = jest.fn(() => {
@@ -379,6 +379,7 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
           })
 
           expect(onFinish).toHaveBeenCalledTimes(0)
+          failTrap(done)
         })
 
         it("should cancel and revert a completed workflow", async () => {
