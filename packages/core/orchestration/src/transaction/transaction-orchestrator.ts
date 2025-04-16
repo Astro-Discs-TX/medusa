@@ -1059,10 +1059,6 @@ export class TransactionOrchestrator extends EventEmitter {
     step: TransactionStep,
     response: unknown
   ): Promise<void> {
-    const isAsync = step.isCompensating()
-      ? step.definition.compensateAsync
-      : step.definition.async
-
     if (isDefined(response) && step.saveResponse) {
       transaction.addResponse(
         step.definition.action!,
@@ -1073,15 +1069,7 @@ export class TransactionOrchestrator extends EventEmitter {
       )
     }
 
-    const ret = await TransactionOrchestrator.setStepSuccess(
-      transaction,
-      step,
-      response
-    )
-
-    if (isAsync && !ret.stopExecution) {
-      await transaction.scheduleRetry(step, 0)
-    }
+    await TransactionOrchestrator.setStepSuccess(transaction, step, response)
   }
 
   /**
@@ -1094,10 +1082,6 @@ export class TransactionOrchestrator extends EventEmitter {
     isPermanent: boolean,
     response?: unknown
   ): Promise<void> {
-    const isAsync = step.isCompensating()
-      ? step.definition.compensateAsync
-      : step.definition.async
-
     if (isDefined(response) && step.saveResponse) {
       transaction.addResponse(
         step.definition.action!,
@@ -1108,16 +1092,12 @@ export class TransactionOrchestrator extends EventEmitter {
       )
     }
 
-    const ret = await TransactionOrchestrator.setStepFailure(
+    await TransactionOrchestrator.setStepFailure(
       transaction,
       step,
       error,
       isPermanent ? 0 : step.definition.maxRetries
     )
-
-    if (isAsync && !ret.stopExecution) {
-      await transaction.scheduleRetry(step, 0)
-    }
   }
 
   /**
