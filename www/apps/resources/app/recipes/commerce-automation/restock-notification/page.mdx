@@ -31,7 +31,7 @@ export const metadata = {
 
 In this guide, you'll learn how to notify customers when a variant is restocked in Medusa.
 
-When you install a Medusa application, you get a fully-fledged commerce platform with a framework for customization. The Medusa application's commerce features are built around [commerce modules](../../../commerce-modules/page.mdx) which are available out-of-the-box. These features include managing the inventory of product variants in different stock locations and sales channels.
+When you install a Medusa application, you get a fully-fledged commerce platform with a Framework for customization. The Medusa application's commerce features are built around [commerce modules](../../../commerce-modules/page.mdx) which are available out-of-the-box. These features include managing the inventory of product variants in different stock locations and sales channels.
 
 Customers browsing your store may be interested in a product that is currently out of stock. To keep the customer interested in your store and encourage them to purchase the product in the future, you can build customizations around Medusa's commerce features to subscribe customers to receive a notification when the product is restocked.
 
@@ -169,7 +169,7 @@ In the data model, you define the following properties:
 
 <Note>
 
-Learn more about data model [properties](!docs!/learn/fundamentals/data-models/property-types) and [relations](!docs!/learn/fundamentals/data-models/relationships).
+Learn more about data model [properties](!docs!/learn/fundamentals/data-models/properties) and [relations](!docs!/learn/fundamentals/data-models/relationships).
 
 </Note>
 
@@ -305,7 +305,7 @@ Learn more about module links in [this documentation](!docs!/learn/fundamentals/
 
 </Note>
 
-To create a link, create the file `src/links/restock-variant.ts` with the following content:
+To define a link, create the file `src/links/restock-variant.ts` with the following content:
 
 ![The directory structure of the Medusa Application after adding this link.](https://res.cloudinary.com/dza7lstvk/image/upload/v1733225402/Medusa%20Resources/restock-dir-overview-7_dln3fw.jpg)
 
@@ -329,7 +329,7 @@ export default defineLink(
 You define a link using `defineLink` from the Modules SDK. It accepts three parameters:
 
 1. The first data model part of the link, which is the Restock Module's `restockSubscription` data model. A module has a special `linkable` property that contain link configurations for its data models. You also specify the field that points to the product variant.
-1. The second data model part of the link, which is the Product Module's `productVariant` data model.
+2. The second data model part of the link, which is the Product Module's `productVariant` data model.
 3. An object of configurations for the module link. By default, Medusa creates a table in the database to represent the link you define. However, in this guide, you only want this link to retrieve the variants associated with a subscription. So, you enable `readOnly` telling Medusa not to create a table for this link.
 
 In the next steps, you'll see how this link allows you to retrieve product variants' details when retrieving restock subscriptions.
@@ -1490,5 +1490,3 @@ You've now implemented restock notifications in Medusa. You can also customize t
 If you're new to Medusa, check out the [main documentation](!docs!/learn), where you'll get a more in-depth learning of all the concepts you've used in this guide and more.
 
 To learn more about the commerce features that Medusa provides, check out Medusa's [Commerce Modules](../../../commerce-modules/page.mdx).
-
-For other general guides related to [deployment](../../../deployment/page.mdx), [storefront development](../../../storefront-development/page.mdx), [integrations](../../../integrations/page.mdx), and more, check out the [Development Resources](../../../page.mdx).

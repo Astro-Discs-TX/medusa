@@ -1,4 +1,5 @@
 import {
+  AdditionalData,
   AddToCartWorkflowInputDTO,
   ConfirmVariantInventoryWorkflowInputDTO,
 } from "@medusajs/framework/types"
@@ -33,6 +34,7 @@ import {
 } from "../utils/prepare-line-item-data"
 import { confirmVariantInventoryWorkflow } from "./confirm-variant-inventory"
 import { refreshCartItemsWorkflow } from "./refresh-cart-items"
+import { pricingContextResult } from "../utils/schemas"
 
 const cartFields = ["completed_at"].concat(cartFieldsForPricingContext)
 
@@ -68,10 +70,44 @@ export const addToCartWorkflowId = "add-to-cart"
  * Add a line item to a cart.
  *
  * @property hooks.validate - This hook is executed before all operations. You can consume this hook to perform any custom validation. If validation fails, you can throw an error to stop the workflow execution.
+ * @property hooks.setPricingContext - This hook is executed after the cart is retrieved and before the line items are created. You can consume this hook to return any custom context useful for the prices retrieval of the variants to be added to the cart.
+ * 
+ * For example, assuming you have the following custom pricing rule:
+ * 
+ * ```json
+ * {
+ *   "attribute": "location_id",
+ *   "operator": "eq",
+ *   "value": "sloc_123",
+ * }
+ * ```
+ * 
+ * You can consume the `setPricingContext` hook to add the `location_id` context to the prices calculation:
+ * 
+ * ```ts
+ * import { addToCartWorkflow } from "@medusajs/medusa/core-flows";
+ * import { StepResponse } from "@medusajs/workflows-sdk";
+ * 
+ * addToCartWorkflow.hooks.setPricingContext((
+ *   { cart, variantIds, items, additional_data }, { container }
+ * ) => {
+ *   return new StepResponse({
+ *     location_id: "sloc_123", // Special price for in-store purchases
+ *   });
+ * });
+ * ```
+ * 
+ * The variants' prices will now be retrieved using the context you return.
+ * 
+ * :::note
+ * 
+ * Learn more about prices calculation context in the [Prices Calculation](https://docs.medusajs.com/resources/commerce-modules/pricing/price-calculation) documentation.
+ * 
+ * :::
  */
 export const addToCartWorkflow = createWorkflow(
   addToCartWorkflowId,
-  (input: WorkflowData<AddToCartWorkflowInputDTO>) => {
+  (input: WorkflowData<AddToCartWorkflowInputDTO & AdditionalData>) => {
     const cartQuery = useQueryGraphStep({
       entity: "cart",
       filters: { id: input.cart_id },
@@ -93,6 +129,35 @@ export const addToCartWorkflow = createWorkflow(
       return (data.input.items ?? []).map((i) => i.variant_id).filter(Boolean)
     })
 
+    const setPricingContext = createHook(
+      "setPricingContext",
+      {
+        cart,
+        variantIds,
+        items: input.items,
+        additional_data: input.additional_data,
+      },
+      {
+        resultValidator: pricingContextResult,
+      }
+    )
+
+    const setPricingContextResult = setPricingContext.getResult()
+    const pricingContext = transform(
+      { cart, setPricingContextResult },
+      (data) => {
+        return {
+          ...data.cart,
+          ...(data.setPricingContextResult ? data.setPricingContextResult : {}),
+          currency_code: data.cart.currency_code,
+          region_id: data.cart.region_id,
+          region: data.cart.region,
+          customer_id: data.cart.customer_id,
+          customer: data.cart.customer,
+        }
+      }
+    )
+
     const variants = when({ variantIds }, ({ variantIds }) => {
       return !!variantIds.length
     }).then(() => {
@@ -102,7 +167,7 @@ export const addToCartWorkflow = createWorkflow(
         variables: {
           id: variantIds,
           calculated_price: {
-            context: cart,
+            context: pricingContext,
           },
         },
       })
@@ -201,7 +266,7 @@ export const addToCartWorkflow = createWorkflow(
     })
 
     return new WorkflowResponse(void 0, {
-      hooks: [validate],
+      hooks: [validate, setPricingContext] as const,
     })
   }
 )

@@ -33,8 +33,15 @@ function buildStepContext({
     eventGroupId:
       flowMetadata?.eventGroupId ?? stepArguments.context!.eventGroupId,
     parentStepIdempotencyKey: flowMetadata?.parentStepIdempotencyKey as string,
+    preventReleaseEvents: flowMetadata?.preventReleaseEvents ?? false,
     transactionId: stepArguments.context!.transactionId,
     context: stepArguments.context!,
+    " getStepResult"(
+      stepId: string,
+      action: "invoke" | "compensate" = "invoke"
+    ) {
+      return (stepArguments[action][stepId] as any)?.output?.output
+    },
   }
 
   return executionContext

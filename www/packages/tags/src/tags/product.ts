@@ -52,6 +52,10 @@ export const product = [
     "path": "https://docs.medusajs.com/resources/commerce-modules/inventory/inventory-kit"
   },
   {
+    "title": "Extend Product",
+    "path": "https://docs.medusajs.com/resources/commerce-modules/product/extend"
+  },
+  {
     "title": "Get Variant Prices",
     "path": "https://docs.medusajs.com/resources/commerce-modules/product/guides/price"
   },
@@ -60,11 +64,19 @@ export const product = [
     "path": "https://docs.medusajs.com/resources/commerce-modules/product/guides/price-with-taxes"
   },
   {
+    "title": "Implement Product Reviews",
+    "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/product-reviews"
+  },
+  {
+    "title": "Build Wishlist Plugin",
+    "path": "https://docs.medusajs.com/resources/plugins/guides/wishlist"
+  },
+  {
     "title": "Implement Express Checkout with Medusa",
     "path": "https://docs.medusajs.com/resources/storefront-development/guides/express-checkout"
   },
   {
-    "title": "List Product Categories in Storefront",
+    "title": "Show Product Categories in Storefront",
     "path": "https://docs.medusajs.com/resources/storefront-development/products/categories/list"
   },
   {
@@ -96,7 +108,7 @@ export const product = [
     "path": "https://docs.medusajs.com/resources/storefront-development/products/inventory"
   },
   {
-    "title": "List Products in Storefront",
+    "title": "Show Products in Storefront",
     "path": "https://docs.medusajs.com/resources/storefront-development/products/list"
   },
   {
@@ -226,10 +238,6 @@ export const product = [
   {
     "title": "batchProductVariantsWorkflow",
     "path": "https://docs.medusajs.com/resources/references/medusa-workflows/batchProductVariantsWorkflow"
-  },
-  {
-    "title": "batchProductsWorkflow",
-    "path": "https://docs.medusajs.com/resources/references/medusa-workflows/batchProductsWorkflow"
   },
   {
     "title": "createCollectionsWorkflow",

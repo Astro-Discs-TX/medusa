@@ -150,6 +150,11 @@ export const slugChanges = [
     "filePath": "/www/apps/resources/references/auth_provider/classes/auth_provider.AbstractAuthModuleProvider/page.mdx"
   },
   {
+    "origSlug": "/references/cache/interfaces/cache.ICacheService",
+    "newSlug": "/references/cache-service",
+    "filePath": "/www/apps/resources/references/cache/interfaces/cache.ICacheService/page.mdx"
+  },
+  {
     "origSlug": "/references/cart/ICartModuleService/methods/cart.ICartModuleService.addLineItemAdjustments",
     "newSlug": "/references/cart/addLineItemAdjustments",
     "filePath": "/www/apps/resources/references/cart/ICartModuleService/methods/cart.ICartModuleService.addLineItemAdjustments/page.mdx"
@@ -403,6 +408,26 @@ export const slugChanges = [
     "origSlug": "/references/cart/ICartModuleService/methods/cart.ICartModuleService.updateShippingMethods",
     "newSlug": "/references/cart/updateShippingMethods",
     "filePath": "/www/apps/resources/references/cart/ICartModuleService/methods/cart.ICartModuleService.updateShippingMethods/page.mdx"
+  },
+  {
+    "origSlug": "/references/cart/ICartModuleService/methods/cart.ICartModuleService.upsertLineItemAdjustments",
+    "newSlug": "/references/cart/upsertLineItemAdjustments",
+    "filePath": "/www/apps/resources/references/cart/ICartModuleService/methods/cart.ICartModuleService.upsertLineItemAdjustments/page.mdx"
+  },
+  {
+    "origSlug": "/references/cart/ICartModuleService/methods/cart.ICartModuleService.upsertLineItemTaxLines",
+    "newSlug": "/references/cart/upsertLineItemTaxLines",
+    "filePath": "/www/apps/resources/references/cart/ICartModuleService/methods/cart.ICartModuleService.upsertLineItemTaxLines/page.mdx"
+  },
+  {
+    "origSlug": "/references/cart/ICartModuleService/methods/cart.ICartModuleService.upsertShippingMethodAdjustments",
+    "newSlug": "/references/cart/upsertShippingMethodAdjustments",
+    "filePath": "/www/apps/resources/references/cart/ICartModuleService/methods/cart.ICartModuleService.upsertShippingMethodAdjustments/page.mdx"
+  },
+  {
+    "origSlug": "/references/cart/ICartModuleService/methods/cart.ICartModuleService.upsertShippingMethodTaxLines",
+    "newSlug": "/references/cart/upsertShippingMethodTaxLines",
+    "filePath": "/www/apps/resources/references/cart/ICartModuleService/methods/cart.ICartModuleService.upsertShippingMethodTaxLines/page.mdx"
   },
   {
     "origSlug": "/references/cart/interfaces/cart.ICartModuleService",
@@ -3715,9 +3740,19 @@ export const slugChanges = [
     "filePath": "/www/apps/resources/references/dml/entity_builder/EntityBuilder/methods/dml.entity_builder.EntityBuilder.define/page.mdx"
   },
   {
+    "origSlug": "/references/event/interfaces/event.IEventBusModuleService",
+    "newSlug": "/references/event-service",
+    "filePath": "/www/apps/resources/references/event/interfaces/event.IEventBusModuleService/page.mdx"
+  },
+  {
     "origSlug": "/references/file/classes/file.AbstractFileProviderService",
     "newSlug": "/references/file-provider-module",
     "filePath": "/www/apps/resources/references/file/classes/file.AbstractFileProviderService/page.mdx"
+  },
+  {
+    "origSlug": "/references/file_service/interfaces/file_service.IFileModuleService",
+    "newSlug": "/references/file-service",
+    "filePath": "/www/apps/resources/references/file_service/interfaces/file_service.IFileModuleService/page.mdx"
   },
   {
     "origSlug": "/references/fulfillment/IFulfillmentModuleService/methods/fulfillment.IFulfillmentModuleService.calculateShippingOptionsPrices",
@@ -4470,6 +4505,11 @@ export const slugChanges = [
     "filePath": "/www/apps/resources/references/js_sdk/admin/Admin/properties/js_sdk.admin.Admin.paymentCollection/page.mdx"
   },
   {
+    "origSlug": "/references/js_sdk/admin/Admin/properties/js_sdk.admin.Admin.plugin",
+    "newSlug": "/references/js-sdk/admin/plugin",
+    "filePath": "/www/apps/resources/references/js_sdk/admin/Admin/properties/js_sdk.admin.Admin.plugin/page.mdx"
+  },
+  {
     "origSlug": "/references/js_sdk/admin/Admin/properties/js_sdk.admin.Admin.priceList",
     "newSlug": "/references/js-sdk/admin/priceList",
     "filePath": "/www/apps/resources/references/js_sdk/admin/Admin/properties/js_sdk.admin.Admin.priceList/page.mdx"
@@ -4685,6 +4725,16 @@ export const slugChanges = [
     "filePath": "/www/apps/resources/references/js_sdk/store/classes/js_sdk.store.Store/page.mdx"
   },
   {
+    "origSlug": "/references/locking/interfaces/locking.ILockingModule",
+    "newSlug": "/references/locking-service",
+    "filePath": "/www/apps/resources/references/locking/interfaces/locking.ILockingModule/page.mdx"
+  },
+  {
+    "origSlug": "/references/locking/interfaces/locking.ILockingProvider",
+    "newSlug": "/references/locking-module-provider",
+    "filePath": "/www/apps/resources/references/locking/interfaces/locking.ILockingProvider/page.mdx"
+  },
+  {
     "origSlug": "/references/medusa_config/interfaces/medusa_config.ConfigModule",
     "newSlug": "/references/medusa-config",
     "filePath": "/www/apps/resources/references/medusa_config/interfaces/medusa_config.ConfigModule/page.mdx"
@@ -4798,6 +4848,11 @@ export const slugChanges = [
     "origSlug": "/references/notification/classes/notification.AbstractNotificationProviderService",
     "newSlug": "/references/notification-provider-module",
     "filePath": "/www/apps/resources/references/notification/classes/notification.AbstractNotificationProviderService/page.mdx"
+  },
+  {
+    "origSlug": "/references/notification_service/interfaces/notification_service.INotificationModuleService",
+    "newSlug": "/references/notification-service",
+    "filePath": "/www/apps/resources/references/notification_service/interfaces/notification_service.INotificationModuleService/page.mdx"
   },
   {
     "origSlug": "/references/order/IOrderModuleService/methods/order.IOrderModuleService.addOrderAction",
@@ -5748,6 +5803,11 @@ export const slugChanges = [
     "origSlug": "/references/payment/IPaymentModuleService/methods/payment.IPaymentModuleService.restoreRefundReasons",
     "newSlug": "/references/payment/restoreRefundReasons",
     "filePath": "/www/apps/resources/references/payment/IPaymentModuleService/methods/payment.IPaymentModuleService.restoreRefundReasons/page.mdx"
+  },
+  {
+    "origSlug": "/references/payment/IPaymentModuleService/methods/payment.IPaymentModuleService.retrievePayment",
+    "newSlug": "/references/payment/retrievePayment",
+    "filePath": "/www/apps/resources/references/payment/IPaymentModuleService/methods/payment.IPaymentModuleService.retrievePayment/page.mdx"
   },
   {
     "origSlug": "/references/payment/IPaymentModuleService/methods/payment.IPaymentModuleService.retrievePaymentCollection",

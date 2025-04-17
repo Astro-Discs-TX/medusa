@@ -143,13 +143,38 @@ const nextConfig = {
         destination: `${process.env.NEXT_PUBLIC_BASE_URL}/learn/resources/usage`,
         permanent: true,
       },
+      {
+        source: "/plugins",
+        destination: "/integrations",
+        permanent: true,
+      },
+      {
+        source: "/resources",
+        destination: "/recipes",
+        permanent: true,
+      },
+      {
+        source: "/references/medusa-config",
+        destination: `${process.env.NEXT_PUBLIC_BASE_URL}/learn/configurations/medusa-config`,
+        permanent: true,
+      },
+      {
+        source: "/troubleshooting/workflow-errors",
+        destination: "/troubleshooting/workflow-errors/when-then",
+        permanent: true,
+      },
+      {
+        source: "/medusa-cli/commands/start-cluster",
+        destination: "/medusa-cli/commands/start",
+        permanent: true,
+      },
     ]
   },
   outputFileTracingExcludes: {
     "*": ["node_modules/@medusajs/icons"],
   },
   experimental: {
-    optimizePackageImports: ["@medusajs/icons", "@medusajs/ui"],
+    optimizePackageImports: ["@medusajs/icons", "@medusajs/ui", "elkjs"],
   },
 }
 

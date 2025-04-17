@@ -6,7 +6,7 @@ export const sidebars = [
     items: [
       {
         type: "category",
-        title: "Get Started",
+        title: "Getting Started",
         children: [
           {
             type: "link",
@@ -130,6 +130,11 @@ export const sidebars = [
         children: [
           {
             type: "link",
+            path: "/learn/fundamentals/framework",
+            title: "Overview",
+          },
+          {
+            type: "link",
             path: "/learn/fundamentals/medusa-container",
             title: "Medusa Container",
           },
@@ -218,7 +223,12 @@ export const sidebars = [
               {
                 type: "link",
                 path: "/learn/fundamentals/module-links/custom-columns",
-                title: "Custom Columns",
+                title: "Add Custom Columns",
+              },
+              {
+                type: "link",
+                path: "/learn/fundamentals/module-links/read-only",
+                title: "Read-Only Links",
               },
               {
                 type: "link",
@@ -239,23 +249,8 @@ export const sidebars = [
               },
               {
                 type: "link",
-                path: "/learn/fundamentals/data-models/property-types",
-                title: "Property Types",
-              },
-              {
-                type: "link",
-                path: "/learn/fundamentals/data-models/primary-key",
-                title: "Primary Key",
-              },
-              {
-                type: "link",
-                path: "/learn/fundamentals/data-models/default-properties",
-                title: "Default Properties",
-              },
-              {
-                type: "link",
-                path: "/learn/fundamentals/data-models/configure-properties",
-                title: "Configure Properties",
+                path: "/learn/fundamentals/data-models/properties",
+                title: "Properties",
               },
               {
                 type: "link",
@@ -279,13 +274,8 @@ export const sidebars = [
               },
               {
                 type: "link",
-                path: "/learn/fundamentals/data-models/searchable-property",
-                title: "Searchable Property",
-              },
-              {
-                type: "link",
                 path: "/learn/fundamentals/data-models/write-migration",
-                title: "Write Migration",
+                title: "Migrations",
               },
             ],
           },
@@ -536,8 +526,13 @@ export const sidebars = [
           },
           {
             type: "link",
+            title: "Medusa Configuations",
+            path: "/learn/configurations/medusa-config",
+          },
+          {
+            type: "link",
             title: "Type Aliases",
-            path: "/learn/conventions/ts-aliases",
+            path: "/learn/configurations/ts-aliases",
           },
         ],
       },
@@ -592,20 +587,30 @@ export const sidebars = [
         ],
       },
       {
-        type: "link",
-        path: "/learn/build",
-        title: "Build",
-        chapterTitle: "Production",
+        type: "category",
+        title: "Production",
         children: [
+          {
+            type: "link",
+            path: "/learn/build",
+            title: "Build",
+          },
+          {
+            type: "link",
+            path: "/learn/production/worker-mode",
+            title: "Worker Mode",
+          },
           {
             type: "link",
             path: "/learn/deployment",
             title: "Deployment Overview",
-          },
-          {
-            type: "link",
-            path: "/learn/deployment/general",
-            title: "General Deployment",
+            children: [
+              {
+                type: "link",
+                path: "/learn/deployment/general",
+                title: "General Deployment",
+              },
+            ],
           },
         ],
       },
@@ -640,7 +645,7 @@ export const sidebars = [
               },
               {
                 type: "link",
-                path: "/learn/resources//contribution-guidelines/admin-translations",
+                path: "/learn/resources/contribution-guidelines/admin-translations",
                 title: "Admin Translations",
               },
             ],

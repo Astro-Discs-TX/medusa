@@ -1,11 +1,23 @@
 export const cart = [
   {
+    "title": "Extend Cart",
+    "path": "https://docs.medusajs.com/resources/commerce-modules/cart/extend"
+  },
+  {
     "title": "Implement Custom Line Item Pricing in Medusa",
     "path": "https://docs.medusajs.com/resources/examples/guides/custom-item-price"
   },
   {
     "title": "Implement Quote Management",
     "path": "https://docs.medusajs.com/resources/examples/guides/quote-management"
+  },
+  {
+    "title": "Send Abandoned Cart Notification",
+    "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/abandoned-cart"
+  },
+  {
+    "title": "Implement Loyalty Points",
+    "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/loyalty-points"
   },
   {
     "title": "Create Cart Context in Storefront",
@@ -22,6 +34,10 @@ export const cart = [
   {
     "title": "Retrieve Cart in Storefront",
     "path": "https://docs.medusajs.com/resources/storefront-development/cart/retrieve"
+  },
+  {
+    "title": "Show Cart Totals",
+    "path": "https://docs.medusajs.com/resources/storefront-development/cart/totals"
   },
   {
     "title": "Update Cart in Storefront",
