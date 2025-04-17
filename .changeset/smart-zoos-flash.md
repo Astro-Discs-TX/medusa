@@ -2,4 +2,4 @@
 "@medusajs/core-flows": patch
 ---
 
-fix(core-flows): return fulfillment creation
+fix(core-flows, link-modules): return fulfillment creation
