@@ -69,7 +69,7 @@ const { result } = await createShippingOptionsWorkflow(container)
       type: {
         label: "Standard",
         description: "Standard shipping",
-        code: "standard"
+        code: "standard",
       },
       price_type: "flat",
       prices: [
@@ -77,8 +77,8 @@ const { result } = await createShippingOptionsWorkflow(container)
         {
           currency_code: "usd",
           amount: 10,
-          rules: {}
-        }
+          rules: {},
+        },
         // price if cart total >= $100
         {
           currency_code: "usd",
@@ -87,17 +87,23 @@ const { result } = await createShippingOptionsWorkflow(container)
             item_total: {
               operator: "gte",
               value: 100,
-            }
-          }
-        }
-      ]
-    }]
+            },
+          },
+        },
+      ],
+    }],
   })
 ```
 
 In this example, you create a shipping option whose default price is `$10`. When the total of the cart or order using this shipping option is greater than `$100`, the shipping option's price becomes free.
 
 ### Using Pricing Module's Service
+
+<Note>
+
+For most use cases, it's recommended to use [workflows](#using-workflows) instead of directly using the module's service.
+
+</Note>
 
 When adding a price using the [addPrices](!resources!/references/pricing/addPrices) method of the Pricing Module's service, pass the `rules` property to a price object.
 
@@ -111,8 +117,8 @@ const priceSet = await pricingModule.addPrices({
     {
       currency_code: "usd",
       amount: 10,
-      rules: {}
-    }
+      rules: {},
+    },
     // price if cart total >= $100
     {
       currency_code: "usd",
@@ -121,29 +127,29 @@ const priceSet = await pricingModule.addPrices({
         item_total: {
           operator: "gte",
           value: 100,
-        }
-      }
-    }
-  ]
+        },
+      },
+    },
+  ],
 })
 ```
 
 In this example, you set the default price of a resource (for example, a shipping option), to `$10`. You also add a conditioned price that sets the price to `0` when the cart or order's total is greater than or equal to `$100`.
 
-### How is the Rule Applied?
+### How is the Price Rule Applied?
 
 The [price calculation](../price-calculation/page.mdx) mechanism considers a price applicable when the resource that this price is in matches the specified rules.
 
 For example, a [cart object](!api!/store#carts_cart_schema) has an `item_total` property. So, if a shipping option has the following price:
 
-```ts
+```json
 {
-  currency_code: "usd",
-  amount: 0,
-  rules: {
-    item_total: {
-      operator: "gte",
-      value: 100,
+  "currency_code": "usd",
+  "amount": 0,
+  "rules": {
+    "item_total": {
+      "operator": "gte",
+      "value": 100,
     }
   }
 }
@@ -153,14 +159,14 @@ The shipping option's price is applied when the cart's `item_total` is greater t
 
 You can also apply the rule on nested relations and properties. For example, to apply a shipping option's price based on the customer's group, you can apply a rule on the `customer.group.id` attribute:
 
-```ts
+```json
 {
-  currency_code: "usd",
-  amount: 0,
-  rules: {
+  "currency_code": "usd",
+  "amount": 0,
+  "rules": {
     "customer.group.id": {
-      operator: "eq",
-      value: "cusgrp_123"
+      "operator": "eq",
+      "value": "cusgrp_123"
     }
   }
 }
