@@ -1,8 +1,8 @@
 /** @type {import('types').Sidebar.SidebarItem[]} */
-export const architecturalModulesSidebar = [
+export const infrastructureModulesSidebar = [
   {
     type: "link",
-    path: "/architectural-modules",
+    path: "/infrastructure-modules",
     title: "Overview",
   },
   {
@@ -15,7 +15,7 @@ export const architecturalModulesSidebar = [
     children: [
       {
         type: "link",
-        path: "/architectural-modules/cache",
+        path: "/infrastructure-modules/cache",
         title: "Overview",
       },
       {
@@ -24,12 +24,12 @@ export const architecturalModulesSidebar = [
         children: [
           {
             type: "link",
-            path: "/architectural-modules/cache/in-memory",
+            path: "/infrastructure-modules/cache/in-memory",
             title: "In-Memory",
           },
           {
             type: "link",
-            path: "/architectural-modules/cache/redis",
+            path: "/infrastructure-modules/cache/redis",
             title: "Redis",
           },
         ],
@@ -40,7 +40,7 @@ export const architecturalModulesSidebar = [
         children: [
           {
             type: "link",
-            path: "/architectural-modules/cache/create",
+            path: "/infrastructure-modules/cache/create",
             title: "Create Cache Module",
           },
           {
@@ -59,7 +59,7 @@ export const architecturalModulesSidebar = [
     children: [
       {
         type: "link",
-        path: "/architectural-modules/event",
+        path: "/infrastructure-modules/event",
         title: "Overview",
       },
       {
@@ -68,12 +68,12 @@ export const architecturalModulesSidebar = [
         children: [
           {
             type: "link",
-            path: "/architectural-modules/event/local",
+            path: "/infrastructure-modules/event/local",
             title: "Local",
           },
           {
             type: "link",
-            path: "/architectural-modules/event/redis",
+            path: "/infrastructure-modules/event/redis",
             title: "Redis",
           },
         ],
@@ -84,7 +84,7 @@ export const architecturalModulesSidebar = [
         children: [
           {
             type: "link",
-            path: "/architectural-modules/event/create",
+            path: "/infrastructure-modules/event/create",
             title: "Create Event Module",
           },
           {
@@ -103,7 +103,7 @@ export const architecturalModulesSidebar = [
     children: [
       {
         type: "link",
-        path: "/architectural-modules/file",
+        path: "/infrastructure-modules/file",
         title: "Overview",
       },
       {
@@ -112,12 +112,12 @@ export const architecturalModulesSidebar = [
         children: [
           {
             type: "link",
-            path: "/architectural-modules/file/local",
+            path: "/infrastructure-modules/file/local",
             title: "Local",
           },
           {
             type: "link",
-            path: "/architectural-modules/file/s3",
+            path: "/infrastructure-modules/file/s3",
             title: "AWS S3 (and Compatible APIs)",
           },
         ],
@@ -147,7 +147,7 @@ export const architecturalModulesSidebar = [
     children: [
       {
         type: "link",
-        path: "/architectural-modules/locking",
+        path: "/infrastructure-modules/locking",
         title: "Overview",
       },
       {
@@ -156,12 +156,12 @@ export const architecturalModulesSidebar = [
         children: [
           {
             type: "link",
-            path: "/architectural-modules/locking/redis",
+            path: "/infrastructure-modules/locking/redis",
             title: "Redis",
           },
           {
             type: "link",
-            path: "/architectural-modules/locking/postgres",
+            path: "/infrastructure-modules/locking/postgres",
             title: "PostgreSQL",
           },
         ],
@@ -191,7 +191,7 @@ export const architecturalModulesSidebar = [
     children: [
       {
         type: "link",
-        path: "/architectural-modules/notification",
+        path: "/infrastructure-modules/notification",
         title: "Overview",
       },
       {
@@ -200,12 +200,12 @@ export const architecturalModulesSidebar = [
         children: [
           {
             type: "link",
-            path: "/architectural-modules/notification/local",
+            path: "/infrastructure-modules/notification/local",
             title: "Local",
           },
           {
             type: "link",
-            path: "/architectural-modules/notification/sendgrid",
+            path: "/infrastructure-modules/notification/sendgrid",
             title: "SendGrid",
           },
         ],
@@ -229,7 +229,7 @@ export const architecturalModulesSidebar = [
           },
           {
             type: "link",
-            path: "/architectural-modules/notification/send-notification",
+            path: "/infrastructure-modules/notification/send-notification",
             title: "Send Notification",
           },
           {
@@ -248,7 +248,7 @@ export const architecturalModulesSidebar = [
     children: [
       {
         type: "link",
-        path: "/architectural-modules/workflow-engine",
+        path: "/infrastructure-modules/workflow-engine",
         title: "Overview",
       },
       {
@@ -257,12 +257,12 @@ export const architecturalModulesSidebar = [
         children: [
           {
             type: "link",
-            path: "/architectural-modules/workflow-engine/in-memory",
+            path: "/infrastructure-modules/workflow-engine/in-memory",
             title: "In-Memory",
           },
           {
             type: "link",
-            path: "/architectural-modules/workflow-engine/redis",
+            path: "/infrastructure-modules/workflow-engine/redis",
             title: "Redis",
           },
         ],
@@ -273,7 +273,7 @@ export const architecturalModulesSidebar = [
         children: [
           {
             type: "link",
-            path: "/architectural-modules/workflow-engine/how-to-use",
+            path: "/infrastructure-modules/workflow-engine/how-to-use",
             title: "Use Workflow Engine Module",
           },
         ],
