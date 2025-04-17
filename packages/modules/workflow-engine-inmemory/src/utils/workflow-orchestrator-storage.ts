@@ -14,6 +14,7 @@ import {
   MedusaError,
   TransactionState,
   TransactionStepState,
+  isDefined,
   isPresent,
 } from "@medusajs/framework/utils"
 import { WorkflowOrchestratorService } from "@services"
@@ -115,8 +116,8 @@ export class InMemoryDistributedTransactionStorage
       return data
     }
 
-    const { idempotent } = options ?? {}
-    if (!idempotent) {
+    const { idempotent, store, retentionTime } = options ?? {}
+    if (!idempotent && !(store && isDefined(retentionTime))) {
       return
     }
 
@@ -309,10 +310,16 @@ export class InMemoryDistributedTransactionStorage
     const { modelId: workflowId, transactionId } = transaction
 
     const inter = setTimeout(async () => {
+      const context = transaction.getFlow().metadata ?? {}
       await this.workflowOrchestratorService_.run(workflowId, {
         transactionId,
         logOnError: true,
         throwOnError: false,
+        context: {
+          eventGroupId: context.eventGroupId,
+          parentStepIdempotencyKey: context.parentStepIdempotencyKey,
+          preventReleaseEvents: context.preventReleaseEvents,
+        },
       })
     }, interval * 1e3)
 
@@ -342,9 +349,16 @@ export class InMemoryDistributedTransactionStorage
     const { modelId: workflowId, transactionId } = transaction
 
     const inter = setTimeout(async () => {
+      const context = transaction.getFlow().metadata ?? {}
       await this.workflowOrchestratorService_.run(workflowId, {
         transactionId,
+        logOnError: true,
         throwOnError: false,
+        context: {
+          eventGroupId: context.eventGroupId,
+          parentStepIdempotencyKey: context.parentStepIdempotencyKey,
+          preventReleaseEvents: context.preventReleaseEvents,
+        },
       })
     }, interval * 1e3)
 
@@ -374,9 +388,16 @@ export class InMemoryDistributedTransactionStorage
     const { modelId: workflowId, transactionId } = transaction
 
     const inter = setTimeout(async () => {
+      const context = transaction.getFlow().metadata ?? {}
       await this.workflowOrchestratorService_.run(workflowId, {
         transactionId,
+        logOnError: true,
         throwOnError: false,
+        context: {
+          eventGroupId: context.eventGroupId,
+          parentStepIdempotencyKey: context.parentStepIdempotencyKey,
+          preventReleaseEvents: context.preventReleaseEvents,
+        },
       })
     }, interval * 1e3)
 
