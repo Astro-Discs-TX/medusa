@@ -6,13 +6,13 @@ export const metadata = {
 
 # {metadata.title}
 
-In this chapter, you’ll learn what a long-running workflow is and how to configure it.
+In this chapter, you'll learn what a long-running workflow is and how to configure it.
 
 ## What is a Long-Running Workflow?
 
 When you execute a workflow, you wait until the workflow finishes execution to receive the output.
 
-A long-running workflow is a workflow that continues its execution in the background. You don’t receive its output immediately. Instead, you subscribe to the workflow execution to listen to status changes and receive its result once the execution is finished.
+A long-running workflow is a workflow that continues its execution in the background. You don't receive its output immediately. Instead, you subscribe to the workflow execution to listen to status changes and receive its result once the execution is finished.
 
 ### Why use Long-Running Workflows?
 
@@ -252,7 +252,7 @@ type SetStepFailureStepInput = {
 };
 
 export const setStepFailureStep = createStep(
-  "set-step-success-step",
+  "setStepFailureStep",
   async function (
     { transactionId }: SetStepFailureStepInput,
     { container }
@@ -346,7 +346,7 @@ In the above example, you execute the long-running workflow `hello-world` and re
 
 ### subscribe Method
 
-The main service's `subscribe` method allows you to listen to changes in the workflow execution’s status. It accepts an object having three properties:
+The main service's `subscribe` method allows you to listen to changes in the workflow execution's status. It accepts an object having three properties:
 
 <TypeList
   types={[
