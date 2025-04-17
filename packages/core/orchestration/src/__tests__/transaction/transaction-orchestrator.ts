@@ -1367,36 +1367,6 @@ describe("Transaction Orchestrator", () => {
       expect(transaction.getState()).toBe(TransactionState.DONE)
     })
 
-    it("should validate if step exists when 'skipOnPermanentFailure' is set as a string", async () => {
-      const flow: TransactionStepsDefinition = {
-        next: {
-          action: "action1",
-          next: [
-            {
-              action: "action2",
-              skipOnPermanentFailure: "actionUnknown",
-              next: {
-                action: "action4",
-              },
-            },
-            {
-              action: "action3",
-            },
-          ],
-        },
-      }
-
-      expect(
-        () =>
-          new TransactionOrchestrator({
-            id: "transaction-name",
-            definition: flow,
-          })
-      ).toThrow(
-        `skipOnFailure: "actionUnknown" - Step actionUnknown is not defined.`
-      )
-    })
-
     it("should fail the current steps and revert the transaction if the Step Timeout is reached", async () => {
       const mocks = {
         f1: jest.fn(() => {
