@@ -1343,6 +1343,7 @@ export class TransactionOrchestrator extends EventEmitter {
     }
 
     const actionNames = new Set<string>()
+    const skipOnFailureSteps = new Set<string>()
     const queue: any[] = [
       { obj: flow, level: [TransactionOrchestrator.ROOT_STEP] },
     ]
@@ -1371,7 +1372,7 @@ export class TransactionOrchestrator extends EventEmitter {
           states[parent].next?.push(id)
         }
 
-        const definitionCopy = { ...obj }
+        const definitionCopy = { ...obj } as TransactionStepsDefinition
         delete definitionCopy.next
 
         if (definitionCopy.async) {
@@ -1391,6 +1392,10 @@ export class TransactionOrchestrator extends EventEmitter {
 
         if (definitionCopy.nested) {
           features.hasNestedTransactions = true
+        }
+
+        if (isString(definitionCopy.skipOnPermanentFailure)) {
+          skipOnFailureSteps.add(definitionCopy.skipOnPermanentFailure)
         }
 
         states[id] = Object.assign(
@@ -1423,6 +1428,14 @@ export class TransactionOrchestrator extends EventEmitter {
         }
       } else if (isObject(obj.next)) {
         queue.push({ obj: obj.next, level: [...level] })
+      }
+    }
+
+    for (const step of skipOnFailureSteps) {
+      if (!actionNames.has(step)) {
+        throw new Error(
+          `skipOnFailure: "${step}" - Step ${step} is not defined.`
+        )
       }
     }
 
