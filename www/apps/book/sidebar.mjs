@@ -130,6 +130,11 @@ export const sidebars = [
         children: [
           {
             type: "link",
+            path: "/learn/fundamentals/framework",
+            title: "Overview",
+          },
+          {
+            type: "link",
             path: "/learn/fundamentals/medusa-container",
             title: "Medusa Container",
           },
@@ -190,8 +195,8 @@ export const sidebars = [
               },
               {
                 type: "link",
-                path: "/learn/fundamentals/modules/architectural-modules",
-                title: "Architectural Modules",
+                path: "/learn/fundamentals/modules/infrastructure-modules",
+                title: "Infrastructure Modules",
               },
             ],
           },
