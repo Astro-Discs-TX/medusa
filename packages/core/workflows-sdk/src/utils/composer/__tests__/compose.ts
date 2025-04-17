@@ -1327,7 +1327,7 @@ describe("Workflow composer", function () {
       expect(logStepFn).toHaveBeenCalledTimes(0)
     })
 
-    it.only("should skip steps until the named step in case of permanent failure", async () => {
+    it("should skip steps until the named step in case of permanent failure", async () => {
       const logStepFn = jest.fn(async ({ input }: { input: object }) => {
         return new StepResponse("done and returned")
       })
