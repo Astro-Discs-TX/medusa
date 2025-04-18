@@ -183,22 +183,14 @@ export class S3FileService extends AbstractFileProviderService {
   async getPresignedUploadUrl(
     fileData: FileTypes.ProviderGetPresignedUploadUrlDTO
   ): Promise<FileTypes.ProviderFileResultDTO> {
-    if (!fileData) {
-      throw new MedusaError(
-        MedusaError.Types.INVALID_DATA,
-        `No file data provided`
-      )
-    }
-
-    if (!fileData.filename) {
+    if (!fileData?.filename) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
         `No filename provided`
       )
     }
 
-    const parsedFilename = path.parse(fileData.filename)
-    const fileKey = `${this.config_.prefix}${parsedFilename.name}${parsedFilename.ext}`
+    const fileKey = `${this.config_.prefix}${fileData.filename}`
 
     let acl: ObjectCannedACL | undefined
     if (fileData.access) {

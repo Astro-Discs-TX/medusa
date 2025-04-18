@@ -52,7 +52,6 @@ export interface IFileModuleService extends IModuleService {
    * const uploadInfo = await fileModuleService.getUploadFileUrls({
    *   filename: "product.png",
    *   mimeType: "image/png",
-   *   content: "somecontent" // base64 encoded
    * })
    */
 

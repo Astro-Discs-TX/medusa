@@ -122,4 +122,42 @@ describe.skip("S3 File Plugin", () => {
 
     await s3Service.delete({ fileKey: resp.key })
   })
+
+  it("gets a presigned upload URL for a nested filename structure and uploads a file successfully", async () => {
+    const fileContent = await fs.readFile(fixtureImagePath)
+    const fixtureAsBinary = fileContent.toString("binary")
+
+    const resp = await s3Service.getPresignedUploadUrl({
+      filename: "testfolder/catphoto.jpg",
+      mimeType: "image/jpeg",
+      access: "private",
+    })
+
+    expect(resp).toEqual({
+      key: expect.stringMatching(/tests\/testfolder\/catphoto.*\.jpg/),
+      url: expect.stringMatching(/https:\/\/.*testfolder\/catphoto\.jpg/),
+    })
+
+    const uploadResp = await axios.put(resp.url, fileContent, {
+      headers: {
+        "Content-Type": "image/jpeg",
+      },
+    })
+
+    expect(uploadResp.status).toEqual(200)
+
+    const signedUrl = await s3Service.getPresignedDownloadUrl({
+      fileKey: resp.key,
+    })
+
+    const signedUrlFile = Buffer.from(
+      await axios
+        .get(signedUrl, { responseType: "arraybuffer" })
+        .then((r) => r.data)
+    )
+
+    expect(signedUrlFile.toString("binary")).toEqual(fixtureAsBinary)
+
+    await s3Service.delete({ fileKey: resp.key })
+  })
 })
