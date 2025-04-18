@@ -91,7 +91,7 @@ const getCleanMd_ = unstable_cache(
     getCleanMd({ file: filePath, plugins }),
   ["clean-md"],
   {
-    revalidate: false,
+    revalidate: 1,
   }
 )
 
@@ -104,6 +104,6 @@ const getFileFromMaps = unstable_cache(
   },
   ["file-map"],
   {
-    revalidate: false,
+    revalidate: 1,
   }
 )
