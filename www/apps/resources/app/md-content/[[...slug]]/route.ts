@@ -83,7 +83,7 @@ const getCleanMd_ = unstable_cache(
     getCleanMd({ file: filePath, plugins }),
   ["clean-md"],
   {
-    revalidate: 3600,
+    revalidate: 0,
   }
 )
 
