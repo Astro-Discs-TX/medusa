@@ -12,6 +12,7 @@ import {
 } from "../modules-sdk"
 import { isObject } from "./is-object"
 import { isString } from "./is-string"
+import { tryConvertToNumber } from "./try-convert-to-number"
 import { normalizeImportPathWithSource } from "./normalize-import-path-with-source"
 import { resolveExports } from "./resolve-exports"
 
@@ -233,10 +234,20 @@ function resolveModules(
       options: { redisUrl: process.env.REDIS_URL },
     },
     {
-      resolve: TEMPORARY_REDIS_MODULE_PACKAGE_NAMES[Modules.LOCKING],
-      options: { redisUrl: process.env.REDIS_URL },
+      resolve: MODULE_PACKAGE_NAMES[Modules.LOCKING],
+      options: {
+        providers: [
+          {
+            id: "locking-redis",
+            resolve: TEMPORARY_REDIS_MODULE_PACKAGE_NAMES[Modules.LOCKING],
+            is_default: true,
+            options: {
+              redisUrl: process.env.REDIS_URL,
+            },
+          },
+        ],
+      },
     },
-
     {
       resolve: MODULE_PACKAGE_NAMES[Modules.FILE],
       options: {
@@ -300,7 +311,8 @@ function normalizeProjectConfig(
   projectConfig: InputConfig["projectConfig"],
   { isCloud }: { isCloud: boolean }
 ): ConfigModule["projectConfig"] {
-  const { http, redisOptions, ...restOfProjectConfig } = projectConfig || {}
+  const { http, redisOptions, sessionOptions, ...restOfProjectConfig } =
+    projectConfig || {}
 
   /**
    * The defaults to use for the project config. They are shallow merged
@@ -337,8 +349,32 @@ function normalizeProjectConfig(
       },
       ...redisOptions,
     },
+    sessionOptions: {
+      ...(isCloud && process.env.SESSION_STORE === "dynamodb"
+        ? {
+            dynamodbOptions: {
+              prefix: process.env.DYNAMO_DB_SESSIONS_PREFIX ?? "sess:",
+              hashKey: process.env.DYNAMO_DB_SESSIONS_HASH_KEY ?? "id",
+              initialized: process.env.DYNAMO_DB_SESSIONS_CREATE_TABLE
+                ? false
+                : true,
+              table: process.env.DYNAMO_DB_SESSIONS_TABLE ?? "medusa-sessions",
+              readCapacityUnits: tryConvertToNumber(
+                process.env.DYNAMO_DB_SESSIONS_READ_UNITS,
+                5
+              ),
+              writeCapacityUnits: tryConvertToNumber(
+                process.env.DYNAMO_DB_SESSIONS_WRITE_UNITS,
+                5
+              ),
+              skipThrowMissingSpecialKeys: true,
+            },
+          }
+        : {}),
+      ...sessionOptions,
+    },
     ...restOfProjectConfig,
-  }
+  } satisfies ConfigModule["projectConfig"]
 }
 
 function normalizeAdminConfig(
