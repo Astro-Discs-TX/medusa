@@ -5,6 +5,7 @@ import {
   MedusaError,
 } from "@medusajs/framework/utils"
 import { MedusaRequest, MedusaStoreRequest } from "@medusajs/framework/http"
+import { transformAndValidateSalesChannelIds } from "./filter-by-valid-sales-channels"
 
 export const wrapVariantsWithTotalInventoryQuantity = async (
   req: MedusaRequest,
@@ -28,13 +29,7 @@ export const wrapVariantsWithInventoryQuantityForSalesChannel = async (
   req: MedusaStoreRequest<unknown>,
   variants: VariantInput[]
 ) => {
-  let { sales_channel_id: salesChannelIds = [] } = req.validatedQuery as {
-    sales_channel_id: string | string[]
-  }
-
-  salesChannelIds = Array.isArray(salesChannelIds)
-    ? salesChannelIds
-    : [salesChannelIds]
+  const salesChannelIds = transformAndValidateSalesChannelIds(req)
 
   const publishableApiKeySalesChannelIds =
     req.publishable_key_context.sales_channel_ids ?? []
