@@ -27,11 +27,19 @@ export async function GET(req: NextRequest, { params }: Params) {
   const filePathFromMap = await getFileFromMaps(
     `/${slug.join("/")}`.replace("//", "/")
   )
+  // eslint-disable-next-line no-console
+  console.log(filePathFromMap, `/${slug.join("/")}`.replace("//", "/"))
   if (!filePathFromMap) {
     return notFound()
   }
 
   const filePath = path.join(process.cwd(), "..", "..", "..", filePathFromMap)
+  // eslint-disable-next-line no-console
+  console.log(
+    filePathFromMap,
+    `/${slug.join("/")}`.replace("//", "/"),
+    filePath
+  )
 
   if (!existsSync(filePath)) {
     return notFound()
