@@ -49,6 +49,9 @@ export async function GET(req: NextRequest, { params }: Params) {
     return notFound()
   }
 
+  // eslint-disable-next-line no-console
+  console.log("erererererere", filePath)
+
   const cleanMdContent = await getCleanMd_(filePath, {
     before: [
       [
@@ -81,6 +84,9 @@ export async function GET(req: NextRequest, { params }: Params) {
       [addUrlToRelativeLink, { url: process.env.NEXT_PUBLIC_BASE_URL }],
     ] as unknown as Plugin[],
   })
+
+  // eslint-disable-next-line no-console
+  console.log("erererererere2", cleanMdContent)
 
   return new NextResponse(cleanMdContent, {
     headers: {
