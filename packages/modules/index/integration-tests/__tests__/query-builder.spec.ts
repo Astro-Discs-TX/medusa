@@ -631,6 +631,46 @@ describe("IndexModuleService query", function () {
     ])
   })
 
+  it("should filter using IN operator with array of strings", async () => {
+    const { data } = await module.query({
+      fields: ["product.id", "product.variants.*"],
+      filters: {
+        product: {
+          variants: {
+            sku: { $in: ["sku 123", "aaa test aaa", "does-not-exist"] },
+          },
+        },
+      },
+      pagination: {
+        order: {
+          product: {
+            variants: {
+              prices: {
+                amount: "DESC",
+              },
+            },
+          },
+        },
+      },
+    })
+
+    expect(data).toEqual([
+      {
+        id: "prod_1",
+        variants: [
+          {
+            id: "var_1",
+            sku: "aaa test aaa",
+          },
+          {
+            id: "var_2",
+            sku: "sku 123",
+          },
+        ],
+      },
+    ])
+  })
+
   it("should query products filtering by price and returning the complete entity", async () => {
     const { data, metadata } = await module.query({
       fields: ["product.*", "product.variants.*", "product.variants.prices.*"],

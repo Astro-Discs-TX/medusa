@@ -262,20 +262,26 @@ export class QueryBuilder {
               }
 
               const inPlaceholders = val.map(() => "?").join(",")
-              const hasId = field[0] === "id"
+              const hasId = field[field.length - 1] === "id"
               if (hasId) {
                 builder.whereRaw(
-                  `(${aliasMapping[attr]}.id) IN (${inPlaceholders})`,
-                  [...val]
+                  `${aliasMapping[attr]}.id IN (${inPlaceholders})`,
+                  val
                 )
               } else {
+                const targetField = field[field.length - 1] as string
+                const jsonbValues = val.map((item) =>
+                  JSON.stringify({
+                    [targetField]: item === null ? null : item,
+                  })
+                )
                 builder.whereRaw(
-                  `(${aliasMapping[attr]}.data${nested}->>?)${castType} IN (${inPlaceholders})`,
-                  [...field, ...val]
+                  `${aliasMapping[attr]}.data${nested} @> ANY(ARRAY[${inPlaceholders}]::JSONB[])`,
+                  jsonbValues
                 )
               }
             } else {
-              const potentialIdFields = field[0]
+              const potentialIdFields = field[field.length - 1]
               const hasId = potentialIdFields === "id"
               if (hasId) {
                 builder.whereRaw(`(${aliasMapping[attr]}.id) ${operator} ?`, [
@@ -302,18 +308,21 @@ export class QueryBuilder {
             return
           }
 
-          const castType = this.getPostgresCastType(attr, field).cast
+          // const castType = this.getPostgresCastType(attr, field).cast
           const inPlaceholders = value.map(() => "?").join(",")
-          const hasId = field[0] === "id"
+          const hasId = field[field.length - 1] === "id"
           if (hasId) {
             builder.whereRaw(
-              `(${aliasMapping[attr]}.id) IN (${inPlaceholders})`,
+              `${aliasMapping[attr]}.id IN (${inPlaceholders})`,
               [...value]
             )
           } else {
+            const jsonbValues = value.map((item) =>
+              JSON.stringify({ [nested]: item === null ? null : item })
+            )
             builder.whereRaw(
-              `(${aliasMapping[attr]}.data${nested}->>?)${castType} IN (${inPlaceholders})`,
-              [...field, ...value]
+              `${aliasMapping[attr]}.data IN ANY(ARRAY[${inPlaceholders}]::JSONB[])`,
+              jsonbValues
             )
           }
         } else if (isDefined(value)) {
@@ -329,7 +338,7 @@ export class QueryBuilder {
             )
           } else {
             const castType = this.getPostgresCastType(attr, field).cast
-            const hasId = field[0] === "id"
+            const hasId = field[field.length - 1] === "id"
             if (hasId) {
               builder.whereRaw(`(${aliasMapping[attr]}.id) ${operator} ?`, [
                 value,
