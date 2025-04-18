@@ -2,7 +2,7 @@ import { Context } from "../shared-context"
 
 export type Subscriber<TData = unknown> = (data: Event<TData>) => Promise<void>
 
-export type SubscriberContext = {
+export type SubscriberContext = Record<string, unknown> & {
   /**
    * The ID of the subscriber. Useful when retrying failed subscribers.
    */

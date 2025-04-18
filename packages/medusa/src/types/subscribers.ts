@@ -1,12 +1,8 @@
-import { Event, MedusaContainer } from "@medusajs/framework/types"
-
-interface SubscriberContext extends Record<string, unknown> {
-  subscriberId?: string
-}
+import { Event, MedusaContainer, EventBusTypes } from "@medusajs/framework/types"
 
 export type SubscriberConfig = {
   event: string | string[]
-  context?: SubscriberContext
+  context?: EventBusTypes.SubscriberContext
 }
 
 export type SubscriberArgs<T = unknown> = {
