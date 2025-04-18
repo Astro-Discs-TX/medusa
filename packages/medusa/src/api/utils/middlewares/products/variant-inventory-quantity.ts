@@ -5,6 +5,7 @@ import {
   MedusaError,
 } from "@medusajs/framework/utils"
 import { MedusaRequest, MedusaStoreRequest } from "@medusajs/framework/http"
+import { transformAndValidateSalesChannelIds } from "./filter-by-valid-sales-channels"
 
 export const wrapVariantsWithTotalInventoryQuantity = async (
   req: MedusaRequest,
@@ -28,25 +29,27 @@ export const wrapVariantsWithInventoryQuantityForSalesChannel = async (
   req: MedusaStoreRequest<unknown>,
   variants: VariantInput[]
 ) => {
-  const salesChannelId = req.filterableFields.sales_channel_id as
-    | string
-    | string[]
-  const { sales_channel_ids: idsFromPublishableKey = [] } =
-    req.publishable_key_context
-
-  let channelToUse: string | undefined
-  if (salesChannelId && !Array.isArray(salesChannelId)) {
-    channelToUse = salesChannelId
+  let { sales_channel_id: salesChannelIds = [] } = req.validatedQuery as {
+    sales_channel_id: string | string[]
   }
 
-  if (idsFromPublishableKey.length === 1) {
-    channelToUse = idsFromPublishableKey[0]
-  }
+  salesChannelIds = Array.isArray(salesChannelIds)
+    ? salesChannelIds
+    : [salesChannelIds]
 
-  if (!channelToUse) {
+  const publishableApiKeySalesChannelIds =
+    req.publishable_key_context.sales_channel_ids ?? []
+
+  let channelsToUse: string
+
+  if (publishableApiKeySalesChannelIds.length === 1) {
+    channelsToUse = publishableApiKeySalesChannelIds[0]
+  } else if (salesChannelIds.length === 1) {
+    channelsToUse = salesChannelIds[0]
+  } else {
     throw new MedusaError(
       MedusaError.Types.INVALID_DATA,
-      `Inventory availability cannot be calculated in the given context. Either provide a sales channel id or configure a single sales channel in the publishable key`
+      `Inventory availability cannot be calculated in the given context. Either provide a single sales channel id or configure a single sales channel in the publishable key`
     )
   }
 
@@ -60,7 +63,7 @@ export const wrapVariantsWithInventoryQuantityForSalesChannel = async (
   const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
   const availability = await getVariantAvailability(query, {
     variant_ids: variantIds,
-    sales_channel_id: channelToUse,
+    sales_channel_id: channelsToUse,
   })
 
   wrapVariants(variants, availability)
