@@ -319,10 +319,16 @@ export class InMemoryDistributedTransactionStorage
     const { modelId: workflowId, transactionId } = transaction
 
     const inter = setTimeout(async () => {
+      const context = transaction.getFlow().metadata ?? {}
       await this.workflowOrchestratorService_.run(workflowId, {
         transactionId,
         logOnError: true,
         throwOnError: false,
+        context: {
+          eventGroupId: context.eventGroupId,
+          parentStepIdempotencyKey: context.parentStepIdempotencyKey,
+          preventReleaseEvents: context.preventReleaseEvents,
+        },
       })
     }, interval * 1e3)
 
@@ -352,9 +358,16 @@ export class InMemoryDistributedTransactionStorage
     const { modelId: workflowId, transactionId } = transaction
 
     const inter = setTimeout(async () => {
+      const context = transaction.getFlow().metadata ?? {}
       await this.workflowOrchestratorService_.run(workflowId, {
         transactionId,
+        logOnError: true,
         throwOnError: false,
+        context: {
+          eventGroupId: context.eventGroupId,
+          parentStepIdempotencyKey: context.parentStepIdempotencyKey,
+          preventReleaseEvents: context.preventReleaseEvents,
+        },
       })
     }, interval * 1e3)
 
@@ -384,9 +397,16 @@ export class InMemoryDistributedTransactionStorage
     const { modelId: workflowId, transactionId } = transaction
 
     const inter = setTimeout(async () => {
+      const context = transaction.getFlow().metadata ?? {}
       await this.workflowOrchestratorService_.run(workflowId, {
         transactionId,
+        logOnError: true,
         throwOnError: false,
+        context: {
+          eventGroupId: context.eventGroupId,
+          parentStepIdempotencyKey: context.parentStepIdempotencyKey,
+          preventReleaseEvents: context.preventReleaseEvents,
+        },
       })
     }, interval * 1e3)
 
