@@ -99,3 +99,5 @@ const getFileFromMaps = unstable_cache(
     revalidate: 3600,
   }
 )
+
+export const dynamic = "force-dynamic"
