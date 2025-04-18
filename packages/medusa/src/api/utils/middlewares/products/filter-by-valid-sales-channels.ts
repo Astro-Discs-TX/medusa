@@ -22,7 +22,7 @@ export function transformAndValidateSalesChannelIds(
     : [idsFromRequest]
 
   // If all sales channel ids are not in the publishable key, we throw an error
-  if (idsFromRequest) {
+  if (idsFromRequest.length) {
     const uniqueInParams = arrayDifference(
       idsFromRequest,
       idsFromPublishableKey

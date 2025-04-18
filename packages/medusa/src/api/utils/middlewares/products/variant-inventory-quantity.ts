@@ -5,7 +5,6 @@ import {
   MedusaError,
 } from "@medusajs/framework/utils"
 import { MedusaRequest, MedusaStoreRequest } from "@medusajs/framework/http"
-import { transformAndValidateSalesChannelIds } from "./filter-by-valid-sales-channels"
 
 export const wrapVariantsWithTotalInventoryQuantity = async (
   req: MedusaRequest,
