@@ -163,7 +163,6 @@ const redirects = async () => {
       destination: "/learn/fundamentals/modules/infrastructure-modules",
       permanent: true,
     },
-    // New redirects from CSV
     {
       source: "/v1/admin/quickstart",
       destination: "/learn/fundamentals/admin",
