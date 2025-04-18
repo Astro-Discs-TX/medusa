@@ -262,15 +262,31 @@ export class QueryBuilder {
               }
 
               const inPlaceholders = val.map(() => "?").join(",")
-              builder.whereRaw(
-                `(${aliasMapping[attr]}.data${nested}->>?)${castType} IN (${inPlaceholders})`,
-                [...field, ...val]
-              )
+              const hasId = field[0] === "id"
+              if (hasId) {
+                builder.whereRaw(
+                  `(${aliasMapping[attr]}.id) IN (${inPlaceholders})`,
+                  [...val]
+                )
+              } else {
+                builder.whereRaw(
+                  `(${aliasMapping[attr]}.data${nested}->>?)${castType} IN (${inPlaceholders})`,
+                  [...field, ...val]
+                )
+              }
             } else {
-              builder.whereRaw(
-                `(${aliasMapping[attr]}.data${nested}->>?)${castType} ${operator} ?`,
-                [...field, ...val]
-              )
+              const potentialIdFields = field[0]
+              const hasId = potentialIdFields === "id"
+              if (hasId) {
+                builder.whereRaw(`(${aliasMapping[attr]}.id) ${operator} ?`, [
+                  ...val,
+                ])
+              } else {
+                builder.whereRaw(
+                  `(${aliasMapping[attr]}.data${nested}->>?)${castType} ${operator} ?`,
+                  [...field, ...val]
+                )
+              }
             }
           } else {
             throw new Error(`Unsupported operator: ${subKey}`)
@@ -288,10 +304,18 @@ export class QueryBuilder {
 
           const castType = this.getPostgresCastType(attr, field).cast
           const inPlaceholders = value.map(() => "?").join(",")
-          builder.whereRaw(
-            `(${aliasMapping[attr]}.data${nested}->>?)${castType} IN (${inPlaceholders})`,
-            [...field, ...value]
-          )
+          const hasId = field[0] === "id"
+          if (hasId) {
+            builder.whereRaw(
+              `(${aliasMapping[attr]}.id) IN (${inPlaceholders})`,
+              [...value]
+            )
+          } else {
+            builder.whereRaw(
+              `(${aliasMapping[attr]}.data${nested}->>?)${castType} IN (${inPlaceholders})`,
+              [...field, ...value]
+            )
+          }
         } else if (isDefined(value)) {
           const operator = value === null ? "IS" : "="
 
@@ -305,10 +329,17 @@ export class QueryBuilder {
             )
           } else {
             const castType = this.getPostgresCastType(attr, field).cast
-            builder.whereRaw(
-              `(${aliasMapping[attr]}.data${nested}->>?)${castType} ${operator} ?`,
-              [...field, value]
-            )
+            const hasId = field[0] === "id"
+            if (hasId) {
+              builder.whereRaw(`(${aliasMapping[attr]}.id) ${operator} ?`, [
+                value,
+              ])
+            } else {
+              builder.whereRaw(
+                `(${aliasMapping[attr]}.data${nested}->>?)${castType} ${operator} ?`,
+                [...field, value]
+              )
+            }
           }
         }
       }
@@ -712,9 +743,14 @@ export class QueryBuilder {
       const alias = aliasMapping[attr]
       const direction = orderBy[aliasPath]
 
-      queryBuilder.orderByRaw(
-        `(${alias}.data->>'${field}')${pgType.cast}` + " " + direction
-      )
+      const hasId = field === "id"
+      if (hasId) {
+        queryBuilder.orderByRaw(`${alias}.id ${direction}`)
+      } else {
+        queryBuilder.orderByRaw(
+          `(${alias}.data->>'${field}')${pgType.cast} ${direction}`
+        )
+      }
     }
 
     let take_ = !isNaN(+take!) ? +take! : 15
@@ -817,17 +853,25 @@ export class QueryBuilder {
       const alias = aliasMapping[attr]
       const direction = orderBy[aliasPath]
 
-      const orderAlias = `"${alias}.data->>'${field}'"`
+      let orderAlias = `"${alias}.data->>'${field}'"`
+      const hasId = field === "id"
+      if (hasId) {
+        orderAlias = `${alias}.id`
+      }
       orderAliases.push(orderAlias + " " + direction)
 
       // transform the order by clause to a select MIN/MAX
       queryBuilder.select(
         direction === "ASC"
           ? this.knex.raw(
-              `MIN((${alias}.data->>'${field}')${pgType.cast}) as ${orderAlias}`
+              `MIN((${hasId ? `${alias}.id` : `${alias}.data->>'${field}'`})${
+                pgType.cast
+              }) as ${orderAlias}`
             )
           : this.knex.raw(
-              `MAX((${alias}.data->>'${field}')${pgType.cast}) as ${orderAlias}`
+              `MAX((${hasId ? `${alias}.id` : `${alias}.data->>'${field}'`})${
+                pgType.cast
+              }) as ${orderAlias}`
             )
       )
     }
