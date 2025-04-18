@@ -1,5 +1,5 @@
 import { getCleanMd } from "docs-utils"
-import { existsSync } from "fs"
+import { existsSync, readdirSync } from "fs"
 import { unstable_cache } from "next/cache"
 import { notFound } from "next/navigation"
 import { NextRequest, NextResponse } from "next/server"
@@ -21,14 +21,12 @@ export async function GET(req: NextRequest, { params }: Params) {
   const { slug = ["/"] } = await params
 
   // keep this so that Vercel keeps the files in deployment
-  const basePath = path.join(process.cwd(), "app")
-  const referencesPath = path.join(process.cwd(), "references")
+  path.join(process.cwd(), "app")
+  path.join(process.cwd(), "references")
 
   const filePathFromMap = await getFileFromMaps(
     `/${slug.join("/")}`.replace("//", "/")
   )
-  // eslint-disable-next-line no-console
-  console.log(filePathFromMap, `/${slug.join("/")}`.replace("//", "/"))
   if (!filePathFromMap) {
     return notFound()
   }
@@ -42,7 +40,9 @@ export async function GET(req: NextRequest, { params }: Params) {
     filePathFromMap,
     `/${slug.join("/")}`.replace("//", "/"),
     filePath,
-    process.cwd()
+    process.cwd(),
+    readdirSync(path.join(process.cwd(), "app")),
+    readdirSync(path.join(process.cwd(), "app/how-to-tutorials"))
   )
 
   if (!existsSync(filePath)) {
