@@ -21,8 +21,8 @@ export async function GET(req: NextRequest, { params }: Params) {
   const { slug = ["/"] } = await params
 
   // keep this so that Vercel keeps the files in deployment
-  path.join(process.cwd(), "app")
-  path.join(process.cwd(), "references")
+  const basePath = path.join(process.cwd(), "app")
+  const referencesPath = path.join(process.cwd(), "references")
 
   const filePathFromMap = await getFileFromMaps(
     `/${slug.join("/")}`.replace("//", "/")
@@ -101,7 +101,7 @@ const getCleanMd_ = unstable_cache(
     getCleanMd({ file: filePath, plugins }),
   ["clean-md"],
   {
-    revalidate: 1,
+    revalidate: 3600,
   }
 )
 
@@ -114,6 +114,6 @@ const getFileFromMaps = unstable_cache(
   },
   ["file-map"],
   {
-    revalidate: 1,
+    revalidate: 3600,
   }
 )

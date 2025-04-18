@@ -178,6 +178,9 @@ const nextConfig = {
   outputFileTracingExcludes: {
     "*": ["node_modules/@medusajs/icons"],
   },
+  outputFileTracingIncludes: {
+    "/md-content/\\[\\.\\.\\.slug\\]": ["./app/*", "./references/*"],
+  },
   experimental: {
     optimizePackageImports: ["@medusajs/icons", "@medusajs/ui", "elkjs"],
   },
