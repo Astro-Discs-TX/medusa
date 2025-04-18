@@ -31,7 +31,7 @@ export async function GET(req: NextRequest, { params }: Params) {
     return notFound()
   }
 
-  const filePath = path.join(path.resolve("..", "..", ".."), filePathFromMap)
+  const filePath = path.join(process.cwd(), "..", "..", "..", filePathFromMap)
 
   if (!existsSync(filePath)) {
     return notFound()
@@ -96,8 +96,6 @@ const getFileFromMaps = unstable_cache(
   },
   ["file-map"],
   {
-    revalidate: 3600,
+    revalidate: 0,
   }
 )
-
-export const dynamic = "force-dynamic"
