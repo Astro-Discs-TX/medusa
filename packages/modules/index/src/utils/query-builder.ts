@@ -9,6 +9,35 @@ import {
 import { Knex } from "@mikro-orm/knex"
 import { OrderBy, QueryFormat, QueryOptions, Select } from "@types"
 
+function escapeJsonPathString(val: string): string {
+  // Escape for JSONPath string
+  return val.replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/'/g, "\\'")
+}
+
+function buildSafeJsonPathQuery(
+  field: string,
+  operator: string,
+  value: any
+): string {
+  let jsonPathOperator = operator
+  if (operator === "=") {
+    jsonPathOperator = "=="
+  } else if (operator.toUpperCase().includes("LIKE")) {
+    jsonPathOperator = "like_regex"
+  }
+
+  if (typeof value === "string") {
+    let val = value
+    if (jsonPathOperator === "like_regex") {
+      // Convert SQL LIKE wildcards to regex
+      val = val.replace(/%/g, ".*").replace(/_/g, ".")
+    }
+    value = `"${escapeJsonPathString(val)}"`
+  }
+
+  return `$.${field} ${jsonPathOperator} ${value}`
+}
+
 export const OPERATOR_MAP = {
   $eq: "=",
   $lt: "<",
@@ -289,10 +318,14 @@ export class QueryBuilder {
               } else {
                 const targetField = field[field.length - 1] as string
 
-                builder.whereRaw(
-                  `${aliasMapping[attr]}.data${nested} @@ '$.${targetField} ${operator} ?'`,
-                  [...val]
+                const jsonPath = buildSafeJsonPathQuery(
+                  targetField,
+                  operator,
+                  val[0]
                 )
+                builder.whereRaw(`${aliasMapping[attr]}.data${nested} @@ ?`, [
+                  jsonPath,
+                ])
               }
             }
           } else {
@@ -327,7 +360,7 @@ export class QueryBuilder {
             )
           }
         } else if (isDefined(value)) {
-          const operator = value === null ? "IS" : "="
+          let operator = "="
 
           if (operator === "=") {
             builder.whereRaw(
@@ -338,6 +371,10 @@ export class QueryBuilder {
               )}'::jsonb`
             )
           } else {
+            if (value === null) {
+              operator = "IS"
+            }
+
             const hasId = field[field.length - 1] === "id"
             if (hasId) {
               builder.whereRaw(`(${aliasMapping[attr]}.id) ${operator} ?`, [
@@ -346,10 +383,14 @@ export class QueryBuilder {
             } else {
               const targetField = field[field.length - 1] as string
 
-              builder.whereRaw(
-                `${aliasMapping[attr]}.data${nested} @@ '$.${targetField} ${operator} ?'`,
-                [value]
+              const jsonPath = buildSafeJsonPathQuery(
+                targetField,
+                operator,
+                value
               )
+              builder.whereRaw(`${aliasMapping[attr]}.data${nested} @@ ?`, [
+                jsonPath,
+              ])
             }
           }
         }
