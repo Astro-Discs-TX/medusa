@@ -59,6 +59,13 @@ export default class FileProviderService {
       )
     }
 
+    if (!fileData.filename) {
+      throw new MedusaError(
+        MedusaError.Types.INVALID_DATA,
+        "File name is required to get a presigned upload URL"
+      )
+    }
+
     return this.fileProvider_.getPresignedUploadUrl(fileData)
   }
 }

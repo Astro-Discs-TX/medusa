@@ -35,4 +35,8 @@ export interface UploadFileUrlDTO {
    * The URL of the file.
    */
   url: string
+  /**
+   * The key of the file.
+   */
+  key: string
 }
