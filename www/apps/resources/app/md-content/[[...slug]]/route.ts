@@ -33,12 +33,16 @@ export async function GET(req: NextRequest, { params }: Params) {
     return notFound()
   }
 
-  const filePath = path.join(process.cwd(), "..", "..", "..", filePathFromMap)
+  const filePath = path.join(
+    process.cwd(),
+    filePathFromMap.replace("/www/apps/resources", "")
+  )
   // eslint-disable-next-line no-console
   console.log(
     filePathFromMap,
     `/${slug.join("/")}`.replace("//", "/"),
-    filePath
+    filePath,
+    process.cwd()
   )
 
   if (!existsSync(filePath)) {

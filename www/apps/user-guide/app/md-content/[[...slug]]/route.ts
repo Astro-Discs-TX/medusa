@@ -22,6 +22,9 @@ export async function GET(req: NextRequest, { params }: Params) {
   const basePath = path.join(process.cwd(), "app")
   const filePath = path.join(basePath, ...slug, "page.mdx")
 
+  // eslint-disable-next-line no-console
+  console.log(process.cwd(), filePath)
+
   if (!existsSync(filePath)) {
     return notFound()
   }
