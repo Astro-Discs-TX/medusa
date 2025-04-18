@@ -1,5 +1,5 @@
 import { getCleanMd } from "docs-utils"
-import { existsSync, readdirSync } from "fs"
+import { existsSync } from "fs"
 import { unstable_cache } from "next/cache"
 import { notFound } from "next/navigation"
 import { NextRequest, NextResponse } from "next/server"
@@ -31,26 +31,11 @@ export async function GET(req: NextRequest, { params }: Params) {
     return notFound()
   }
 
-  const filePath = path.join(
-    process.cwd(),
-    filePathFromMap.replace("/www/apps/resources", "")
-  )
-  // eslint-disable-next-line no-console
-  console.log(
-    filePathFromMap,
-    `/${slug.join("/")}`.replace("//", "/"),
-    filePath,
-    process.cwd(),
-    readdirSync(path.join(process.cwd(), "app")),
-    readdirSync(path.join(process.cwd(), "app/how-to-tutorials"))
-  )
+  const filePath = path.join(process.cwd(), "..", "..", "..", filePathFromMap)
 
   if (!existsSync(filePath)) {
     return notFound()
   }
-
-  // eslint-disable-next-line no-console
-  console.log("erererererere", filePath)
 
   const cleanMdContent = await getCleanMd_(filePath, {
     before: [
@@ -84,9 +69,6 @@ export async function GET(req: NextRequest, { params }: Params) {
       [addUrlToRelativeLink, { url: process.env.NEXT_PUBLIC_BASE_URL }],
     ] as unknown as Plugin[],
   })
-
-  // eslint-disable-next-line no-console
-  console.log("erererererere2", cleanMdContent)
 
   return new NextResponse(cleanMdContent, {
     headers: {
