@@ -179,7 +179,7 @@ const nextConfig = {
     "*": ["node_modules/@medusajs/icons"],
   },
   outputFileTracingIncludes: {
-    "/md-content/\\[\\.\\.\\.slug\\]": ["./app/**/*"],
+    "/md-content/\\[\\[\\.\\.\\.slug\\]\\]": ["./app/**/*"],
     "/md-content/references/**": ["./references/**/*"],
   },
   experimental: {
