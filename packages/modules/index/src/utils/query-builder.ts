@@ -236,7 +236,6 @@ export class QueryBuilder {
               field,
               value[subKey]
             )
-            const castType = this.getPostgresCastType(attr, [field]).cast
 
             let val = operator === "IN" ? subValue : [subValue]
             if (operator === "=" && subValue === null) {
@@ -288,9 +287,11 @@ export class QueryBuilder {
                   ...val,
                 ])
               } else {
+                const targetField = field[field.length - 1] as string
+
                 builder.whereRaw(
-                  `(${aliasMapping[attr]}.data${nested}->>?)${castType} ${operator} ?`,
-                  [...field, ...val]
+                  `${aliasMapping[attr]}.data${nested} @@ '$.${targetField} ${operator} ?'`,
+                  [...val]
                 )
               }
             }
@@ -337,16 +338,17 @@ export class QueryBuilder {
               )}'::jsonb`
             )
           } else {
-            const castType = this.getPostgresCastType(attr, field).cast
             const hasId = field[field.length - 1] === "id"
             if (hasId) {
               builder.whereRaw(`(${aliasMapping[attr]}.id) ${operator} ?`, [
                 value,
               ])
             } else {
+              const targetField = field[field.length - 1] as string
+
               builder.whereRaw(
-                `(${aliasMapping[attr]}.data${nested}->>?)${castType} ${operator} ?`,
-                [...field, value]
+                `${aliasMapping[attr]}.data${nested} @@ '$.${targetField} ${operator} ?'`,
+                [value]
               )
             }
           }

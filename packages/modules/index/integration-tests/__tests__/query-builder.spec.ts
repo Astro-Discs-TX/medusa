@@ -671,6 +671,46 @@ describe("IndexModuleService query", function () {
     ])
   })
 
+  it("should filter using IN operator with array of strings", async () => {
+    const { data } = await module.query({
+      fields: ["product.id", "product.variants.*"],
+      filters: {
+        product: {
+          variants: {
+            sku: { $in: ["sku 123", "aaa test aaa", "does-not-exist"] },
+          },
+        },
+      },
+      pagination: {
+        order: {
+          product: {
+            variants: {
+              prices: {
+                amount: "DESC",
+              },
+            },
+          },
+        },
+      },
+    })
+
+    expect(data).toEqual([
+      {
+        id: "prod_1",
+        variants: [
+          {
+            id: "var_1",
+            sku: "aaa test aaa",
+          },
+          {
+            id: "var_2",
+            sku: "sku 123",
+          },
+        ],
+      },
+    ])
+  })
+
   it("should query products filtering by price and returning the complete entity", async () => {
     const { data, metadata } = await module.query({
       fields: ["product.*", "product.variants.*", "product.variants.prices.*"],
@@ -903,6 +943,54 @@ describe("IndexModuleService query", function () {
             b: 15,
           },
         },
+      },
+    ])
+  })
+
+  it.only("should query products filtering by prices bigger than 10", async () => {
+    const { data, metadata } = await module.query({
+      fields: ["product.*", "product.variants.*", "product.variants.prices.*"],
+      filters: {
+        product: {
+          variants: {
+            prices: {
+              amount: { $gt: 20 },
+            },
+          },
+        },
+      },
+      pagination: {
+        take: 100,
+        skip: 0,
+        order: {
+          product: {
+            created_at: "ASC",
+          },
+        },
+      },
+    })
+
+    expect(metadata).toEqual({
+      count: 1,
+      skip: 0,
+      take: 100,
+    })
+
+    expect(data).toEqual([
+      {
+        id: "prod_1",
+        variants: [
+          {
+            id: "var_1",
+            sku: "aaa test aaa",
+            prices: [
+              {
+                id: "money_amount_1",
+                amount: 100,
+              },
+            ],
+          },
+        ],
       },
     ])
   })
