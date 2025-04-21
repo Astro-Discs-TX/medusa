@@ -10,6 +10,7 @@ import {
   mergePathsAndSchemasIntoOAS,
 } from "./utils/merge-oas"
 import { isFile } from "./utils/fs-utils"
+import { toUnixSlash } from "@medusajs/utils"
 
 /**
  * Constants
@@ -180,7 +181,7 @@ async function getOASFromPaths(
 ): Promise<OpenAPIObject> {
   console.log(`🔵 Gathering custom OAS`)
   // fast-glob broke Windows compatibility in v10, see https://github.com/mrmlnc/fast-glob#pattern-syntax, https://github.com/sindresorhus/globby/issues/130
-  const gen = await swaggerInline(additionalPaths.map(path => path.replace(/\\/g, "/")), {
+  const gen = await swaggerInline(additionalPaths.map(path => toUnixSlash(path)), {
     base:
       customBaseFile ?? path.resolve(basePath, "oas", "default.oas.base.yaml"),
     format: ".json",
