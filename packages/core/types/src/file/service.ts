@@ -1,12 +1,9 @@
 import { IModuleService } from "../modules-sdk"
-import { FileDTO, FilterableFileProps } from "./common"
+import { FileDTO, FilterableFileProps, UploadFileUrlDTO } from "./common"
 import { FindConfig } from "../common"
 import { Context } from "../shared-context"
-import { CreateFileDTO } from "./mutations"
+import { CreateFileDTO, GetUploadFileUrlDTO } from "./mutations"
 
-/**
- * The main service interface for the File Module.
- */
 export interface IFileModuleService extends IModuleService {
   /**
    * This method uploads files to the designated file storage system.
@@ -19,7 +16,7 @@ export interface IFileModuleService extends IModuleService {
    * const [file] = await fileModuleService.createFiles([{
    *   filename: "product.png",
    *   mimeType: "image/png",
-   *   content: "somecontent"
+   *   content: "somecontent" // base64 encoded
    * }])
    */
   createFiles(
@@ -38,11 +35,48 @@ export interface IFileModuleService extends IModuleService {
    * const file = await fileModuleService.createFiles({
    *   filename: "product.png",
    *   mimeType: "image/png",
-   *   content: "somecontent"
+   *   content: "somecontent" // base64 encoded
    * })
    */
 
   createFiles(data: CreateFileDTO, sharedContext?: Context): Promise<FileDTO>
+
+  /**
+   * This method gets the upload URL for a file.
+   *
+   * @param {GetUploadFileUrlDTO} data - The file information to get the upload URL for.
+   * @param {Context} sharedContext - A context used to share resources, such as transaction manager, between the application and the module.
+   * @returns {Promise<UploadFileUrlDTO>} The upload URL for the file.
+   *
+   * @example
+   * const uploadInfo = await fileModuleService.getUploadFileUrls({
+   *   filename: "product.png",
+   *   mimeType: "image/png",
+   * })
+   */
+
+  getUploadFileUrls(
+    data: GetUploadFileUrlDTO,
+    sharedContext?: Context
+  ): Promise<UploadFileUrlDTO>
+
+  /**
+   * This method uploads files to the designated file storage system.
+   *
+   * @param {GetUploadFileUrlDTO[]} data - The file information to get the upload URL for.
+   * @param {Context} sharedContext - A context used to share resources, such as transaction manager, between the application and the module.
+   * @returns {Promise<UploadFileUrlDTO[]>} The upload URLs for the files.
+   *
+   * @example
+   * const [uploadInfo] = await fileModuleService.getUploadFileUrls([{
+   *   filename: "product.png",
+   *   mimeType: "image/png",
+   * }])
+   */
+  getUploadFileUrls(
+    data: GetUploadFileUrlDTO[],
+    sharedContext?: Context
+  ): Promise<UploadFileUrlDTO[]>
 
   /**
    * This method deletes files by their IDs.
@@ -87,15 +121,17 @@ export interface IFileModuleService extends IModuleService {
   ): Promise<FileDTO>
 
   /**
-   * This method is used to retrieve a file by ID, similarly to `retrieve`. Enumeration of files is not supported, but the list method is in order to support remote queries
+   * This method is used to retrieve a file by ID, similarly to `retrieve`. It doesn't retrieve multiple files, but it's added to support retrieving files with [Query](https://docs.medusajs.com/learn/fundamentals/module-links/query).
    *
    * @param {FilterableFileProps} filters - The filters to apply on the retrieved files.
    * @param {FindConfig<FileDTO>} config -
    * The configurations determining how the files are retrieved. Its properties, such as `select` or `relations`, accept the
    * attributes or relations associated with a file.
    * @param {Context} sharedContext - A context used to share resources, such as transaction manager, between the application and the module.
-   * @returns {Promise<FileDTO[]>} The list of files. In this particular case, it will either be at most one file.
+   * @returns {Promise<FileDTO[]>} The list of files. In this case, it will have at most one file.
    *
+   * @example
+   * const files = await fileModuleService.listFiles({ id: "file_123" })
    */
   listFiles(
     filters?: FilterableFileProps,
@@ -104,15 +140,17 @@ export interface IFileModuleService extends IModuleService {
   ): Promise<FileDTO[]>
 
   /**
-   * This method is used to retrieve a file by ID, similarly to `retrieve`. Enumeration of files is not supported, but the listAndCount method is in order to support remote queries
+   * This method is used to retrieve a file by ID, similarly to `retrieve`. It doesn't retrieve multiple files, but it's added to support retrieving files with [Query](https://docs.medusajs.com/learn/fundamentals/module-links/query).
    *
    * @param {FilterableFileProps} filters - The filters to apply on the retrieved files.
    * @param {FindConfig<FileDTO>} config -
    * The configurations determining how the files are retrieved. Its properties, such as `select` or `relations`, accept the
    * attributes or relations associated with a file.
    * @param {Context} sharedContext - A context used to share resources, such as transaction manager, between the application and the module.
-   * @returns {Promise<[FileDTO[], number]>} The list of files and their count. In this particular case, it will either be at most one file.
+   * @returns {Promise<[FileDTO[], number]>} The list of files and their count. In this case, it will have at most one file.
    *
+   * @example
+   * const [files] = await fileModuleService.listAndCountFiles({ id: "file_123" })
    */
   listAndCountFiles(
     filters?: FilterableFileProps,

@@ -172,6 +172,7 @@ medusaIntegrationTestRunner({
               variant_option_values: null,
               requires_shipping: true,
               is_discountable: true,
+              is_giftcard: false,
               is_tax_inclusive: false,
               raw_compare_at_unit_price: null,
               raw_unit_price: {
@@ -492,6 +493,10 @@ medusaIntegrationTestRunner({
               },
             }),
           ],
+          credit_lines: [],
+          credit_line_subtotal: 0,
+          credit_line_tax_total: 0,
+          credit_line_total: 0,
         })
       })
     })

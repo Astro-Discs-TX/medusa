@@ -1,3 +1,4 @@
+import { createCartCreditLinesWorkflow } from "@medusajs/core-flows"
 import { medusaIntegrationTestRunner } from "@medusajs/test-utils"
 import {
   Modules,
@@ -150,7 +151,7 @@ medusaIntegrationTestRunner({
       })
 
       describe("POST /store/carts", () => {
-        it("should succesffully create a cart", async () => {
+        it("should successfully create a cart", async () => {
           const response = await api.post(
             `/store/carts`,
             {
@@ -254,10 +255,10 @@ medusaIntegrationTestRunner({
       })
 
       describe("POST /store/carts/:id/line-items", () => {
-        let shippingOption, shippingOptionExpensive
+        let shippingOption, shippingOptionExpensive, stockLocation
 
         beforeEach(async () => {
-          const stockLocation = (
+          stockLocation = (
             await api.post(
               `/admin/stock-locations`,
               { name: "test location" },
@@ -893,6 +894,67 @@ medusaIntegrationTestRunner({
             )
           })
         })
+
+        describe("with manage_inventory true", () => {
+          let inventoryItem
+          beforeEach(async () => {
+            await api.post(
+              `/admin/products/${product.id}/variants/${product.variants[0].id}`,
+              { manage_inventory: true },
+              adminHeaders
+            )
+
+            inventoryItem = (
+              await api.post(
+                `/admin/inventory-items`,
+                { sku: "bottle" },
+                adminHeaders
+              )
+            ).data.inventory_item
+          })
+
+          describe("with allow_backorder true", () => {
+            beforeEach(async () => {
+              await api.post(
+                `/admin/products/${product.id}/variants/${product.variants[0].id}`,
+                { allow_backorder: true },
+                adminHeaders
+              )
+            })
+
+            it("should add item to cart even if no inventory locations", async () => {
+              let response = await api.post(
+                `/store/carts/${cart.id}/line-items`,
+                {
+                  variant_id: product.variants[0].id,
+                  quantity: 1,
+                },
+                storeHeaders
+              )
+
+              expect(response.status).toEqual(200)
+            })
+
+            it("should add item to cart even if inventory is empty", async () => {
+              await api.post(
+                `/admin/inventory-items/${inventoryItem.id}/location-levels/batch`,
+                { create: [{ location_id: stockLocation.id }] },
+                adminHeaders
+              )
+
+              let response = await api.post(
+                `/store/carts/${cart.id}/line-items`,
+                {
+                  variant_id: product.variants[0].id,
+                  quantity: 1,
+                },
+                storeHeaders
+              )
+
+              expect(response.status).toEqual(200)
+            })
+          })
+        })
       })
 
       describe("POST /store/carts/:id/line-items/:id", () => {
@@ -1084,6 +1146,172 @@ medusaIntegrationTestRunner({
               { option_id: shippingOption.id },
               storeHeaders
             )
+          })
+
+          it("should successfully complete cart", async () => {
+            const paymentCollection = (
+              await api.post(
+                `/store/payment-collections`,
+                { cart_id: cart.id },
+                storeHeaders
+              )
+            ).data.payment_collection
+
+            await api.post(
+              `/store/payment-collections/${paymentCollection.id}/payment-sessions`,
+              { provider_id: "pp_system_default" },
+              storeHeaders
+            )
+
+            createCartCreditLinesWorkflow.run({
+              input: [
+                {
+                  cart_id: cart.id,
+                  amount: 100,
+                  currency_code: "usd",
+                  reference: "test",
+                  reference_id: "test",
+                },
+              ],
+              container: appContainer,
+            })
+
+            const response = await api.post(
+              `/store/carts/${cart.id}/complete`,
+              {},
+              storeHeaders
+            )
+
+            expect(response.status).toEqual(200)
+            expect(response.data.order).toEqual(
+              expect.objectContaining({
+                id: expect.any(String),
+                currency_code: "usd",
+                credit_lines: [
+                  expect.objectContaining({
+                    amount: 100,
+                    reference: "test",
+                    reference_id: "test",
+                  }),
+                ],
+                items: expect.arrayContaining([
+                  expect.objectContaining({
+                    unit_price: 1500,
+                    compare_at_unit_price: null,
+                    quantity: 1,
+                  }),
+                ]),
+              })
+            )
+          })
+
+          it("should successfully complete cart with credit lines alone", async () => {
+            const oldCart = (
+              await api.get(`/store/carts/${cart.id}`, storeHeaders)
+            ).data.cart
+
+            createCartCreditLinesWorkflow.run({
+              input: [
+                {
+                  cart_id: oldCart.id,
+                  amount: oldCart.total,
+                  currency_code: "usd",
+                  reference: "test",
+                  reference_id: "test",
+                },
+              ],
+              container: appContainer,
+            })
+
+            const response = await api.post(
+              `/store/carts/${cart.id}/complete`,
+              {},
+              storeHeaders
+            )
+
+            expect(response.status).toEqual(200)
+            expect(response.data.order).toEqual(
+              expect.objectContaining({
+                id: expect.any(String),
+                currency_code: "usd",
+                credit_line_total: 2395,
+                discount_total: 100,
+                credit_lines: [
+                  expect.objectContaining({
+                    amount: 2395,
+                  }),
+                ],
+                items: expect.arrayContaining([
+                  expect.objectContaining({
+                    unit_price: 1500,
+                    compare_at_unit_price: null,
+                    quantity: 1,
+                  }),
+                ]),
+              })
+            )
+          })
+
+          it("should successfully complete cart without shipping for digital products", async () => {
+            /**
+             * Product has a shipping profile so cart item should not require shipping
+             */
+            const product = (
+              await api.post(
+                `/admin/products`,
+                {
+                  title: "Product without inventory management",
+                  description: "test",
+                  options: [
+                    {
+                      title: "Size",
+                      values: ["S", "M", "L", "XL"],
+                    },
+                  ],
+                  variants: [
+                    {
+                      title: "S / Black",
+                      sku: "special-shirt",
+                      options: {
+                        Size: "S",
+                      },
+                      manage_inventory: false,
+                      prices: [
+                        {
+                          amount: 1500,
+                          currency_code: "usd",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                adminHeaders
+              )
+            ).data.product
+
+            cart = (
+              await api.post(
+                `/store/carts`,
+                {
+                  currency_code: "usd",
+                  sales_channel_id: salesChannel.id,
+                  region_id: region.id,
+                  shipping_address: shippingAddressData,
+                },
+                storeHeadersWithCustomer
+              )
+            ).data.cart
+
+            cart = (
+              await api.post(
+                `/store/carts/${cart.id}/line-items`,
+                {
+                  variant_id: product.variants[0].id,
+                  quantity: 1,
+                },
+                storeHeaders
+              )
+            ).data.cart
 
             const paymentCollection = (
               await api.post(
@@ -1098,9 +1326,9 @@ medusaIntegrationTestRunner({
               { provider_id: "pp_system_default" },
               storeHeaders
             )
-          })
 
-          it("should successfully complete cart", async () => {
+            expect(cart.items[0].requires_shipping).toEqual(false)
+
             const response = await api.post(
               `/store/carts/${cart.id}/complete`,
               {},
@@ -1110,13 +1338,10 @@ medusaIntegrationTestRunner({
             expect(response.status).toEqual(200)
             expect(response.data.order).toEqual(
               expect.objectContaining({
-                id: expect.any(String),
-                currency_code: "usd",
+                shipping_methods: [],
                 items: expect.arrayContaining([
                   expect.objectContaining({
-                    unit_price: 1500,
-                    compare_at_unit_price: null,
-                    quantity: 1,
+                    requires_shipping: false,
                   }),
                 ]),
               })
@@ -1367,8 +1592,6 @@ medusaIntegrationTestRunner({
             })
 
             it("should complete a cart with inventory item shared between variants", async () => {
-              console.log(cart)
-
               const response = await api.post(
                 `/store/carts/${cart.id}/complete`,
                 {},
@@ -1835,6 +2058,72 @@ medusaIntegrationTestRunner({
                   tax_lines: [],
                 }),
               ],
+            })
+          )
+        })
+
+        it("should not generate tax lines for gift card products", async () => {
+          const giftCardProduct = (
+            await api.post(
+              `/admin/products`,
+              {
+                title: "Gift Card",
+                description: "test",
+                is_giftcard: true,
+                options: [
+                  {
+                    title: "Denomination",
+                    values: ["10", "20", "50", "100"],
+                  },
+                ],
+                variants: [
+                  {
+                    title: "10",
+                    sku: "special-shirt",
+                    options: {
+                      Denomination: "10",
+                    },
+                    manage_inventory: false,
+                    prices: [
+                      {
+                        amount: 1000,
+                        currency_code: "usd",
+                      },
+                    ],
+                  },
+                ],
+              },
+              adminHeaders
+            )
+          ).data.product
+
+          let updated = await api.post(
+            `/store/carts/${cart.id}/line-items?fields=+items.is_giftcard`,
+            { variant_id: giftCardProduct.variants[0].id, quantity: 1 },
+            storeHeaders
+          )
+
+          expect(updated.status).toEqual(200)
+          expect(updated.data.cart).toEqual(
+            expect.objectContaining({
+              id: cart.id,
+              items: expect.arrayContaining([
+                expect.objectContaining({
+                  is_giftcard: false,
+                  tax_lines: [
+                    expect.objectContaining({
+                      description: "CA Default Rate",
+                      code: "CADEFAULT",
+                      rate: 5,
+                      provider_id: "system",
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_giftcard: true,
+                  tax_lines: [],
+                }),
+              ]),
             })
           )
         })

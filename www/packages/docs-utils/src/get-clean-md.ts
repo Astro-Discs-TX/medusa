@@ -1,7 +1,6 @@
 import remarkMdx from "remark-mdx"
 import remarkParse from "remark-parse"
 import remarkStringify from "remark-stringify"
-import { read } from "to-vfile"
 import { FrontMatter, UnistNode, UnistNodeWithData, UnistTree } from "types"
 import { Plugin, Transformer, unified } from "unified"
 import { SKIP } from "unist-util-visit"
@@ -21,6 +20,7 @@ import {
   parsePackageInstall,
   parsePrerequisites,
   parseSourceCodeLink,
+  parseSplitList,
   parseTable,
   parseTabs,
   parseTypeList,
@@ -47,6 +47,7 @@ const parsers: Record<string, ComponentParser> = {
   IconSearch: parseIconSearch,
   HookValues: parseHookValues,
   Colors: parseColors,
+  SplitList: parseSplitList,
 }
 
 const isComponentAllowed = (nodeName: string): boolean => {
@@ -172,6 +173,7 @@ export const getCleanMd = async ({
   parserOptions,
   type = "file",
 }: GetCleanMdOptions): Promise<string> => {
+  const { read } = await import("to-vfile")
   if (type === "file" && !file.endsWith(".md") && !file.endsWith(".mdx")) {
     return ""
   }

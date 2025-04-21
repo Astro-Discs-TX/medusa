@@ -9,6 +9,7 @@ export type PaymentCollectionStatus =
   | "awaiting"
   | "authorized"
   | "partially_authorized"
+  | "partially_captured"
   | "canceled"
   | "failed"
   | "completed"
@@ -551,6 +552,16 @@ export interface PaymentSessionDTO {
    * When the payment session was authorized.
    */
   authorized_at?: Date
+
+  /**
+   * When the payment session was created
+   */
+  created_at: Date | string
+
+  /**
+   * When the payment session was updated
+   */
+  updated_at: Date | string
 
   /**
    * The ID of the associated payment collection.

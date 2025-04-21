@@ -1218,7 +1218,6 @@ medusaIntegrationTestRunner({
               "/admin/products",
               {
                 title: "Test fixture",
-                shipping_profile_id: shippingProfile.id,
                 options: [
                   { title: "size", values: ["large", "small"] },
                   { title: "color", values: ["green"] },
@@ -1390,9 +1389,7 @@ medusaIntegrationTestRunner({
           const paymentCollection = (
             await api.post(
               `/store/payment-collections`,
-              {
-                cart_id: cart.id,
-              },
+              { cart_id: cart.id },
               storeHeaders
             )
           ).data.payment_collection

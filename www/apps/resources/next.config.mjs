@@ -26,6 +26,9 @@ const withMDX = mdx({
               projectPath: path.resolve("..", "ui"),
               contentPath: "src/content/docs",
             },
+            "user-guide": {
+              projectPath: path.resolve("..", "user-guide"),
+            },
           },
         },
       ],
@@ -55,7 +58,7 @@ const nextConfig = {
   // Configure `pageExtensions` to include MDX files
   pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
 
-  transpilePackages: ["docs-ui"],
+  transpilePackages: ["docs-ui", "next-mdx-remote"],
 
   basePath: process.env.NEXT_PUBLIC_BASE_PATH || "/resources",
   async redirects() {
@@ -125,13 +128,62 @@ const nextConfig = {
         destination: "/deployment",
         permanent: true,
       },
+      {
+        source: "/recipes/integrate-ecommerce-stack",
+        destination: "/recipes/erp",
+        permanent: true,
+      },
+      {
+        source: "/contribution-guidelines/:path",
+        destination: `${process.env.NEXT_PUBLIC_BASE_URL}/learn/resources/contribution-guidelines/:path`,
+        permanent: true,
+      },
+      {
+        source: "/usage",
+        destination: `${process.env.NEXT_PUBLIC_BASE_URL}/learn/resources/usage`,
+        permanent: true,
+      },
+      {
+        source: "/plugins",
+        destination: "/integrations",
+        permanent: true,
+      },
+      {
+        source: "/resources",
+        destination: "/recipes",
+        permanent: true,
+      },
+      {
+        source: "/references/medusa-config",
+        destination: `${process.env.NEXT_PUBLIC_BASE_URL}/learn/configurations/medusa-config`,
+        permanent: true,
+      },
+      {
+        source: "/troubleshooting/workflow-errors",
+        destination: "/troubleshooting/workflow-errors/when-then",
+        permanent: true,
+      },
+      {
+        source: "/medusa-cli/commands/start-cluster",
+        destination: "/medusa-cli/commands/start",
+        permanent: true,
+      },
+      {
+        source: "/architectural-modules/:path*",
+        destination: "/infrastructure-modules/:path*",
+        permanent: true,
+      },
     ]
   },
   outputFileTracingExcludes: {
     "*": ["node_modules/@medusajs/icons"],
   },
+  outputFileTracingIncludes: {
+    "/md\\-content/\\[\\[\\.\\.\\.slug\\]\\]": ["./app/**/*.mdx"],
+    "/md\\-content/references/**": ["./references/**/*.mdx"],
+  },
   experimental: {
-    optimizePackageImports: ["@medusajs/icons", "@medusajs/ui"],
+    optimizePackageImports: ["@medusajs/icons", "@medusajs/ui", "elkjs"],
   },
 }
 

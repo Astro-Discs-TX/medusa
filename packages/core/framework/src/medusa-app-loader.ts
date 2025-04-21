@@ -115,6 +115,12 @@ export class MedusaAppLoader {
       ),
     }
 
+    const driverOptions = {
+      ...(configManager.config.projectConfig.databaseDriverOptions ?? {}),
+    }
+    const pool = (driverOptions.pool as Record<string, unknown>) ?? {}
+    delete driverOptions.pool
+
     const sharedResourcesConfig: ModuleServiceInitializeOptions = {
       database: {
         clientUrl:
@@ -125,6 +131,7 @@ export class MedusaAppLoader {
           )?.client?.config?.connection?.connectionString ??
           configManager.config.projectConfig.databaseUrl,
         driverOptions: configManager.config.projectConfig.databaseDriverOptions,
+        pool: pool,
         debug: configManager.config.projectConfig.databaseLogging ?? false,
         schema: configManager.config.projectConfig.databaseSchema,
         database: configManager.config.projectConfig.databaseName,

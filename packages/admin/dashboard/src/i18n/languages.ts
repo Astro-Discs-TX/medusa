@@ -1,5 +1,6 @@
 import {
   de,
+  bg,
   enUS,
   es,
   fr,
@@ -18,11 +19,22 @@ import {
   faIR,
   cs,
   ru,
-  el
+  el,
+  lt,
+  vi,
+  ko,
+  nl,
+  hu,
 } from "date-fns/locale"
 import { Language } from "./types"
 
 export const languages: Language[] = [
+  {
+    code: "bg",
+    display_name: "Български",
+    ltr: true,
+    date_locale: bg,
+  },
   {
     code: "en",
     display_name: "English",
@@ -52,6 +64,12 @@ export const languages: Language[] = [
     display_name: "Français",
     ltr: true,
     date_locale: fr,
+  },
+  {
+    code: "hu",
+    display_name: "Magyar",
+    ltr: true,
+    date_locale: hu,
   },
   {
     code: "it",
@@ -142,5 +160,29 @@ export const languages: Language[] = [
     display_name: "Русский",
     ltr: true,
     date_locale: ru,
+  },
+  {
+    code: "lt",
+    display_name: "Lietuviškai",
+    ltr: true,
+    date_locale: lt,
+  },
+  {
+    code: "vi",
+    display_name: "Tiếng Việt",
+    ltr: true,
+    date_locale: vi,
+  },
+  {
+    code: "ko",
+    display_name: "한국어",
+    ltr: true,
+    date_locale: ko,
+  },
+  {
+    code: "nl",
+    display_name: "Nederlands",
+    ltr: true,
+    date_locale: nl,
   },
 ]
