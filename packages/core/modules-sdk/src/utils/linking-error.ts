@@ -13,7 +13,7 @@ type LinkingErrorMessageInput = {
 
 /**
  *
- * Example: Module to dismiss salesChannel and apiKey by keys sales_channel_id and publishable_key_id was not found. Ensure the link exists, keys are correct, and the link is passed in the correct order to method 'remoteLink.dismiss'
+ * Example: Module to dismiss salesChannel and apiKey by keys sales_channel_id and api_key_id was not found. Ensure the link exists, keys are correct, and the link is passed in the correct order to method 'remoteLink.dismiss'
  */
 export const linkingErrorMessage = (input: LinkingErrorMessageInput) => {
   const { moduleA, moduleB, moduleAKey, moduleBKey, type } = input
