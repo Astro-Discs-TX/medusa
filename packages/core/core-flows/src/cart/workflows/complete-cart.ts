@@ -120,7 +120,7 @@ export const completeCartWorkflow = createWorkflow(
     ).then(() => {
       const paymentSessions = validateCartPaymentsStep({ cart })
       // purpose of this step is to run compensation if cart completion fails
-      // and tries to cancel or refund the payment depending on the status.
+      // and tries to refund the payment if captured
       compensatePaymentIfNeededStep({
         payment_session_id: paymentSessions[0].id,
       })

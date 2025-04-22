@@ -51,16 +51,6 @@ export const compensatePaymentIfNeededStep = createStep(
       }
     )
 
-    if (paymentSession.status === PaymentSessionStatus.AUTHORIZED) {
-      try {
-        await paymentModule.cancelPayment(paymentSession.id)
-      } catch (e) {
-        logger.error(
-          `Error was thrown trying to cancel payment session - ${paymentSession.id} - ${e}`
-        )
-      }
-    }
-
     if (
       paymentSession.status === PaymentSessionStatus.CAPTURED &&
       paymentSession.payment?.id
