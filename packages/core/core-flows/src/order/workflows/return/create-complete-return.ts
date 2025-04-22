@@ -7,6 +7,7 @@ import {
   OrderWorkflow,
   ShippingOptionDTO,
   WithCalculatedPrice,
+  AdditionalData,
 } from "@medusajs/framework/types"
 import {
   MathBN,
@@ -18,6 +19,7 @@ import {
 import {
   WorkflowData,
   WorkflowResponse,
+  createHook,
   createStep,
   createWorkflow,
   parallelize,
@@ -36,6 +38,7 @@ import {
   throwIfOrderIsCancelled,
 } from "../../utils/order-validation"
 import { validateReturnReasons } from "../../utils/validate-return-reason"
+import { pricingContextResult } from "../../../cart/utils/schemas"
 
 function prepareShippingMethodData({
   orderId,
@@ -186,6 +189,7 @@ function prepareFulfillmentData({
 function prepareReturnShippingOptionQueryVariables({
   order,
   input,
+  setPricingContextResult,
 }: {
   order: {
     currency_code: string
@@ -194,11 +198,13 @@ function prepareReturnShippingOptionQueryVariables({
   input: {
     return_shipping?: OrderWorkflow.CreateOrderReturnWorkflowInput["return_shipping"]
   }
+  setPricingContextResult?: any
 }) {
   const variables = {
     id: input.return_shipping?.option_id,
     calculated_price: {
       context: {
+        ...(setPricingContextResult ? setPricingContextResult : {}),
         currency_code: order.currency_code,
       },
     },
@@ -305,12 +311,49 @@ export const createAndCompleteReturnOrderWorkflowId =
  * @summary
  *
  * Create and complete a return for an order.
+ * 
+ * @property hooks.setPricingContext - This hook is executed before the return's shipping method is created. You can consume this hook to return any custom context useful for the prices retrieval of the shipping method's option.
+ * 
+ * For example, assuming you have the following custom pricing rule:
+ * 
+ * ```json
+ * {
+ *   "attribute": "location_id",
+ *   "operator": "eq",
+ *   "value": "sloc_123",
+ * }
+ * ```
+ * 
+ * You can consume the `setPricingContext` hook to add the `location_id` context to the prices calculation:
+ * 
+ * ```ts
+ * import { createAndCompleteReturnOrderWorkflow } from "@medusajs/medusa/core-flows";
+ * import { StepResponse } from "@medusajs/workflows-sdk";
+ * 
+ * createAndCompleteReturnOrderWorkflow.hooks.setPricingContext((
+ *   { order, additional_data }, { container }
+ * ) => {
+ *   return new StepResponse({
+ *     location_id: "sloc_123", // Special price for in-store purchases
+ *   });
+ * });
+ * ```
+ * 
+ * The price of the shipping method's option will now be retrieved using the context you return.
+ * 
+ * :::note
+ * 
+ * Learn more about prices calculation context in the [Prices Calculation](https://docs.medusajs.com/resources/commerce-modules/pricing/price-calculation) documentation.
+ * 
+ * :::
  */
 export const createAndCompleteReturnOrderWorkflow = createWorkflow(
   createAndCompleteReturnOrderWorkflowId,
   function (
-    input: WorkflowData<OrderWorkflow.CreateOrderReturnWorkflowInput>
-  ): WorkflowResponse<ReturnDTO> {
+    input: WorkflowData<
+      OrderWorkflow.CreateOrderReturnWorkflowInput & AdditionalData
+    >
+  ) {
     const order: OrderDTO = useRemoteQueryStep({
       entry_point: "orders",
       fields: [
@@ -329,8 +372,20 @@ export const createAndCompleteReturnOrderWorkflow = createWorkflow(
 
     createCompleteReturnValidationStep({ order, input })
 
+    const setPricingContext = createHook(
+      "setPricingContext",
+      {
+        order,
+        additional_data: input.additional_data,
+      },
+      {
+        resultValidator: pricingContextResult,
+      }
+    )
+    const setPricingContextResult = setPricingContext.getResult()
+
     const returnShippingOptionsVariables = transform(
-      { input, order },
+      { input, order, setPricingContextResult },
       prepareReturnShippingOptionQueryVariables
     )
 
@@ -415,6 +470,8 @@ export const createAndCompleteReturnOrderWorkflow = createWorkflow(
       }).config({ name: "emit-return-received-event" })
     )
 
-    return new WorkflowResponse(returnCreated)
+    return new WorkflowResponse(returnCreated as ReturnDTO, {
+      hooks: [setPricingContext] as const,
+    })
   }
 )

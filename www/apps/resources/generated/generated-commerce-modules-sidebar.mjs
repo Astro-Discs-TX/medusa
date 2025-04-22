@@ -1066,7 +1066,7 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
           "isPathHref": true,
           "type": "category",
           "title": "Server Guides",
-          "autogenerate_tags": "server+cart",
+          "autogenerate_tags": "cart+server",
           "autogenerate_as_ref": true,
           "sort_sidebar": "alphabetize",
           "description": "Learn how to use the Cart Module in your customizations on the Medusa application server.",
@@ -1091,8 +1091,24 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "loaded": true,
               "isPathHref": true,
               "type": "ref",
+              "title": "Implement Loyalty Points",
+              "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/loyalty-points",
+              "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "ref",
               "title": "Implement Quote Management",
               "path": "https://docs.medusajs.com/resources/examples/guides/quote-management",
+              "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "ref",
+              "title": "Send Abandoned Cart Notification",
+              "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/abandoned-cart",
               "children": []
             }
           ]
@@ -2384,7 +2400,7 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
           "isPathHref": true,
           "type": "category",
           "title": "Server Guides",
-          "autogenerate_tags": "server+customer",
+          "autogenerate_tags": "customer+server",
           "autogenerate_as_ref": true,
           "sort_sidebar": "alphabetize",
           "description": "Learn how to use the Customer Module in your customizations on the Medusa application server.",
@@ -2395,6 +2411,14 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "type": "link",
               "path": "/commerce-modules/customer/extend",
               "title": "Extend Module",
+              "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "ref",
+              "title": "Implement Loyalty Points",
+              "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/loyalty-points",
               "children": []
             }
           ]
@@ -3259,7 +3283,7 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
           "isPathHref": true,
           "type": "category",
           "title": "Concepts",
-          "autogenerate_tags": "concept+fulfillment",
+          "autogenerate_tags": "fulfillment+concept",
           "autogenerate_as_ref": true,
           "children": [
             {
@@ -3300,6 +3324,14 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "type": "link",
               "path": "/commerce-modules/fulfillment/links-to-other-modules",
               "title": "Links to Other Modules",
+              "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "ref",
+              "title": "Shipping Option Price Rules",
+              "path": "https://docs.medusajs.com/resources/commerce-modules/pricing/price-rules",
               "children": []
             },
             {
@@ -3373,7 +3405,7 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
           "isPathHref": true,
           "type": "category",
           "title": "Admin User Guides",
-          "autogenerate_tags": "userGuide+fulfillment",
+          "autogenerate_tags": "fulfillment+userGuide",
           "autogenerate_as_ref": true,
           "sort_sidebar": "alphabetize",
           "description": "Learn how to utilize and manage Fulfillment features in the Medusa Admin dashboard.",
@@ -3392,6 +3424,14 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "type": "ref",
               "title": "Manage Order Fulfillments",
               "path": "https://docs.medusajs.com/user-guide/orders/fulfillments",
+              "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "ref",
+              "title": "Manage Shipping Options",
+              "path": "https://docs.medusajs.com/user-guide/settings/locations-and-shipping/locations",
               "children": []
             },
             {
@@ -5925,11 +5965,19 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
           "isPathHref": true,
           "type": "category",
           "title": "Server Guides",
-          "autogenerate_tags": "server+order",
+          "autogenerate_tags": "order+server",
           "autogenerate_as_ref": true,
           "sort_sidebar": "alphabetize",
           "description": "Learn how to use the Order Module in your customizations on the Medusa application server.",
           "children": [
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "ref",
+              "title": "Implement Loyalty Points",
+              "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/loyalty-points",
+              "children": []
+            },
             {
               "loaded": true,
               "isPathHref": true,
@@ -9672,6 +9720,15 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
                       "loaded": true,
                       "isPathHref": true,
                       "type": "link",
+                      "path": "/references/payment/retrievePayment",
+                      "title": "retrievePayment",
+                      "description": "",
+                      "children": []
+                    },
+                    {
+                      "loaded": true,
+                      "isPathHref": true,
+                      "type": "link",
                       "path": "/references/payment/retrievePaymentCollection",
                       "title": "retrievePaymentCollection",
                       "description": "",
@@ -10969,7 +11026,7 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
           "isPathHref": true,
           "type": "category",
           "title": "Concepts",
-          "autogenerate_tags": "concept+product",
+          "autogenerate_tags": "product+concept",
           "autogenerate_as_ref": true,
           "children": [
             {
@@ -11003,6 +11060,14 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "title": "Inventory Kits",
               "path": "https://docs.medusajs.com/resources/commerce-modules/inventory/inventory-kit",
               "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "ref",
+              "title": "Variant Price Rules",
+              "path": "https://docs.medusajs.com/resources/commerce-modules/pricing/price-rules",
+              "children": []
             }
           ]
         },
@@ -11011,7 +11076,7 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
           "isPathHref": true,
           "type": "category",
           "title": "Server Guides",
-          "autogenerate_tags": "server+product",
+          "autogenerate_tags": "product+server",
           "autogenerate_as_ref": true,
           "sort_sidebar": "alphabetize",
           "description": "Learn how to use the Product Module in your customizations on the Medusa application server.",
@@ -11046,6 +11111,14 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "type": "link",
               "path": "/commerce-modules/product/guides/price",
               "title": "Get Variant Prices",
+              "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "ref",
+              "title": "Implement Product Reviews",
+              "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/product-reviews",
               "children": []
             }
           ]
@@ -11096,24 +11169,8 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "loaded": true,
               "isPathHref": true,
               "type": "ref",
-              "title": "List Product Categories in Storefront",
-              "path": "https://docs.medusajs.com/resources/storefront-development/products/categories/list",
-              "children": []
-            },
-            {
-              "loaded": true,
-              "isPathHref": true,
-              "type": "ref",
               "title": "List Product Collections in Storefront",
               "path": "https://docs.medusajs.com/resources/storefront-development/products/collections/list",
-              "children": []
-            },
-            {
-              "loaded": true,
-              "isPathHref": true,
-              "type": "ref",
-              "title": "List Products in Storefront",
-              "path": "https://docs.medusajs.com/resources/storefront-development/products/list",
               "children": []
             },
             {
@@ -11186,6 +11243,22 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "type": "ref",
               "title": "Select Product Variants in Storefront",
               "path": "https://docs.medusajs.com/resources/storefront-development/products/variants",
+              "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "ref",
+              "title": "Show Product Categories in Storefront",
+              "path": "https://docs.medusajs.com/resources/storefront-development/products/categories/list",
+              "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "ref",
+              "title": "Show Products in Storefront",
+              "path": "https://docs.medusajs.com/resources/storefront-development/products/list",
               "children": []
             }
           ]
@@ -12714,7 +12787,7 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
           "isPathHref": true,
           "type": "category",
           "title": "Server Guides",
-          "autogenerate_tags": "server+promotion",
+          "autogenerate_tags": "promotion+server",
           "autogenerate_as_ref": true,
           "sort_sidebar": "alphabetize",
           "description": "Learn how to use the Promotion Module in your customizations on the Medusa application server.",
@@ -12725,6 +12798,14 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "type": "link",
               "path": "/commerce-modules/promotion/extend",
               "title": "Extend Module",
+              "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "ref",
+              "title": "Implement Loyalty Points",
+              "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/loyalty-points",
               "children": []
             }
           ]
@@ -13591,7 +13672,7 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "loaded": true,
               "isPathHref": true,
               "type": "ref",
-              "title": "Region Context in Storefront",
+              "title": "Region React Context in Storefront",
               "path": "https://docs.medusajs.com/resources/storefront-development/regions/context",
               "children": []
             },
@@ -13599,7 +13680,7 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "loaded": true,
               "isPathHref": true,
               "type": "ref",
-              "title": "Store and Retrieve Region",
+              "title": "Store Selected Region in Storefront",
               "path": "https://docs.medusajs.com/resources/storefront-development/regions/store-retrieve-region",
               "children": []
             }

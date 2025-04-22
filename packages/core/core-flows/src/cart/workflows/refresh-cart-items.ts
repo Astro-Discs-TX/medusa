@@ -28,6 +28,8 @@ import { refreshPaymentCollectionForCartWorkflow } from "./refresh-payment-colle
 import { updateCartPromotionsWorkflow } from "./update-cart-promotions"
 import { updateTaxLinesWorkflow } from "./update-tax-lines"
 import { upsertTaxLinesWorkflow } from "./upsert-tax-lines"
+import { AdditionalData } from "@medusajs/types"
+import { pricingContextResult } from "../utils/schemas"
 
 /**
  * The details of the cart to refresh.
@@ -88,10 +90,58 @@ export const refreshCartItemsWorkflowId = "refresh-cart-items"
  *
  * Refresh a cart's details after an update.
  *
+ * @property hooks.setPricingContext - This hook is executed before the cart is refreshed. You can consume this hook to return any custom context useful for the prices retrieval of the variants in the cart.
+ *
+ * For example, assuming you have the following custom pricing rule:
+ *
+ * ```json
+ * {
+ *   "attribute": "location_id",
+ *   "operator": "eq",
+ *   "value": "sloc_123",
+ * }
+ * ```
+ *
+ * You can consume the `setPricingContext` hook to add the `location_id` context to the prices calculation:
+ *
+ * ```ts
+ * import { refreshCartItemsWorkflow } from "@medusajs/medusa/core-flows";
+ * import { StepResponse } from "@medusajs/workflows-sdk";
+ *
+ * refreshCartItemsWorkflow.hooks.setPricingContext((
+ *   { cart, items, additional_data }, { container }
+ * ) => {
+ *   return new StepResponse({
+ *     location_id: "sloc_123", // Special price for in-store purchases
+ *   });
+ * });
+ * ```
+ *
+ * The variants' prices will now be retrieved using the context you return.
+ *
+ * :::note
+ *
+ * Learn more about prices calculation context in the [Prices Calculation](https://docs.medusajs.com/resources/commerce-modules/pricing/price-calculation) documentation.
+ *
+ * :::
+ *
  */
 export const refreshCartItemsWorkflow = createWorkflow(
   refreshCartItemsWorkflowId,
-  (input: WorkflowData<RefreshCartItemsWorkflowInput>) => {
+  (input: WorkflowData<RefreshCartItemsWorkflowInput & AdditionalData>) => {
+    const setPricingContext = createHook(
+      "setPricingContext",
+      {
+        cart_id: input.cart_id,
+        items: input.items,
+        additional_data: input.additional_data,
+      },
+      {
+        resultValidator: pricingContextResult,
+      }
+    )
+    const setPricingContextResult = setPricingContext.getResult()
+
     when({ input }, ({ input }) => {
       return !!input.force_refresh
     }).then(() => {
@@ -106,9 +156,22 @@ export const refreshCartItemsWorkflow = createWorkflow(
         return (data.cart.items ?? []).map((i) => i.variant_id).filter(Boolean)
       })
 
-      const cartPricingContext = transform({ cart }, ({ cart }) => {
-        return filterObjectByKeys(cart, cartFieldsForPricingContext)
-      })
+      const cartPricingContext = transform(
+        { cart, setPricingContextResult },
+        (data) => {
+          return {
+            ...filterObjectByKeys(data.cart, cartFieldsForPricingContext),
+            ...(data.setPricingContextResult
+              ? data.setPricingContextResult
+              : {}),
+            currency_code: data.cart.currency_code,
+            region_id: data.cart.region_id,
+            region: data.cart.region,
+            customer_id: data.cart.customer_id,
+            customer: data.cart.customer,
+          }
+        }
+      )
 
       const variants = useRemoteQueryStep({
         entry_point: "variants",
@@ -229,12 +292,17 @@ export const refreshCartItemsWorkflow = createWorkflow(
       },
     })
 
-    createHook("beforeRefreshingPaymentCollection", { input })
+    const beforeRefreshingPaymentCollection = createHook(
+      "beforeRefreshingPaymentCollection",
+      { input }
+    )
 
     refreshPaymentCollectionForCartWorkflow.runAsStep({
       input: { cart_id: input.cart_id },
     })
 
-    return new WorkflowResponse(refetchedCart)
+    return new WorkflowResponse(refetchedCart, {
+      hooks: [setPricingContext, beforeRefreshingPaymentCollection] as const,
+    })
   }
 )

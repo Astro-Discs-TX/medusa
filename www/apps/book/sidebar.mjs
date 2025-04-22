@@ -130,6 +130,11 @@ export const sidebars = [
         children: [
           {
             type: "link",
+            path: "/learn/fundamentals/framework",
+            title: "Overview",
+          },
+          {
+            type: "link",
             path: "/learn/fundamentals/medusa-container",
             title: "Medusa Container",
           },
@@ -190,8 +195,8 @@ export const sidebars = [
               },
               {
                 type: "link",
-                path: "/learn/fundamentals/modules/architectural-modules",
-                title: "Architectural Modules",
+                path: "/learn/fundamentals/modules/infrastructure-modules",
+                title: "Infrastructure Modules",
               },
             ],
           },
@@ -327,7 +332,12 @@ export const sidebars = [
               {
                 type: "link",
                 path: "/learn/fundamentals/api-routes/additional-data",
-                title: "Additional Data",
+                title: "Pass Additional Data",
+              },
+              {
+                type: "link",
+                path: "/learn/fundamentals/api-routes/retrieve-custom-links",
+                title: "Retrieve Custom Links",
               },
             ],
           },
@@ -527,7 +537,7 @@ export const sidebars = [
           {
             type: "link",
             title: "Type Aliases",
-            path: "/learn/conventions/ts-aliases",
+            path: "/learn/configurations/ts-aliases",
           },
         ],
       },
@@ -640,7 +650,7 @@ export const sidebars = [
               },
               {
                 type: "link",
-                path: "/learn/resources//contribution-guidelines/admin-translations",
+                path: "/learn/resources/contribution-guidelines/admin-translations",
                 title: "Admin Translations",
               },
             ],

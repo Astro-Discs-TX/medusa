@@ -57,17 +57,18 @@ const sidebarMappings: {
       "/medusa-cli",
       "/js-sdk",
       "/nextjs-starter",
+      "/references/js-sdk",
     ],
   },
   {
     module: async () =>
       import(
-        "@/generated/generated-architectural-modules-sidebar.mjs"
+        "@/generated/generated-infrastructure-modules-sidebar.mjs"
       ) as Promise<{
         default: Sidebar.Sidebar
       }>,
     paths: [
-      "/architectural-modules",
+      "/infrastructure-modules",
       "/references/file-provider-module",
       "/references/locking",
       "/references/notification-provider-module",

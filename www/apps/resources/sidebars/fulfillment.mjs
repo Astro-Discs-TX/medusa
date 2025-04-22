@@ -21,7 +21,7 @@ export const fulfillmentSidebar = [
       {
         type: "category",
         title: "Concepts",
-        autogenerate_tags: "concept+fulfillment",
+        autogenerate_tags: "fulfillment+concept",
         autogenerate_as_ref: true,
         children: [
           {
@@ -93,7 +93,7 @@ export const fulfillmentSidebar = [
       {
         type: "category",
         title: "Admin User Guides",
-        autogenerate_tags: "userGuide+fulfillment",
+        autogenerate_tags: "fulfillment+userGuide",
         autogenerate_as_ref: true,
         sort_sidebar: "alphabetize",
         description:

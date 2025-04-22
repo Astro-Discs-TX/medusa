@@ -1,4 +1,5 @@
 import {
+  Context,
   ILinkModule,
   LinkDefinition,
   LoadedModule,
@@ -7,7 +8,9 @@ import {
 
 import {
   isObject,
+  MedusaContext,
   MedusaError,
+  MedusaModuleType,
   Modules,
   promiseAll,
   toPascalCase,
@@ -55,6 +58,9 @@ type LinkDataConfig = {
 }
 
 export class Link {
+  // To not lose the context chain, we need to set the type to MedusaModuleType
+  static __type = MedusaModuleType
+
   private modulesMap: Map<string, LoadedLinkModule> = new Map()
   private relationsPairs: Map<string, LoadedLinkModule> = new Map()
   private relations: Map<string, Map<string, RemoteRelationship[]>> = new Map()
@@ -171,7 +177,8 @@ export class Link {
 
   private async executeCascade(
     removedServices: DeleteEntityInput,
-    executionMethod: "softDelete" | "restore"
+    executionMethod: "softDelete" | "restore",
+    @MedusaContext() sharedContext: Context = {}
   ): Promise<[CascadeError[] | null, RemovedIds]> {
     const removedIds: RemovedIds = {}
     const returnIdsList: RemovedIds = {}
@@ -254,9 +261,13 @@ export class Link {
                   method += toPascalCase(args.methodSuffix)
                 }
 
-                const removed = await service[method](cascadeDelKeys, {
-                  returnLinkableKeys: returnFields,
-                })
+                const removed = await service[method](
+                  cascadeDelKeys,
+                  {
+                    returnLinkableKeys: returnFields,
+                  },
+                  sharedContext
+                )
 
                 deletedEntities = removed as Record<string, string[]>
               } catch (error) {
@@ -382,14 +393,17 @@ export class Link {
     }
   }
 
-  async create(link: LinkDefinition | LinkDefinition[]): Promise<unknown[]> {
+  async create(
+    link: LinkDefinition | LinkDefinition[],
+    @MedusaContext() sharedContext: Context = {}
+  ): Promise<unknown[]> {
     const allLinks = Array.isArray(link) ? link : [link]
     const serviceLinks = new Map<
       string,
       {
         linksToCreate: [string | string[], string, Record<string, unknown>?][]
         linksToValidateForUniqueness: {
-          filters: { [key: string]: string }[]
+          filters: { [key: string]: any }[]
           services: string[]
         }
       }
@@ -418,55 +432,51 @@ export class Link {
            */
           linksToValidateForUniqueness: {
             filters: [],
-            services: [],
+            services: relationships?.map((r) => r.serviceName) ?? [],
           },
         })
       }
 
-      relationships?.forEach((relationship) => {
-        const linksToValidateForUniqueness = serviceLinks.get(
-          service.__definition.key
-        )!.linksToValidateForUniqueness!
+      /**
+       * When isList is set on false on the relationship, then it means
+       * we have a one-to-one or many-to-one relationship with the
+       * other side and we have limit duplicate entries from other
+       * entity. For example:
+       *
+       * - A brand has a many to one relationship with a product.
+       * - A product can have only one brand. Aka (brand.isList = false)
+       * - A brand can have multiple products. Aka (products.isList = true)
+       *
+       * A result of this, we have to ensure that a product_id can only appear
+       * once in the pivot table that is used for tracking "brand<>products"
+       * relationship.
+       */
+      const linksToValidateForUniqueness = serviceLinks.get(
+        service.__definition.key
+      )!.linksToValidateForUniqueness!
 
-        linksToValidateForUniqueness.services.push(relationship.serviceName)
-
-        /**
-         * When isList is set on false on the relationship, then it means
-         * we have a one-to-one or many-to-one relationship with the
-         * other side and we have limit duplicate entries from other
-         * entity. For example:
-         *
-         * - A brand has a many to one relationship with a product.
-         * - A product can have only one brand. Aka (brand.isList = false)
-         * - A brand can have multiple products. Aka (products.isList = true)
-         *
-         * A result of this, we have to ensure that a product_id can only appear
-         * once in the pivot table that is used for tracking "brand<>products"
-         * relationship.
-         */
-        if (relationship.isList === false) {
-          const otherSide = relationships.find(
-            (other) => other.foreignKey !== relationship.foreignKey
-          )
-          if (!otherSide) {
-            return
-          }
-
-          if (moduleBKey === otherSide.foreignKey) {
-            linksToValidateForUniqueness.filters.push({
-              [otherSide.foreignKey]: link[moduleB][moduleBKey],
-            })
-          } else {
-            primaryKeys.forEach((pk) => {
-              if (pk === otherSide.foreignKey) {
-                linksToValidateForUniqueness.filters.push({
-                  [otherSide.foreignKey]: link[moduleA][pk],
-                })
-              }
-            })
-          }
+      const modA = relationships?.[0]!
+      const modB = relationships?.[1]!
+      if (!modA.hasMany || !modB.hasMany) {
+        if (!modA.hasMany && !modB.hasMany) {
+          linksToValidateForUniqueness.filters.push({
+            $or: [
+              { [modA.foreignKey]: link[moduleA][modA.foreignKey] },
+              { [modB.foreignKey]: link[moduleB][modB.foreignKey] },
+            ],
+          })
+        } else if (!modA.hasMany) {
+          linksToValidateForUniqueness.filters.push({
+            [modA.foreignKey]: { $ne: link[moduleA][modA.foreignKey] },
+            [modB.foreignKey]: link[moduleB][modB.foreignKey],
+          })
+        } else if (!modB.hasMany) {
+          linksToValidateForUniqueness.filters.push({
+            [modB.foreignKey]: { $ne: link[moduleB][modB.foreignKey] },
+            [modA.foreignKey]: link[moduleA][modA.foreignKey],
+          })
         }
-      })
+      }
 
       const pkValue =
         primaryKeys.length === 1
@@ -493,7 +503,8 @@ export class Link {
           },
           {
             take: 1,
-          }
+          },
+          sharedContext
         )
 
         if (existingLinks.length > 0) {
@@ -511,13 +522,18 @@ export class Link {
     const promises: Promise<unknown[]>[] = []
     for (const [serviceName, data] of serviceLinks) {
       const service = this.modulesMap.get(serviceName)!
-      promises.push(service.create(data.linksToCreate))
+      promises.push(
+        service.create(data.linksToCreate, undefined, undefined, sharedContext)
+      )
     }
 
     return (await promiseAll(promises)).flat()
   }
 
-  async dismiss(link: LinkDefinition | LinkDefinition[]): Promise<unknown[]> {
+  async dismiss(
+    link: LinkDefinition | LinkDefinition[],
+    @MedusaContext() sharedContext: Context = {}
+  ): Promise<unknown[]> {
     const allLinks = Array.isArray(link) ? link : [link]
     const serviceLinks = new Map<string, [string | string[], string][]>()
 
@@ -545,27 +561,34 @@ export class Link {
     for (const [serviceName, links] of serviceLinks) {
       const service = this.modulesMap.get(serviceName)!
 
-      promises.push(service.dismiss(links))
+      promises.push(service.dismiss(links, undefined, sharedContext))
     }
 
     return (await promiseAll(promises)).flat()
   }
 
   async delete(
-    removedServices: DeleteEntityInput
+    removedServices: DeleteEntityInput,
+    @MedusaContext() sharedContext: Context = {}
   ): Promise<[CascadeError[] | null, RemovedIds]> {
-    return await this.executeCascade(removedServices, "softDelete")
+    return await this.executeCascade(
+      removedServices,
+      "softDelete",
+      sharedContext
+    )
   }
 
   async restore(
-    removedServices: DeleteEntityInput
+    removedServices: DeleteEntityInput,
+    @MedusaContext() sharedContext: Context = {}
   ): Promise<[CascadeError[] | null, RestoredIds]> {
-    return await this.executeCascade(removedServices, "restore")
+    return await this.executeCascade(removedServices, "restore", sharedContext)
   }
 
   async list(
     link: LinkDefinition | LinkDefinition[],
-    options?: { asLinkDefinition?: boolean }
+    options?: { asLinkDefinition?: boolean },
+    @MedusaContext() sharedContext: Context = {}
   ): Promise<(object | LinkDefinition)[]> {
     const allLinks = Array.isArray(link) ? link : [link]
     const serviceLinks = new Map<string, object[]>()
@@ -591,7 +614,7 @@ export class Link {
 
       promises.push(
         service
-          .list({ $or: filters })
+          .list({ $or: filters }, {}, sharedContext)
           .then((links: any[]) =>
             options?.asLinkDefinition
               ? convertRecordsToLinkDefinition(links, service)

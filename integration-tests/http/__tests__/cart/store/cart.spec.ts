@@ -151,7 +151,7 @@ medusaIntegrationTestRunner({
       })
 
       describe("POST /store/carts", () => {
-        it("should succesffully create a cart", async () => {
+        it("should successfully create a cart", async () => {
           const response = await api.post(
             `/store/carts`,
             {
@@ -255,10 +255,10 @@ medusaIntegrationTestRunner({
       })
 
       describe("POST /store/carts/:id/line-items", () => {
-        let shippingOption, shippingOptionExpensive
+        let shippingOption, shippingOptionExpensive, stockLocation
 
         beforeEach(async () => {
-          const stockLocation = (
+          stockLocation = (
             await api.post(
               `/admin/stock-locations`,
               { name: "test location" },
@@ -892,6 +892,67 @@ medusaIntegrationTestRunner({
                 ]),
               })
             )
+          })
+        })
+
+        describe("with manage_inventory true", () => {
+          let inventoryItem
+          beforeEach(async () => {
+            await api.post(
+              `/admin/products/${product.id}/variants/${product.variants[0].id}`,
+              { manage_inventory: true },
+              adminHeaders
+            )
+
+            inventoryItem = (
+              await api.post(
+                `/admin/inventory-items`,
+                { sku: "bottle" },
+                adminHeaders
+              )
+            ).data.inventory_item
+          })
+
+          describe("with allow_backorder true", () => {
+            beforeEach(async () => {
+              await api.post(
+                `/admin/products/${product.id}/variants/${product.variants[0].id}`,
+                { allow_backorder: true },
+                adminHeaders
+              )
+            })
+
+            it("should add item to cart even if no inventory locations", async () => {
+              let response = await api.post(
+                `/store/carts/${cart.id}/line-items`,
+                {
+                  variant_id: product.variants[0].id,
+                  quantity: 1,
+                },
+                storeHeaders
+              )
+
+              expect(response.status).toEqual(200)
+            })
+
+            it("should add item to cart even if inventory is empty", async () => {
+              await api.post(
+                `/admin/inventory-items/${inventoryItem.id}/location-levels/batch`,
+                { create: [{ location_id: stockLocation.id }] },
+                adminHeaders
+              )
+
+              let response = await api.post(
+                `/store/carts/${cart.id}/line-items`,
+                {
+                  variant_id: product.variants[0].id,
+                  quantity: 1,
+                },
+                storeHeaders
+              )
+
+              expect(response.status).toEqual(200)
+            })
           })
         })
       })
@@ -1997,6 +2058,72 @@ medusaIntegrationTestRunner({
                   tax_lines: [],
                 }),
               ],
+            })
+          )
+        })
+
+        it("should not generate tax lines for gift card products", async () => {
+          const giftCardProduct = (
+            await api.post(
+              `/admin/products`,
+              {
+                title: "Gift Card",
+                description: "test",
+                is_giftcard: true,
+                options: [
+                  {
+                    title: "Denomination",
+                    values: ["10", "20", "50", "100"],
+                  },
+                ],
+                variants: [
+                  {
+                    title: "10",
+                    sku: "special-shirt",
+                    options: {
+                      Denomination: "10",
+                    },
+                    manage_inventory: false,
+                    prices: [
+                      {
+                        amount: 1000,
+                        currency_code: "usd",
+                      },
+                    ],
+                  },
+                ],
+              },
+              adminHeaders
+            )
+          ).data.product
+
+          let updated = await api.post(
+            `/store/carts/${cart.id}/line-items?fields=+items.is_giftcard`,
+            { variant_id: giftCardProduct.variants[0].id, quantity: 1 },
+            storeHeaders
+          )
+
+          expect(updated.status).toEqual(200)
+          expect(updated.data.cart).toEqual(
+            expect.objectContaining({
+              id: cart.id,
+              items: expect.arrayContaining([
+                expect.objectContaining({
+                  is_giftcard: false,
+                  tax_lines: [
+                    expect.objectContaining({
+                      description: "CA Default Rate",
+                      code: "CADEFAULT",
+                      rate: 5,
+                      provider_id: "system",
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  is_giftcard: true,
+                  tax_lines: [],
+                }),
+              ]),
             })
           )
         })

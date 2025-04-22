@@ -83,7 +83,7 @@ const generatedgeneratedIntegrationsSidebarSidebar = {
           "loaded": true,
           "isPathHref": true,
           "type": "ref",
-          "path": "/architectural-modules/file/s3",
+          "path": "/infrastructure-modules/file/s3",
           "title": "AWS",
           "children": []
         }
@@ -110,6 +110,23 @@ const generatedgeneratedIntegrationsSidebarSidebar = {
       "loaded": true,
       "isPathHref": true,
       "type": "category",
+      "title": "Migration",
+      "initialOpen": true,
+      "children": [
+        {
+          "loaded": true,
+          "isPathHref": true,
+          "type": "link",
+          "path": "/integrations/guides/magento",
+          "title": "Magento",
+          "children": []
+        }
+      ]
+    },
+    {
+      "loaded": true,
+      "isPathHref": true,
+      "type": "category",
       "title": "Notification",
       "initialOpen": true,
       "children": [
@@ -125,7 +142,7 @@ const generatedgeneratedIntegrationsSidebarSidebar = {
           "loaded": true,
           "isPathHref": true,
           "type": "ref",
-          "path": "/architectural-modules/notification/sendgrid",
+          "path": "/infrastructure-modules/notification/sendgrid",
           "title": "SendGrid",
           "children": []
         }
@@ -144,6 +161,23 @@ const generatedgeneratedIntegrationsSidebarSidebar = {
           "type": "ref",
           "path": "/commerce-modules/payment/payment-provider/stripe",
           "title": "Stripe",
+          "children": []
+        }
+      ]
+    },
+    {
+      "loaded": true,
+      "isPathHref": true,
+      "type": "category",
+      "title": "Search",
+      "initialOpen": true,
+      "children": [
+        {
+          "loaded": true,
+          "isPathHref": true,
+          "type": "ref",
+          "path": "/integrations/guides/algolia",
+          "title": "Algolia",
           "children": []
         }
       ]

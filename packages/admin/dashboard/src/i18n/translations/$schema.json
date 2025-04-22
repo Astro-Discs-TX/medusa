@@ -220,6 +220,7 @@
         "plusCount",
         "plusCountMore",
         "areYouSure",
+        "areYouSureDescription",
         "noRecordsFound",
         "typeToConfirm",
         "noResultsTitle",
@@ -1407,6 +1408,7 @@
         }
       },
       "required": [
+        "title",
         "shippingAddress",
         "billingAddress",
         "contactHeading",
@@ -3032,10 +3034,16 @@
         "manageLocations": {
           "type": "string"
         },
+        "manageLocationQuantity": {
+          "type": "string"
+        },
         "deleteWarning": {
           "type": "string"
         },
         "editItemDetails": {
+          "type": "string"
+        },
+        "quantityAcrossLocations": {
           "type": "string"
         },
         "create": {
@@ -3250,8 +3258,10 @@
         "locationLevels",
         "associatedVariants",
         "manageLocations",
+        "manageLocationQuantity",
         "deleteWarning",
         "editItemDetails",
+        "quantityAcrossLocations",
         "create",
         "reservation",
         "adjustInventory",
@@ -3573,7 +3583,7 @@
               "additionalProperties": false
             }
           },
-          "required": ["title", "create"],
+          "required": ["title", "fields", "create"],
           "additionalProperties": false
         }
       },
@@ -3587,7 +3597,8 @@
         "fields",
         "registered",
         "guest",
-        "hasAccount"
+        "hasAccount",
+        "addresses"
       ],
       "additionalProperties": false
     },
@@ -4243,7 +4254,7 @@
             "inboundTotal": {
               "type": "string"
             },
-            "refundAmount": {
+            "estDifference": {
               "type": "string"
             },
             "outstandingAmount": {
@@ -4457,7 +4468,7 @@
             "sendNotificationHint",
             "returnTotal",
             "inboundTotal",
-            "refundAmount",
+            "estDifference",
             "outstandingAmount",
             "reason",
             "reasonHint",
