@@ -277,8 +277,8 @@ export const apiRouteHighlights = [
 ]
 
 ```ts title="src/api/store/payment-methods/[account_holder_id]/route.ts" highlights={apiRouteHighlights}
-import { MedusaError } from "@medusajs/framework/utils";
-import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+import { MedusaError } from "@medusajs/framework/utils"
+import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 
 export async function GET(
   req: MedusaRequest,
@@ -292,11 +292,11 @@ export async function GET(
     entity: "account_holder",
     fields: [
       "data",
-      "provider_id"
+      "provider_id",
     ],
     filters: {
-      id: account_holder_id
-    }
+      id: account_holder_id,
+    },
   })
 
   if (!accountHolder) {
@@ -313,14 +313,14 @@ export async function GET(
         account_holder: {
           data: {
             id: accountHolder.data.id,
-          }
-        }
-      }
+          },
+        },
+      },
     }
   )
 
   res.json({
-    payment_methods: paymentMethods
+    payment_methods: paymentMethods,
   })
 }
 ```
@@ -361,7 +361,7 @@ Refer to the [Middlewares](!docs!/learn/fundamentals/api-routes/middlewares) doc
 Middlewares are added in the `src/api/middlewares.ts` file. So, create the file with the following content:
 
 ```ts title="src/api/middlewares.ts"
-import { authenticate, defineMiddlewares } from "@medusajs/framework/http";
+import { authenticate, defineMiddlewares } from "@medusajs/framework/http"
 
 export default defineMiddlewares({
   routes: [
@@ -369,10 +369,10 @@ export default defineMiddlewares({
       matcher: "/store/payment-methods/:provider_id/:account_holder_id",
       method: "GET",
       middlewares: [
-        authenticate("customer", ["bearer", "session"])
-      ]
-    }
-  ]
+        authenticate("customer", ["bearer", "session"]),
+      ],
+    },
+  ],
 })
 ```
 
@@ -424,7 +424,7 @@ await initiatePaymentSession(cart, {
   // ...
   data: {
     setup_future_usage: "off_session",
-  }
+  },
 })
 ```
 
@@ -618,7 +618,7 @@ const StripeSavedPaymentMethodsContainer = ({
       return
     }
     const selectedMethod = savedPaymentMethods.find(
-      method => method.id === selectedPaymentMethod
+      (method) => method.id === selectedPaymentMethod
     )
 
     if (!selectedMethod) {
@@ -636,7 +636,7 @@ const StripeSavedPaymentMethodsContainer = ({
       provider_id: method.provider_id,
       data: {
         payment_method_id: method.id,
-      }
+      },
     }).catch((error) => {
       setError(error.message)
     })
@@ -976,7 +976,7 @@ Once the order is placed successfully, you can check it in the Medusa Admin dash
 
 ## Next Steps
 
-You've added support for saved payment methods in in your Medusa application and Next.js Starter Storefront, allowing customers to save their payment methods during checkout and use them in future orders.
+You've added support for saved payment methods in your Medusa application and Next.js Starter Storefront, allowing customers to save their payment methods during checkout and use them in future orders.
 
 You can add more features to the saved payment methods, such as allowing customers to delete saved payment methods. You can use [Stripe's APIs](https://docs.stripe.com/api/payment_methods/detach) in the storefront or add an [API route](!docs!/learn/fundamentals/api-routes) in Medusa to delete the saved payment method.
 
