@@ -8864,6 +8864,14 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "path": "/references/payment/provider",
               "title": "Create Payment Provider",
               "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "ref",
+              "title": "Saved Payment Methods",
+              "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/saved-payment-methods",
+              "children": []
             }
           ]
         },
