@@ -10,6 +10,7 @@ import {
   mergePathsAndSchemasIntoOAS,
 } from "./utils/merge-oas"
 import { isFile } from "./utils/fs-utils"
+import { toUnixSlash } from "@medusajs/utils"
 
 /**
  * Constants
@@ -179,7 +180,7 @@ async function getOASFromPaths(
   customBaseFile?: string
 ): Promise<OpenAPIObject> {
   console.log(`🔵 Gathering custom OAS`)
-  const gen = await swaggerInline(additionalPaths, {
+  const gen = await swaggerInline(additionalPaths.map(toUnixSlash), {
     base:
       customBaseFile ?? path.resolve(basePath, "oas", "default.oas.base.yaml"),
     format: ".json",
