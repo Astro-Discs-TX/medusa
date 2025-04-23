@@ -1,8 +1,9 @@
 /**
  * @oas [delete] /admin/draft-orders/{id}/edit/shipping-methods/method/{method_id}
  * operationId: DeleteDraftOrdersIdEditShippingMethodsMethodMethod_id
- * summary: Remove Method from Draft Order
- * description: Remove a Method from a draft order.
+ * summary: Remove Shipping Method from Draft Order
+ * x-sidebar-summary: Remove Shipping Method
+ * description: Remove the shipping method in a draft order that is being edited.
  * x-authenticated: true
  * parameters:
  *   - name: id
@@ -13,7 +14,7 @@
  *       type: string
  *   - name: method_id
  *     in: path
- *     description: The draft order's method id.
+ *     description: The shipping method's ID.
  *     required: true
  *     schema:
  *       type: string
@@ -22,6 +23,26 @@
  *   - cookie_auth: []
  *   - jwt_token: []
  * x-codeSamples:
+ *   - lang: JavaScript
+ *     label: JS SDK
+ *     source: |-
+ *       import Medusa from "@medusajs/js-sdk"
+ * 
+ *       export const sdk = new Medusa({
+ *         baseUrl: import.meta.env.VITE_BACKEND_URL || "/",
+ *         debug: import.meta.env.DEV,
+ *         auth: {
+ *           type: "session",
+ *         },
+ *       })
+ * 
+ *       sdk.admin.draftOrder.removeShippingMethod(
+ *         "order_123", 
+ *         "shipping_method_123"
+ *       )
+ *       .then(({ draft_order_preview }) => {
+ *         console.log(draft_order_preview)
+ *       })
  *   - lang: Shell
  *     label: cURL
  *     source: |-

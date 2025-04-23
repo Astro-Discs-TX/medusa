@@ -15552,8 +15552,9 @@ paths:
       x-workflow: updateDraftOrderShippingMethodWorkflow
     delete:
       operationId: DeleteDraftOrdersIdEditShippingMethodsMethodMethod_id
-      summary: Remove Method from Draft Order
-      description: Remove a Method from a draft order.
+      summary: Remove Shipping Method from Draft Order
+      x-sidebar-summary: Remove Shipping Method
+      description: Remove the shipping method in a draft order that is being edited.
       x-authenticated: true
       parameters:
         - name: id
@@ -15564,7 +15565,7 @@ paths:
             type: string
         - name: method_id
           in: path
-          description: The draft order's method id.
+          description: The shipping method's ID.
           required: true
           schema:
             type: string
@@ -15573,6 +15574,26 @@ paths:
         - cookie_auth: []
         - jwt_token: []
       x-codeSamples:
+        - lang: JavaScript
+          label: JS SDK
+          source: |-
+            import Medusa from "@medusajs/js-sdk"
+
+            export const sdk = new Medusa({
+              baseUrl: import.meta.env.VITE_BACKEND_URL || "/",
+              debug: import.meta.env.DEV,
+              auth: {
+                type: "session",
+              },
+            })
+
+            sdk.admin.draftOrder.removeShippingMethod(
+              "order_123", 
+              "shipping_method_123"
+            )
+            .then(({ draft_order_preview }) => {
+              console.log(draft_order_preview)
+            })
         - lang: Shell
           label: cURL
           source: |-
@@ -15677,8 +15698,8 @@ paths:
       x-workflow: updateDraftOrderActionShippingMethodWorkflow
     delete:
       operationId: DeleteDraftOrdersIdEditShippingMethodsAction_id
-      summary: Remove Shipping Method from Draft Order
-      x-sidebar-summary: Remove Shipping Method
+      summary: Remove New Shipping Method from Draft Order
+      x-sidebar-summary: Remove New Shipping Method
       description: |
         Remove the shipping method in a draft order using the `ID` of the method's `SHIPPING_ADD` action.
 
@@ -61273,7 +61294,7 @@ components:
           $ref: '#/components/schemas/AdminShippingOption'
     AdminShippingOptionRule:
       type: object
-      description: The rule's rules.
+      description: The shipping option rule's details.
       x-schemaName: AdminShippingOptionRule
       required:
         - id
@@ -61288,11 +61309,12 @@ components:
         id:
           type: string
           title: id
-          description: The rule's ID.
+          description: The shipping option rule's ID.
         attribute:
           type: string
           title: attribute
-          description: The rule's attribute.
+          description: The shipping option rule's attribute.
+          example: is_return
         operator:
           type: string
           description: The rule's operator.
@@ -61306,35 +61328,27 @@ components:
             - gte
             - nin
         value:
-          oneOf:
-            - type: string
-              title: value
-              description: The rule's value.
-            - type: array
-              description: The rule's value.
-              items:
-                type: string
-                title: value
-                description: The value's details.
+          type: string
+          title: value
         shipping_option_id:
           type: string
           title: shipping_option_id
-          description: The rule's shipping option id.
+          description: The ID of the shipping option this rule is for.
         created_at:
           type: string
           format: date-time
           title: created_at
-          description: The rule's created at.
+          description: The date the shipping option rule was created.
         updated_at:
           type: string
           format: date-time
           title: updated_at
-          description: The rule's updated at.
+          description: The date the shipping option rule was updated.
         deleted_at:
           type: string
           format: date-time
           title: deleted_at
-          description: The rule's deleted at.
+          description: The date the shipping option rule was deleted.
     AdminShippingOptionType:
       type: object
       description: The shipping option's details.
@@ -63166,14 +63180,14 @@ components:
           description: The date the workflow execution was deleted.
     AdminWorkflowExecutionExecution:
       type: object
-      description: The workflow execution's execution.
+      description: The workflow execution's steps details.
       x-schemaName: AdminWorkflowExecutionExecution
       required:
         - steps
       properties:
         steps:
           type: object
-          description: The execution's steps.
+          description: The execution's steps. Each object key is a step ID, and the value is the object whose properties are shown below.
           required:
             - id
             - invoke
@@ -63190,7 +63204,7 @@ components:
                 description: The step's ID.
               invoke:
                 type: object
-                description: The step's invoke.
+                description: The state of the step's invokation function.
                 x-schemaName: WorkflowExecutionFn
                 required:
                   - state
@@ -63198,7 +63212,7 @@ components:
                 properties:
                   state:
                     type: string
-                    description: The invoke's state.
+                    description: The invokation step's state.
                     enum:
                       - failed
                       - not_started
@@ -63212,7 +63226,7 @@ components:
                       - timeout
                   status:
                     type: string
-                    description: The invoke's status.
+                    description: The invokation step's state.
                     enum:
                       - idle
                       - ok
@@ -63221,60 +63235,61 @@ components:
                       - permanent_failure
               definition:
                 type: object
-                description: The step's definition.
+                description: The step's definition details.
                 x-schemaName: WorkflowExecutionDefinition
                 properties:
                   async:
                     type: boolean
                     title: async
-                    description: The definition's async.
+                    description: Whether the step is async.
                   compensateAsync:
                     type: boolean
                     title: compensateAsync
-                    description: The definition's compensateasync.
+                    description: Whether the compensation function of the step is async.
                   noCompensation:
                     type: boolean
                     title: noCompensation
-                    description: The definition's nocompensation.
+                    description: Whether the step doesn't have a compensation function.
                   continueOnPermanentFailure:
                     type: boolean
                     title: continueOnPermanentFailure
-                    description: The definition's continueonpermanentfailure.
+                    description: Whether the workflow should continue executing even if its status is changed to failed.
                   skipOnPermanentFailure:
                     oneOf:
                       - type: string
                         title: skipOnPermanentFailure
-                        description: The definition's skiponpermanentfailure.
+                        description: The ID of the step to skip to in case of a permanent failure.
                       - type: boolean
                         title: skipOnPermanentFailure
-                        description: The definition's skiponpermanentfailure.
+                        description: Whether the workflow should skip subsequent steps in case of a permanent failure.
                   maxRetries:
                     type: number
                     title: maxRetries
-                    description: The definition's maxretries.
+                    description: The maximum number of times to retry the step.
                   noWait:
                     type: boolean
                     title: noWait
-                    description: The definition's nowait.
+                    description: Whether the workflow shouldn't wait for the step to finish before moving to the next step.
+                    default: false
                   retryInterval:
                     type: number
                     title: retryInterval
-                    description: The definition's retryinterval.
+                    description: The interval in seconds between retry attempts when the step fails.
                   retryIntervalAwaiting:
                     type: number
                     title: retryIntervalAwaiting
-                    description: The definition's retryintervalawaiting.
+                    description: The interval in seconds to retry a step even if its status is `waiting_response`.
                   saveResponse:
                     type: boolean
                     title: saveResponse
-                    description: The definition's saveresponse.
+                    description: Whether the step's response is stored.
                   timeout:
                     type: number
                     title: timeout
-                    description: The definition's timeout.
+                    description: The maximum time in seconds to wait for this step to complete. If the step exceeds this time, the step's state is changed to `timeout`, but the step continues executing.
               compensate:
                 type: object
-                description: The step's compensate.
+                description: The state of the step's compensation function.
                 x-schemaName: WorkflowExecutionFn
                 required:
                   - state
@@ -63282,7 +63297,7 @@ components:
                 properties:
                   state:
                     type: string
-                    description: The compensate's state.
+                    description: The compensation function's state.
                     enum:
                       - failed
                       - not_started
@@ -63296,7 +63311,7 @@ components:
                       - timeout
                   status:
                     type: string
-                    description: The compensate's status.
+                    description: The compensation function's status.
                     enum:
                       - idle
                       - ok
@@ -63306,11 +63321,11 @@ components:
               depth:
                 type: number
                 title: depth
-                description: The step's depth.
+                description: The step's depth in the workflow's execution.
               startedAt:
                 type: number
                 title: startedAt
-                description: The step's startedat.
+                description: The timestamp the step started executing.
     AdminWorkflowExecutionResponse:
       type: object
       description: The workflow execution's details.
