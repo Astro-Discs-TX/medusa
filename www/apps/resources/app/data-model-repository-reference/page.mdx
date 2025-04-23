@@ -1,7 +1,7 @@
 import { ChildDocs } from "docs-ui"
 
 export const metadata = {
-  title: `Base Repository Reference`,
+  title: `Data Model Repository Reference`,
 }
 
 # {metadata.title}
@@ -45,7 +45,11 @@ To resolve a data model repository from a module's container, pass the data mode
 
 For example:
 
-```ts
+export const resolveRepoHighlights = [
+  ["17", "postRepository", "Resolve the data model repository for the `Post` model."],
+]
+
+```ts highlights={resolveRepoHighlights}
 import { MedusaService } from "@medusajs/framework/utils"
 import { InferTypeOf, DAL } from "@medusajs/framework/types"
 import Post from "./models/post"
