@@ -1889,7 +1889,7 @@ medusaIntegrationTestRunner({
             )
           ).data.order
 
-          // 10. 1 line item was fulfilled so 1 line item is delivered
+          // 10. both items are fulfilled, shipped and delivered
           expect(deliveredOrder2.items[0].detail.fulfilled_quantity).toEqual(2)
           expect(deliveredOrder2.items[0].detail.shipped_quantity).toEqual(2)
           expect(deliveredOrder2.items[0].detail.delivered_quantity).toEqual(2)
