@@ -11612,6 +11612,10 @@ export const filesMap = [
     "pathname": "/references/js_sdk/admin/DraftOrder/methods/js_sdk.admin.DraftOrder.removePromotions"
   },
   {
+    "filePath": "/www/apps/resources/references/js_sdk/admin/DraftOrder/methods/js_sdk.admin.DraftOrder.removeShippingMethod/page.mdx",
+    "pathname": "/references/js_sdk/admin/DraftOrder/methods/js_sdk.admin.DraftOrder.removeShippingMethod"
+  },
+  {
     "filePath": "/www/apps/resources/references/js_sdk/admin/DraftOrder/methods/js_sdk.admin.DraftOrder.requestEdit/page.mdx",
     "pathname": "/references/js_sdk/admin/DraftOrder/methods/js_sdk.admin.DraftOrder.requestEdit"
   },
@@ -18264,6 +18268,10 @@ export const filesMap = [
     "pathname": "/references/types/CommonTypes/interfaces/types.CommonTypes.RequestQueryFields"
   },
   {
+    "filePath": "/www/apps/resources/references/types/CommonTypes/interfaces/types.CommonTypes.SessionOptions/page.mdx",
+    "pathname": "/references/types/CommonTypes/interfaces/types.CommonTypes.SessionOptions"
+  },
+  {
     "filePath": "/www/apps/resources/references/types/CommonTypes/interfaces/types.CommonTypes.SoftDeletableEntity/page.mdx",
     "pathname": "/references/types/CommonTypes/interfaces/types.CommonTypes.SoftDeletableEntity"
   },
@@ -18620,6 +18628,10 @@ export const filesMap = [
     "pathname": "/references/types/FileTypes/interfaces/types.FileTypes.FilterableFileProps"
   },
   {
+    "filePath": "/www/apps/resources/references/types/FileTypes/interfaces/types.FileTypes.GetUploadFileUrlDTO/page.mdx",
+    "pathname": "/references/types/FileTypes/interfaces/types.FileTypes.GetUploadFileUrlDTO"
+  },
+  {
     "filePath": "/www/apps/resources/references/types/FileTypes/interfaces/types.FileTypes.IFileModuleService/page.mdx",
     "pathname": "/references/types/FileTypes/interfaces/types.FileTypes.IFileModuleService"
   },
@@ -18644,12 +18656,24 @@ export const filesMap = [
     "pathname": "/references/types/FileTypes/interfaces/types.FileTypes.ProviderGetFileDTO"
   },
   {
+    "filePath": "/www/apps/resources/references/types/FileTypes/interfaces/types.FileTypes.ProviderGetPresignedUploadUrlDTO/page.mdx",
+    "pathname": "/references/types/FileTypes/interfaces/types.FileTypes.ProviderGetPresignedUploadUrlDTO"
+  },
+  {
     "filePath": "/www/apps/resources/references/types/FileTypes/interfaces/types.FileTypes.ProviderUploadFileDTO/page.mdx",
     "pathname": "/references/types/FileTypes/interfaces/types.FileTypes.ProviderUploadFileDTO"
   },
   {
     "filePath": "/www/apps/resources/references/types/FileTypes/interfaces/types.FileTypes.S3FileServiceOptions/page.mdx",
     "pathname": "/references/types/FileTypes/interfaces/types.FileTypes.S3FileServiceOptions"
+  },
+  {
+    "filePath": "/www/apps/resources/references/types/FileTypes/interfaces/types.FileTypes.UploadFileUrlDTO/page.mdx",
+    "pathname": "/references/types/FileTypes/interfaces/types.FileTypes.UploadFileUrlDTO"
+  },
+  {
+    "filePath": "/www/apps/resources/references/types/FileTypes/types/types.FileTypes.FileAccessPermission/page.mdx",
+    "pathname": "/references/types/FileTypes/types/types.FileTypes.FileAccessPermission"
   },
   {
     "filePath": "/www/apps/resources/references/types/HttpTypes/interfaces/types.HttpTypes.AdminAddClaimInboundItems/page.mdx",
@@ -23020,10 +23044,6 @@ export const filesMap = [
     "pathname": "/references/types/interfaces/types.SavePaymentMethodOutput"
   },
   {
-    "filePath": "/www/apps/resources/references/types/interfaces/types.SessionOptions/page.mdx",
-    "pathname": "/references/types/interfaces/types.SessionOptions"
-  },
-  {
     "filePath": "/www/apps/resources/references/types/interfaces/types.StoreCreateReturnItem/page.mdx",
     "pathname": "/references/types/interfaces/types.StoreCreateReturnItem"
   },
@@ -24118,6 +24138,10 @@ export const filesMap = [
   {
     "filePath": "/www/apps/resources/references/workflows/types/workflows.UnwrapWorkflowInputDataType/page.mdx",
     "pathname": "/references/workflows/types/workflows.UnwrapWorkflowInputDataType"
+  },
+  {
+    "filePath": "/www/apps/resources/references/workflows/types/workflows.Void/page.mdx",
+    "pathname": "/references/workflows/types/workflows.Void"
   },
   {
     "filePath": "/www/apps/resources/references/workflows/types/workflows.WorkflowData/page.mdx",
