@@ -1,8 +1,5 @@
 import { createStep, StepResponse } from "@medusajs/framework/workflows-sdk"
-import {
-  ContainerRegistrationKeys,
-  PaymentSessionStatus,
-} from "@medusajs/framework/utils"
+import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 import { Modules } from "@medusajs/framework/utils"
 import { Logger } from "@medusajs/framework/types"
 import { IPaymentModuleService } from "@medusajs/framework/types"
@@ -51,10 +48,7 @@ export const compensatePaymentIfNeededStep = createStep(
       }
     )
 
-    if (
-      paymentSession.status === PaymentSessionStatus.CAPTURED &&
-      paymentSession.payment?.id
-    ) {
+    if (paymentSession.payment?.captured_at) {
       try {
         await paymentModule.refundPayment({
           payment_id: paymentSession.payment.id,
