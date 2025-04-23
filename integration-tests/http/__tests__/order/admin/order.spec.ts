@@ -1878,6 +1878,7 @@ medusaIntegrationTestRunner({
 
           expect(shippedOrder2.items[0].detail.fulfilled_quantity).toEqual(2)
           expect(shippedOrder2.items[0].detail.shipped_quantity).toEqual(2)
+          expect(shippedOrder2.items[0].detail.delivered_quantity).toEqual(1)
 
           // 9. mark the fulfillment as delivered
           const deliveredOrder2 = (
