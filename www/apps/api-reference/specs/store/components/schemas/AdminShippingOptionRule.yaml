@@ -1,5 +1,5 @@
 type: object
-description: The shipping option rule's details.
+description: The rule's rules.
 x-schemaName: AdminShippingOptionRule
 required:
   - id
@@ -14,12 +14,11 @@ properties:
   id:
     type: string
     title: id
-    description: The shipping option rule's ID.
+    description: The rule's ID.
   attribute:
     type: string
     title: attribute
-    description: The shipping option rule's attribute.
-    example: is_return
+    description: The rule's attribute.
   operator:
     type: string
     description: The rule's operator.
@@ -33,24 +32,32 @@ properties:
       - gte
       - nin
   value:
-    type: string
-    title: value
+    oneOf:
+      - type: string
+        title: value
+        description: The rule's value.
+      - type: array
+        description: The rule's value.
+        items:
+          type: string
+          title: value
+          description: The value's details.
   shipping_option_id:
     type: string
     title: shipping_option_id
-    description: The ID of the shipping option this rule is for.
+    description: The rule's shipping option id.
   created_at:
     type: string
     format: date-time
     title: created_at
-    description: The date the shipping option rule was created.
+    description: The rule's created at.
   updated_at:
     type: string
     format: date-time
     title: updated_at
-    description: The date the shipping option rule was updated.
+    description: The rule's updated at.
   deleted_at:
     type: string
     format: date-time
     title: deleted_at
-    description: The date the shipping option rule was deleted.
+    description: The rule's deleted at.
