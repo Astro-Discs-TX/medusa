@@ -97,8 +97,5 @@ export async function createPartitions(
     }
   }
 
-  partitions.push(`ANALYZE ${activeSchema}index_data`)
-  partitions.push(`ANALYZE ${activeSchema}index_relation`)
-
   await manager.execute(partitions.join("; "))
 }
