@@ -54,6 +54,18 @@ jobs:
           medusa new cli-test --skip-db --v2 --branch ci
         working-directory: ..
 
+      - name: Install package dependencies
+      - uses: actions/cache@v3
+        id: cache
+        with:
+          path: |
+            .yarn/cache
+          key: ${{ runner.os }}-yarn-${{inputs.extension}}-v8-${{ hashFiles('**/yarn.lock') }}-3
+          restore-keys: |
+            ${{ runner.os }}-yarn-${{inputs.extension}}-v8-3
+      - run: yarn install --immutable
+      - working-directory: ../cli-test
+
       - name: Run migrations
         run: npx medusa db:migrate
         working-directory: ../cli-test
