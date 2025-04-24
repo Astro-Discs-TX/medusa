@@ -16,8 +16,6 @@ jobs:
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
     outputs:
-      module-matrix: ${{ steps.set-module-matrix.outputs.matrix }}
-      module-chunks: ${{ steps.set-module-chunks.outputs.chunks }}
       unit-tests-matrix: ${{ steps.set-unit-tests-matrix.outputs.matrix }}
       unit-tests-chunks: ${{ steps.set-unit-tests-chunks.outputs.chunks }}
     steps:
@@ -44,20 +42,6 @@ jobs:
         uses: ./.github/actions/cache-deps
         with:
           extension: pipeline
-
-      - name: Build
-        run: yarn build
-
-      - id: set-module-chunks
-        name: Set Module Chunks
-        working-directory: integration-tests/modules
-        run: echo "chunks=$(yarn run jest --listTests --json | jq -cM '[_nwise(length / 2 | ceil)]')" >> $GITHUB_OUTPUT
-
-      - id: set-module-matrix
-        name: Set Module Matrix
-        run: echo "matrix=$(echo $CHUNKS | jq -cM 'to_entries | map(.key)')" >> $GITHUB_OUTPUT
-        env:
-          CHUNKS: ${{ steps.set-module-chunks.outputs.chunks }}
 
       - id: set-unit-tests-chunks
         name: Set Unit Tests Chunks
