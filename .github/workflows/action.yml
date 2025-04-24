@@ -47,6 +47,9 @@ jobs:
         with:
           extension: pipeline
 
+      - name: Build
+        run: yarn build
+
       - id: set-module-chunks
         name: Set Module Chunks
         working-directory: integration-tests/modules
