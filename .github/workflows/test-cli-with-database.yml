@@ -40,12 +40,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup development server
-        uses: ./.github/actions/setup-server
-        with:
-          cache-extension: "cli-test"
-          node-version: 20
-
       - name: Install Medusa cli
         run: npm i -g @medusajs/cli@latest
 
