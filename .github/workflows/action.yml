@@ -18,8 +18,6 @@ jobs:
     outputs:
       module-matrix: ${{ steps.set-module-matrix.outputs.matrix }}
       module-chunks: ${{ steps.set-module-chunks.outputs.chunks }}
-      http-matrix: ${{ steps.set-http-matrix.outputs.matrix }}
-      http-chunks: ${{ steps.set-http-chunks.outputs.chunks }}
       unit-tests-matrix: ${{ steps.set-unit-tests-matrix.outputs.matrix }}
       unit-tests-chunks: ${{ steps.set-unit-tests-chunks.outputs.chunks }}
     steps:
@@ -60,17 +58,6 @@ jobs:
         run: echo "matrix=$(echo $CHUNKS | jq -cM 'to_entries | map(.key)')" >> $GITHUB_OUTPUT
         env:
           CHUNKS: ${{ steps.set-module-chunks.outputs.chunks }}
-
-      - id: set-http-chunks
-        name: Set HTTP Chunks
-        working-directory: integration-tests/http
-        run: echo "chunks=$(yarn run jest --listTests --json | jq -cM '[_nwise(length / 2 | ceil)]')" >> $GITHUB_OUTPUT
-
-      - id: set-http-matrix
-        name: Set HTTP Matrix
-        run: echo "matrix=$(echo $CHUNKS | jq -cM 'to_entries | map(.key)')" >> $GITHUB_OUTPUT
-        env:
-          CHUNKS: ${{ steps.set-http-chunks.outputs.chunks }}
 
       - id: set-unit-tests-chunks
         name: Set Unit Tests Chunks
@@ -245,10 +232,10 @@ jobs:
 
   integration-tests-modules-matrix:
     needs: setup
-    name: Shard (${{ matrix.chunk }}) Module Integration Tests
+    name: Shard (${{ matrix.shard_index }}) Module Integration Tests
     strategy:
       matrix:
-        chunk: ${{ fromJSON(needs.setup.outputs.module-matrix) }}
+        shard_index: [1, 2, 3]
     runs-on: ubuntu-latest
     env:
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
@@ -280,7 +267,7 @@ jobs:
           extension: pipeline
 
       - name: Run Modules integration tests
-        run: yarn test:integration:modules
+        run: yarn test:integration:modules -- --shard=${{ matrix.shard_index }}/3
         env:
           DB_USERNAME: postgres
           DB_PASSWORD: postgres
