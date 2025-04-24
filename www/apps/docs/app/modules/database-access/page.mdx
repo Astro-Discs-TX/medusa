@@ -1,0 +1,121 @@
+import { ChildDocs } from "docs-ui"
+
+export const metadata = {
+  title: `Database Access in Medusa v2`,
+}
+
+# {metadata.title}
+
+If you're trying to access the database in Medusa v2, you might have noticed that the old import path no longer works:
+
+```ts
+// ❌ This no longer works in v2
+import { dataSource } from "@medusajs/medusa/loaders/database"
+```
+
+This is because Medusa v2 uses MikroORM instead of TypeORM and the internal architecture has changed. Here's how to access the database in Medusa v2.
+
+## How to Access the Database
+
+There are a few different ways to access the database in Medusa v2:
+
+### Option 1: Create a Custom Repository
+
+```ts
+import { DALUtils } from "@medusajs/framework/utils"
+import MyEntity from "./models/my-entity"
+
+export class MyEntityRepository extends DALUtils.mikroOrmBaseRepositoryFactory(MyEntity) {
+  // You can add custom methods here
+}
+```
+
+Register it in your module's loader:
+
+```ts
+import { asClass } from "awilix"
+import { MyEntityRepository } from "./repositories/my-entity-repository"
+
+export default async ({ container }) => {
+  container.register({
+    myEntityRepository: asClass(MyEntityRepository).singleton(),
+  })
+}
+```
+
+### Option 2: Inject the Entity Manager
+
+You can inject the entity manager into your services:
+
+```ts
+import { MedusaService } from "@medusajs/framework/utils"
+
+export class MyService extends MedusaService {
+  protected readonly manager_
+  
+  constructor({ manager }) {
+    super()
+    this.manager_ = manager
+  }
+  
+  async findItems() {
+    // Use the manager directly
+    return await this.manager_.find("your_entity", {
+      where: { status: "active" }
+    })
+  }
+}
+```
+
+### Option 3: Run Raw SQL Queries
+
+If you need to run raw SQL:
+
+```ts
+async function runRawQuery() {
+  const knex = this.manager_.getKnex()
+  
+  return await knex.raw("SELECT * FROM my_table WHERE status = ?", ["active"])
+}
+```
+
+## Common Database Operations
+
+Here are some examples of common operations:
+
+```ts
+// Create
+const item = await myEntityRepository.create({
+  name: "Test Item",
+  status: "active"
+})
+
+// Find one
+const item = await myEntityRepository.findOne({
+  where: { id: "item_123" }
+})
+
+// Update
+await myEntityRepository.update("item_123", {
+  status: "inactive"
+})
+
+// Delete
+await myEntityRepository.delete("item_123")
+```
+
+## Transactions
+
+To run multiple operations in a transaction:
+
+```ts
+await myEntityRepository.transaction(async (transactionManager) => {
+  // Operations inside the transaction
+  const entity = transactionManager.create(MyEntity, data)
+  await transactionManager.persistAndFlush(entity)
+  
+  return entity
+})
+```
+
+By following these patterns, you'll be able to access and work with the database in Medusa v2. 
