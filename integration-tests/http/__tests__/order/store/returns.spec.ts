@@ -151,7 +151,7 @@ medusaIntegrationTestRunner({
       item = order.items[0]
     })
 
-    describe("POST /store/return", () => {
+    describe("POST /store/returns", () => {
       it("should request a return", async () => {
         let orderResult = (
           await api.get(`/admin/orders/${order.id}`, adminHeaders)
@@ -216,7 +216,7 @@ medusaIntegrationTestRunner({
 
         const returnResponse = (
           await api.post(
-            "/store/return",
+            "/store/returns",
             returnPayload,
             storeHeadersWithCustomer
           )

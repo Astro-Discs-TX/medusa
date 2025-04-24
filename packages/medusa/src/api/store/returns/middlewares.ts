@@ -6,10 +6,10 @@ import { MiddlewareRoute } from "@medusajs/framework/http"
 import * as QueryConfig from "./query-config"
 import { ReturnsParams, StorePostReturnsReqSchema } from "./validators"
 
-export const storeReturnRoutesMiddlewares: MiddlewareRoute[] = [
+export const storeReturnsRoutesMiddlewares: MiddlewareRoute[] = [
   {
     method: ["POST"],
-    matcher: "/store/return",
+    matcher: "/store/returns",
     middlewares: [
       validateAndTransformBody(StorePostReturnsReqSchema),
       validateAndTransformQuery(
