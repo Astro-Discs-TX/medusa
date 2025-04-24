@@ -70,14 +70,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Assert changed
-        run: ./scripts/assert-changed-files-actions.sh "packages"
-
-      - name: Install dependencies
-        uses: ./.github/actions/cache-deps
-        with:
-          extension: pipeline
-
       - name: Run unit tests
         run: yarn test:chunk
         env:
