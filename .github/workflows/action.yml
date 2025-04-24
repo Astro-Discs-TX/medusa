@@ -67,9 +67,6 @@ jobs:
 
       - name: Run unit tests
         run: yarn test:chunk -- --shard=${{ matrix.shard_index }}/2
-        env:
-          CHUNK: ${{ matrix.chunk }}
-          CHUNKS: ${{ needs.setup.outputs.unit-tests-chunks }}
 
   unit-tests:
     if: ${{ always() }}
@@ -79,12 +76,12 @@ jobs:
       - run: exit 1
         if: >-
           ${{
-               contains(unit-tests-matrix.result, 'failure')
-            || contains(unit-tests-matrix.result, 'cancelled')
-            || contains(unit-tests-matrix.result, 'skipped')
+               contains(needs.unit-tests-matrix.result, 'failure')
+            || contains(needs.unit-tests-matrix.result, 'cancelled')
+            || contains(needs.unit-tests-matrix.result, 'skipped')
           }}
       - run: exit 0
-        if: ${{ contains(unit-tests-matrix.result, 'success') }}
+        if: ${{ contains(needs.unit-tests-matrix.result, 'success') }}
 
   integration-tests-packages-matrix:
     needs: setup
