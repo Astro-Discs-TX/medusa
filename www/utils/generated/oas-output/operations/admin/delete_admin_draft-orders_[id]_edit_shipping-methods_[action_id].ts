@@ -1,8 +1,8 @@
 /**
  * @oas [delete] /admin/draft-orders/{id}/edit/shipping-methods/{action_id}
  * operationId: DeleteDraftOrdersIdEditShippingMethodsAction_id
- * summary: Remove Shipping Method from Draft Order
- * x-sidebar-summary: Remove Shipping Method
+ * summary: Remove New Shipping Method from Draft Order
+ * x-sidebar-summary: Remove New Shipping Method
  * description: |
  *   Remove the shipping method in a draft order using the `ID` of the method's `SHIPPING_ADD` action.
  * 
