@@ -2673,13 +2673,23 @@ In this section, you’ll customize the [Next.js Starter storefront](../../../..
 2. Add a new tab in the customer’s dashboard to view their purchased digital products.
 3. Allow customers to download the digital products through the new page in the dashboard.
 
-If you haven't installed the Next.js Starter storefront in the first step, refer to [this guide](../../../../nextjs-starter/page.mdx#approach-2-install-separately) to learn how to install it.
+<Note title="Reminder" forceMultiline>
+
+The Next.js Starter Storefront was installed in a separate directory from Medusa. The directory's name is `{your-project}-storefront`.
+
+So, if your Medusa application's directory is `medusa-digital-product`, you can find the storefront by going back to the parent directory and changing to the `medusa-digital-product-storefront` directory:
+
+```bash
+cd ../medusa-digital-product-storefront # change based on your project name
+```
+
+</Note>
 
 ### Add Types
 
 In `src/types/global.ts`, add the following types that you’ll use in your customizations:
 
-```ts title="src/types/global.ts"
+```ts title="src/types/global.ts" badgeLabel="Storefront" badgeColor="blue"
 import { 
   // other imports...
   StoreProductVariant,
@@ -2719,7 +2729,7 @@ export const fieldHighlights = [
   ["24"]
 ]
 
-```ts title="src/lib/data/products.ts" highlights={fieldHighlights}
+```ts title="src/lib/data/products.ts" highlights={fieldHighlights} badgeLabel="Storefront" badgeColor="blue"
 export const listProducts = async ({
   pageParam = 1,
   queryParams,
@@ -2757,7 +2767,7 @@ When a customer views a product’s details page, digital products linked to var
 
 To retrieve the links of a digital product’s preview media, first, add the following import at the top of `src/lib/data/products.ts`:
 
-```ts title="src/lib/data/products.ts"
+```ts title="src/lib/data/products.ts" badgeLabel="Storefront" badgeColor="blue"
 import { DigitalProductPreview } from "../../types/global"
 ```
 
@@ -2799,7 +2809,7 @@ This function uses the API route you created in the previous section to get the 
 
 To add a button that shows the customer the preview media of a digital product, first, in `src/modules/products/components/product-actions/index.tsx`, cast the `selectedVariant` variable in the component to the `VariantWithDigitalProduct` type you created earlier:
 
-```tsx title="src/modules/products/components/product-actions/index.tsx"
+```tsx title="src/modules/products/components/product-actions/index.tsx" badgeLabel="Storefront" badgeColor="blue"
 // other imports...
 import { VariantWithDigitalProduct } from "../../../../types/global"
 
@@ -2821,7 +2831,7 @@ export default function ProductActions({
 
 Then, add the following function in the component:
 
-```tsx title="src/modules/products/components/product-actions/index.tsx"
+```tsx title="src/modules/products/components/product-actions/index.tsx" badgeLabel="Storefront" badgeColor="blue"
 // other imports...
 import { getDigitalProductPreview } from "../../../../lib/data/products"
 
@@ -2854,7 +2864,7 @@ This function uses the `getDigitalProductPreview` function you created earlier t
 
 Finally, in the `return` statement, add a new button above the add-to-cart button:
 
-```tsx title="src/modules/products/components/product-actions/index.tsx"
+```tsx title="src/modules/products/components/product-actions/index.tsx" badgeLabel="Storefront" badgeColor="blue"
 return (
   <div>
     {/* Before add to cart */}
@@ -2883,7 +2893,7 @@ You’ll now create the page customers can view their purchased digital product 
 
 Start by creating the file `src/lib/data/digital-products.ts` with the following content:
 
-```ts title="src/lib/data/digital-products.ts"
+```ts title="src/lib/data/digital-products.ts" badgeLabel="Storefront" badgeColor="blue"
 "use server"
 
 import { DigitalProduct } from "../../types/global"
@@ -2915,7 +2925,7 @@ The `getCustomerDigitalProducts` retrieves the logged-in customer’s purchased 
 
 Then, create the file `src/modules/account/components/digital-products-list/index.tsx` with the following content:
 
-```tsx title="src/modules/account/components/digital-products-list/index.tsx"
+```tsx title="src/modules/account/components/digital-products-list/index.tsx" badgeLabel="Storefront" badgeColor="blue"
 "use client"
 
 import { Table } from "@medusajs/ui"
@@ -2969,7 +2979,7 @@ This adds a `DigitalProductsList` component that receives a list of digital prod
 
 Next, create the file `src/app/[countryCode]/(main)/account/@dashboard/digital-products/page.tsx` with the following content:
 
-```tsx title="src/app/[countryCode]/(main)/account/@dashboard/digital-products/page.tsx"
+```tsx title="src/app/[countryCode]/(main)/account/@dashboard/digital-products/page.tsx" badgeLabel="Storefront" badgeColor="blue"
 import { Metadata } from "next"
 
 import { getCustomerDigitalProducts } from "../../../../../../lib/data/digital-products"
@@ -3005,7 +3015,7 @@ In the route, you retrieve the digital’s products using the `getCustomerDigita
 
 Finally, to add a tab in the customer’s account dashboard that links to this page, add it in the `src/modules/account/components/account-nav/index.tsx` file:
 
-```tsx title="src/modules/account/components/account-nav/index.tsx"
+```tsx title="src/modules/account/components/account-nav/index.tsx" badgeLabel="Storefront" badgeColor="blue"
 // other imports...
 import { Photo } from "@medusajs/icons"
 
@@ -3067,7 +3077,7 @@ Then, go to the customer’s account page and click on the new Digital Products 
 
 To add a download link for the purchased digital products’ medias, first, add a new function to `src/lib/data/digital-products.ts`:
 
-```ts title="src/lib/data/digital-products.ts"
+```ts title="src/lib/data/digital-products.ts" badgeLabel="Storefront" badgeColor="blue"
 export const getDigitalMediaDownloadLink = async (mediaId: string) => {
   const headers = {
     ...(await getAuthHeaders()),
@@ -3093,7 +3103,7 @@ In this function, you send a request to the download API route you created earli
 
 Then, in `src/modules/account/components/digital-products-list/index.tsx`, import the `getDigitalMediaDownloadLink` at the top of the file:
 
-```tsx title="src/modules/account/components/digital-products-list/index.tsx"
+```tsx title="src/modules/account/components/digital-products-list/index.tsx" badgeLabel="Storefront" badgeColor="blue"
 import { getDigitalMediaDownloadLink } from "../../../../lib/data/digital-products"
 ```
 
