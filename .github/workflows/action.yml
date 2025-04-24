@@ -89,8 +89,6 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
-      matrix:
-        shard_index: [1, 2]
     env:
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
@@ -130,7 +128,7 @@ jobs:
           extension: pipeline
 
       - name: Run integration tests
-        run: yarn test:integration:packages -- --shard=${{ matrix.shard_index }}/2
+        run: yarn test:integration:packages
         env:
           DB_PASSWORD: postgres
           DB_USERNAME: postgres
