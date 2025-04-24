@@ -6,27 +6,34 @@ export const metadata = {
 
 # {metadata.title}
 
-If you're trying to access the database in Medusa v2, you might have noticed that the old import path no longer works:
+If you've upgraded to Medusa v2 and are trying to access the database, you might have noticed that the previous import path no longer works:
 
 ```ts
 // ❌ This no longer works in v2
 import { dataSource } from "@medusajs/medusa/loaders/database"
 ```
 
-This is because Medusa v2 uses MikroORM instead of TypeORM and the internal architecture has changed. Here's how to access the database in Medusa v2.
+This is because Medusa v2 has migrated from TypeORM to MikroORM, changing how database access is structured. This guide explains the new approaches for database operations in v2.
 
 ## How to Access the Database
 
-There are a few different ways to access the database in Medusa v2:
+There are several ways to work with the database in Medusa v2:
 
 ### Option 1: Create a Custom Repository
 
+The recommended approach is to create a custom repository for your entity:
+
 ```ts
 import { DALUtils } from "@medusajs/framework/utils"
-import MyEntity from "./models/my-entity"
+import { Product } from "./models/product"
 
-export class MyEntityRepository extends DALUtils.mikroOrmBaseRepositoryFactory(MyEntity) {
-  // You can add custom methods here
+export class ProductRepository extends DALUtils.mikroOrmBaseRepositoryFactory(Product) {
+  // Add custom methods for specialized queries
+  async findAvailableProducts() {
+    return await this.find({
+      where: { status: "published", inventory_quantity: { $gt: 0 } }
+    })
+  }
 }
 ```
 
@@ -34,23 +41,24 @@ Register it in your module's loader:
 
 ```ts
 import { asClass } from "awilix"
-import { MyEntityRepository } from "./repositories/my-entity-repository"
+import { ProductRepository } from "./repositories/product-repository"
 
 export default async ({ container }) => {
   container.register({
-    myEntityRepository: asClass(MyEntityRepository).singleton(),
+    productRepository: asClass(ProductRepository).singleton(),
   })
 }
 ```
 
 ### Option 2: Inject the Entity Manager
 
-You can inject the entity manager into your services:
+You can inject the entity manager directly into your services:
 
 ```ts
 import { MedusaService } from "@medusajs/framework/utils"
+import { Product } from "./models/product"
 
-export class MyService extends MedusaService {
+export class ProductService extends MedusaService {
   protected readonly manager_
   
   constructor({ manager }) {
@@ -58,10 +66,9 @@ export class MyService extends MedusaService {
     this.manager_ = manager
   }
   
-  async findItems() {
-    // Use the manager directly
-    return await this.manager_.find("your_entity", {
-      where: { status: "active" }
+  async findProducts(filters = {}) {
+    return await this.manager_.find(Product, {
+      where: filters
     })
   }
 }
@@ -69,53 +76,77 @@ export class MyService extends MedusaService {
 
 ### Option 3: Run Raw SQL Queries
 
-If you need to run raw SQL:
+For complex queries or performance-critical operations, you can run raw SQL:
 
 ```ts
-async function runRawQuery() {
+async function getProductStats() {
   const knex = this.manager_.getKnex()
   
-  return await knex.raw("SELECT * FROM my_table WHERE status = ?", ["active"])
+  return await knex.raw(`
+    SELECT 
+      category_id, 
+      COUNT(*) as product_count, 
+      AVG(price) as average_price 
+    FROM products 
+    GROUP BY category_id
+  `)
 }
 ```
 
 ## Common Database Operations
 
-Here are some examples of common operations:
+Here are examples of typical operations using a repository:
 
 ```ts
-// Create
-const item = await myEntityRepository.create({
-  name: "Test Item",
-  status: "active"
+// Create a new product
+const product = await productRepository.create({
+  title: "Ergonomic Chair",
+  description: "Office chair with lumbar support",
+  price: 299.99,
+  inventory_quantity: 50
 })
 
-// Find one
-const item = await myEntityRepository.findOne({
-  where: { id: "item_123" }
+// Find a specific product
+const product = await productRepository.findOne({
+  where: { id: "prod_123456789" }
 })
 
-// Update
-await myEntityRepository.update("item_123", {
-  status: "inactive"
+// Update a product
+await productRepository.update("prod_123456789", {
+  inventory_quantity: 42,
+  metadata: {
+    featured: true
+  }
 })
 
-// Delete
-await myEntityRepository.delete("item_123")
+// Delete a product
+await productRepository.delete("prod_123456789")
 ```
 
 ## Transactions
 
-To run multiple operations in a transaction:
+To ensure database consistency across multiple operations:
 
 ```ts
-await myEntityRepository.transaction(async (transactionManager) => {
-  // Operations inside the transaction
-  const entity = transactionManager.create(MyEntity, data)
-  await transactionManager.persistAndFlush(entity)
+await productRepository.transaction(async (transactionManager) => {
+  // Create a new product
+  const product = transactionManager.create(Product, {
+    title: "Limited Edition Watch",
+    price: 1299.99
+  })
   
-  return entity
+  // Update inventory in the same transaction
+  const inventory = transactionManager.findOne(Inventory, {
+    where: { sku: "WATCH-LE-2023" }
+  })
+  
+  inventory.quantity = inventory.quantity - 1
+  
+  // Save both changes atomically
+  await transactionManager.persistAndFlush([product, inventory])
+  
+  return product
 })
 ```
 
-By following these patterns, you'll be able to access and work with the database in Medusa v2. 
+These approaches will help you work effectively with the database in Medusa v2 while taking advantage of MikroORM's powerful features. 
