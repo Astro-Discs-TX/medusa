@@ -61,7 +61,7 @@ jobs:
           medusa new cli-test --skip-db --v2 --branch ci
 
       - name: Echo path
-        run: echo ${{github.workspace}}
+        run: cat ${{github.workspace}}/package.json
 
       - name: Set resolutions
         uses: restackio/update-json-values-action@v1.0.0
