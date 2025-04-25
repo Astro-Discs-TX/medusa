@@ -40,10 +40,19 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "yarn"
+
+      - name: Yarn version
+        run: yarn -v
+
       - name: Install dependencies
         uses: ./.github/actions/cache-deps
         with:
-          extension: pipeline
+          extension: cli-database
 
       - name: Install Medusa cli
         run: npm i -g @medusajs/cli@latest
