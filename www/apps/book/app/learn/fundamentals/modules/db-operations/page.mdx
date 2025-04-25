@@ -353,78 +353,7 @@ You can then use the data model repository in your service to perform database o
 
 A data model repository has methods that allows you to create, update, and delete records, among other operations.
 
-Here are examples of typical operations using a repository:
-
-```ts
-// Create a new product
-const product = await productRepository.create({
-  title: "Ergonomic Chair",
-  description: "Office chair with lumbar support",
-  price: 299.99,
-  inventory_quantity: 50
-})
-
-// Find a specific product
-const product = await productRepository.findOne({
-  where: { id: "prod_123456789" }
-})
-
-// Update a product
-await productRepository.update("prod_123456789", {
-  inventory_quantity: 42,
-  metadata: {
-    featured: true
-  }
-})
-
-// Delete a product
-await productRepository.delete("prod_123456789")
-
-// Find multiple products with filtering
-const products = await productRepository.find({
-  where: { 
-    status: "published", 
-    inventory_quantity: { $gt: 0 }
-  },
-  take: 10,
-  skip: 0,
-  order: { created_at: "DESC" }
-})
-```
-
-You can also create custom repository classes with specialized query methods:
-
-```ts
-import { DALUtils } from "@medusajs/framework/utils"
-import { Product } from "./models/product"
-
-export class ProductRepository extends DALUtils.mikroOrmBaseRepositoryFactory(Product) {
-  // Add custom methods for specialized queries
-  async findAvailableProducts() {
-    return await this.find({
-      where: { status: "published", inventory_quantity: { $gt: 0 } }
-    })
-  }
-  
-  async findFeaturedProducts() {
-    return await this.find({
-      where: { 
-        metadata: {
-          featured: true
-        }
-      }
-    })
-  }
-  
-  async updateInventory(productId: string, quantity: number) {
-    return await this.update(productId, {
-      inventory_quantity: quantity
-    })
-  }
-}
-```
-
-To learn about all the methods available in a data model repository, refer to the [Data Model Repository](!resources!/data-model-repository-reference) reference.
+To learn about the methods available in a data model repository, refer to the [Data Model Repository](!resources!/data-model-repository-reference) reference.
 
 ### Perform Database Operations with the Transactional Entity Manager
 
@@ -755,70 +684,142 @@ class BlogModuleService {
 }
 ```
 
+Here are examples of typical operations using a repository:
+
+```ts
+// Create a new blog post
+const post = await postRepository.create({
+  title: "Introduction to Medusa",
+  content: "Medusa is a composable commerce platform...",
+  author_id: "author_123",
+  status: "draft"
+})
+
+// Find a specific post
+const post = await postRepository.findOne({
+  where: { id: "post_123456" }
+})
+
+// Update a post
+await postRepository.update("post_123456", {
+  status: "published",
+  metadata: {
+    featured: true
+  }
+})
+
+// Delete a post
+await postRepository.delete("post_123456")
+
+// Find multiple posts with filtering
+const posts = await postRepository.find({
+  where: { 
+    status: "published", 
+    author_id: "author_123"
+  },
+  take: 10,
+  skip: 0,
+  order: { created_at: "DESC" }
+})
+```
+
+You can also create custom repository classes with specialized query methods:
+
+```ts
+import { DALUtils } from "@medusajs/framework/utils"
+import { Post } from "./models/post"
+
+export class PostRepository extends DALUtils.mikroOrmBaseRepositoryFactory(Post) {
+  // Add custom methods for specialized queries
+  async findPublishedPosts() {
+    return await this.find({
+      where: { status: "published" }
+    })
+  }
+  
+  async findFeaturedPosts() {
+    return await this.find({
+      where: { 
+        metadata: {
+          featured: true
+        }
+      }
+    })
+  }
+  
+  async updateStatus(postId: string, status: string) {
+    return await this.update(postId, {
+      status
+    })
+  }
+}
+```
+
 ### Complex Transaction Example
 
 Here's a more practical example demonstrating multiple operations in a single transaction:
 
 ```ts
-await productRepository.transaction(async (transactionManager) => {
-  // Create a new product
-  const product = transactionManager.create(Product, {
-    title: "Limited Edition Watch",
-    price: 1299.99
+await postRepository.transaction(async (transactionManager) => {
+  // Create a new blog post
+  const post = transactionManager.create(Post, {
+    title: "New Blog Post",
+    content: "This is the content of the post",
+    status: "draft"
   })
   
-  // Update inventory in the same transaction
-  const inventory = await transactionManager.findOne(Inventory, {
-    where: { sku: "WATCH-LE-2023" }
+  // Update author statistics in the same transaction
+  const authorStats = await transactionManager.findOne(AuthorStats, {
+    where: { author_id: post.author_id }
   })
   
-  inventory.quantity = inventory.quantity - 1
+  authorStats.post_count = authorStats.post_count + 1
   
   // Save both changes atomically
-  await transactionManager.persistAndFlush([product, inventory])
+  await transactionManager.persistAndFlush([post, authorStats])
   
-  return product
+  return post
 })
 ```
 
 ### Advanced SQL Query Examples
 
-Here are examples of more complex SQL queries for common e-commerce needs:
+Here are examples of more complex SQL queries for a blog module:
 
 ```ts
-// Get popular products with their categories
-async function getPopularProducts() {
+// Get popular posts with their categories
+async function getPopularPosts() {
   const knex = this.manager_.getKnex()
   
   return await knex.raw(`
     SELECT 
       p.id, 
       p.title, 
-      p.price, 
+      p.created_at, 
       c.name as category_name,
-      COUNT(oi.id) as order_count
-    FROM products p
-    LEFT JOIN product_categories pc ON p.id = pc.product_id
+      COUNT(cm.id) as comment_count
+    FROM posts p
+    LEFT JOIN post_categories pc ON p.id = pc.post_id
     LEFT JOIN categories c ON pc.category_id = c.id
-    LEFT JOIN order_items oi ON p.id = oi.product_id
+    LEFT JOIN comments cm ON p.id = cm.post_id
+    WHERE p.status = 'published'
     GROUP BY p.id, c.id
-    ORDER BY order_count DESC
+    ORDER BY comment_count DESC
     LIMIT 10
   `)
 }
 
-// Calculate sales metrics
-async function getSalesMetrics() {
+// Calculate blog metrics
+async function getBlogMetrics() {
   const knex = this.manager_.getKnex()
   
   return await knex.raw(`
     SELECT 
-      DATE_TRUNC('month', o.created_at) as month,
-      SUM(o.total) as revenue,
-      COUNT(o.id) as orders,
-      COUNT(DISTINCT o.customer_id) as unique_customers
-    FROM orders o
-    WHERE o.status = 'completed'
+      DATE_TRUNC('month', p.created_at) as month,
+      COUNT(p.id) as posts,
+      COUNT(DISTINCT p.author_id) as unique_authors,
+      SUM(CASE WHEN p.status = 'published' THEN 1 ELSE 0 END) as published_posts
+    FROM posts p
     GROUP BY month
     ORDER BY month DESC
     LIMIT 12
