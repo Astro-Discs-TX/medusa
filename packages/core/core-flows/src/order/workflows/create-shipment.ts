@@ -134,7 +134,7 @@ function prepareRegisterShipmentData({
 
       // NOTE: if the order item has an inventory kit or `required_qunatity` > 1, fulfillment items wont't match 1:1 with order items.
       // - for each inventory item in the kit, a fulfillment item will be created i.e. one line item could have multiple fulfillment items
-      // - the quantity of the fulfillment item will be the quantity of the order item divided by the required quantity of the inventory item
+      // - the quantity of the fulfillment item will be the quantity of the order item multiplied by the required quantity of the inventory item
       //
       //   We need to take this into account when creating a shipment to compute quantity of line items being shipped based on fulfillment items and qunatities.
       //   NOTE: for now we only need to find one inventory item of a line item to compute this since when a fulfillment is created all inventory items are fulfilled together.
