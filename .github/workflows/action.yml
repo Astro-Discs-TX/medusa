@@ -43,11 +43,8 @@ jobs:
   unit-tests:
     needs: setup
     runs-on: ubuntu-latest
-    name: Unit Tests
     strategy:
       fail-fast: true
-      matrix:
-        shard_index: [1]
     env:
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
@@ -70,10 +67,12 @@ jobs:
 
   integration-tests-packages:
     needs: setup
-    name: Packages integration tests
+    name: Packages integration tests - Shard ${{ matrix.shard_index }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
+      matrix:
+        shard_index: [1, 2]
     env:
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
@@ -113,7 +112,7 @@ jobs:
           extension: pipeline
 
       - name: Run integration tests
-        run: yarn test:integration:packages
+        run: yarn test:integration:packages -- --shard=${{ matrix.shard_index }}/2
         env:
           DB_PASSWORD: postgres
           DB_USERNAME: postgres
