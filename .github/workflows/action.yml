@@ -63,7 +63,7 @@ jobs:
           extension: pipeline
 
       - name: Run unit tests
-        run: yarn test:chunk -- --shard=${{ matrix.shard_index }}/1
+        run: yarn test:chunk
 
   integration-tests-packages:
     needs: setup
@@ -72,7 +72,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        shard_index: [1, 2]
+        group: ["core", "medusa", "modules"]
     env:
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
@@ -112,7 +112,7 @@ jobs:
           extension: pipeline
 
       - name: Run integration tests
-        run: yarn test:integration:packages -- --shard=${{ matrix.shard_index }}/2
+        run: yarn test:integration:packages:${{ matrix.group }}
         env:
           DB_PASSWORD: postgres
           DB_USERNAME: postgres
