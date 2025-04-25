@@ -61,7 +61,7 @@ jobs:
           fetch-depth: 0
           path: cli-test
 
-      - run: yarn install
+      - run: yarn install --immutable
         working-directory: cli-test
 
       - name: Run migrations
