@@ -364,9 +364,9 @@ export const serviceHighlights3 = [
   ["25", "from", "The email address to send the email from."],
   ["26", "to", "The email address to send the email to"],
   ["27", "getTemplateSubject", "Get the email subject for the template type."],
-  ["32", "html", "Set the template as an HTML template if its type is `string`."],
-  ["34", "react", "Set the template as a React template."],
-  ["38", "send", "Send the email using the Resend client."]
+  ["34", "html", "Set the template as an HTML template if its type is `string`."],
+  ["39", "react", "Set the template as a React template."],
+  ["43", "send", "Send the email using the Resend client."]
 ]
 
 ```ts title="src/modules/resend/service.ts" highlights={serviceHighlights3}
@@ -393,24 +393,33 @@ class ResendNotificationProviderService extends AbstractNotificationProviderServ
       return {}
     }
 
-    const emailOptions: CreateEmailOptions = {
+    const commonOptions = {
       from: this.options.from,
       to: [notification.to],
       subject: this.getTemplateSubject(notification.template as Templates),
-      html: "",
     }
 
+    let emailOptions: CreateEmailOptions
     if (typeof template === "string") {
-      emailOptions.html = template
+      emailOptions = {
+        ...commonOptions,
+        html: template,
+      }
     } else {
-      emailOptions.react = template(notification.data)
-      delete emailOptions.html
+      emailOptions = {
+        ...commonOptions,
+        react: template(notification.data),
+      }
     }
 
     const { data, error } = await this.resendClient.emails.send(emailOptions)
 
-    if (error) {
-      this.logger.error(`Failed to send email`, error)
+    if (error || !data) {
+      if (error) {
+        this.logger.error("Failed to send email", error)
+      } else {
+        this.logger.error("Failed to send email: unknown error")
+      }
       return {}
     }
 
@@ -425,7 +434,9 @@ The `send` method receives the notification details object as a parameter. Some 
 - `template`: The template type of the notification.
 - `data`: The data useful for the email type. For example, when sending an order-confirmation email, `data` would hold the order's details.
 
-In the method, you retrieve the template and subject of the email using the methods you defined earlier. Then, you put together the data to pass to Resend, such as the email address to send the notification to and the email address to send from. Also, if the email's template is a string, it's passed as an HTML template. Otherwise, it's passed as a React template.
+In the method, you retrieve the template and subject of the email using the methods you defined earlier. Then, you put together the data to pass to Resend, such as the email address to send the notification to and the email address to send from.
+
+Also, if the email's template is a string, it's passed as an HTML template. Otherwise, it's passed as a React template.
 
 Finally, you use the `emails.send` method of the Resend client to send the email. If an error occurs you log it in the terminal. Otherwise, you return the ID of the send email as received from Resend. Medusa uses this ID when creating the notification in its database.
 
