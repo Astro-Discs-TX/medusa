@@ -6,27 +6,33 @@ import {
   ModulesSdkTypes,
   CreateTaxProviderDTO,
 } from "@medusajs/framework/types"
-import { asFunction, Lifetime } from "awilix"
+import { asFunction, asValue, Lifetime } from "awilix"
 
 import * as providers from "../providers"
 import TaxProviderService from "../services/tax-provider"
+import { MedusaError } from "@medusajs/framework/utils"
 
 const PROVIDER_REGISTRATION_KEY = "tax_providers" as const
 
 const registrationFn = async (klass, container, pluginOptions) => {
+  if (!klass?.identifier) {
+    throw new MedusaError(
+      MedusaError.Types.INVALID_ARGUMENT,
+      `Trying to register a tax provider without a provider identifier.`
+    )
+  }
+
+  const key = `tp_${klass.identifier}${
+    pluginOptions.id ? `_${pluginOptions.id}` : ""
+  }`
+
   container.register({
-    [`tp_${klass.identifier}`]: asFunction(
-      (cradle) => new klass(cradle, pluginOptions),
-      { lifetime: klass.LIFE_TIME || Lifetime.SINGLETON }
-    ),
+    [key]: asFunction((cradle) => new klass(cradle, pluginOptions.options), {
+      lifetime: klass.LIFE_TIME || Lifetime.SINGLETON,
+    }),
   })
 
-  container.registerAdd(
-    PROVIDER_REGISTRATION_KEY,
-    asFunction((cradle) => new klass(cradle, pluginOptions), {
-      lifetime: klass.LIFE_TIME || Lifetime.SINGLETON,
-    })
-  )
+  container.registerAdd(PROVIDER_REGISTRATION_KEY, asValue(key))
 }
 
 export default async ({
@@ -40,7 +46,7 @@ export default async ({
 >): Promise<void> => {
   // Local providers
   for (const provider of Object.values(providers)) {
-    await registrationFn(provider, container, {})
+    await registrationFn(provider, container, { id: "system" })
   }
 
   await moduleProviderLoader({
