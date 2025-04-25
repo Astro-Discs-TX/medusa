@@ -41,7 +41,7 @@ export const TaxRegionDetail = () => {
     <SingleColumnPage
       data={taxRegion}
       showJSON
-      // showMetadata // TOOD -> enable when tax region update is added to the API
+      // showMetadata // TOOD -> enable when tax region metadata
       widgets={{
         after: getWidgets("tax.details.after"),
         before: getWidgets("tax.details.before"),

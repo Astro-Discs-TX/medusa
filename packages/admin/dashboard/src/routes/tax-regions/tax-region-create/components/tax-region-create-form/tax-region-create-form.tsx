@@ -48,8 +48,6 @@ export const TaxRegionCreateForm = ({ parentId }: TaxRegionCreateFormProps) => {
       })),
   })
 
-  console.log(taxProviders)
-
   const form = useForm<z.infer<typeof TaxRegionCreateSchema>>({
     defaultValues: {
       name: "",
@@ -82,7 +80,7 @@ export const TaxRegionCreateForm = ({ parentId }: TaxRegionCreateFormProps) => {
         country_code: values.country_code,
         parent_id: parentId,
         default_tax_rate: defaultRate,
-        tax_provider_id: values.tax_provider_id,
+        provider_id: values.tax_provider_id,
       },
       {
         onSuccess: ({ tax_region }) => {
