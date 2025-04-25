@@ -43,8 +43,8 @@ jobs:
 
       - name: Install dependencies
         uses: ./.github/actions/cache-deps
-        working-directory: medusa
         with:
+          working-directory: medusa
           extension: pipeline
 
       - name: Install Medusa cli
