@@ -59,7 +59,7 @@ jobs:
       - name: Create Medusa project
         working-directory: ../cli-test
         run: |
-          medusa new cli-test --skip-db --v2 --branch ci
+          medusa new cli-test --skip-db --v2 --branch ci-custom
 
       - name: Echo path
         run: touch ${{github.workspace}}/cli-test/yarn.lock
