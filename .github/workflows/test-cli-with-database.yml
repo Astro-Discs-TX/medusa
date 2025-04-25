@@ -6,6 +6,8 @@ jobs:
   test-cli-with-database:
     env:
       NODE_ENV: CI
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
       REDIS_URL: redis://localhost:6379
       DATABASE_URL: "postgres://postgres:postgres@localhost/cli-test"
     services:
