@@ -65,9 +65,9 @@ jobs:
       - name: Run unit tests
         run: yarn test:chunk
 
-  integration-tests-packages:
+  integration-tests-packages-matrix:
     needs: setup
-    name: ${{ matrix.group }} integration tests
+    name: Packages integration tests (${{ matrix.group }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
@@ -116,6 +116,21 @@ jobs:
         env:
           DB_PASSWORD: postgres
           DB_USERNAME: postgres
+
+  integration-tests-packages:
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    needs: integration-tests-packages-matrix
+    steps:
+      - run: exit 1
+        if: >-
+          ${{
+               contains(needs.integration-tests-packages-matrix.result, 'failure')
+            || contains(needs.integration-tests-packages-matrix.result, 'cancelled')
+            || contains(needs.integration-tests-packages-matrix.result, 'skipped')
+          }}
+      - run: exit 0
+        if: ${{ contains(needs.integration-tests-packages-matrix.result, 'success') }}
 
   integration-tests-http-matrix:
     needs: setup
