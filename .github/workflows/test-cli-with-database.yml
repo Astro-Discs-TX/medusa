@@ -57,7 +57,7 @@ jobs:
         run: npm i -g @medusajs/cli@latest
 
       - name: Create Medusa project
-        working-directory: ../cli-test
+        working-directory: ..
         run: |
           medusa new cli-test --skip-db --v2 --branch ci-custom
 
