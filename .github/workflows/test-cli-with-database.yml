@@ -56,7 +56,7 @@ jobs:
       - name: Create Medusa project
         uses: actions/checkout@v4
         with:
-          repository: https://github.com/medusajs/medusa-starter-default
+          repository: medusajs/medusa-starter-default
           ref: ci-test
           fetch-depth: 0
           path: cli-test
