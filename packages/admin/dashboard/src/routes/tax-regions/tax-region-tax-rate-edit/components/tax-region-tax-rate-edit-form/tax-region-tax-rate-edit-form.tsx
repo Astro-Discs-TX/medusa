@@ -29,7 +29,7 @@ const TaxRegionTaxRateEditSchema = z.object({
     value: z.string().optional(),
   }),
   is_combinable: z.boolean().optional(),
-  tax_provider_id: z.string().optional(),
+  provider_id: z.string().optional(),
 })
 
 export const TaxRegionTaxRateEditForm = ({
@@ -57,7 +57,7 @@ export const TaxRegionTaxRateEditForm = ({
         value: taxRate.rate?.toString() || "",
       },
       is_combinable: taxRate.is_combinable,
-      tax_provider_id: taxRate.tax_region?.provider_id,
+      provider_id: taxRate.tax_region?.provider_id,
     },
     resolver: zodResolver(TaxRegionTaxRateEditSchema),
   })
@@ -71,7 +71,7 @@ export const TaxRegionTaxRateEditForm = ({
         code: values.code,
         rate: values.rate?.float,
         is_combinable: values.is_combinable,
-        tax_provider_id: values.tax_provider_id,
+        provider_id: values.tax_provider_id,
       },
       {
         onSuccess: () => {
@@ -149,7 +149,7 @@ export const TaxRegionTaxRateEditForm = ({
             />
             <Form.Field
               control={form.control}
-              name="tax_provider_id"
+              name="provider_id"
               render={({ field }) => (
                 <Form.Item>
                   <Form.Label>{t("taxRegions.fields.taxProvider")}</Form.Label>

@@ -31,7 +31,7 @@ const TaxRegionCreateSchema = z.object({
     value: z.string().optional(),
   }),
   country_code: z.string().min(1),
-  tax_provider_id: z.string(),
+  provider_id: z.string(),
 })
 
 export const TaxRegionCreateForm = ({ parentId }: TaxRegionCreateFormProps) => {
@@ -56,7 +56,7 @@ export const TaxRegionCreateForm = ({ parentId }: TaxRegionCreateFormProps) => {
       },
       code: "",
       country_code: "",
-      tax_provider_id: "",
+      provider_id: "",
     },
     resolver: zodResolver(TaxRegionCreateSchema),
   })
@@ -211,7 +211,7 @@ export const TaxRegionCreateForm = ({ parentId }: TaxRegionCreateFormProps) => {
                     />
                     <Form.Field
                       control={form.control}
-                      name="tax_provider_id"
+                      name="provider_id"
                       render={({ field }) => (
                         <Form.Item>
                           <Form.Label>
