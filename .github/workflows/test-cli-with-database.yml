@@ -64,6 +64,9 @@ jobs:
       - run: rm package-lock.json
         working-directory: ../cli-test
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - run: yarn --version && yarn install
         working-directory: ../cli-test
 
