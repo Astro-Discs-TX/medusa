@@ -64,7 +64,7 @@ jobs:
       - run: rm package-lock.json
         working-directory: ../cli-test
 
-      - run: yarn install
+      - run: yarn --version && yarn install
         working-directory: ../cli-test
 
       - name: Run migrations
