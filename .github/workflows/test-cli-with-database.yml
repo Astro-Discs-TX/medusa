@@ -69,7 +69,7 @@ jobs:
       - name: Echo path
         run: touch ${{github.workspace}}/cli-test/yarn.lock
 
-      - run: yarn install
+      - run: yarn install --immutable
         working-directory: cli-test
 
       - name: Run migrations
