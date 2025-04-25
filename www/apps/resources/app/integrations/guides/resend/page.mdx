@@ -544,7 +544,7 @@ import {
   Head, 
   Preview, 
   Body, 
-  Link 
+  Link, 
 } from "@react-email/components"
 import { BigNumberValue, CustomerDTO, OrderDTO } from "@medusajs/framework/types"
 
@@ -606,7 +606,7 @@ function OrderPlacedEmailComponent({ order, email_banner }: OrderPlacedEmailProp
             <Container
               className="mb-4 rounded-lg p-7"
               style={{
-                background: 'linear-gradient(to right, #3b82f6, #4f46e5)'
+                background: "linear-gradient(to right, #3b82f6, #4f46e5)",
               }}
             >
               <Section>
@@ -642,8 +642,8 @@ function OrderPlacedEmailComponent({ order, email_banner }: OrderPlacedEmailProp
                 <Row>
                   <Column className="w-1/3">
                     <Img
-                      src={item.thumbnail ?? ''}
-                      alt={item.product_title ?? ''}
+                      src={item.thumbnail ?? ""}
+                      alt={item.product_title ?? ""}
                       className="rounded-lg"
                       width="100%"
                     />
@@ -757,7 +757,7 @@ npm install -D react-email
 
 Then, in `src/modules/resend/emails/order-placed.tsx`, add the following at the end of the file:
 
-```ts title="src/modules/resend/emails/order-placed.tsx"
+```tsx title="src/modules/resend/emails/order-placed.tsx"
 const mockOrder = {
   "order": {
     "id": "order_01JSNXDH9BPJWWKVW03B9E9KW8",
@@ -801,7 +801,7 @@ const mockOrder = {
         "raw_compare_at_unit_price": null,
         "raw_unit_price": {
           "value": "10",
-          "precision": 20
+          "precision": 20,
         },
         "created_at": new Date(),
         "updated_at": new Date(),
@@ -813,7 +813,7 @@ const mockOrder = {
         "quantity": 1,
         "raw_quantity": {
           "value": "1",
-          "precision": 20
+          "precision": 20,
         },
         "detail": {
           "id": "orditem_01JSNXDH9DK1XMESEZPADYFWKY",
@@ -824,35 +824,35 @@ const mockOrder = {
           "raw_compare_at_unit_price": null,
           "raw_quantity": {
             "value": "1",
-            "precision": 20
+            "precision": 20,
           },
           "raw_fulfilled_quantity": {
             "value": "0",
-            "precision": 20
+            "precision": 20,
           },
           "raw_delivered_quantity": {
             "value": "0",
-            "precision": 20
+            "precision": 20,
           },
           "raw_shipped_quantity": {
             "value": "0",
-            "precision": 20
+            "precision": 20,
           },
           "raw_return_requested_quantity": {
             "value": "0",
-            "precision": 20
+            "precision": 20,
           },
           "raw_return_received_quantity": {
             "value": "0",
-            "precision": 20
+            "precision": 20,
           },
           "raw_return_dismissed_quantity": {
             "value": "0",
-            "precision": 20
+            "precision": 20,
           },
           "raw_written_off_quantity": {
             "value": "0",
-            "precision": 20
+            "precision": 20,
           },
           "created_at": new Date(),
           "updated_at": new Date(),
@@ -867,7 +867,7 @@ const mockOrder = {
           "return_requested_quantity": 0,
           "return_received_quantity": 0,
           "return_dismissed_quantity": 0,
-          "written_off_quantity": 0
+          "written_off_quantity": 0,
         },
         "subtotal": 10,
         "total": 10,
@@ -887,69 +887,69 @@ const mockOrder = {
         "write_off_total": 0,
         "raw_subtotal": {
           "value": "10",
-          "precision": 20
+          "precision": 20,
         },
         "raw_total": {
           "value": "10",
-          "precision": 20
+          "precision": 20,
         },
         "raw_original_total": {
           "value": "10",
-          "precision": 20
+          "precision": 20,
         },
         "raw_discount_total": {
           "value": "0",
-          "precision": 20
+          "precision": 20,
         },
         "raw_discount_subtotal": {
           "value": "0",
-          "precision": 20
+          "precision": 20,
         },
         "raw_discount_tax_total": {
           "value": "0",
-          "precision": 20
+          "precision": 20,
         },
         "raw_tax_total": {
           "value": "0",
-          "precision": 20
+          "precision": 20,
         },
         "raw_original_tax_total": {
           "value": "0",
-          "precision": 20
+          "precision": 20,
         },
         "raw_refundable_total_per_unit": {
           "value": "10",
-          "precision": 20
+          "precision": 20,
         },
         "raw_refundable_total": {
           "value": "10",
-          "precision": 20
+          "precision": 20,
         },
         "raw_fulfilled_total": {
           "value": "0",
-          "precision": 20
+          "precision": 20,
         },
         "raw_shipped_total": {
           "value": "0",
-          "precision": 20
+          "precision": 20,
         },
         "raw_return_requested_total": {
           "value": "0",
-          "precision": 20
+          "precision": 20,
         },
         "raw_return_received_total": {
           "value": "0",
-          "precision": 20
+          "precision": 20,
         },
         "raw_return_dismissed_total": {
           "value": "0",
-          "precision": 20
+          "precision": 20,
         },
         "raw_write_off_total": {
           "value": "0",
-          "precision": 20
-        }
-      }
+          "precision": 20,
+        },
+      },
     ],
     "shipping_address": {
       "id": "caaddr_01JSNXD6W0TGPH2JQD18K97B25",
@@ -967,7 +967,7 @@ const mockOrder = {
       "metadata": null,
       "created_at": "2025-04-25T07:25:48.801Z",
       "updated_at": "2025-04-25T07:25:48.801Z",
-      "deleted_at": null
+      "deleted_at": null,
     },
     "billing_address": {
       "id": "caaddr_01JSNXD6W0V7RNZH63CPG26K5W",
@@ -985,7 +985,7 @@ const mockOrder = {
       "metadata": null,
       "created_at": "2025-04-25T07:25:48.801Z",
       "updated_at": "2025-04-25T07:25:48.801Z",
-      "deleted_at": null
+      "deleted_at": null,
     },
     "shipping_methods": [
       {
@@ -999,7 +999,7 @@ const mockOrder = {
         "metadata": null,
         "raw_amount": {
           "value": "10",
-          "precision": 20
+          "precision": 20,
         },
         "created_at": new Date(),
         "updated_at": new Date(),
@@ -1018,7 +1018,7 @@ const mockOrder = {
           "created_at": new Date(),
           "updated_at": new Date(),
           "deleted_at": null,
-          "shipping_method_id": "ordsm_01JSNXDH9B9DDRQXJT5J5AE5V1"
+          "shipping_method_id": "ordsm_01JSNXDH9B9DDRQXJT5J5AE5V1",
         },
         "subtotal": 10,
         "total": 10,
@@ -1030,37 +1030,37 @@ const mockOrder = {
         "original_tax_total": 0,
         "raw_subtotal": {
           "value": "10",
-          "precision": 20
+          "precision": 20,
         },
         "raw_total": {
           "value": "10",
-          "precision": 20
+          "precision": 20,
         },
         "raw_original_total": {
           "value": "10",
-          "precision": 20
+          "precision": 20,
         },
         "raw_discount_total": {
           "value": "0",
-          "precision": 20
+          "precision": 20,
         },
         "raw_discount_subtotal": {
           "value": "0",
-          "precision": 20
+          "precision": 20,
         },
         "raw_discount_tax_total": {
           "value": "0",
-          "precision": 20
+          "precision": 20,
         },
         "raw_tax_total": {
           "value": "0",
-          "precision": 20
+          "precision": 20,
         },
         "raw_original_tax_total": {
           "value": "0",
-          "precision": 20
-        }
-      }
+          "precision": 20,
+        },
+      },
     ],
     "customer": {
       "id": "cus_01JSNXD6VQC1YH56E4TGC81NWX",
@@ -1074,9 +1074,9 @@ const mockOrder = {
       "created_by": null,
       "created_at": "2025-04-25T07:25:48.791Z",
       "updated_at": "2025-04-25T07:25:48.791Z",
-      "deleted_at": null
-    }
-  }
+      "deleted_at": null,
+    },
+  },
 }
 // @ts-ignore
 export default () => <OrderPlacedEmailComponent {...mockOrder} />
