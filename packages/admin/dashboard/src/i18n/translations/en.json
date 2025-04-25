@@ -1851,6 +1851,7 @@
       },
       "taxRate": "Tax rate",
       "taxCode": "Tax code",
+      "taxProvider": "Tax provider",
       "targets": {
         "label": "Targets",
         "hint": "Select the targets that this tax rate will apply to.",

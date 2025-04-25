@@ -1,9 +1,9 @@
 import * as QueryConfig from "./query-config"
 
-import { AdminGetTaxProvidersParams } from "./validators"
-
 import { validateAndTransformQuery } from "@medusajs/framework"
 import { MiddlewareRoute } from "@medusajs/framework/http"
+
+import { AdminGetTaxProvidersParams } from "./validators"
 
 export const adminTaxProviderRoutesMiddlewares: MiddlewareRoute[] = [
   {

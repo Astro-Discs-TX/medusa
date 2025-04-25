@@ -6898,6 +6898,9 @@
             "taxCode": {
               "type": "string"
             },
+            "taxProvider": {
+              "type": "string"
+            },
             "targets": {
               "type": "object",
               "properties": {
@@ -7228,6 +7231,7 @@
             "defaultTaxRate",
             "taxRate",
             "taxCode",
+            "taxProvider",
             "targets",
             "sublevels",
             "noDefaultRate"
