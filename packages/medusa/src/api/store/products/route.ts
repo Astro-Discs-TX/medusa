@@ -80,7 +80,7 @@ async function getProductsWithIndexEngine(
   await wrapProductsWithTaxPrices(req, products)
   res.json({
     products,
-    count: metadata!.count,
+    count: metadata!.estimate_count,
     offset: metadata!.skip,
     limit: metadata!.take,
   })

@@ -97,5 +97,17 @@ export async function createPartitions(
     }
   }
 
+  // Create count estimate function
+  partitions.push(`
+    CREATE OR REPLACE FUNCTION count_estimate(query text) RETURNS bigint AS $$
+    DECLARE
+        plan jsonb;
+    BEGIN
+        EXECUTE 'EXPLAIN (FORMAT JSON) ' || query INTO plan;
+        RETURN (plan->0->'Plan'->>'Plan Rows')::bigint;
+    END;
+    $$ LANGUAGE plpgsql;
+  `)
+
   await manager.execute(partitions.join("; "))
 }

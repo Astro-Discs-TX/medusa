@@ -971,7 +971,7 @@ describe("IndexModuleService query", function () {
     })
 
     expect(metadata).toEqual({
-      count: 1,
+      estimate_count: 1,
       skip: 0,
       take: 100,
     })

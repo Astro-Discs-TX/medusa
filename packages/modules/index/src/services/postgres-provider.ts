@@ -299,8 +299,8 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
     const resultMetadata: IndexTypes.QueryFunctionReturnPagination | undefined =
       hasPagination
         ? ({
-            count: hasCount
-              ? parseInt(resultSet[0]?.count_total ?? 0)
+            estimate_count: hasCount
+              ? parseInt(resultSet[0]?.estimate_count ?? 0)
               : undefined,
             skip,
             take,

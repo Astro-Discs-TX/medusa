@@ -819,7 +819,7 @@ export class QueryBuilder {
       })
 
       if (hasCount) {
-        queryBuilder.select(this.knex.raw("pd.count_total"))
+        queryBuilder.select(this.knex.raw("pd.estimate_count"))
       }
 
       queryBuilder.joinRaw(
@@ -931,7 +931,9 @@ export class QueryBuilder {
     queryBuilder.groupByRaw(`${rootAlias}.id`)
 
     const countSubQuery = hasCount
-      ? `, (SELECT count(id) FROM data_select) as count_total`
+      ? `, (
+        SELECT count_estimate('${queryBuilder.toQuery().replace(/'/g, "''")}')
+      ) as estimate_count`
       : ""
 
     return `
