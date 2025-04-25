@@ -61,9 +61,6 @@ jobs:
         run: |
           medusa new cli-test --skip-db --v2 --branch ci-custom
 
-      - name: Echo path
-        run: touch ${{github.workspace}}/cli-test/yarn.lock
-
       - run: yarn install
         working-directory: ../cli-test
 
