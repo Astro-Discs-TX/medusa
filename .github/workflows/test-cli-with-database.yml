@@ -38,7 +38,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
+          path: medusa
           fetch-depth: 0
+
+      - name: Install dependencies
+        uses: ./.github/actions/cache-deps
+        with:
+          extension: pipeline
 
       - name: Install Medusa cli
         run: npm i -g @medusajs/cli@latest
@@ -48,7 +54,7 @@ jobs:
           medusa new cli-test --skip-db --v2 --branch ci
         working-directory: ..
 
-      - name: Install package dependencies
+      - name: Setup cache
         uses: actions/cache@v3
         id: cache
         with:
