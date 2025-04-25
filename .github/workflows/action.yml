@@ -72,7 +72,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        group: ["core", "medusa", "modules"]
+        group: ["slow", "fast"]
     env:
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
