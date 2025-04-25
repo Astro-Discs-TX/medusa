@@ -273,7 +273,6 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
       schema: this.schemaObjectRepresentation_,
       entityMap: this.schemaEntitiesMap_,
       knex: connection.getKnex(),
-      rawConfig: config,
       selector: {
         select,
         where,
@@ -288,19 +287,22 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
       requestedFields,
     })
 
-    const sql = qb.buildQuery({
+    const { sql, sqlCount } = qb.buildQuery({
       hasPagination,
       returnIdOnly: !!keepFilteredEntities,
       hasCount,
     })
 
-    const resultSet = await manager.execute(sql)
+    const [resultSet, countResult] = await Promise.all([
+      manager.execute(sql),
+      hasCount ? manager.execute(sqlCount!) : null,
+    ])
 
     const resultMetadata: IndexTypes.QueryFunctionReturnPagination | undefined =
       hasPagination
         ? ({
             estimate_count: hasCount
-              ? parseInt(resultSet[0]?.estimate_count ?? 0)
+              ? parseInt(countResult![0]?.estimate_count ?? 0)
               : undefined,
             skip,
             take,
