@@ -837,6 +837,20 @@ export class QueryBuilder {
       innerQueryBuilder.orderBy(`${rootAlias}.id`, "ASC")
     }
 
+    // Count query to estimate the number of results in parallel
+    let countQuery: Knex.Raw | undefined
+    if (hasCount) {
+      const estimateQuery = innerQueryBuilder.clone()
+      estimateQuery.clearSelect().select(1)
+      estimateQuery.clearOrder()
+      estimateQuery.clearCounters()
+
+      countQuery = this.knex.raw(
+        `SELECT count_estimate(?) AS estimate_count`,
+        estimateQuery.toQuery().replace(/INNER JOIN/gi, "LEFT JOIN")
+      )
+    }
+
     // Apply pagination to the inner query
     if (hasPagination) {
       innerQueryBuilder.limit(take_)
@@ -855,20 +869,6 @@ export class QueryBuilder {
       : { [`${rootKey}.id`]: `${rootAlias}.id` }
 
     outerQueryBuilder.select(finalSelectParts)
-
-    // Count query to estimate the number of results in parallel
-    let countQuery: Knex.Raw | undefined
-    if (hasCount) {
-      const estimateQuery = innerQueryBuilder.clone()
-      estimateQuery.clearSelect().select(1)
-      estimateQuery.clearOrder()
-      estimateQuery.clearCounters()
-
-      countQuery = this.knex.raw(
-        `SELECT count_estimate(?) AS estimate_count`,
-        estimateQuery.toQuery().replace(/INNER JOIN/gi, "LEFT JOIN")
-      )
-    }
 
     outerQueryBuilder.from(
       `cat_${rootEntity} AS ${this.getShortAlias(aliasMapping, rootKey)}`

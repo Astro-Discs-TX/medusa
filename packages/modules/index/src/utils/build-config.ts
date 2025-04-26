@@ -1027,26 +1027,38 @@ function buildAliasMap(
           continue
         }
 
-        const shortcutAliases = recursivelyBuildAliasPath(
+        const shortcutAliases_ = recursivelyBuildAliasPath(
           parentEntity.inSchemaRef,
           newParentPath,
           [],
           new Set(visited),
           [...pathStack]
-        ).map((aliasObj) => ({
-          alias: aliasObj.alias,
-          shortCutOf:
-            shortCutOf.alias.split(".")[0] === aliasObj.alias.split(".")[0]
-              ? shortCutOf.alias
-              : undefined,
-          isList: parentEntity.isList ?? true,
-          isInverse: shortCutOf.isInverse,
-        }))
+        )
+
+        // Assign all shortcut aliases to the parent aliases
+        const shortcutAliases: any[] = []
+        shortcutAliases_.forEach((shortcutAlias) => {
+          parentAliases.forEach((aliasObj) => {
+            let isSamePath =
+              aliasObj.alias.split(".")[0] === shortcutAlias.alias.split(".")[0]
+
+            if (!isSamePath) {
+              return
+            }
+
+            shortcutAliases.push({
+              alias: shortcutAlias.alias,
+              shortCutOf: aliasObj.alias,
+              isList: parentEntity.isList ?? true,
+              isInverse: shortcutAlias.isInverse,
+            })
+          })
+        })
 
         // Only add shortcut aliases if they don’t duplicate existing paths
         for (const shortcut of shortcutAliases) {
-          if (!aliases.some((a) => a.alias === shortcut.alias)) {
-            aliases.push(shortcut)
+          if (!aliases.some((a) => a.alias === shortcut?.alias)) {
+            aliases.push(shortcut!)
           }
         }
       }
