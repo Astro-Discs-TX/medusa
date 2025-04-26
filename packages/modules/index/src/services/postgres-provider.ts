@@ -284,6 +284,7 @@ export class PostgresProvider implements IndexTypes.StorageProvider {
         keepFilteredEntities,
         orderBy,
       },
+      rawConfig: config,
       requestedFields,
     })
 

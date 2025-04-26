@@ -1,5 +1,10 @@
 import { IndexTypes } from "@medusajs/framework/types"
-import { isDefined, isObject, isString } from "@medusajs/framework/utils"
+import {
+  isDefined,
+  isObject,
+  isString,
+  unflattenObjectKeys,
+} from "@medusajs/framework/utils"
 import { Knex } from "@mikro-orm/knex"
 import { OrderBy, QueryFormat, QueryOptions, Select } from "@types"
 
@@ -55,6 +60,7 @@ export class QueryBuilder {
   private readonly options?: QueryOptions
   private readonly schema: IndexTypes.SchemaObjectRepresentation
   private readonly allSchemaFields: Set<string>
+  private readonly rawConfig?: IndexTypes.IndexQueryConfig<any>
   private readonly requestedFields: {
     [key: string]: any
   }
@@ -65,6 +71,7 @@ export class QueryBuilder {
     knex: Knex
     selector: QueryFormat
     options?: QueryOptions
+    rawConfig?: IndexTypes.IndexQueryConfig<any>
     requestedFields: {
       [key: string]: any
     }
@@ -78,6 +85,7 @@ export class QueryBuilder {
     this.allSchemaFields = new Set(
       Object.values(this.schema).flatMap((entity) => entity.fields ?? [])
     )
+    this.rawConfig = args.rawConfig
     this.requestedFields = args.requestedFields
   }
 
@@ -265,13 +273,18 @@ export class QueryBuilder {
             }
 
             if (operator === "=") {
-              builder.whereRaw(
-                `${aliasMapping[attr]}.data @> '${getPathOperation(
-                  attr,
-                  field as string[],
-                  subValue
-                )}'::jsonb`
-              )
+              const hasId = field[field.length - 1] === "id"
+              if (hasId) {
+                builder.whereRaw(`${aliasMapping[attr]}.id = ?`, subValue)
+              } else {
+                builder.whereRaw(
+                  `${aliasMapping[attr]}.data @> '${getPathOperation(
+                    attr,
+                    field as string[],
+                    subValue
+                  )}'::jsonb`
+                )
+              }
             } else if (operator === "IN") {
               if (val && !Array.isArray(val)) {
                 val = [val]
@@ -354,13 +367,18 @@ export class QueryBuilder {
           let operator = "="
 
           if (operator === "=") {
-            builder.whereRaw(
-              `${aliasMapping[attr]}.data @> '${getPathOperation(
-                attr,
-                field as string[],
-                value
-              )}'::jsonb`
-            )
+            const hasId = field[field.length - 1] === "id"
+            if (hasId) {
+              builder.whereRaw(`${aliasMapping[attr]}.id = ?`, value)
+            } else {
+              builder.whereRaw(
+                `${aliasMapping[attr]}.data @> '${getPathOperation(
+                  attr,
+                  field as string[],
+                  value
+                )}'::jsonb`
+              )
+            }
           } else {
             if (value === null) {
               operator = "IS"
@@ -411,8 +429,7 @@ export class QueryBuilder {
     parentProperty: string,
     aliasPath: string[] = [],
     level = 0,
-    aliasMapping: { [path: string]: string } = {},
-    joinType: "INNER" | "LEFT" = "LEFT"
+    aliasMapping: { [path: string]: string } = {}
   ): string[] {
     const currentAliasPath = [...aliasPath, parentProperty].join(".")
 
@@ -502,7 +519,6 @@ export class QueryBuilder {
       }
     }
 
-    const joinMethod = joinType === "INNER" ? "innerJoin" : "leftJoin"
     let queryParts: string[] = []
     for (const join of allEntities) {
       const joinBuilder = this.knex.queryBuilder()
@@ -520,12 +536,12 @@ export class QueryBuilder {
             `${entity.ref.entity}${parEntity.ref.entity}`.toLowerCase()
           const pivotTable = `cat_pivot_${pName}`
 
-          joinBuilder[joinMethod](
+          joinBuilder.leftJoin(
             `${pivotTable} AS ${alias}_ref`,
             `${alias}_ref.child_id`,
             `${parAlias}.id`
           )
-          joinBuilder[joinMethod](
+          joinBuilder.leftJoin(
             joinTable,
             `${alias}.id`,
             `${alias}_ref.parent_id`
@@ -535,12 +551,12 @@ export class QueryBuilder {
             `${parEntity.ref.entity}${entity.ref.entity}`.toLowerCase()
           const pivotTable = `cat_pivot_${pName}`
 
-          joinBuilder[joinMethod](
+          joinBuilder.leftJoin(
             `${pivotTable} AS ${alias}_ref`,
             `${alias}_ref.parent_id`,
             `${parAlias}.id`
           )
-          joinBuilder[joinMethod](
+          joinBuilder.leftJoin(
             joinTable,
             `${alias}.id`,
             `${alias}_ref.child_id`
@@ -586,8 +602,7 @@ export class QueryBuilder {
             child,
             aliasPath.concat(parentProperty),
             level + 1,
-            aliasMapping,
-            joinType
+            aliasMapping
           )
         )
         .filter(Boolean)
@@ -725,15 +740,22 @@ export class QueryBuilder {
       }
     }
 
+    const filterSortStructure =
+      unflattenObjectKeys({
+        ...(this.rawConfig?.filters
+          ? unflattenObjectKeys(this.rawConfig?.filters)
+          : {}),
+        ...orderBy,
+      })[rootKey] ?? {}
+
     const joinParts = this.buildQueryParts(
-      rootStructure,
+      filterSortStructure,
       "",
       entity as IndexTypes.SchemaObjectEntityRepresentation["parents"][0],
       rootKey,
       [],
       0,
-      aliasMapping,
-      "LEFT"
+      aliasMapping
     )
 
     const rootAlias = aliasMapping[rootKey]
@@ -847,7 +869,7 @@ export class QueryBuilder {
 
       countQuery = this.knex.raw(
         `SELECT count_estimate(?) AS estimate_count`,
-        estimateQuery.toQuery().replace(/INNER JOIN/gi, "LEFT JOIN")
+        estimateQuery.toQuery()
       )
     }
 
@@ -860,15 +882,6 @@ export class QueryBuilder {
     }
 
     const innerQueryAlias = "paginated_ids"
-    const finalSelectParts = !returnIdOnly
-      ? this.buildSelectParts(
-          selectOnlyStructure[rootKey] as Select,
-          rootKey,
-          aliasMapping
-        )
-      : { [`${rootKey}.id`]: `${rootAlias}.id` }
-
-    outerQueryBuilder.select(finalSelectParts)
 
     outerQueryBuilder.from(
       `cat_${rootEntity} AS ${this.getShortAlias(aliasMapping, rootKey)}`
@@ -887,15 +900,24 @@ export class QueryBuilder {
       rootKey,
       [],
       0,
-      aliasMapping,
-      "LEFT"
+      aliasMapping
     )
     joinPartsOuterQuery.forEach((joinPart) => {
       outerQueryBuilder.joinRaw(joinPart)
     })
 
+    const finalSelectParts = !returnIdOnly
+      ? this.buildSelectParts(
+          selectOnlyStructure[rootKey] as Select,
+          rootKey,
+          aliasMapping
+        )
+      : { [`${rootKey}.id`]: `${rootAlias}.id` }
+
+    outerQueryBuilder.select(finalSelectParts)
+
     const finalSql = outerQueryBuilder.toQuery()
-    //console.log("Generated SQL:", finalSql)
+
     return {
       sql: finalSql,
       sqlCount: countQuery?.toQuery?.(),
