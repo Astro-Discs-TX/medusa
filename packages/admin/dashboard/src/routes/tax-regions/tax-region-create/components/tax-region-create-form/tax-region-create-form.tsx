@@ -80,7 +80,7 @@ export const TaxRegionCreateForm = ({ parentId }: TaxRegionCreateFormProps) => {
         country_code: values.country_code,
         parent_id: parentId,
         default_tax_rate: defaultRate,
-        provider_id: values.tax_provider_id,
+        provider_id: values.provider_id,
       },
       {
         onSuccess: ({ tax_region }) => {

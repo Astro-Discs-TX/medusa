@@ -11,10 +11,6 @@ import { PercentageInput } from "../../../../../components/inputs/percentage-inp
 import { RouteDrawer, useRouteModal } from "../../../../../components/modals"
 import { KeyboundForm } from "../../../../../components/utilities/keybound-form"
 import { useUpdateTaxRate } from "../../../../../hooks/api/tax-rates"
-import { formatProvider } from "../../../../../lib/format-provider"
-import { sdk } from "../../../../../lib/client"
-import { Combobox } from "../../../../../components/inputs/combobox"
-import { useComboboxData } from "../../../../../hooks/use-combobox-data"
 
 type TaxRegionTaxRateEditFormProps = {
   taxRate: HttpTypes.AdminTaxRate
@@ -29,7 +25,6 @@ const TaxRegionTaxRateEditSchema = z.object({
     value: z.string().optional(),
   }),
   is_combinable: z.boolean().optional(),
-  provider_id: z.string().optional(),
 })
 
 export const TaxRegionTaxRateEditForm = ({
@@ -39,16 +34,6 @@ export const TaxRegionTaxRateEditForm = ({
   const { t } = useTranslation()
   const { handleSuccess } = useRouteModal()
 
-  const taxProviders = useComboboxData({
-    queryKey: ["tax_providers"],
-    queryFn: (params) => sdk.admin.taxProvider.list(params),
-    getOptions: (data) =>
-      data.tax_providers.map((provider) => ({
-        label: formatProvider(provider.id),
-        value: provider.id,
-      })),
-  })
-
   const form = useForm<z.infer<typeof TaxRegionTaxRateEditSchema>>({
     defaultValues: {
       name: taxRate.name,
@@ -57,7 +42,6 @@ export const TaxRegionTaxRateEditForm = ({
         value: taxRate.rate?.toString() || "",
       },
       is_combinable: taxRate.is_combinable,
-      provider_id: taxRate.tax_region?.provider_id,
     },
     resolver: zodResolver(TaxRegionTaxRateEditSchema),
   })
@@ -71,7 +55,6 @@ export const TaxRegionTaxRateEditForm = ({
         code: values.code,
         rate: values.rate?.float,
         is_combinable: values.is_combinable,
-        provider_id: values.tax_provider_id,
       },
       {
         onSuccess: () => {
@@ -146,25 +129,6 @@ export const TaxRegionTaxRateEditForm = ({
                   </Form.Item>
                 )
               }}
-            />
-            <Form.Field
-              control={form.control}
-              name="provider_id"
-              render={({ field }) => (
-                <Form.Item>
-                  <Form.Label>{t("taxRegions.fields.taxProvider")}</Form.Label>
-                  <Form.Control>
-                    <Combobox
-                      {...field}
-                      options={taxProviders.options}
-                      searchValue={taxProviders.searchValue}
-                      onSearchValueChange={taxProviders.onSearchValueChange}
-                      fetchNextPage={taxProviders.fetchNextPage}
-                    />
-                  </Form.Control>
-                  <Form.ErrorMessage />
-                </Form.Item>
-              )}
             />
           </div>
           {isSublevel && (

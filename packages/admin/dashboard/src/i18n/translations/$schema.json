@@ -9184,9 +9184,6 @@
             "deleteRateDescription": {
               "type": "string"
             },
-            "editTaxRate": {
-              "type": "string"
-            },
             "editRateAction": {
               "type": "string"
             },
@@ -9244,7 +9241,6 @@
             "createTaxRate",
             "createTaxRateHint",
             "deleteRateDescription",
-            "editTaxRate",
             "editRateAction",
             "editOverridesAction",
             "editOverridesTitle",
