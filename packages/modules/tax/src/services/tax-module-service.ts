@@ -444,7 +444,7 @@ export default class TaxModuleService
     )
 
     const taxLines = await this.getTaxLinesFromProvider(
-      parentRegion.provider_id,
+      parentRegion.provider_id as string,
       toReturn,
       calculationContext
     )
@@ -453,11 +453,10 @@ export default class TaxModuleService
   }
 
   private async getTaxLinesFromProvider(
-    rawProviderId: string | null,
+    providerId: string,
     items: ItemWithRates[],
     calculationContext: TaxTypes.TaxCalculationContext
   ) {
-    const providerId = rawProviderId || "system" // TODO: should we default to system?
     const provider = this.taxProviderService_.retrieveProvider(providerId)
 
     const [itemLines, shippingLines] = items.reduce(
