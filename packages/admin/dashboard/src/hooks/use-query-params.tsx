@@ -6,7 +6,8 @@ type QueryParams<T extends string> = {
 
 export function useQueryParams<T extends string>(
   keys: T[],
-  prefix?: string
+  prefix?: string,
+  keepUndefinedStrings: boolean = false
 ): QueryParams<T> {
   const [params] = useSearchParams()
 
@@ -17,7 +18,8 @@ export function useQueryParams<T extends string>(
     const prefixedKey = prefix ? `${prefix}_${key}` : key
     const value = params.get(prefixedKey) || undefined
 
-    result[key] = value
+    if (value !== "undefined" || keepUndefinedStrings)
+      result[key] = value
   })
 
   return result

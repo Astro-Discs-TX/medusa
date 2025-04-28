@@ -15,12 +15,14 @@ import { useQueryParams } from "../../../../../hooks/use-query-params"
 const PAGE_SIZE = 20
 
 export const UserListTable = () => {
-  const { q, order, offset } = useQueryParams(["q", "order", "offset"])
+  const { q, order, offset, created_at, updated_at } = useQueryParams(["q", "order", "offset", "created_at", "updated_at"])
   const { users, count, isPending, isError, error } = useUsers(
     {
       q,
       order,
       offset: offset ? parseInt(offset) : 0,
+      created_at: created_at ? JSON.parse(created_at) : undefined,
+      updated_at: updated_at ? JSON.parse(updated_at) : undefined,
       limit: PAGE_SIZE,
     },
     {

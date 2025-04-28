@@ -120,7 +120,8 @@ export const DataTable = <TData,>({
       ...(enableSearch ? ["q"] : []),
       ...(enablePagination ? ["offset"] : []),
     ],
-    prefix
+    prefix,
+    true
   )
   const [_, setSearchParams] = useSearchParams()
 
@@ -175,8 +176,7 @@ export const DataTable = <TData,>({
 
       Object.entries(value).forEach(([key, filter]) => {
         if (
-          prefixedFilterIds.includes(getQueryParamKey(key, prefix)) &&
-          filter
+          prefixedFilterIds.includes(getQueryParamKey(key, prefix))
         ) {
           prev.set(getQueryParamKey(key, prefix), JSON.stringify(filter))
         }
@@ -368,7 +368,7 @@ function parseFilterState(
     const filterValue = value[id]
 
     if (filterValue) {
-      filters[id] = JSON.parse(filterValue)
+      filters[id] = filterValue !== "undefined" ? JSON.parse(filterValue) : undefined
     }
   }
 
