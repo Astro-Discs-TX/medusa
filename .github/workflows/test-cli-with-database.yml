@@ -67,7 +67,7 @@ jobs:
       - name: Enable Corepack
         run: corepack enable
 
-      - run: yarn --version && yarn install
+      - run: touch yarn.lock && yarn --version && yarn install
         working-directory: ../cli-test
 
       - name: Run migrations
