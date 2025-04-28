@@ -15,7 +15,7 @@ import {
   Text,
   useDataTable,
 } from "@medusajs/ui"
-import React, { ReactNode, useCallback, useMemo } from "react"
+import React, { ReactNode, useCallback, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link, useNavigate, useSearchParams } from "react-router-dom"
 
@@ -160,12 +160,19 @@ export const DataTable = <TData,>({
     })
   }
 
+  const [newFilter, setNewFilter] = useState<string>()
   const filtering: DataTableFilteringState = useMemo(
-    () => parseFilterState(filterIds, filterParams),
-    [filterIds, filterParams]
+    () => {
+      const existingFilters = parseFilterState(filterIds, filterParams)
+      if (newFilter)
+        existingFilters[newFilter] = undefined
+      return existingFilters
+    },
+    [filterIds, filterParams, newFilter]
   )
 
   const handleFilteringChange = (value: DataTableFilteringState) => {
+    setNewFilter(undefined)
     setSearchParams((prev) => {
       Array.from(prev.keys()).forEach((key) => {
         if (prefixedFilterIds.includes(key) && !(key in value)) {
@@ -175,10 +182,14 @@ export const DataTable = <TData,>({
 
       Object.entries(value).forEach(([key, filter]) => {
         if (
-          prefixedFilterIds.includes(getQueryParamKey(key, prefix)) &&
-          filter
+          prefixedFilterIds.includes(getQueryParamKey(key, prefix))
         ) {
-          prev.set(getQueryParamKey(key, prefix), JSON.stringify(filter))
+          const prefixedKey = getQueryParamKey(key, prefix)
+          if (filter) {
+            prev.set(prefixedKey, JSON.stringify(filter))
+          } else {
+            setNewFilter(prefixedKey)
+          }
         }
       })
 
