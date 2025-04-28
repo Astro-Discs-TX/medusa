@@ -61,13 +61,11 @@ jobs:
         run: |
           medusa new cli-test --skip-db --v2 --branch ci-custom
 
-      - run: rm package-lock.json
-        working-directory: ../cli-test
-
       - name: Enable Corepack
         run: corepack enable
 
-      - run: yarn --version && yarn install
+      - name: Install new app dependencies (via resolutions)
+        run: rm package-lock.json && yarn install --no-immutable
         env:
           YARN_ENABLE_IMMUTABLE_INSTALLS: false
         working-directory: ../cli-test
