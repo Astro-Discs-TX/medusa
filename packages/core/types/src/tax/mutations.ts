@@ -201,6 +201,11 @@ export interface CreateTaxRegionDTO {
   parent_id?: string | null
 
   /**
+   * The ID of the tax provider for the region.
+   */
+  provider_id?: string | null
+
+  /**
    * Holds custom data in key-value pairs.
    */
   metadata?: MetadataType
