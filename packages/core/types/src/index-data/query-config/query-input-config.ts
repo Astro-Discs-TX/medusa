@@ -1,10 +1,10 @@
+import { QueryContextType } from "../../common"
 import { IndexServiceEntryPoints } from "../index-service-entry-points"
 import { ObjectToIndexFields } from "./query-input-config-fields"
 import { IndexFilters } from "./query-input-config-filters"
 import { IndexOrderBy } from "./query-input-config-order-by"
 
 export type IndexQueryInput<TEntry extends string> = {
-  // service: string This property is still supported under the hood but part of the type due to types missmatch towards fields
   /**
    * The name of the entity to retrieve. For example, `product`.
    */
@@ -45,7 +45,7 @@ export type IndexQueryInput<TEntry extends string> = {
   /**
    * Apply a query context on the retrieved data. For example, to retrieve product prices for a certain context.
    */
-  context?: any
+  context?: QueryContextType
   /**
    * Apply a `withDeleted` flag on the retrieved data to retrieve soft deleted items.
    */
