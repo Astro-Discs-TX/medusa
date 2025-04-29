@@ -6467,6 +6467,16 @@
           "required": ["header", "hint", "errors", "successToast"],
           "additionalProperties": false
         },
+        "edit": {
+          "type": "object",
+          "properties": {
+            "successToast": {
+              "type": "string"
+            }
+          },
+          "required": ["successToast"],
+          "additionalProperties": false
+        },
         "province": {
           "type": "object",
           "properties": {
@@ -7244,6 +7254,7 @@
         "list",
         "delete",
         "create",
+        "edit",
         "province",
         "state",
         "stateOrTerritory",
