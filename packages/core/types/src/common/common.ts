@@ -418,6 +418,13 @@ export type KebabCase<S extends string> =
       : `${T}${KebabCase<`${U}${V}`>}`
     : S
 
+/**
+ * Generic JSONB object structure.
+ */
+export interface JsonbObject {
+  [key: string]: unknown
+}
+
 export type MetadataType = Record<string, unknown> | null
 
 export type RawRounding = {

@@ -1,9 +1,25 @@
-import { BaseFilterable } from "../../dal"
+import { JsonbObject } from "../.."
+import { BaseFilterable, FilterableJSONB, FilterableJSONBArray } from "../../dal"
 
 /**
  * The type of the geo zone.
  */
 export type GeoZoneType = "country" | "province" | "city" | "zip"
+
+/**
+ * The postal expression configuration for ZIP-code-based geo zones.
+ */
+export interface PostalExpression extends JsonbObject{
+  /**
+   * A list of full postal codes for exact matching.
+   */
+  matches?: string[]
+
+  /**
+   * A list of postal code prefixes for prefix-based matching.
+   */
+  starts_with?: string[]
+}
 
 /**
  * The geo zone details.
@@ -37,7 +53,7 @@ export interface GeoZoneDTO {
   /**
    * The postal expression of the geo zone.
    */
-  postal_expression: Record<string, unknown> | null
+  postal_expression: PostalExpression | null
 
   /**
    * Holds custom data in key-value pairs.
@@ -58,6 +74,21 @@ export interface GeoZoneDTO {
    * The deletion date of the geo zone.
    */
   deleted_at: Date | null
+}
+
+/**
+ * Filtering structure for postal expressions in a geo zone.
+ */
+export interface PostalExpressionFilterableProps extends FilterableJSONB<PostalExpression> {
+  /**
+   * Filters based on postal code prefixes.
+   */
+  starts_with?: FilterableJSONBArray<string>
+
+  /**
+   * Filters based on exact postal code matches.
+   */
+  matches?: FilterableJSONBArray<string>
 }
 
 /**
@@ -90,5 +121,49 @@ export interface FilterableGeoZoneProps
    */
   city?: string | string[]
 
-  // TODO add support for postal_expression filtering
+  /**
+   * Filter the geo zones by their zip / postal code.
+   */
+  postal_expression?: PostalExpressionFilterableProps
 }
+
+// /**
+//  * Filter structure for JSONB arrays.
+//  *
+//  * Supports containment queries to check if the array contains specific elements
+//  * or is fully contained within another array.
+//  */
+// export interface FilterableJSONBArray<T> {
+//   /**
+//    * Matches JSONB arrays that contain all of the specified elements.
+//    */
+//   $contains?: T[]
+
+//   /**
+//    * Matches JSONB arrays that are fully contained within the specified elements.
+//    */
+//   $contained?: T[]
+// }
+
+// /**
+//  * Generic JSONB object structure.
+//  * Used to model flexible JSONB fields in the database, allowing flexible filtering strategies.
+//  */
+// export interface JsonbObject {
+//   [key: string]: unknown
+// }
+
+// /**
+//  * Filter structure for a JSONB object, supporting key existence queries.
+//  */
+// export interface FilterableJSONB<T extends JsonbObject> {
+//   /**
+//    * Matches JSONB objects that contain all the specified keys.
+//    */
+//   $hasKeys?: (keyof T)[]
+
+//   /**
+//    * Matches JSONB objects that contain at least one of the specified keys.
+//    */
+//   $hasSomeKeys?: (keyof T)[]
+// }

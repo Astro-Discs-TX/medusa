@@ -1,3 +1,4 @@
+import { JsonbObject } from "../common"
 import { InferEntityType } from "../dml"
 import { Dictionary, FilterQuery, Order } from "./utils"
 
@@ -86,6 +87,39 @@ export type UpsertWithReplaceConfig<T> = {
    * The relationships that will be updated/created/deleted as part of the upsert
    */
   relations?: (keyof T)[]
+}
+
+/**
+ * Filter structure for a JSONB object, supporting key existence queries.
+ */
+export interface FilterableJSONB<T extends JsonbObject> {
+  /**
+   * Matches JSONB objects that contain all the specified keys.
+   */
+  $hasKeys?: (keyof T)[]
+
+  /**
+   * Matches JSONB objects that contain at least one of the specified keys.
+   */
+  $hasSomeKeys?: (keyof T)[]
+}
+
+/**
+ * Filter structure for JSONB arrays.
+ *
+ * Supports containment queries to check if the array contains specific elements
+ * or is fully contained within another array.
+ */
+export interface FilterableJSONBArray<T> {
+  /**
+   * Matches JSONB arrays that contain all of the specified elements.
+   */
+  $contains?: T[]
+
+  /**
+   * Matches JSONB arrays that are fully contained within the specified elements.
+   */
+  $contained?: T[]
 }
 
 export * from "./repository-service"
