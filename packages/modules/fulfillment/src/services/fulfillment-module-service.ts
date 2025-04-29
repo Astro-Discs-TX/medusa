@@ -7,6 +7,7 @@ import {
   FulfillmentDTO,
   FulfillmentOption,
   FulfillmentTypes,
+  GeoZoneType,
   IFulfillmentModuleService,
   InferEntityType,
   InternalModuleDeclaration,
@@ -98,8 +99,7 @@ export default class FulfillmentModuleService
     ShippingOptionType: { dto: FulfillmentTypes.ShippingOptionTypeDTO }
     FulfillmentProvider: { dto: FulfillmentTypes.FulfillmentProviderDTO }
   }>(generateMethodForModels)
-  implements IFulfillmentModuleService
-{
+  implements IFulfillmentModuleService {
   protected baseRepository_: DAL.RepositoryService
   protected readonly fulfillmentSetService_: ModulesSdkTypes.IMedusaInternalService<
     InferEntityType<typeof FulfillmentSet>
@@ -2419,17 +2419,71 @@ export default class FulfillmentModuleService
     const geoZoneConstraints = Object.entries(geoZoneRequirePropertyHierarchy)
       .map(([prop, requiredProps]) => {
         if (address![prop]) {
-          return requiredProps.reduce((geoZoneConstraint, prop) => {
-            if (isPresent(address![prop])) {
-              geoZoneConstraint[prop] = address![prop]
+          const geoZoneType = FulfillmentModuleService.buildGeoZoneTypeFromProp(prop)
+          
+          return requiredProps.reduce((geoZoneConstraint, prop, index) => {
+            // Set the type field to avoid matching with incorrect geoZones
+            if (index === 0) {
+              geoZoneConstraint["type"] = geoZoneType
             }
+
+            if (isPresent(address![prop])) {
+              if (prop === "postal_expression") {
+                const postalExpressionFilters = FulfillmentModuleService.buildPostalExpressionFilter(address![prop]!)
+                
+                if (postalExpressionFilters.length) {
+                  geoZoneConstraint["$or"] = postalExpressionFilters
+                }
+
+              } else {
+                geoZoneConstraint[prop] = address![prop]
+              }
+            }
+
             return geoZoneConstraint
-          }, {} as Record<string, string | undefined>)
+          }, {} as Record<string, any | undefined>)
         }
         return null
       })
       .filter((v): v is Record<string, any> => !!v)
 
     return geoZoneConstraints
+  }
+
+  /**
+   * Returns the geo zone type based on the provided address property.
+   * Used to set the appropriate type when building geo zone constraints.
+   */
+  protected static buildGeoZoneTypeFromProp = (
+    prop: string
+  ): GeoZoneType => {
+    switch (prop) {
+      case "postal_expression":
+        return "zip"
+      case "city":
+        return "city"
+      case "province_code":
+        return "province"
+      case "country_code":
+        return "country"
+      default:
+        return "country" // safe fallback
+    }
+  }
+
+  /**
+   * Builds a postal expression filter with exact and prefix matching conditions
+   * based on the provided postal code.
+   */
+  protected static buildPostalExpressionFilter(postalCode: string) {
+    return [
+      { postal_expression: { matches: { $contains: [postalCode] } } },
+      ...Array.from(
+        { length: Math.max(0, Math.min(postalCode.length - 1, 4)) },
+        (_, i) => ({
+          postal_expression: { starts_with: { $contains: [postalCode.slice(0, i + 2)] } }
+        })
+      ),
+    ]
   }
 }
