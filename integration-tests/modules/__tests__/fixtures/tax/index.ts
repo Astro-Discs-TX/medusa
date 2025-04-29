@@ -64,7 +64,6 @@ export const setupTaxStructure = async (service: ITaxModuleService) => {
       country_code: "US",
       province_code: "CA",
       parent_id: us.id,
-      provider_id: "tp_system_system",
       default_tax_rate: {
         rate: 5,
         name: "CA Default Rate",
@@ -75,7 +74,6 @@ export const setupTaxStructure = async (service: ITaxModuleService) => {
       country_code: "US",
       province_code: "NY",
       parent_id: us.id,
-      provider_id: "tp_system_system",
       default_tax_rate: {
         rate: 6,
         name: "NY Default Rate",
@@ -86,7 +84,6 @@ export const setupTaxStructure = async (service: ITaxModuleService) => {
       country_code: "US",
       province_code: "FL",
       parent_id: us.id,
-      provider_id: "tp_system_system",
       default_tax_rate: {
         rate: 4,
         name: "FL Default Rate",
@@ -97,7 +94,6 @@ export const setupTaxStructure = async (service: ITaxModuleService) => {
       country_code: "CA",
       province_code: "QC",
       parent_id: ca.id,
-      provider_id: "tp_system_system",
       default_tax_rate: {
         rate: 2,
         name: "QC Default Rate",
@@ -108,7 +104,6 @@ export const setupTaxStructure = async (service: ITaxModuleService) => {
       country_code: "CA",
       province_code: "BC",
       parent_id: ca.id,
-      provider_id: "tp_system_system",
       default_tax_rate: {
         rate: 2,
         name: "BC Default Rate",
