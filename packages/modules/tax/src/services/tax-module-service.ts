@@ -663,7 +663,6 @@ export default class TaxModuleService
         isProductMatch: false,
         isProductTypeMatch: false,
         isShippingMatch: false,
-        isPriceThresholdMatch: false,
       }
     }
 
