@@ -1,4 +1,5 @@
 import {
+  CreateFulfillmentSetDTO,
   CreateShippingOptionDTO,
   IFulfillmentModuleService,
   UpdateShippingOptionDTO,
@@ -375,6 +376,184 @@ moduleIntegrationTestRunner<IFulfillmentModuleService>({
               expect.objectContaining({ id: shippingOption1.id }),
               expect.objectContaining({ id: shippingOption3.id }),
             ])
+          )
+        })
+
+        describe("matching shipping options by address", () => {
+          beforeEach(async () => {
+            const fulfillmentSet = await service.createFulfillmentSets([
+              {
+                name: "first-set",
+                type: "test-type",
+                service_zones: [
+                  {
+                    name: "partial-toronto",
+                    geo_zones: [
+                      {
+                        type: GeoZoneType.ZIP,
+                        country_code: "ca",
+                        province_code: "ca-on",
+                        city: "Toronto",
+                        postal_expression: {
+                          starts_with: ["A2A", "A3A"],
+                          matches: ["A5A 5A5"]
+                        }
+                      },
+                    ],
+                  },
+                  {
+                    name: "partial-king-city",
+                    geo_zones: [
+                      {
+                        type: GeoZoneType.ZIP,
+                        country_code: "ca",
+                        province_code: "ca-on",
+                        city: "King City",
+                        postal_expression: {
+                          starts_with: ["A7A", "A8A"],
+                          matches: ["A9A 9A9"]
+                        }
+                      },
+                    ],
+                  },
+                ],
+              } as CreateFulfillmentSetDTO,
+              {
+                name: "second-set",
+                type: "test-type",
+                service_zones: [
+                  {
+                    name: "full-ottawa",
+                    geo_zones: [
+                      {
+                        type: GeoZoneType.CITY,
+                        country_code: "ca",
+                        province_code: "ca-on",
+                        city: "Ottawa"
+                      },
+                    ],
+                  },
+                ],
+              } as CreateFulfillmentSetDTO,
+            ])
+            const shippingProfile = await service.createShippingProfiles({
+              name: "test",
+              type: "default",
+            })
+            await service.createShippingOptions([
+              generateCreateShippingOptionsData({
+                service_zone_id: fulfillmentSet[0].service_zones[0].id,
+                shipping_profile_id: shippingProfile.id,
+                provider_id: providerId,
+              }),
+              generateCreateShippingOptionsData({
+                service_zone_id: fulfillmentSet[0].service_zones[1].id,
+                shipping_profile_id: shippingProfile.id,
+                provider_id: providerId,
+              }),
+              generateCreateShippingOptionsData({
+                service_zone_id: fulfillmentSet[1].service_zones[0].id,
+                shipping_profile_id: shippingProfile.id,
+                provider_id: providerId,
+              }),
+            ])
+          })
+
+          it(`should only list shipping options that contain specified address`, async function () {
+            let shippingOptions = await service.listShippingOptionsForContext({
+              address: {
+                country_code: "ca",
+                province_code: "ca-on",
+                city: "Ottawa",
+                postal_expression: "A2A 0L0",
+              },
+            })
+
+            expect(shippingOptions).toHaveLength(1)
+            expect(shippingOptions[0].service_zone.name).toBe("full-ottawa")
+
+            shippingOptions = await service.listShippingOptionsForContext({
+              address: {
+                country_code: "ca",
+                province_code: "ca-on",
+                city: "Ottawa",
+              },
+            })
+
+            expect(shippingOptions).toHaveLength(1)
+            expect(shippingOptions[0].service_zone.name).toBe("full-ottawa")
+
+            shippingOptions = await service.listShippingOptionsForContext({
+              address: {
+                country_code: "ca",
+                province_code: "ca-on",
+              },
+            })
+
+            expect(shippingOptions).toHaveLength(0)
+          })
+
+          it("should list shipping options with exact postal_expression matching", async () => {
+            let shippingOptions = await service.listShippingOptionsForContext({
+              address: {
+                country_code: "ca",
+                province_code: "ca-on",
+                city: "Toronto",
+                postal_expression: "A5A 5A5"
+              },
+            })
+
+            expect(shippingOptions).toHaveLength(1)
+            expect(shippingOptions[0].service_zone.name).toBe("partial-toronto")
+
+            shippingOptions = await service.listShippingOptionsForContext({
+              address: {
+                country_code: "ca",
+                province_code: "ca-on",
+                city: "King City",
+                postal_expression: "A9A 9A9"
+              },
+            })
+
+            expect(shippingOptions).toHaveLength(1)
+            expect(shippingOptions[0].service_zone.name).toBe("partial-king-city")
+
+            shippingOptions = await service.listShippingOptionsForContext({
+              address: {
+                country_code: "ca",
+                province_code: "ca-on",
+              },
+            })
+
+            expect(shippingOptions).toHaveLength(0)
+          })
+
+          it("should list shipping options using starts_with filter",
+            async () => {
+              let shippingOptions = await service.listShippingOptionsForContext({
+                address: {
+                  country_code: "ca",
+                  province_code: "ca-on",
+                  city: "Toronto",
+                  postal_expression: "A2A 0L0"
+                },
+              })
+
+              expect(shippingOptions).toHaveLength(1)
+              expect(shippingOptions[0].service_zone.name).toBe("partial-toronto")
+
+              shippingOptions = await service.listShippingOptionsForContext({
+                address: {
+                  country_code: "ca",
+                  province_code: "ca-on",
+                  city: "King City",
+                  postal_expression: "A7A 0L0"
+                },
+              })
+
+              expect(shippingOptions).toHaveLength(1)
+              expect(shippingOptions[0].service_zone.name).toBe("partial-king-city")
+            }
           )
         })
       })
