@@ -3,14 +3,14 @@ import { AdminTaxRegion } from "../../tax-region"
 export interface AdminTaxRateRule {
   /**
    * The name of the table that the rule references.
-   * 
+   *
    * @example
    * "product_type"
    */
   reference: string
   /**
    * The ID of the record in the table that the rule references.
-   * 
+   *
    * @example
    * "protyp_123"
    */
@@ -50,6 +50,10 @@ export interface AdminTaxRate {
    * Whether the tax rate is the default tax rate in its tax region.
    */
   is_default: boolean
+  /**
+   * Whether the tax rate is a compound tax rate
+   */
+  is_compound: boolean
   /**
    * The date the tax rate was created.
    */
