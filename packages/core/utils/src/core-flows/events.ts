@@ -34,7 +34,7 @@ export const OrderWorkflowEvents = {
 export const OrderEditWorkflowEvents = {
   REQUESTED: "order-edit.requested",
   CONFIRMED: "order-edit.confirmed",
-  CANCELLED: "order-edit.cancelled",
+  CANCELED: "order-edit.canceled",
 }
 
 export const UserWorkflowEvents = {

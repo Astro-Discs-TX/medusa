@@ -146,7 +146,7 @@ export const cancelBeginOrderEditWorkflow = createWorkflow(
       deleteOrderChangesStep({ ids: [orderChange.id] }),
       deleteOrderShippingMethods({ ids: shippingToRemove }),
       emitEventStep({
-        eventName: OrderEditWorkflowEvents.CANCELLED,
+        eventName: OrderEditWorkflowEvents.CANCELED,
         data: eventData,
       })
     )
