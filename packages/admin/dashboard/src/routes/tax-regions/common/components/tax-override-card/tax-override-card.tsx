@@ -37,18 +37,15 @@ export const TaxOverrideCard = ({ taxRate }: TaxOverrideCardProps) => {
     return null
   }
 
-  const groupedRules = taxRate.rules.reduce(
-    (acc, rule) => {
-      if (!acc[rule.reference]) {
-        acc[rule.reference] = []
-      }
+  const groupedRules = taxRate.rules.reduce((acc, rule) => {
+    if (!acc[rule.reference]) {
+      acc[rule.reference] = []
+    }
 
-      acc[rule.reference].push(rule.reference_id)
+    acc[rule.reference].push(rule.reference_id)
 
-      return acc
-    },
-    {} as Record<string, string[]>
-  )
+    return acc
+  }, {} as Record<string, string[]>)
 
   const validKeys = Object.values(TaxRateRuleReferenceType)
   const numberOfTargets = Object.keys(groupedRules).map((key) =>
@@ -91,6 +88,11 @@ export const TaxOverrideCard = ({ taxRate }: TaxOverrideCardProps) => {
             {taxRate.is_combinable
               ? t("taxRegions.fields.isCombinable.true")
               : t("taxRegions.fields.isCombinable.false")}
+          </StatusBadge>
+          <StatusBadge color={taxRate.is_compound ? "green" : "grey"}>
+            {taxRate.is_compound
+              ? t("taxRegions.fields.isCompound.true")
+              : t("taxRegions.fields.isCompound.false")}
           </StatusBadge>
           <ActionMenu
             groups={[
