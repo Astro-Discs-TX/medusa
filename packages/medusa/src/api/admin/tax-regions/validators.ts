@@ -42,7 +42,7 @@ export const AdminGetTaxRegionsParams = createFindParams({
 export type AdminCreateTaxRegionType = z.infer<typeof AdminCreateTaxRegion>
 export const AdminCreateTaxRegion = z.object({
   country_code: z.string(),
-  provider_id: z.string(),
+  provider_id: z.string().nullish(),
   province_code: z.string().nullish(),
   parent_id: z.string().nullish(),
   default_tax_rate: z
