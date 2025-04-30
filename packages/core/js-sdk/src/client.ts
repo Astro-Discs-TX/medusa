@@ -237,11 +237,18 @@ export class Client {
 
       let normalizedInput: RequestInfo | URL = input
       if (input instanceof URL || typeof input === "string") {
-        const baseUrl = new URL(this.config.baseUrl)
-        const fullPath = `${baseUrl.pathname.replace(/\/$/, "")}/${input
-          .toString()
-          .replace(/^\//, "")}`
-        normalizedInput = new URL(fullPath, baseUrl.origin)
+        if (
+          input.toString().startsWith("http://") ||
+          input.toString().startsWith("https://")
+        ) {
+          normalizedInput = new URL("", input.toString())
+        } else {
+          const baseUrl = new URL(this.config.baseUrl)
+          const fullPath = `${baseUrl.pathname.replace(/\/$/, "")}/${input
+            .toString()
+            .replace(/^\//, "")}`
+          normalizedInput = new URL(fullPath, baseUrl.origin)
+        }
         if (init?.query) {
           const params = Object.fromEntries(
             normalizedInput.searchParams.entries()
