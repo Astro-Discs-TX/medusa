@@ -112,7 +112,7 @@ export const generatedEditDates = {
   "app/recipes/b2b/page.mdx": "2025-04-17T08:48:38.369Z",
   "app/recipes/commerce-automation/page.mdx": "2025-04-17T08:48:37.663Z",
   "app/recipes/digital-products/examples/standard/page.mdx": "2025-04-24T15:41:05.364Z",
-  "app/recipes/digital-products/page.mdx": "2025-04-17T08:29:01.230Z",
+  "app/recipes/digital-products/page.mdx": "2025-04-30T12:19:20.550Z",
   "app/recipes/ecommerce/page.mdx": "2025-02-26T12:20:52.092Z",
   "app/recipes/marketplace/examples/vendors/page.mdx": "2025-03-18T15:28:32.122Z",
   "app/recipes/marketplace/page.mdx": "2025-04-17T08:48:36.942Z",
@@ -5747,7 +5747,7 @@ export const generatedEditDates = {
   "references/types/StockLocationTypes/types/types.StockLocationTypes.UpdateStockLocationAddressInput/page.mdx": "2025-01-07T12:54:23.057Z",
   "references/types/StockLocationTypes/types/types.StockLocationTypes.UpsertStockLocationAddressInput/page.mdx": "2025-01-07T12:54:23.058Z",
   "app/storefront-development/guides/express-checkout/page.mdx": "2025-04-17T08:29:01.027Z",
-  "app/commerce-modules/inventory/inventory-kit/page.mdx": "2025-02-26T11:18:00.353Z",
+  "app/commerce-modules/inventory/inventory-kit/page.mdx": "2025-04-30T14:39:20.174Z",
   "app/commerce-modules/api-key/workflows/page.mdx": "2025-01-09T13:41:46.573Z",
   "app/commerce-modules/api-key/js-sdk/page.mdx": "2025-01-09T12:04:39.787Z",
   "app/commerce-modules/auth/js-sdk/page.mdx": "2025-01-09T13:27:54.016Z",
@@ -6057,7 +6057,7 @@ export const generatedEditDates = {
   "app/nextjs-starter/guides/revalidate-cache/page.mdx": "2025-04-18T15:24:15.919Z",
   "app/storefront-development/cart/totals/page.mdx": "2025-03-27T14:47:14.252Z",
   "app/storefront-development/checkout/order-confirmation/page.mdx": "2025-03-27T14:29:45.669Z",
-  "app/how-to-tutorials/tutorials/product-reviews/page.mdx": "2025-04-17T08:48:08.716Z",
+  "app/how-to-tutorials/tutorials/product-reviews/page.mdx": "2025-04-30T10:55:47.113Z",
   "app/troubleshooting/data-models/default-fields/page.mdx": "2025-03-21T06:59:06.775Z",
   "app/troubleshooting/medusa-admin/blocked-request/page.mdx": "2025-03-21T06:53:34.854Z",
   "app/troubleshooting/nextjs-starter-rewrites/page.mdx": "2025-03-21T07:09:08.901Z",
@@ -6218,5 +6218,8 @@ export const generatedEditDates = {
   "references/core_flows/interfaces/core_flows.UpdateDraftOrderStepInput/page.mdx": "2025-04-24T08:23:57.295Z",
   "references/core_flows/interfaces/core_flows.ValidateDraftOrderStepInput/page.mdx": "2025-04-24T08:23:57.277Z",
   "app/commerce-modules/product/guides/variant-inventory/page.mdx": "2025-04-25T14:22:42.329Z",
-  "app/troubleshooting/validation-error/page.mdx": "2025-04-25T14:14:57.568Z"
+  "app/troubleshooting/validation-error/page.mdx": "2025-04-25T14:14:57.568Z",
+  "app/how-to-tutorials/tutorials/bundled-products/page.mdx": "2025-04-29T12:31:44.196Z",
+  "app/recipes/bundled-products/examples/standard/page.mdx": "2025-04-30T14:38:08.643Z",
+  "app/recipes/bundled-products/page.mdx": "2025-04-30T12:20:16.022Z"
 }
