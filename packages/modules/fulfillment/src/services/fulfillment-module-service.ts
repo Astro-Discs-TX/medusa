@@ -2475,15 +2475,29 @@ export default class FulfillmentModuleService
    * Builds a postal expression filter with exact and prefix matching conditions
    * based on the provided postal code.
    */
-  protected static buildPostalExpressionFilter(postalCode: string) {
-    return [
-      { postal_expression: { matches: { $contains: [postalCode] } } },
-      ...Array.from(
-        { length: Math.max(0, Math.min(postalCode.length - 1, 4)) },
-        (_, i) => ({
-          postal_expression: { starts_with: { $contains: [postalCode.slice(0, i + 2)] } }
-        })
-      ),
-    ]
+protected static buildPostalExpressionFilters(postalCode: string) {
+  const postalExpressions = [];
+
+  postalExpressions.push({
+    postal_expression: {
+      matches: { $contains: [postalCode] }
+    }
+  });
+
+  // Add partial match expressions for first 2-5 characters
+  // We start with at least 2 characters and add more if available
+  const minPartialLength = 2;
+  const maxPartialLength = Math.max(0, Math.min(postalCode.length - 1, 5));
+  
+  for (let length = minPartialLength; length <= maxPartialLength; length++) {
+    const partialCode = postalCode.slice(0, length);
+    postalExpressions.push({
+      postal_expression: {
+        starts_with: { $contains: [partialCode] }
+      }
+    });
   }
+
+  return postalExpressions;
+}
 }
