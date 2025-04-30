@@ -1,3 +1,4 @@
+import type { Readable } from "stream"
 import { Constructor, FileTypes } from "@medusajs/framework/types"
 import { MedusaError } from "@medusajs/framework/utils"
 import { FileProviderRegistrationPrefix } from "@types"
@@ -47,5 +48,33 @@ export default class FileProviderService {
     fileData: FileTypes.ProviderGetFileDTO
   ): Promise<string> {
     return this.fileProvider_.getPresignedDownloadUrl(fileData)
+  }
+
+  getPresignedUploadUrl(
+    fileData: FileTypes.ProviderGetPresignedUploadUrlDTO
+  ): Promise<FileTypes.ProviderFileResultDTO> {
+    if (!this.fileProvider_.getPresignedUploadUrl) {
+      throw new MedusaError(
+        MedusaError.Types.INVALID_DATA,
+        "Provider does not support presigned upload URLs"
+      )
+    }
+
+    if (!fileData.filename) {
+      throw new MedusaError(
+        MedusaError.Types.INVALID_DATA,
+        "File name is required to get a presigned upload URL"
+      )
+    }
+
+    return this.fileProvider_.getPresignedUploadUrl(fileData)
+  }
+
+  getAsStream(fileData: FileTypes.ProviderGetFileDTO): Promise<Readable> {
+    return this.fileProvider_.getAsStream(fileData)
+  }
+
+  getAsBuffer(fileData: FileTypes.ProviderGetFileDTO): Promise<Buffer> {
+    return this.fileProvider_.getAsBuffer(fileData)
   }
 }
