@@ -27,18 +27,6 @@ export class LocalFileService extends AbstractFileProviderService {
     this.backendUrl_ = options?.backend_url || "http://localhost:9000/static"
   }
 
-  getUploadDir() {
-    return this.uploadDir_
-  }
-
-  getPrivateUploadDir() {
-    return this.privateUploadDir_
-  }
-
-  getBackendUrl() {
-    return this.backendUrl_
-  }
-
   async upload(
     file: FileTypes.ProviderUploadFileDTO
   ): Promise<FileTypes.ProviderFileResultDTO> {
@@ -134,25 +122,6 @@ export class LocalFileService extends AbstractFileProviderService {
     }
 
     return this.getUploadFileUrl(file.fileKey)
-  }
-
-  async getPresignedUploadUrl(
-    fileData: FileTypes.ProviderGetPresignedUploadUrlDTO
-  ): Promise<FileTypes.ProviderFileResultDTO> {
-    if (!fileData?.filename) {
-      throw new MedusaError(
-        MedusaError.Types.INVALID_DATA,
-        `No filename provided`
-      )
-    }
-
-    return {
-      url: new URL(
-        "upload",
-        `${this.backendUrl_.replace(/\/$/, "")}/`
-      ).toString(),
-      key: fileData.filename,
-    }
   }
 
   private getUploadFilePath = (baseDir: string, fileKey: string) => {
