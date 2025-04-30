@@ -40,7 +40,7 @@ export const metadata = {
 
 In this tutorial, you'll learn how to localize your Medusa store's data with Contentful.
 
-When you install a Medusa application, you get a fully-fledged commerce platform with a framework for customization. While Medusa provides features essential for internationalization, such as support for multiple [regions](../../../commerce-modules/region/page.mdx) and [currencies](../../../commerce-modules/currency/page.mdx), it doesn't provide content localization.
+When you install a Medusa application, you get a fully-fledged commerce platform with a Framework for customization. While Medusa provides features essential for internationalization, such as support for multiple [regions](../../../commerce-modules/region/page.mdx) and [currencies](../../../commerce-modules/currency/page.mdx), it doesn't provide content localization.
 
 However, Medusa's architecture supports the integration of third-party services to provide additional features, such as data localization. One service you can integrate is [Contentful](https://www.contentful.com/), a headless content management system (CMS) that allows you to manage and deliver content across multiple channels.
 
@@ -1298,7 +1298,7 @@ To create the step, create the file `src/workflows/steps/create-products-content
 export const createProductsContentfulStepHighlights = [
   ["12", `"create-products-contentful-step"`, "The step's unique name."],
   ["13", "input", "The step's input."],
-  ["15", "container", "The Medusa container, useful to resolve framework and commerce tools."],
+  ["15", "container", "The Medusa container, useful to resolve Framework and commerce tools."],
   ["15", "resolve", "Resolve the Contentful Module's service from the Medusa container."],
   ["21", "createProduct", "Create a new product entry in Contentful."],
   ["24", "permanentFailure", "If an error occurs, fail the step and\npass the created products to the compensation function."],
@@ -1362,7 +1362,7 @@ You create a step with `createStep` from the Workflows SDK. It accepts three par
 1. The step's unique name, which is `create-products-contentful-step`.
 2. An async function that receives two parameters:
     - The step's input, which is in this case an object holding an array of products to create in Contentful.
-    - An object that has properties including the [Medusa container](!docs!/learn/fundamentals/medusa-container), which is a registry of framework and commerce tools that you can access in the step.
+    - An object that has properties including the [Medusa container](!docs!/learn/fundamentals/medusa-container), which is a registry of Framework and commerce tools that you can access in the step.
 3. An optional compensation function that undoes the actions performed in the step if an error occurs in the workflow's execution. This mechanism ensures data consistency in your application, especially as you integrate external systems.
 
 <Note>
@@ -1506,7 +1506,7 @@ A subscriber file must export:
 The subscriber function receives an object as a parameter that has the following properties:
 
 - `event`: An object that holds the event's data payload. The payload of the `product.created` event is an array of product IDs.
-- `container`: The Medusa container to access the framework and commerce tools.
+- `container`: The Medusa container to access the Framework and commerce tools.
 
 In the subscriber function, you execute the `createProductsContentfulWorkflow` by invoking it, passing the Medusa container as a parameter. Then, you chain a `run` method, passing it the product ID from the event's data payload as input.
 
