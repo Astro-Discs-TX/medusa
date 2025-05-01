@@ -1,0 +1,557 @@
+[
+  {
+    "name": "cart.created",
+    "payload": "{\n  id, // The ID of the cart\n}",
+    "description": "Emitted when a cart is created.",
+    "workflows": [
+      "createCartWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "cart.updated",
+    "payload": "{\n  id, // The ID of the cart\n}",
+    "description": "Emitted when a cart's details are updated.",
+    "workflows": [
+      "updateLineItemInCartWorkflow",
+      "updateCartWorkflow",
+      "addToCartWorkflow",
+      "addShippingMethodToCartWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "cart.customer_updated",
+    "payload": "{\n  id, // The ID of the cart\n}",
+    "description": "Emitted when the customer in the cart is updated.",
+    "workflows": [
+      "updateCartWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "cart.region_updated",
+    "payload": "{\n  id, // The ID of the cart\n}",
+    "workflows": [
+      "updateCartWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "customer.created",
+    "payload": "[{\n  id, // The ID of the customer\n}]",
+    "description": "Emitted when a customer is created.",
+    "workflows": [
+      "createCustomersWorkflow",
+      "createCustomerAccountWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "customer.updated",
+    "payload": "[{\n  id, // The ID of the customer\n}]",
+    "description": "Emitted when a customer is updated.",
+    "workflows": [
+      "updateCustomersWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "customer.deleted",
+    "payload": "[{\n  id, // The ID of the customer\n}]",
+    "description": "Emitted when a customer is deleted.",
+    "workflows": [
+      "deleteCustomersWorkflow",
+      "removeCustomerAccountWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "order.updated",
+    "payload": "{\n  id, // The ID of the order\n}",
+    "description": "Emitted when the details of an order or draft order is updated. This\ndoesn't include updates made by an edit.",
+    "workflows": [
+      "updateOrderWorkflow",
+      "updateDraftOrderWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "order.placed",
+    "payload": "{\n  id, // The ID of the order\n}",
+    "description": "Emitted when an order is placed, or when a draft order is converted to an\norder.",
+    "workflows": [
+      "convertDraftOrderWorkflow",
+      "completeCartWorkflow",
+      "processPaymentWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "order.canceled",
+    "payload": "{\n  id, // The ID of the order\n}",
+    "description": "Emitted when an order is canceld.",
+    "workflows": [
+      "cancelOrderWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "order.completed",
+    "payload": "[{\n  id, // The ID of the order\n}]",
+    "description": "Emitted when orders are completed.",
+    "workflows": [
+      "completeOrderWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "order.archived",
+    "payload": "[{\n  id, // The ID of the order\n}]",
+    "description": "Emitted when an order is archived.",
+    "workflows": [
+      "archiveOrderWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "order.fulfillment_created",
+    "payload": "{\n  order_id, // The ID of the order\n  fulfillment_id, // The ID of the fulfillment\n  no_notification, // Whether to notify the customer\n}",
+    "description": "Emitted when a fulfillment is created for an order.",
+    "workflows": [
+      "createOrderFulfillmentWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "order.fulfillment_canceled",
+    "payload": "{\n  order_id, // The ID of the order\n  fulfillment_id, // The ID of the fulfillment\n  no_notification, // Whether to notify the customer\n}",
+    "description": "Emitted when an order's fulfillment is canceled.",
+    "workflows": [
+      "cancelOrderFulfillmentWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "order.return_requested",
+    "payload": "{\n  order_id, // The ID of the order\n  return_id, // The ID of the return\n}",
+    "description": "Emitted when a return request is confirmed.",
+    "workflows": [
+      "createAndCompleteReturnOrderWorkflow",
+      "confirmReturnRequestWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "order.return_received",
+    "payload": "{\n  order_id, // The ID of the order\n  return_id, // The ID of the return\n}",
+    "description": "Emitted when a return is marked as received.",
+    "workflows": [
+      "createAndCompleteReturnOrderWorkflow",
+      "confirmReturnReceiveWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "order.claim_created",
+    "payload": "{\n  order_id, // The ID of the order\n  claim_id, // The ID of the claim\n}",
+    "description": "Emitted when a claim is created for an order.",
+    "workflows": [
+      "confirmClaimRequestWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "order.exchange_created",
+    "payload": "{\n  order_id, // The ID of the order\n  exchange_id, // The ID of the exchange\n}",
+    "description": "Emitted when an exchange is created for an order.",
+    "workflows": [
+      "confirmExchangeRequestWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "order.transfer_requested",
+    "payload": "{\n  id, // The ID of the order\n  order_change_id, // The ID of the order change created for the transfer\n}",
+    "description": "Emitted when an order is requested to be transferred to\nanother customer.",
+    "workflows": [
+      "requestOrderTransferWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "order-edit.requested",
+    "payload": "{\n  order_id, // The ID of the order\n  actions, // The actions to edit the order\n}",
+    "description": "Emitted when an order edit is requested.",
+    "workflows": [
+      "requestOrderEditRequestWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "order-edit.confirmed",
+    "payload": "{\n  order_id, // The ID of the order\n  actions, // The actions to edit the order\n}",
+    "description": "Emitted when an order edit request is confirmed.",
+    "workflows": [
+      "confirmOrderEditRequestWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "order-edit.canceled",
+    "payload": "{\n  order_id, // The ID of the order\n  actions, // The actions to edit the order\n}",
+    "description": "Emitted when an order edit request is canceled.",
+    "workflows": [
+      "cancelBeginOrderEditWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "user.created",
+    "payload": "[{\n  id, // The ID of the user\n}]",
+    "description": "Emitted when users are created.",
+    "workflows": [
+      "createUsersWorkflow",
+      "createUserAccountWorkflow",
+      "acceptInviteWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "user.updated",
+    "payload": "[{\n  id, // The ID of the user\n}]",
+    "description": "Emitted when users are updated.",
+    "workflows": [
+      "updateUsersWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "user.deleted",
+    "payload": "[{\n  id, // The ID of the user\n}]",
+    "description": "Emitted when users are deleted.",
+    "workflows": [
+      "deleteUsersWorkflow",
+      "removeUserAccountWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "auth.password_reset",
+    "payload": "{\n  entity_id, // The identifier of the user or customer. For example, an email address.\n  actor_type, // The type of actor. For example, \"customer\", \"user\", or custom.\n  token, // The generated token.\n}",
+    "description": "Emitted when a reset password token is generated. You can listen to this event\nto send a reset password email to the user or customer, for example.",
+    "workflows": [
+      "generateResetPasswordTokenWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "sales-channel.created",
+    "payload": "[{\n  id, // The ID of the sales channel\n}]",
+    "description": "Emitted when sales channels are created.",
+    "workflows": [
+      "createSalesChannelsWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "sales-channel.updated",
+    "payload": "[{\n  id, // The ID of the sales channel\n}]",
+    "description": "Emitted when sales channels are updated.",
+    "workflows": [
+      "updateSalesChannelsWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "sales-channel.deleted",
+    "payload": "[{\n  id, // The ID of the sales channel\n}]",
+    "description": "Emitted when sales channels are deleted.",
+    "workflows": [
+      "deleteSalesChannelsWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "product-category.created",
+    "payload": "[{\n  id, // The ID of the product category\n}]",
+    "description": "Emitted when product categories are created.",
+    "workflows": [
+      "createProductCategoriesWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "product-category.updated",
+    "payload": "[{\n  id, // The ID of the product category\n}]",
+    "description": "Emitted when product categories are updated.",
+    "workflows": [
+      "updateProductCategoriesWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "product-category.deleted",
+    "payload": "[{\n  id, // The ID of the product category\n}]",
+    "description": "Emitted when product categories are deleted.",
+    "workflows": [
+      "deleteProductCategoriesWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "product-collection.created",
+    "payload": "[{\n  id, // The ID of the product collection\n}]",
+    "description": "Emitted when product collections are created.",
+    "workflows": [
+      "createCollectionsWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "product-collection.updated",
+    "payload": "[{\n  id, // The ID of the product collection\n}]",
+    "description": "Emitted when product collections are updated.",
+    "workflows": [
+      "updateCollectionsWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "product-collection.deleted",
+    "payload": "[{\n  id, // The ID of the product collection\n}]",
+    "description": "Emitted when product collections are deleted.",
+    "workflows": [
+      "deleteCollectionsWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "product-variant.updated",
+    "payload": "[{\n  id, // The ID of the product variant\n}]",
+    "description": "Emitted when product variants are updated.",
+    "workflows": [
+      "updateProductVariantsWorkflow",
+      "batchProductVariantsWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "product-variant.created",
+    "payload": "[{\n  id, // The ID of the product variant\n}]",
+    "description": "Emitted when product variants are created.",
+    "workflows": [
+      "createProductVariantsWorkflow",
+      "createProductsWorkflow",
+      "batchProductVariantsWorkflow",
+      "batchProductsWorkflow",
+      "importProductsWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "product-variant.deleted",
+    "payload": "[{\n  id, // The ID of the product variant\n}]",
+    "description": "Emitted when product variants are deleted.",
+    "workflows": [
+      "deleteProductVariantsWorkflow",
+      "batchProductVariantsWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "product.updated",
+    "payload": "[{\n  id, // The ID of the product\n}]",
+    "description": "Emitted when products are updated.",
+    "workflows": [
+      "updateProductsWorkflow",
+      "batchProductsWorkflow",
+      "importProductsWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "product.created",
+    "payload": "[{\n  id, // The ID of the product\n}]",
+    "description": "Emitted when products are created.",
+    "workflows": [
+      "createProductsWorkflow",
+      "batchProductsWorkflow",
+      "importProductsWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "product.deleted",
+    "payload": "[{\n  id, // The ID of the product\n}]",
+    "description": "Emitted when products are deleted.",
+    "workflows": [
+      "deleteProductsWorkflow",
+      "batchProductsWorkflow",
+      "importProductsWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "product-type.updated",
+    "payload": "[{\n  id, // The ID of the product type\n}]",
+    "description": "Emitted when product types are updated.",
+    "workflows": [
+      "updateProductTypesWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "product-type.created",
+    "payload": "[{\n  id, // The ID of the product type\n}]",
+    "description": "Emitted when product types are created.",
+    "workflows": [
+      "createProductTypesWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "product-type.deleted",
+    "payload": "[{\n  id, // The ID of the product type\n}]",
+    "description": "Emitted when product types are deleted.",
+    "workflows": [
+      "deleteProductTypesWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "product-tag.updated",
+    "payload": "[{\n  id, // The ID of the product tag\n}]",
+    "description": "Emitted when product tags are updated.",
+    "workflows": [
+      "updateProductTagsWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "product-tag.created",
+    "payload": "[{\n  id, // The ID of the product tag\n}]",
+    "description": "Emitted when product tags are created.",
+    "workflows": [
+      "createProductTagsWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "product-tag.deleted",
+    "payload": "[{\n  id, // The ID of the product tag\n}]",
+    "description": "Emitted when product tags are deleted.",
+    "workflows": [
+      "deleteProductTagsWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "product-option.updated",
+    "payload": "[{\n  id, // The ID of the product option\n}]",
+    "description": "Emitted when product options are updated.",
+    "workflows": [
+      "updateProductOptionsWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "product-option.created",
+    "payload": "[{\n  id, // The ID of the product option\n}]",
+    "description": "Emitted when product options are created.",
+    "workflows": [
+      "createProductOptionsWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "product-option.deleted",
+    "payload": "[{\n  id, // The ID of the product option\n}]",
+    "description": "Emitted when product options are deleted.",
+    "workflows": [
+      "deleteProductOptionsWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "invite.accepted",
+    "payload": "{\n  id, // The ID of the invite\n}",
+    "description": "Emitted when an invite is accepted.",
+    "workflows": [
+      "acceptInviteWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "invite.created",
+    "payload": "[{\n  id, // The ID of the invite\n}]",
+    "description": "Emitted when invites are created. You can listen to this event\nto send an email to the invited users, for example.",
+    "workflows": [
+      "createInvitesWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "invite.deleted",
+    "payload": "[{\n  id, // The ID of the invite\n}]",
+    "description": "Emitted when invites are deleted.",
+    "workflows": [
+      "deleteInvitesWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "invite.resent",
+    "payload": "[{\n  id, // The ID of the invite\n}]",
+    "description": "Emitted when invites should be resent because their token was\nrefreshed. You can listen to this event to send an email to the invited users,\nfor example.",
+    "workflows": [
+      "refreshInviteTokensWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "region.updated",
+    "payload": "[{\n  id, // The ID of the region\n}]",
+    "description": "Emitted when regions are updated.",
+    "workflows": [
+      "updateRegionsWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "region.created",
+    "payload": "[{\n  id, // The ID of the region\n}]",
+    "description": "Emitted when regions are created.",
+    "workflows": [
+      "createRegionsWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "region.deleted",
+    "payload": "[{\n  id, // The ID of the region\n}]",
+    "description": "Emitted when regions are deleted.",
+    "workflows": [
+      "deleteRegionsWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "shipment.created",
+    "payload": "{\n  id, // the ID of the shipment\n  no_notification, // whether to notify the customer\n}",
+    "description": "Emitted when a shipment is created for an order.",
+    "workflows": [
+      "createOrderShipmentWorkflow"
+    ],
+    "deprecated": false
+  },
+  {
+    "name": "delivery.created",
+    "payload": "{\n  id, // the ID of the fulfillment\n}",
+    "description": "Emitted when a fulfillment is marked as delivered.",
+    "workflows": [
+      "markOrderFulfillmentAsDeliveredWorkflow"
+    ],
+    "deprecated": false
+  }
+]
