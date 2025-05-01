@@ -248,7 +248,7 @@ export const EditPromotionDetailsForm = ({
                         <CurrencyInput
                           min={0}
                           onValueChange={(val) =>
-                            onChange(val ? parseInt(val) : null)
+                            onChange(val ? parseFloat(val) : null)
                           }
                           code={currencyCode}
                           symbol={getCurrencySymbol(currencyCode)}
@@ -266,7 +266,7 @@ export const EditPromotionDetailsForm = ({
                             onChange(
                               e.target.value === ""
                                 ? null
-                                : parseInt(e.target.value)
+                                : parseFloat(e.target.value)
                             )
                           }}
                         />

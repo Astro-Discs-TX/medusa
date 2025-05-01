@@ -710,7 +710,7 @@ export const CreatePromotionForm = () => {
                                     {...field}
                                     min={0}
                                     onValueChange={(value) => {
-                                      onChange(value ? parseInt(value) : "")
+                                      onChange(value ? parseFloat(value) : "")
                                     }}
                                     code={currencyCode || "USD"}
                                     symbol={
@@ -733,7 +733,7 @@ export const CreatePromotionForm = () => {
                                       onChange(
                                         e.target.value === ""
                                           ? null
-                                          : parseInt(e.target.value)
+                                          : parseFloat(e.target.value)
                                       )
                                     }}
                                   />
