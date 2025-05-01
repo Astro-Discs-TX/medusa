@@ -341,3 +341,12 @@ export type AdminBatchVariantInventoryItemsType = BatchMethodRequest<
   AdminBatchUpdateVariantInventoryItemType,
   AdminBatchDeleteVariantInventoryItemType
 >
+
+export const AdminImportProducts = z.object({
+  filename: z.string(),
+  originalname: z.string(),
+  extension: z.string(),
+  size: z.number(),
+  mimeType: z.string(),
+})
+export type AdminImportProductsType = z.infer<typeof AdminImportProducts>

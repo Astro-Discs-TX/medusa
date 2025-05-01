@@ -1,4 +1,8 @@
-import { HttpTypes, SelectParams } from "@medusajs/types"
+import {
+  AdminDirectUploadSignatureResponse,
+  HttpTypes,
+  SelectParams,
+} from "@medusajs/types"
 import { Client } from "../client"
 import { ClientHeaders } from "../types"
 
@@ -43,18 +47,25 @@ export class Product {
     /**
      * Get signed URL for file uploads
      */
-    const response = await this.client.fetch<any>(`/admin/direct_upload`, {
-      method: "POST",
-      headers: headers,
-      body: {
-        filename: body.file.name,
-        type: body.file.type,
-      },
-      query,
-    })
+    const response =
+      await this.client.fetch<AdminDirectUploadSignatureResponse>(
+        "admin/direct-upload",
+        {
+          method: "POST",
+          headers: headers,
+          body: {
+            filename: body.file.name,
+            mimeType: body.file.type,
+            size: body.file.size,
+          },
+          query,
+        }
+      )
 
     /**
-     * Upload file using the signed URL.
+     * Upload file using the signed URL. We cannot send cookies or any other
+     * special headers in this request, since external services like S3 will
+     * give a CORS error.
      */
     await fetch(response.url, {
       method: "PUT",
@@ -65,15 +76,18 @@ export class Product {
      * Perform products import using the uploaded file name
      */
     return await this.client.fetch<HttpTypes.AdminImportProductResponse>(
-      `/admin/products/import`,
+      "/admin/products/import",
       {
         method: "POST",
         headers: {
           ...headers,
         },
         body: {
-          key: response.key,
+          filename: response.filename,
           originalname: response.originalname,
+          extension: response.extension,
+          size: response.size,
+          mimeType: response.mimeType,
         },
         query,
       }
