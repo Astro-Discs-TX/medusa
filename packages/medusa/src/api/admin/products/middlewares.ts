@@ -3,6 +3,7 @@ import {
   validateAndTransformBody,
   validateAndTransformQuery,
 } from "@medusajs/framework"
+import multer from "multer"
 import { maybeApplyLinkFilter, MiddlewareRoute } from "@medusajs/framework/http"
 import { DEFAULT_BATCH_ENDPOINTS_SIZE_LIMIT } from "../../../utils/middlewares"
 import { createBatchBody } from "../../utils/validators"
@@ -33,6 +34,8 @@ import {
   CreateProductVariant,
 } from "./validators"
 import IndexEngineFeatureFlag from "../../../loaders/feature-flags/index-engine"
+
+const upload = multer({ storage: multer.memoryStorage() })
 
 export const adminProductRoutesMiddlewares: MiddlewareRoute[] = [
   {
@@ -97,6 +100,11 @@ export const adminProductRoutesMiddlewares: MiddlewareRoute[] = [
   {
     method: ["POST"],
     matcher: "/admin/products/import",
+    middlewares: [upload.single("file")],
+  },
+  {
+    method: ["POST"],
+    matcher: "/admin/products/imports",
     middlewares: [validateAndTransformBody(AdminImportProducts)],
   },
   {

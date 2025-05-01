@@ -1,23 +1,28 @@
 import {
-  MedusaResponse,
   AuthenticatedMedusaRequest,
+  MedusaResponse,
 } from "@medusajs/framework/http"
-import { Modules } from "@medusajs/framework/utils"
-import type { HttpTypes } from "@medusajs/framework/types"
+import { HttpTypes } from "@medusajs/framework/types"
+import { MedusaError } from "@medusajs/framework/utils"
 import { importProductsWorkflow } from "@medusajs/core-flows"
-import type { AdminImportProductsType } from "../validators"
 
 export const POST = async (
-  req: AuthenticatedMedusaRequest<AdminImportProductsType>,
+  req: AuthenticatedMedusaRequest<HttpTypes.AdminImportProductRequest>,
   res: MedusaResponse<HttpTypes.AdminImportProductResponse>
 ) => {
-  const fileProvider = req.scope.resolve(Modules.FILE)
-  const file = await fileProvider.getAsBuffer(req.validatedBody.file_key)
+  const input = req.file as Express.Multer.File
+
+  if (!input) {
+    throw new MedusaError(
+      MedusaError.Types.INVALID_DATA,
+      "No file was uploaded for importing"
+    )
+  }
 
   const { result, transaction } = await importProductsWorkflow(req.scope).run({
     input: {
-      filename: req.validatedBody.originalname,
-      fileContent: file.toString("utf-8"),
+      filename: input.originalname,
+      fileContent: input.buffer.toString("utf-8"),
     },
   })
 

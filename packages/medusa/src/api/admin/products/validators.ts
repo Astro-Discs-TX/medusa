@@ -1,6 +1,6 @@
-import { BatchMethodRequest } from "@medusajs/framework/types"
+import { BatchMethodRequest, HttpTypes } from "@medusajs/framework/types"
 import { ProductStatus } from "@medusajs/framework/utils"
-import { z } from "zod"
+import { z, ZodType } from "zod"
 import {
   applyAndAndOrOperators,
   booleanString,
@@ -348,5 +348,5 @@ export const AdminImportProducts = z.object({
   extension: z.string(),
   size: z.number(),
   mime_type: z.string(),
-})
+}) satisfies ZodType<HttpTypes.AdminImportProductsRequest>
 export type AdminImportProductsType = z.infer<typeof AdminImportProducts>

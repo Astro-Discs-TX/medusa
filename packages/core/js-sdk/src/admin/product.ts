@@ -1,8 +1,4 @@
-import {
-  AdminDirectUploadSignatureResponse,
-  HttpTypes,
-  SelectParams,
-} from "@medusajs/types"
+import { HttpTypes, SelectParams } from "@medusajs/types"
 import { Client } from "../client"
 import { ClientHeaders } from "../types"
 
@@ -44,12 +40,56 @@ export class Product {
     query?: {},
     headers?: ClientHeaders
   ) {
+    const form = new FormData()
+    form.append("file", body.file)
+
+    return await this.client.fetch<HttpTypes.AdminImportProductResponse>(
+      `/admin/products/import`,
+      {
+        method: "POST",
+        headers: {
+          ...headers,
+          // Let the browser determine the content type.
+          "content-type": null,
+        },
+        body: form,
+        query,
+      }
+    )
+  }
+
+  /**
+   * This method creates a product import. The products are only imported after
+   * the import is confirmed using the {@link confirmImport} method.
+   *
+   * This method sends a request to the
+   * [Create Product Import](https://docs.medusajs.com/api/admin#products_postproductsimport)
+   * API route.
+   *
+   * @param body - The import's details.
+   * @param query - Query parameters to pass to the request.
+   * @param headers - Headers to pass in the request.
+   * @returns The import's details.
+   *
+   * @example
+   * sdk.admin.product.directImport({
+   *   file // uploaded File instance
+   * })
+   * .then(({ transaction_id }) => {
+   *   console.log(transaction_id)
+   * })
+   */
+  async directImport(
+    body: HttpTypes.AdminImportProductRequest,
+    query?: {},
+    headers?: ClientHeaders
+  ) {
     /**
      * Get signed URL for file uploads
      */
     const response =
-      await this.client.fetch<AdminDirectUploadSignatureResponse>(
-        "admin/direct-upload",
+      await this.client.fetch<HttpTypes.AdminUploadPreSignedUrlResponse>(
+        "admin/uploads/presigned-urls",
         {
           method: "POST",
           headers: headers,
@@ -57,7 +97,7 @@ export class Product {
             originalname: body.file.name,
             mime_type: body.file.type,
             size: body.file.size,
-          },
+          } satisfies HttpTypes.AdminUploadPreSignedUrlRequest,
           query,
         }
       )
@@ -75,8 +115,8 @@ export class Product {
     /**
      * Perform products import using the uploaded file name
      */
-    return await this.client.fetch<HttpTypes.AdminImportProductResponse>(
-      "/admin/products/import",
+    return await this.client.fetch<HttpTypes.AdminImportProductsResponse>(
+      "/admin/products/imports",
       {
         method: "POST",
         headers: {
@@ -88,7 +128,7 @@ export class Product {
           extension: response.extension,
           size: response.size,
           mime_type: response.mimeType,
-        },
+        } satisfies HttpTypes.AdminImportProductsRequest,
         query,
       }
     )
