@@ -35,6 +35,8 @@ class EventsKindGenerator extends DefaultKindGenerator<ts.VariableDeclaration> {
 
     const events: {
       name: string
+      parentName: string
+      propertyName: string
       payload: string
       description?: string
       workflows: string[]
@@ -45,9 +47,11 @@ class EventsKindGenerator extends DefaultKindGenerator<ts.VariableDeclaration> {
       .filter((property) => ts.isPropertyAssignment(property))
       .map((property) => {
         const propertyAssignment = property as ts.PropertyAssignment
+        const eventVariableName = node.name.getText()
+        const eventPropertyName = propertyAssignment.name.getText()
         const workflows = this.getWorkflowsUsingEvent({
-          eventVariableName: node.name.getText(),
-          eventPropertyName: propertyAssignment.name.getText(),
+          eventVariableName,
+          eventPropertyName,
         })
         if (!workflows.length) {
           return null
@@ -84,6 +88,8 @@ class EventsKindGenerator extends DefaultKindGenerator<ts.VariableDeclaration> {
 
         return {
           name: propertyAssignment.initializer.getText().replaceAll(`"`, ""),
+          parentName: eventVariableName,
+          propertyName: eventPropertyName,
           payload: (payloadTag?.comment as string) ?? "",
           description,
           workflows,

@@ -1,6 +1,8 @@
 [
   {
     "name": "cart.created",
+    "parentName": "CartWorkflowEvents",
+    "propertyName": "CREATED",
     "payload": "{\n  id, // The ID of the cart\n}",
     "description": "Emitted when a cart is created.",
     "workflows": [
@@ -10,6 +12,8 @@
   },
   {
     "name": "cart.updated",
+    "parentName": "CartWorkflowEvents",
+    "propertyName": "UPDATED",
     "payload": "{\n  id, // The ID of the cart\n}",
     "description": "Emitted when a cart's details are updated.",
     "workflows": [
@@ -22,6 +26,8 @@
   },
   {
     "name": "cart.customer_updated",
+    "parentName": "CartWorkflowEvents",
+    "propertyName": "CUSTOMER_UPDATED",
     "payload": "{\n  id, // The ID of the cart\n}",
     "description": "Emitted when the customer in the cart is updated.",
     "workflows": [
@@ -31,6 +37,8 @@
   },
   {
     "name": "cart.region_updated",
+    "parentName": "CartWorkflowEvents",
+    "propertyName": "REGION_UPDATED",
     "payload": "{\n  id, // The ID of the cart\n}",
     "workflows": [
       "updateCartWorkflow"
@@ -39,6 +47,8 @@
   },
   {
     "name": "customer.created",
+    "parentName": "CustomerWorkflowEvents",
+    "propertyName": "CREATED",
     "payload": "[{\n  id, // The ID of the customer\n}]",
     "description": "Emitted when a customer is created.",
     "workflows": [
@@ -49,6 +59,8 @@
   },
   {
     "name": "customer.updated",
+    "parentName": "CustomerWorkflowEvents",
+    "propertyName": "UPDATED",
     "payload": "[{\n  id, // The ID of the customer\n}]",
     "description": "Emitted when a customer is updated.",
     "workflows": [
@@ -58,6 +70,8 @@
   },
   {
     "name": "customer.deleted",
+    "parentName": "CustomerWorkflowEvents",
+    "propertyName": "DELETED",
     "payload": "[{\n  id, // The ID of the customer\n}]",
     "description": "Emitted when a customer is deleted.",
     "workflows": [
@@ -68,6 +82,8 @@
   },
   {
     "name": "order.updated",
+    "parentName": "OrderWorkflowEvents",
+    "propertyName": "UPDATED",
     "payload": "{\n  id, // The ID of the order\n}",
     "description": "Emitted when the details of an order or draft order is updated. This\ndoesn't include updates made by an edit.",
     "workflows": [
@@ -78,17 +94,21 @@
   },
   {
     "name": "order.placed",
+    "parentName": "OrderWorkflowEvents",
+    "propertyName": "PLACED",
     "payload": "{\n  id, // The ID of the order\n}",
     "description": "Emitted when an order is placed, or when a draft order is converted to an\norder.",
     "workflows": [
-      "convertDraftOrderWorkflow",
       "completeCartWorkflow",
+      "convertDraftOrderWorkflow",
       "processPaymentWorkflow"
     ],
     "deprecated": false
   },
   {
     "name": "order.canceled",
+    "parentName": "OrderWorkflowEvents",
+    "propertyName": "CANCELED",
     "payload": "{\n  id, // The ID of the order\n}",
     "description": "Emitted when an order is canceld.",
     "workflows": [
@@ -98,6 +118,8 @@
   },
   {
     "name": "order.completed",
+    "parentName": "OrderWorkflowEvents",
+    "propertyName": "COMPLETED",
     "payload": "[{\n  id, // The ID of the order\n}]",
     "description": "Emitted when orders are completed.",
     "workflows": [
@@ -107,6 +129,8 @@
   },
   {
     "name": "order.archived",
+    "parentName": "OrderWorkflowEvents",
+    "propertyName": "ARCHIVED",
     "payload": "[{\n  id, // The ID of the order\n}]",
     "description": "Emitted when an order is archived.",
     "workflows": [
@@ -116,6 +140,8 @@
   },
   {
     "name": "order.fulfillment_created",
+    "parentName": "OrderWorkflowEvents",
+    "propertyName": "FULFILLMENT_CREATED",
     "payload": "{\n  order_id, // The ID of the order\n  fulfillment_id, // The ID of the fulfillment\n  no_notification, // Whether to notify the customer\n}",
     "description": "Emitted when a fulfillment is created for an order.",
     "workflows": [
@@ -125,6 +151,8 @@
   },
   {
     "name": "order.fulfillment_canceled",
+    "parentName": "OrderWorkflowEvents",
+    "propertyName": "FULFILLMENT_CANCELED",
     "payload": "{\n  order_id, // The ID of the order\n  fulfillment_id, // The ID of the fulfillment\n  no_notification, // Whether to notify the customer\n}",
     "description": "Emitted when an order's fulfillment is canceled.",
     "workflows": [
@@ -134,6 +162,8 @@
   },
   {
     "name": "order.return_requested",
+    "parentName": "OrderWorkflowEvents",
+    "propertyName": "RETURN_REQUESTED",
     "payload": "{\n  order_id, // The ID of the order\n  return_id, // The ID of the return\n}",
     "description": "Emitted when a return request is confirmed.",
     "workflows": [
@@ -144,6 +174,8 @@
   },
   {
     "name": "order.return_received",
+    "parentName": "OrderWorkflowEvents",
+    "propertyName": "RETURN_RECEIVED",
     "payload": "{\n  order_id, // The ID of the order\n  return_id, // The ID of the return\n}",
     "description": "Emitted when a return is marked as received.",
     "workflows": [
@@ -154,6 +186,8 @@
   },
   {
     "name": "order.claim_created",
+    "parentName": "OrderWorkflowEvents",
+    "propertyName": "CLAIM_CREATED",
     "payload": "{\n  order_id, // The ID of the order\n  claim_id, // The ID of the claim\n}",
     "description": "Emitted when a claim is created for an order.",
     "workflows": [
@@ -163,6 +197,8 @@
   },
   {
     "name": "order.exchange_created",
+    "parentName": "OrderWorkflowEvents",
+    "propertyName": "EXCHANGE_CREATED",
     "payload": "{\n  order_id, // The ID of the order\n  exchange_id, // The ID of the exchange\n}",
     "description": "Emitted when an exchange is created for an order.",
     "workflows": [
@@ -172,6 +208,8 @@
   },
   {
     "name": "order.transfer_requested",
+    "parentName": "OrderWorkflowEvents",
+    "propertyName": "TRANSFER_REQUESTED",
     "payload": "{\n  id, // The ID of the order\n  order_change_id, // The ID of the order change created for the transfer\n}",
     "description": "Emitted when an order is requested to be transferred to\nanother customer.",
     "workflows": [
@@ -181,6 +219,8 @@
   },
   {
     "name": "order-edit.requested",
+    "parentName": "OrderEditWorkflowEvents",
+    "propertyName": "REQUESTED",
     "payload": "{\n  order_id, // The ID of the order\n  actions, // The actions to edit the order\n}",
     "description": "Emitted when an order edit is requested.",
     "workflows": [
@@ -190,6 +230,8 @@
   },
   {
     "name": "order-edit.confirmed",
+    "parentName": "OrderEditWorkflowEvents",
+    "propertyName": "CONFIRMED",
     "payload": "{\n  order_id, // The ID of the order\n  actions, // The actions to edit the order\n}",
     "description": "Emitted when an order edit request is confirmed.",
     "workflows": [
@@ -199,6 +241,8 @@
   },
   {
     "name": "order-edit.canceled",
+    "parentName": "OrderEditWorkflowEvents",
+    "propertyName": "CANCELED",
     "payload": "{\n  order_id, // The ID of the order\n  actions, // The actions to edit the order\n}",
     "description": "Emitted when an order edit request is canceled.",
     "workflows": [
@@ -208,6 +252,8 @@
   },
   {
     "name": "user.created",
+    "parentName": "UserWorkflowEvents",
+    "propertyName": "CREATED",
     "payload": "[{\n  id, // The ID of the user\n}]",
     "description": "Emitted when users are created.",
     "workflows": [
@@ -219,6 +265,8 @@
   },
   {
     "name": "user.updated",
+    "parentName": "UserWorkflowEvents",
+    "propertyName": "UPDATED",
     "payload": "[{\n  id, // The ID of the user\n}]",
     "description": "Emitted when users are updated.",
     "workflows": [
@@ -228,6 +276,8 @@
   },
   {
     "name": "user.deleted",
+    "parentName": "UserWorkflowEvents",
+    "propertyName": "DELETED",
     "payload": "[{\n  id, // The ID of the user\n}]",
     "description": "Emitted when users are deleted.",
     "workflows": [
@@ -238,6 +288,8 @@
   },
   {
     "name": "auth.password_reset",
+    "parentName": "AuthWorkflowEvents",
+    "propertyName": "PASSWORD_RESET",
     "payload": "{\n  entity_id, // The identifier of the user or customer. For example, an email address.\n  actor_type, // The type of actor. For example, \"customer\", \"user\", or custom.\n  token, // The generated token.\n}",
     "description": "Emitted when a reset password token is generated. You can listen to this event\nto send a reset password email to the user or customer, for example.",
     "workflows": [
@@ -247,6 +299,8 @@
   },
   {
     "name": "sales-channel.created",
+    "parentName": "SalesChannelWorkflowEvents",
+    "propertyName": "CREATED",
     "payload": "[{\n  id, // The ID of the sales channel\n}]",
     "description": "Emitted when sales channels are created.",
     "workflows": [
@@ -256,6 +310,8 @@
   },
   {
     "name": "sales-channel.updated",
+    "parentName": "SalesChannelWorkflowEvents",
+    "propertyName": "UPDATED",
     "payload": "[{\n  id, // The ID of the sales channel\n}]",
     "description": "Emitted when sales channels are updated.",
     "workflows": [
@@ -265,6 +321,8 @@
   },
   {
     "name": "sales-channel.deleted",
+    "parentName": "SalesChannelWorkflowEvents",
+    "propertyName": "DELETED",
     "payload": "[{\n  id, // The ID of the sales channel\n}]",
     "description": "Emitted when sales channels are deleted.",
     "workflows": [
@@ -274,6 +332,8 @@
   },
   {
     "name": "product-category.created",
+    "parentName": "ProductCategoryWorkflowEvents",
+    "propertyName": "CREATED",
     "payload": "[{\n  id, // The ID of the product category\n}]",
     "description": "Emitted when product categories are created.",
     "workflows": [
@@ -283,6 +343,8 @@
   },
   {
     "name": "product-category.updated",
+    "parentName": "ProductCategoryWorkflowEvents",
+    "propertyName": "UPDATED",
     "payload": "[{\n  id, // The ID of the product category\n}]",
     "description": "Emitted when product categories are updated.",
     "workflows": [
@@ -292,6 +354,8 @@
   },
   {
     "name": "product-category.deleted",
+    "parentName": "ProductCategoryWorkflowEvents",
+    "propertyName": "DELETED",
     "payload": "[{\n  id, // The ID of the product category\n}]",
     "description": "Emitted when product categories are deleted.",
     "workflows": [
@@ -301,6 +365,8 @@
   },
   {
     "name": "product-collection.created",
+    "parentName": "ProductCollectionWorkflowEvents",
+    "propertyName": "CREATED",
     "payload": "[{\n  id, // The ID of the product collection\n}]",
     "description": "Emitted when product collections are created.",
     "workflows": [
@@ -310,6 +376,8 @@
   },
   {
     "name": "product-collection.updated",
+    "parentName": "ProductCollectionWorkflowEvents",
+    "propertyName": "UPDATED",
     "payload": "[{\n  id, // The ID of the product collection\n}]",
     "description": "Emitted when product collections are updated.",
     "workflows": [
@@ -319,6 +387,8 @@
   },
   {
     "name": "product-collection.deleted",
+    "parentName": "ProductCollectionWorkflowEvents",
+    "propertyName": "DELETED",
     "payload": "[{\n  id, // The ID of the product collection\n}]",
     "description": "Emitted when product collections are deleted.",
     "workflows": [
@@ -328,6 +398,8 @@
   },
   {
     "name": "product-variant.updated",
+    "parentName": "ProductVariantWorkflowEvents",
+    "propertyName": "UPDATED",
     "payload": "[{\n  id, // The ID of the product variant\n}]",
     "description": "Emitted when product variants are updated.",
     "workflows": [
@@ -338,6 +410,8 @@
   },
   {
     "name": "product-variant.created",
+    "parentName": "ProductVariantWorkflowEvents",
+    "propertyName": "CREATED",
     "payload": "[{\n  id, // The ID of the product variant\n}]",
     "description": "Emitted when product variants are created.",
     "workflows": [
@@ -351,6 +425,8 @@
   },
   {
     "name": "product-variant.deleted",
+    "parentName": "ProductVariantWorkflowEvents",
+    "propertyName": "DELETED",
     "payload": "[{\n  id, // The ID of the product variant\n}]",
     "description": "Emitted when product variants are deleted.",
     "workflows": [
@@ -361,6 +437,8 @@
   },
   {
     "name": "product.updated",
+    "parentName": "ProductWorkflowEvents",
+    "propertyName": "UPDATED",
     "payload": "[{\n  id, // The ID of the product\n}]",
     "description": "Emitted when products are updated.",
     "workflows": [
@@ -372,6 +450,8 @@
   },
   {
     "name": "product.created",
+    "parentName": "ProductWorkflowEvents",
+    "propertyName": "CREATED",
     "payload": "[{\n  id, // The ID of the product\n}]",
     "description": "Emitted when products are created.",
     "workflows": [
@@ -383,6 +463,8 @@
   },
   {
     "name": "product.deleted",
+    "parentName": "ProductWorkflowEvents",
+    "propertyName": "DELETED",
     "payload": "[{\n  id, // The ID of the product\n}]",
     "description": "Emitted when products are deleted.",
     "workflows": [
@@ -394,6 +476,8 @@
   },
   {
     "name": "product-type.updated",
+    "parentName": "ProductTypeWorkflowEvents",
+    "propertyName": "UPDATED",
     "payload": "[{\n  id, // The ID of the product type\n}]",
     "description": "Emitted when product types are updated.",
     "workflows": [
@@ -403,6 +487,8 @@
   },
   {
     "name": "product-type.created",
+    "parentName": "ProductTypeWorkflowEvents",
+    "propertyName": "CREATED",
     "payload": "[{\n  id, // The ID of the product type\n}]",
     "description": "Emitted when product types are created.",
     "workflows": [
@@ -412,6 +498,8 @@
   },
   {
     "name": "product-type.deleted",
+    "parentName": "ProductTypeWorkflowEvents",
+    "propertyName": "DELETED",
     "payload": "[{\n  id, // The ID of the product type\n}]",
     "description": "Emitted when product types are deleted.",
     "workflows": [
@@ -421,6 +509,8 @@
   },
   {
     "name": "product-tag.updated",
+    "parentName": "ProductTagWorkflowEvents",
+    "propertyName": "UPDATED",
     "payload": "[{\n  id, // The ID of the product tag\n}]",
     "description": "Emitted when product tags are updated.",
     "workflows": [
@@ -430,6 +520,8 @@
   },
   {
     "name": "product-tag.created",
+    "parentName": "ProductTagWorkflowEvents",
+    "propertyName": "CREATED",
     "payload": "[{\n  id, // The ID of the product tag\n}]",
     "description": "Emitted when product tags are created.",
     "workflows": [
@@ -439,6 +531,8 @@
   },
   {
     "name": "product-tag.deleted",
+    "parentName": "ProductTagWorkflowEvents",
+    "propertyName": "DELETED",
     "payload": "[{\n  id, // The ID of the product tag\n}]",
     "description": "Emitted when product tags are deleted.",
     "workflows": [
@@ -448,6 +542,8 @@
   },
   {
     "name": "product-option.updated",
+    "parentName": "ProductOptionWorkflowEvents",
+    "propertyName": "UPDATED",
     "payload": "[{\n  id, // The ID of the product option\n}]",
     "description": "Emitted when product options are updated.",
     "workflows": [
@@ -457,6 +553,8 @@
   },
   {
     "name": "product-option.created",
+    "parentName": "ProductOptionWorkflowEvents",
+    "propertyName": "CREATED",
     "payload": "[{\n  id, // The ID of the product option\n}]",
     "description": "Emitted when product options are created.",
     "workflows": [
@@ -466,6 +564,8 @@
   },
   {
     "name": "product-option.deleted",
+    "parentName": "ProductOptionWorkflowEvents",
+    "propertyName": "DELETED",
     "payload": "[{\n  id, // The ID of the product option\n}]",
     "description": "Emitted when product options are deleted.",
     "workflows": [
@@ -475,6 +575,8 @@
   },
   {
     "name": "invite.accepted",
+    "parentName": "InviteWorkflowEvents",
+    "propertyName": "ACCEPTED",
     "payload": "{\n  id, // The ID of the invite\n}",
     "description": "Emitted when an invite is accepted.",
     "workflows": [
@@ -484,6 +586,8 @@
   },
   {
     "name": "invite.created",
+    "parentName": "InviteWorkflowEvents",
+    "propertyName": "CREATED",
     "payload": "[{\n  id, // The ID of the invite\n}]",
     "description": "Emitted when invites are created. You can listen to this event\nto send an email to the invited users, for example.",
     "workflows": [
@@ -493,6 +597,8 @@
   },
   {
     "name": "invite.deleted",
+    "parentName": "InviteWorkflowEvents",
+    "propertyName": "DELETED",
     "payload": "[{\n  id, // The ID of the invite\n}]",
     "description": "Emitted when invites are deleted.",
     "workflows": [
@@ -502,6 +608,8 @@
   },
   {
     "name": "invite.resent",
+    "parentName": "InviteWorkflowEvents",
+    "propertyName": "RESENT",
     "payload": "[{\n  id, // The ID of the invite\n}]",
     "description": "Emitted when invites should be resent because their token was\nrefreshed. You can listen to this event to send an email to the invited users,\nfor example.",
     "workflows": [
@@ -511,6 +619,8 @@
   },
   {
     "name": "region.updated",
+    "parentName": "RegionWorkflowEvents",
+    "propertyName": "UPDATED",
     "payload": "[{\n  id, // The ID of the region\n}]",
     "description": "Emitted when regions are updated.",
     "workflows": [
@@ -520,6 +630,8 @@
   },
   {
     "name": "region.created",
+    "parentName": "RegionWorkflowEvents",
+    "propertyName": "CREATED",
     "payload": "[{\n  id, // The ID of the region\n}]",
     "description": "Emitted when regions are created.",
     "workflows": [
@@ -529,6 +641,8 @@
   },
   {
     "name": "region.deleted",
+    "parentName": "RegionWorkflowEvents",
+    "propertyName": "DELETED",
     "payload": "[{\n  id, // The ID of the region\n}]",
     "description": "Emitted when regions are deleted.",
     "workflows": [
@@ -538,6 +652,8 @@
   },
   {
     "name": "shipment.created",
+    "parentName": "FulfillmentWorkflowEvents",
+    "propertyName": "SHIPMENT_CREATED",
     "payload": "{\n  id, // the ID of the shipment\n  no_notification, // whether to notify the customer\n}",
     "description": "Emitted when a shipment is created for an order.",
     "workflows": [
@@ -547,6 +663,8 @@
   },
   {
     "name": "delivery.created",
+    "parentName": "FulfillmentWorkflowEvents",
+    "propertyName": "DELIVERY_CREATED",
     "payload": "{\n  id, // the ID of the fulfillment\n}",
     "description": "Emitted when a fulfillment is marked as delivered.",
     "workflows": [
