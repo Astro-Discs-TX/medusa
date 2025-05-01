@@ -3,6 +3,7 @@ import {
   Context,
   DAL,
   FilterableFulfillmentSetProps,
+  FilterableGeoZoneProps,
   FindConfig,
   FulfillmentDTO,
   FulfillmentOption,
@@ -2429,7 +2430,7 @@ export default class FulfillmentModuleService
 
             if (isPresent(address![prop])) {
               if (prop === "postal_expression") {
-                const postalExpressionFilters = FulfillmentModuleService.buildPostalExpressionFilter(address![prop]!)
+                const postalExpressionFilters = FulfillmentModuleService.buildPostalExpressionFilters(address![prop]!)
                 
                 if (postalExpressionFilters.length) {
                   geoZoneConstraint["$or"] = postalExpressionFilters
@@ -2475,29 +2476,29 @@ export default class FulfillmentModuleService
    * Builds a postal expression filter with exact and prefix matching conditions
    * based on the provided postal code.
    */
-protected static buildPostalExpressionFilters(postalCode: string) {
-  const postalExpressions = [];
+  protected static buildPostalExpressionFilters(postalCode: string): FilterableGeoZoneProps[] {
+    const postalExpressions: FilterableGeoZoneProps[] = [];
 
-  postalExpressions.push({
-    postal_expression: {
-      matches: { $contains: [postalCode] }
-    }
-  });
-
-  // Add partial match expressions for first 2-5 characters
-  // We start with at least 2 characters and add more if available
-  const minPartialLength = 2;
-  const maxPartialLength = Math.max(0, Math.min(postalCode.length - 1, 5));
-  
-  for (let length = minPartialLength; length <= maxPartialLength; length++) {
-    const partialCode = postalCode.slice(0, length);
     postalExpressions.push({
       postal_expression: {
-        starts_with: { $contains: [partialCode] }
+        matches: { $contains: [postalCode] }
       }
     });
-  }
 
-  return postalExpressions;
-}
+    // Add partial match expressions for first 2-5 characters
+    // We start with at least 2 characters and add more if available
+    const minPartialLength = 2;
+    const maxPartialLength = Math.max(0, Math.min(postalCode.length - 1, 5));
+    
+    for (let length = minPartialLength; length <= maxPartialLength; length++) {
+      const partialCode = postalCode.slice(0, length);
+      postalExpressions.push({
+        postal_expression: {
+          starts_with: { $contains: [partialCode] }
+        }
+      });
+    }
+
+    return postalExpressions;
+  }
 }
