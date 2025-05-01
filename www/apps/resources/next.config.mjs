@@ -174,7 +174,7 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/references/events",
+        source: "/events-reference",
         destination: "/references/events",
         permanent: true,
       },
