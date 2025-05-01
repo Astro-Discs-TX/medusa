@@ -54,8 +54,8 @@ export class Product {
           method: "POST",
           headers: headers,
           body: {
-            filename: body.file.name,
-            mimeType: body.file.type,
+            originalname: body.file.name,
+            mime_type: body.file.type,
             size: body.file.size,
           },
           query,
@@ -83,11 +83,11 @@ export class Product {
           ...headers,
         },
         body: {
-          filename: response.filename,
+          file_key: response.filename,
           originalname: response.originalname,
           extension: response.extension,
           size: response.size,
-          mimeType: response.mimeType,
+          mime_type: response.mimeType,
         },
         query,
       }

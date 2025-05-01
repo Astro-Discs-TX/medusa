@@ -4,6 +4,7 @@ import type {
   MedusaResponse,
   AuthenticatedMedusaRequest,
 } from "@medusajs/framework/http"
+import { Modules } from "@medusajs/framework/utils"
 import type { HttpTypes } from "@medusajs/framework/types"
 import type { AdminDirectUploadRequestPayloadType } from "./validators"
 
@@ -11,16 +12,14 @@ export const POST = async (
   req: AuthenticatedMedusaRequest<AdminDirectUploadRequestPayloadType>,
   res: MedusaResponse<HttpTypes.AdminDirectUploadSignatureResponse>
 ) => {
-  const fileProvider = req.scope.resolve("file")
-  const { filename: originalname, mimeType, size } = req.body
-
-  const type = new MIMEType(mimeType)
+  const fileProvider = req.scope.resolve(Modules.FILE)
+  const type = new MIMEType(req.validatedBody.mime_type)
   const extension = type.subtype
   const uniqueFilename = `${ulid()}.${extension}`
 
   const response = await fileProvider.getUploadFileUrls({
     filename: uniqueFilename,
-    mimeType: mimeType,
+    mimeType: req.validatedBody.mime_type,
     access: "private",
   })
 
@@ -28,8 +27,8 @@ export const POST = async (
     url: response.url,
     filename: response.key,
     mimeType: type.toString(),
-    size,
+    size: req.validatedBody.size,
     extension,
-    originalname,
+    originalname: req.validatedBody.originalname,
   })
 }
