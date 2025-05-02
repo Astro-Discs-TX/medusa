@@ -72,14 +72,14 @@ export class Product {
    * @returns The import's details.
    *
    * @example
-   * sdk.admin.product.directImport({
+   * sdk.admin.product.createImport({
    *   file // uploaded File instance
    * })
    * .then(({ transaction_id }) => {
    *   console.log(transaction_id)
    * })
    */
-  async directImport(
+  async createImport(
     body: HttpTypes.AdminImportProductRequest,
     query?: {},
     headers?: ClientHeaders
