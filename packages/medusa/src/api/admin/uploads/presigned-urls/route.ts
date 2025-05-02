@@ -26,7 +26,7 @@ export const POST = async (
   res.json({
     url: response.url,
     filename: response.key,
-    mimeType: type.toString(),
+    mime_type: type.toString(),
     size: req.validatedBody.size,
     extension,
     originalname: req.validatedBody.originalname,

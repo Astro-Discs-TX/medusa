@@ -127,7 +127,7 @@ export class Product {
           originalname: response.originalname,
           extension: response.extension,
           size: response.size,
-          mime_type: response.mimeType,
+          mime_type: response.mime_type,
         } satisfies HttpTypes.AdminImportProductsRequest,
         query,
       }

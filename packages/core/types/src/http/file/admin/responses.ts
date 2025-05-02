@@ -37,7 +37,7 @@ export interface AdminUploadPreSignedUrlResponse {
   /**
    * The mime type of the file.
    */
-  mimeType: string
+  mime_type: string
 
   /**
    * Extension of the file to be uploaded
