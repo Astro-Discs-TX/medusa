@@ -4,7 +4,11 @@ import type {
   MedusaResponse,
   AuthenticatedMedusaRequest,
 } from "@medusajs/framework/http"
-import { Modules } from "@medusajs/framework/utils"
+import {
+  Modules,
+  MedusaError,
+  MedusaErrorTypes,
+} from "@medusajs/framework/utils"
 import type { HttpTypes } from "@medusajs/framework/types"
 import type { AdminUploadPreSignedUrlType } from "../validators"
 
@@ -13,7 +17,18 @@ export const POST = async (
   res: MedusaResponse<HttpTypes.AdminUploadPreSignedUrlResponse>
 ) => {
   const fileProvider = req.scope.resolve(Modules.FILE)
-  const type = new MIMEType(req.validatedBody.mime_type)
+  let type: MIMEType
+
+  try {
+    type = new MIMEType(req.validatedBody.mime_type)
+  } catch {
+    throw new MedusaError(
+      MedusaErrorTypes.INVALID_DATA,
+      `Invalid file type "${req.validatedBody.mime_type}"`,
+      MedusaErrorTypes.INVALID_DATA
+    )
+  }
+
   const extension = type.subtype
   const uniqueFilename = `${ulid()}.${extension}`
 
