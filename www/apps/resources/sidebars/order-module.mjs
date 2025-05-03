@@ -77,7 +77,7 @@ export const orderSidebar = [
       {
         type: "category",
         title: "Server Guides",
-        autogenerate_tags: "server+order",
+        autogenerate_tags: "order+server",
         autogenerate_as_ref: true,
         sort_sidebar: "alphabetize",
         description:
@@ -166,7 +166,7 @@ export const orderSidebar = [
           },
           {
             type: "link",
-            path: "/commerce-modules/order/events",
+            path: "/references/order/events",
             title: "Events Reference",
           },
           {

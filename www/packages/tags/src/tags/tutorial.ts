@@ -28,8 +28,16 @@ export const tutorial = [
     "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/abandoned-cart"
   },
   {
+    "title": "Loyalty Points",
+    "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/loyalty-points"
+  },
+  {
     "title": "Product Reviews",
     "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/product-reviews"
+  },
+  {
+    "title": "Integrate Contentful",
+    "path": "https://docs.medusajs.com/resources/integrations/guides/contentful"
   },
   {
     "title": "Build Wishlist Plugin",

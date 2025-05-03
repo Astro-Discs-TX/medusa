@@ -52,6 +52,10 @@ export const product = [
     "path": "https://docs.medusajs.com/resources/commerce-modules/inventory/inventory-kit"
   },
   {
+    "title": "Variant Price Rules",
+    "path": "https://docs.medusajs.com/resources/commerce-modules/pricing/price-rules"
+  },
+  {
     "title": "Extend Product",
     "path": "https://docs.medusajs.com/resources/commerce-modules/product/extend"
   },
@@ -64,8 +68,16 @@ export const product = [
     "path": "https://docs.medusajs.com/resources/commerce-modules/product/guides/price-with-taxes"
   },
   {
+    "title": "Get Variant Inventory",
+    "path": "https://docs.medusajs.com/resources/commerce-modules/product/guides/variant-inventory"
+  },
+  {
     "title": "Implement Product Reviews",
     "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/product-reviews"
+  },
+  {
+    "title": "Localization with Contentful",
+    "path": "https://docs.medusajs.com/resources/integrations/guides/contentful"
   },
   {
     "title": "Build Wishlist Plugin",

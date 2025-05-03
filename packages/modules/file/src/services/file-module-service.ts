@@ -1,7 +1,10 @@
+import type { Readable } from "stream"
 import {
   Context,
   CreateFileDTO,
+  GetUploadFileUrlDTO,
   FileDTO,
+  UploadFileUrlDTO,
   FileTypes,
   FilterableFileProps,
   FindConfig,
@@ -26,6 +29,10 @@ export default class FileModuleService implements FileTypes.IFileModuleService {
     return joinerConfig
   }
 
+  getProvider() {
+    return this.fileProviderService_
+  }
+
   createFiles(
     data: CreateFileDTO[],
     sharedContext?: Context
@@ -45,6 +52,27 @@ export default class FileModuleService implements FileTypes.IFileModuleService {
       id: file.key,
       url: file.url,
     }))
+
+    return Array.isArray(data) ? result : result[0]
+  }
+
+  getUploadFileUrls(
+    data: GetUploadFileUrlDTO[],
+    sharedContext?: Context
+  ): Promise<UploadFileUrlDTO[]>
+  getUploadFileUrls(
+    data: GetUploadFileUrlDTO,
+    sharedContext?: Context
+  ): Promise<UploadFileUrlDTO>
+
+  async getUploadFileUrls(
+    data: GetUploadFileUrlDTO[] | GetUploadFileUrlDTO
+  ): Promise<UploadFileUrlDTO[] | UploadFileUrlDTO> {
+    const input = Array.isArray(data) ? data : [data]
+
+    const result = await Promise.all(
+      input.map((file) => this.fileProviderService_.getPresignedUploadUrl(file))
+    )
 
     return Array.isArray(data) ? result : result[0]
   }
@@ -130,5 +158,27 @@ export default class FileModuleService implements FileTypes.IFileModuleService {
       ],
       1,
     ]
+  }
+
+  /**
+   * Get the file contents as a readable stream.
+   *
+   * @example
+   * const stream = await fileModuleService.getAsStream("file_123")
+   * writeable.pipe(stream)
+   */
+  getAsStream(id: string): Promise<Readable> {
+    return this.fileProviderService_.getAsStream({ fileKey: id })
+  }
+
+  /**
+   * Get the file contents as a Node.js Buffer
+   *
+   * @example
+   * const contents = await fileModuleService.getAsBuffer("file_123")
+   * contents.toString('utf-8')
+   */
+  getAsBuffer(id: string): Promise<Buffer> {
+    return this.fileProviderService_.getAsBuffer({ fileKey: id })
   }
 }

@@ -21,7 +21,7 @@ export const fulfillmentSidebar = [
       {
         type: "category",
         title: "Concepts",
-        autogenerate_tags: "concept+fulfillment",
+        autogenerate_tags: "fulfillment+concept",
         autogenerate_as_ref: true,
         children: [
           {
@@ -155,7 +155,7 @@ export const fulfillmentSidebar = [
           },
           {
             type: "link",
-            path: "/commerce-modules/fulfillment/events",
+            path: "/references/fulfillment/events",
             title: "Events Reference",
           },
           {

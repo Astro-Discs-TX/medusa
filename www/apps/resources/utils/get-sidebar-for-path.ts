@@ -63,12 +63,12 @@ const sidebarMappings: {
   {
     module: async () =>
       import(
-        "@/generated/generated-architectural-modules-sidebar.mjs"
+        "@/generated/generated-infrastructure-modules-sidebar.mjs"
       ) as Promise<{
         default: Sidebar.Sidebar
       }>,
     paths: [
-      "/architectural-modules",
+      "/infrastructure-modules",
       "/references/file-provider-module",
       "/references/locking",
       "/references/notification-provider-module",
@@ -116,13 +116,14 @@ const sidebarMappings: {
       "/medusa-workflows-reference",
       "/references/core-flows",
       "/references/data-model",
-      "/events-reference",
+      "/references/events",
       "/references/helper-steps",
       "/service-factory-reference",
       "/test-tools-reference",
       "/references/workflows",
       "/references-overview",
       "/references/medusa-workflows",
+      "/data-model-repository-reference",
     ],
   },
   {

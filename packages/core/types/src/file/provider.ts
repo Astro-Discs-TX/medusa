@@ -1,3 +1,6 @@
+import { Readable } from "stream"
+import { FileAccessPermission } from "./common"
+
 /**
  * @interface
  *
@@ -71,7 +74,34 @@ export type ProviderUploadFileDTO = {
   /**
    * The access level of the file. Defaults to private if not passed
    */
-  access?: "public" | "private"
+  access?: FileAccessPermission
+}
+
+/**
+ * @interface
+ *
+ * The details of the file to get a presigned upload URL for.
+ */
+export type ProviderGetPresignedUploadUrlDTO = {
+  /**
+   * The filename of the file to get a presigned upload URL for.
+   */
+  filename: string
+
+  /**
+   * The mimetype of the file to get a presigned upload URL for.
+   */
+  mimeType?: string
+
+  /**
+   * The access level of the file to get a presigned upload URL for.
+   */
+  access?: FileAccessPermission
+
+  /**
+   * The validity of the presigned upload URL in seconds.
+   */
+  expiresIn?: number
 }
 
 export interface IFileProvider {
@@ -103,4 +133,26 @@ export interface IFileProvider {
    *
    */
   getPresignedDownloadUrl(fileData: ProviderGetFileDTO): Promise<string>
+
+  /**
+   * This method is used to get a presigned upload URL for a file.
+   * If the file provider does not support direct upload, an exception will be thrown when calling this method.
+   *
+   * @param {ProviderGetPresignedUploadUrlDTO} fileData - The details of the file to get a presigned upload URL for.
+   * @returns {Promise<ProviderFileResultDTO>} The presigned URL and file key to upload the file to
+   *
+   */
+  getPresignedUploadUrl?(
+    fileData: ProviderGetPresignedUploadUrlDTO
+  ): Promise<ProviderFileResultDTO>
+
+  /**
+   * Get the file contents as a readable stream.
+   */
+  getAsStream(fileData: ProviderGetFileDTO): Promise<Readable>
+
+  /**
+   * Get the file contents as a Node.js Buffer
+   */
+  getAsBuffer(fileData: ProviderGetFileDTO): Promise<Buffer>
 }

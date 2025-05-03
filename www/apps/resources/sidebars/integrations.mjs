@@ -32,6 +32,11 @@ export const integrationsSidebar = [
     children: [
       {
         type: "link",
+        path: "/integrations/guides/contentful",
+        title: "Contentful",
+      },
+      {
+        type: "link",
         path: "/integrations/guides/sanity",
         title: "Sanity",
       },
@@ -56,8 +61,8 @@ export const integrationsSidebar = [
     children: [
       {
         type: "ref",
-        path: "/architectural-modules/file/s3",
-        title: "AWS",
+        path: "/infrastructure-modules/file/s3",
+        title: "S3 (and Compatible APIs)",
       },
     ],
   },
@@ -97,7 +102,7 @@ export const integrationsSidebar = [
       },
       {
         type: "ref",
-        path: "/architectural-modules/notification/sendgrid",
+        path: "/infrastructure-modules/notification/sendgrid",
         title: "SendGrid",
       },
     ],
