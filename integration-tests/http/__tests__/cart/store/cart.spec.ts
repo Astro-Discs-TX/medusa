@@ -1060,7 +1060,7 @@ medusaIntegrationTestRunner({
         })
       })
 
-      describe("POST /store/carts/:id/complete", () => {
+      describe.only("POST /store/carts/:id/complete", () => {
         describe("should successfully complete cart", () => {
           beforeEach(async () => {
             const stockLocation = (
