@@ -33,6 +33,7 @@ import {
   validateCartPaymentsStep,
   validateShippingStep,
 } from "../steps"
+import { compensatePaymentIfNeededStep } from "../steps/compensate-payment-if-needed"
 import { reserveInventoryStep } from "../steps/reserve-inventory"
 import { completeCartFields } from "../utils/fields"
 import { prepareConfirmInventoryInput } from "../utils/prepare-confirm-inventory-input"
@@ -111,7 +112,22 @@ export const completeCartWorkflow = createWorkflow(
       name: "cart-query",
     })
 
-    const paymentSessions = validateCartPaymentsStep({ cart })
+    // this is only run when the cart is completed for the first time (same condition as below)
+    // but needs to be before the validation step
+    const paymentSessions = when(
+      "create-order-payment-compensation",
+      { orderId },
+      ({ orderId }) => !orderId
+    ).then(() => {
+      const paymentSessions = validateCartPaymentsStep({ cart })
+      // purpose of this step is to run compensation if cart completion fails
+      // and tries to cancel or refund the payment depending on the status.
+      compensatePaymentIfNeededStep({
+        payment_session_id: paymentSessions[0].id,
+      })
+
+      return paymentSessions
+    })
 
     const validate = createHook("validate", {
       input,
