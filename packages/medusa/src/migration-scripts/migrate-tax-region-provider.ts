@@ -32,12 +32,12 @@ const assignSystemProviderToTaxRegionsWorkflow = createWorkflow(
   }
 )
 
-export default async function assignProductsToShippingProfile({
+export default async function assignTaxSystemProviderToTaxRegions({
   container,
 }: ExecArgs) {
   const logger = container.resolve(ContainerRegistrationKeys.LOGGER)
 
-  logger.info("Assigning products to shipping profile")
+  logger.info("Assigning tax system provider to tax regions")
 
   try {
     await assignSystemProviderToTaxRegionsWorkflow(container).run()
