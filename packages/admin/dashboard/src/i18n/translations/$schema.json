@@ -2038,7 +2038,7 @@
                   "type": "string"
                 }
               },
-              "required": ["label", "hint"],
+              "required": ["label", "hint", "placeholder"],
               "additionalProperties": false
             },
             "subtitle": {
@@ -2051,7 +2051,7 @@
                   "type": "string"
                 }
               },
-              "required": ["label"],
+              "required": ["label", "placeholder"],
               "additionalProperties": false
             },
             "handle": {
@@ -2067,7 +2067,7 @@
                   "type": "string"
                 }
               },
-              "required": ["label", "tooltip"],
+              "required": ["label", "tooltip", "placeholder"],
               "additionalProperties": false
             },
             "description": {
@@ -2083,7 +2083,7 @@
                   "type": "string"
                 }
               },
-              "required": ["label", "hint"],
+              "required": ["label", "hint", "placeholder"],
               "additionalProperties": false
             },
             "discountable": {
@@ -6512,6 +6512,16 @@
           "required": ["header", "create"],
           "additionalProperties": false
         },
+        "provider": {
+          "type": "object",
+          "properties": {
+            "header": {
+              "type": "string"
+            }
+          },
+          "required": ["header"],
+          "additionalProperties": false
+        },
         "state": {
           "type": "object",
           "properties": {
@@ -7268,6 +7278,7 @@
         "create",
         "edit",
         "province",
+        "provider",
         "state",
         "stateOrTerritory",
         "county",

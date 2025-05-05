@@ -23,7 +23,6 @@ import {
   isProvinceInCountry,
 } from "../../../../../lib/data/country-states"
 import { useDeleteTaxRegionAction } from "../../hooks"
-import { formatProvider } from "../../../../../lib/format-provider"
 
 interface TaxRegionCardProps extends ComponentPropsWithoutRef<"div"> {
   taxRegion: HttpTypes.AdminTaxRegion
@@ -118,12 +117,7 @@ export const TaxRegionCard = ({
               </Text>
             ) : (
               <div className="flex items-center gap-x-2">
-                <Heading>{name}</Heading>{" "}
-                {taxRegion.provider_id && (
-                  <span className="text-ui-fg-subtle">
-                    ({formatProvider(taxRegion.provider_id!)})
-                  </span>
-                )}
+                <Heading>{name}</Heading>
               </div>
             )}
           </div>
