@@ -1,7 +1,4 @@
-import {
-  ContainerRegistrationKeys,
-  remoteQueryObjectFromString,
-} from "@medusajs/framework/utils"
+import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 import {
   AuthenticatedMedusaRequest,
   MedusaResponse,
@@ -13,23 +10,19 @@ export const GET = async (
   req: AuthenticatedMedusaRequest<HttpTypes.AdminGetTaxProvidersParams>,
   res: MedusaResponse<HttpTypes.AdminTaxProviderListResponse>
 ) => {
-  const remoteQuery = req.scope.resolve(ContainerRegistrationKeys.REMOTE_QUERY)
+  const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
 
-  const { rows: tax_providers, metadata } = await remoteQuery(
-    remoteQueryObjectFromString({
-      entryPoint: "tax_providers",
-      variables: {
-        filters: req.filterableFields,
-        ...req.queryConfig.pagination,
-      },
-      fields: req.queryConfig.fields,
-    })
-  )
+  const result = await query.graph({
+    entity: "tax_providers",
+    filters: req.filterableFields,
+    pagination: req.queryConfig.pagination,
+    fields: req.queryConfig.fields,
+  })
 
   res.status(200).json({
-    tax_providers,
-    count: metadata.count,
-    offset: metadata.skip,
-    limit: metadata.take,
+    tax_providers: result.data,
+    count: result.metadata?.count ?? 0,
+    offset: result.metadata?.skip ?? 0,
+    limit: result.metadata?.take ?? 0,
   })
 }
