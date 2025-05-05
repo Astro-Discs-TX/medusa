@@ -337,7 +337,7 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
           expect(executionsList).toHaveLength(1)
         })
 
-        it.only("should return a list of workflow executions and keep it saved when there is a retentionTime set but allow for executing the same workflow multiple times with different run_id if the workflow is considered done", async () => {
+        it("should return a list of workflow executions and keep it saved when there is a retentionTime set but allow for executing the same workflow multiple times with different run_id if the workflow is considered done", async () => {
           const transactionId = "transaction_1"
           await workflowOrcModule.run(
             "workflow_not_idempotent_with_retention",
@@ -472,10 +472,7 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
           })
 
           expect(onFinish).toHaveBeenCalledTimes(0)
-          failTrap(
-            done,
-            "subscribe to a async workflow and receive the response when it finishes"
-          )
+          failTrap(done)
         })
 
         it("should cancel and revert a completed workflow", async () => {

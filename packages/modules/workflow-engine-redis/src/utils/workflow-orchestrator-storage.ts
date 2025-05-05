@@ -250,7 +250,7 @@ export class RedisDistributedTransactionStorage
         {
           select: ["execution", "context"],
           order: {
-            transaction_id: "desc",
+            id: "desc",
           },
           take: 1,
         }
@@ -260,6 +260,7 @@ export class RedisDistributedTransactionStorage
 
     if (trx) {
       const execution = trx.execution as TransactionFlow
+      // TODO: Add a flag for cases where we still want to return the execution even if it's not idempotent (e.g cancel and revert later)
       if (
         !idempotent &&
         [

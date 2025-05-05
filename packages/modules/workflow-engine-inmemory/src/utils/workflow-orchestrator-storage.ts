@@ -141,7 +141,7 @@ export class InMemoryDistributedTransactionStorage
           {
             select: ["execution", "context"],
             order: {
-              transaction_id: "desc",
+              id: "desc",
             },
             take: 1,
           }
@@ -151,6 +151,7 @@ export class InMemoryDistributedTransactionStorage
 
     if (trx) {
       const execution = trx.execution as TransactionFlow
+      // TODO: Add a flag for cases where we still want to return the execution even if it's not idempotent (e.g cancel and revert later)
       if (
         !idempotent &&
         [

@@ -132,7 +132,6 @@ export class WorkflowOrchestratorService {
     const {
       input,
       transactionId,
-      runId,
       resultFrom,
       logOnError,
       events: eventHandlers,
@@ -143,7 +142,6 @@ export class WorkflowOrchestratorService {
     throwOnError ??= true
     context ??= {}
     context.transactionId = transactionId ?? ulid()
-    context.runId = runId ?? ulid()
 
     const workflowId = isString(workflowIdOrWorkflow)
       ? workflowIdOrWorkflow
