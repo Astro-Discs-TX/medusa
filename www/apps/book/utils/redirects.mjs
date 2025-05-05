@@ -1,5 +1,5 @@
 /**
- * @returns {Promise<import("next").Redirect[]>}
+ * @type {import("next").NextConfig["redirects"]}
  */
 const redirects = async () => {
   return [
@@ -159,7 +159,7 @@ const redirects = async () => {
       permanent: true,
     },
     {
-      source: "/learn/fundamentals/modules/infrastructure-modules",
+      source: "/learn/fundamentals/modules/architectural-modules",
       destination: "/learn/fundamentals/modules/infrastructure-modules",
       permanent: true,
     },
