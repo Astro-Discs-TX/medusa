@@ -79,6 +79,7 @@ export class TransactionPayload {
 class DistributedTransaction extends EventEmitter {
   public modelId: string
   public transactionId: string
+  public runId: string
 
   private readonly errors: TransactionStepError[] = []
   private readonly context: TransactionContext = new TransactionContext()
@@ -109,7 +110,7 @@ class DistributedTransaction extends EventEmitter {
 
     this.transactionId = flow.transactionId
     this.modelId = flow.modelId
-
+    this.runId = flow.runId
     if (errors) {
       this.errors = errors
     }
