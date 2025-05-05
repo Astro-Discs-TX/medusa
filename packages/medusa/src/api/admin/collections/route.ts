@@ -1,9 +1,8 @@
+import { createCollectionsWorkflow } from "@medusajs/core-flows"
 import {
   AuthenticatedMedusaRequest,
   MedusaResponse,
 } from "@medusajs/framework/http"
-
-import { createCollectionsWorkflow } from "@medusajs/core-flows"
 import { AdditionalData, HttpTypes } from "@medusajs/framework/types"
 import {
   ContainerRegistrationKeys,
