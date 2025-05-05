@@ -121,6 +121,13 @@ While tutorials show you a specific use case, they also help you understand how 
       },
       {
         type: "link",
+        title: "Re-Order",
+        path: "/how-to-tutorials/tutorials/re-order",
+        description:
+          "Learn how to allow customers to re-order previous orders.",
+      },
+      {
+        type: "link",
         title: "Wishlist Plugin",
         path: "/plugins/guides/wishlist",
         description:

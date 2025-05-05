@@ -415,6 +415,15 @@ const generatedgeneratedHowToTutorialsSidebarSidebar = {
           "loaded": true,
           "isPathHref": true,
           "type": "link",
+          "title": "Re-Order",
+          "path": "/how-to-tutorials/tutorials/re-order",
+          "description": "Learn how to allow customers to re-order previous orders.",
+          "children": []
+        },
+        {
+          "loaded": true,
+          "isPathHref": true,
+          "type": "link",
           "title": "Wishlist Plugin",
           "path": "/plugins/guides/wishlist",
           "description": "Learn how to build a plugin for wishlist functionalities.",

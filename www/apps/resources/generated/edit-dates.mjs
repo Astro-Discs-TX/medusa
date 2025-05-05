@@ -108,7 +108,7 @@ export const generatedEditDates = {
   "app/medusa-cli/page.mdx": "2024-08-28T11:25:32.382Z",
   "app/medusa-container-resources/page.mdx": "2025-04-17T08:48:10.255Z",
   "app/medusa-workflows-reference/page.mdx": "2025-01-20T08:21:29.962Z",
-  "app/nextjs-starter/page.mdx": "2025-02-26T11:37:47.137Z",
+  "app/nextjs-starter/page.mdx": "2025-05-05T13:08:14.526Z",
   "app/recipes/b2b/page.mdx": "2025-04-17T08:48:38.369Z",
   "app/recipes/commerce-automation/page.mdx": "2025-05-01T15:33:47.062Z",
   "app/recipes/digital-products/examples/standard/page.mdx": "2025-04-24T15:41:05.364Z",
@@ -6218,5 +6218,6 @@ export const generatedEditDates = {
   "references/module_events/module_events.Region/page.mdx": "2025-05-01T15:18:45.934Z",
   "references/module_events/module_events.Sales_Channel/page.mdx": "2025-05-01T15:18:45.933Z",
   "references/module_events/module_events.User/page.mdx": "2025-05-01T15:18:45.932Z",
-  "references/modules/module_events/page.mdx": "2025-05-01T15:18:45.930Z"
+  "references/modules/module_events/page.mdx": "2025-05-01T15:18:45.930Z",
+  "app/how-to-tutorials/tutorials/re-order/page.mdx": "2025-05-05T13:22:41.574Z"
 }

@@ -56,6 +56,10 @@ export const server = [
     "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/product-reviews"
   },
   {
+    "title": "Re-Order",
+    "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/re-order"
+  },
+  {
     "title": "Create Cache Module",
     "path": "https://docs.medusajs.com/resources/infrastructure-modules/cache/create"
   },

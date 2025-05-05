@@ -6053,6 +6053,14 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "title": "Implement Quote Management",
               "path": "https://docs.medusajs.com/resources/examples/guides/quote-management",
               "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "ref",
+              "title": "Implement Re-Order",
+              "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/re-order",
+              "children": []
             }
           ]
         },

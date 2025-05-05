@@ -36,6 +36,10 @@ export const tutorial = [
     "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/product-reviews"
   },
   {
+    "title": "Re-Order",
+    "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/re-order"
+  },
+  {
     "title": "Integrate Contentful",
     "path": "https://docs.medusajs.com/resources/integrations/guides/contentful"
   },
