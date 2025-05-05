@@ -53,6 +53,10 @@ export type Context<TManager = unknown> = {
    * A string indicating the ID of the current transaction.
    */
   transactionId?: string
+  /**
+   * A string indicating the ID of the current run.
+   */
+  runId?: string
 
   /**
    * An instance of a message aggregator, which is used to aggregate messages to be emitted at a later point.

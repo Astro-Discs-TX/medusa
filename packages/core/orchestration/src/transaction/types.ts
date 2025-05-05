@@ -261,6 +261,7 @@ export type TransactionFlow = {
   options?: TransactionModelOptions
   definition: TransactionStepsDefinition
   transactionId: string
+  runId: string
   metadata?: {
     eventGroupId?: string
     parentIdempotencyKey?: string

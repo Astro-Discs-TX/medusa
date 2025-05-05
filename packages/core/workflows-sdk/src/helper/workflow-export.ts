@@ -189,6 +189,7 @@ function createContextualWorkflowRunner<
     }
 
     context.transactionId ??= ulid()
+    context.runId ??= ulid()
     context.eventGroupId ??= ulid()
 
     return await originalExecution(

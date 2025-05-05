@@ -1,3 +1,4 @@
+import { ulid } from "ulid"
 import {
   DistributedTransaction,
   DistributedTransactionType,
@@ -1292,6 +1293,7 @@ export class TransactionOrchestrator extends EventEmitter {
       modelId: this.id,
       options: this.options,
       transactionId: transactionId,
+      runId: ulid(),
       metadata: flowMetadata,
       hasAsyncSteps: features.hasAsyncSteps,
       hasFailedSteps: false,

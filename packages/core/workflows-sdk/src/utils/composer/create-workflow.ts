@@ -201,6 +201,7 @@ export function createWorkflow<TData, TResult, THooks extends any[]>(
           ...(sharedContext?.context ?? {}),
           transactionId:
             step.__step__ + "-" + (stepContext.transactionId ?? ulid()),
+          runId: stepContext.runId ?? ulid(),
           parentStepIdempotencyKey: stepContext.idempotencyKey,
           preventReleaseEvents: true,
         }

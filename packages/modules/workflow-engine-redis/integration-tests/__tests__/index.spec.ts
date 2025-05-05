@@ -132,6 +132,13 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
               primaryKey: "workflow_id",
               serviceName: "workflows",
             },
+            run_id: {
+              entity: "WorkflowExecution",
+              field: "workflowExecution",
+              linkable: "workflow_execution_run_id",
+              primaryKey: "run_id",
+              serviceName: "workflows",
+            },
           },
         })
       })

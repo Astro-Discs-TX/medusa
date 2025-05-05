@@ -160,6 +160,7 @@ export class RedisDistributedTransactionStorage
       {
         workflow_id: data.flow.modelId,
         transaction_id: data.flow.transactionId,
+        run_id: data.flow.runId,
         execution: data.flow,
         context: {
           data: data.context,
@@ -176,6 +177,7 @@ export class RedisDistributedTransactionStorage
       {
         workflow_id: data.flow.modelId,
         transaction_id: data.flow.transactionId,
+        run_id: data.flow.runId,
       },
     ])
   }
@@ -240,18 +242,35 @@ export class RedisDistributedTransactionStorage
 
     const [_, workflowId, transactionId] = key.split(":")
     const trx = await this.workflowExecutionService_
-      .retrieve(
+      .list(
         {
           workflow_id: workflowId,
           transaction_id: transactionId,
         },
         {
           select: ["execution", "context"],
+          order: {
+            transaction_id: "desc",
+          },
+          take: 1,
         }
       )
+      .then((trx) => trx[0])
       .catch(() => undefined)
 
     if (trx) {
+      const execution = trx.execution as TransactionFlow
+      if (
+        !idempotent &&
+        [
+          TransactionState.DONE,
+          TransactionState.FAILED,
+          TransactionState.REVERTED,
+        ].includes(execution.state)
+      ) {
+        return
+      }
+
       const checkpointData = {
         flow: trx.execution,
         context: trx.context.data,
