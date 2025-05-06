@@ -47,10 +47,11 @@ export async function processPayment({
         payment_id: paymentData.data[0].id,
         amount: processedEvent.data?.amount,
       },
+      throwOnError: false,
     })
   }
 
-  // Authorize payment session, if there is no payment yet
+  // Authorize payment session and create payment, if there is no payment yet
   if (
     !cartPaymentCollection.data.length &&
     processedEvent.action === PaymentActions.AUTHORIZED &&
@@ -60,16 +61,19 @@ export async function processPayment({
       input: {
         id: processedEvent.data?.session_id,
       },
+      throwOnError: false,
     })
   }
 
-  // Complete cart, if the payment is associated with a cart
+  // Complete cart, if the payment is authorized and associated with a cart
   if (cartPaymentCollection.data.length) {
     await completeCartWorkflow(container).run({
       input: {
         id: cartPaymentCollection.data[0].cart_id,
       },
+      throwOnError: false,
       context: {
+        // We pass the transactionId here and in `POST /carts/:id/complete` to ensure only one cart-completion workflow can run at a time
         transactionId: cartPaymentCollection.data[0].cart_id,
       },
     })
