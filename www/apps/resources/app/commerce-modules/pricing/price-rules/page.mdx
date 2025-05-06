@@ -8,16 +8,159 @@ tags:
 ---
 
 export const metadata = {
-  title: `Price Rules`,
+  title: `Price Tiers and Rules`,
 }
 
 # {metadata.title}
 
-In this Pricing Module guide, you'll learn about price rules for price sets and price lists, and how to add rules to a price.
+In this Pricing Module guide, you'll learn about tired prices, price rules for price sets and price lists, and how to add rules to a price.
+
+## Tiered Pricing
+
+Each price, represented by the [Price data model](/references/pricing/models/Price), has two optional properties that can be used to create tiered prices:
+
+- `min_quantity`: The minimum quantity that must be in the cart for the price to be applied.
+- `max_quantity`: The maximum quantity that can be in the cart for the price to be applied.
+
+This is useful to set tiered pricing for resources like product variants and shipping options.
+
+For example, you can set a variant's price to:
+
+- `$10` by default.
+- `$8` when the customer adds `10` or more of the variant to the cart.
+- `$6` when the customer adds `20` or more of the variant to the cart.
+
+These price definitions would look like this:
+
+```json title="Example Prices"
+[
+  // default price
+  {
+    "amount": 10,
+    "currency_code": "usd",
+  },
+  {
+    "amount": 8,
+    "currency_code": "usd",
+    "min_quantity": 10,
+    "max_quantity": 19,
+  },
+  {
+    "amount": 6,
+    "currency_code": "usd",
+    "min_quantity": 20,
+  },
+],
+```
+
+### How to Create Tiered Prices Using Workflows?
+
+Medusa uses the Pricing Module to store prices of different resources, such as product variants and shipping options.
+
+When you manage one of these resources using [Medusa's workflows](../../../medusa-workflows-reference/page.mdx) or using the API routes that use them, you can set the minimum and maximum quantity of a price using the `min_quantity` and `max_quantity` properties of the price object.
+
+For example, when creating a product using the [createProductsWorkflow](!resources!/references/medusa-workflows/createProductsWorkflow) you can set tiered prices for the product's variants:
+
+export const tieredPricingHighlights = [
+  ["16", "min_quantity", "The minimum quantity that must be in the cart for the price to be applied."],
+  ["17", "max_quantity", "The maximum quantity that can be in the cart for the price to be applied."],
+]
+
+```ts highlights={tieredPricingHighlights}
+const { result } = await createProductsWorkflow(container)
+  .run({
+    input: {
+      products: [{
+        variants: [{
+          id: "variant_1",
+          prices: [
+            // default price
+            {
+              amount: 10,
+              currency_code: "usd",
+            },
+            {
+              amount: 8,
+              currency_code: "usd",
+              min_quantity: 10,
+              max_quantity: 19,
+            },
+            {
+              amount: 6,
+              currency_code: "usd",
+              min_quantity: 20,
+            },
+          ],
+          // ...
+        }]
+      }],
+      // ...
+    }
+  })
+```
+
+In this example, you create a product variants with a default price of `$10`. You also add two tiered prices that set the price to `$8` when the quantity is between `10` and `19`, and to `$6` when the quantity is `20` or more.
+
+### How to Create Tiered Prices Using Pricing Module's Service
+
+<Note>
+
+For most use cases, it's recommended to use [workflows](#how-to-create-tiered-prices-using-workflows) instead of directly using the module's service.
+
+</Note>
+
+When adding a price using the [addPrices](!resources!/references/pricing/addPrices) method of the Pricing Module's service, you can pass the `min_quantity` and `max_quantity` properties to a price object.
+
+For example:
+
+```ts
+const priceSet = await pricingModule.addPrices({
+  priceSetId: "pset_1",
+  prices: [
+    // default price
+    {
+      amount: 10,
+      currency_code: "usd",
+    },
+    // tiered prices
+    {
+      amount: 8,
+      currency_code: "usd",
+      min_quantity: 10,
+      max_quantity: 19,
+    },
+    {
+      amount: 6,
+      currency_code: "usd",
+      min_quantity: 20,
+    },
+  ],
+})
+```
+
+In this example, you set the default price of a resource (for example, a product variant), to `$10`. You also add two tiered prices that set the price to `$8` when the quantity is between `10` and `19`, and to `$6` when the quantity is `20` or more.
+
+### How are Tiered Prices Applied?
+
+The [price calculation](../price-calculation/page.mdx) mechanism considers the cart's items as a context when choosing the best price to apply.
+
+For example, consider the customer added the `variant_1` product variant (created in the [workflow section](#how-to-create-tiered-prices-using-workflows)) to their cart with a quantity of `15`.
+
+The price calculation mechanism will choose the second price, which is `$8`, because the quantity of `15` is between `10` and `19`.
+
+<Note>
+
+If there are other rules applied to the price, they may affect the price calculation. Keep reading to learn about other price rules, and refer to the [Price Calculation](../price-calculation/page.mdx) guide for more details on the calculation mechanism.
+
+</Note>
+
+---
 
 ## Price Rule
 
-You can restrict prices by rules. Each rule of a price is represented by the [PriceRule data model](/references/pricing/models/PriceRule).
+You can also restrict prices by advanced rules, such as a customer's group, zip code, or a cart's total.
+
+Each rule of a price is represented by the [PriceRule data model](/references/pricing/models/PriceRule).
 
 The `Price` data model has a `rules_count` property, which indicates how many rules, represented by `PriceRule`, are applied to the price.
 
@@ -31,9 +174,7 @@ For example, a price can be restricted by a region and a zip code.
 
 ![A diagram showcasing the relation between the PriceRule and Price with multiple rules.](https://res.cloudinary.com/dza7lstvk/image/upload/v1709649296/Medusa%20Resources/price-rule-3_pwpocz.jpg)
 
----
-
-## Price List Rules
+### Price List Rules
 
 Rules applied to a price list are represented by the [PriceListRule data model](/references/pricing/models/PriceListRule).
 
@@ -41,11 +182,7 @@ The `rules_count` property of a `PriceList` indicates how many rules are applied
 
 ![A diagram showcasing the relation between the PriceSet, PriceList, Price, RuleType, and PriceListRuleValue](https://res.cloudinary.com/dza7lstvk/image/upload/v1709641999/Medusa%20Resources/price-list_zd10yd.jpg)
 
----
-
-## How to Set Rules on a Price?
-
-### Using Workflows
+### How to Set Rules on a Price Using Workflows?
 
 Medusa uses the Pricing Module to store prices of different resources, such as product variants and shipping options.
 
@@ -97,11 +234,11 @@ const { result } = await createShippingOptionsWorkflow(container)
 
 In this example, you create a shipping option whose default price is `$10`. When the total of the cart or order using this shipping option is greater than `$100`, the shipping option's price becomes free.
 
-### Using Pricing Module's Service
+### How to Set Rules Using Pricing Module's Service
 
 <Note>
 
-For most use cases, it's recommended to use [workflows](#using-workflows) instead of directly using the module's service.
+For most use cases, it's recommended to use [workflows](#how-to-set-rules-on-a-price-using-workflows) instead of directly using the module's service.
 
 </Note>
 
