@@ -33,14 +33,18 @@ import { WorkflowsModuleService } from "../../src/services"
 import "../__fixtures__"
 import { createScheduled } from "../__fixtures__/workflow_scheduled"
 import { TestDatabase } from "../utils"
+import {
+  workflowNotIdempotentWithRetentionStep2Invoke,
+  workflowNotIdempotentWithRetentionStep3Invoke,
+} from "../__fixtures__"
 
 jest.setTimeout(300000)
 
-const failTrap = (done) => {
+const failTrap = (done, name) => {
   setTimeoutSync(() => {
     // REF:https://stackoverflow.com/questions/78028715/jest-async-test-with-event-emitter-isnt-ending
     console.warn(
-      "Jest is breaking the event emit with its debouncer. This allows to continue the test by managing the timeout of the test manually."
+      `Jest is breaking the event emit with its debouncer. This allows to continue the test by managing the timeout of the test manually. ${name}`
     )
     done()
   }, 5000)
@@ -301,6 +305,72 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
           expect(done).toBe(true)
         })
 
+        it("should return a list of workflow executions and keep it saved when there is a retentionTime set but allow for executing the same workflow multiple times with different run_id if the workflow is considered done", async () => {
+          const transactionId = "transaction_1"
+          await workflowOrcModule.run(
+            "workflow_not_idempotent_with_retention",
+            {
+              input: {
+                value: "123",
+              },
+              transactionId,
+            }
+          )
+
+          let { data: executionsList } = await query.graph({
+            entity: "workflow_executions",
+            fields: ["id", "run_id", "transaction_id"],
+          })
+
+          expect(executionsList).toHaveLength(1)
+
+          expect(
+            workflowNotIdempotentWithRetentionStep2Invoke
+          ).toHaveBeenCalledTimes(2)
+          expect(
+            workflowNotIdempotentWithRetentionStep2Invoke.mock.calls[0][0]
+          ).toEqual({ hey: "oh" })
+          expect(
+            workflowNotIdempotentWithRetentionStep2Invoke.mock.calls[1][0]
+          ).toEqual({
+            hey: "hello",
+          })
+          expect(
+            workflowNotIdempotentWithRetentionStep3Invoke
+          ).toHaveBeenCalledTimes(1)
+          expect(
+            workflowNotIdempotentWithRetentionStep3Invoke.mock.calls[0][0]
+          ).toEqual({
+            notAsyncResponse: "hello",
+          })
+
+          await workflowOrcModule.run(
+            "workflow_not_idempotent_with_retention",
+            {
+              input: {
+                value: "123",
+              },
+              transactionId,
+            }
+          )
+
+          const { data: executionsList2 } = await query.graph({
+            entity: "workflow_executions",
+            filters: {
+              id: { $nin: executionsList.map((e) => e.id) },
+            },
+            fields: ["id", "run_id", "transaction_id"],
+          })
+
+          expect(executionsList2).toHaveLength(1)
+          expect(executionsList2[0].run_id).not.toEqual(
+            executionsList[0].run_id
+          )
+          expect(executionsList2[0].transaction_id).toEqual(
+            executionsList[0].transaction_id
+          )
+        })
+
         it("should revert the entire transaction when a step timeout expires", async () => {
           const { transaction, result, errors } = (await workflowOrcModule.run(
             "workflow_step_timeout",
@@ -393,7 +463,7 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
             throwOnError: false,
           })
 
-          await setTimeout(200)
+          await setTimeout(500)
 
           const { transaction, result, errors } = (await workflowOrcModule.run(
             "workflow_transaction_timeout_async",
@@ -444,7 +514,7 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
             },
           })
 
-          failTrap(done)
+          failTrap(done, "workflow_async_background")
         })
 
         it("should subscribe to a async workflow and receive the response when it finishes", (done) => {
@@ -473,7 +543,7 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
 
           expect(onFinish).toHaveBeenCalledTimes(0)
 
-          failTrap(done)
+          failTrap(done, "workflow_async_background")
         })
 
         it("should not skip step if condition is true", function (done) {
@@ -495,7 +565,7 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
             },
           })
 
-          failTrap(done)
+          failTrap(done, "wf-when")
         })
 
         it("should cancel an async sub workflow when compensating", (done) => {
@@ -533,7 +603,7 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
             },
           })
 
-          failTrap(done)
+          failTrap(done, "workflow_async_background_fail")
         })
 
         it("should cancel and revert a completed workflow", async () => {

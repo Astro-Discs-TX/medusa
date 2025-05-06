@@ -117,7 +117,9 @@ export class InMemoryDistributedTransactionStorage
 
   async get(
     key: string,
-    options?: TransactionOptions
+    options?: TransactionOptions & {
+      isCancelling?: boolean
+    }
   ): Promise<TransactionCheckpoint | undefined> {
     const data = this.storage.get(key)
 
@@ -151,16 +153,27 @@ export class InMemoryDistributedTransactionStorage
 
     if (trx) {
       const execution = trx.execution as TransactionFlow
-      // TODO: Add a flag for cases where we still want to return the execution even if it's not idempotent (e.g cancel and revert later)
-      if (
-        !idempotent &&
-        [
-          TransactionState.DONE,
-          TransactionState.FAILED,
+
+      if (!idempotent) {
+        const isFailedOrReverted = [
           TransactionState.REVERTED,
+          TransactionState.FAILED,
         ].includes(execution.state)
-      ) {
-        return
+
+        const isDone = execution.state === TransactionState.DONE
+
+        const isCancellingAndFailedOrReverted =
+          options?.isCancelling && isFailedOrReverted
+
+        const isNotCancellingAndDoneOrFailedOrReverted =
+          !options?.isCancelling && (isDone || isFailedOrReverted)
+
+        if (
+          isCancellingAndFailedOrReverted ||
+          isNotCancellingAndDoneOrFailedOrReverted
+        ) {
+          return
+        }
       }
 
       return {
@@ -234,15 +247,23 @@ export class InMemoryDistributedTransactionStorage
     key: string
     options?: TransactionOptions
   }) {
-    const isInitialCheckpoint = data.flow.state === TransactionState.NOT_STARTED
+    const isInitialCheckpoint = [TransactionState.NOT_STARTED].includes(
+      data.flow.state
+    )
 
     /**
      * In case many execution can succeed simultaneously, we need to ensure that the latest
      * execution does continue if a previous execution is considered finished
      */
     const currentFlow = data.flow
+
+    const getOptions = {
+      ...options,
+      isCancelling: !!data.flow.cancelledAt,
+    } as Parameters<typeof this.get>[1]
+
     const { flow: latestUpdatedFlow } =
-      (await this.get(key, options)) ??
+      (await this.get(key, getOptions)) ??
       ({ flow: {} } as { flow: TransactionFlow })
 
     if (!isInitialCheckpoint && !isPresent(latestUpdatedFlow)) {

@@ -221,7 +221,8 @@ class DistributedTransaction extends EventEmitter {
 
   public static async loadTransaction(
     modelId: string,
-    transactionId: string
+    transactionId: string,
+    options?: { isCancelling?: boolean }
   ): Promise<TransactionCheckpoint | null> {
     const key = TransactionOrchestrator.getKeyName(
       DistributedTransaction.keyPrefix,
@@ -229,12 +230,13 @@ class DistributedTransaction extends EventEmitter {
       transactionId
     )
 
-    const options = TransactionOrchestrator.getWorkflowOptions(modelId)
+    const workflowOptions = TransactionOrchestrator.getWorkflowOptions(modelId)
 
-    const loadedData = await DistributedTransaction.keyValueStore.get(
-      key,
-      options
-    )
+    const loadedData = await DistributedTransaction.keyValueStore.get(key, {
+      ...workflowOptions,
+      isCancelling: options?.isCancelling,
+    })
+
     if (loadedData) {
       return loadedData
     }

@@ -278,6 +278,7 @@ export type TransactionFlow = {
   hasRevertedSteps: boolean
   timedOutAt: number | null
   startedAt?: number
+  cancelledAt?: number
   state: TransactionState
   steps: {
     [key: string]: TransactionStep

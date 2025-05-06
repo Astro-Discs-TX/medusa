@@ -1,5 +1,6 @@
 import {
   DistributedTransactionType,
+  TransactionState,
   WorkflowManager,
 } from "@medusajs/framework/orchestration"
 import {
@@ -356,16 +357,6 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
 
           expect(executionsList).toHaveLength(1)
 
-          await workflowOrcModule.setStepSuccess({
-            idempotencyKey: {
-              action: TransactionHandlerType.INVOKE,
-              stepId: "new_step_name",
-              workflowId: "workflow_not_idempotent_with_retention",
-              transactionId,
-            },
-            stepResponse: { uhuuuu: "yeaah!" },
-          })
-
           expect(
             workflowNotIdempotentWithRetentionStep2Invoke
           ).toHaveBeenCalledTimes(2)
@@ -375,23 +366,16 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
           expect(
             workflowNotIdempotentWithRetentionStep2Invoke.mock.calls[1][0]
           ).toEqual({
-            hey: "async hello",
+            hey: "hello",
           })
-
           expect(
             workflowNotIdempotentWithRetentionStep3Invoke
           ).toHaveBeenCalledTimes(1)
           expect(
             workflowNotIdempotentWithRetentionStep3Invoke.mock.calls[0][0]
           ).toEqual({
-            uhuuuu: "yeaah!",
+            notAsyncResponse: "hello",
           })
-          ;({ data: executionsList } = await query.graph({
-            entity: "workflow_executions",
-            fields: ["id", "run_id", "transaction_id"],
-          }))
-
-          expect(executionsList).toHaveLength(1)
 
           await workflowOrcModule.run(
             "workflow_not_idempotent_with_retention",
@@ -495,6 +479,37 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
           expect(transaction.getFlow().state).toEqual("reverted")
         })
 
+        it("should cancel and revert a non idempotent completed workflow with rentention time given a specific transaction id", async () => {
+          const workflowId = "workflow_not_idempotent_with_retention"
+          const transactionId = "trx_123"
+
+          await workflowOrcModule.run(workflowId, {
+            input: {
+              value: "123",
+            },
+            transactionId,
+          })
+
+          let executions = await workflowOrcModule.listWorkflowExecutions({
+            transaction_id: transactionId,
+          })
+
+          expect(executions.length).toEqual(1)
+          expect(executions[0].state).toEqual(TransactionState.DONE)
+          expect(executions[0].transaction_id).toEqual(transactionId)
+
+          await workflowOrcModule.cancel(workflowId, {
+            transactionId,
+          })
+
+          executions = await workflowOrcModule.listWorkflowExecutions({
+            transaction_id: transactionId,
+          })
+
+          expect(executions.length).toEqual(1)
+          expect(executions[0].state).toEqual(TransactionState.REVERTED)
+        })
+
         it("should run conditional steps if condition is true", (done) => {
           void workflowOrcModule.subscribe({
             workflowId: "workflow_conditional_step",
@@ -542,8 +557,8 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
 
       describe("Scheduled workflows", () => {
         beforeEach(() => {
-          jest.useFakeTimers()
           jest.clearAllMocks()
+          jest.useFakeTimers()
 
           // Register test-value in the container for all tests
           const sharedContainer =

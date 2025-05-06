@@ -320,7 +320,7 @@ export class WorkflowOrchestratorService {
     const transaction = await this.getRunningTransaction(
       workflowId,
       transactionId,
-      options
+      { ...options, isCancelling: true }
     )
     if (!transaction) {
       if (!throwOnError) {

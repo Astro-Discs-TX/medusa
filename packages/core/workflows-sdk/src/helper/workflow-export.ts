@@ -105,6 +105,8 @@ function createContextualWorkflowRunner<
       preventReleaseEvents,
     }
 
+    context.isCancelling = isCancel
+
     const args = [
       transactionOrIdOrIdempotencyKey,
       input,

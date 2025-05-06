@@ -6,9 +6,11 @@ import {
   SchedulerOptions,
   SkipExecutionError,
   TransactionCheckpoint,
+  TransactionContext,
   TransactionFlow,
   TransactionOptions,
   TransactionStep,
+  TransactionStepError,
 } from "@medusajs/framework/orchestration"
 import { Logger, ModulesSdkTypes } from "@medusajs/framework/types"
 import {
@@ -225,7 +227,7 @@ export class RedisDistributedTransactionStorage
 
   async get(
     key: string,
-    options?: TransactionOptions
+    options?: TransactionOptions & { isCancelling?: boolean }
   ): Promise<TransactionCheckpoint | undefined> {
     const data = await this.redisClient.get(key)
 
@@ -260,26 +262,36 @@ export class RedisDistributedTransactionStorage
 
     if (trx) {
       const execution = trx.execution as TransactionFlow
-      // TODO: Add a flag for cases where we still want to return the execution even if it's not idempotent (e.g cancel and revert later)
-      if (
-        !idempotent &&
-        [
-          TransactionState.DONE,
-          TransactionState.FAILED,
+
+      if (!idempotent) {
+        const isFailedOrReverted = [
           TransactionState.REVERTED,
+          TransactionState.FAILED,
         ].includes(execution.state)
-      ) {
-        return
+
+        const isDone = execution.state === TransactionState.DONE
+
+        const isCancellingAndFailedOrReverted =
+          options?.isCancelling && isFailedOrReverted
+
+        const isNotCancellingAndDoneOrFailedOrReverted =
+          !options?.isCancelling && (isDone || isFailedOrReverted)
+
+        if (
+          isCancellingAndFailedOrReverted ||
+          isNotCancellingAndDoneOrFailedOrReverted
+        ) {
+          return
+        }
       }
 
-      const checkpointData = {
-        flow: trx.execution,
-        context: trx.context.data,
-        errors: trx.context.errors,
+      return {
+        flow: trx.execution as TransactionFlow,
+        context: trx.context?.data as TransactionContext,
+        errors: trx.context?.errors as TransactionStepError[],
       }
-
-      return checkpointData
     }
+
     return
   }
 
@@ -560,15 +572,23 @@ export class RedisDistributedTransactionStorage
     key: string
     options?: TransactionOptions
   }) {
-    const isInitialCheckpoint = data.flow.state === TransactionState.NOT_STARTED
+    const isInitialCheckpoint = [TransactionState.NOT_STARTED].includes(
+      data.flow.state
+    )
 
     /**
      * In case many execution can succeed simultaneously, we need to ensure that the latest
      * execution does continue if a previous execution is considered finished
      */
     const currentFlow = data.flow
+
+    const getOptions = {
+      ...options,
+      isCancelling: !!data.flow.cancelledAt,
+    } as Parameters<typeof this.get>[1]
+
     const { flow: latestUpdatedFlow } =
-      (await this.get(key, options)) ??
+      (await this.get(key, getOptions)) ??
       ({ flow: {} } as { flow: TransactionFlow })
 
     if (!isInitialCheckpoint && !isPresent(latestUpdatedFlow)) {
