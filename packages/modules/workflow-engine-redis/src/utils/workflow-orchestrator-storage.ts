@@ -357,6 +357,11 @@ export class RedisDistributedTransactionStorage
       })
     }
 
+    const isNotStarted = data.flow.state === TransactionState.NOT_STARTED
+    const isManualTransactionId = !data.flow.transactionId.startsWith("auto-")
+    // Only set if not exists
+    const shouldSetNX = isNotStarted && isManualTransactionId
+
     // Prepare operations to be executed in batch or pipeline
     const stringifiedData = JSON.stringify(data)
     const pipeline = this.redisClient.pipeline()
@@ -364,19 +369,45 @@ export class RedisDistributedTransactionStorage
     // Execute Redis operations
     if (!hasFinished) {
       if (ttl) {
-        pipeline.set(key, stringifiedData, "EX", ttl)
+        if (shouldSetNX) {
+          pipeline.set(key, stringifiedData, "EX", ttl, "NX")
+        } else {
+          pipeline.set(key, stringifiedData, "EX", ttl)
+        }
       } else {
-        pipeline.set(key, stringifiedData)
+        if (shouldSetNX) {
+          pipeline.set(key, stringifiedData, "NX")
+        } else {
+          pipeline.set(key, stringifiedData)
+        }
       }
     } else {
       pipeline.unlink(key)
     }
 
+    const pipelinePromise = pipeline.exec().then((result) => {
+      if (!shouldSetNX) {
+        return result
+      }
+
+      const actionResult = result?.pop()
+      const isOk = !!actionResult?.pop()
+      if (!isOk) {
+        throw new MedusaError(
+          MedusaError.Types.INVALID_ARGUMENT,
+          "Transaction already started for transactionId: " +
+            data.flow.transactionId
+        )
+      }
+
+      return result
+    })
+
     // Database operations
     if (hasFinished && !retentionTime && !idempotent) {
-      await promiseAll([pipeline.exec(), this.deleteFromDb(data)])
+      await promiseAll([pipelinePromise, this.deleteFromDb(data)])
     } else {
-      await promiseAll([pipeline.exec(), this.saveToDb(data, retentionTime)])
+      await promiseAll([pipelinePromise, this.saveToDb(data, retentionTime)])
     }
   }
 

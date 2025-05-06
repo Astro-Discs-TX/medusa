@@ -16,6 +16,7 @@ import {
   ContainerRegistrationKeys,
   Module,
   Modules,
+  promiseAll,
   TransactionHandlerType,
   TransactionStepState,
 } from "@medusajs/framework/utils"
@@ -37,6 +38,7 @@ import {
   workflowNotIdempotentWithRetentionStep2Invoke,
   workflowNotIdempotentWithRetentionStep3Invoke,
 } from "../__fixtures__"
+import { ulid } from "ulid"
 
 jest.setTimeout(300000)
 
@@ -148,6 +150,44 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
       })
 
       describe("Testing basic workflow", function () {
+        it("should prevent executing twice the same workflow in perfect concurrency with the same transactionId and non idempotent and not async but retention time is set", async () => {
+          const transactionId = "transaction_id"
+          const workflowId = "workflow_id" + ulid()
+
+          const step1 = createStep("step1", async () => {
+            await setTimeout(100)
+            return new StepResponse("step1")
+          })
+
+          createWorkflow(
+            {
+              name: workflowId,
+              retentionTime: 1000,
+            },
+            function () {
+              return new WorkflowResponse(step1())
+            }
+          )
+
+          const [result1, result2] = await promiseAll([
+            workflowOrcModule.run(workflowId, {
+              input: {},
+              transactionId,
+            }),
+            workflowOrcModule
+              .run(workflowId, {
+                input: {},
+                transactionId,
+              })
+              .catch((e) => e),
+          ])
+
+          expect(result1.result).toEqual("step1")
+          expect(result2.message).toEqual(
+            "Transaction already started for transactionId: " + transactionId
+          )
+        })
+
         it("should return a list of workflow executions and remove after completed when there is no retentionTime set", async () => {
           await workflowOrcModule.run("workflow_1", {
             input: {

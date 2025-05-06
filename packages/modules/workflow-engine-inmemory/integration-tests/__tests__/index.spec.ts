@@ -11,6 +11,7 @@ import {
 import {
   Module,
   Modules,
+  promiseAll,
   TransactionHandlerType,
 } from "@medusajs/framework/utils"
 import {
@@ -22,6 +23,7 @@ import {
 import { moduleIntegrationTestRunner } from "@medusajs/test-utils"
 import { WorkflowsModuleService } from "@services"
 import { asFunction } from "awilix"
+import { ulid } from "ulid"
 import { setTimeout as setTimeoutSync } from "timers"
 import { setTimeout as setTimeoutPromise } from "timers/promises"
 import "../__fixtures__"
@@ -106,6 +108,44 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
             },
           },
         })
+      })
+
+      it("should prevent executing twice the same workflow in perfect concurrency with the same transactionId and non idempotent and not async but retention time is set", async () => {
+        const transactionId = "transaction_id"
+        const workflowId = "workflow_id" + ulid()
+
+        const step1 = createStep("step1", async () => {
+          await setTimeoutPromise(100)
+          return new StepResponse("step1")
+        })
+
+        createWorkflow(
+          {
+            name: workflowId,
+            retentionTime: 1000,
+          },
+          function () {
+            return new WorkflowResponse(step1())
+          }
+        )
+
+        const [result1, result2] = await promiseAll([
+          workflowOrcModule.run(workflowId, {
+            input: {},
+            transactionId,
+          }),
+          workflowOrcModule
+            .run(workflowId, {
+              input: {},
+              transactionId,
+            })
+            .catch((e) => e),
+        ])
+
+        expect(result1.result).toEqual("step1")
+        expect(result2.message).toEqual(
+          "Transaction already started for transactionId: " + transactionId
+        )
       })
 
       it("should execute an async workflow keeping track of the event group id provided in the context", async () => {

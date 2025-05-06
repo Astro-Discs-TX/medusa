@@ -222,6 +222,20 @@ export class InMemoryDistributedTransactionStorage
     }
 
     // Store in memory
+    const isNotStarted = data.flow.state === TransactionState.NOT_STARTED
+    const isManualTransactionId = !data.flow.transactionId.startsWith("auto-")
+
+    if (isNotStarted && isManualTransactionId) {
+      const storedData = this.storage.get(key)
+      if (storedData) {
+        throw new MedusaError(
+          MedusaError.Types.INVALID_ARGUMENT,
+          "Transaction already started for transactionId: " +
+            data.flow.transactionId
+        )
+      }
+    }
+
     this.storage.set(key, data)
 
     // Optimize DB operations - only perform when necessary
@@ -236,6 +250,8 @@ export class InMemoryDistributedTransactionStorage
     } else {
       await this.saveToDb(data, retentionTime)
     }
+
+    this.storage.delete(key)
   }
 
   async #preventRaceConditionExecutionIfNecessary({
