@@ -250,8 +250,6 @@ export class InMemoryDistributedTransactionStorage
     } else {
       await this.saveToDb(data, retentionTime)
     }
-
-    this.storage.delete(key)
   }
 
   async #preventRaceConditionExecutionIfNecessary({
