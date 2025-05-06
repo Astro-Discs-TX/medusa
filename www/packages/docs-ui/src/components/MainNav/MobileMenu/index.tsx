@@ -54,7 +54,7 @@ export const MainNavMobileMenu = () => {
           >
             <div
               ref={ref}
-              className="w-full px-docs_1.5 max-h-[75%] overflow-auto"
+              className="w-full px-docs_1.5 h-3/4 flex flex-col justify-center"
             >
               {selectedMenus.length === 0 && (
                 <MainNavMobileMainMenu setSelectedMenus={setSelectedMenus} />
