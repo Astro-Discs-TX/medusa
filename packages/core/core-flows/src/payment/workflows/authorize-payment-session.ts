@@ -24,11 +24,11 @@ export type AuthorizePaymentSessionWorkflowInput = {
 export const authorizePaymentSessionWorkflowId =
   "authorize-payment-session-workflow"
 /**
- * This workflow captures a payment. It's used by the
- * [Capture Payment Admin API Route](https://docs.medusajs.com/api/admin#payments_postpaymentsidcapture).
+ * This workflow authorizes a payment session. It's used by the
+ * [Authorize Payment Session Admin API Route](https://docs.medusajs.com/api/admin#paymentsessions_postpaymentsessionsauthorize).
  *
  * You can use this workflow within your own customizations or custom workflows, allowing you
- * to capture a payment in your custom flows.
+ * to authorize a payment session in your custom flows.
  *
  * @example
  * const { result } = await authorizePaymentSessionWorkflow(container)
@@ -40,7 +40,7 @@ export const authorizePaymentSessionWorkflowId =
  *
  * @summary
  *
- * Capture a payment.
+ * Authorize a payment session.
  */
 export const authorizePaymentSessionWorkflow = createWorkflow(
   authorizePaymentSessionWorkflowId,
