@@ -1,23 +1,18 @@
 import {
+  authorizePaymentSessionWorkflow,
   capturePaymentWorkflow,
   completeCartWorkflow,
 } from "@medusajs/core-flows"
-import {
-  MedusaContainer,
-  ProviderWebhookPayload,
-  WebhookActionResult,
-} from "@medusajs/framework/types"
+import { MedusaContainer, WebhookActionResult } from "@medusajs/framework/types"
 import {
   ContainerRegistrationKeys,
   PaymentActions,
 } from "@medusajs/framework/utils"
 
 export async function processPayment({
-  rawEvent,
   processedEvent,
   container,
 }: {
-  rawEvent: ProviderWebhookPayload
   processedEvent: WebhookActionResult
   container: MedusaContainer
 }) {
@@ -42,6 +37,7 @@ export async function processPayment({
     },
   })
 
+  // Capture payment, if it exists
   if (
     processedEvent.action === PaymentActions.SUCCESSFUL &&
     !!paymentData.data.length
@@ -54,14 +50,20 @@ export async function processPayment({
     })
   }
 
+  // Authorize payment session, if there is no payment yet
   if (
     !cartPaymentCollection.data.length &&
     processedEvent.action === PaymentActions.AUTHORIZED &&
     !!processedEvent.data?.session_id
   ) {
-    // authorize payment session workflow
+    await authorizePaymentSessionWorkflow(container).run({
+      input: {
+        id: processedEvent.data?.session_id,
+      },
+    })
   }
 
+  // Complete cart, if the payment is associated with a cart
   if (cartPaymentCollection.data.length) {
     await completeCartWorkflow(container).run({
       input: {

@@ -50,7 +50,6 @@ export default async function paymentWebhookhandler({
   }
 
   await processPayment({
-    rawEvent: input,
     processedEvent,
     container,
   })
