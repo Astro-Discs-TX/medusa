@@ -142,4 +142,5 @@ export type OasEvents = {
   description?: string
   deprecated?: boolean
   deprecated_message?: string
+  version?: string
 }
