@@ -2,4 +2,4 @@
 "@medusajs/product": patch
 ---
 
-fix(product): allow variant search by product properties
+feat(product): allow variant search by product properties
