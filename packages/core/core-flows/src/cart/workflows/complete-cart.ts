@@ -24,7 +24,7 @@ import {
   useQueryGraphStep,
   useRemoteQueryStep,
 } from "../../common"
-import { addOrderTransactionStep } from "../../order"
+import { addOrderTransactionStep } from "../../order/steps/add-order-transaction"
 import { createOrdersStep } from "../../order/steps/create-orders"
 import { authorizePaymentSessionStep } from "../../payment/steps/authorize-payment-session"
 import { registerUsageStep } from "../../promotion/steps/register-usage"
