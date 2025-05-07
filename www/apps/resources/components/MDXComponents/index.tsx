@@ -7,6 +7,9 @@ import {
   SourceCodeLink,
   CodeTabs,
   CodeTab,
+  Table,
+  Badge,
+  Tooltip,
 } from "docs-ui"
 import { CommerceModuleSections } from "../CommerceModuleSections"
 
@@ -19,6 +22,11 @@ const MDXComponents: MDXComponentsType = {
   SourceCodeLink,
   CodeTabs,
   CodeTab,
+  Table,
+  Badge,
+  Tooltip: (props) => {
+    return <Tooltip {...props} />
+  },
 }
 
 export default MDXComponents
