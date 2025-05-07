@@ -47,8 +47,6 @@ const TagsOperationDescriptionSection = ({
   const { area } = useArea()
   const pathname = usePathname()
 
-  console.log(operation.summary, operation["x-events"])
-
   return (
     <>
       <H2>
