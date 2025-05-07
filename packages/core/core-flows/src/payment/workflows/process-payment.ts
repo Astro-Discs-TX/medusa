@@ -1,7 +1,7 @@
 import { WebhookActionResult } from "@medusajs/types"
 import { PaymentActions } from "@medusajs/utils"
 import { createWorkflow, when } from "@medusajs/workflows-sdk"
-import { completeCartWorkflow } from "../../cart"
+import { completeCartWorkflow } from "../../cart/workflows/complete-cart"
 import { useQueryGraphStep } from "../../common"
 import { authorizePaymentSessionStep } from "../steps"
 import { capturePaymentWorkflow } from "./capture-payment"
@@ -71,16 +71,12 @@ export const processPaymentWorkflow = createWorkflow(
         input.action === PaymentActions.SUCCESSFUL && !!paymentData.data.length
       )
     }).then(() => {
-      capturePaymentWorkflow
-        .runAsStep({
-          input: {
-            payment_id: paymentData.data[0].id,
-            amount: input.data?.amount,
-          },
-        })
-        .config({
-          continueOnPermanentFailure: true, // Continue payment processing even if payment capture fails
-        })
+      capturePaymentWorkflow.runAsStep({
+        input: {
+          payment_id: paymentData.data[0].id,
+          amount: input.data?.amount,
+        },
+      })
     })
 
     when(
@@ -98,8 +94,6 @@ export const processPaymentWorkflow = createWorkflow(
       authorizePaymentSessionStep({
         id: input.data!.session_id,
         context: {},
-      }).config({
-        continueOnPermanentFailure: true, // Continue payment processing even if payment authorization fails
       })
     })
 

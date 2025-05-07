@@ -1,3 +1,4 @@
+import { processPaymentWorkflow } from "@medusajs/core-flows"
 import {
   IPaymentModuleService,
   ProviderWebhookPayload,
@@ -8,7 +9,6 @@ import {
   PaymentWebhookEvents,
 } from "@medusajs/framework/utils"
 import { SubscriberArgs, SubscriberConfig } from "../types/subscribers"
-import { processPayment } from "./utils/process-payment"
 
 type SerializedBuffer = {
   data: ArrayBuffer
@@ -49,10 +49,7 @@ export default async function paymentWebhookhandler({
     return
   }
 
-  await processPayment({
-    processedEvent,
-    container,
-  })
+  await processPaymentWorkflow(container).run({ input: processedEvent })
 }
 
 export const config: SubscriberConfig = {
