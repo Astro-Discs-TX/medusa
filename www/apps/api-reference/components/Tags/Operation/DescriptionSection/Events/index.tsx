@@ -104,8 +104,11 @@ const TagsOperationDescriptionSectionEvent = ({
   }, [event.payload])
   return (
     <TabsContent value={event.name}>
-      <div className="mt-1">
-        <MarkdownContent allowedElements={["code", "p", "a"]}>
+      <div className="my-1 flex flex-wrap gap-1">
+        <MarkdownContent
+          allowedElements={["code", "p", "a"]}
+          className={"[&_p:last-child]:!mb-1"}
+        >
           {`\`${event.name}\`: ${event.description}`}
         </MarkdownContent>
         {event.deprecated &&
@@ -116,6 +119,11 @@ const TagsOperationDescriptionSectionEvent = ({
           ) : (
             <Badge variant="orange">Deprecated</Badge>
           ))}
+        {event.version && (
+          <Tooltip text={`This event is emitted since v${event.version}`}>
+            <Badge variant="blue">v{event.version}</Badge>
+          </Tooltip>
+        )}
       </div>
       <TagOperationParameters
         schemaObject={parsedPayload}
