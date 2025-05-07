@@ -1,0 +1,3016 @@
+{
+  "$schema": "./$schema.json",
+  "general": {
+    "ascending": "ঊর্ধ্বগামী",
+    "descending": "অধোগামী",
+    "add": "যোগ",
+    "start": "শুরু",
+    "end": "শেষ",
+    "open": "খোলা",
+    "close": "বন্ধ",
+    "apply": "আবেদন",
+    "range": "পরিসর",
+    "search": "অনুসন্ধান",
+    "of": "এর",
+    "results": "ফলাফল",
+    "pages": "পৃষ্ঠাগুলি",
+    "next": "পরবর্তী",
+    "prev": "পূর্ববর্তী",
+    "is": "হয়",
+    "timeline": "সময়রেখা",
+    "success": "সফল",
+    "warning": "সতর্কতা",
+    "tip": "টিপ",
+    "error": "ত্রুটি",
+    "select": "নির্বাচন",
+    "selected": "নির্বাচিত",
+    "enabled": "সক্রিয়",
+    "disabled": "অক্ষম",
+    "expired": "মেয়াদ",
+    "active": "সক্রিয়",
+    "revoked": "প্রত্যাহার",
+    "new": "নতুন",
+    "modified": "পরিবর্তিত",
+    "added": "যোগ",
+    "removed": "সরানো",
+    "admin": "অ্যাডমিন",
+    "store": "দোকান",
+    "details": "বিস্তারিত",
+    "items_one": "{{count}} আইটেম",
+    "items_other": "{{count}} আইটেম",
+    "countSelected": "{{count}} নির্বাচিত",
+    "countOfTotalSelected": "{{count}} এর {{total}} নির্বাচিত",
+    "plusCount": "+ {{count}}",
+    "plusCountMore": "+ {{count}} আরো",
+    "areYouSure": "আপনি কি নিশ্চিত?",
+    "areYouSureDescription": "আপনী মুছে ফেলতে লেছে {{entity}} {{title}}. এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।",
+    "noRecordsFound": "কোন রেকর্ড পাওয়া যায়নি",
+    "typeToConfirm": "টাইপ করুন {val} নিশ্চিত করতে:",
+    "noResultsTitle": "কোন ফলাফল নেই",
+    "noResultsMessage": "ফিল্টার বা সার্চ কোয়েরি পরিবর্তন করার চেষ্টা করুন",
+    "noSearchResults": "কোন ফলাফল পাওয়া জাইন",
+    "noSearchResultsFor": "কোন ফলাফল পাওয়া জাইন জন্য <0>'{{query}}'</0>",
+    "noRecordsTitle": "কোনো রেকর্ড নেই",
+    "noRecordsMessage": "দেখানোর মতো কোনও ফলাফল নেই।",
+    "unsavedChangesTitle": "আপনি কি নিশ্চিত যে আপনি এই ফর্মটি ছেড়ে যেতে চান?",
+    "unsavedChangesDescription": "আপনার কিছু অসংরক্ষিত পরিবর্তন আছে যা আপনি যদি এই ফর্ম থেকে বেরিয়ে আসেন তাহলে হারিয়ে যাবে।",
+    "includesTaxTooltip": "এই কলামে দেওয়া দামগুলি কর সহ।",
+    "excludesTaxTooltip": "এই কলামের দামগুলি কর ব্যতীত।",
+    "noMoreData": "আর কোন তথ্য পাওয়া নেই"
+  },
+  "json": {
+    "header": "JSON",
+    "numberOfKeys_one": "{{count}} চাবি",
+    "numberOfKeys_other": "{{count}} চাবি",
+    "drawer": {
+      "header_one": "JSON <0>· {{count}} চাবি</0>",
+      "header_other": "JSON <0>· {{count}} চাবি</0>",
+      "description": "এই অবজেক্টের জন্য JSON ডেটা দেখুন।"
+    }
+  },
+  "metadata": {
+    "header": "Metadata",
+    "numberOfKeys_one": "{{count}} চাবি",
+    "numberOfKeys_other": "{{count}} চাবি",
+    "edit": {
+      "header": "মেটাডেটা সম্পাদনা করুন",
+      "description": "এই বস্তুর মেটাডেটা সম্পাদনা করুন।",
+      "successToast": "মেটাডেটা সফলভাবে আপডেট করা হয়েছে।",
+      "actions": {
+        "insertRowAbove": "উপরে সারি ঢোকান",
+        "insertRowBelow": "নীচে সারি ঢোকান",
+        "deleteRow": "সারি মুছুন"
+      },
+      "labels": {
+        "key": "চাবি",
+        "value": "মান"
+      },
+      "complexRow": {
+        "label": "কিছু সারি অক্ষম করা হয়েছে৷",
+        "description": "এই অবজেক্টে অ্যারে বা অবজেক্টের মতো নন-আদিম মেটাডেটা রয়েছে যা এখানে সম্পাদনা করা যাবে না। অক্ষম সারিগুলি সম্পাদনা করতে, সরাসরি API ব্যবহার করুন।",
+        "tooltip": "এই সারিটি অক্ষম করা হয়েছে কারণ এতে অ-প্রাথমিক ডেটা রয়েছে।"
+      }
+    }
+  },
+  "validation": {
+    "mustBeInt": "মানটি অবশ্যই একটি পূর্ণসংখ্যা হতে হবে।",
+    "mustBePositive": "মানটি অবশ্যই একটি ধনাত্মক সংখ্যা হতে হবে।"
+  },
+  "actions": {
+    "save": "সংরক্ষণ করুন",
+    "saveAsDraft": "খসড়া হিসাবে সংরক্ষণ করুন",
+    "copy": "কপি",
+    "copied": "কপি করা হয়েছে",
+    "duplicate": "ডুপ্লিকেট",
+    "publish": "প্রকাশ করুন",
+    "create": "তৈরি করুন",
+    "delete": "মুছে দিন",
+    "remove": "সরান",
+    "revoke": "প্রত্যাহার করুন",
+    "cancel": "বাতিল করুন",
+    "forceConfirm": "জোর করে নিশ্চিত করুন",
+    "continueEdit": "সম্পাদনা চালিয়ে যান",
+    "enable": "সক্ষম করুন",
+    "disable": "নিষ্ক্রিয় করুন",
+    "undo": "পূর্বাবস্থায় ফেরান",
+    "complete": "সম্পূর্ণ",
+    "viewDetails": "বিস্তারিত দেখুন",
+    "back": "ব্যাক",
+    "close": "বন্ধ",
+    "showMore": "আরও দেখান",
+    "continue": "চালিয়ে যান",
+    "continueWithEmail": "ইমেল দিয়ে চালিয়ে যান",
+    "idCopiedToClipboard": "ক্লিপবোর্ডে আইডি কপি করা হয়েছে",
+    "addReason": "কারণ যোগ করুন",
+    "addNote": "নোট যোগ করুন",
+    "reset": "রিসেট করুন",
+    "confirm": "নিশ্চিত করুন",
+    "edit": "সম্পাদনা করুন",
+    "addItems": "আইটেম যোগ করুন",
+    "download": "ডাউনলোড করুন",
+    "clear": "পরিষ্কার",
+    "clearAll": "সব সাফ করুন",
+    "apply": "আবেদন করুন",
+    "add": "যোগ করুন",
+    "select": "নির্বাচন করুন",
+    "browse": "ব্রাউজ করুন",
+    "logout": "লগআউট",
+    "hide": "লুকান",
+    "export": "রপ্তানি",
+    "import": "আমদানি",
+    "cannotUndo": "এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।"
+  },
+  "operators": {
+    "in": "ইন"
+  },
+  "app": {
+    "search": {
+      "label": "অনুসন্ধান করুন",
+      "title": "অনুসন্ধান করুন",
+      "description": "অর্ডার, পণ্য, গ্রাহক এবং আরও অনেক কিছু সহ আপনার সম্পূর্ণ দোকান অনুসন্ধান করুন।",
+      "allAreas": "সমস্ত এলাকা",
+      "navigation": "নেভিগেশন",
+      "openResult": "ওপেন রেজাল্ট",
+      "showMore": "আরও দেখান",
+      "placeholder": "ঝাঁপ দাও অথবা যেকোনো কিছু খুঁজে বের করো...",
+      "noResultsTitle": "কোন ফলাফল পাওয়া যায়নি",
+      "noResultsMessage": "আপনার অনুসন্ধানের সাথে মেলে এমন কিছু আমরা খুঁজে পাইনি।",
+      "emptySearchTitle": "অনুসন্ধান করতে টাইপ করুন",
+      "emptySearchMessage": "অন্বেষণ করার জন্য একটি কীওয়ার্ড বা বাক্যাংশ লিখুন।",
+      "loadMore": "লোড {{count}} আরো",
+      "groups": {
+        "all": "সমস্ত এলাকা",
+        "customer": "গ্রাহকদের",
+        "customerGroup": "গ্রাহক গ্রুপ",
+        "product": "পণ্য",
+        "productVariant": "পণ্য বৈকল্পিক",
+        "inventory": "ইনভেন্টরি",
+        "reservation": "রিজার্ভেশন",
+        "category": "ক্যাটাগরি",
+        "collection": "সংগ্রহ",
+        "order": "অর্ডার",
+        "promotion": "প্রচার",
+        "campaign": "প্রচারণা",
+        "priceList": "মূল্য তালিকা",
+        "user": "ব্যবহারকারী",
+        "region": "অঞ্চলসমূহ",
+        "taxRegion": "ট্যাক্স অঞ্চল",
+        "returnReason": "প্রত্যাবর্তন কারণ",
+        "salesChannel": "বিক্রয় চ্যানেল",
+        "productType": "পণ্যের ধরন",
+        "productTag": "পণ্য ট্যাগ",
+        "location": "অবস্থানসমূহ",
+        "shippingProfile": "শিপিং প্রোফাইল",
+        "publishableApiKey": "প্রকাশযোগ্য API Key",
+        "secretApiKey": "গোপন API Key",
+        "command": "কমান্ড",
+        "navigation": "নেভিগেশন"
+      }
+    },
+    "keyboardShortcuts": {
+      "pageShortcut": "ঝাঁপ দাও",
+      "settingShortcut": "সেটিংস",
+      "commandShortcut": "কমান্ড",
+      "then": "তারপর",
+      "navigation": {
+        "goToOrders": "অর্ডার",
+        "goToProducts": "পণ্য",
+        "goToCollections": "সংগ্রহ",
+        "goToCategories": "ক্যাটাগরি",
+        "goToCustomers": "গ্রাহকদের",
+        "goToCustomerGroups": "গ্রাহক গ্রুপ",
+        "goToInventory": "ইনভেন্টরি",
+        "goToReservations": "রিজার্ভেশন",
+        "goToPriceLists": "মূল্য তালিকা",
+        "goToPromotions": "প্রচার",
+        "goToCampaigns": "প্রচারণা"
+      },
+      "settings": {
+        "goToSettings": "সেটিংস",
+        "goToStore": "দোকান",
+        "goToUsers": "ব্যবহারকারী",
+        "goToRegions": "অঞ্চল",
+        "goToTaxRegions": "ট্যাক্স অঞ্চল",
+        "goToSalesChannels": "বিক্রয় চ্যানেল",
+        "goToProductTypes": "পণ্যের ধরন",
+        "goToLocations": "অবস্থানসমূহ",
+        "goToPublishableApiKeys": "প্রকাশযোগ্য API Keys",
+        "goToSecretApiKeys": "গোপন API Keys",
+        "goToWorkflows": "কর্মপ্রবাহ",
+        "goToProfile": "প্রোফাইল",
+        "goToReturnReasons": "প্রত্যাবর্তন কারণ"
+      }
+    },
+    "menus": {
+      "user": {
+        "documentation": "ডকুমেন্টেশন",
+        "changelog": "চেঞ্জলগ",
+        "shortcuts": "শর্টকাট",
+        "profileSettings": "প্রোফাইল সেটিংস",
+        "theme": {
+          "label": "থিম",
+          "dark": "অন্ধকার",
+          "light": "আলো",
+          "system": "সিস্টেম"
+        }
+      },
+      "store": {
+        "label": "দোকান",
+        "storeSettings": "স্টোর সেটিংস"
+      },
+      "actions": {
+        "logout": "লগ আউট করুন"
+      }
+    },
+    "nav": {
+      "accessibility": {
+        "title": "নেভিগেশন",
+        "description": "ড্যাশবোর্ডের জন্য নেভিগেশন মেনু।"
+      },
+      "common": {
+        "extensions": "এক্সটেনশন"
+      },
+      "main": {
+        "store": "দোকান",
+        "storeSettings": "স্টোর সেটিংস"
+      },
+      "settings": {
+        "header": "সেটিংস",
+        "general": "সাধারণ",
+        "developer": "বিকাশকারী",
+        "myAccount": "আমার অ্যাকাউন্ট"
+      }
+    }
+  },
+  "dataGrid": {
+    "columns": {
+      "view": "দেখুন",
+      "resetToDefault": "ডিফল্টে রিসেট করুন",
+      "disabled": "কোন কলামগুলি দৃশ্যমান তা পরিবর্তন করা অক্ষম করা আছে।"
+    },
+    "shortcuts": {
+      "label": "শর্টকাট",
+      "commands": {
+        "undo": "পূর্বাবস্থায় ফেরান",
+        "redo": "আবার করুন",
+        "copy": "কপি",
+        "paste": "পেস্ট করুন",
+        "edit": "সম্পাদনা করুন",
+        "delete": "মুছে দিন",
+        "clear": "পরিষ্কার",
+        "moveUp": "উপরে সরান",
+        "moveDown": "নিচে সরান",
+        "moveLeft": "বামে সরান",
+        "moveRight": "ডানদিকে সরান",
+        "moveTop": "উপরে সরান",
+        "moveBottom": "নীচে সরান",
+        "selectDown": "নিচে নির্বাচন করুন",
+        "selectUp": "নির্বাচন করুন",
+        "selectColumnDown": "নিচের কলাম নির্বাচন করুন",
+        "selectColumnUp": "Select column up",
+        "focusToolbar": "ফোকাস টুলবার",
+        "focusCancel": "ফোকাস বাতিল"
+      }
+    },
+    "errors": {
+      "fixError": "ত্রুটি ঠিক করুন",
+      "count_one": "{{count}} ত্রুটি",
+      "count_other": "{{count}} ত্রুটি"
+    }
+  },
+  "filters": {
+    "sortLabel": "সাজান",
+    "filterLabel": "ফিল্টার",
+    "searchLabel": "খুঁজুন",
+    "date": {
+      "today": "আজ",
+      "lastSevenDays": "সর্বশেষ ৭ দিন",
+      "lastThirtyDays": "সর্বশেষ ৩০ দিন",
+      "lastNinetyDays": "সর্বশেষ ৯০ দিন",
+      "lastTwelveMonths": "সর্বশেষ ১২ মাস",
+      "custom": "কাস্টম",
+      "from": "থেকে",
+      "to": "যাচ্ছে",
+      "starting": "শুরু হচ্ছে",
+      "ending": "শেষ হচ্ছে"
+    },
+    "compare": {
+      "lessThan": "এর কম",
+      "greaterThan": "এর বেশি",
+      "exact": "ঠিক",
+      "range": "সীমা",
+      "lessThanLabel": "{{value}} এর কম",
+      "greaterThanLabel": "{{value}} এর বেশি",
+      "andLabel": "এবং"
+    },
+    "sorting": {
+      "alphabeticallyAsc": "A থেকে Z",
+      "alphabeticallyDesc": "Z থেকে A",
+      "dateAsc": "নতুন প্রথম",
+      "dateDesc": "পুরোনো প্রথম"
+    },
+    "radio": {
+      "yes": "হ্যাঁ",
+      "no": "না",
+      "true": "সত্য",
+      "false": "মিথ্যা"
+    },
+    "addFilter": "ফিল্টার যোগ করুন"
+  },
+  "errorBoundary": {
+    "badRequestTitle": "৪০০ - ভুল অনুরোধ",
+    "badRequestMessage": "অনুরোধটি সার্ভার দ্বারা ভুল সিনট্যাক্সের কারণে বুঝে নেওয়া যায়নি।",
+    "notFoundTitle": "৪০৪ - এই ঠিকানায় কোনো পাতা নেই",
+    "notFoundMessage": "URLটি চেক করুন এবং আবার চেষ্টা করুন, অথবা আপনি যা খুঁজছেন তা খুঁজে পেতে সার্চ বারের ব্যবহার করুন।",
+    "internalServerErrorTitle": "৫০০ - অভ্যন্তরীণ সার্ভার ত্রুটি",
+    "internalServerErrorMessage": "সার্ভারে একটি অপ্রত্যাশিত ত্রুটি ঘটেছে। পরে আবার চেষ্টা করুন।",
+    "defaultTitle": "একটি ত্রুটি ঘটেছে",
+    "defaultMessage": "এই পৃষ্ঠাটি রেন্ডার করার সময় একটি অপ্রত্যাশিত ত্রুটি ঘটেছে।",
+    "noMatchMessage": "আপনি যে পৃষ্ঠাটি খুঁজছেন তা বিদ্যমান নয়।",
+    "backToDashboard": "ড্যাশবোর্ডে ফিরে যান"
+  },
+  "addresses": {
+    "title": "ঠিকানা",
+    "shippingAddress": {
+      "header": "শিপিং ঠিকানা",
+      "editHeader": "শিপিং ঠিকানা সম্পাদনা করুন",
+      "editLabel": "শিপিং ঠিকানা",
+      "label": "শিপিং ঠিকানা"
+    },
+    "billingAddress": {
+      "header": "বিলিং ঠিকানা",
+      "editHeader": "বিলিং ঠিকানা সম্পাদনা করুন",
+      "editLabel": "বিলিং ঠিকানা",
+      "label": "বিলিং ঠিকানা",
+      "sameAsShipping": "শিপিং ঠিকানার মতো একই"
+    },
+    "contactHeading": "যোগাযোগ",
+    "locationHeading": "অবস্থান"
+  },
+  "email": {
+    "editHeader": "ইমেইল সম্পাদনা করুন",
+    "editLabel": "ইমেইল",
+    "label": "ইমেইল"
+  },
+  "transferOwnership": {
+    "header": "মালিকানা স্থানান্তর",
+    "label": "মালিকানা স্থানান্তর করুন",
+    "details": {
+      "order": "অর্ডার বিস্তারিত",
+      "draft": "ড্রাফট বিস্তারিত"
+    },
+    "currentOwner": {
+      "label": "বর্তমান মালিক",
+      "hint": "অর্ডারের বর্তমান মালিক।"
+    },
+    "newOwner": {
+      "label": "নতুন মালিক",
+      "hint": "অর্ডার স্থানান্তরের জন্য নতুন মালিক।"
+    },
+    "validation": {
+      "mustBeDifferent": "নতুন মালিক বর্তমান মালিক থেকে আলাদা হতে হবে।",
+      "required": "নতুন মালিক প্রয়োজন।"
+    }
+  },
+  "sales_channels": {
+    "availableIn": "<0>{{x}}</0> এর মধ্যে <1>{{y}}</1> সেলস চ্যানেলে উপলব্ধ"
+  },
+  "products": {
+    "domain": "পণ্য",
+    "list": {
+      "noRecordsMessage": "বিক্রি শুরু করতে আপনার প্রথম পণ্য তৈরি করুন।"
+    },
+    "edit": {
+      "header": "পণ্য সম্পাদনা করুন",
+      "description": "পণ্যের বিস্তারিত সম্পাদনা করুন।",
+      "successToast": "পণ্য {{title}} সফলভাবে আপডেট হয়েছে।"
+    },
+  "create": {
+    "title": "পণ্য তৈরি করুন",
+    "description": "একটি নতুন পণ্য তৈরি করুন।",
+    "header": "সাধারণ",
+    "tabs": {
+      "details": "বিস্তারিত",
+      "organize": "সংগঠিত করুন",
+      "variants": "ভ্যারিয়েন্ট",
+      "inventory": "ইনভেন্টরি কিট"
+    },
+    "errors": {
+      "variants": "অন্তত একটি ভ্যারিয়েন্ট নির্বাচন করুন।",
+      "options": "অন্তত একটি অপশন তৈরি করুন।",
+      "uniqueSku": "SKU অবশ্যই অনন্য হতে হবে।"
+    },
+    "inventory": {
+      "heading": "ইনভেন্টরি কিট",
+      "label": "ভ্যারিয়েন্টের ইনভেন্টরি কিটে ইনভেন্টরি আইটেম যোগ করুন।",
+      "itemPlaceholder": "ইনভেন্টরি আইটেম নির্বাচন করুন",
+      "quantityPlaceholder": "কিটের জন্য কতটি প্রয়োজন?"
+    },
+    "variants": {
+      "header": "ভ্যারিয়েন্ট",
+      "subHeadingTitle": "হ্যাঁ, এটি একটি পণ্য যার ভ্যারিয়েন্ট আছে",
+      "subHeadingDescription": "যদি চেক করা না থাকে, তাহলে আমরা আপনার জন্য একটি ডিফল্ট ভ্যারিয়েন্ট তৈরি করব",
+      "optionTitle": {
+        "placeholder": "আকার"
+      },
+      "optionValues": {
+        "placeholder": "ছোট, মাঝারি, বড়"
+      },
+      "productVariants": {
+        "label": "পণ্য ভ্যারিয়েন্ট",
+        "hint": "এই র‌্যাংকিংটি আপনার স্টোরফ্রন্টে ভ্যারিয়েন্টের অর্ডারে প্রভাব ফেলবে।",
+        "alert": "ভ্যারিয়েন্ট তৈরি করতে অপশন যোগ করুন।",
+        "tip": "যে ভ্যারিয়েন্টগুলি চেক করা হয়নি, তা তৈরি হবে না। আপনি পরবর্তীতে ভ্যারিয়েন্ট তৈরি এবং সম্পাদনা করতে পারবেন, তবে এই তালিকাটি আপনার পণ্যের অপশনগুলির মধ্যে পরিবর্তনগুলি উপস্থাপন করে।"
+      },
+      "productOptions": {
+        "label": "পণ্য অপশন",
+        "hint": "পণ্যের অপশন সংজ্ঞায়িত করুন, যেমন রঙ, আকার, ইত্যাদি।"
+      }
+    },
+    "successToast": "পণ্য {{title}} সফলভাবে তৈরি হয়েছে।"
+  },
+    "export": {
+      "header": "পণ্য তালিকা রপ্তানি করুন",
+      "description": "পণ্য তালিকাটি একটি CSV ফাইলে রপ্তানি করুন।",
+      "success": {
+        "title": "আমরা আপনার রপ্তানি প্রক্রিয়া করছি",
+        "description": "ডেটা রপ্তানি করতে কয়েক মিনিট সময় লাগতে পারে। আমরা যখন এটি শেষ করব, তখন আপনাকে জানিয়ে দেব।"
+      },
+      "filters": {
+        "title": "ফিল্টার",
+        "description": "এই দৃশ্যটি কাস্টমাইজ করতে টেবিলের ওভারভিউতে ফিল্টার প্রয়োগ করুন"
+      },
+      "columns": {
+        "title": "কলাম",
+        "description": "রপ্তানি করা ডেটা নির্দিষ্ট প্রয়োজনের জন্য কাস্টমাইজ করুন"
+      }
+    },
+    "import": {
+      "header": "পণ্য তালিকা আমদানি করুন",
+      "uploadLabel": "পণ্য আমদানি করুন",
+      "uploadHint": "একটি CSV ফাইল ড্র্যাগ এবং ড্রপ করুন অথবা আপলোড করতে ক্লিক করুন",
+      "description": "প্রি-ডিফাইনড ফরম্যাটে একটি CSV ফাইল প্রদান করে পণ্য আমদানি করুন",
+      "template": {
+        "title": "তালিকা কিভাবে সাজাবেন তা নিশ্চিত না?",
+        "description": "নিশ্চিত করতে সঠিক ফরম্যাট অনুসরণ করছেন, নিচে থেকে টেমপ্লেট ডাউনলোড করুন।"
+      },
+      "upload": {
+        "title": "একটি CSV ফাইল আপলোড করুন",
+        "description": "আমদানি করে আপনি পণ্য যোগ বা আপডেট করতে পারেন। বিদ্যমান পণ্য আপডেট করতে হলে আপনাকে বিদ্যমান হ্যান্ডল এবং আইডি ব্যবহার করতে হবে, বিদ্যমান ভেরিয়েন্ট আপডেট করতে হলে আপনাকে বিদ্যমান আইডি ব্যবহার করতে হবে। পণ্য আমদানি করার আগে আপনাকে নিশ্চিতকরণের জন্য বলা হবে।",
+        "preprocessing": "পূর্বপ্রসেসিং...",
+        "productsToCreate": "পণ্য তৈরি হবে",
+        "productsToUpdate": "পণ্য আপডেট হবে"
+      },
+      "success": {
+        "title": "আমরা আপনার আমদানি প্রক্রিয়া করছি",
+        "description": "ডেটা আমদানি করতে কিছু সময় লাগতে পারে। আমরা যখন এটি শেষ করব, তখন আপনাকে জানিয়ে দেব।"
+      }
+    },
+    "deleteWarning": "আপনি পণ্য {{title}} মুছে ফেলতে যাচ্ছেন। এই কাজটি ফিরে নেওয়া যাবে না।",
+    "variants": {
+      "header": "ভেরিয়েন্ট",
+      "empty": {
+        "heading": "কোনো ভেরিয়েন্ট নেই",
+        "description": "প্রদর্শন করার জন্য কোনো ভেরিয়েন্ট নেই।"
+      },
+      "filtered": {
+        "heading": "কোনো ফলাফল নেই",
+        "description": "বর্তমান ফিল্টার শর্তাবলী অনুযায়ী কোনো ভেরিয়েন্ট মেলে না।"
+      }
+    },
+    "attributes": "গুণাবলী",
+    "editAttributes": "গুণাবলী সম্পাদনা করুন",
+    "editOptions": "অপশন সম্পাদনা করুন",
+    "editPrices": "মূল্য সম্পাদনা করুন",
+    "media": {
+      "label": "মিডিয়া",
+      "editHint": "পণ্যের সাথে মিডিয়া যোগ করুন যাতে এটি আপনার স্টোরফ্রন্টে প্রদর্শিত হয়।",
+      "makeThumbnail": "থাম্বনেইল তৈরি করুন",
+      "uploadImagesLabel": "চিত্র আপলোড করুন",
+      "uploadImagesHint": "এখানে চিত্রগুলি ড্র্যাগ এবং ড্রপ করুন অথবা আপলোড করতে ক্লিক করুন।",
+      "invalidFileType": "'{{name}}' একটি সমর্থিত ফাইল প্রকার নয়। সমর্থিত ফাইল প্রকারগুলি হল: {{types}}।",
+      "failedToUpload": "যে মিডিয়া আপলোড করা হয়েছে তা আপলোড করতে ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।",
+      "deleteWarning_one": "আপনি {{count}} চিত্র মুছে ফেলতে যাচ্ছেন। এই কাজটি ফিরে নেওয়া যাবে না।",
+      "deleteWarning_other": "আপনি {{count}} চিত্র মুছে ফেলতে যাচ্ছেন। এই কাজটি ফিরে নেওয়া যাবে না।",
+      "deleteWarningWithThumbnail_one": "আপনি {{count}} চিত্র মুছে ফেলতে যাচ্ছেন, থাম্বনেইল সহ। এই কাজটি ফিরে নেওয়া যাবে না।",
+      "deleteWarningWithThumbnail_other": "আপনি {{count}} চিত্র মুছে ফেলতে যাচ্ছেন, থাম্বনেইল সহ। এই কাজটি ফিরে নেওয়া যাবে না।",
+      "thumbnailTooltip": "থাম্বনেইল",
+      "galleryLabel": "গ্যালারি",
+      "downloadImageLabel": "বর্তমান চিত্র ডাউনলোড করুন",
+      "deleteImageLabel": "বর্তমান চিত্র মুছে ফেলুন",
+      "emptyState": {
+        "header": "এখনো কোন মিডিয়া নেই",
+        "description": "পণ্যের সাথে মিডিয়া যোগ করুন যাতে এটি আপনার স্টোরফ্রন্টে প্রদর্শিত হয়।",
+        "action": "মিডিয়া যোগ করুন"
+      },
+      "successToast": "মিডিয়া সফলভাবে আপডেট করা হয়েছে।"
+    },
+    "discountableHint": "যখন চেক করা হয় না, তখন এই পণ্যের উপর ডিসকাউন্ট প্রয়োগ হবে না।",
+    "noSalesChannels": "কোনো বিক্রয় চ্যানেলে উপলব্ধ নয়",
+    "variantCount_one": "{{count}} ভ্যারিয়েন্ট",
+    "variantCount_other": "{{count}} ভ্যারিয়েন্টস",
+    "deleteVariantWarning": "আপনি {{title}} ভ্যারিয়েন্টটি মুছে ফেলতে যাচ্ছেন। এই কাজটি ফিরে নেওয়া যাবে না।",
+    "productStatus": {
+      "draft": "ড্রাফট",
+      "published": "প্রকাশিত",
+      "proposed": "প্রস্তাবিত",
+      "rejected": "প্রত্যাখ্যাত"
+    },
+    "fields": {
+      "title": {
+        "label": "শিরোনাম",
+        "hint": "আপনার পণ্যের জন্য একটি সংক্ষিপ্ত এবং স্পষ্ট শিরোনাম দিন। <0/>অনুসন্ধান ইঞ্জিনগুলির জন্য ৫০-৬০ অক্ষরের দৈর্ঘ্য সুপারিশকৃত।",
+        "placeholder": "শীতকালীন জ্যাকেট"
+      },
+      "subtitle": {
+        "label": "উপশিরোনাম",
+        "placeholder": "গরম এবং আরামদায়ক"
+      },
+      "handle": {
+        "label": "হ্যান্ডল",
+        "tooltip": "হ্যান্ডলটি আপনার পণ্যকে আপনার স্টোরফ্রন্টে উল্লেখ করতে ব্যবহৃত হয়। যদি নির্দিষ্ট না করা হয়, তবে শিরোনাম থেকে হ্যান্ডলটি তৈরি করা হবে।",
+        "placeholder": "winter-jacket"
+      },
+      "description": {
+        "label": "বর্ণনা",
+        "hint": "আপনার পণ্যের জন্য একটি সংক্ষিপ্ত এবং স্পষ্ট বর্ণনা দিন। <0/>অনুসন্ধান ইঞ্জিনগুলির জন্য ১২০-১৬০ অক্ষরের দৈর্ঘ্য সুপারিশকৃত।",
+        "placeholder": "একটি গরম এবং আরামদায়ক জ্যাকেট"
+      },
+      "discountable": {
+        "label": "ডিসকাউন্টযোগ্য",
+        "hint": "যখন চেক করা হয় না, তখন এই পণ্যের উপর ডিসকাউন্ট প্রয়োগ হবে না"
+      },
+      "shipping_profile": {
+        "label": "শিপিং প্রোফাইল",
+        "hint": "পণ্যটিকে একটি শিপিং প্রোফাইলে সংযুক্ত করুন"
+      },
+      "type": {
+        "label": "প্রকার"
+      },
+      "collection": {
+        "label": "সংগ্রহ"
+      },
+      "categories": {
+        "label": "ক্যাটাগরি"
+      },
+      "tags": {
+        "label": "ট্যাগ"
+      },
+      "sales_channels": {
+        "label": "বিক্রয় চ্যানেল",
+        "hint": "যদি না স্পষ্ট করা হয়, তবে এই পণ্যটি শুধুমাত্র ডিফল্ট বিক্রয় চ্যানেলে উপলব্ধ থাকবে।"
+      },
+      "countryOrigin": {
+        "label": "উৎপত্তি দেশ"
+      },
+      "material": {
+        "label": "সামগ্রী"
+      },
+      "width": {
+        "label": "প্রস্থ"
+      },
+      "length": {
+        "label": "দৈর্ঘ্য"
+      },
+      "height": {
+        "label": "উচ্চতা"
+      },
+      "weight": {
+        "label": "ওজন"
+      },
+      "options": {
+        "label": "পণ্যের বিকল্প",
+        "hint": "বিকল্পগুলি পণ্যের রঙ, আকার ইত্যাদি সংজ্ঞায়িত করতে ব্যবহৃত হয়",
+        "add": "বিকল্প যোগ করুন",
+        "optionTitle": "বিকল্প শিরোনাম",
+        "optionTitlePlaceholder": "রঙ",
+        "variations": "ভেরিয়েশন (কমা দিয়ে আলাদা করা)",
+        "variantionsPlaceholder": "লাল, নীল, সবুজ"
+      },
+      "variants": {
+        "label": "পণ্য ভ্যারিয়েন্ট",
+        "hint": "যে ভ্যারিয়েন্টগুলি চেক করা হয়নি, সেগুলি তৈরি হবে না, এই র‌্যাঙ্কিং আপনার স্টোরফ্রন্টে ভ্যারিয়েন্টের অবস্থান নির্ধারণ করবে।"
+      },
+      "mid_code": {
+        "label": "মিড কোড"
+      },
+      "hs_code": {
+        "label": "এইচএস কোড"
+      }
+    },
+    "variant": {
+      "edit": {
+        "header": "ভ্যারিয়েন্ট সম্পাদনা করুন",
+        "success": "পণ্যের ভ্যারিয়েন্ট সফলভাবে সম্পাদিত হয়েছে"
+      },
+      "create": {
+        "header": "ভ্যারিয়েন্টের বিবরণ"
+      },
+      "deleteWarning": "আপনি কি এই ভ্যারিয়েন্টটি মুছে ফেলতে নিশ্চিত?",
+      "pricesPagination": "১ - {{current}} এর মধ্যে {{total}} দাম",
+      "tableItemAvailable": "{{availableCount}} উপলব্ধ",
+      "tableItem_one": "{{availableCount}} উপলব্ধ {{locationCount}} স্থানে",
+      "tableItem_other": "{{availableCount}} উপলব্ধ {{locationCount}} স্থানে",
+      "inventory": {
+        "notManaged": "ব্যবস্থাপনা করা হয়নি",
+        "manageItems": "ইনভেন্টরি আইটেম পরিচালনা করুন",
+        "notManagedDesc": "এই ভ্যারিয়েন্টের জন্য ইনভেন্টরি পরিচালনা করা হয় না। ভ্যারিয়েন্টের ইনভেন্টরি ট্র্যাক করতে ‘ইনভেন্টরি পরিচালনা করুন’ চালু করুন।",
+        "manageKit": "ইনভেন্টরি কিট পরিচালনা করুন",
+        "navigateToItem": "ইনভেন্টরি আইটেমে যান",
+        "actions": {
+          "inventoryItems": "ইনভেন্টরি আইটেমে যান",
+          "inventoryKit": "ইনভেন্টরি আইটেমগুলি দেখান"
+        },
+        "inventoryKit": "ইনভেন্টরি কিট",
+        "inventoryKitHint": "এই ভ্যারিয়েন্টে কি একাধিক ইনভেন্টরি আইটেম রয়েছে?",
+        "validation": {
+          "itemId": "অনুগ্রহ করে ইনভেন্টরি আইটেম নির্বাচন করুন।",
+          "quantity": "পরিমাণ প্রয়োজন। অনুগ্রহ করে একটি ধনাত্মক সংখ্যা দিন।"
+        },
+        "header": "স্টক এবং ইনভেন্টরি",
+        "editItemDetails": "আইটেমের বিবরণ সম্পাদনা করুন",
+        "manageInventoryLabel": "ইনভেন্টরি পরিচালনা করুন",
+        "manageInventoryHint": "যখন সক্রিয় হয়, আমরা অর্ডার এবং রিটার্ন তৈরি হলে আপনার জন্য ইনভেন্টরি পরিমাণ পরিবর্তন করব।",
+        "allowBackordersLabel": "ব্যাকঅর্ডারের অনুমতি দিন",
+        "allowBackordersHint": "যখন সক্রিয় হয়, গ্রাহকরা ভ্যারিয়েন্টটি কিনতে পারবেন যদিও উপলব্ধ পরিমাণ নেই।",
+        "toast": {
+          "levelsBatch": "ইনভেন্টরি স্তর আপডেট হয়েছে।",
+          "update": "ইনভেন্টরি আইটেম সফলভাবে আপডেট হয়েছে।",
+          "updateLevel": "ইনভেন্টরি স্তর সফলভাবে আপডেট হয়েছে।",
+          "itemsManageSuccess": "ইনভেন্টরি আইটেমগুলি সফলভাবে আপডেট হয়েছে।"
+        }
+      }
+    },
+    "options": {
+      "header": "অপশনগুলি",
+      "edit": {
+        "header": "অপশন সম্পাদনা করুন",
+        "successToast": "অপশন {{title}} সফলভাবে আপডেট হয়েছে।"
+      },
+      "create": {
+        "header": "অপশন তৈরি করুন",
+        "successToast": "অপশন {{title}} সফলভাবে তৈরি হয়েছে।"
+      },
+      "deleteWarning": "আপনি পণ্যের অপশনটি মুছে ফেলতে যাচ্ছেন: {{title}}। এই ক্রিয়া পুনরুদ্ধারযোগ্য নয়।"
+    },
+    "organization": {
+      "header": "সংগঠন",
+      "edit": {
+        "header": "সংগঠন সম্পাদনা করুন",
+        "toasts": {
+          "success": "{{title}} এর সংগঠন সফলভাবে আপডেট হয়েছে।"
+        }
+      }
+    },
+    "stock": {
+      "heading": "পণ্যের স্টক স্তর এবং অবস্থান পরিচালনা করুন",
+      "description": "পণ্যের সমস্ত ভ্যারিয়েন্টের জন্য স্টক করা ইনভেন্টরি স্তর আপডেট করুন।",
+      "loading": "একটি মুহূর্তের জন্য অপেক্ষা করুন, এটি কিছুটা সময় নিতে পারে...",
+      "tooltips": {
+        "alreadyManaged": "এই ইনভেন্টরি আইটেমটি ইতিমধ্যেই {{title}} এর অধীনে সম্পাদনাযোগ্য।",
+        "alreadyManagedWithSku": "এই ইনভেন্টরি আইটেমটি ইতিমধ্যেই {{title}} ({{sku}}) এর অধীনে সম্পাদনাযোগ্য।"
+      }
+    },
+    "shippingProfile": {
+      "header": "শিপিং কনফিগারেশন",
+      "edit": {
+        "header": "শিপিং কনফিগারেশন",
+        "toasts": {
+          "success": "{{title}} এর জন্য শিপিং প্রোফাইল সফলভাবে আপডেট হয়েছে।"
+        }
+      },
+      "create": {
+        "errors": {
+          "required": "শিপিং প্রোফাইল প্রয়োজন"
+        }
+      }
+    },
+    "toasts": {
+      "delete": {
+        "success": {
+          "header": "পণ্য মুছে ফেলা হয়েছে",
+          "description": "{{title}} সফলভাবে মুছে ফেলা হয়েছে।"
+        },
+        "error": {
+          "header": "পণ্য মুছে ফেলতে ব্যর্থ"
+        }
+      }
+    }
+  },
+  "collections": {
+    "domain": "সংগ্রহ",
+    "subtitle": "পণ্যগুলোকে সংগ্রহে সংগঠিত করুন।",
+    "createCollection": "সংগ্রহ তৈরি করুন",
+    "createCollectionHint": "আপনার পণ্যগুলো সংগঠিত করতে একটি নতুন সংগ্রহ তৈরি করুন।",
+    "createSuccess": "সংগ্রহ সফলভাবে তৈরি হয়েছে।",
+    "editCollection": "সংগ্রহ সম্পাদনা করুন",
+    "handleTooltip": "হ্যান্ডলটি আপনার সংগ্রহের রেফারেন্স হিসেবে ব্যবহৃত হয়। যদি নির্ধারণ না করা হয়, তবে হ্যান্ডলটি সংগ্রহের শিরোনাম থেকে স্বয়ংক্রিয়ভাবে তৈরি হবে।",
+    "deleteWarning": "আপনি {{title}} সংগ্রহটি মুছে ফেলতে যাচ্ছেন। এই ক্রিয়া অবিকল ফিরে আনা যাবে না।",
+    "removeSingleProductWarning": "আপনি {{title}} পণ্যটি সংগ্রহ থেকে মুছে ফেলতে যাচ্ছেন। এই ক্রিয়া অবিকল ফিরে আনা যাবে না।",
+    "removeProductsWarning_one": "আপনি {{count}} পণ্য সংগ্রহ থেকে মুছে ফেলতে যাচ্ছেন। এই ক্রিয়া অবিকল ফিরে আনা যাবে না।",
+    "removeProductsWarning_other": "আপনি {{count}} পণ্য সংগ্রহ থেকে মুছে ফেলতে যাচ্ছেন। এই ক্রিয়া অবিকল ফিরে আনা যাবে না।",
+    "products": {
+      "list": {
+        "noRecordsMessage": "সংগ্রহে কোন পণ্য নেই।"
+      },
+      "add": {
+        "successToast_one": "পণ্য সফলভাবে সংগ্রহে যোগ করা হয়েছে।",
+        "successToast_other": "পণ্যগুলো সফলভাবে সংগ্রহে যোগ করা হয়েছে।"
+      },
+      "remove": {
+        "successToast_one": "পণ্য সফলভাবে সংগ্রহ থেকে মুছে ফেলা হয়েছে।",
+        "successToast_other": "পণ্যগুলো সফলভাবে সংগ্রহ থেকে মুছে ফেলা হয়েছে।"
+      }
+    }
+  },
+  "categories": {
+    "domain": "শ্রেণী",
+    "subtitle": "পণ্যগুলোকে শ্রেণীতে সংগঠিত করুন, এবং সেই শ্রেণীর র‌্যাঙ্কিং এবং শ্রেণীবিভাগ পরিচালনা করুন।",
+    "create": {
+      "header": "শ্রেণী তৈরি করুন",
+      "hint": "আপনার পণ্যগুলো সংগঠিত করতে একটি নতুন শ্রেণী তৈরি করুন।",
+      "tabs": {
+        "details": "বিস্তারিত",
+        "organize": "র‌্যাঙ্কিং সংগঠিত করুন"
+      },
+      "successToast": "শ্রেণী {{name}} সফলভাবে তৈরি হয়েছে।"
+    },
+    "edit": {
+      "header": "শ্রেণী সম্পাদনা করুন",
+      "description": "শ্রেণী সম্পাদনা করুন এবং এর বিস্তারিত তথ্য আপডেট করুন।",
+      "successToast": "শ্রেণী সফলভাবে আপডেট করা হয়েছে।"
+    },
+    "delete": {
+      "confirmation": "আপনি {{name}} শ্রেণীটি মুছে ফেলতে যাচ্ছেন। এই ক্রিয়া অবিকল ফিরে আনা যাবে না।",
+      "successToast": "শ্রেণী {{name}} সফলভাবে মুছে ফেলা হয়েছে।"
+    },
+    "products": {
+      "add": {
+        "disabledTooltip": "পণ্যটি ইতিমধ্যে এই শ্রেণীতে রয়েছে।",
+        "successToast_one": "{{count}} পণ্য শ্রেণীতে সফলভাবে যোগ করা হয়েছে।",
+        "successToast_other": "{{count}} পণ্য শ্রেণীতে সফলভাবে যোগ করা হয়েছে।"
+      },
+      "remove": {
+        "confirmation_one": "আপনি {{count}} পণ্য শ্রেণী থেকে মুছে ফেলতে যাচ্ছেন। এই ক্রিয়া অবিকল ফিরে আনা যাবে না।",
+        "confirmation_other": "আপনি {{count}} পণ্য শ্রেণী থেকে মুছে ফেলতে যাচ্ছেন। এই ক্রিয়া অবিকল ফিরে আনা যাবে না।",
+        "successToast_one": "{{count}} পণ্য শ্রেণী থেকে সফলভাবে মুছে ফেলা হয়েছে।",
+        "successToast_other": "{{count}} পণ্য শ্রেণী থেকে সফলভাবে মুছে ফেলা হয়েছে।"
+      },
+      "list": {
+        "noRecordsMessage": "এই শ্রেণীতে কোন পণ্য নেই।"
+      }
+    },
+    "organize": {
+      "header": "সংগঠন",
+      "action": "র‌্যাঙ্কিং সম্পাদনা করুন"
+    },
+    "fields": {
+      "visibility": {
+        "label": "দৃশ্যমানতা",
+        "internal": "অভ্যন্তরীণ",
+        "public": "পাবলিক"
+      },
+      "status": {
+        "label": "অবস্থা",
+        "active": "সক্রিয়",
+        "inactive": "নিষ্ক্রিয়"
+      },
+      "path": {
+        "label": "পথ",
+        "tooltip": "শ্রেণীর পূর্ণ পথ দেখান।"
+      },
+      "children": {
+        "label": "সন্তান"
+      },
+      "new": {
+        "label": "নতুন"
+      }
+    }
+  },
+  "inventory": {
+    "domain": "ইনভেন্টরি",
+    "subtitle": "আপনার ইনভেন্টরি আইটেমগুলি পরিচালনা করুন",
+    "reserved": "রিজার্ভড",
+    "available": "উপলব্ধ",
+    "locationLevels": "অবস্থান",
+    "associatedVariants": "সম্পর্কিত ভেরিয়েন্ট",
+    "manageLocations": "অবস্থান পরিচালনা করুন",
+    "manageLocationQuantity": "অবস্থান পরিমাণ পরিচালনা করুন",
+    "deleteWarning": "আপনি একটি ইনভেন্টরি আইটেম মুছে ফেলতে যাচ্ছেন। এই কাজটি বাতিল করা যাবে না।",
+    "editItemDetails": "আইটেমের বিস্তারিত সম্পাদনা করুন",
+    "quantityAcrossLocations": "{{quantity}} {{locations}} অবস্থানে",
+    "create": {
+      "title": "ইনভেন্টরি আইটেম তৈরি করুন",
+      "details": "বিস্তারিত",
+      "availability": "উপলব্ধতা",
+      "locations": "অবস্থান",
+      "attributes": "গুণাবলী",
+      "requiresShipping": "শিপিং প্রয়োজন",
+      "requiresShippingHint": "এই ইনভেন্টরি আইটেমটি কি শিপিং প্রয়োজন?",
+      "successToast": "ইনভেন্টরি আইটেম সফলভাবে তৈরি হয়েছে।"
+    },
+    "reservation": {
+      "header": "{{itemName}} এর রিজার্ভেশন",
+      "editItemDetails": "রিজার্ভেশন সম্পাদনা করুন",
+      "lineItemId": "লাইন আইটেম আইডি",
+      "orderID": "অর্ডার আইডি",
+      "description": "বর্ণনা",
+      "location": "অবস্থান",
+      "inStockAtLocation": "এই অবস্থানে স্টকে আছে",
+      "availableAtLocation": "এই অবস্থানে উপলব্ধ",
+      "reservedAtLocation": "এই অবস্থানে রিজার্ভড",
+      "reservedAmount": "রিজার্ভ পরিমাণ",
+      "create": "রিজার্ভেশন তৈরি করুন",
+      "itemToReserve": "রিজার্ভ করার আইটেম",
+      "quantityPlaceholder": "আপনি কতটি রিজার্ভ করতে চান?",
+      "descriptionPlaceholder": "এই রিজার্ভেশনটি কী ধরনের?",
+      "successToast": "রিজার্ভেশন সফলভাবে তৈরি হয়েছে।",
+      "updateSuccessToast": "রিজার্ভেশন সফলভাবে আপডেট হয়েছে।",
+      "deleteSuccessToast": "রিজার্ভেশন সফলভাবে মুছে ফেলা হয়েছে।",
+      "errors": {
+        "noAvaliableQuantity": "স্টক অবস্থানে উপলব্ধ পরিমাণ নেই।",
+        "quantityOutOfRange": "ন্যূনতম পরিমাণ 1 এবং সর্বাধিক পরিমাণ {{max}}"
+      }
+    },
+    "adjustInventory": {
+      "errors": {
+        "stockedQuantity": "স্টক পরিমাণ {{quantity}} এর কম করা যাবে না।"
+      }
+    },
+    "toast": {
+      "updateLocations": "অবস্থানগুলি সফলভাবে আপডেট হয়েছে।",
+      "updateLevel": "ইনভেন্টরি স্তর সফলভাবে আপডেট হয়েছে।",
+      "updateItem": "ইনভেন্টরি আইটেম সফলভাবে আপডেট হয়েছে।"
+    },
+    "stock": {
+      "title": "ইনভেন্টরি স্তর আপডেট করুন",
+      "description": "নির্বাচিত ইনভেন্টরি আইটেমগুলির জন্য স্টক স্তর আপডেট করুন।",
+      "action": "স্টক স্তর সম্পাদনা করুন",
+      "placeholder": "সক্ষম করা হয়নি",
+      "disablePrompt_one": "আপনি {{count}} অবস্থান স্তর অক্ষম করতে যাচ্ছেন। এই কাজটি বাতিল করা যাবে না।",
+      "disablePrompt_other": "আপনি {{count}} অবস্থান স্তর অক্ষম করতে যাচ্ছেন। এই কাজটি বাতিল করা যাবে না।",
+      "disabledToggleTooltip": "অক্ষম করা যাবে না: অক্ষম করার আগে ইনকামিং এবং/অথবা রিজার্ভড পরিমাণ পরিষ্কার করুন।",
+      "successToast": "ইনভেন্টরি স্তর সফলভাবে আপডেট হয়েছে।"
+    }
+  },
+  "giftCards": {
+    "domain": "গিফট কার্ড",
+    "editGiftCard": "গিফট কার্ড সম্পাদনা করুন",
+    "createGiftCard": "গিফট কার্ড তৈরি করুন",
+    "createGiftCardHint": "ম্যানুয়ালি একটি গিফট কার্ড তৈরি করুন যা আপনার স্টোরে পেমেন্ট পদ্ধতি হিসেবে ব্যবহার করা যেতে পারে।",
+    "selectRegionFirst": "প্রথমে একটি অঞ্চল নির্বাচন করুন",
+    "deleteGiftCardWarning": "আপনি গিফট কার্ড {{code}} মুছে ফেলতে যাচ্ছেন। এই কাজটি বাতিল করা যাবে না।",
+    "balanceHigherThanValue": "ব্যালেন্সটি মূল পরিমাণের চেয়ে বেশি হতে পারে না।",
+    "balanceLowerThanZero": "ব্যালেন্সটি নেতিবাচক হতে পারে না।",
+    "expiryDateHint": "দেশগুলির গিফট কার্ডের মেয়াদ শেষ হওয়ার তারিখ সম্পর্কিত বিভিন্ন আইন রয়েছে। মেয়াদ শেষ হওয়ার তারিখ সেট করার আগে স্থানীয় বিধিমালা পরীক্ষা করুন।",
+    "regionHint": "গিফট কার্ডের অঞ্চল পরিবর্তন করলে এর মুদ্রা পরিবর্তিত হবে, যা এর মুদ্রাস্বাক্ষরমূল্যকে প্রভাবিত করতে পারে।",
+    "enabledHint": "নির্দিষ্ট করুন যে গিফট কার্ডটি সক্ষম বা অক্ষম।",
+    "balance": "ব্যালেন্স",
+    "currentBalance": "বর্তমান ব্যালেন্স",
+    "initialBalance": "আরম্ভিক ব্যালেন্স",
+    "personalMessage": "ব্যক্তিগত বার্তা",
+    "recipient": "প্রাপক"
+  },
+  "customers": {
+    "domain": "গ্রাহক",
+    "list": {
+      "noRecordsMessage": "আপনার গ্রাহকরা এখানে প্রদর্শিত হবে।"
+    },
+    "create": {
+      "header": "গ্রাহক তৈরি করুন",
+      "hint": "নতুন গ্রাহক তৈরি করুন এবং তাদের বিস্তারিত পরিচালনা করুন।",
+      "successToast": "গ্রাহক {{email}} সফলভাবে তৈরি হয়েছে।"
+    },
+    "groups": {
+      "label": "গ্রাহক গ্রুপ",
+      "remove": "আপনি কি নিশ্চিত যে গ্রাহককে \"{{name}}\" গ্রাহক গ্রুপ থেকে সরাতে চান?",
+      "removeMany": "আপনি কি নিশ্চিত যে গ্রাহককে নিম্নলিখিত গ্রাহক গ্রুপগুলি থেকে সরাতে চান: {{groups}}?",
+      "alreadyAddedTooltip": "গ্রাহক ইতিমধ্যেই এই গ্রাহক গ্রুপে রয়েছে।",
+      "list": {
+        "noRecordsMessage": "এই গ্রাহক কোন গ্রুপের অন্তর্গত নয়।"
+      },
+      "add": {
+        "success": "গ্রাহককে যোগ করা হয়েছে: {{groups}}।",
+        "list": {
+          "noRecordsMessage": "অনুগ্রহ করে প্রথমে একটি গ্রাহক গ্রুপ তৈরি করুন।"
+        }
+      },
+      "removed": {
+        "success": "গ্রাহককে সরানো হয়েছে: {{groups}}।",
+        "list": {
+          "noRecordsMessage": "অনুগ্রহ করে প্রথমে একটি গ্রাহক গ্রুপ তৈরি করুন।"
+        }
+      }
+    },
+    "edit": {
+      "header": "গ্রাহক সম্পাদনা করুন",
+      "emailDisabledTooltip": "নিবন্ধিত গ্রাহকদের জন্য ইমেইল ঠিকানা পরিবর্তন করা যাবে না।",
+      "successToast": "গ্রাহক {{email}} সফলভাবে আপডেট হয়েছে।"
+    },
+    "delete": {
+      "title": "গ্রাহক মুছুন",
+      "description": "আপনি গ্রাহক {{email}} মুছে ফেলতে যাচ্ছেন। এই কাজটি বাতিল করা যাবে না।",
+      "successToast": "গ্রাহক {{email}} সফলভাবে মুছে ফেলা হয়েছে।"
+    },
+    "fields": {
+      "guest": "অতিথি",
+      "registered": "নিবন্ধিত",
+      "groups": "গ্রুপ"
+    },
+    "registered": "নিবন্ধিত",
+    "guest": "অতিথি",
+    "hasAccount": "একটি অ্যাকাউন্ট আছে",
+    "addresses": {
+      "title": "ঠিকানা",
+      "fields": {
+        "addressName": "ঠিকানার নাম",
+        "address1": "ঠিকানা ১",
+        "address2": "ঠিকানা ২",
+        "city": "শহর",
+        "province": "প্রদেশ",
+        "postalCode": "পোস্টাল কোড",
+        "country": "দেশ",
+        "phone": "ফোন",
+        "company": "কোম্পানি",
+        "countryCode": "দেশের কোড",
+        "provinceCode": "প্রদেশের কোড"
+      },
+      "create": {
+        "header": "ঠিকানা তৈরি করুন",
+        "hint": "গ্রাহকের জন্য একটি নতুন ঠিকানা তৈরি করুন।",
+        "successToast": "ঠিকানা সফলভাবে তৈরি হয়েছে।"
+      }
+    }
+  },
+  "customerGroups": {
+    "domain": "গ্রাহক গ্রুপ",
+    "subtitle": "গ্রাহকদের গ্রুপে ভাগ করুন। গ্রুপে ভিন্ন অফার এবং মূল্য থাকতে পারে।",
+    "list": {
+      "empty": {
+        "heading": "কোনো গ্রাহক গ্রুপ নেই",
+        "description": "দেখানোর মতো কোনো গ্রাহক গ্রুপ নেই।"
+      },
+      "filtered": {
+        "heading": "কোনো ফলাফল নেই",
+        "description": "বর্তমান ফিল্টার শর্তের সাথে কোনো গ্রাহক গ্রুপ মেলে না।"
+      }
+    },
+    "create": {
+      "header": "গ্রাহক গ্রুপ তৈরি করুন",
+      "hint": "আপনার গ্রাহকদের ভাগ করতে একটি নতুন গ্রাহক গ্রুপ তৈরি করুন।",
+      "successToast": "গ্রাহক গ্রুপ {{name}} সফলভাবে তৈরি হয়েছে।"
+    },
+    "edit": {
+      "header": "গ্রাহক গ্রুপ সম্পাদনা করুন",
+      "successToast": "গ্রাহক গ্রুপ {{name}} সফলভাবে আপডেট হয়েছে।"
+    },
+    "delete": {
+      "title": "গ্রাহক গ্রুপ মুছুন",
+      "description": "আপনি গ্রাহক গ্রুপ {{name}} মুছে ফেলতে যাচ্ছেন। এই কাজটি পূর্বাবস্থায় ফিরিয়ে নেওয়া যাবে না।",
+      "successToast": "গ্রাহক গ্রুপ {{name}} সফলভাবে মুছে ফেলা হয়েছে।"
+    },
+    "customers": {
+      "alreadyAddedTooltip": "গ্রাহক ইতিমধ্যেই এই গ্রুপে যুক্ত হয়েছে।",
+      "add": {
+        "successToast_one": "গ্রাহক সফলভাবে গ্রুপে যুক্ত হয়েছে।",
+        "successToast_other": "গ্রাহকরা সফলভাবে গ্রুপে যুক্ত হয়েছে।",
+        "list": {
+          "noRecordsMessage": "প্রথমে একটি গ্রাহক তৈরি করুন।"
+        }
+      },
+      "remove": {
+        "title_one": "গ্রাহক সরান",
+        "title_other": "গ্রাহক সরান",
+        "description_one": "আপনি গ্রাহক গ্রুপ থেকে {{count}} জন গ্রাহক সরাতে যাচ্ছেন। এই কাজটি পূর্বাবস্থায় ফিরিয়ে নেওয়া যাবে না।",
+        "description_other": "আপনি গ্রাহক গ্রুপ থেকে {{count}} জন গ্রাহক সরাতে যাচ্ছেন। এই কাজটি পূর্বাবস্থায় ফিরিয়ে নেওয়া যাবে না।"
+      },
+      "list": {
+        "noRecordsMessage": "এই গ্রুপে কোনো গ্রাহক নেই।"
+      }
+    }
+  },
+  "orders": {
+    "domain": "অর্ডারসমূহ",
+    "claim": "দাবি",
+    "exchange": "বিনিময়",
+    "return": "ফেরত",
+    "cancelWarning": "আপনি অর্ডার {{id}} বাতিল করতে যাচ্ছেন। এই কাজটি আর পূর্বাবস্থায় ফিরানো যাবে না।",
+    "orderCanceled": "অর্ডার সফলভাবে বাতিল হয়েছে",
+    "onDateFromSalesChannel": "{{salesChannel}} থেকে {{date}} তারিখে",
+    "list": {
+      "noRecordsMessage": "আপনার অর্ডারসমূহ এখানে প্রদর্শিত হবে।"
+    },
+    "status": {
+      "not_paid": "অপরিশোধিত",
+      "pending": "অপেক্ষমাণ",
+      "completed": "সম্পন্ন",
+      "draft": "খসড়া",
+      "archived": "আর্কাইভকৃত",
+      "canceled": "বাতিলকৃত",
+      "requires_action": "কাজের প্রয়োজন"
+    },
+    "summary": {
+      "requestReturn": "ফেরতের অনুরোধ করুন",
+      "allocateItems": "আইটেম বরাদ্দ করুন",
+      "editOrder": "অর্ডার সম্পাদনা করুন",
+      "editOrderContinue": "অর্ডার সম্পাদনা চালিয়ে যান",
+      "inventoryKit": "{{count}}টি ইনভেন্টরি আইটেম নিয়ে গঠিত",
+      "itemTotal": "মোট আইটেম",
+      "shippingTotal": "মোট শিপিং",
+      "discountTotal": "মোট ছাড়",
+      "taxTotalIncl": "মোট কর (অন্তর্ভুক্ত)",
+      "itemSubtotal": "আইটেম উপ-মোট",
+      "shippingSubtotal": "শিপিং উপ-মোট",
+      "discountSubtotal": "ছাড় উপ-মোট",
+      "taxTotal": "মোট কর"
+    },
+    "transfer": {
+      "title": "মালিকানা হস্তান্তর",
+      "requestSuccess": "অর্ডার হস্তান্তরের অনুরোধ পাঠানো হয়েছে: {{email}}।",
+      "currentOwner": "বর্তমান মালিক",
+      "newOwner": "নতুন মালিক",
+      "currentOwnerDescription": "এই অর্ডারের সাথে বর্তমানে যিনি যুক্ত আছেন।",
+      "newOwnerDescription": "যার কাছে এই অর্ডার হস্তান্তর করা হবে।"
+    },
+    "payment": {
+      "title": "পেমেন্টসমূহ",
+      "isReadyToBeCaptured": "পেমেন্ট <0/> ক্যাপচারের জন্য প্রস্তুত।",
+      "totalPaidByCustomer": "গ্রাহক কর্তৃক প্রদত্ত মোট অর্থ",
+      "capture": "পেমেন্ট গ্রহণ করুন",
+      "capture_short": "গ্রহণ করুন",
+      "refund": "ফেরত দিন",
+      "markAsPaid": "পরিশোধিত হিসাবে চিহ্নিত করুন",
+      "statusLabel": "পেমেন্টের অবস্থা",
+      "statusTitle": "পেমেন্ট স্ট্যাটাস",
+      "status": {
+        "notPaid": "অপরিশোধিত",
+        "authorized": "অনুমোদিত",
+        "partiallyAuthorized": "আংশিকভাবে অনুমোদিত",
+        "awaiting": "অপেক্ষমাণ",
+        "captured": "গ্রহণ করা হয়েছে",
+        "partiallyRefunded": "আংশিকভাবে ফেরত দেওয়া হয়েছে",
+        "partiallyCaptured": "আংশিকভাবে গ্রহণ করা হয়েছে",
+        "refunded": "ফেরত দেওয়া হয়েছে",
+        "canceled": "বাতিলকৃত",
+        "requiresAction": "কাজের প্রয়োজন"
+      },
+      "capturePayment": "{{amount}} টাকার পেমেন্ট গ্রহণ করা হবে।",
+      "capturePaymentSuccess": "{{amount}} টাকার পেমেন্ট সফলভাবে গ্রহণ করা হয়েছে",
+      "markAsPaidPayment": "{{amount}} টাকার পেমেন্ট পরিশোধিত হিসেবে চিহ্নিত করা হবে।",
+      "markAsPaidPaymentSuccess": "{{amount}} টাকার পেমেন্ট সফলভাবে পরিশোধিত হিসেবে চিহ্নিত হয়েছে",
+      "createRefund": "ফেরত তৈরি করুন",
+      "refundPaymentSuccess": "{{amount}} টাকার ফেরত সফল হয়েছে",
+      "createRefundWrongQuantity": "পরিমাণটি ১ থেকে {{number}} এর মধ্যে একটি সংখ্যা হতে হবে",
+      "refundAmount": "{{ amount }} ফেরত দিন",
+      "paymentLink": "{{ amount }} টাকার জন্য পেমেন্ট লিংক কপি করুন",
+      "selectPaymentToRefund": "ফেরতের জন্য একটি পেমেন্ট নির্বাচন করুন"
+    },
+    "edits": {
+      "title": "অর্ডার সম্পাদনা করুন",
+      "confirm": "সম্পাদনা নিশ্চিত করুন",
+      "confirmText": "আপনি একটি অর্ডার সম্পাদনা নিশ্চিত করতে যাচ্ছেন। এই কাজটি আর পূর্বাবস্থায় ফিরানো যাবে না।",
+      "cancel": "সম্পাদনা বাতিল করুন",
+      "currentItems": "বর্তমান আইটেমসমূহ",
+      "currentItemsDescription": "আইটেমের পরিমাণ সামঞ্জস্য করুন বা মুছে ফেলুন।",
+      "addItemsDescription": "আপনি অর্ডারে নতুন আইটেম যোগ করতে পারেন।",
+      "addItems": "আইটেম যোগ করুন",
+      "amountPaid": "পরিশোধিত পরিমাণ",
+      "newTotal": "নতুন মোট",
+      "differenceDue": "বাকী পরিমাণ",
+      "create": "অর্ডার সম্পাদনা করুন",
+      "currentTotal": "বর্তমান মোট",
+      "noteHint": "সম্পাদনার জন্য একটি অভ্যন্তরীণ নোট যোগ করুন",
+      "cancelSuccessToast": "অর্ডার সম্পাদনা বাতিল হয়েছে",
+      "createSuccessToast": "অর্ডার সম্পাদনা অনুরোধ তৈরি হয়েছে",
+      "activeChangeError": "অর্ডারে ইতোমধ্যে একটি সক্রিয় পরিবর্তন রয়েছে (ফেরত, দাবী, বিনিময় ইত্যাদি)। সম্পাদনা করার আগে পরিবর্তনটি শেষ বা বাতিল করুন।",
+      "panel": {
+        "title": "অর্ডার সম্পাদনা অনুরোধ করা হয়েছে",
+        "titlePending": "অর্ডার সম্পাদনা অপেক্ষমাণ"
+      },
+      "toast": {
+        "canceledSuccessfully": "অর্ডার সম্পাদনা বাতিল হয়েছে",
+        "confirmedSuccessfully": "অর্ডার সম্পাদনা নিশ্চিত হয়েছে"
+      },
+      "validation": {
+        "quantityLowerThanFulfillment": "পরিমাণ পূর্ণ পরিমাণের চেয়ে কম বা সমান সেট করা যাবে না"
+      }
+    },
+    "edit": {
+      "email": {
+        "title": "ইমেইল সম্পাদনা করুন",
+        "requestSuccess": "অর্ডারের ইমেইল {{email}} তে আপডেট করা হয়েছে।"
+      },
+      "shippingAddress": {
+        "title": "শিপিং ঠিকানা সম্পাদনা করুন",
+        "requestSuccess": "অর্ডারের শিপিং ঠিকানা আপডেট করা হয়েছে।"
+      },
+      "billingAddress": {
+        "title": "বিলিং ঠিকানা সম্পাদনা করুন",
+        "requestSuccess": "অর্ডারের বিলিং ঠিকানা আপডেট করা হয়েছে।"
+      }
+    },
+    "returns": {
+      "create": "ফেরত তৈরি করুন",
+      "confirm": "ফেরত নিশ্চিত করুন",
+      "confirmText": "আপনি একটি ফেরত নিশ্চিত করতে যাচ্ছেন। এই কাজটি আর পূর্বাবস্থায় ফিরানো যাবে না।",
+      "inbound": "আন্তঃনির্দেশনা",
+      "outbound": "বাহ্যিক",
+      "sendNotification": "নোটিফিকেশন পাঠান",
+      "sendNotificationHint": "ফেরত সম্পর্কিত গ্রাহককে নোটিফাই করুন।",
+      "returnTotal": "ফেরতের মোট",
+      "inboundTotal": "আন্তঃনির্দেশনা মোট",
+      "estDifference": "আনুমানিক পার্থক্য",
+      "outstandingAmount": "বাকী পরিমাণ",
+      "reason": "কারণ",
+      "reasonHint": "গ্রাহক কেন আইটেম ফেরত দিতে চান তা নির্বাচন করুন।",
+      "note": "নোট",
+      "noInventoryLevel": "কোনও ইনভেন্টরি স্তর নেই",
+      "noInventoryLevelDesc": "নির্বাচিত অবস্থানে নির্বাচিত আইটেমগুলির জন্য কোনও ইনভেন্টরি স্তর নেই। ফেরত অনুরোধ করা যেতে পারে, তবে ফেরত গ্রহণ করা যাবে না যতক্ষণ না নির্বাচিত অবস্থানের জন্য ইনভেন্টরি স্তর তৈরি করা হয়।",
+      "noteHint": "আপনি কিছু নির্দিষ্ট করতে চাইলে খালি টাইপ করতে পারেন।",
+      "location": "অবস্থান",
+      "locationHint": "যে অবস্থানে আপনি আইটেম ফেরত দিতে চান তা নির্বাচন করুন।",
+      "inboundShipping": "ফেরত শিপিং",
+      "inboundShippingHint": "আপনি কোন পদ্ধতি ব্যবহার করতে চান তা নির্বাচন করুন।",
+      "returnableQuantityLabel": "ফেরতযোগ্য পরিমাণ",
+      "refundableAmountLabel": "ফেরতযোগ্য পরিমাণ",
+      "returnRequestedInfo": "{{requestedItemsCount}}x আইটেম ফেরত অনুরোধ করা হয়েছে",
+      "returnReceivedInfo": "{{requestedItemsCount}}x আইটেম ফেরত গ্রহণ করা হয়েছে",
+      "itemReceived": "আইটেম গ্রহণ করা হয়েছে",
+      "returnRequested": "ফেরত অনুরোধ করা হয়েছে",
+      "damagedItemReceived": "ক্ষতিগ্রস্ত আইটেম গ্রহণ করা হয়েছে",
+      "damagedItemsReturned": "{{quantity}}x ক্ষতিগ্রস্ত আইটেম ফেরত দেওয়া হয়েছে",
+      "activeChangeError": "এই অর্ডারে একটি সক্রিয় পরিবর্তন চলছে। দয়া করে প্রথমে পরিবর্তনটি সম্পন্ন বা বাতিল করুন।",
+      "cancel": {
+        "title": "ফেরত বাতিল করুন",
+        "description": "আপনি কি সত্যিই ফেরত অনুরোধ বাতিল করতে চান?"
+      },
+      "placeholders": {
+        "noReturnShippingOptions": {
+          "title": "কোনও ফেরত শিপিং অপশন পাওয়া যায়নি",
+          "hint": "অবস্থানটির জন্য কোনও ফেরত শিপিং অপশন তৈরি করা হয়নি। আপনি এটি <LinkComponent>অবস্থান ও শিপিং</LinkComponent> এ তৈরি করতে পারেন।"
+        },
+        "outboundShippingOptions": {
+          "title": "কোনও বাহ্যিক শিপিং অপশন পাওয়া যায়নি",
+          "hint": "অবস্থানটির জন্য কোনও বাহ্যিক শিপিং অপশন তৈরি করা হয়নি। আপনি এটি <LinkComponent>অবস্থান ও শিপিং</LinkComponent> এ তৈরি করতে পারেন।"
+        }
+      },
+      "receive": {
+        "action": "আইটেম গ্রহণ করুন",
+        "receiveItems": "{{ returnType }} {{ id }}",
+        "restockAll": "সব আইটেম পুনরায় স্টক করুন",
+        "itemsLabel": "গ্রহণ করা আইটেম",
+        "title": "#{{returnId}} এর জন্য আইটেম গ্রহণ করুন",
+        "sendNotificationHint": "গ্রাহককে প্রাপ্ত ফেরত সম্পর্কিত নোটিফাই করুন।",
+        "inventoryWarning": "দয়া করে লক্ষ্য করুন যে, উপরে আপনার দেওয়া তথ্য অনুযায়ী আমরা স্বয়ংক্রিয়ভাবে ইনভেন্টরি স্তর সমন্বয় করব।",
+        "writeOffInputLabel": "কতগুলি আইটেম ক্ষতিগ্রস্ত হয়েছে?",
+        "toast": {
+          "success": "ফেরত সফলভাবে গ্রহণ করা হয়েছে।",
+          "errorLargeValue": "পরিমাণ অনুরোধকৃত আইটেমের পরিমাণের চেয়ে বেশি।",
+          "errorNegativeValue": "পরিমাণ নেতিবাচক মান হতে পারে না।",
+          "errorLargeDamagedValue": "ক্ষতিগ্রস্ত আইটেমের পরিমাণ + অক্ষত আইটেম গ্রহণ করা পরিমাণ ফেরতের মোট আইটেম পরিমাণ অতিক্রম করেছে। দয়া করে অক্ষত আইটেমের পরিমাণ কমান।"
+        }
+      },
+      "toast": {
+        "canceledSuccessfully": "ফেরত সফলভাবে বাতিল করা হয়েছে",
+        "confirmedSuccessfully": "ফেরত সফলভাবে নিশ্চিত করা হয়েছে"
+      },
+      "panel": {
+        "title": "ফেরত শুরু করা হয়েছে",
+        "description": "একটি ওপেন ফেরত অনুরোধ আছে যা সম্পন্ন হওয়া উচিত"
+      }
+    },
+    "claims": {
+      "create": "ক্লেইম তৈরি করুন",
+      "confirm": "ক্লেইম নিশ্চিত করুন",
+      "confirmText": "আপনি একটি ক্লেইম নিশ্চিত করতে যাচ্ছেন। এই পদক্ষেপটি পুনরুদ্ধার করা যাবে না।",
+      "manage": "ক্লেইম পরিচালনা করুন",
+      "outbound": "বাহ্যিক",
+      "outboundItemAdded": "{{itemsCount}}x ক্লেইমের মাধ্যমে যোগ করা হয়েছে",
+      "outboundTotal": "বাহ্যিক মোট",
+      "outboundShipping": "বাহ্যিক শিপিং",
+      "outboundShippingHint": "যে পদ্ধতি আপনি ব্যবহার করতে চান তা নির্বাচন করুন।",
+      "refundAmount": "আনুমানিক পার্থক্য",
+      "activeChangeError": "এই অর্ডারে একটি সক্রিয় অর্ডার পরিবর্তন রয়েছে। অনুগ্রহ করে পূর্ববর্তী পরিবর্তনটি শেষ বা বাতিল করুন।",
+      "actions": {
+        "cancelClaim": {
+          "successToast": "ক্লেইম সফলভাবে বাতিল করা হয়েছে।"
+        }
+      },
+      "cancel": {
+        "title": "ক্লেইম বাতিল করুন",
+        "description": "আপনি কি নিশ্চিত যে আপনি ক্লেইমটি বাতিল করতে চান?"
+      },
+      "tooltips": {
+        "onlyReturnShippingOptions": "এই তালিকাটি শুধুমাত্র রিটার্ন শিপিং অপশনগুলির মধ্যে থাকবে।"
+      },
+      "toast": {
+        "canceledSuccessfully": "ক্লেইম সফলভাবে বাতিল করা হয়েছে",
+        "confirmedSuccessfully": "ক্লেইম সফলভাবে নিশ্চিত করা হয়েছে"
+      },
+      "panel": {
+        "title": "ক্লেইম শুরু করা হয়েছে",
+        "description": "সম্পন্ন করার জন্য একটি খোলামেলা ক্লেইম অনুরোধ রয়েছে"
+      }
+    },
+    "exchanges": {
+      "create": "এক্সচেঞ্জ তৈরি করুন",
+      "manage": "এক্সচেঞ্জ পরিচালনা করুন",
+      "confirm": "এক্সচেঞ্জ নিশ্চিত করুন",
+      "confirmText": "আপনি এক্সচেঞ্জ নিশ্চিত করতে যাচ্ছেন। এই পদক্ষেপটি পূর্বাবস্থায় ফিরিয়ে নেওয়া যাবে না।",
+      "outbound": "আউটবাউন্ড",
+      "outboundItemAdded": "{{itemsCount}}x এক্সচেঞ্জের মাধ্যমে যোগ করা হয়েছে",
+      "outboundTotal": "আউটবাউন্ড মোট",
+      "outboundShipping": "আউটবাউন্ড শিপিং",
+      "outboundShippingHint": "আপনি কোন পদ্ধতি ব্যবহার করতে চান তা নির্বাচন করুন।",
+      "refundAmount": "আনুমানিক পার্থক্য",
+      "activeChangeError": "এই অর্ডারে একটি সক্রিয় অর্ডার পরিবর্তন রয়েছে। অনুগ্রহ করে পূর্ববর্তী পরিবর্তনটি শেষ বা বাতিল করুন।",
+      "actions": {
+        "cancelExchange": {
+          "successToast": "এক্সচেঞ্জ সফলভাবে বাতিল করা হয়েছে।"
+        }
+      },
+      "cancel": {
+        "title": "এক্সচেঞ্জ বাতিল করুন",
+        "description": "আপনি কি নিশ্চিত যে আপনি এক্সচেঞ্জটি বাতিল করতে চান?"
+      },
+      "tooltips": {
+        "onlyReturnShippingOptions": "এই তালিকাটি শুধুমাত্র রিটার্ন শিপিং অপশনগুলির মধ্যে থাকবে।"
+      },
+      "toast": {
+        "canceledSuccessfully": "এক্সচেঞ্জ সফলভাবে বাতিল করা হয়েছে",
+        "confirmedSuccessfully": "এক্সচেঞ্জ সফলভাবে নিশ্চিত করা হয়েছে"
+      },
+      "panel": {
+        "title": "এক্সচেঞ্জ শুরু করা হয়েছে",
+        "description": "সম্পন্ন করার জন্য একটি খোলামেলা এক্সচেঞ্জ অনুরোধ রয়েছে"
+      }
+    },
+    "reservations": {
+      "allocatedLabel": "বরাদ্দ করা হয়েছে",
+      "notAllocatedLabel": "বরাদ্দ করা হয়নি"
+    },
+    "allocateItems": {
+      "action": "আইটেম বরাদ্দ করুন",
+      "title": "অর্ডার আইটেম বরাদ্দ করুন",
+      "locationDescription": "আপনি কোন লোকেশন থেকে বরাদ্দ করতে চান তা নির্বাচন করুন।",
+      "itemsToAllocate": "বরাদ্দ করার আইটেম",
+      "itemsToAllocateDesc": "আপনি কতটি আইটেম বরাদ্দ করতে চান তা নির্বাচন করুন",
+      "search": "আইটেম অনুসন্ধান করুন",
+      "consistsOf": "{{num}}x ইনভেন্টরি আইটেম দ্বারা গঠিত",
+      "requires": "প্রতিটি ভেরিয়েন্টের জন্য {{num}} প্রয়োজন",
+      "toast": {
+        "created": "আইটেম সফলভাবে বরাদ্দ করা হয়েছে"
+      },
+      "error": {
+        "quantityNotAllocated": "এখনও বরাদ্দ না হওয়া আইটেম রয়েছে।"
+      }
+    },
+    "shipment": {
+      "title": "ফুলফিলমেন্ট শিপড হিসাবে চিহ্নিত করুন",
+      "trackingNumber": "ট্র্যাকিং নম্বর",
+      "addTracking": "ট্র্যাকিং নম্বর যোগ করুন",
+      "sendNotification": "নোটিফিকেশন পাঠান",
+      "sendNotificationHint": "গ্রাহককে এই শিপমেন্ট সম্পর্কে জানিয়ে দিন।",
+      "toastCreated": "শিপমেন্ট সফলভাবে তৈরি করা হয়েছে।"
+    },
+    "fulfillment": {
+      "cancelWarning": "আপনি একটি ফুলফিলমেন্ট বাতিল করতে যাচ্ছেন। এই পদক্ষেপটি পূর্বাবস্থায় ফিরিয়ে নেওয়া যাবে না।",
+      "markAsDeliveredWarning": "আপনি ফুলফিলমেন্টকে ডেলিভারী হিসাবে চিহ্নিত করতে যাচ্ছেন। এই পদক্ষেপটি পূর্বাবস্থায় ফিরিয়ে নেওয়া যাবে না।",
+      "differentOptionSelected": "যে শিপিং অপশনটি নির্বাচন করা হয়েছে, তা গ্রাহক কর্তৃক নির্বাচিত অপশন থেকে ভিন্ন।",
+      "disabledItemTooltip": "যে শিপিং অপশনটি আপনি নির্বাচন করেছেন, তা এই আইটেমের ফুলফিলমেন্ট অনুমোদন করে না।",
+      "unfulfilledItems": "অফুলফিলড আইটেম",
+      "statusLabel": "ফুলফিলমেন্ট স্থিতি",
+      "statusTitle": "ফুলফিলমেন্ট স্থিতি",
+      "fulfillItems": "আইটেম ফুলফিল করুন",
+      "awaitingFulfillmentBadge": "ফুলফিলমেন্টের জন্য অপেক্ষা করছে",
+      "requiresShipping": "শিপিং প্রয়োজন",
+      "number": "ফুলফিলমেন্ট #{{number}}",
+      "itemsToFulfill": "ফুলফিল করার আইটেম",
+      "create": "ফুলফিলমেন্ট তৈরি করুন",
+      "available": "উপলব্ধ",
+      "inStock": "স্টকে আছে",
+      "markAsShipped": "শিপড হিসাবে চিহ্নিত করুন",
+      "markAsPickedUp": "পিকআপ হিসাবে চিহ্নিত করুন",
+      "markAsDelivered": "ডেলিভারী হিসাবে চিহ্নিত করুন",
+      "itemsToFulfillDesc": "ফুলফিল করার জন্য আইটেম এবং পরিমাণ নির্বাচন করুন",
+      "locationDescription": "আপনি কোন লোকেশন থেকে আইটেম ফুলফিল করতে চান তা নির্বাচন করুন।",
+      "sendNotificationHint": "গ্রাহককে তৈরি করা ফুলফিলমেন্ট সম্পর্কে জানিয়ে দিন।",
+      "methodDescription": "গ্রাহক যে শিপিং পদ্ধতি নির্বাচন করেছেন, তার থেকে আলাদা শিপিং পদ্ধতি নির্বাচন করুন",
+      "error": {
+        "wrongQuantity": "ফুলফিল করার জন্য মাত্র একটি আইটেম উপলব্ধ",
+        "wrongQuantity_other": "পরিমাণ {{number}} এর মধ্যে একটি সংখ্যা হওয়া উচিত",
+        "noItems": "ফুলফিল করার জন্য কোনও আইটেম নেই।",
+        "noShippingOption": "শিপিং অপশন প্রয়োজন",
+        "noLocation": "লোকেশন প্রয়োজন"
+      },
+      "status": {
+        "notFulfilled": "ফুলফিল করা হয়নি",
+        "partiallyFulfilled": "আংশিকভাবে ফুলফিল করা হয়েছে",
+        "fulfilled": "ফুলফিল করা হয়েছে",
+        "partiallyShipped": "আংশিকভাবে শিপড",
+        "shipped": "শিপড",
+        "delivered": "ডেলিভারী হয়েছে",
+        "partiallyDelivered": "আংশিকভাবে ডেলিভারী হয়েছে",
+        "partiallyReturned": "আংশিকভাবে রিটার্ন হয়েছে",
+        "returned": "রিটার্ন হয়েছে",
+        "canceled": "বাতিল হয়েছে",
+        "requiresAction": "অ্যাকশন প্রয়োজন"
+      },
+      "toast": {
+        "created": "ফুলফিলমেন্ট সফলভাবে তৈরি করা হয়েছে",
+        "canceled": "ফুলফিলমেন্ট সফলভাবে বাতিল করা হয়েছে",
+        "fulfillmentShipped": "এর আগে শিপড ফুলফিলমেন্ট বাতিল করা যাবে না",
+        "fulfillmentDelivered": "ফুলফিলমেন্ট সফলভাবে ডেলিভারী হিসাবে চিহ্নিত করা হয়েছে",
+        "fulfillmentPickedUp": "ফুলফিলমেন্ট সফলভাবে পিকআপ হিসাবে চিহ্নিত করা হয়েছে"
+      },
+      "trackingLabel": "ট্র্যাকিং",
+      "shippingFromLabel": "শিপিং কোথা থেকে",
+      "itemsLabel": "আইটেম"
+    },
+    "refund": {
+      "title": "রিফান্ড তৈরি করুন",
+      "sendNotificationHint": "গ্রাহককে তৈরি করা রিফান্ড সম্পর্কে জানিয়ে দিন।",
+      "systemPayment": "সিস্টেম পেমেন্ট",
+      "systemPaymentDesc": "আপনার এক বা একাধিক পেমেন্ট সিস্টেম পেমেন্ট। এই ধরনের পেমেন্টের জন্য ক্যাপচার এবং রিফান্ড Medusa দ্বারা পরিচালিত হয় না, সেজন্য সতর্ক থাকুন।",
+      "error": {
+        "amountToLarge": "মূল অর্ডার পরিমাণের চেয়ে বেশি রিফান্ড করা যাবে না।",
+        "amountNegative": "রিফান্ড পরিমাণ একটি ইতিবাচক সংখ্যা হতে হবে।",
+        "reasonRequired": "অনুগ্রহ করে একটি রিফান্ড কারণ নির্বাচন করুন।"
+      }
+    },
+    "customer": {
+      "contactLabel": "যোগাযোগ",
+      "editEmail": "ইমেইল সম্পাদনা করুন",
+      "transferOwnership": "মালিকানা স্থানান্তর করুন",
+      "editBillingAddress": "বিলিং ঠিকানা সম্পাদনা করুন",
+      "editShippingAddress": "শিপিং ঠিকানা সম্পাদনা করুন"
+    },
+    "activity": {
+      "header": "ক্রিয়াকলাপ",
+      "showMoreActivities_one": "আরও {{count}} ক্রিয়াকলাপ দেখান",
+      "showMoreActivities_other": "আরও {{count}} ক্রিয়াকলাপ দেখান",
+      "comment": {
+        "label": "মন্তব্য",
+        "placeholder": "একটি মন্তব্য দিন",
+        "addButtonText": "মন্তব্য যোগ করুন",
+        "deleteButtonText": "মন্তব্য মুছে ফেলুন"
+      },
+      "from": "থেকে",
+      "to": "প্রতি",
+      "events": {
+        "common": {
+          "toReturn": "ফিরিয়ে দিতে হবে",
+          "toSend": "পাঠাতে হবে"
+        },
+        "placed": {
+          "title": "অর্ডার দেওয়া হয়েছে",
+          "fromSalesChannel": "থেকে {{salesChannel}}"
+        },
+        "canceled": {
+          "title": "অর্ডার বাতিল করা হয়েছে"
+        },
+        "payment": {
+          "awaiting": "পেমেন্টের জন্য অপেক্ষা করা হচ্ছে",
+          "captured": "পেমেন্ট ক্যাপচার করা হয়েছে",
+          "canceled": "পেমেন্ট বাতিল করা হয়েছে",
+          "refunded": "পেমেন্ট রিফান্ড করা হয়েছে"
+        },
+        "fulfillment": {
+          "created": "আইটেম ফুলফিল করা হয়েছে",
+          "canceled": "ফুলফিলমেন্ট বাতিল করা হয়েছে",
+          "shipped": "আইটেম শিপড করা হয়েছে",
+          "delivered": "আইটেম ডেলিভারী করা হয়েছে",
+          "items_one": "{{count}} আইটেম",
+          "items_other": "{{count}} আইটেম"
+        },
+        "return": {
+          "created": "রিটার্ন #{{returnId}} অনুরোধ করা হয়েছে",
+          "canceled": "রিটার্ন #{{returnId}} বাতিল করা হয়েছে",
+          "received": "রিটার্ন #{{returnId}} গ্রহণ করা হয়েছে",
+          "items_one": "{{count}} আইটেম রিটার্ন করা হয়েছে",
+          "items_other": "{{count}} আইটেম রিটার্ন করা হয়েছে"
+        },
+        "note": {
+          "comment": "মন্তব্য",
+          "byLine": "দ্বারা {{author}}"
+        },
+        "claim": {
+          "created": "দাবী #{{claimId}} অনুরোধ করা হয়েছে",
+          "canceled": "দাবী #{{claimId}} বাতিল করা হয়েছে",
+          "itemsInbound": "{{count}} আইটেম ফেরত দেওয়ার জন্য",
+          "itemsOutbound": "{{count}} আইটেম পাঠানোর জন্য"
+        },
+        "exchange": {
+          "created": "এক্সচেঞ্জ #{{exchangeId}} অনুরোধ করা হয়েছে",
+          "canceled": "এক্সচেঞ্জ #{{exchangeId}} বাতিল করা হয়েছে",
+          "itemsInbound": "{{count}} আইটেম ফেরত দেওয়ার জন্য",
+          "itemsOutbound": "{{count}} আইটেম পাঠানোর জন্য"
+        },
+        "edit": {
+          "requested": "অর্ডার সম্পাদনা #{{editId}} অনুরোধ করা হয়েছে",
+          "confirmed": "অর্ডার সম্পাদনা #{{editId}} নিশ্চিত করা হয়েছে"
+        },
+        "transfer": {
+          "requested": "অর্ডার স্থানান্তর #{{transferId}} অনুরোধ করা হয়েছে",
+          "confirmed": "অর্ডার স্থানান্তর #{{transferId}} নিশ্চিত করা হয়েছে",
+          "declined": "অর্ডার স্থানান্তর #{{transferId}} প্রত্যাখ্যান করা হয়েছে"
+        },
+        "update_order": {
+          "shipping_address": "শিপিং ঠিকানা আপডেট করা হয়েছে",
+          "billing_address": "বিলিং ঠিকানা আপডেট করা হয়েছে",
+          "email": "ইমেইল আপডেট করা হয়েছে"
+        }
+      }
+    },
+    "fields": {
+      "displayId": "ডিসপ্লে আইডি",
+      "refundableAmount": "রিফান্ডযোগ্য পরিমাণ",
+      "returnableQuantity": "ফিরিয়ে দেওয়ার পরিমাণ"
+    }
+  },
+  "draftOrders": {
+    "domain": "ড্রাফট অর্ডার",
+    "deleteWarning": "আপনি ড্রাফট অর্ডার {{id}} মুছে ফেলতে যাচ্ছেন। এই কার্যক্রমটি বাতিল করা যাবে না।",
+    "paymentLinkLabel": "পেমেন্ট লিঙ্ক",
+    "cartIdLabel": "কার্ট আইডি",
+    "markAsPaid": {
+      "label": "পেমেন্ট হিসাবে চিহ্নিত করুন",
+      "warningTitle": "পেমেন্ট হিসাবে চিহ্নিত করুন",
+      "warningDescription": "আপনি ড্রাফট অর্ডারটি পেমেন্ট হিসাবে চিহ্নিত করতে যাচ্ছেন। এই কার্যক্রমটি বাতিল করা যাবে না, এবং পরে পেমেন্ট সংগ্রহ করা সম্ভব হবে না।"
+    },
+    "status": {
+      "open": "খোলা",
+      "completed": "সম্পূর্ণ"
+    },
+    "create": {
+      "createDraftOrder": "ড্রাফট অর্ডার তৈরি করুন",
+      "createDraftOrderHint": "অর্ডার দেওয়ার আগে অর্ডারের বিবরণ পরিচালনা করতে একটি নতুন ড্রাফট অর্ডার তৈরি করুন।",
+      "chooseRegionHint": "অঞ্চল নির্বাচন করুন",
+      "existingItemsLabel": "বিদ্যমান আইটেম",
+      "existingItemsHint": "ড্রাফট অর্ডারে বিদ্যমান পণ্য যোগ করুন।",
+      "customItemsLabel": "কাস্টম আইটেম",
+      "customItemsHint": "ড্রাফট অর্ডারে কাস্টম আইটেম যোগ করুন।",
+      "addExistingItemsAction": "বিদ্যমান আইটেম যোগ করুন",
+      "addCustomItemAction": "কাস্টম আইটেম যোগ করুন",
+      "noCustomItemsAddedLabel": "এখনো কোনো কাস্টম আইটেম যোগ করা হয়নি",
+      "noExistingItemsAddedLabel": "এখনো কোনো বিদ্যমান আইটেম যোগ করা হয়নি",
+      "chooseRegionTooltip": "প্রথমে একটি অঞ্চল নির্বাচন করুন",
+      "useExistingCustomerLabel": "বিদ্যমান গ্রাহক ব্যবহার করুন",
+      "addShippingMethodsAction": "শিপিং পদ্ধতি যোগ করুন",
+      "unitPriceOverrideLabel": "ইউনিট মূল্য ওভাররাইড",
+      "shippingOptionLabel": "শিপিং অপশন",
+      "shippingOptionHint": "ড্রাফট অর্ডারের জন্য শিপিং অপশন নির্বাচন করুন।",
+      "shippingPriceOverrideLabel": "শিপিং মূল্য ওভাররাইড",
+      "shippingPriceOverrideHint": "ড্রাফট অর্ডারের শিপিং মূল্য ওভাররাইড করুন।",
+      "sendNotificationLabel": "বিজ্ঞপ্তি পাঠান",
+      "sendNotificationHint": "ড্রাফট অর্ডার তৈরি হলে গ্রাহককে একটি বিজ্ঞপ্তি পাঠান।"
+    },
+    "validation": {
+      "requiredEmailOrCustomer": "ইমেইল বা গ্রাহক প্রয়োজন।",
+      "requiredItems": "অন্তত একটি আইটেম প্রয়োজন।",
+      "invalidEmail": "ইমেইল একটি বৈধ ইমেইল ঠিকানা হতে হবে।"
+    }
+  },
+  "stockLocations": {
+    "domain": "লোকেশন এবং শিপিং",
+    "list": {
+      "description": "আপনার স্টোরের স্টক লোকেশন এবং শিপিং অপশনগুলি পরিচালনা করুন।"
+    },
+    "create": {
+      "header": "স্টক লোকেশন তৈরি করুন",
+      "hint": "স্টক লোকেশন একটি শারীরিক স্থান যেখানে পণ্য সংরক্ষিত এবং শিপিং করা হয়।",
+      "successToast": "লোকেশন {{name}} সফলভাবে তৈরি হয়েছে।"
+    },
+    "edit": {
+      "header": "স্টক লোকেশন সম্পাদনা করুন",
+      "viewInventory": "ইনভেন্টরি দেখুন",
+      "successToast": "লোকেশন {{name}} সফলভাবে আপডেট হয়েছে।"
+    },
+    "delete": {
+      "confirmation": "আপনি স্টক লোকেশন \"{{name}}\" মুছে ফেলতে যাচ্ছেন। এই কার্যক্রমটি বাতিল করা যাবে না।"
+    },
+    "fulfillmentProviders": {
+      "header": "ফুলফিলমেন্ট প্রদানকারী",
+      "shippingOptionsTooltip": "এই ড্রপডাউন কেবলমাত্র সেই প্রদানকারীদের অন্তর্ভুক্ত করবে যারা এই লোকেশনের জন্য সক্রিয়। যদি ড্রপডাউন নিষ্ক্রিয় থাকে তবে তাদের লোকেশনে যোগ করুন।",
+      "label": "সংযুক্ত ফুলফিলমেন্ট প্রদানকারী",
+      "connectedTo": "{{count}} এর মধ্যে {{total}} ফুলফিলমেন্ট প্রদানকারীর সাথে সংযুক্ত",
+      "noProviders": "এই স্টক লোকেশন কোন ফুলফিলমেন্ট প্রদানকারীর সাথে সংযুক্ত নয়।",
+      "action": "প্রদানকারী সংযুক্ত করুন",
+      "successToast": "স্টক লোকেশনের জন্য ফুলফিলমেন্ট প্রদানকারী সফলভাবে আপডেট হয়েছে।"
+    },
+    "fulfillmentSets": {
+      "pickup": {
+        "header": "পিকআপ"
+      },
+      "shipping": {
+        "header": "শিপিং"
+      },
+      "disable": {
+        "confirmation": "আপনি কি নিশ্চিত যে আপনি \"{{name}}\" নিষ্ক্রিয় করতে চান? এটি সমস্ত সম্পর্কিত সার্ভিস জোন এবং শিপিং অপশন মুছে ফেলবে এবং এটি পুনরুদ্ধার করা যাবে না।",
+        "pickup": "পিকআপ সফলভাবে নিষ্ক্রিয় করা হয়েছে।",
+        "shipping": "শিপিং সফলভাবে নিষ্ক্রিয় করা হয়েছে।"
+      },
+      "enable": {
+        "pickup": "পিকআপ সফলভাবে সক্রিয় করা হয়েছে।",
+        "shipping": "শিপিং সফলভাবে সক্রিয় করা হয়েছে।"
+      }
+    },
+    "sidebar": {
+      "header": "শিপিং কনফিগারেশন",
+      "shippingProfiles": {
+        "label": "শিপিং প্রোফাইল",
+        "description": "শিপিং প্রয়োজনীয়তার ভিত্তিতে পণ্য গ্রুপ করুন"
+      }
+    },
+    "salesChannels": {
+      "header": "বিক্রয় চ্যানেল",
+      "hint": "এই অবস্থানের সাথে সংযুক্ত বিক্রয় চ্যানেলগুলি পরিচালনা করুন।",
+      "label": "সংযুক্ত বিক্রয় চ্যানেল",
+      "connectedTo": "{{count}} এর মধ্যে {{total}} বিক্রয় চ্যানেলের সাথে সংযুক্ত",
+      "noChannels": "এই অবস্থানটি কোন বিক্রয় চ্যানেলের সাথে সংযুক্ত নয়।",
+      "action": "বিক্রয় চ্যানেল সংযুক্ত করুন",
+      "successToast": "বিক্রয় চ্যানেলগুলি সফলভাবে আপডেট করা হয়েছে।"
+    },
+    "pickupOptions": {
+      "edit": {
+        "header": "পিকআপ বিকল্প সম্পাদনা করুন"
+      }
+    },
+    "shippingOptions": {
+      "create": {
+        "shipping": {
+          "header": "{{zone}} এর জন্য শিপিং বিকল্প তৈরি করুন",
+          "hint": "এই অবস্থান থেকে পণ্য কিভাবে শিপ করা হবে তা সংজ্ঞায়িত করার জন্য একটি নতুন শিপিং বিকল্প তৈরি করুন।",
+          "label": "শিপিং বিকল্প",
+          "successToast": "শিপিং বিকল্প {{name}} সফলভাবে তৈরি হয়েছে।"
+        },
+        "pickup": {
+          "header": "{{zone}} এর জন্য পিকআপ বিকল্প তৈরি করুন",
+          "hint": "এই অবস্থান থেকে পণ্য কিভাবে পিকআপ করা হবে তা সংজ্ঞায়িত করার জন্য একটি নতুন পিকআপ বিকল্প তৈরি করুন।",
+          "label": "পিকআপ বিকল্প",
+          "successToast": "পিকআপ বিকল্প {{name}} সফলভাবে তৈরি হয়েছে।"
+        },
+        "returns": {
+          "header": "{{zone}} এর জন্য রিটার্ন বিকল্প তৈরি করুন",
+          "hint": "এই অবস্থানে পণ্য কীভাবে ফেরত আসবে তা সংজ্ঞায়িত করার জন্য একটি নতুন রিটার্ন বিকল্প তৈরি করুন।",
+          "label": "রিটার্ন বিকল্প",
+          "successToast": "রিটার্ন বিকল্প {{name}} সফলভাবে তৈরি হয়েছে।"
+        },
+        "tabs": {
+          "details": "বিস্তারিত",
+          "prices": "মূল্য"
+        },
+        "action": "বিকল্প তৈরি করুন"
+      },
+      "delete": {
+        "confirmation": "আপনি শিপিং বিকল্প \"{{name}}\" মুছে ফেলতে যাচ্ছেন। এই ক্রিয়া ফিরিয়ে নেওয়া যাবে না।",
+        "successToast": "শিপিং বিকল্প {{name}} সফলভাবে মুছে ফেলা হয়েছে।"
+      },
+      "edit": {
+        "header": "শিপিং বিকল্প সম্পাদনা করুন",
+        "action": "বিকল্প সম্পাদনা করুন",
+        "successToast": "শিপিং বিকল্প {{name}} সফলভাবে আপডেট হয়েছে।"
+      },
+      "pricing": {
+        "action": "মূল্য সম্পাদনা করুন"
+      },
+      "conditionalPrices": {
+        "header": "{{name}} এর জন্য শর্তাধীন মূল্য",
+        "description": "এই শিপিং বিকল্পের জন্য শর্তাধীন মূল্য পরিচালনা করুন যা কার্ট আইটেমের মোট অনুযায়ী নির্ধারিত হয়।",
+        "attributes": {
+          "cartItemTotal": "কার্ট আইটেম মোট"
+        },
+        "summaries": {
+          "range": "যদি <0>{{attribute}}</0> <1>{{gte}}</1> এবং <2>{{lte}}</2> এর মধ্যে থাকে",
+          "greaterThan": "যদি <0>{{attribute}}</0> ≥ <1>{{gte}}</1>",
+          "lessThan": "যদি <0>{{attribute}}</0> ≤ <1>{{lte}}</1>"
+        },
+        "actions": {
+          "addPrice": "মূল্য যোগ করুন",
+          "manageConditionalPrices": "শর্তাধীন মূল্য পরিচালনা করুন"
+        },
+        "rules": {
+          "amount": "শিপিং বিকল্প মূল্য",
+          "gte": "সর্বনিম্ন কার্ট আইটেম মোট",
+          "lte": "সর্বাধিক কার্ট আইটেম মোট"
+        },
+        "customRules": {
+          "label": "কাস্টম নিয়ম",
+          "tooltip": "এই শর্তাধীন মূল্যে নিয়ম রয়েছে যা ড্যাশবোর্ডে পরিচালনা করা যায় না।",
+          "eq": "কার্ট আইটেম মোট সমান হতে হবে",
+          "gt": "কার্ট আইটেম মোট বেশি হতে হবে",
+          "lt": "কার্ট আইটেম মোট কম হতে হবে"
+        },
+        "errors": {
+          "amountRequired": "শিপিং বিকল্প মূল্য প্রয়োজন",
+          "minOrMaxRequired": "সর্বনিম্ন বা সর্বাধিক কার্ট আইটেম মোটের মধ্যে একটি অবশ্যই প্রদান করতে হবে",
+          "minGreaterThanMax": "সর্বনিম্ন কার্ট আইটেম মোট সর্বাধিক কার্ট আইটেম মোটের চেয়ে কম বা সমান হতে হবে",
+          "duplicateAmount": "শিপিং বিকল্প মূল্য প্রতিটি শর্তের জন্য একক হতে হবে",
+          "overlappingConditions": "শর্তগুলি সব মূল্য নিয়মে একক হতে হবে"
+        }
+      },
+      "fields": {
+        "count": {
+          "shipping_one": "{{count}} শিপিং বিকল্প",
+          "shipping_other": "{{count}} শিপিং বিকল্পগুলি",
+          "pickup_one": "{{count}} পিকআপ বিকল্প",
+          "pickup_other": "{{count}} পিকআপ বিকল্পগুলি",
+          "returns_one": "{{count}} রিটার্ন বিকল্প",
+          "returns_other": "{{count}} রিটার্ন বিকল্পগুলি"
+        },
+        "priceType": {
+          "label": "মূল্য প্রকার",
+          "options": {
+            "fixed": {
+              "label": "স্থির",
+              "hint": "শিপিং বিকল্পের মূল্য স্থির এবং অর্ডারের বিষয়বস্তুর ভিত্তিতে পরিবর্তিত হয় না।"
+            },
+            "calculated": {
+              "label": "গণনা করা",
+              "hint": "শিপিং বিকল্পের মূল্য চেকআউট সময় পূর্ণfillment প্রদানকারী দ্বারা গণনা করা হয়।"
+            }
+          }
+        },
+        "enableInStore": {
+          "label": "স্টোরে সক্ষম করুন",
+          "hint": "এটি নিশ্চিত করবে যে গ্রাহকরা চেকআউট সময় এই বিকল্পটি ব্যবহার করতে পারবেন।"
+        },
+        "provider": "ফুলফিলমেন্ট প্রদানকারী",
+        "profile": "শিপিং প্রোফাইল",
+        "fulfillmentOption": "ফুলফিলমেন্ট বিকল্প"
+      }
+    },
+    "serviceZones": {
+      "create": {
+        "headerPickup": "{{location}} থেকে পিকআপের জন্য সেবা অঞ্চল তৈরি করুন",
+        "headerShipping": "{{location}} থেকে শিপিংয়ের জন্য সেবা অঞ্চল তৈরি করুন",
+        "action": "সেবা অঞ্চল তৈরি করুন",
+        "successToast": "সেবা অঞ্চল {{name}} সফলভাবে তৈরি হয়েছে।"
+      },
+      "edit": {
+        "header": "সেবা অঞ্চল সম্পাদনা করুন",
+        "successToast": "সেবা অঞ্চল {{name}} সফলভাবে আপডেট হয়েছে।"
+      },
+      "delete": {
+        "confirmation": "আপনি সেবা অঞ্চল \"{{name}}\" মুছে ফেলতে যাচ্ছেন। এই ক্রিয়া ফিরিয়ে নেওয়া যাবে না।",
+        "successToast": "সেবা অঞ্চল {{name}} সফলভাবে মুছে ফেলা হয়েছে।"
+      },
+      "manageAreas": {
+        "header": "{{name}} এর জন্য এলাকাগুলি পরিচালনা করুন",
+        "action": "এলাকা পরিচালনা করুন",
+        "label": "এলাকা",
+        "hint": "যে ভৌগলিক এলাকাগুলিতে সেবা অঞ্চলটি কভার করে তা নির্বাচন করুন।",
+        "successToast": "{{name}} এর জন্য এলাকাগুলি সফলভাবে আপডেট করা হয়েছে।"
+      },
+      "fields": {
+        "noRecords": "কোন সেবা অঞ্চল নেই যা শিপিং বিকল্প যোগ করা যাবে।",
+        "tip": "একটি সেবা অঞ্চল হল ভৌগলিক অঞ্চল বা এর একটি সংগ্রহ। এটি শিপিং বিকল্পগুলিকে একটি নির্দিষ্ট অবস্থানে সীমাবদ্ধ করতে ব্যবহৃত হয়।"
+      }
+    }
+  },
+  "shippingProfile": {
+    "domain": "শিপিং প্রোফাইল",
+    "subtitle": "মিল রেখে শিপিং প্রয়োজনীয়তা সহ পণ্যগুলিকে প্রোফাইলে গ্রুপ করুন।",
+    "create": {
+      "header": "শিপিং প্রোফাইল তৈরি করুন",
+      "hint": "মিল রেখে শিপিং প্রয়োজনীয়তা সহ পণ্যগুলিকে গ্রুপ করার জন্য একটি নতুন শিপিং প্রোফাইল তৈরি করুন।",
+      "successToast": "শিপিং প্রোফাইল {{name}} সফলভাবে তৈরি হয়েছে।"
+    },
+    "delete": {
+      "title": "শিপিং প্রোফাইল মুছুন",
+      "description": "আপনি শিপিং প্রোফাইল {{name}} মুছে ফেলতে যাচ্ছেন। এই পদক্ষেপটি পূর্বাবস্থায় ফিরিয়ে নেওয়া যাবে না।",
+      "successToast": "শিপিং প্রোফাইল {{name}} সফলভাবে মুছে ফেলা হয়েছে।"
+    },
+    "tooltip": {
+      "type": "শিপিং প্রোফাইলের প্রকার লিখুন, উদাহরণস্বরূপ: ভারী, অতিরিক্ত আকার, কেবল মাল পরিবহন, ইত্যাদি।"
+    }
+  },
+  "taxRegions": {
+  "domain": "ট্যাক্স অঞ্চল",
+  "list": {
+    "hint": "বিভিন্ন দেশ ও অঞ্চল থেকে আপনার গ্রাহকরা কেনাকাটা করার সময় আপনি যেটি চার্জ করবেন তা পরিচালনা করুন।"
+  },
+  "delete": {
+    "confirmation": "আপনি একটি ট্যাক্স অঞ্চল মুছে ফেলতে যাচ্ছেন। এই পদক্ষেপটি পূর্বাবস্থায় ফিরিয়ে নেওয়া যাবে না।",
+    "successToast": "ট্যাক্স অঞ্চল সফলভাবে মুছে ফেলা হয়েছে।"
+  },
+  "create": {
+    "header": "ট্যাক্স অঞ্চল তৈরি করুন",
+    "hint": "একটি নির্দিষ্ট দেশের জন্য ট্যাক্স রেট সংজ্ঞায়িত করতে একটি নতুন ট্যাক্স অঞ্চল তৈরি করুন।",
+    "errors": {
+      "rateIsRequired": "ডিফল্ট ট্যাক্স রেট তৈরি করার সময় ট্যাক্স রেট প্রয়োজন।",
+      "nameIsRequired": "ডিফল্ট ট্যাক্স রেট তৈরি করার সময় নাম প্রয়োজন।"
+    },
+    "successToast": "ট্যাক্স অঞ্চল সফলভাবে তৈরি হয়েছে।"
+  },
+  "edit": {
+    "successToast": "ট্যাক্স অঞ্চল সফলভাবে আপডেট হয়েছে।"
+  },
+  "province": {
+    "header": "প্রদেশ",
+    "create": {
+      "header": "প্রদেশ ট্যাক্স অঞ্চল তৈরি করুন",
+      "hint": "একটি নির্দিষ্ট প্রদেশের জন্য ট্যাক্স রেট সংজ্ঞায়িত করতে একটি নতুন ট্যাক্স অঞ্চল তৈরি করুন।"
+    }
+  },
+  "provider": {
+    "header": "ট্যাক্স প্রদানকারী"
+  },
+  "state": {
+    "header": "রাষ্ট্র",
+    "create": {
+      "header": "রাজ্য ট্যাক্স অঞ্চল তৈরি করুন",
+      "hint": "একটি নির্দিষ্ট রাজ্যের জন্য ট্যাক্স রেট সংজ্ঞায়িত করতে একটি নতুন ট্যাক্স অঞ্চল তৈরি করুন।"
+    }
+  },
+  "stateOrTerritory": {
+    "header": "রাজ্য বা এলাকা",
+    "create": {
+      "header": "রাজ্য/এলাকা ট্যাক্স অঞ্চল তৈরি করুন",
+      "hint": "একটি নির্দিষ্ট রাজ্য/এলাকার জন্য ট্যাক্স রেট সংজ্ঞায়িত করতে একটি নতুন ট্যাক্স অঞ্চল তৈরি করুন।"
+    }
+  },
+  "county": {
+    "header": "কাউন্টি",
+    "create": {
+      "header": "কাউন্টি ট্যাক্স অঞ্চল তৈরি করুন",
+      "hint": "একটি নির্দিষ্ট কাউন্টির জন্য ট্যাক্স রেট সংজ্ঞায়িত করতে একটি নতুন ট্যাক্স অঞ্চল তৈরি করুন।"
+    }
+  },
+  "region": {
+    "header": "অঞ্চল",
+    "create": {
+      "header": "অঞ্চল ট্যাক্স অঞ্চল তৈরি করুন",
+      "hint": "একটি নির্দিষ্ট অঞ্চলের জন্য ট্যাক্স রেট সংজ্ঞায়িত করতে একটি নতুন ট্যাক্স অঞ্চল তৈরি করুন।"
+    }
+  },
+  "department": {
+    "header": "বিভাগ",
+    "create": {
+      "header": "বিভাগ ট্যাক্স অঞ্চল তৈরি করুন",
+      "hint": "একটি নির্দিষ্ট বিভাগের জন্য ট্যাক্স রেট সংজ্ঞায়িত করতে একটি নতুন ট্যাক্স অঞ্চল তৈরি করুন।"
+    }
+  },
+  "territory": {
+    "header": "এলাকা",
+    "create": {
+      "header": "এলাকা ট্যাক্স অঞ্চল তৈরি করুন",
+      "hint": "একটি নির্দিষ্ট এলাকার জন্য ট্যাক্স রেট সংজ্ঞায়িত করতে একটি নতুন ট্যাক্স অঞ্চল তৈরি করুন।"
+    }
+  },
+  "prefecture": {
+    "header": "প্রিফেকচার",
+    "create": {
+      "header": "প্রিফেকচার ট্যাক্স অঞ্চল তৈরি করুন",
+      "hint": "একটি নির্দিষ্ট প্রিফেকচারের জন্য ট্যাক্স রেট সংজ্ঞায়িত করতে একটি নতুন ট্যাক্স অঞ্চল তৈরি করুন।"
+    }
+  },
+  "district": {
+    "header": "জেলা",
+    "create": {
+      "header": "জেলা ট্যাক্স অঞ্চল তৈরি করুন",
+      "hint": "একটি নির্দিষ্ট জেলার জন্য ট্যাক্স রেট সংজ্ঞায়িত করতে একটি নতুন ট্যাক্স অঞ্চল তৈরি করুন।"
+    }
+  },
+  "governorate": {
+    "header": "গভর্নরেট",
+    "create": {
+      "header": "গভর্নরেট ট্যাক্স অঞ্চল তৈরি করুন",
+      "hint": "একটি নির্দিষ্ট গভর্নরেটের জন্য ট্যাক্স রেট সংজ্ঞায়িত করতে একটি নতুন ট্যাক্স অঞ্চল তৈরি করুন।"
+    }
+  },
+  "canton": {
+    "header": "ক্যানটন",
+    "create": {
+      "header": "ক্যানটন ট্যাক্স অঞ্চল তৈরি করুন",
+      "hint": "একটি নির্দিষ্ট ক্যানটনের জন্য ট্যাক্স রেট সংজ্ঞায়িত করতে একটি নতুন ট্যাক্স অঞ্চল তৈরি করুন।"
+    }
+  },
+  "emirate": {
+    "header": "এমিরেট",
+    "create": {
+      "header": "এমিরেট ট্যাক্স অঞ্চল তৈরি করুন",
+      "hint": "একটি নির্দিষ্ট এমিরেটের জন্য ট্যাক্স রেট সংজ্ঞায়িত করতে একটি নতুন ট্যাক্স অঞ্চল তৈরি করুন।"
+    }
+  },
+  "sublevel": {
+    "header": "সাবলেভেল",
+    "create": {
+      "header": "সাবলেভেল ট্যাক্স অঞ্চল তৈরি করুন",
+      "hint": "একটি নির্দিষ্ট সাবলেভেলের জন্য ট্যাক্স রেট সংজ্ঞায়িত করতে একটি নতুন ট্যাক্স অঞ্চল তৈরি করুন।"
+    }
+  },
+  "taxOverrides": {
+    "header": "ওভাররাইডস",
+    "create": {
+      "header": "ওভাররাইড তৈরি করুন",
+      "hint": "নির্বাচিত শর্তগুলির জন্য ডিফল্ট ট্যাক্স রেট ওভাররাইড করতে একটি নতুন ট্যাক্স রেট তৈরি করুন।"
+    },
+    "edit": {
+      "header": "ওভাররাইড সম্পাদনা করুন",
+      "hint": "নির্বাচিত শর্তগুলির জন্য ডিফল্ট ট্যাক্স রেট ওভাররাইড করতে ট্যাক্স রেট সম্পাদনা করুন।"
+    }
+  },
+  "taxRates": {
+    "create": {
+      "header": "ট্যাক্স রেট তৈরি করুন",
+      "hint": "একটি নির্দিষ্ট অঞ্চলের জন্য ট্যাক্স রেট সংজ্ঞায়িত করতে একটি নতুন ট্যাক্স রেট তৈরি করুন।",
+      "successToast": "ট্যাক্স রেট সফলভাবে তৈরি হয়েছে।"
+    },
+    "edit": {
+      "header": "ট্যাক্স রেট সম্পাদনা করুন",
+      "hint": "একটি নির্দিষ্ট অঞ্চলের জন্য ট্যাক্স রেট সংজ্ঞায়িত করতে ট্যাক্স রেট সম্পাদনা করুন।",
+      "successToast": "ট্যাক্স রেট সফলভাবে আপডেট হয়েছে।"
+    },
+    "delete": {
+      "confirmation": "\"{{name}}\" ট্যাক্স রেটটি মুছে ফেলতে যাচ্ছেন। এই পদক্ষেপটি পূর্বাবস্থায় ফিরানো যাবে না।",
+      "successToast": "ট্যাক্স রেট সফলভাবে মুছে ফেলা হয়েছে।"
+    }
+  },
+    "fields": {
+      "isCombinable": {
+        "label": "কম্বাইনযোগ্য",
+        "hint": "এই ট্যাক্স রেটটি কি ট্যাক্স অঞ্চলের ডিফল্ট রেটের সাথে কম্বাইন করা যাবে কিনা।",
+        "true": "কম্বাইনযোগ্য",
+        "false": "কম্বাইনযোগ্য নয়"
+      },
+      "defaultTaxRate": {
+        "label": "ডিফল্ট ট্যাক্স রেট",
+        "tooltip": "এই অঞ্চলের জন্য ডিফল্ট ট্যাক্স রেট। একটি উদাহরণ হল একটি দেশের বা অঞ্চলের স্ট্যান্ডার্ড VAT রেট।",
+        "action": "ডিফল্ট ট্যাক্স রেট তৈরি করুন"
+      },
+      "taxRate": "ট্যাক্স রেট",
+      "taxCode": "ট্যাক্স কোড",
+      "taxProvider": "ট্যাক্স প্রদানকারী",
+      "targets": {
+        "label": "টার্গেট",
+        "hint": "এই ট্যাক্স রেটটি কোন টার্গেটগুলির উপর প্রযোজ্য হবে তা নির্বাচন করুন।",
+        "options": {
+          "product": "পণ্য",
+          "productCollection": "পণ্য সংগ্রহ",
+          "productTag": "পণ্য ট্যাগ",
+          "productType": "পণ্য প্রকার",
+          "customerGroup": "কাস্টমার গ্রুপ"
+        },
+        "operators": {
+          "in": "এর মধ্যে",
+          "on": "এতে",
+          "and": "এবং"
+        },
+        "placeholders": {
+          "product": "পণ্য অনুসন্ধান করুন",
+          "productCollection": "পণ্য সংগ্রহ অনুসন্ধান করুন",
+          "productTag": "পণ্য ট্যাগ অনুসন্ধান করুন",
+          "productType": "পণ্য প্রকার অনুসন্ধান করুন",
+          "customerGroup": "কাস্টমার গ্রুপ অনুসন্ধান করুন"
+        },
+        "tags": {
+          "product": "পণ্য",
+          "productCollection": "পণ্য সংগ্রহ",
+          "productTag": "পণ্য ট্যাগ",
+          "productType": "পণ্য প্রকার",
+          "customerGroup": "কাস্টমার গ্রুপ"
+        },
+        "modal": {
+          "header": "টার্গেট যোগ করুন"
+        },
+        "values_one": "{{count}} মান",
+        "values_other": "{{count}} মান",
+        "numberOfTargets_one": "{{count}} টার্গেট",
+        "numberOfTargets_other": "{{count}} টার্গেট",
+        "additionalValues_one": "এবং {{count}} আরও মান",
+        "additionalValues_other": "এবং {{count}} আরও মান",
+        "action": "টার্গেট যোগ করুন"
+      },
+      "sublevels": {
+        "labels": {
+          "province": "প্রদেশ",
+          "state": "রাজ্য",
+          "region": "অঞ্চল",
+          "stateOrTerritory": "রাজ্য/এলাকা",
+          "department": "বিভাগ",
+          "county": "কাউন্টি",
+          "territory": "এলাকা",
+          "prefecture": "প্রিফেকচার",
+          "district": "জেলা",
+          "governorate": "গভর্নরেট",
+          "emirate": "এমিরেট",
+          "canton": "ক্যানটন",
+          "sublevel": "সাবলেভেল কোড"
+        },
+        "placeholders": {
+          "province": "প্রদেশ নির্বাচন করুন",
+          "state": "রাজ্য নির্বাচন করুন",
+          "region": "অঞ্চল নির্বাচন করুন",
+          "stateOrTerritory": "রাজ্য/এলাকা নির্বাচন করুন",
+          "department": "বিভাগ নির্বাচন করুন",
+          "county": "কাউন্টি নির্বাচন করুন",
+          "territory": "এলাকা নির্বাচন করুন",
+          "prefecture": "প্রিফেকচার নির্বাচন করুন",
+          "district": "জেলা নির্বাচন করুন",
+          "governorate": "গভর্নরেট নির্বাচন করুন",
+          "emirate": "এমিরেট নির্বাচন করুন",
+          "canton": "ক্যানটন নির্বাচন করুন"
+        },
+        "tooltips": {
+          "sublevel": "সাবলেভেল ট্যাক্স অঞ্চলের জন্য ISO 3166-2 কোড লিখুন।",
+          "notPartOfCountry": "{{province}} {{country}} দেশের অংশ মনে হচ্ছে না। দয়া করে এটি সঠিক কিনা তা পুনরায় যাচাই করুন।"
+        },
+        "alert": {
+          "header": "এই ট্যাক্স অঞ্চলের জন্য সাবলেভেল অঞ্চলগুলি অক্ষম",
+          "description": "ডিফল্টভাবে এই অঞ্চলের জন্য সাবলেভেল অঞ্চলগুলি অক্ষম। আপনি সাবলেভেল অঞ্চলগুলি সক্ষম করতে পারেন, যেমন প্রদেশ, রাজ্য, বা এলাকা তৈরি করতে।",
+          "action": "সাবলেভেল অঞ্চলগুলি সক্ষম করুন"
+        }
+      },
+      "noDefaultRate": {
+        "label": "কোন ডিফল্ট রেট নেই",
+        "tooltip": "এই ট্যাক্স অঞ্চলের কোন ডিফল্ট ট্যাক্স রেট নেই। যদি কোনো স্ট্যান্ডার্ড রেট থাকে, যেমন একটি দেশের VAT, তবে এটি এই অঞ্চলে যোগ করুন।"
+      }
+    }
+  },
+  "promotions": {
+    "domain": "প্রচার",
+    "sections": {
+      "details": "প্রচার বিবরণ"
+    },
+    "tabs": {
+      "template": "প্রকার",
+      "details": "বিস্তারিত",
+      "campaign": "ক্যাম্পেইন"
+    },
+    "fields": {
+      "type": "প্রকার",
+      "value_type": "মূল্য প্রকার",
+      "value": "মূল্য",
+      "campaign": "ক্যাম্পেইন",
+      "method": "পদ্ধতি",
+      "allocation": "বণ্টন",
+      "addCondition": "শর্ত যোগ করুন",
+      "clearAll": "সব মুছে ফেলুন",
+      "amount": {
+        "tooltip": "মুল্য নির্ধারণ করার জন্য মুদ্রা কোড নির্বাচন করুন"
+      },
+      "conditions": {
+        "rules": {
+          "title": "কী গ্রাহক এই কোড ব্যবহার করতে পারবে?",
+          "description": "কোন গ্রাহককে প্রচার কোড ব্যবহার করতে অনুমতি দেওয়া হবে? যদি না পরিবর্তন করা হয়, তবে সকল গ্রাহক এই কোড ব্যবহার করতে পারবে।"
+        },
+        "target-rules": {
+          "title": "কোন আইটেমে প্রচার প্রয়োগ করা হবে?",
+          "description": "প্রচারটি শুধুমাত্র ঐ আইটেমে প্রয়োগ করা হবে যা নিম্নলিখিত শর্ত পূর্ণ করবে।"
+        },
+        "buy-rules": {
+          "title": "কোন আইটেমগুলো কার্টে থাকতে হবে প্রচারটি আনলক করার জন্য?",
+          "description": "যদি এই শর্তগুলি মিলে যায়, তবে আমরা লক্ষ্য আইটেমগুলিতে প্রচারটি সক্রিয় করব।"
+        }
+      }
+    },
+    "tooltips": {
+      "campaignType": "ব্যয়ের বাজেট সেট করতে প্রচারে মুদ্রা কোড নির্বাচন করা আবশ্যক।"
+    },
+    "errors": {
+      "requiredField": "অবশ্যই পূরণ করতে হবে",
+      "promotionTabError": "আগে প্রচার ট্যাবে ত্রুটিগুলি ঠিক করুন"
+    },
+    "toasts": {
+      "promotionCreateSuccess": "প্রচার ({{code}}) সফলভাবে তৈরি করা হয়েছে।"
+    },
+    "create": {},
+    "edit": {
+      "title": "প্রচার বিবরণ সম্পাদনা করুন",
+      "rules": {
+        "title": "ব্যবহার শর্ত সম্পাদনা করুন"
+      },
+      "target-rules": {
+        "title": "আইটেম শর্ত সম্পাদনা করুন"
+      },
+      "buy-rules": {
+        "title": "ক্রয় শর্ত সম্পাদনা করুন"
+      }
+    },
+    "campaign": {
+      "header": "ক্যাম্পেইন",
+      "edit": {
+        "header": "ক্যাম্পেইন সম্পাদনা করুন",
+        "successToast": "প্রচারের ক্যাম্পেইন সফলভাবে আপডেট করা হয়েছে।"
+      },
+      "actions": {
+        "goToCampaign": "ক্যাম্পেইনে যান"
+      }
+    },
+    "campaign_currency": {
+      "tooltip": "এটি প্রচারের মুদ্রা। এটি 'বিস্তারিত' ট্যাব থেকে পরিবর্তন করুন।"
+    },
+    "form": {
+      "required": "অবশ্যই পূরণ করতে হবে",
+      "and": "এবং",
+      "selectAttribute": "অ্যাট্রিবিউট নির্বাচন করুন",
+      "campaign": {
+        "existing": {
+          "title": "বিদ্যমান ক্যাম্পেইন",
+          "description": "একটি বিদ্যমান ক্যাম্পেইনে প্রচার যোগ করুন।",
+          "placeholder": {
+            "title": "কোনও বিদ্যমান ক্যাম্পেইন নেই",
+            "desc": "আপনি একটিকে তৈরি করতে পারেন যাতে একাধিক প্রচার ট্র্যাক করা যায় এবং বাজেট সীমা সেট করা যায়।"
+          }
+        },
+        "new": {
+          "title": "নতুন ক্যাম্পেইন",
+          "description": "এই প্রচারের জন্য একটি নতুন ক্যাম্পেইন তৈরি করুন।"
+        },
+        "none": {
+          "title": "ক্যাম্পেইন ছাড়া",
+          "description": "ক্যাম্পেইন সঙ্গে প্রচার না যুক্ত করে এগিয়ে যান"
+        }
+      },
+      "status": {
+        "label": "স্থিতি",
+        "draft": {
+          "title": "ড্রাফট",
+          "description": "গ্রাহকরা কোডটি এখন ব্যবহার করতে পারবেন না"
+        },
+        "active": {
+          "title": "সক্রিয়",
+          "description": "গ্রাহকরা কোডটি ব্যবহার করতে পারবেন"
+        },
+        "inactive": {
+          "title": "নিষ্ক্রিয়",
+          "description": "গ্রাহকরা আর কোডটি ব্যবহার করতে পারবেন না"
+        }
+      },
+      "method": {
+        "label": "পদ্ধতি",
+        "code": {
+          "title": "প্রচার কোড",
+          "description": "গ্রাহকদের চেকআউট সময় এই কোডটি প্রবেশ করতে হবে"
+        },
+        "automatic": {
+          "title": "স্বয়ংক্রিয়",
+          "description": "গ্রাহকরা চেকআউট সময় এই প্রচার দেখতে পাবেন"
+        }
+      },
+      "max_quantity": {
+        "title": "সর্বাধিক পরিমাণ",
+        "description": "এই প্রচারটি কতটি আইটেমে প্রযোজ্য তা সর্বাধিক পরিমাণ।"
+      },
+      "type": {
+        "standard": {
+          "title": "স্ট্যান্ডার্ড",
+          "description": "একটি স্ট্যান্ডার্ড প্রচার"
+        },
+        "buyget": {
+          "title": "কিনুন পেতে",
+          "description": "একটি 'কিনুন X, পেতে Y' প্রচার"
+        }
+      },
+      "allocation": {
+        "each": {
+          "title": "প্রতি",
+          "description": "প্রত্যেকটি আইটেমে মান প্রযোজ্য"
+        },
+        "across": {
+          "title": "মোট",
+          "description": "আইটেমগুলোর মধ্যে মান প্রযোজ্য"
+        }
+      },
+      "code": {
+        "title": "কোড",
+        "description": "যে কোডটি আপনার গ্রাহকরা চেকআউটের সময় প্রবেশ করবেন।"
+      },
+      "value": {
+        "title": "প্রচারমূলক মান"
+      },
+      "value_type": {
+        "fixed": {
+          "title": "নির্ধারিত পরিমাণ",
+          "description": "ছাড় দেওয়ার পরিমাণ। যেমন, ১০০"
+        },
+        "percentage": {
+          "title": "শতাংশ",
+          "description": "যত শতাংশ পরিমাণে ছাড় দেওয়া হবে। যেমন, ৮%"
+        }
+      }
+    },
+    "deleteWarning": "আপনি প্রচার {{code}} মুছে ফেলার জন্য প্রস্তুত। এই কাজটি ফিরিয়ে নেওয়া যাবে না।",
+    "createPromotionTitle": "প্রচার তৈরি করুন",
+    "type": "প্রচার ধরন",
+    "conditions": {
+      "add": "শর্ত যোগ করুন",
+      "list": {
+        "noRecordsMessage": "প্রচারটি কোন আইটেমে প্রযোজ্য তা সীমাবদ্ধ করতে একটি শর্ত যোগ করুন।"
+      }
+    }
+  },
+  "campaigns": {
+    "domain": "ক্যাম্পেইন",
+    "details": "ক্যাম্পেইন বিবরণ",
+    "status": {
+      "active": "সক্রিয়",
+      "expired": "মেয়াদ শেষ",
+      "scheduled": "সূচীভুক্ত"
+    },
+    "delete": {
+      "title": "আপনি কি নিশ্চিত?",
+      "description": "আপনি ক্যাম্পেইন '{{name}}' মুছে ফেলতে যাচ্ছেন। এই পদক্ষেপটি পূর্বাবস্থায় ফেরানো যাবে না।",
+      "successToast": "ক্যাম্পেইন '{{name}}' সফলভাবে তৈরি হয়েছে।"
+    },
+    "edit": {
+      "header": "ক্যাম্পেইন সম্পাদনা করুন",
+      "description": "ক্যাম্পেইনের বিবরণ সম্পাদনা করুন।",
+      "successToast": "ক্যাম্পেইন '{{name}}' সফলভাবে আপডেট করা হয়েছে।"
+    },
+    "configuration": {
+      "header": "কনফিগারেশন",
+      "edit": {
+        "header": "ক্যাম্পেইন কনফিগারেশন সম্পাদনা করুন",
+        "description": "ক্যাম্পেইনের কনফিগারেশন সম্পাদনা করুন।",
+        "successToast": "ক্যাম্পেইন কনফিগারেশন সফলভাবে আপডেট করা হয়েছে।"
+      }
+    },
+    "create": {
+      "title": "ক্যাম্পেইন তৈরি করুন",
+      "description": "একটি প্রচারমূলক ক্যাম্পেইন তৈরি করুন।",
+      "hint": "একটি প্রচারমূলক ক্যাম্পেইন তৈরি করুন।",
+      "header": "ক্যাম্পেইন তৈরি করুন",
+      "successToast": "ক্যাম্পেইন '{{name}}' সফলভাবে তৈরি করা হয়েছে।"
+    },
+    "fields": {
+      "name": "নাম",
+      "identifier": "আইডেন্টিফায়ার",
+      "start_date": "শুরু তারিখ",
+      "end_date": "শেষ তারিখ",
+      "total_spend": "বাজেট ব্যয়",
+      "total_used": "বাজেট ব্যবহৃত",
+      "budget_limit": "বাজেট সীমা",
+      "campaign_id": {
+        "hint": "শুধুমাত্র সেই ক্যাম্পেইনগুলি এই তালিকায় প্রদর্শিত হবে, যেগুলির প্রচারের মুদ্রা কোড সমান।"
+      }
+    },
+    "budget": {
+      "create": {
+        "hint": "ক্যাম্পেইনের জন্য একটি বাজেট তৈরি করুন।",
+        "header": "ক্যাম্পেইন বাজেট"
+      },
+      "details": "ক্যাম্পেইন বাজেট",
+      "fields": {
+        "type": "ধরণ",
+        "currency": "মুদ্রা",
+        "limit": "সীমা",
+        "used": "ব্যবহৃত"
+      },
+      "type": {
+        "spend": {
+          "title": "খরচ",
+          "description": "সব প্রচারের ব্যবহৃত ডিসকাউন্টের মোট পরিমাণের উপর একটি সীমা নির্ধারণ করুন।"
+        },
+        "usage": {
+          "title": "ব্যবহার",
+          "description": "প্রচারনা কতবার ব্যবহার করা যেতে পারে তার উপর একটি সীমা নির্ধারণ করুন।"
+        }
+      },
+      "edit": {
+        "header": "ক্যাম্পেইন বাজেট সম্পাদনা করুন"
+      }
+    },
+    "promotions": {
+      "remove": {
+        "title": "প্রচারনা ক্যাম্পেইন থেকে সরান",
+        "description": "আপনি ক্যাম্পেইন থেকে {{count}} প্রচারনা(গুলি) সরানোর জন্য প্রস্তুত। এই পদক্ষেপটি পূর্বাবস্থায় ফিরিয়ে নেওয়া যাবে না।"
+      },
+      "alreadyAdded": "এই প্রচারনা ইতিমধ্যে ক্যাম্পেইনে যোগ করা হয়েছে।",
+      "alreadyAddedDiffCampaign": "এই প্রচারনা ইতিমধ্যে একটি আলাদা ক্যাম্পেইনে যোগ করা হয়েছে ({{name}})।",
+      "currencyMismatch": "প্রচারনার এবং ক্যাম্পেইনের মুদ্রা মেলে না",
+      "toast": {
+        "success": "সফলভাবে {{count}} প্রচারনা(গুলি) ক্যাম্পেইনে যোগ করা হয়েছে"
+      },
+      "add": {
+        "list": {
+          "noRecordsMessage": "প্রথমে একটি প্রচারনা তৈরি করুন।"
+        }
+      },
+      "list": {
+        "noRecordsMessage": "ক্যাম্পেইনে কোনো প্রচারনা নেই।"
+      }
+    },
+    "deleteCampaignWarning": "আপনি ক্যাম্পেইন {{name}} মুছে ফেলার জন্য প্রস্তুত। এই পদক্ষেপটি পূর্বাবস্থায় ফিরিয়ে নেওয়া যাবে না।",
+    "totalSpend": "<0>{{amount}}</0> <1>{{currency}}</1>"
+  },
+  "priceLists": {
+    "domain": "মূল্য তালিকা",
+    "subtitle": "নির্দিষ্ট শর্তাবলীর জন্য বিক্রয় বা ওভাররাইড মূল্য তৈরি করুন।",
+    "delete": {
+      "confirmation": "আপনি \"{{title}}\" মূল্য তালিকা মুছে ফেলার জন্য প্রস্তুত। এই পদক্ষেপটি পূর্বাবস্থায় ফিরিয়ে নেওয়া যাবে না।",
+      "successToast": "\"{{title}}\" মূল্য তালিকা সফলভাবে মুছে ফেলা হয়েছে।"
+    },
+    "create": {
+      "header": "মূল্য তালিকা তৈরি করুন",
+      "subheader": "আপনার পণ্যের মূল্য পরিচালনা করার জন্য একটি নতুন মূল্য তালিকা তৈরি করুন।",
+      "tabs": {
+        "details": "বিস্তারিত",
+        "products": "পণ্য",
+        "prices": "মূল্য"
+      },
+      "successToast": "মূল্য তালিকা {{title}} সফলভাবে তৈরি হয়েছে।",
+      "products": {
+        "list": {
+          "noRecordsMessage": "প্রথমে একটি পণ্য তৈরি করুন।"
+        }
+      }
+    },
+    "edit": {
+      "header": "মূল্য তালিকা সম্পাদনা করুন",
+      "successToast": "মূল্য তালিকা {{title}} সফলভাবে আপডেট করা হয়েছে।"
+    },
+    "configuration": {
+      "header": "কনফিগারেশন",
+      "edit": {
+        "header": "মূল্য তালিকা কনফিগারেশন সম্পাদনা করুন",
+        "description": "মূল্য তালিকার কনফিগারেশন সম্পাদনা করুন।",
+        "successToast": "মূল্য তালিকার কনফিগারেশন সফলভাবে আপডেট করা হয়েছে।"
+      }
+    },
+    "products": {
+      "header": "পণ্য",
+      "actions": {
+        "addProducts": "পণ্য যোগ করুন",
+        "editPrices": "মূল্য সম্পাদনা করুন"
+      },
+      "delete": {
+        "confirmation_one": "আপনি পণ্যের মূল্য তালিকায় {{count}} পণ্যের দাম মুছে ফেলার জন্য প্রস্তুত। এই পদক্ষেপটি পূর্বাবস্থায় ফিরিয়ে নেওয়া যাবে না।",
+        "confirmation_other": "আপনি পণ্যের মূল্য তালিকায় {{count}} পণ্যের দাম মুছে ফেলার জন্য প্রস্তুত। এই পদক্ষেপটি পূর্বাবস্থায় ফিরিয়ে নেওয়া যাবে না।",
+        "successToast_one": "সফলভাবে {{count}} পণ্যের দাম মুছে ফেলা হয়েছে।",
+        "successToast_other": "সফলভাবে {{count}} পণ্যের দাম মুছে ফেলা হয়েছে।"
+      },
+      "add": {
+        "successToast": "মূল্য সফলভাবে মূল্য তালিকায় যোগ করা হয়েছে।"
+      },
+      "edit": {
+        "successToast": "মূল্য সফলভাবে আপডেট করা হয়েছে।"
+      }
+    },
+    "fields": {
+      "priceOverrides": {
+        "label": "মূল্য ওভাররাইড",
+        "header": "মূল্য ওভাররাইড"
+      },
+      "status": {
+        "label": "স্ট্যাটাস",
+        "options": {
+          "active": "সক্রিয়",
+          "draft": "খসড়া",
+          "expired": "মেয়াদোত্তীর্ণ",
+          "scheduled": "নির্ধারিত"
+        }
+      },
+      "type": {
+        "label": "ধরন",
+        "hint": "আপনি যে ধরনের মূল্য তালিকা তৈরি করতে চান তা নির্বাচন করুন।",
+        "options": {
+          "sale": {
+            "label": "বিক্রয়",
+            "description": "বিক্রয় মূল্য পণ্যের জন্য অস্থায়ী মূল্য পরিবর্তন।"
+          },
+          "override": {
+            "label": "ওভাররাইড",
+            "description": "ওভাররাইড সাধারণত গ্রাহক-বিশেষ মূল্য তৈরি করতে ব্যবহৃত হয়।"
+          }
+        }
+      },
+      "startsAt": {
+        "label": "মূল্য তালিকার শুরু তারিখ আছে কি?",
+        "hint": "ভবিষ্যতে সক্রিয় হওয়ার জন্য মূল্য তালিকাটি নির্ধারণ করুন।"
+      },
+      "endsAt": {
+        "label": "মূল্য তালিকার মেয়াদ শেষের তারিখ আছে কি?",
+        "hint": "ভবিষ্যতে নিষ্ক্রিয় হওয়ার জন্য মূল্য তালিকাটি নির্ধারণ করুন।"
+      },
+      "customerAvailability": {
+        "header": "গ্রাহক গোষ্ঠী নির্বাচন করুন",
+        "label": "গ্রাহক উপলভ্যতা",
+        "hint": "কোন গ্রাহক গোষ্ঠীগুলিতে মূল্য তালিকা প্রযোজ্য হবে তা নির্বাচন করুন।",
+        "placeholder": "গ্রাহক গোষ্ঠী অনুসন্ধান করুন",
+        "attribute": "গ্রাহক গোষ্ঠী"
+      }
+    }
+  },
+  "profile": {
+    "domain": "প্রোফাইল",
+    "manageYourProfileDetails": "আপনার প্রোফাইলের বিস্তারিত পরিচালনা করুন।",
+    "fields": {
+      "languageLabel": "ভাষা",
+      "usageInsightsLabel": "ব্যবহারের অন্তর্দৃষ্টি"
+    },
+    "edit": {
+      "header": "প্রোফাইল সম্পাদনা করুন",
+      "languageHint": "আপনি যে ভাষা ব্যবহার করতে চান তা নির্বাচন করুন যা অ্যাডমিন ড্যাশবোর্ডে প্রদর্শিত হবে। এটি আপনার স্টোরের ভাষা পরিবর্তন করবে না।",
+      "languagePlaceholder": "ভাষা নির্বাচন করুন",
+      "usageInsightsHint": "ব্যবহারের অন্তর্দৃষ্টি শেয়ার করুন এবং আমাদের মেদুসাকে উন্নত করতে সাহায্য করুন। আপনি আমাদের <0>ডকুমেন্টেশন</0> এ যা সংগ্রহ করি এবং কিভাবে ব্যবহার করি তা সম্পর্কে আরও পড়তে পারেন।"
+    },
+    "toast": {
+      "edit": "প্রোফাইল পরিবর্তনগুলি সংরক্ষিত হয়েছে"
+    }
+  },
+  "users": {
+    "domain": "ব্যবহারকারীরা",
+    "editUser": "ব্যবহারকারী সম্পাদনা করুন",
+    "inviteUser": "ব্যবহারকারী আমন্ত্রণ করুন",
+    "inviteUserHint": "আপনার স্টোরে নতুন ব্যবহারকারী আমন্ত্রণ করুন।",
+    "sendInvite": "আমন্ত্রণ পাঠান",
+    "pendingInvites": "অপেক্ষমান আমন্ত্রণগুলি",
+    "deleteInviteWarning": "আপনি {{email}} এর জন্য আমন্ত্রণ মুছে ফেলতে যাচ্ছেন। এই কার্যকলাপটি পূর্বাবস্থায় ফেরানো যাবে না।",
+    "resendInvite": "আমন্ত্রণ আবার পাঠান",
+    "copyInviteLink": "আমন্ত্রণ লিঙ্ক কপি করুন",
+    "expiredOnDate": "মেয়াদ শেষ {{date}} তে",
+    "validFromUntil": "মেয়াদ <0>{{from}}</0> থেকে <1>{{until}}</1> পর্যন্ত",
+    "acceptedOnDate": "গৃহীত হয়েছে {{date}} তে",
+    "inviteStatus": {
+      "accepted": "গৃহীত",
+      "pending": "অপেক্ষমাণ",
+      "expired": "মেয়াদ উত্তীর্ণ"
+    },
+    "roles": {
+      "admin": "অ্যাডমিন",
+      "developer": "ডেভেলপার",
+      "member": "সদস্য"
+    },
+    "list": {
+      "empty": {
+        "heading": "কোনও ব্যবহারকারী পাওয়া যায়নি",
+        "description": "একটি ব্যবহারকারী আমন্ত্রণ পাওয়ার পর, তারা এখানে প্রদর্শিত হবে।"
+      },
+      "filtered": {
+        "heading": "কোনও ফলাফল পাওয়া যায়নি",
+        "description": "কোনও ব্যবহারকারী বর্তমান ফিল্টার মানদণ্ডের সাথে মেলে না।"
+      }
+    },
+    "deleteUserWarning": "আপনি ব্যবহারকারী {{name}} মুছে ফেলতে যাচ্ছেন। এই কার্যকলাপটি পূর্বাবস্থায় ফেরানো যাবে না।",
+    "deleteUserSuccess": "ব্যবহারকারী {{name}} সফলভাবে মুছে ফেলা হয়েছে",
+    "invite": "আমন্ত্রণ"
+  },
+  "store": {
+    "domain": "স্টোর",
+    "manageYourStoresDetails": "আপনার স্টোরের বিবরণ পরিচালনা করুন",
+    "editStore": "স্টোর সম্পাদনা করুন",
+    "defaultCurrency": "ডিফল্ট মুদ্রা",
+    "defaultRegion": "ডিফল্ট অঞ্চল",
+    "defaultSalesChannel": "ডিফল্ট বিক্রয় চ্যানেল",
+    "defaultLocation": "ডিফল্ট অবস্থান",
+    "swapLinkTemplate": "লিঙ্ক পরিবর্তন টেমপ্লেট",
+    "paymentLinkTemplate": "পেমেন্ট লিঙ্ক টেমপ্লেট",
+    "inviteLinkTemplate": "অভ্যর্থনা লিঙ্ক টেমপ্লেট",
+    "currencies": "মুদ্রা",
+    "addCurrencies": "মুদ্রা যোগ করুন",
+    "enableTaxInclusivePricing": "ট্যাক্স অন্তর্ভুক্ত মূল্য নির্ধারণ সক্ষম করুন",
+    "disableTaxInclusivePricing": "ট্যাক্স অন্তর্ভুক্ত মূল্য নির্ধারণ অক্ষম করুন",
+    "removeCurrencyWarning_one": "আপনি আপনার স্টোর থেকে {{count}} মুদ্রা মুছে ফেলতে যাচ্ছেন। নিশ্চিত করুন যে আপনি মুদ্রা ব্যবহার করা সমস্ত দাম মুছে ফেলেছেন এর আগে।",
+    "removeCurrencyWarning_other": "আপনি আপনার স্টোর থেকে {{count}} মুদ্রা মুছে ফেলতে যাচ্ছেন। নিশ্চিত করুন যে আপনি মুদ্রা ব্যবহার করা সমস্ত দাম মুছে ফেলেছেন এর আগে।",
+    "currencyAlreadyAdded": "মুদ্রাটি ইতিমধ্যে আপনার স্টোরে যোগ করা হয়েছে।",
+    "edit": {
+      "header": "স্টোর সম্পাদনা করুন"
+    },
+    "toast": {
+      "update": "স্টোর সফলভাবে আপডেট হয়েছে",
+      "currenciesUpdated": "মুদ্রাগুলি সফলভাবে আপডেট হয়েছে",
+      "currenciesRemoved": "স্টোর থেকে মুদ্রাগুলি সফলভাবে মুছে ফেলা হয়েছে",
+      "updatedTaxInclusivitySuccessfully": "ট্যাক্স অন্তর্ভুক্ত মূল্য নির্ধারণ সফলভাবে আপডেট হয়েছে"
+    }
+  },
+  "regions": {
+    "domain": "অঞ্চল",
+    "subtitle": "একটি অঞ্চল হল একটি এলাকা যেখানে আপনি পণ্য বিক্রি করেন। এটি একাধিক দেশকে কভার করতে পারে এবং এর ভিন্ন ট্যাক্স রেট, প্রদানকারী এবং মুদ্রা থাকতে পারে।",
+    "createRegion": "অঞ্চল তৈরি করুন",
+    "createRegionHint": "একটি নির্দিষ্ট দেশের সেটের জন্য ট্যাক্স রেট এবং প্রদানকারী পরিচালনা করুন।",
+    "addCountries": "দেশ যুক্ত করুন",
+    "editRegion": "অঞ্চল সম্পাদনা করুন",
+    "countriesHint": "এই অঞ্চলে অন্তর্ভুক্ত দেশগুলি যুক্ত করুন।",
+    "deleteRegionWarning": "আপনি {{name}} অঞ্চলটি মুছে ফেলতে যাচ্ছেন। এই ক্রিয়া পূর্বাবস্থায় ফিরিয়ে নেওয়া যাবে না।",
+    "removeCountriesWarning_one": "আপনি {{count}} দেশটি এই অঞ্চল থেকে মুছে ফেলতে যাচ্ছেন। এই ক্রিয়া পূর্বাবস্থায় ফিরিয়ে নেওয়া যাবে না।",
+    "removeCountriesWarning_other": "আপনি {{count}} দেশগুলি এই অঞ্চল থেকে মুছে ফেলতে যাচ্ছেন। এই ক্রিয়া পূর্বাবস্থায় ফিরিয়ে নেওয়া যাবে না।",
+    "removeCountryWarning": "আপনি {{name}} দেশটি এই অঞ্চল থেকে মুছে ফেলতে যাচ্ছেন। এই ক্রিয়া পূর্বাবস্থায় ফিরিয়ে নেওয়া যাবে না।",
+    "automaticTaxesHint": "যখন সক্ষম করা হয়, ট্যাক্স শুধুমাত্র শিপিং ঠিকানা অনুযায়ী চেকআউটে গণনা করা হবে।",
+    "taxInclusiveHint": "যখন সক্ষম করা হয়, অঞ্চলের দামে ট্যাক্স অন্তর্ভুক্ত থাকবে।",
+    "providersHint": "এই অঞ্চলে কোন প্রদানকারী উপলব্ধ তা যুক্ত করুন।",
+    "shippingOptions": "শিপিং অপশন",
+    "deleteShippingOptionWarning": "আপনি {{name}} শিপিং অপশনটি মুছে ফেলতে যাচ্ছেন। এই ক্রিয়া পূর্বাবস্থায় ফিরিয়ে নেওয়া যাবে না।",
+    "return": "রিটার্ন",
+    "outbound": "আউটবাউন্ড",
+    "priceType": "মূল্য ধরন",
+    "flatRate": "ফ্ল্যাট রেট",
+    "calculated": "গণনা করা",
+    "list": {
+      "noRecordsMessage": "যেই এলাকায় আপনি বিক্রি করেন সেগুলির জন্য একটি অঞ্চল তৈরি করুন।"
+    },
+    "toast": {
+      "delete": "অঞ্চল সফলভাবে মুছে ফেলা হয়েছে",
+      "edit": "অঞ্চল সম্পাদনা সফলভাবে সংরক্ষিত হয়েছে",
+      "create": "অঞ্চল সফলভাবে তৈরি হয়েছে",
+      "countries": "অঞ্চল দেশগুলি সফলভাবে আপডেট হয়েছে"
+    },
+    "shippingOption": {
+      "createShippingOption": "শিপিং অপশন তৈরি করুন",
+      "createShippingOptionHint": "এলাকার জন্য একটি নতুন শিপিং অপশন তৈরি করুন।",
+      "editShippingOption": "শিপিং অপশন সম্পাদনা করুন",
+      "fulfillmentMethod": "ফুলফিলমেন্ট পদ্ধতি",
+      "type": {
+        "outbound": "আউটবাউন্ড",
+        "outboundHint": "আপনি যদি গ্রাহকের কাছে পণ্য পাঠানোর জন্য শিপিং অপশন তৈরি করেন তবে এটি ব্যবহার করুন।",
+        "return": "রিটার্ন",
+        "returnHint": "আপনি যদি গ্রাহকের কাছ থেকে পণ্য ফেরত পাওয়ার জন্য শিপিং অপশন তৈরি করেন তবে এটি ব্যবহার করুন।"
+      },
+      "priceType": {
+        "label": "মূল্য ধরন",
+        "flatRate": "ফ্ল্যাট রেট",
+        "calculated": "গণনা করা"
+      },
+      "availability": {
+        "adminOnly": "শুধুমাত্র অ্যাডমিন",
+        "adminOnlyHint": "যখন সক্ষম করা হয়, শিপিং অপশনটি শুধুমাত্র অ্যাডমিন ড্যাশবোর্ডে উপলব্ধ হবে, storefront-এ নয়।"
+      },
+      "taxInclusiveHint": "যখন সক্ষম করা হয়, শিপিং অপশনের মূল্য ট্যাক্স অন্তর্ভুক্ত হবে।",
+      "requirements": {
+        "label": "দাবি",
+        "hint": "শিপিং অপশনের জন্য প্রয়োজনীয়তা নির্ধারণ করুন।"
+      }
+    }
+  },
+  "taxes": {
+    "domain": "ট্যাক্স অঞ্চল",
+    "domainDescription": "আপনার ট্যাক্স অঞ্চল পরিচালনা করুন",
+    "countries": {
+      "taxCountriesHint": "ট্যাক্স সেটিংস তালিকাভুক্ত দেশগুলিতে প্রযোজ্য হবে।"
+    },
+    "settings": {
+      "editTaxSettings": "ট্যাক্স সেটিংস সম্পাদনা করুন",
+      "taxProviderLabel": "ট্যাক্স প্রদানকারী",
+      "systemTaxProviderLabel": "সিস্টেম ট্যাক্স প্রদানকারী",
+      "calculateTaxesAutomaticallyLabel": "স্বয়ংক্রিয়ভাবে ট্যাক্স হিসাব করুন",
+      "calculateTaxesAutomaticallyHint": "যখন সক্ষম করা হয়, ট্যাক্স হার স্বয়ংক্রিয়ভাবে গণনা করা হবে এবং কার্টে প্রযোজ্য হবে। যখন অক্ষম করা হয়, ট্যাক্সগুলি চেকআউটে ম্যানুয়ালি গণনা করতে হবে। তৃতীয় পক্ষের ট্যাক্স প্রদানকারীদের সাথে ব্যবহার করার জন্য ম্যানুয়াল ট্যাক্স সুপারিশ করা হয়।",
+      "applyTaxesOnGiftCardsLabel": "গিফট কার্ডে ট্যাক্স প্রয়োগ করুন",
+      "applyTaxesOnGiftCardsHint": "যখন সক্ষম করা হয়, গিফট কার্ডে ট্যাক্স চেকআউটে প্রয়োগ করা হবে। কিছু দেশে, ট্যাক্স বিধিমালা গিফট কার্ডের ক্রয়ের সময় ট্যাক্স প্রয়োগের দাবি করে।",
+      "defaultTaxRateLabel": "ডিফল্ট ট্যাক্স হার",
+      "defaultTaxCodeLabel": "ডিফল্ট ট্যাক্স কোড"
+    },
+    "defaultRate": {
+      "sectionTitle": "ডিফল্ট ট্যাক্স হার"
+    },
+    "taxRate": {
+      "sectionTitle": "ট্যাক্স হার",
+      "createTaxRate": "নতুন ট্যাক্স হার তৈরি করুন",
+      "createTaxRateHint": "এলাকার জন্য একটি নতুন ট্যাক্স হার তৈরি করুন।",
+      "deleteRateDescription": "আপনি ট্যাক্স হার {{name}} মুছে ফেলতে যাচ্ছেন। এই ক্রিয়া পুনরুদ্ধার করা যাবে না।",
+      "editRateAction": "হার সম্পাদনা করুন",
+      "editOverridesAction": "ওভাররাইড সম্পাদনা করুন",
+      "editOverridesTitle": "ট্যাক্স হার ওভাররাইড সম্পাদনা করুন",
+      "editOverridesHint": "ট্যাক্স হারের জন্য ওভাররাইড নির্দিষ্ট করুন।",
+      "deleteTaxRateWarning": "আপনি ট্যাক্স হার {{name}} মুছে ফেলতে যাচ্ছেন। এই ক্রিয়া পুনরুদ্ধার করা যাবে না।",
+      "productOverridesLabel": "পণ্যের ওভাররাইড",
+      "productOverridesHint": "ট্যাক্স হারের জন্য পণ্যের ওভাররাইড নির্দিষ্ট করুন।",
+      "addProductOverridesAction": "পণ্যের ওভাররাইড যোগ করুন",
+      "productTypeOverridesLabel": "পণ্য ধরনের ওভাররাইড",
+      "productTypeOverridesHint": "ট্যাক্স হারের জন্য পণ্য ধরনের ওভাররাইড নির্দিষ্ট করুন।",
+      "addProductTypeOverridesAction": "পণ্য ধরনের ওভাররাইড যোগ করুন",
+      "shippingOptionOverridesLabel": "শিপিং অপশন ওভাররাইড",
+      "shippingOptionOverridesHint": "ট্যাক্স হারের জন্য শিপিং অপশন ওভাররাইড নির্দিষ্ট করুন।",
+      "addShippingOptionOverridesAction": "শিপিং অপশন ওভাররাইড যোগ করুন",
+      "productOverridesHeader": "পণ্য",
+      "productTypeOverridesHeader": "পণ্য ধরনের",
+      "shippingOptionOverridesHeader": "শিপিং অপশন"
+    }
+  },
+  "locations": {
+    "domain": "অবস্থান",
+    "editLocation": "অবস্থান সম্পাদনা করুন",
+    "addSalesChannels": "বিক্রয় চ্যানেল যোগ করুন",
+    "noLocationsFound": "কোন অবস্থান পাওয়া যায়নি",
+    "selectLocations": "অবস্থানগুলি নির্বাচন করুন যা আইটেমটি মজুত করে।",
+    "deleteLocationWarning": "আপনি {{name}} অবস্থানটি মুছে ফেলতে যাচ্ছেন। এই ক্রিয়া পুনরুদ্ধার করা যাবে না।",
+    "removeSalesChannelsWarning_one": "আপনি {{count}} বিক্রয় চ্যানেল {{location}} থেকে মুছে ফেলতে যাচ্ছেন।",
+    "removeSalesChannelsWarning_other": "আপনি {{count}} বিক্রয় চ্যানেল {{location}} থেকে মুছে ফেলতে যাচ্ছেন।",
+    "toast": {
+      "create": "অবস্থান সফলভাবে তৈরি হয়েছে",
+      "update": "অবস্থান সফলভাবে আপডেট হয়েছে",
+      "removeChannel": "বিক্রয় চ্যানেল সফলভাবে মুছে ফেলা হয়েছে"
+    }
+  },
+  "reservations": {
+    "domain": "সংরক্ষণ",
+    "subtitle": "ইনভেন্টরি আইটেমের সংরক্ষিত পরিমাণ পরিচালনা করুন।",
+    "deleteWarning": "আপনি একটি সংরক্ষণ মুছে ফেলতে যাচ্ছেন। এই ক্রিয়া পুনরুদ্ধার করা যাবে না।"
+  },
+  "salesChannels": {
+    "domain": "বিক্রয় চ্যানেল",
+    "subtitle": "যে অনলাইন এবং অফলাইন চ্যানেলে আপনি পণ্য বিক্রি করেন তা পরিচালনা করুন।",
+    "list": {
+      "empty": {
+        "heading": "কোন বিক্রয় চ্যানেল পাওয়া যায়নি",
+        "description": "একটি বিক্রয় চ্যানেল তৈরি হলে, এটি এখানে প্রদর্শিত হবে।"
+      },
+      "filtered": {
+        "heading": "কোন ফলাফল পাওয়া যায়নি",
+        "description": "বর্তমান ফিল্টার মানদণ্ডের সাথে কোন বিক্রয় চ্যানেল মেলে না।"
+      }
+    },
+    "createSalesChannel": "বিক্রয় চ্যানেল তৈরি করুন",
+    "createSalesChannelHint": "আপনার পণ্য বিক্রি করার জন্য একটি নতুন বিক্রয় চ্যানেল তৈরি করুন।",
+    "enabledHint": "বিক্রয় চ্যানেলটি সক্ষম কি না তা নির্ধারণ করুন।",
+    "removeProductsWarning_one": "আপনি {{sales_channel}} থেকে {{count}} পণ্য মুছে ফেলতে যাচ্ছেন।",
+    "removeProductsWarning_other": "আপনি {{sales_channel}} থেকে {{count}} পণ্য মুছে ফেলতে যাচ্ছেন।",
+    "addProducts": "পণ্য যোগ করুন",
+    "editSalesChannel": "বিক্রয় চ্যানেল সম্পাদনা করুন",
+    "productAlreadyAdded": "পণ্যটি ইতিমধ্যে বিক্রয় চ্যানেলে যোগ করা হয়েছে।",
+    "deleteSalesChannelWarning": "আপনি বিক্রয় চ্যানেল {{name}} মুছে ফেলতে যাচ্ছেন। এই ক্রিয়া আর পুনরুদ্ধার করা যাবে না।",
+    "toast": {
+      "create": "বিক্রয় চ্যানেল সফলভাবে তৈরি হয়েছে",
+      "update": "বিক্রয় চ্যানেল সফলভাবে আপডেট হয়েছে",
+      "delete": "বিক্রয় চ্যানেল সফলভাবে মুছে ফেলা হয়েছে"
+    },
+    "tooltip": {
+      "cannotDeleteDefault": "ডিফল্ট বিক্রয় চ্যানেল মুছে ফেলা যাবে না"
+    },
+    "products": {
+      "list": {
+        "noRecordsMessage": "বিক্রয় চ্যানেলে কোনও পণ্য নেই।"
+      },
+      "add": {
+        "list": {
+          "noRecordsMessage": "প্রথমে একটি পণ্য তৈরি করুন।"
+        }
+      }
+    }
+  },
+  "apiKeyManagement": {
+    "domain": {
+      "publishable": "পাবলিশেবল API কী",
+      "secret": "গোপন API কী"
+    },
+    "subtitle": {
+      "publishable": "স্টোরফ্রন্টে ব্যবহৃত API কী পরিচালনা করুন যা নির্দিষ্ট বিক্রয় চ্যানেলগুলিতে অনুরোধের স্কোপ সীমাবদ্ধ করে।",
+      "secret": "অ্যাডমিন অ্যাপ্লিকেশনে অ্যাডমিন ব্যবহারকারীদের প্রমাণীকরণ করতে ব্যবহৃত API কী পরিচালনা করুন।"
+    },
+    "status": {
+      "active": "সক্রিয়",
+      "revoked": "প্রত্যাহৃত"
+    },
+    "type": {
+      "publishable": "পাবলিশেবল",
+      "secret": "গোপন"
+    },
+    "create": {
+      "createPublishableHeader": "পাবলিশেবল API কী তৈরি করুন",
+      "createPublishableHint": "নির্দিষ্ট বিক্রয় চ্যানেলগুলিতে অনুরোধের স্কোপ সীমাবদ্ধ করতে একটি নতুন পাবলিশেবল API কী তৈরি করুন।",
+      "createSecretHeader": "গোপন API কী তৈরি করুন",
+      "createSecretHint": "মেদুসা API-তে এক অভ্যস্ত অ্যাডমিন ব্যবহারকারী হিসেবে অ্যাক্সেস করতে একটি নতুন গোপন API কী তৈরি করুন।",
+      "secretKeyCreatedHeader": "গোপন কী তৈরি হয়েছে",
+      "secretKeyCreatedHint": "আপনার নতুন গোপন কী তৈরি করা হয়েছে। এখন এটি কপি করে নিরাপদে সংরক্ষণ করুন। এটি একমাত্র সময়ে প্রদর্শিত হবে।",
+      "copySecretTokenSuccess": "গোপন কী ক্লিপবোর্ডে কপি করা হয়েছে।",
+      "copySecretTokenFailure": "গোপন কী ক্লিপবোর্ডে কপি করতে ব্যর্থ হয়েছে।",
+      "successToast": "API কী সফলভাবে তৈরি হয়েছে।"
+    },
+    "edit": {
+      "header": "API কী সম্পাদনা করুন",
+      "description": "API কী-এর শিরোনাম সম্পাদনা করুন।",
+      "successToast": "API কী {{title}} সফলভাবে আপডেট হয়েছে।"
+    },
+    "salesChannels": {
+      "title": "বিক্রয় চ্যানেল যোগ করুন",
+      "description": "বিক্রয় চ্যানেলগুলি যোগ করুন যেগুলি API কী-এর স্কোপ সীমাবদ্ধ করা উচিত।",
+      "successToast_one": "{{count}} বিক্রয় চ্যানেল সফলভাবে API কী-তে যোগ করা হয়েছে।",
+      "successToast_other": "{{count}} বিক্রয় চ্যানেলগুলি সফলভাবে API কী-তে যোগ করা হয়েছে।",
+      "alreadyAddedTooltip": "বিক্রয় চ্যানেলটি ইতিমধ্যে API কী-তে যোগ করা হয়েছে।",
+      "list": {
+        "noRecordsMessage": "পাবলিশেবল API কী-এর স্কোপে কোন বিক্রয় চ্যানেল নেই।"
+      }
+    },
+    "delete": {
+      "warning": "আপনি API কী {{title}} মুছে ফেলতে যাচ্ছেন। এই পদক্ষেপটি অপরিবর্তনীয়।",
+      "successToast": "API কী {{title}} সফলভাবে মুছে ফেলা হয়েছে।"
+    },
+    "revoke": {
+      "warning": "আপনি API কী {{title}} বাতিল করতে যাচ্ছেন। এই পদক্ষেপটি অপরিবর্তনীয়।",
+      "successToast": "API কী {{title}} সফলভাবে বাতিল করা হয়েছে।"
+    },
+    "addSalesChannels": {
+      "list": {
+        "noRecordsMessage": "প্রথমে একটি বিক্রয় চ্যানেল তৈরি করুন।"
+      }
+    },
+    "removeSalesChannel": {
+      "warning": "আপনি API কী থেকে বিক্রয় চ্যানেল {{name}} মুছে ফেলতে যাচ্ছেন। এই পদক্ষেপটি অপরিবর্তনীয়।",
+      "warningBatch_one": "আপনি API কী থেকে {{count}} বিক্রয় চ্যানেল মুছে ফেলতে যাচ্ছেন। এই পদক্ষেপটি অপরিবর্তনীয়।",
+      "warningBatch_other": "আপনি API কী থেকে {{count}} বিক্রয় চ্যানেলগুলি মুছে ফেলতে যাচ্ছেন। এই পদক্ষেপটি অপরিবর্তনীয়।",
+      "successToast": "বিক্রয় চ্যানেল সফলভাবে API কী থেকে মুছে ফেলা হয়েছে।",
+      "successToastBatch_one": "{{count}} বিক্রয় চ্যানেল সফলভাবে API কী থেকে মুছে ফেলা হয়েছে।",
+      "successToastBatch_other": "{{count}} বিক্রয় চ্যানেলগুলি সফলভাবে API কী থেকে মুছে ফেলা হয়েছে।"
+    },
+    "actions": {
+      "revoke": "API কী বাতিল করুন",
+      "copy": "API কী কপি করুন",
+      "copySuccessToast": "API কী ক্লিপবোর্ডে কপি করা হয়েছে।"
+    },
+    "table": {
+      "lastUsedAtHeader": "সর্বশেষ ব্যবহৃত",
+      "createdAtHeader": "বাতিলের সময়"
+    },
+    "fields": {
+      "lastUsedAtLabel": "সর্বশেষ ব্যবহৃত সময়",
+      "revokedByLabel": "বাতিল করেছেন",
+      "revokedAtLabel": "বাতিলের সময়",
+      "createdByLabel": "সৃষ্টিকর্তা"
+    }
+  },
+  "returnReasons": {
+    "domain": "রিটার্ন রিজন",
+    "subtitle": "রিটার্ন করা আইটেমগুলির জন্য কারণগুলি পরিচালনা করুন।",
+    "calloutHint": "রিটার্ন শ্রেণিবদ্ধ করার জন্য কারণগুলি পরিচালনা করুন।",
+    "editReason": "রিটার্ন কারণ সম্পাদনা করুন",
+    "create": {
+      "header": "রিটার্ন কারণ যোগ করুন",
+      "subtitle": "রিটার্নের সবচেয়ে সাধারণ কারণগুলি নির্দিষ্ট করুন।",
+      "hint": "রিটার্ন শ্রেণীবদ্ধ করার জন্য একটি নতুন রিটার্ন কারণ তৈরি করুন।",
+      "successToast": "রিটার্ন কারণ {{label}} সফলভাবে তৈরি করা হয়েছে।"
+    },
+    "edit": {
+      "header": "রিটার্ন কারণ সম্পাদনা করুন",
+      "subtitle": "রিটার্ন কারণের মান সম্পাদনা করুন।",
+      "successToast": "রিটার্ন কারণ {{label}} সফলভাবে আপডেট করা হয়েছে।"
+    },
+    "delete": {
+      "confirmation": "আপনি রিটার্ন কারণ \"{{label}}\" মুছে ফেলতে যাচ্ছেন। এই পদক্ষেপটি অপরিবর্তনীয়।",
+      "successToast": "রিটার্ন কারণ \"{{label}}\" সফলভাবে মুছে ফেলা হয়েছে।"
+    },
+    "fields": {
+      "value": {
+        "label": "মান",
+        "placeholder": "wrong_size",
+        "tooltip": "মানটি রিটার্ন কারণের জন্য একটি অনন্য শনাক্তকারী হওয়া উচিত।"
+      },
+      "label": { "label": "লেবেল", "placeholder": "ভুল সাইজ" },
+      "description": {
+        "label": "বিবরণ",
+        "placeholder": "গ্রাহক ভুল সাইজ পেয়েছেন"
+      }
+    }
+  },
+  "login": {
+    "forgotPassword": "পাসওয়ার্ড ভুলে গেছেন? - <0>রিসেট</0>",
+    "title": "মেডুসায় স্বাগতম",
+    "hint": "অ্যাকাউন্ট এলাকায় প্রবেশ করতে সাইন ইন করুন"
+  },
+  "invite": {
+    "title": "মেডুসায় স্বাগতম",
+    "hint": "নিচে আপনার অ্যাকাউন্ট তৈরি করুন",
+    "backToLogin": "লগইনে ফিরে যান",
+    "createAccount": "অ্যাকাউন্ট তৈরি করুন",
+    "alreadyHaveAccount": "অ্যাকাউন্ট আছে? - <0>লগইন করুন</0>",
+    "emailTooltip": "আপনার ইমেইল পরিবর্তন করা যাবে না। অন্য ইমেইল ব্যবহার করতে চাইলে, একটি নতুন আমন্ত্রণ পাঠাতে হবে।",
+    "invalidInvite": "আমন্ত্রণটি অবৈধ অথবা মেয়াদ উত্তীর্ণ হয়েছে।",
+    "successTitle": "আপনার অ্যাকাউন্ট সফলভাবে নিবন্ধিত হয়েছে",
+    "successHint": "তুরন্ত মেডুসা অ্যাডমিন ব্যবহার শুরু করুন।",
+    "successAction": "মেডুসা অ্যাডমিন শুরু করুন",
+    "invalidTokenTitle": "আপনার আমন্ত্রণ টোকেন অবৈধ",
+    "invalidTokenHint": "নতুন আমন্ত্রণ লিঙ্কের জন্য চেষ্টা করুন।",
+    "passwordMismatch": "পাসওয়ার্ড মেলে না",
+    "toast": {
+      "accepted": "আমন্ত্রণ সফলভাবে গ্রহণ করা হয়েছে"
+    }
+  },
+  "resetPassword": {
+    "title": "পাসওয়ার্ড রিসেট",
+    "hint": "নিচে আপনার ইমেইল এড্রেস দিন, আমরা আপনাকে পাসওয়ার্ড রিসেট করার নির্দেশনা পাঠাবো।",
+    "email": "ইমেইল",
+    "sendResetInstructions": "রিসেট নির্দেশনা পাঠান",
+    "backToLogin": "<0>লগইন পৃষ্ঠায় ফিরে যান</0>",
+    "newPasswordHint": "নিচে একটি নতুন পাসওয়ার্ড নির্বাচন করুন।",
+    "invalidTokenTitle": "আপনার রিসেট টোকেন অবৈধ",
+    "invalidTokenHint": "একটি নতুন রিসেট লিঙ্কের জন্য চেষ্টা করুন।",
+    "expiredTokenTitle": "আপনার রিসেট টোকেনের মেয়াদ শেষ হয়েছে",
+    "goToResetPassword": "পাসওয়ার্ড রিসেট পৃষ্ঠায় যান",
+    "resetPassword": "পাসওয়ার্ড রিসেট",
+    "newPassword": "নতুন পাসওয়ার্ড",
+    "repeatNewPassword": "নতুন পাসওয়ার্ড পুনরায় লিখুন",
+    "tokenExpiresIn": "টোকেনের মেয়াদ <0>{{time}}</0> মিনিটে শেষ হবে",
+    "successfulRequestTitle": "সফলভাবে আপনার ইমেইল পাঠানো হয়েছে",
+    "successfulRequest": "আমরা আপনাকে একটি ইমেইল পাঠিয়েছি যেটি আপনি আপনার পাসওয়ার্ড রিসেট করতে ব্যবহার করতে পারবেন। যদি কিছু মিনিট পরেও এটি না পান, তাহলে আপনার স্প্যাম ফোল্ডার চেক করুন।",
+    "successfulResetTitle": "পাসওয়ার্ড রিসেট সফল",
+    "successfulReset": "দয়া করে লগইন পৃষ্ঠায় লগইন করুন।",
+    "passwordMismatch": "পাসওয়ার্ড মিলে না",
+    "invalidLinkTitle": "আপনার রিসেট লিঙ্ক অবৈধ",
+    "invalidLinkHint": "পাসওয়ার্ড রিসেট আবার চেষ্টা করুন।"
+  },
+  "workflowExecutions": {
+    "domain": "ওয়ার্কফ্লো",
+    "subtitle": "আপনার Medusa অ্যাপ্লিকেশনে ওয়ার্কফ্লো এক্সিকিউশনগুলো দেখুন এবং ট্র্যাক করুন।",
+    "transactionIdLabel": "লেনদেন আইডি",
+    "workflowIdLabel": "ওয়ার্কফ্লো আইডি",
+    "progressLabel": "অগ্রগতি",
+    "stepsCompletedLabel_one": "{{count}} ধাপের মধ্যে {{completed}} ধাপ সম্পন্ন হয়েছে",
+    "stepsCompletedLabel_other": "{{count}} ধাপের মধ্যে {{completed}} ধাপ সম্পন্ন হয়েছে",
+    "list": {
+      "noRecordsMessage": "এখনো কোনো ওয়ার্কফ্লো এক্সিকিউট করা হয়নি।"
+    },
+    "history": {
+      "sectionTitle": "ইতিহাস",
+      "runningState": "চলমান...",
+      "awaitingState": "অপেক্ষমাণ",
+      "failedState": "ব্যর্থ হয়েছে",
+      "skippedState": "এড়িয়ে গেছে",
+      "skippedFailureState": "এড়িয়ে গেছে (ব্যর্থতা)",
+      "definitionLabel": "সংজ্ঞা",
+      "outputLabel": "আউটপুট",
+      "compensateInputLabel": "ক্ষতিপূরণের ইনপুট",
+      "revertedLabel": "পূর্বাবস্থায় ফিরেছে",
+      "errorLabel": "ত্রুটি"
+    },
+    "state": {
+      "done": "সম্পন্ন",
+      "failed": "ব্যর্থ হয়েছে",
+      "reverted": "পূর্বাবস্থায় ফিরেছে",
+      "invoking": "আহ্বান করা হচ্ছে",
+      "compensating": "ক্ষতিপূরণ প্রদান",
+      "notStarted": "শুরু হয়নি"
+    },
+    "transaction": {
+      "state": {
+        "waitingToCompensate": "ক্ষতিপূরণের জন্য অপেক্ষমাণ"
+      }
+    },
+    "step": {
+      "state": {
+        "skipped": "এড়িয়ে গেছে",
+        "skippedFailure": "এড়িয়ে গেছে (ব্যর্থতা)",
+        "dormant": "নিষ্ক্রিয়",
+        "timeout": "সময়োত্তীর্ণ"
+      }
+    }
+  },
+  "productTypes": {
+    "domain": "প্রোডাক্ট ধরনসমূহ",
+    "subtitle": "আপনার পণ্যগুলোকে ধরন অনুযায়ী সংগঠিত করুন।",
+    "create": {
+      "header": "প্রোডাক্ট ধরন তৈরি করুন",
+      "hint": "আপনার পণ্যগুলো শ্রেণিবদ্ধ করতে একটি নতুন প্রোডাক্ট ধরন তৈরি করুন।",
+      "successToast": "প্রোডাক্ট ধরন {{value}} সফলভাবে তৈরি হয়েছে।"
+    },
+    "edit": {
+      "header": "প্রোডাক্ট ধরন সম্পাদনা করুন",
+      "successToast": "প্রোডাক্ট ধরন {{value}} সফলভাবে হালনাগাদ হয়েছে।"
+    },
+    "delete": {
+      "confirmation": "আপনি \"{{value}}\" নামক প্রোডাক্ট ধরনটি মুছে ফেলতে যাচ্ছেন। এই কাজটি পূর্বাবস্থায় ফিরিয়ে নেওয়া যাবে না।",
+      "successToast": "প্রোডাক্ট ধরন \"{{value}}\" সফলভাবে মুছে ফেলা হয়েছে।"
+    },
+    "fields": {
+      "value": "মান"
+    }
+  },
+  "productTags": {
+    "domain": "প্রোডাক্ট ট্যাগসমূহ",
+    "create": {
+      "header": "প্রোডাক্ট ট্যাগ তৈরি করুন",
+      "subtitle": "আপনার প্রোডাক্টগুলো শ্রেণিবদ্ধ করতে একটি নতুন ট্যাগ তৈরি করুন।",
+      "successToast": "প্রোডাক্ট ট্যাগ {{value}} সফলভাবে তৈরি হয়েছে।"
+    },
+    "edit": {
+      "header": "প্রোডাক্ট ট্যাগ সম্পাদনা করুন",
+      "subtitle": "প্রোডাক্ট ট্যাগের মান সম্পাদনা করুন।",
+      "successToast": "প্রোডাক্ট ট্যাগ {{value}} সফলভাবে হালনাগাদ হয়েছে।"
+    },
+    "delete": {
+      "confirmation": "আপনি {{value}} নামক প্রোডাক্ট ট্যাগটি মুছে ফেলতে যাচ্ছেন। এই কাজটি পূর্বাবস্থায় ফিরিয়ে নেওয়া যাবে না।",
+      "successToast": "প্রোডাক্ট ট্যাগ {{value}} সফলভাবে মুছে ফেলা হয়েছে।"
+    },
+    "fields": {
+      "value": "মান"
+    }
+  },
+  "notifications": {
+    "domain": "বিজ্ঞপ্তি",
+    "emptyState": {
+      "title": "কোনো বিজ্ঞপ্তি নেই",
+      "description": "এই মুহূর্তে আপনার কোনো বিজ্ঞপ্তি নেই, তবে যখন থাকবে তখন সেগুলো এখানে দেখা যাবে।"
+    },
+    "accessibility": {
+      "description": "মেডুসা সম্পর্কিত কার্যকলাপের বিজ্ঞপ্তি এখানে তালিকাভুক্ত থাকবে।"
+    }
+  },
+  "errors": {
+    "serverError": "সার্ভার ত্রুটি - পরে আবার চেষ্টা করুন।",
+    "invalidCredentials": "ভুল ইমেইল অথবা পাসওয়ার্ড"
+  },
+  "statuses": {
+    "scheduled": "নির্ধারিত",
+    "expired": "মেয়াদোত্তীর্ণ",
+    "active": "সক্রিয়",
+    "inactive": "নিষ্ক্রিয়",
+    "draft": "খসড়া",
+    "enabled": "সক্রিয় করা হয়েছে",
+    "disabled": "নিষ্ক্রিয় করা হয়েছে"
+  },
+  "labels": {
+    "productVariant": "পণ্যের বৈচিত্র্য",
+    "prices": "মূল্যসমূহ",
+    "available": "উপলব্ধ",
+    "inStock": "স্টকে আছে",
+    "added": "যুক্ত হয়েছে",
+    "removed": "অপসারণ হয়েছে",
+    "from": "হতে",
+    "to": "প্রতি",
+    "beaware": "সতর্ক থাকুন",
+    "loading": "লোড হচ্ছে"
+  },
+  "fields": {
+    "amount": "পরিমাণ",
+    "refundAmount": "ফেরত পরিমাণ",
+    "name": "নাম",
+    "default": "ডিফল্ট",
+    "lastName": "শেষ নাম",
+    "firstName": "প্রথম নাম",
+    "title": "শিরোনাম",
+    "customTitle": "কাস্টম শিরোনাম",
+    "manageInventory": "ইনভেন্টরি পরিচালনা করুন",
+    "inventoryKit": "ইনভেন্টরি কিট আছে",
+    "inventoryItems": "ইনভেন্টরি আইটেমসমূহ",
+    "inventoryItem": "ইনভেন্টরি আইটেম",
+    "requiredQuantity": "প্রয়োজনীয় পরিমাণ",
+    "description": "বর্ণনা",
+    "email": "ইমেইল",
+    "password": "পাসওয়ার্ড",
+    "repeatPassword": "পাসওয়ার্ড পুনরাবৃত্তি করুন",
+    "confirmPassword": "পাসওয়ার্ড নিশ্চিত করুন",
+    "newPassword": "নতুন পাসওয়ার্ড",
+    "repeatNewPassword": "নতুন পাসওয়ার্ড পুনরাবৃত্তি করুন",
+    "categories": "বিভাগসমূহ",
+    "shippingMethod": "শিপিং পদ্ধতি",
+    "configurations": "কনফিগারেশনসমূহ",
+    "conditions": "শর্তাবলী",
+    "category": "বিভাগ",
+    "collection": "সংগ্রহ",
+    "discountable": "ছাড়যোগ্য",
+    "handle": "হ্যান্ডেল",
+    "subtitle": "উপশিরোনাম",
+    "by": "দ্বারা",
+    "item": "আইটেম",
+    "qty": "পরিমাণ",
+    "limit": "সীমা",
+    "tags": "ট্যাগসমূহ",
+    "type": "ধরন",
+    "reason": "কারণ",
+    "none": "কোনটি না",
+    "all": "সব",
+    "search": "অনুসন্ধান",
+    "percentage": "শতাংশ",
+    "sales_channels": "বিক্রয় চ্যানেলসমূহ",
+    "customer_groups": "গ্রাহক গোষ্ঠীসমূহ",
+    "product_tags": "পণ্য ট্যাগসমূহ",
+    "product_types": "পণ্যের ধরনসমূহ",
+    "product_collections": "পণ্য সংগ্রহসমূহ",
+    "status": "অবস্থা",
+    "code": "কোড",
+    "value": "মান",
+    "disabled": "অক্ষম",
+    "dynamic": "ডায়নামিক",
+    "normal": "স্বাভাবিক",
+    "years": "বছর",
+    "months": "মাস",
+    "days": "দিন",
+    "hours": "ঘন্টা",
+    "minutes": "মিনিট",
+    "totalRedemptions": "মোট রিডেম্পশন",
+    "countries": "দেশসমূহ",
+    "paymentProviders": "পেমেন্ট প্রদানকারী",
+    "refundReason": "ফেরতের কারণ",
+    "fulfillmentProviders": "ফুলফিলমেন্ট প্রদানকারী",
+    "fulfillmentProvider": "ফুলফিলমেন্ট প্রদানকারী",
+    "providers": "প্রদানকারী",
+    "availability": "উপলব্ধতা",
+    "inventory": "ইনভেন্টরি",
+    "optional": "ঐচ্ছিক",
+    "note": "নোট",
+    "automaticTaxes": "স্বয়ংক্রিয় ট্যাক্স",
+    "taxInclusivePricing": "ট্যাক্স অন্তর্ভুক্ত মূল্য",
+    "currency": "মুদ্রা",
+    "address": "ঠিকানা",
+    "address2": "ফ্ল্যাট, স্যুট ইত্যাদি",
+    "city": "শহর",
+    "postalCode": "পোস্টাল কোড",
+    "country": "দেশ",
+    "state": "রাষ্ট্র",
+    "province": "প্রদেশ",
+    "company": "প্রতিষ্ঠান",
+    "phone": "ফোন",
+    "metadata": "মেটাডেটা",
+    "selectCountry": "দেশ নির্বাচন করুন",
+    "products": "পণ্যসমূহ",
+    "variants": "ভেরিয়েন্টসমূহ",
+    "orders": "অর্ডারসমূহ",
+    "account": "অ্যাকাউন্ট",
+    "total": "মোট অর্ডার",
+    "paidTotal": "মোট পেমেন্ট",
+    "totalExclTax": "ট্যাক্স বাদে মোট",
+    "subtotal": "সাবটোটাল",
+    "shipping": "শিপিং",
+    "outboundShipping": "আউটবাউন্ড শিপিং",
+    "returnShipping": "রিটার্ন শিপিং",
+    "tax": "ট্যাক্স",
+    "created": "তৈরি হয়েছে",
+    "key": "কী",
+    "customer": "গ্রাহক",
+    "date": "তারিখ",
+    "order": "অর্ডার",
+    "fulfillment": "ফুলফিলমেন্ট",
+    "provider": "প্রদানকারী",
+    "payment": "পেমেন্ট",
+    "items": "আইটেমসমূহ",
+    "salesChannel": "বিক্রয় চ্যানেল",
+    "region": "অঞ্চল",
+    "discount": "ছাড়",
+    "role": "ভূমিকা",
+    "sent": "প্রেরিত",
+    "salesChannels": "বিক্রয় চ্যানেলসমূহ",
+    "product": "পণ্য",
+    "createdAt": "তৈরির তারিখ",
+    "updatedAt": "আপডেট হয়েছে",
+    "revokedAt": "বাতিলের তারিখ",
+    "true": "সত্য",
+    "false": "মিথ্যা",
+    "giftCard": "উপহার কার্ড",
+    "tag": "ট্যাগ",
+    "dateIssued": "প্রদান তারিখ",
+    "issuedDate": "প্রদান তারিখ",
+    "expiryDate": "মেয়াদ শেষের তারিখ",
+    "price": "মূল্য",
+    "priceTemplate": "মূল্য {{regionOrCurrency}}",
+    "height": "উচ্চতা",
+    "width": "প্রস্থ",
+    "length": "দৈর্ঘ্য",
+    "weight": "ওজন",
+    "midCode": "MID কোড",
+    "hsCode": "HS কোড",
+    "ean": "EAN",
+    "upc": "UPC",
+    "inventoryQuantity": "ইনভেন্টরি পরিমাণ",
+    "barcode": "বারকোড",
+    "countryOfOrigin": "উৎপত্তি দেশ",
+    "material": "উপাদান",
+    "thumbnail": "থাম্বনেইল",
+    "sku": "SKU",
+    "managedInventory": "পরিচালিত ইনভেন্টরি",
+    "allowBackorder": "ব্যাকঅর্ডার অনুমোদন করুন",
+    "inStock": "স্টকে আছে",
+    "location": "অবস্থান",
+    "quantity": "পরিমাণ",
+    "variant": "ভেরিয়েন্ট",
+    "id": "আইডি",
+    "parent": "প্যারেন্ট",
+    "minSubtotal": "ন্যূনতম সাবটোটাল",
+    "maxSubtotal": "সর্বোচ্চ সাবটোটাল",
+    "shippingProfile": "শিপিং প্রোফাইল",
+    "summary": "সারসংক্ষেপ",
+    "details": "বিস্তারিত",
+    "label": "লেবেল",
+    "rate": "হার",
+    "requiresShipping": "শিপিং প্রয়োজন",
+    "unitPrice": "একক মূল্য",
+    "startDate": "শুরুর তারিখ",
+    "endDate": "শেষ তারিখ",
+    "draft": "খসড়া",
+    "values": "মানসমূহ"
+  },
+  "dateTime": {
+    "years_one": "বছর",
+    "years_other": "বছর",
+    "months_one": "মাস",
+    "months_other": "মাস",
+    "weeks_one": "সপ্তাহ",
+    "weeks_other": "সপ্তাহ",
+    "days_one": "দিন",
+    "days_other": "দিন",
+    "hours_one": "ঘন্টা",
+    "hours_other": "ঘন্টা",
+    "minutes_one": "মিনিট",
+    "minutes_other": "মিনিট",
+    "seconds_one": "সেকেন্ড",
+    "seconds_other": "সেকেন্ড"
+  }
+
+}

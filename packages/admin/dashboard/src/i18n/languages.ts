@@ -25,6 +25,7 @@ import {
   ko,
   nl,
   hu,
+  bd,
 } from "date-fns/locale"
 import { Language } from "./types"
 
@@ -184,5 +185,11 @@ export const languages: Language[] = [
     display_name: "Nederlands",
     ltr: true,
     date_locale: nl,
+  },
+  {
+    code: "bd",
+    display_name: "Bangladesh (Bangla)",
+    ltr: true,
+    date_locale: bd,
   },
 ]

@@ -24,6 +24,7 @@ import lt from "./lt.json"
 import vi from "./vi.json"
 import ko from "./ko.json"
 import nl from "./nl.json"
+import bd from "./bd.json"
 
 export default {
   bg: {
@@ -103,5 +104,8 @@ export default {
   },
   nl: {
     translation: nl,
+  },
+  bd: {
+    translation: bd,
   },
 }
