@@ -11,6 +11,7 @@ import { useArea } from "../../../../providers/area"
 import { Feedback, Badge, Link, FeatureFlagNotice, H2 } from "docs-ui"
 import { usePathname } from "next/navigation"
 import { TagsOperationDescriptionSectionWorkflowBadgeProps } from "./WorkflowBadge"
+import { TagsOperationDescriptionSectionEventsProps } from "./Events"
 
 const TagsOperationDescriptionSectionSecurity =
   dynamic<TagsOperationDescriptionSectionSecurityProps>(
@@ -32,6 +33,11 @@ const TagsOperationDescriptionSectionWorkflowBadge =
     async () => import("./WorkflowBadge")
   ) as React.FC<TagsOperationDescriptionSectionWorkflowBadgeProps>
 
+const TagsOperationDescriptionSectionEvents =
+  dynamic<TagsOperationDescriptionSectionEventsProps>(
+    async () => import("./Events")
+  ) as React.FC<TagsOperationDescriptionSectionEventsProps>
+
 type TagsOperationDescriptionSectionProps = {
   operation: OpenAPI.Operation
 }
@@ -40,6 +46,8 @@ const TagsOperationDescriptionSection = ({
 }: TagsOperationDescriptionSectionProps) => {
   const { area } = useArea()
   const pathname = usePathname()
+
+  console.log(operation.summary, operation["x-events"])
 
   return (
     <>
@@ -103,6 +111,11 @@ const TagsOperationDescriptionSection = ({
       <TagsOperationDescriptionSectionResponses
         responses={operation.responses}
       />
+      {(operation["x-events"]?.length || 0) > 0 && (
+        <TagsOperationDescriptionSectionEvents
+          events={operation["x-events"]!}
+        />
+      )}
     </>
   )
 }
