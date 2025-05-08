@@ -20,12 +20,7 @@ export async function configLoaderOverride(
   configModule.projectConfig.databaseDriverOptions =
     override.clientUrl.includes("localhost")
       ? {}
-      : {
-          connection: {
-            ssl: { rejectUnauthorized: false },
-          },
-          idle_in_transaction_session_timeout: 20000,
-        }
+      : getSSLConfig()
 
   logger.info("Disabling admin as we run integration tests")
   Object.assign(configModule.admin ?? {}, { disable: true })
@@ -34,4 +29,12 @@ export async function configLoaderOverride(
     projectConfig: configModule,
     baseDir: entryDirectory,
   })
+}
+
+function getSSLConfig() {
+  if (process.env.NODE_ENV === "test") return {}
+  else return {
+    connection: { ssl: { rejectUnauthorized: false } },
+    idle_in_transaction_session_timeout: 20000,
+  }
 }
