@@ -55,7 +55,7 @@ Emitted when the customer in the cart is updated.
 </Table.Cell>
       <Table.Cell>
 Emitted when the cart's region is updated. This
-event is emitted alongside the CartWorkflowEvents.UPDATED event.
+event is emitted alongside the `cart.updated` event.
 </Table.Cell>
     </Table.Row>
   </Table.Body>
@@ -143,7 +143,7 @@ The following workflows emit this event when they're executed. These workflows a
 \`\`\``} />
 
 Emitted when the cart's region is updated. This
-event is emitted alongside the CartWorkflowEvents.UPDATED event.
+event is emitted alongside the `cart.updated` event.
 
 #### Payload
 
@@ -443,8 +443,8 @@ order.
 
 The following workflows emit this event when they're executed. These workflows are executed by Medusa's API routes. You can also view the events emitted by API routes in the [Store](https://docs.medusajs.com/api/store) and [Admin](https://docs.medusajs.com/api/admin) API references.
 
-- [completeCartWorkflow](/references/medusa-workflows/completeCartWorkflow)
 - [convertDraftOrderWorkflow](/references/medusa-workflows/convertDraftOrderWorkflow)
+- [completeCartWorkflow](/references/medusa-workflows/completeCartWorkflow)
 - [processPaymentWorkflow](/references/medusa-workflows/processPaymentWorkflow)
 
 ---
@@ -525,7 +525,7 @@ The following workflows emit this event when they're executed. These workflows a
 {
   order_id, // The ID of the order
   fulfillment_id, // The ID of the fulfillment
-  no_notification, // Whether to notify the customer
+  no_notification, // (boolean) Whether to notify the customer
 }
 \`\`\``} />
 
@@ -537,7 +537,7 @@ Emitted when a fulfillment is created for an order.
 {
   order_id, // The ID of the order
   fulfillment_id, // The ID of the fulfillment
-  no_notification, // Whether to notify the customer
+  no_notification, // (boolean) Whether to notify the customer
 }
 ```
 
@@ -553,7 +553,7 @@ The following workflows emit this event when they're executed. These workflows a
 {
   order_id, // The ID of the order
   fulfillment_id, // The ID of the fulfillment
-  no_notification, // Whether to notify the customer
+  no_notification, // (boolean) Whether to notify the customer
 }
 \`\`\``} />
 
@@ -565,7 +565,7 @@ Emitted when an order's fulfillment is canceled.
 {
   order_id, // The ID of the order
   fulfillment_id, // The ID of the fulfillment
-  no_notification, // Whether to notify the customer
+  no_notification, // (boolean) Whether to notify the customer
 }
 ```
 
@@ -756,7 +756,7 @@ Emitted when an order edit request is canceled.
 <EventHeader headerLvl="3" headerProps={{ id: "order-editrequested", children: (<>order-edit.requested</>), className: "flex flex-wrap justify-center gap-docs_0.25" }} eventName="order-edit.requested" payload={`\`\`\`ts
 {
   order_id, // The ID of the order
-  actions, // The actions to edit the order
+  actions, // (array) The [actions](https://docs.medusajs.com/resources/references/fulfillment/interfaces/fulfillment.OrderChangeActionDTO) to edit the order
 }
 \`\`\``} />
 
@@ -767,7 +767,7 @@ Emitted when an order edit is requested.
 ```ts
 {
   order_id, // The ID of the order
-  actions, // The actions to edit the order
+  actions, // (array) The [actions](https://docs.medusajs.com/resources/references/fulfillment/interfaces/fulfillment.OrderChangeActionDTO) to edit the order
 }
 ```
 
@@ -782,8 +782,7 @@ The following workflows emit this event when they're executed. These workflows a
 <EventHeader headerLvl="3" headerProps={{ id: "order-editconfirmed", children: (<>order-edit.confirmed</>), className: "flex flex-wrap justify-center gap-docs_0.25" }} eventName="order-edit.confirmed" payload={`\`\`\`ts
 {
   order_id, // The ID of the order
-  actions, // The actions to edit the order
-}
+  actions, // (array) The [actions](https://docs.medusajs.com/resources/references/fulfillment/interfaces/fulfillment.OrderChangeActionDTO) to edit the order
 \`\`\``} />
 
 Emitted when an order edit request is confirmed.
@@ -793,8 +792,7 @@ Emitted when an order edit request is confirmed.
 ```ts
 {
   order_id, // The ID of the order
-  actions, // The actions to edit the order
-}
+  actions, // (array) The [actions](https://docs.medusajs.com/resources/references/fulfillment/interfaces/fulfillment.OrderChangeActionDTO) to edit the order
 ```
 
 #### Workflows Emitting this Event
@@ -808,7 +806,7 @@ The following workflows emit this event when they're executed. These workflows a
 <EventHeader headerLvl="3" headerProps={{ id: "order-editcanceled", children: (<>order-edit.canceled</>), className: "flex flex-wrap justify-center gap-docs_0.25" }} eventName="order-edit.canceled" payload={`\`\`\`ts
 {
   order_id, // The ID of the order
-  actions, // The actions to edit the order
+  actions, // (array) The [actions](https://docs.medusajs.com/resources/references/fulfillment/interfaces/fulfillment.OrderChangeActionDTO) to edit the order
 }
 \`\`\``} />
 
@@ -819,7 +817,7 @@ Emitted when an order edit request is canceled.
 ```ts
 {
   order_id, // The ID of the order
-  actions, // The actions to edit the order
+  actions, // (array) The [actions](https://docs.medusajs.com/resources/references/fulfillment/interfaces/fulfillment.OrderChangeActionDTO) to edit the order
 }
 ```
 
@@ -2244,7 +2242,7 @@ Emitted when a fulfillment is marked as delivered.
 <EventHeader headerLvl="3" headerProps={{ id: "shipmentcreated", children: (<>shipment.created</>), className: "flex flex-wrap justify-center gap-docs_0.25" }} eventName="shipment.created" payload={`\`\`\`ts
 {
   id, // the ID of the shipment
-  no_notification, // whether to notify the customer
+  no_notification, // (boolean) whether to notify the customer
 }
 \`\`\``} />
 
@@ -2255,7 +2253,7 @@ Emitted when a shipment is created for an order.
 ```ts
 {
   id, // the ID of the shipment
-  no_notification, // whether to notify the customer
+  no_notification, // (boolean) whether to notify the customer
 }
 ```
 
