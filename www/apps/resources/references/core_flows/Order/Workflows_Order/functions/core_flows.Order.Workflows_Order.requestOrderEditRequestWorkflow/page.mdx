@@ -158,6 +158,9 @@ Description
       <Table.HeaderCell>
 Payload
 </Table.HeaderCell>
+      <Table.HeaderCell>
+Action
+</Table.HeaderCell>
     </Table.Row>
   </Table.Header>
   <Table.Body>
@@ -175,6 +178,17 @@ Emitted when an order edit is requested.
   actions, // The actions to edit the order
 }
 ```
+</Table.Cell>
+      <Table.Cell>
+<CopyGeneratedSnippetButton tooltipText="Copy subscriber for event" type="subscriber" options={{
+        event: "order-edit.requested",
+        payload: `\`\`\`ts
+{
+  order_id, // The ID of the order
+  actions, // The actions to edit the order
+}
+\`\`\``
+        }}/>
 </Table.Cell>
     </Table.Row>
   </Table.Body>
