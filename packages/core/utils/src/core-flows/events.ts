@@ -267,6 +267,8 @@ export const OrderEditWorkflowEvents = {
   /**
    * Emitted when an order edit is requested.
    *
+   * @version 2.8.0
+   *
    * @eventPayload
    * ```ts
    * {
@@ -279,16 +281,21 @@ export const OrderEditWorkflowEvents = {
   /**
    * Emitted when an order edit request is confirmed.
    *
+   * @version 2.8.0
+   *
    * @eventPayload
    * ```ts
    * {
    *   order_id, // The ID of the order
    *   actions, // (array) The [actions](https://docs.medusajs.com/resources/references/fulfillment/interfaces/fulfillment.OrderChangeActionDTO) to edit the order
+   * }
    * ```
    */
   CONFIRMED: "order-edit.confirmed",
   /**
    * Emitted when an order edit request is canceled.
+   *
+   * @version 2.8.0
    *
    * @eventPayload
    * ```ts
