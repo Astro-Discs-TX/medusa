@@ -186,11 +186,6 @@ export class AbstractFileProviderService implements IFileProvider {
    * @returns {Promise<Readable>} The file's stream.
    * 
    * @version 2.8.0
-   * @ignore
-   * @privateRemarks
-   * The ignore tag to be removed once the feature is ready.
-   * Also, the version indicates the version where the method was added.
-   * Maybe we should change the version once the feature is ready.
    *
    * @example
    * class MyFileProviderService extends AbstractFileProviderService {
@@ -216,11 +211,6 @@ export class AbstractFileProviderService implements IFileProvider {
    * @returns {Promise<Buffer>} The file's buffer.
    * 
    * @version 2.8.0
-   * @ignore
-   * @privateRemarks
-   * The ignore tag to be removed once the feature is ready.
-   * Also, the version indicates the version where the method was added.
-   * Maybe we should change the version once the feature is ready.
    *
    * @example
    * class MyFileProviderService extends AbstractFileProviderService {
