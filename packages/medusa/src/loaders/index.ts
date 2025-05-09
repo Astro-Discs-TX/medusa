@@ -29,6 +29,7 @@ import requestIp from "request-ip"
 import { v4 } from "uuid"
 import adminLoader from "./admin"
 import apiLoader from "./api"
+import { MedusaModule } from "@medusajs/framework/modules-sdk"
 
 type Options = {
   directory: string
