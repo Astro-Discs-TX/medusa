@@ -91,10 +91,10 @@ medusaIntegrationTestRunner({
         })
       })
 
-      describe("Ensure event subscribers", () => {
+      describe("Workflows event", () => {
         const failingEventName = "failing-event"
 
-        it("Should not compensate the workflow if the event subscriber throws an error", async () => {
+        it("should not compensate the workflow if the event subscriber fails", async () => {
           const step1 = createStep(
             {
               name: "my-step",
