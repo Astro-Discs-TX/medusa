@@ -4,8 +4,8 @@ import {
   WorkflowData,
   WorkflowResponse,
 } from "@medusajs/framework/workflows-sdk"
+import { createPaymentSessionsWorkflow } from "../../payment-collection/workflows/create-payment-session"
 import { refundPaymentsWorkflow } from "../../payment/workflows"
-import { createPaymentSessionsWorkflow } from "./create-payment-session"
 
 /**
  * The data to create payment sessions.

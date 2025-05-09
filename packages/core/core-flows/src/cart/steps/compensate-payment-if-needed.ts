@@ -1,7 +1,6 @@
 import { Logger } from "@medusajs/framework/types"
-import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
+import { ContainerRegistrationKeys, Modules } from "@medusajs/framework/utils"
 import { createStep, StepResponse } from "@medusajs/framework/workflows-sdk"
-import { refundPaymentAndRecreatePaymentSessionWorkflow } from "../../payment-collection/workflows/refund-payment-recreate-payment-session"
 
 /**
  * The payment session's details for compensation.
@@ -74,7 +73,8 @@ export const compensatePaymentIfNeededStep = createStep(
           note: "Refunded due to cart completion failure",
         }
 
-        await refundPaymentAndRecreatePaymentSessionWorkflow(container).run({
+        const wfEngine = container.resolve(Modules.WORKFLOW_ENGINE)
+        await wfEngine.run("refund-payment-and-recreate-payment-session", {
           input: workflowInput,
         })
       } catch (e) {
