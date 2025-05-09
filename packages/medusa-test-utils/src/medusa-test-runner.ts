@@ -1,11 +1,11 @@
 import { MedusaAppOutput } from "@medusajs/framework/modules-sdk"
-import { ContainerLike, MedusaContainer } from "@medusajs/framework/types"
+import { MedusaContainer } from "@medusajs/framework/types"
 import {
   ContainerRegistrationKeys,
   createMedusaContainer,
 } from "@medusajs/framework/utils"
-import { logger } from "@medusajs/framework"
 import { asValue } from "awilix"
+import { logger } from "@medusajs/framework/logger"
 import { dbTestUtilFactory, getDatabaseURL } from "./database"
 import {
   applyEnvVarsToProcess,
@@ -61,7 +61,7 @@ class MedusaTestRunner {
     debug: boolean
   }
 
-  private globalContainer: ContainerLike | null = null
+  private globalContainer: MedusaContainer | null = null
   private apiUtils: any = null
   private loadedApplication: any = null
   private shutdown: () => Promise<void> = async () => void 0
@@ -183,6 +183,8 @@ class MedusaTestRunner {
         baseURL: `http://localhost:${port}`,
         cancelToken: cancelTokenSource.token,
       })
+
+      this.apiUtils.cancelToken = { source: cancelTokenSource }
     } catch (error) {
       logger.error(`Error starting the app: ${error?.message}`)
       await this.cleanup()
@@ -192,6 +194,9 @@ class MedusaTestRunner {
 
   public async cleanup(): Promise<void> {
     try {
+      process.removeAllListeners("SIGTERM")
+      process.removeAllListeners("SIGINT")
+
       await this.dbUtils.shutdown(this.dbName)
       await this.shutdown()
       await clearInstances()
@@ -200,9 +205,17 @@ class MedusaTestRunner {
         this.apiUtils.cancelToken.source.cancel("Cleanup")
       }
 
+      if (this.globalContainer?.dispose) {
+        await this.globalContainer.dispose()
+      }
+
       this.apiUtils = null
       this.loadedApplication = null
       this.globalContainer = null
+
+      if (global.gc) {
+        global.gc()
+      }
     } catch (error) {
       logger.error("Error during cleanup:", error?.message)
     }
@@ -210,6 +223,7 @@ class MedusaTestRunner {
 
   public async beforeAll(): Promise<void> {
     try {
+      this.setupProcessHandlers()
       await configLoaderOverride(this.cwd, this.dbConfig)
       applyEnvVarsToProcess(this.env)
       await this.setupApplication()
@@ -224,6 +238,8 @@ class MedusaTestRunner {
       this.isFirstTime = false
       return
     }
+
+    await this.afterEach()
 
     const container = this.globalContainer as MedusaContainer
     const copiedContainer = createMedusaContainer({}, container)
@@ -296,11 +312,50 @@ export function medusaIntegrationTestRunner({
   })
 
   return describe("", () => {
-    beforeAll(() => runner.beforeAll())
-    beforeEach(() => runner.beforeEach())
-    afterEach(() => runner.afterEach())
-    afterAll(() => runner.cleanup())
+    let testOptions: MedusaSuiteOptions
 
+    beforeAll(async () => {
+      await runner.beforeAll()
+      testOptions = runner.getOptions()
+    })
+
+    beforeEach(async () => {
+      await runner.beforeEach()
+    })
+
+    afterEach(async () => {
+      await runner.afterEach()
+    })
+
+    afterAll(async () => {
+      // Run main cleanup
+      await runner.cleanup()
+
+      // Clean references to the test options
+      for (const key in testOptions) {
+        if (typeof testOptions[key] === "function") {
+          testOptions[key] = null
+        } else if (
+          typeof testOptions[key] === "object" &&
+          testOptions[key] !== null
+        ) {
+          Object.keys(testOptions[key]).forEach((k) => {
+            testOptions[key][k] = null
+          })
+          testOptions[key] = null
+        }
+      }
+
+      // Encourage garbage collection
+      // @ts-ignore
+      testOptions = null
+
+      if (global.gc) {
+        global.gc()
+      }
+    })
+
+    // Run test suite with options
     testSuite(runner.getOptions())
   })
 }
