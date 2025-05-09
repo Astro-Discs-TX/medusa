@@ -1,5 +1,5 @@
-import { IPaymentModuleService, Logger } from "@medusajs/framework/types"
-import { ContainerRegistrationKeys, Modules } from "@medusajs/framework/utils"
+import { Logger } from "@medusajs/framework/types"
+import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 import { createStep, StepResponse } from "@medusajs/framework/workflows-sdk"
 import { refundPaymentAndRecreatePaymentSessionWorkflow } from "../../payment-collection/workflows/refund-payment-recreate-payment-session"
 
@@ -36,9 +36,6 @@ export const compensatePaymentIfNeededStep = createStep(
     }
 
     const logger = container.resolve<Logger>(ContainerRegistrationKeys.LOGGER)
-    const paymentModule = container.resolve<IPaymentModuleService>(
-      Modules.PAYMENT
-    )
 
     const query = container.resolve(ContainerRegistrationKeys.QUERY)
 
