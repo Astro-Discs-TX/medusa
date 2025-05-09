@@ -360,6 +360,15 @@ const generatedgeneratedHowToTutorialsSidebarSidebar = {
         {
           "loaded": true,
           "isPathHref": true,
+          "type": "ref",
+          "title": "Bundled Products",
+          "path": "/recipes/bundled-products/examples/standard",
+          "description": "Learn how to implement bundled products in your Medusa store.",
+          "children": []
+        },
+        {
+          "loaded": true,
+          "isPathHref": true,
           "type": "link",
           "title": "Custom Item Pricing",
           "path": "/examples/guides/custom-item-price",
@@ -373,6 +382,15 @@ const generatedgeneratedHowToTutorialsSidebarSidebar = {
           "title": "Loyalty Points System",
           "path": "/how-to-tutorials/tutorials/loyalty-points",
           "description": "Learn how to implement a loyalty points system in your Medusa store.",
+          "children": []
+        },
+        {
+          "loaded": true,
+          "isPathHref": true,
+          "type": "ref",
+          "title": "Localization with Contentful",
+          "path": "/integrations/guides/contentful",
+          "description": "Learn how to implement localization in Medusa by integrating Contentful.",
           "children": []
         },
         {

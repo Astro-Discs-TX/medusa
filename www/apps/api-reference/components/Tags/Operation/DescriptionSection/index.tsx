@@ -8,9 +8,10 @@ import dynamic from "next/dynamic"
 import TagsOperationDescriptionSectionParameters from "./Parameters"
 import MDXContentClient from "@/components/MDXContent/Client"
 import { useArea } from "../../../../providers/area"
-import { Feedback, Badge, Link, FeatureFlagNotice, H2 } from "docs-ui"
+import { Feedback, Badge, Link, FeatureFlagNotice, H2, Tooltip } from "docs-ui"
 import { usePathname } from "next/navigation"
 import { TagsOperationDescriptionSectionWorkflowBadgeProps } from "./WorkflowBadge"
+import { TagsOperationDescriptionSectionEventsProps } from "./Events"
 
 const TagsOperationDescriptionSectionSecurity =
   dynamic<TagsOperationDescriptionSectionSecurityProps>(
@@ -31,6 +32,11 @@ const TagsOperationDescriptionSectionWorkflowBadge =
   dynamic<TagsOperationDescriptionSectionWorkflowBadgeProps>(
     async () => import("./WorkflowBadge")
   ) as React.FC<TagsOperationDescriptionSectionWorkflowBadgeProps>
+
+const TagsOperationDescriptionSectionEvents =
+  dynamic<TagsOperationDescriptionSectionEventsProps>(
+    async () => import("./Events")
+  ) as React.FC<TagsOperationDescriptionSectionEventsProps>
 
 type TagsOperationDescriptionSectionProps = {
   operation: OpenAPI.Operation
@@ -56,6 +62,15 @@ const TagsOperationDescriptionSection = ({
             tooltipTextClassName="font-normal text-medusa-fg-base"
             badgeClassName="ml-0.5"
           />
+        )}
+        {operation["x-version"] && (
+          <Tooltip
+            text={`This API route is available since v${operation["x-version"]}`}
+          >
+            <Badge variant="blue" className="ml-0.5">
+              v{operation["x-version"]}
+            </Badge>
+          </Tooltip>
         )}
       </H2>
       <div className="my-1">
@@ -103,6 +118,11 @@ const TagsOperationDescriptionSection = ({
       <TagsOperationDescriptionSectionResponses
         responses={operation.responses}
       />
+      {(operation["x-events"]?.length || 0) > 0 && (
+        <TagsOperationDescriptionSectionEvents
+          events={operation["x-events"]!}
+        />
+      )}
     </>
   )
 }
