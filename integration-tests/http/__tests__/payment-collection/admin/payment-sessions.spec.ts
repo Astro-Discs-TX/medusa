@@ -6,18 +6,31 @@ import {
   generateStoreHeaders,
 } from "../../../../helpers/create-admin-user"
 import { getProductFixture } from "../../../../helpers/fixtures"
+import { createAuthenticatedCustomer } from "../../../../modules/helpers/create-authenticated-customer"
 
-jest.setTimeout(30000)
+jest.setTimeout(60000)
 
 medusaIntegrationTestRunner({
   testSuite: ({ dbConnection, getContainer, api }) => {
     let storeHeaders
-
+    let storeHeadersWithCustomer
     beforeEach(async () => {
       const container = getContainer()
       const publishableKey = await generatePublishableKey(container)
       storeHeaders = generateStoreHeaders({ publishableKey })
       await createAdminUser(dbConnection, adminHeaders, container)
+      const result = await createAuthenticatedCustomer(api, storeHeaders, {
+        first_name: "tony",
+        last_name: "stark",
+        email: "tony@stark-industries.com",
+      })
+
+      storeHeadersWithCustomer = {
+        headers: {
+          ...storeHeaders.headers,
+          authorization: `Bearer ${result.jwt}`,
+        },
+      }
     })
 
     describe("POST /admin/payment-collections/:id/payment-sessions", () => {
@@ -30,7 +43,11 @@ medusaIntegrationTestRunner({
         region = (
           await api.post(
             "/admin/regions",
-            { name: "United States", currency_code: "usd", countries: ["us"] },
+            {
+              name: "United States",
+              currency_code: "usd",
+              countries: ["us"],
+            },
             adminHeaders
           )
         ).data.region
@@ -67,53 +84,102 @@ medusaIntegrationTestRunner({
             adminHeaders
           )
         ).data.product
-
-        cart = (
-          await api.post(
-            "/store/carts",
-            {
-              region_id: region.id,
-              items: [{ variant_id: product.variants[0].id, quantity: 1 }],
-            },
-            storeHeaders
-          )
-        ).data.cart
       })
 
-      it("should create a payment session", async () => {
-        const paymentCollection = (
+      describe("when the customer is guest", () => {
+        beforeEach(async () => {
+          cart = (
+            await api.post(
+              "/store/carts",
+              {
+                region_id: region.id,
+                items: [{ variant_id: product.variants[0].id, quantity: 1 }],
+              },
+              storeHeaders
+            )
+          ).data.cart
+        })
+
+        it("should create a payment session", async () => {
+          const paymentCollection = (
+            await api.post(
+              `/store/payment-collections`,
+              {
+                cart_id: cart.id,
+              },
+              storeHeaders
+            )
+          ).data.payment_collection
+
           await api.post(
-            `/store/payment-collections`,
-            {
-              cart_id: cart.id,
-            },
+            `/store/payment-collections/${paymentCollection.id}/payment-sessions`,
+            { provider_id: "pp_system_default" },
             storeHeaders
           )
-        ).data.payment_collection
 
-        await api.post(
-          `/store/payment-collections/${paymentCollection.id}/payment-sessions`,
-          { provider_id: "pp_system_default" },
-          storeHeaders
-        )
+          // Adding a second payment session to ensure only one session gets created
+          const {
+            data: { payment_collection },
+          } = await api.post(
+            `/store/payment-collections/${paymentCollection.id}/payment-sessions`,
+            { provider_id: "pp_system_default" },
+            storeHeaders
+          )
 
-        // Adding a second payment session to ensure only one session gets created
-        const {
-          data: { payment_collection },
-        } = await api.post(
-          `/store/payment-collections/${paymentCollection.id}/payment-sessions`,
-          { provider_id: "pp_system_default" },
-          storeHeaders
-        )
+          expect(payment_collection.payment_sessions).toEqual([
+            expect.objectContaining({
+              currency_code: "usd",
+              provider_id: "pp_system_default",
+              status: "pending",
+              amount: 150,
+            }),
+          ])
+        })
+      })
 
-        expect(payment_collection.payment_sessions).toEqual([
-          expect.objectContaining({
-            currency_code: "usd",
-            provider_id: "pp_system_default",
-            status: "pending",
-            amount: 150,
-          }),
-        ])
+      describe("when the customer is authenticated", () => {
+        beforeEach(async () => {
+          cart = (
+            await api.post(
+              "/store/carts",
+              {
+                region_id: region.id,
+                items: [{ variant_id: product.variants[0].id, quantity: 1 }],
+              },
+              storeHeadersWithCustomer
+            )
+          ).data.cart
+        })
+
+        it("should create a payment session", async () => {
+          const paymentCollection = (
+            await api.post(
+              `/store/payment-collections`,
+              { cart_id: cart.id },
+              storeHeadersWithCustomer
+            )
+          ).data.payment_collection
+
+          const {
+            data: { payment_collection },
+          } = await api.post(
+            `/store/payment-collections/${paymentCollection.id}/payment-sessions`,
+            { provider_id: "pp_system_default" },
+            storeHeadersWithCustomer
+          )
+
+          // TODO: This does not create an account holder as the system payment provider does not support it
+          // Create a custom system payment provider that supports it or add account holder support to the system payment provider
+          // This test will pass through the account holder creation step though, which is what the test is checking for
+          expect(payment_collection.payment_sessions).toEqual([
+            expect.objectContaining({
+              currency_code: "usd",
+              provider_id: "pp_system_default",
+              status: "pending",
+              amount: 150,
+            }),
+          ])
+        })
       })
     })
   },
