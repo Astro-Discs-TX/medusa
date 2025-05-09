@@ -1,8 +1,6 @@
+import { IPaymentModuleService, Logger } from "@medusajs/framework/types"
+import { ContainerRegistrationKeys, Modules } from "@medusajs/framework/utils"
 import { createStep, StepResponse } from "@medusajs/framework/workflows-sdk"
-import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
-import { Modules } from "@medusajs/framework/utils"
-import { Logger } from "@medusajs/framework/types"
-import { IPaymentModuleService } from "@medusajs/framework/types"
 
 /**
  * The payment session's details for compensation.

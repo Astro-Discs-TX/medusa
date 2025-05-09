@@ -9,7 +9,7 @@ import { capturePaymentWorkflow } from "./capture-payment"
 /**
  * The data to process a payment from a webhook action.
  */
-interface ProcessPaymentWorkflowInput extends WebhookActionResult {}
+export interface ProcessPaymentWorkflowInput extends WebhookActionResult {}
 
 export const processPaymentWorkflowId = "process-payment-workflow"
 /**
@@ -133,9 +133,7 @@ export const processPaymentWorkflow = createWorkflow(
     }).then(() => {
       completeCartWorkflow
         .runAsStep({
-          input: {
-            id: cartPaymentCollection.data[0].cart_id,
-          },
+          input: { id: cartPaymentCollection.data[0].cart_id },
         })
         .config({
           continueOnPermanentFailure: true, // Continue payment processing even if cart completion fails

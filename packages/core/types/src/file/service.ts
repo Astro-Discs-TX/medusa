@@ -1,10 +1,17 @@
+import { Readable } from "stream"
 import { IModuleService } from "../modules-sdk"
 import { FileDTO, FilterableFileProps, UploadFileUrlDTO } from "./common"
 import { FindConfig } from "../common"
 import { Context } from "../shared-context"
+import { IFileProvider } from "./provider"
 import { CreateFileDTO, GetUploadFileUrlDTO } from "./mutations"
 
 export interface IFileModuleService extends IModuleService {
+  /**
+   * Returns a reference to the file provider in use
+   */
+  getProvider(): IFileProvider
+
   /**
    * This method uploads files to the designated file storage system.
    *
@@ -157,4 +164,36 @@ export interface IFileModuleService extends IModuleService {
     config?: FindConfig<FileDTO>,
     sharedContext?: Context
   ): Promise<[FileDTO[], number]>
+
+  /**
+   * This method retrieves a file by its ID and returns a stream to download the file. Under the hood, it will use the
+   * file provider that was used to upload the file to retrievethe stream.
+   * 
+   * @version 2.8.0
+   * 
+   * @param {string} id - The ID of the file.
+   * @param {Context} sharedContext - A context used to share resources, such as transaction manager, between the application and the module.
+   * @returns {Promise<Readable>} A readable stream of the file contents.
+   *
+   * @example
+   * const stream = await fileModuleService.getDownloadStream("file_123")
+   * writeable.pipe(stream)
+   */
+  getDownloadStream(id: string, sharedContext?: Context): Promise<Readable>
+
+  /**
+   * This method retrieves a file by its ID and returns the file contents as a buffer. Under the hood, it will use the
+   * file provider that was used to upload the file to retrieve the buffer.
+   * 
+   * @version 2.8.0
+   * 
+   * @param {string} id - The ID of the file.
+   * @param {Context} sharedContext - A context used to share resources, such as transaction manager, between the application and the module.
+   * @returns {Promise<Buffer>} A buffer of the file contents.
+   *
+   * @example
+   * const contents = await fileModuleService.getAsBuffer("file_123")
+   * contents.toString('utf-8')
+   */
+  getAsBuffer(id: string, sharedContext?: Context): Promise<Buffer>
 }
