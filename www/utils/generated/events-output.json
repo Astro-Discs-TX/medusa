@@ -227,7 +227,6 @@
     "workflows": [
       "requestOrderEditRequestWorkflow"
     ],
-    "version": "2.8.0",
     "deprecated": false
   },
   {
@@ -239,7 +238,6 @@
     "workflows": [
       "confirmOrderEditRequestWorkflow"
     ],
-    "version": "2.8.0",
     "deprecated": false
   },
   {
@@ -251,7 +249,6 @@
     "workflows": [
       "cancelBeginOrderEditWorkflow"
     ],
-    "version": "2.8.0",
     "deprecated": false
   },
   {
