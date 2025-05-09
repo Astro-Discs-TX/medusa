@@ -1,6 +1,7 @@
 import { IPaymentModuleService, Logger } from "@medusajs/framework/types"
 import { ContainerRegistrationKeys, Modules } from "@medusajs/framework/utils"
 import { createStep, StepResponse } from "@medusajs/framework/workflows-sdk"
+import { refundPaymentAndRecreatePaymentSessionWorkflow } from "../../payment-collection/workflows/refund-payment-recreate-payment-session"
 
 /**
  * The payment session's details for compensation.
@@ -39,18 +40,45 @@ export const compensatePaymentIfNeededStep = createStep(
       Modules.PAYMENT
     )
 
-    const paymentSession = await paymentModule.retrievePaymentSession(
-      paymentSessionId,
-      {
-        relations: ["payment"],
-      }
-    )
+    const query = container.resolve(ContainerRegistrationKeys.QUERY)
+
+    const { data: paymentSessions } = await query.graph({
+      entity: "payment_session",
+      fields: [
+        "id",
+        "payment_collection_id",
+        "amount",
+        "raw_amount",
+        "provider_id",
+        "data",
+        "payment.id",
+        "payment.captured_at",
+        "payment.customer.id",
+      ],
+      filters: {
+        id: paymentSessionId,
+      },
+    })
+    const paymentSession = paymentSessions[0]
+
+    if (!paymentSession) {
+      return
+    }
 
     if (paymentSession.payment?.captured_at) {
       try {
-        await paymentModule.refundPayment({
+        const workflowInput = {
+          payment_collection_id: paymentSession.payment_collection_id,
+          provider_id: paymentSession.provider_id,
+          customer_id: paymentSession.payment?.customer?.id,
+          data: paymentSession.data,
+          amount: paymentSession.raw_amount ?? paymentSession.amount,
           payment_id: paymentSession.payment.id,
           note: "Refunded due to cart completion failure",
+        }
+
+        await refundPaymentAndRecreatePaymentSessionWorkflow(container).run({
+          input: workflowInput,
         })
       } catch (e) {
         logger.error(

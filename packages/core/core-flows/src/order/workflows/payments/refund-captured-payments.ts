@@ -20,6 +20,7 @@ export const refundCapturedPaymentsWorkflow = createWorkflow(
     input: WorkflowData<{
       order_id: string
       created_by?: string
+      note?: string
     }>
   ) => {
     const orderQuery = useQueryGraphStep({
@@ -74,6 +75,7 @@ export const refundCapturedPaymentsWorkflow = createWorkflow(
               payment_id: payment.id,
               created_by: input.created_by,
               amount: amountToRefund,
+              note: input.note,
             }
           })
           .filter((payment) => MathBN.gt(payment.amount, 0))
