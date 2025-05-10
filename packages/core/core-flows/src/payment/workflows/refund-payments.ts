@@ -1,5 +1,5 @@
 import { BigNumberInput, PaymentDTO } from "@medusajs/framework/types"
-import { MathBN, MedusaError } from "@medusajs/framework/utils"
+import { isDefined, MathBN, MedusaError } from "@medusajs/framework/utils"
 import {
   createStep,
   createWorkflow,
@@ -8,7 +8,7 @@ import {
   WorkflowResponse,
 } from "@medusajs/framework/workflows-sdk"
 import { useQueryGraphStep } from "../../common"
-import { addOrderTransactionStep } from "../../order"
+import { addOrderTransactionStep } from "../../order/steps/add-order-transaction"
 import { refundPaymentsStep } from "../steps/refund-payments"
 
 /**
@@ -172,18 +172,24 @@ export const refundPaymentsWorkflow = createWorkflow(
           paymentsMap[payment.id] = payment
         }
 
-        return input.map((paymentInput) => {
-          const payment = paymentsMap[paymentInput.payment_id]!
-          const order = payment.payment_collection.order
+        return input
+          .map((paymentInput) => {
+            const payment = paymentsMap[paymentInput.payment_id]!
+            const order = payment.payment_collection?.order
 
-          return {
-            order_id: order.id,
-            amount: MathBN.mult(paymentInput.amount, -1),
-            currency_code: payment.currency_code,
-            reference_id: payment.id,
-            reference: "refund",
-          }
-        })
+            if (!order) {
+              return
+            }
+
+            return {
+              order_id: order.id,
+              amount: MathBN.mult(paymentInput.amount, -1),
+              currency_code: payment.currency_code,
+              reference_id: payment.id,
+              reference: "refund",
+            }
+          })
+          .filter(isDefined)
       }
     )
 
