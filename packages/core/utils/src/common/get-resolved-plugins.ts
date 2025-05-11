@@ -100,7 +100,7 @@ async function resolvePlugin(
         resolve: path.join(
           isAdminLocal ? pluginStaticOptions.srcDir : name,
           "admin"
-        ),
+        ).split(path.sep).join("/"),
       }
     : undefined
 
