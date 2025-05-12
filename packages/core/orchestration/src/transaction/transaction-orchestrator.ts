@@ -785,15 +785,30 @@ export class TransactionOrchestrator extends EventEmitter {
         return
       }
 
-      const execution: Promise<void | unknown>[] = []
-      for (const step of nextSteps.next) {
+      const stepsShouldContinueExecution = nextSteps.next.map((step) => {
         const { shouldContinueExecution } = this.prepareStepForExecution(
           step,
           flow
         )
 
-        // Should stop the execution if next step cant be handled
-        if (!shouldContinueExecution) {
+        return shouldContinueExecution
+      })
+
+      await transaction.saveCheckpoint().catch((error) => {
+        if (SkipExecutionError.isSkipExecutionError(error)) {
+          continueExecution = false
+          return
+        }
+
+        throw error
+      })
+
+      const execution: Promise<void | unknown>[] = []
+
+      let i = 0
+      for (const step of nextSteps.next) {
+        const stepIndex = i++
+        if (!stepsShouldContinueExecution[stepIndex]) {
           continue
         }
 
@@ -812,16 +827,6 @@ export class TransactionOrchestrator extends EventEmitter {
 
         // Compute current transaction state
         await this.computeCurrentTransactionState(transaction)
-
-        // Save checkpoint before executing step
-        await transaction.saveCheckpoint().catch((error) => {
-          if (SkipExecutionError.isSkipExecutionError(error)) {
-            continueExecution = false
-            return
-          }
-
-          throw error
-        })
 
         if (!continueExecution) {
           break
