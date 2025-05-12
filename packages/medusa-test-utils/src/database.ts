@@ -5,6 +5,7 @@ import {
   SqlEntityManager,
 } from "@mikro-orm/postgresql"
 import { createDatabase, dropDatabase } from "pg-god"
+import { logger } from "@medusajs/framework/logger"
 
 const DB_HOST = process.env.DB_HOST ?? "localhost"
 const DB_USERNAME = process.env.DB_USERNAME ?? ""
@@ -130,7 +131,7 @@ export function getMikroOrmWrapper({
         try {
           await this.orm.getSchemaGenerator().ensureDatabase()
         } catch (err) {
-          console.error("Error ensuring database:", err)
+          logger.error("Error ensuring database:", err)
           throw err
         }
 
@@ -154,7 +155,7 @@ export function getMikroOrmWrapper({
           try {
             await this.orm.close()
           } catch (closeError) {
-            console.error("Error closing ORM:", closeError)
+            logger.error("Error closing ORM:", closeError)
           }
         }
         this.orm = null
@@ -184,11 +185,11 @@ export function getMikroOrmWrapper({
 
         await Promise.race([closePromise, timeoutPromise])
       } catch (error) {
-        console.error("Error clearing database:", error)
+        logger.error("Error clearing database:", error)
         try {
           await this.orm?.close()
         } catch (closeError) {
-          console.error("Error during forced ORM close:", closeError)
+          logger.error("Error during forced ORM close:", closeError)
         }
         throw error
       } finally {
@@ -209,7 +210,7 @@ export const dbTestUtilFactory = (): any => ({
         pgGodCredentials
       )
     } catch (error) {
-      console.error("Error creating database:", error)
+      logger.error("Error creating database:", error)
       throw error
     }
   },
@@ -254,7 +255,7 @@ export const dbTestUtilFactory = (): any => ({
 
       await runRawQuery(`SET session_replication_role = 'origin';`)
     } catch (error) {
-      console.error("Error during database teardown:", error)
+      logger.error("Error during database teardown:", error)
       throw error
     }
   },
@@ -298,12 +299,12 @@ export const dbTestUtilFactory = (): any => ({
         pgGodCredentials
       )
     } catch (error) {
-      console.error("Error during database shutdown:", error)
+      logger.error("Error during database shutdown:", error)
       try {
         await this.pgConnection_?.context?.destroy()
         await this.pgConnection_?.destroy()
       } catch (cleanupError) {
-        console.error("Error during forced cleanup:", cleanupError)
+        logger.error("Error during forced cleanup:", cleanupError)
       }
       throw error
     } finally {

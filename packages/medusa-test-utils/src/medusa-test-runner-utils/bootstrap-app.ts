@@ -4,6 +4,7 @@ import { resolve } from "path"
 import { MedusaContainer } from "@medusajs/framework/types"
 import { applyEnvVarsToProcess } from "./utils"
 import { promiseAll, GracefulShutdownServer } from "@medusajs/framework/utils"
+import { logger } from "@medusajs/framework/logger"
 
 async function bootstrapApp({
   cwd,
@@ -29,7 +30,7 @@ async function bootstrapApp({
       port: PORT,
     }
   } catch (error) {
-    console.error("Error bootstrapping app:", error)
+    logger.error("Error bootstrapping app:", error)
     throw error
   }
 }
@@ -77,12 +78,12 @@ export async function startApp({
           global.gc()
         }
       } catch (error) {
-        console.error("Error during shutdown:", error)
+        logger.error("Error during shutdown:", error)
         try {
           await expressServer?.shutdown()
           await medusaShutdown()
         } catch (cleanupError) {
-          console.error("Error during forced cleanup:", cleanupError)
+          logger.error("Error during forced cleanup:", cleanupError)
         }
         throw error
       }
@@ -92,7 +93,7 @@ export async function startApp({
       const server = app
         .listen(port)
         .on("error", async (err) => {
-          console.error("Error starting server:", err)
+          logger.error("Error starting server:", err)
           await shutdown()
           return reject(err)
         })
@@ -109,19 +110,19 @@ export async function startApp({
       expressServer = GracefulShutdownServer.create(server)
     })
   } catch (error) {
-    console.error("Error in startApp:", error)
+    logger.error("Error in startApp:", error)
     if (expressServer) {
       try {
         await expressServer.shutdown()
       } catch (cleanupError) {
-        console.error("Error cleaning up express server:", cleanupError)
+        logger.error("Error cleaning up express server:", cleanupError)
       }
     }
     if (medusaShutdown) {
       try {
         await medusaShutdown()
       } catch (cleanupError) {
-        console.error("Error cleaning up medusa:", cleanupError)
+        logger.error("Error cleaning up medusa:", cleanupError)
       }
     }
     throw error
