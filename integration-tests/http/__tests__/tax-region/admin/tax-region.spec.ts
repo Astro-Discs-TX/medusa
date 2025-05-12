@@ -24,7 +24,7 @@ medusaIntegrationTestRunner({
             "/admin/tax-regions",
             {
               country_code: "us",
-              provider_id: "tp_system", // TODO: update when Oli's PR is merged
+              provider_id: "tp_system",
             },
             adminHeaders
           )
