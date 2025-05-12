@@ -184,11 +184,15 @@ export function createWorkflow<TData, TResult, THooks extends any[]>(
   }: {
     input: TData
   }): ReturnType<StepFunction<TData, TResult>> => {
+    // Get current workflow composition context
+    const workflowCompositionContext =
+      global[OrchestrationUtils.SymbolMedusaWorkflowComposerContext]
+
     const step = createStep(
       {
         name: `${name}-as-step`,
-        async: context.isAsync,
-        nested: context.isAsync, // if async we flag this is a nested transaction
+        async: workflowCompositionContext.isAsync,
+        nested: workflowCompositionContext.isAsync, // if async we flag this is a nested transaction
       },
       async (stepInput: TData, stepContext) => {
         const { container, ...sharedContext } = stepContext
@@ -206,7 +210,7 @@ export function createWorkflow<TData, TResult, THooks extends any[]>(
         }
 
         let transaction
-        if (workflowEngine && context.isAsync) {
+        if (workflowEngine && workflowCompositionContext.isAsync) {
           transaction = await workflowEngine.run(name, {
             input: stepInput as any,
             context: executionContext,
@@ -221,7 +225,9 @@ export function createWorkflow<TData, TResult, THooks extends any[]>(
 
         return new StepResponse(
           transaction.result,
-          context.isAsync ? stepContext.transactionId : transaction
+          workflowCompositionContext.isAsync
+            ? stepContext.transactionId
+            : transaction
         )
       },
       async (transaction, stepContext) => {
@@ -246,7 +252,7 @@ export function createWorkflow<TData, TResult, THooks extends any[]>(
 
         const transactionId = step.__step__ + "-" + stepContext.transactionId
 
-        if (workflowEngine && context.isAsync) {
+        if (workflowEngine && workflowCompositionContext.isAsync) {
           await workflowEngine.cancel(name, {
             transactionId: transactionId,
             context: executionContext,
