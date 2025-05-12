@@ -1,10 +1,10 @@
 export const metadata = {
-  title: `Tax Module Provider`,
+  title: `Tax module provider`,
 }
 
 # {metadata.title}
 
-In this guide, you’ll learn about the tax module provider and how it's used.
+In this guide, you’ll learn about the Tax module provider and how it's used.
 
 <Note title="Looking for no-code docs?">
 
@@ -12,19 +12,19 @@ Refer to this [Medusa Admin User Guide](!user-guide!/settings/tax-regions) to le
 
 </Note>
 
-## What is a Tax Module Provider?
+## What is a Tax module provider?
 
-The tax module provider handles tax line calculations in the Medusa application. It integrates third-party tax services, such as TaxJar, or implements custom tax calculation logic.
+The Tax module provider handles tax line calculations in the Medusa application. It integrates third-party tax services, such as TaxJar, or implements custom tax calculation logic.
 
-The Medusa application uses the tax module provider whenever it needs to calculate tax lines for a cart or order, or when you [calculate the tax lines using the Tax Module's service](../tax-calculation-with-provider/page.mdx).
+The Medusa application uses the Tax module provider whenever it needs to calculate tax lines for a cart or order, or when you [calculate the tax lines using the Tax Module's service](../tax-calculation-with-provider/page.mdx).
 
-![Diagram showcasing the communication between Medusa the tax module provider, and the third-party tax provider.](https://res.cloudinary.com/dza7lstvk/image/upload/v1746790996/Medusa%20Resources/tax-provider-service_kcgpne.jpg)
+![Diagram showcasing the communication between Medusa the Tax module provider, and the third-party tax provider.](https://res.cloudinary.com/dza7lstvk/image/upload/v1746790996/Medusa%20Resources/tax-provider-service_kcgpne.jpg)
 
 ---
 
 ## Default Tax Provider
 
-The Tax Module provides a `system` tax provider that acts as a placeholder tax provider. It performs basic tax calculation, as you can see in the [Create Tax Module Provider](/references/tax/provider#gettaxlines) guide.
+The Tax Module provides a `system` tax provider that acts as a placeholder tax provider. It performs basic tax calculation, as you can see in the [Create Tax module provider](/references/tax/provider#gettaxlines) guide.
 
 This provider is installed by default in your application and you can use it with tax regions.
 
@@ -38,13 +38,13 @@ The identifier of the system tax provider is `tp_system`.
 
 ## How to Create a Custom Tax Provider?
 
-A tax module provider is a module whose service implements the `ITaxProvider` imported from `@medusajs/framework/types`.
+A Tax module provider is a module whose service implements the `ITaxProvider` imported from `@medusajs/framework/types`.
 
 The module can have multiple tax provider services, where each are registered as separate tax providers.
 
-Refer to the [Create Tax Module Provider](/references/tax/provider) guide to learn how to create a tax module provider.
+Refer to the [Create Tax module provider](/references/tax/provider) guide to learn how to create a Tax module provider.
 
-After you create a tax provider, you can choose it as the default tax module provider for a region in the [Medusa Admin dashboard](!user-guide!/settings/tax-regions).
+After you create a tax provider, you can choose it as the default Tax module provider for a region in the [Medusa Admin dashboard](!user-guide!/settings/tax-regions).
 
 ---
 
@@ -58,23 +58,23 @@ Learn more about this option in the [Module Options](../module-options/page.mdx)
 
 ### Registration on Application Start
 
-When the Medusa application starts, it registers the tax module providers defined in the `providers` option of the Tax Module.
+When the Medusa application starts, it registers the Tax module providers defined in the `providers` option of the Tax Module.
 
-For each tax module provider, the Medusa application finds all tax provider services defined in them to register.
+For each Tax module provider, the Medusa application finds all tax provider services defined in them to register.
 
 ### TaxProvider Data Model
 
 A registered tax provider is represented by the [TaxProvider data model](/references/tax/models/TaxProvider) in the Medusa application.
 
-This data model is used to reference a service in the tax module provider and determine whether it's installed in the application.
+This data model is used to reference a service in the Tax module provider and determine whether it's installed in the application.
 
 ![Diagram showcasing the TaxProvider data model](https://res.cloudinary.com/dza7lstvk/image/upload/v1746791254/Medusa%20Resources/tax-provider-model_r6ktjw.jpg)
 
 The `TaxProvider` data model has the following properties:
 
 - `id`: The unique identifier of the tax provider. The ID's format is `tp_{identifier}_{id}`, where:
-    - `identifier` is the value of the `identifier` property in the tax module provider's service.
-    - `id` is the value of the `id` property of the tax module provider in `medusa-config.ts`.
+    - `identifier` is the value of the `identifier` property in the Tax module provider's service.
+    - `id` is the value of the `id` property of the Tax module provider in `medusa-config.ts`.
 - `is_enabled`: A boolean indicating whether the tax provider is enabled.
 
 ### How to Remove a Tax Provider?

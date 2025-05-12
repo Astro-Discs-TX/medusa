@@ -1,12 +1,12 @@
 import { CardList } from "docs-ui"
 
 export const metadata = {
-  title: `Payment Module Provider`,
+  title: `Payment module provider`,
 }
 
 # {metadata.title}
 
-In this guide, you’ll learn about the payment module provider and how it's used.
+In this guide, you’ll learn about the Payment module provider and how it's used.
 
 <Note title="Looking for no-code docs?">
 
@@ -16,17 +16,17 @@ Refer to this [Medusa Admin User Guide](!user-guide!/settings/regions) to learn 
 
 ---
 
-## What is a Payment Module Provider?
+## What is a Payment module provider?
 
-The payment module provider handles payment processing in the Medusa application. It integrates third-party payment services, such as [Stripe](./stripe/page.mdx).
+The Payment module provider handles payment processing in the Medusa application. It integrates third-party payment services, such as [Stripe](./stripe/page.mdx).
 
 To authorize a payment amount with a payment provider, a payment session is created and associated with that payment provider. The payment provider is then used to handle the authorization.
 
 After the payment session is authorized, the payment provider is associated with the resulting payment and handles its payment processing, such as to capture or refund payment.
 
-![Diagram showcasing the communication between Medusa, the payment module provider, and the third-party payment provider.](https://res.cloudinary.com/dza7lstvk/image/upload/v1746791374/Medusa%20Resources/payment-provider-service_l4zi6m.jpg)
+![Diagram showcasing the communication between Medusa, the Payment module provider, and the third-party payment provider.](https://res.cloudinary.com/dza7lstvk/image/upload/v1746791374/Medusa%20Resources/payment-provider-service_l4zi6m.jpg)
 
-### List of Payment Module Providers
+### List of Payment module providers
 
 <CardList
   items={[
@@ -73,9 +73,9 @@ Learn more about this option in the [Module Options](../module-options/page.mdx)
 
 ### Registration on Application Start
 
-When the Medusa application starts, it registers the payment module providers defined in the `providers` option of the Payment Module.
+When the Medusa application starts, it registers the Payment module providers defined in the `providers` option of the Payment Module.
 
-For each payment module provider, the Medusa application finds all payment provider services defined in them to register.
+For each Payment module provider, the Medusa application finds all payment provider services defined in them to register.
 
 ### PaymentProvider Data Model
 
@@ -83,13 +83,13 @@ A registered payment provider is represented by the [PaymentProvider data model]
 
 ![Diagram showcasing the PaymentProvider data model](https://res.cloudinary.com/dza7lstvk/image/upload/v1746791364/Medusa%20Resources/payment-provider-model_lx91oa.jpg)
 
-This data model is used to reference a service in the payment module provider and determine whether it's installed in the application.
+This data model is used to reference a service in the Payment module provider and determine whether it's installed in the application.
 
 The `PaymentProvider` data model has the following properties:
 
-- `id`: The unique identifier of the payment module provider. The ID's format is `pp_{identifier}_{id}`, where:
-    - `identifier` is the value of the `identifier` property in the payment module provider's service.
-    - `id` is the value of the `id` property of the payment module provider in `medusa-config.ts`.
+- `id`: The unique identifier of the Payment module provider. The ID's format is `pp_{identifier}_{id}`, where:
+    - `identifier` is the value of the `identifier` property in the Payment module provider's service.
+    - `id` is the value of the `id` property of the Payment module provider in `medusa-config.ts`.
 - `is_enabled`: A boolean indicating whether the payment provider is enabled.
 
 ### How to Remove a Payment Provider?
