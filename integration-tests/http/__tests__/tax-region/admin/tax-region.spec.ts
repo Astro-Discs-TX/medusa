@@ -24,10 +24,11 @@ medusaIntegrationTestRunner({
             "/admin/tax-regions",
             {
               country_code: "us",
-              provider_id: "tp_system_system", // TODO: update when Oli's PR is merged
+              provider_id: "tp_system", // TODO: update when Oli's PR is merged
             },
             adminHeaders
           )
+
           taxRegion = (
             await api.post(
               "/admin/tax-regions",
@@ -88,6 +89,28 @@ medusaIntegrationTestRunner({
               id: expect.any(String),
               province_code: "ca",
               metadata: { test: "updated 2" },
+            })
+          )
+        })
+
+        it("should create a province tax region without a provider", async () => {
+          const response = await api.post(
+            `/admin/tax-regions`,
+            {
+              country_code: "us",
+              parent_id: taxRegion.id,
+              province_code: "ny",
+            },
+            adminHeaders
+          )
+
+          expect(response.status).toEqual(200)
+          expect(response.data.tax_region).toEqual(
+            expect.objectContaining({
+              id: expect.any(String),
+              country_code: "us",
+              province_code: "ny",
+              provider_id: null,
             })
           )
         })
