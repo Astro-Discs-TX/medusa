@@ -179,7 +179,7 @@ export function getMikroOrmWrapper({
 
         const closePromise = this.orm.close()
         const timeoutPromise = new Promise((_, reject) => {
-          setTimeout(() => reject(new Error("ORM close timeout")), 5000)
+          setTimeout(() => reject(new Error("ORM close timeout")), 5000).unref()
         })
 
         await Promise.race([closePromise, timeoutPromise])
@@ -271,7 +271,7 @@ export const dbTestUtilFactory = (): any => ({
               setTimeout(
                 () => reject(new Error("Context destroy timeout")),
                 5000
-              )
+              ).unref()
             ),
           ])
         )
@@ -285,7 +285,7 @@ export const dbTestUtilFactory = (): any => ({
               setTimeout(
                 () => reject(new Error("Connection destroy timeout")),
                 5000
-              )
+              ).unref()
             ),
           ])
         )

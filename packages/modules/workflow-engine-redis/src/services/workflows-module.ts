@@ -66,14 +66,6 @@ export class WorkflowsModuleService<
   }
 
   __hooks = {
-    onApplicationShutdown: async () => {
-      await this.workflowOrchestratorService_.onApplicationShutdown()
-      await this.redisDisconnectHandler_()
-      clearInterval(this.clearTimeout_)
-    },
-    onApplicationPrepareShutdown: async () => {
-      await this.workflowOrchestratorService_.onApplicationPrepareShutdown()
-    },
     onApplicationStart: async () => {
       await this.workflowOrchestratorService_.onApplicationStart()
 
@@ -83,6 +75,15 @@ export class WorkflowsModuleService<
           await this.clearExpiredExecutions()
         } catch {}
       }, 1000 * 60 * 60)
+      this.clearTimeout_.unref()
+    },
+    onApplicationPrepareShutdown: async () => {
+      await this.workflowOrchestratorService_.onApplicationPrepareShutdown()
+    },
+    onApplicationShutdown: async () => {
+      await this.workflowOrchestratorService_.onApplicationShutdown()
+      await this.redisDisconnectHandler_()
+      clearInterval(this.clearTimeout_)
     },
   }
 

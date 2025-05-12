@@ -68,7 +68,7 @@ export async function startApp({
         ])
 
         const timeoutPromise = new Promise((_, reject) => {
-          setTimeout(() => reject(new Error("Shutdown timeout")), 5000)
+          setTimeout(() => reject(new Error("Shutdown timeout")), 5000).unref()
         })
 
         await Promise.race([shutdownPromise, timeoutPromise])
