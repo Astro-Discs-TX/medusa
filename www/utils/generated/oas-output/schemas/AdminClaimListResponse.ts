@@ -26,6 +26,10 @@
  *     description: The list of claims.
  *     items:
  *       $ref: "#/components/schemas/AdminClaim"
+ *   estimate_count:
+ *     type: number
+ *     title: estimate_count
+ *     description: The claim's estimate count.
  * 
 */
 

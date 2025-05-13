@@ -1,7 +1,7 @@
 /**
  * @schema StoreReturnResponse
  * type: object
- * description: The return's details.
+ * description: SUMMARY
  * x-schemaName: StoreReturnResponse
  * required:
  *   - return

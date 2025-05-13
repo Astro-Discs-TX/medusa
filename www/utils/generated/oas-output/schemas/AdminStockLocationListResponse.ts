@@ -26,6 +26,10 @@
  *     description: The list of stock locations.
  *     items:
  *       $ref: "#/components/schemas/AdminStockLocation"
+ *   estimate_count:
+ *     type: number
+ *     title: estimate_count
+ *     description: The stock location's estimate count.
  * 
 */
 

@@ -24,3 +24,7 @@ properties:
     description: The list of product tags.
     items:
       $ref: ./AdminProductTag.yaml
+  estimate_count:
+    type: number
+    title: estimate_count
+    description: The product tag's estimate count.

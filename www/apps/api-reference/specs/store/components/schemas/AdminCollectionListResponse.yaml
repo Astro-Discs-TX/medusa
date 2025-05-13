@@ -24,3 +24,7 @@ properties:
     description: The list of product collections.
     items:
       $ref: ./AdminCollection.yaml
+  estimate_count:
+    type: number
+    title: estimate_count
+    description: The collection's estimate count.

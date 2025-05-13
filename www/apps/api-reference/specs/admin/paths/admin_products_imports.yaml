@@ -1,0 +1,84 @@
+post:
+  operationId: PostProductsImports
+  summary: Create Product
+  description: Create a product.
+  x-authenticated: true
+  parameters: []
+  security:
+    - api_token: []
+    - cookie_auth: []
+    - jwt_token: []
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/AdminImportProducts.yaml
+  x-codeSamples:
+    - lang: JavaScript
+      label: JS SDK
+      source:
+        $ref: ../code_samples/JavaScript/admin_products_imports/post.js
+    - lang: Shell
+      label: cURL
+      source:
+        $ref: ../code_samples/Shell/admin_products_imports/post.sh
+  tags:
+    - Products
+  responses:
+    '202':
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/AdminImportProductResponse.yaml
+    '400':
+      $ref: ../components/responses/400_error.yaml
+    '401':
+      $ref: ../components/responses/unauthorized.yaml
+    '404':
+      $ref: ../components/responses/not_found_error.yaml
+    '409':
+      $ref: ../components/responses/invalid_state_error.yaml
+    '422':
+      $ref: ../components/responses/invalid_request_error.yaml
+    '500':
+      $ref: ../components/responses/500_error.yaml
+  x-workflow: importProductsWorkflow
+  x-events:
+    - name: product-variant.created
+      payload: |-
+        ```ts
+        [{
+          id, // The ID of the product variant
+        }]
+        ```
+      description: Emitted when product variants are created.
+      deprecated: false
+    - name: product.updated
+      payload: |-
+        ```ts
+        [{
+          id, // The ID of the product
+        }]
+        ```
+      description: Emitted when products are updated.
+      deprecated: false
+    - name: product.created
+      payload: |-
+        ```ts
+        [{
+          id, // The ID of the product
+        }]
+        ```
+      description: Emitted when products are created.
+      deprecated: false
+    - name: product.deleted
+      payload: |-
+        ```ts
+        [{
+          id, // The ID of the product
+        }]
+        ```
+      description: Emitted when products are deleted.
+      deprecated: false
+  x-version: 2.8.0

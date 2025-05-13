@@ -26,6 +26,10 @@
  *     description: The list of notifications.
  *     items:
  *       $ref: "#/components/schemas/AdminNotification"
+ *   estimate_count:
+ *     type: number
+ *     title: estimate_count
+ *     description: The notification's estimate count.
  * 
 */
 

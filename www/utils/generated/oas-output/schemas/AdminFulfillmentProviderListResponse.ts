@@ -26,6 +26,10 @@
  *     description: The list of fulfillment providers.
  *     items:
  *       $ref: "#/components/schemas/AdminFulfillmentProvider"
+ *   estimate_count:
+ *     type: number
+ *     title: estimate_count
+ *     description: The fulfillment provider's estimate count.
  * 
 */
 

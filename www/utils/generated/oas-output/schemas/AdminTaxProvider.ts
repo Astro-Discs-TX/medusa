@@ -1,0 +1,20 @@
+/**
+ * @schema AdminTaxProvider
+ * type: object
+ * description: The tax provider's tax providers.
+ * x-schemaName: AdminTaxProvider
+ * required:
+ *   - id
+ *   - is_enabled
+ * properties:
+ *   id:
+ *     type: string
+ *     title: id
+ *     description: The tax provider's ID.
+ *   is_enabled:
+ *     type: boolean
+ *     title: is_enabled
+ *     description: The tax provider's is enabled.
+ * 
+*/
+

@@ -73,6 +73,14 @@
  *             type: string
  *             title: workflow_id
  *             description: A workflow ID.
+ *   - name: q
+ *     in: query
+ *     description: The workflows execution's q.
+ *     required: false
+ *     schema:
+ *       type: string
+ *       title: q
+ *       description: The workflows execution's q.
  * security:
  *   - api_token: []
  *   - cookie_auth: []

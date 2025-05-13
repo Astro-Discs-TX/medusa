@@ -24,3 +24,7 @@ properties:
     description: The list of notifications.
     items:
       $ref: ./AdminNotification.yaml
+  estimate_count:
+    type: number
+    title: estimate_count
+    description: The notification's estimate count.

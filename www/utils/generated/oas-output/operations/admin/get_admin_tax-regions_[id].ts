@@ -23,6 +23,29 @@
  *         fields. without prefix it will replace the entire default fields.
  *       externalDocs:
  *         url: "#select-fields-and-relations"
+ *   - name: province_code
+ *     in: query
+ *     description: The tax region's province code.
+ *     required: false
+ *     schema:
+ *       type: string
+ *       title: province_code
+ *       description: The tax region's province code.
+ *   - name: provider_id
+ *     in: query
+ *     description: The tax region's provider id.
+ *     required: false
+ *     schema:
+ *       type: string
+ *       title: provider_id
+ *       description: The tax region's provider id.
+ *   - name: metadata
+ *     in: query
+ *     description: The tax region's metadata.
+ *     required: false
+ *     schema:
+ *       type: object
+ *       description: The tax region's metadata.
  * security:
  *   - api_token: []
  *   - cookie_auth: []

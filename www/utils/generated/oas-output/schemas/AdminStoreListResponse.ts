@@ -26,6 +26,10 @@
  *     description: The list of stores.
  *     items:
  *       $ref: "#/components/schemas/AdminStore"
+ *   estimate_count:
+ *     type: number
+ *     title: estimate_count
+ *     description: The store's estimate count.
  * 
 */
 

@@ -24,3 +24,7 @@ properties:
     description: The list of currencies.
     items:
       $ref: ./StoreCurrency.yaml
+  estimate_count:
+    type: number
+    title: estimate_count
+    description: The currency's estimate count.

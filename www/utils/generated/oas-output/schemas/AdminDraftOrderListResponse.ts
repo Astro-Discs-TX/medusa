@@ -26,6 +26,10 @@
  *     description: The list of draft orders.
  *     items:
  *       $ref: "#/components/schemas/AdminDraftOrder"
+ *   estimate_count:
+ *     type: number
+ *     title: estimate_count
+ *     description: The draft order's estimate count.
  * 
 */
 

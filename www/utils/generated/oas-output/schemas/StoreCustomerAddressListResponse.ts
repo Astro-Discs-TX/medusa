@@ -26,6 +26,10 @@
  *     description: The list of addresses.
  *     items:
  *       $ref: "#/components/schemas/StoreCustomerAddress"
+ *   estimate_count:
+ *     type: number
+ *     title: estimate_count
+ *     description: The customer's estimate count.
  * 
 */
 

@@ -26,6 +26,10 @@
  *     description: The list of price lists.
  *     items:
  *       $ref: "#/components/schemas/AdminPriceList"
+ *   estimate_count:
+ *     type: number
+ *     title: estimate_count
+ *     description: The price list's estimate count.
  * 
 */
 

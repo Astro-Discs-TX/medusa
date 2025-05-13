@@ -159,15 +159,6 @@ tags:
       url: https://docs.medusajs.com/resources/storefront-development/regions
     x-associatedSchema:
       $ref: ./components/schemas/StoreRegion.yaml
-  - name: Return
-    description: >
-      Customers can request to return items in their order. The admin user then
-      receives and handles the return.
-
-
-      These API routes allows customers to create a return.
-    x-associatedSchema:
-      $ref: ./components/schemas/StoreReturn.yaml
   - name: Return Reasons
     description: >
       A return reason is a possible reason a customer wants to return an item.
@@ -177,6 +168,9 @@ tags:
       storefront to allow customers to select their return reason.
     x-associatedSchema:
       $ref: ./components/schemas/StoreReturnReason.yaml
+  - name: Returns
+    x-associatedSchema:
+      $ref: ./components/schemas/StoreReturn.yaml
   - name: Shipping Options
     description: >
       A shipping option is a way of shipping an item to or from the customer.
@@ -281,12 +275,12 @@ paths:
     $ref: paths/store_regions.yaml
   /store/regions/{id}:
     $ref: paths/store_regions_{id}.yaml
-  /store/return:
-    $ref: paths/store_return.yaml
   /store/return-reasons:
     $ref: paths/store_return-reasons.yaml
   /store/return-reasons/{id}:
     $ref: paths/store_return-reasons_{id}.yaml
+  /store/returns:
+    $ref: paths/store_returns.yaml
   /store/shipping-options:
     $ref: paths/store_shipping-options.yaml
   /store/shipping-options/{id}/calculate:

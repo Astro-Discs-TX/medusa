@@ -26,6 +26,10 @@
  *     description: The list of price preferences.
  *     items:
  *       $ref: "#/components/schemas/AdminPricePreference"
+ *   estimate_count:
+ *     type: number
+ *     title: estimate_count
+ *     description: The price preference's estimate count.
  * 
 */
 

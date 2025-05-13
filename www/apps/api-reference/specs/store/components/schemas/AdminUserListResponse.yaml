@@ -24,3 +24,7 @@ properties:
     description: The list of users.
     items:
       $ref: ./AdminUser.yaml
+  estimate_count:
+    type: number
+    title: estimate_count
+    description: The user's estimate count.

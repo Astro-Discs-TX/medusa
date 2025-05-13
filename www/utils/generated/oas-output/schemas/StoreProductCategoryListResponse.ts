@@ -26,6 +26,10 @@
  *     description: The list of product categories.
  *     items:
  *       $ref: "#/components/schemas/StoreProductCategory"
+ *   estimate_count:
+ *     type: number
+ *     title: estimate_count
+ *     description: The product category's estimate count.
  * 
 */
 

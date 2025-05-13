@@ -26,6 +26,10 @@
  *     description: The list of product collections.
  *     items:
  *       $ref: "#/components/schemas/AdminCollection"
+ *   estimate_count:
+ *     type: number
+ *     title: estimate_count
+ *     description: The collection's estimate count.
  * 
 */
 

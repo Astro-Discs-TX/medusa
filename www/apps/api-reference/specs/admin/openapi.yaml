@@ -568,6 +568,9 @@ tags:
       url: https://docs.medusajs.com/resources/commerce-modules/store
     x-associatedSchema:
       $ref: ./components/schemas/AdminStore.yaml
+  - name: Tax Providers
+    x-associatedSchema:
+      $ref: ./components/schemas/AdminTaxProvider.yaml
   - name: Tax Rates
     description: >
       A tax rate is a percentage amount used to calculate the tax amount of each
@@ -904,6 +907,10 @@ paths:
     $ref: paths/admin_products_import.yaml
   /admin/products/import/{transaction_id}/confirm:
     $ref: paths/admin_products_import_{transaction_id}_confirm.yaml
+  /admin/products/imports:
+    $ref: paths/admin_products_imports.yaml
+  /admin/products/imports/{transaction_id}/confirm:
+    $ref: paths/admin_products_imports_{transaction_id}_confirm.yaml
   /admin/products/{id}:
     $ref: paths/admin_products_{id}.yaml
   /admin/products/{id}/options:
@@ -1014,6 +1021,8 @@ paths:
     $ref: paths/admin_stores.yaml
   /admin/stores/{id}:
     $ref: paths/admin_stores_{id}.yaml
+  /admin/tax-providers:
+    $ref: paths/admin_tax-providers.yaml
   /admin/tax-rates:
     $ref: paths/admin_tax-rates.yaml
   /admin/tax-rates/{id}:
@@ -1028,6 +1037,8 @@ paths:
     $ref: paths/admin_tax-regions_{id}.yaml
   /admin/uploads:
     $ref: paths/admin_uploads.yaml
+  /admin/uploads/presigned-urls:
+    $ref: paths/admin_uploads_presigned-urls.yaml
   /admin/uploads/{id}:
     $ref: paths/admin_uploads_{id}.yaml
   /admin/users:

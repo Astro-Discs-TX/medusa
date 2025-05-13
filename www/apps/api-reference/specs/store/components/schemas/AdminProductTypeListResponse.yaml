@@ -24,3 +24,7 @@ properties:
     description: The list of product types.
     items:
       $ref: ./AdminProductType.yaml
+  estimate_count:
+    type: number
+    title: estimate_count
+    description: The product type's estimate count.

@@ -127,13 +127,6 @@ tags:
       url: https://docs.medusajs.com/resources/storefront-development/regions
     x-associatedSchema:
       $ref: '#/components/schemas/StoreRegion'
-  - name: Return
-    description: |
-      Customers can request to return items in their order. The admin user then receives and handles the return.
-
-      These API routes allows customers to create a return.
-    x-associatedSchema:
-      $ref: '#/components/schemas/StoreReturn'
   - name: Return Reasons
     description: |
       A return reason is a possible reason a customer wants to return an item.
@@ -141,6 +134,9 @@ tags:
       Use these API routes when implementing return creation flow in your storefront to allow customers to select their return reason.
     x-associatedSchema:
       $ref: '#/components/schemas/StoreReturnReason'
+  - name: Returns
+    x-associatedSchema:
+      $ref: '#/components/schemas/StoreReturn'
   - name: Shipping Options
     description: |
       A shipping option is a way of shipping an item to or from the customer.
@@ -1330,7 +1326,17 @@ paths:
         '500':
           $ref: '#/components/responses/500_error'
       x-workflow: transferCartCustomerWorkflow
-      x-events: []
+      x-events:
+        - name: cart.customer_transferred
+          payload: |-
+            ```ts
+            {
+              id, // The ID of the cart
+              customer_id, // The ID of the customer
+            }
+            ```
+          description: Emitted when the customer in the cart is transferred.
+          deprecated: false
   /store/carts/{id}/line-items:
     post:
       operationId: PostCartsIdLineItems
@@ -8251,72 +8257,6 @@ paths:
           $ref: '#/components/responses/invalid_request_error'
         '500':
           $ref: '#/components/responses/500_error'
-  /store/return:
-    post:
-      operationId: PostReturn
-      summary: Create Return
-      description: Create a return for an order's items. The admin receives the return and process it from their side.
-      x-authenticated: false
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/StoreCreateReturn'
-      x-codeSamples:
-        - lang: Shell
-          label: cURL
-          source: |-
-            curl -X POST '{backend_url}/store/return' \
-            -H 'Content-Type: application/json' \
-            -H 'x-publishable-api-key: {your_publishable_api_key}' \
-            --data-raw '{
-              "order_id": "{value}",
-              "items": [
-                {
-                  "id": "id_XbfptxUVo2io9EI",
-                  "quantity": 7916429753974784,
-                  "reason_id": "{value}",
-                  "note": "{value}"
-                }
-              ],
-              "return_shipping": {
-                "option_id": "{value}",
-                "price": 1068364080349184
-              },
-              "note": "{value}",
-              "location_id": "{value}"
-            }'
-      tags:
-        - Return
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/StoreReturnResponse'
-        '400':
-          $ref: '#/components/responses/400_error'
-        '401':
-          $ref: '#/components/responses/unauthorized'
-        '404':
-          $ref: '#/components/responses/not_found_error'
-        '409':
-          $ref: '#/components/responses/invalid_state_error'
-        '422':
-          $ref: '#/components/responses/invalid_request_error'
-        '500':
-          $ref: '#/components/responses/500_error'
-      x-workflow: createAndCompleteReturnOrderWorkflow
-      parameters:
-        - name: x-publishable-api-key
-          in: header
-          description: Publishable API Key created in the Medusa Admin.
-          required: true
-          schema:
-            type: string
-            externalDocs:
-              url: https://docs.medusajs.com/api/store#publishable-api-key
   /store/return-reasons:
     get:
       operationId: GetReturnReasons
@@ -8484,6 +8424,81 @@ paths:
           $ref: '#/components/responses/invalid_request_error'
         '500':
           $ref: '#/components/responses/500_error'
+  /store/returns:
+    post:
+      operationId: PostReturns
+      summary: Create Return
+      description: Create a return.
+      x-authenticated: false
+      parameters:
+        - name: x-publishable-api-key
+          in: header
+          description: Publishable API Key created in the Medusa Admin.
+          required: true
+          schema:
+            type: string
+            externalDocs:
+              url: https://docs.medusajs.com/api/store#publishable-api-key
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreCreateReturn'
+      x-codeSamples:
+        - lang: Shell
+          label: cURL
+          source: |-
+            curl -X POST '{backend_url}/store/returns' \
+            -H 'x-publishable-api-key: {your_publishable_api_key}' \
+            -H 'Content-Type: application/json' \
+            --data-raw '{
+              "order_id": "order_123",
+              "items": []
+            }'
+      tags:
+        - Returns
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoreReturnResponse'
+        '400':
+          $ref: '#/components/responses/400_error'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/not_found_error'
+        '409':
+          $ref: '#/components/responses/invalid_state_error'
+        '422':
+          $ref: '#/components/responses/invalid_request_error'
+        '500':
+          $ref: '#/components/responses/500_error'
+      x-workflow: createAndCompleteReturnOrderWorkflow
+      x-events:
+        - name: order.return_requested
+          payload: |-
+            ```ts
+            {
+              order_id, // The ID of the order
+              return_id, // The ID of the return
+            }
+            ```
+          description: Emitted when a return request is confirmed.
+          deprecated: false
+        - name: order.return_received
+          payload: |-
+            ```ts
+            {
+              order_id, // The ID of the order
+              return_id, // The ID of the return
+            }
+            ```
+          description: Emitted when a return is marked as received.
+          deprecated: false
+      x-version: 2.8.0
   /store/shipping-options:
     get:
       operationId: GetShippingOptions
@@ -9774,6 +9789,10 @@ components:
           description: The list of claims.
           items:
             $ref: '#/components/schemas/AdminClaim'
+        estimate_count:
+          type: number
+          title: estimate_count
+          description: The claim's estimate count.
     AdminClaimOrderResponse:
       type: object
       description: The created claim's details.
@@ -9931,6 +9950,10 @@ components:
           description: The list of product collections.
           items:
             $ref: '#/components/schemas/AdminCollection'
+        estimate_count:
+          type: number
+          title: estimate_count
+          description: The collection's estimate count.
     AdminCollectionResponse:
       type: object
       description: The collection's details.
@@ -9958,24 +9981,6 @@ components:
           enum:
             - publishable
             - secret
-    AdminCreateCollection:
-      type: object
-      description: the product collection's details.
-      x-schemaName: AdminCreateCollection
-      required:
-        - title
-      properties:
-        title:
-          type: string
-          title: title
-          description: The collection's title.
-        handle:
-          type: string
-          title: handle
-          description: The collection's handle.
-        metadata:
-          type: object
-          description: The collection's metadata, used to store custom key-value pairs.
     AdminCreateCustomerGroup:
       type: object
       description: The customer group's details.
@@ -11240,6 +11245,10 @@ components:
         metadata:
           type: object
           description: The tax region's metadata, used to store custom key-value pairs.
+        provider_id:
+          type: string
+          title: provider_id
+          description: The tax region's provider id.
     AdminCreateVariantInventoryItem:
       type: object
       description: The details of the variant-inventory item association.
@@ -11377,6 +11386,10 @@ components:
           description: The list of currencies.
           items:
             $ref: '#/components/schemas/AdminCurrency'
+        estimate_count:
+          type: number
+          title: estimate_count
+          description: The currency's estimate count.
     AdminCurrencyResponse:
       type: object
       description: The currency's details.
@@ -12491,6 +12504,10 @@ components:
           description: The list of draft orders.
           items:
             $ref: '#/components/schemas/AdminDraftOrder'
+        estimate_count:
+          type: number
+          title: estimate_count
+          description: The draft order's estimate count.
     AdminDraftOrderPreview:
       type: object
       description: The draft order preview's details.
@@ -13708,6 +13725,10 @@ components:
           description: The list of fulfillment providers.
           items:
             $ref: '#/components/schemas/AdminFulfillmentProvider'
+        estimate_count:
+          type: number
+          title: estimate_count
+          description: The fulfillment provider's estimate count.
     AdminFulfillmentProviderOption:
       type: object
       description: The fulfillment option's details.
@@ -13751,6 +13772,10 @@ components:
           description: The list of fulfillment options.
           items:
             $ref: '#/components/schemas/AdminFulfillmentProviderOption'
+        estimate_count:
+          type: number
+          title: estimate_count
+          description: The fulfillment provider's estimate count.
     AdminFulfillmentResponse:
       type: object
       description: A fulfillment's details.
@@ -13941,6 +13966,37 @@ components:
               type: number
               title: toUpdate
               description: The number of products that will be updated by this import.
+    AdminImportProducts:
+      type: object
+      description: SUMMARY
+      x-schemaName: AdminImportProducts
+      required:
+        - file_key
+        - originalname
+        - extension
+        - size
+        - mime_type
+      properties:
+        file_key:
+          type: string
+          title: file_key
+          description: The product's file key.
+        originalname:
+          type: string
+          title: originalname
+          description: The product's originalname.
+        extension:
+          type: string
+          title: extension
+          description: The product's extension.
+        size:
+          type: number
+          title: size
+          description: The product's size.
+        mime_type:
+          type: string
+          title: mime_type
+          description: The product's mime type.
     AdminInventoryItem:
       type: object
       description: The inventory item's details.
@@ -14250,6 +14306,10 @@ components:
           description: The list of notifications.
           items:
             $ref: '#/components/schemas/AdminNotification'
+        estimate_count:
+          type: number
+          title: estimate_count
+          description: The notification's estimate count.
     AdminNotificationResponse:
       type: object
       description: The notification's details.
@@ -17213,6 +17273,10 @@ components:
           description: The list of price lists.
           items:
             $ref: '#/components/schemas/AdminPriceList'
+        estimate_count:
+          type: number
+          title: estimate_count
+          description: The price list's estimate count.
     AdminPriceListPrice:
       type: object
       description: The details of a price list's price.
@@ -17390,6 +17454,10 @@ components:
           description: The list of price preferences.
           items:
             $ref: '#/components/schemas/AdminPricePreference'
+        estimate_count:
+          type: number
+          title: estimate_count
+          description: The price preference's estimate count.
     AdminPricePreferenceResponse:
       type: object
       description: The price preference's details.
@@ -17700,6 +17768,10 @@ components:
           description: The list of product categories.
           items:
             $ref: '#/components/schemas/AdminProductCategory'
+        estimate_count:
+          type: number
+          title: estimate_count
+          description: The product category's estimate count.
     AdminProductCategoryResponse:
       type: object
       description: The product category's details.
@@ -17982,6 +18054,10 @@ components:
           description: The list of product tags.
           items:
             $ref: '#/components/schemas/AdminProductTag'
+        estimate_count:
+          type: number
+          title: estimate_count
+          description: The product tag's estimate count.
     AdminProductTagResponse:
       type: object
       description: The product tag's details.
@@ -18076,6 +18152,10 @@ components:
           description: The list of product types.
           items:
             $ref: '#/components/schemas/AdminProductType'
+        estimate_count:
+          type: number
+          title: estimate_count
+          description: The product type's estimate count.
     AdminProductTypeResponse:
       type: object
       description: The product type's details.
@@ -19034,6 +19114,10 @@ components:
           description: The list of return reasons.
           items:
             $ref: '#/components/schemas/AdminReturnReason'
+        estimate_count:
+          type: number
+          title: estimate_count
+          description: The return reason's estimate count.
     AdminReturnReasonResponse:
       type: object
       description: The return reason's details.
@@ -19545,7 +19629,7 @@ components:
           $ref: '#/components/schemas/AdminShippingOption'
     AdminShippingOptionRule:
       type: object
-      description: The shipping option rule's details.
+      description: The rule's rules.
       x-schemaName: AdminShippingOptionRule
       required:
         - id
@@ -19560,12 +19644,11 @@ components:
         id:
           type: string
           title: id
-          description: The shipping option rule's ID.
+          description: The rule's ID.
         attribute:
           type: string
           title: attribute
-          description: The shipping option rule's attribute.
-          example: is_return
+          description: The rule's attribute.
         operator:
           type: string
           description: The rule's operator.
@@ -19579,27 +19662,35 @@ components:
             - gte
             - nin
         value:
-          type: string
-          title: value
+          oneOf:
+            - type: string
+              title: value
+              description: The rule's value.
+            - type: array
+              description: The rule's value.
+              items:
+                type: string
+                title: value
+                description: The value's details.
         shipping_option_id:
           type: string
           title: shipping_option_id
-          description: The ID of the shipping option this rule is for.
+          description: The rule's shipping option id.
         created_at:
           type: string
           format: date-time
           title: created_at
-          description: The date the shipping option rule was created.
+          description: The rule's created at.
         updated_at:
           type: string
           format: date-time
           title: updated_at
-          description: The date the shipping option rule was updated.
+          description: The rule's updated at.
         deleted_at:
           type: string
           format: date-time
           title: deleted_at
-          description: The date the shipping option rule was deleted.
+          description: The rule's deleted at.
     AdminShippingOptionType:
       type: object
       description: The shipping option's details.
@@ -19866,6 +19957,10 @@ components:
           description: The list of stock locations.
           items:
             $ref: '#/components/schemas/AdminStockLocation'
+        estimate_count:
+          type: number
+          title: estimate_count
+          description: The stock location's estimate count.
     AdminStockLocationResponse:
       type: object
       description: The stock location's details.
@@ -20003,6 +20098,10 @@ components:
           description: The list of stores.
           items:
             $ref: '#/components/schemas/AdminStore'
+        estimate_count:
+          type: number
+          title: estimate_count
+          description: The store's estimate count.
     AdminStoreResponse:
       type: object
       description: The store's details.
@@ -20012,6 +20111,22 @@ components:
       properties:
         store:
           $ref: '#/components/schemas/AdminStore'
+    AdminTaxProvider:
+      type: object
+      description: The tax provider's tax providers.
+      x-schemaName: AdminTaxProvider
+      required:
+        - id
+        - is_enabled
+      properties:
+        id:
+          type: string
+          title: id
+          description: The tax provider's ID.
+        is_enabled:
+          type: boolean
+          title: is_enabled
+          description: The tax provider's is enabled.
     AdminTaxRate:
       type: object
       description: The tax rate's details.
@@ -20275,22 +20390,6 @@ components:
           type: string
           title: title
           description: The API key's title.
-    AdminUpdateCollection:
-      type: object
-      description: The details to update in a collection.
-      x-schemaName: AdminUpdateCollection
-      properties:
-        title:
-          type: string
-          title: title
-          description: The collection's title.
-        handle:
-          type: string
-          title: handle
-          description: The collection's handle.
-        metadata:
-          type: object
-          description: The collection's metadata, can hold custom key-value pairs.
     AdminUpdateCustomerGroup:
       type: object
       description: The details to update in a customer group.
@@ -21221,6 +21320,10 @@ components:
         metadata:
           type: object
           description: The tax region's metadata, can hold custom key-value pairs.
+        provider_id:
+          type: string
+          title: provider_id
+          description: The tax region's provider id.
     AdminUpdateUser:
       type: object
       description: The properties to update in a user.
@@ -21252,6 +21355,69 @@ components:
           type: number
           title: required_quantity
           description: The number of units a single quantity is equivalent to. For example, if a customer orders one quantity of the variant, Medusa checks the availability of the quantity multiplied by the value set for `required_quantity`. When the customer orders the quantity, Medusa reserves the ordered quantity multiplied by the value set for `required_quantity`.
+    AdminUploadPreSignedUrl:
+      type: object
+      description: SUMMARY
+      x-schemaName: AdminUploadPreSignedUrl
+      required:
+        - originalname
+        - size
+        - mime_type
+      properties:
+        originalname:
+          type: string
+          title: originalname
+          description: The upload's originalname.
+        size:
+          type: number
+          title: size
+          description: The upload's size.
+        mime_type:
+          type: string
+          title: mime_type
+          description: The upload's mime type.
+        access:
+          type: string
+          description: The upload's access.
+          enum:
+            - public
+            - private
+    AdminUploadPreSignedUrlResponse:
+      type: object
+      description: SUMMARY
+      x-schemaName: AdminUploadPreSignedUrlResponse
+      required:
+        - url
+        - filename
+        - originalname
+        - mime_type
+        - extension
+        - size
+      properties:
+        url:
+          type: string
+          title: url
+          description: The upload's url.
+        filename:
+          type: string
+          title: filename
+          description: The upload's filename.
+        originalname:
+          type: string
+          title: originalname
+          description: The upload's originalname.
+        mime_type:
+          type: string
+          title: mime_type
+          description: The upload's mime type.
+        extension:
+          type: string
+          title: extension
+          description: The upload's extension.
+        size:
+          type: number
+          title: size
+          description: The upload's size.
     AdminUpsertStockLocationAddress:
       type: object
       description: The details of the stock location address to create.
@@ -21400,6 +21566,10 @@ components:
           description: The list of users.
           items:
             $ref: '#/components/schemas/AdminUser'
+        estimate_count:
+          type: number
+          title: estimate_count
+          description: The user's estimate count.
     AdminUserResponse:
       type: object
       description: The user's details.
@@ -21467,14 +21637,14 @@ components:
           description: The date the workflow execution was deleted.
     AdminWorkflowExecutionExecution:
       type: object
-      description: The workflow execution's steps details.
+      description: The workflow execution's execution.
       x-schemaName: AdminWorkflowExecutionExecution
       required:
         - steps
       properties:
         steps:
           type: object
-          description: The execution's steps. Each object key is a step ID, and the value is the object whose properties are shown below.
+          description: The execution's steps.
           required:
             - id
             - invoke
@@ -21491,7 +21661,7 @@ components:
                 description: The step's ID.
               invoke:
                 type: object
-                description: The state of the step's invokation function.
+                description: The step's invoke.
                 x-schemaName: WorkflowExecutionFn
                 required:
                   - state
@@ -21499,7 +21669,7 @@ components:
                 properties:
                   state:
                     type: string
-                    description: The invokation step's state.
+                    description: The invoke's state.
                     enum:
                       - failed
                       - not_started
@@ -21513,7 +21683,7 @@ components:
                       - timeout
                   status:
                     type: string
-                    description: The invokation step's state.
+                    description: The invoke's status.
                     enum:
                       - idle
                       - ok
@@ -21522,61 +21692,60 @@ components:
                       - permanent_failure
               definition:
                 type: object
-                description: The step's definition details.
+                description: The step's definition.
                 x-schemaName: WorkflowExecutionDefinition
                 properties:
                   async:
                     type: boolean
                     title: async
-                    description: Whether the step is async.
+                    description: The definition's async.
                   compensateAsync:
                     type: boolean
                     title: compensateAsync
-                    description: Whether the compensation function of the step is async.
+                    description: The definition's compensateasync.
                   noCompensation:
                     type: boolean
                     title: noCompensation
-                    description: Whether the step doesn't have a compensation function.
+                    description: The definition's nocompensation.
                   continueOnPermanentFailure:
                     type: boolean
                     title: continueOnPermanentFailure
-                    description: Whether the workflow should continue executing even if its status is changed to failed.
+                    description: The definition's continueonpermanentfailure.
                   skipOnPermanentFailure:
                     oneOf:
                       - type: string
                         title: skipOnPermanentFailure
-                        description: The ID of the step to skip to in case of a permanent failure.
+                        description: The definition's skiponpermanentfailure.
                       - type: boolean
                         title: skipOnPermanentFailure
-                        description: Whether the workflow should skip subsequent steps in case of a permanent failure.
+                        description: The definition's skiponpermanentfailure.
                   maxRetries:
                     type: number
                     title: maxRetries
-                    description: The maximum number of times to retry the step.
+                    description: The definition's maxretries.
                   noWait:
                     type: boolean
                     title: noWait
-                    description: Whether the workflow shouldn't wait for the step to finish before moving to the next step.
-                    default: false
+                    description: The definition's nowait.
                   retryInterval:
                     type: number
                     title: retryInterval
-                    description: The interval in seconds between retry attempts when the step fails.
+                    description: The definition's retryinterval.
                   retryIntervalAwaiting:
                     type: number
                     title: retryIntervalAwaiting
-                    description: The interval in seconds to retry a step even if its status is `waiting_response`.
+                    description: The definition's retryintervalawaiting.
                   saveResponse:
                     type: boolean
                     title: saveResponse
-                    description: Whether the step's response is stored.
+                    description: The definition's saveresponse.
                   timeout:
                     type: number
                     title: timeout
-                    description: The maximum time in seconds to wait for this step to complete. If the step exceeds this time, the step's state is changed to `timeout`, but the step continues executing.
+                    description: The definition's timeout.
               compensate:
                 type: object
-                description: The state of the step's compensation function.
+                description: The step's compensate.
                 x-schemaName: WorkflowExecutionFn
                 required:
                   - state
@@ -21584,7 +21753,7 @@ components:
                 properties:
                   state:
                     type: string
-                    description: The compensation function's state.
+                    description: The compensate's state.
                     enum:
                       - failed
                       - not_started
@@ -21598,7 +21767,7 @@ components:
                       - timeout
                   status:
                     type: string
-                    description: The compensation function's status.
+                    description: The compensate's status.
                     enum:
                       - idle
                       - ok
@@ -21608,11 +21777,11 @@ components:
               depth:
                 type: number
                 title: depth
-                description: The step's depth in the workflow's execution.
+                description: The step's depth.
               startedAt:
                 type: number
                 title: startedAt
-                description: The timestamp the step started executing.
+                description: The step's startedat.
     AdminWorkflowExecutionResponse:
       type: object
       description: The workflow execution's details.
@@ -28558,7 +28727,7 @@ components:
           description: The ID of the cart this payment collection is for.
     StoreCreateReturn:
       type: object
-      description: The details of the return to create.
+      description: SUMMARY
       x-schemaName: StoreCreateReturn
       required:
         - order_id
@@ -28568,7 +28737,7 @@ components:
         order_id:
           type: string
           title: order_id
-          description: The ID of the order this return is created for.
+          description: The return's order id.
         items:
           type: array
           description: The return's items.
@@ -28579,18 +28748,18 @@ components:
         note:
           type: string
           title: note
-          description: A note with more details about the return.
+          description: The return's note.
         receive_now:
           type: boolean
           title: receive_now
-          description: Whether to mark the return as received.
+          description: The return's receive now.
         location_id:
           type: string
           title: location_id
-          description: The ID of the location that items are returned to.
+          description: The return's location id.
     StoreCreateReturnItem:
       type: object
-      description: The details of the line item to create.
+      description: The item's items.
       x-schemaName: StoreCreateReturnItem
       required:
         - id
@@ -28607,14 +28776,14 @@ components:
         reason_id:
           type: string
           title: reason_id
-          description: The ID of the associated return reason.
+          description: The item's reason id.
         note:
           type: string
           title: note
-          description: A note with more details about the returned item.
+          description: The item's note.
     StoreCreateReturnShipping:
       type: object
-      description: The return's shipping details.
+      description: The return's return shipping.
       x-schemaName: StoreCreateReturnShipping
       required:
         - option_id
@@ -28622,11 +28791,11 @@ components:
         option_id:
           type: string
           title: option_id
-          description: The ID of the shipping option to use.
+          description: The return shipping's option id.
         price:
           type: number
           title: price
-          description: The shipping's price.
+          description: The return shipping's price.
     StoreCurrency:
       type: object
       description: The currency's details.
@@ -28709,6 +28878,10 @@ components:
           description: The list of currencies.
           items:
             $ref: '#/components/schemas/StoreCurrency'
+        estimate_count:
+          type: number
+          title: estimate_count
+          description: The currency's estimate count.
     StoreCurrencyResponse:
       type: object
       description: The currency's details.
@@ -28917,6 +29090,10 @@ components:
           description: The list of addresses.
           items:
             $ref: '#/components/schemas/StoreCustomerAddress'
+        estimate_count:
+          type: number
+          title: estimate_count
+          description: The customer's estimate count.
     StoreCustomerAddressResponse:
       type: object
       description: The address's details.
@@ -35578,6 +35755,10 @@ components:
           description: The list of product categories.
           items:
             $ref: '#/components/schemas/StoreProductCategory'
+        estimate_count:
+          type: number
+          title: estimate_count
+          description: The product category's estimate count.
     StoreProductCategoryResponse:
       type: object
       description: The product category's details.
@@ -35783,6 +35964,10 @@ components:
           description: The list of product tags.
           items:
             $ref: '#/components/schemas/StoreProductTag'
+        estimate_count:
+          type: number
+          title: estimate_count
+          description: The product tag's estimate count.
     StoreProductTagResponse:
       type: object
       description: The product tag's details.
@@ -35855,6 +36040,10 @@ components:
           description: The list of product types.
           items:
             $ref: '#/components/schemas/StoreProductType'
+        estimate_count:
+          type: number
+          title: estimate_count
+          description: The product type's estimate count.
     StoreProductTypeResponse:
       type: object
       description: The product type's details.
@@ -36104,60 +36293,72 @@ components:
         - canceled_at
         - received_at
       properties:
-        id:
-          type: string
-          title: id
-          description: The return's ID.
-        order_id:
-          type: string
-          title: order_id
-          description: The ID of the order this return is created for.
-        status:
-          type: string
-          title: status
-          description: The return's status.
-        exchange_id:
-          type: string
-          title: exchange_id
-          description: The ID of the associated exchange.
-        location_id:
-          type: string
-          title: location_id
-          description: The ID of the location the items are returned to.
-        claim_id:
-          type: string
-          title: claim_id
-          description: The ID of the associated claim.
-        display_id:
-          type: number
-          title: display_id
-          description: The return's display ID.
-        refund_amount:
-          type: number
-          title: refund_amount
-          description: The return's refunded amount.
         items:
           type: array
           description: The return's items.
           items:
             $ref: '#/components/schemas/StoreReturnItem'
-        received_at:
+        status:
           type: string
-          title: received_at
-          description: The date the return was received.
+          description: The return's status.
+          enum:
+            - received
+            - canceled
+            - requested
+            - open
+            - partially_received
+        id:
+          type: string
+          title: id
+          description: The return's ID.
+        display_id:
+          type: number
+          title: display_id
+          description: The return's display id.
         created_at:
           type: string
           format: date-time
           title: created_at
-          description: The date the return was created.
+          description: The return's created at.
+        order_id:
+          type: string
+          title: order_id
+          description: The return's order id.
+        location_id:
+          type: string
+          title: location_id
+          description: The return's location id.
         canceled_at:
           type: string
           title: canceled_at
-          description: The date the return was updated.
+          description: The return's canceled at.
+        exchange_id:
+          type: string
+          title: exchange_id
+          description: The return's exchange id.
+        claim_id:
+          type: string
+          title: claim_id
+          description: The return's claim id.
+        refund_amount:
+          type: number
+          title: refund_amount
+          description: The return's refund amount.
+        received_at:
+          type: string
+          title: received_at
+          description: The return's received at.
     StoreReturnItem:
       type: object
-      description: The return item's details.
+      description: The item's items.
       x-schemaName: StoreReturnItem
+      required:
+        - id
+        - quantity
+        - received_quantity
+        - damaged_quantity
+        - item_id
+        - return_id
       properties:
         id:
           type: string
@@ -36178,29 +36379,22 @@ components:
         reason_id:
           type: string
           title: reason_id
-          description: The ID of the item's reason.
+          description: The item's reason id.
         note:
           type: string
           title: note
-          description: A note with more details on why the item is returned.
+          description: The item's note.
         item_id:
           type: string
           title: item_id
-          description: The ID of the item in the order.
+          description: The item's item id.
         return_id:
           type: string
           title: return_id
-          description: The ID of the return this item belongs to.
+          description: The item's return id.
         metadata:
           type: object
-          description: The item's metadata, can hold custom key-value pairs.
-      required:
-        - id
-        - quantity
-        - received_quantity
-        - damaged_quantity
-        - item_id
-        - return_id
+          description: The item's metadata.
     StoreReturnReason:
       type: object
       description: The return reason's details.
@@ -36252,7 +36446,7 @@ components:
           $ref: '#/components/schemas/StoreReturnReason'
     StoreReturnResponse:
       type: object
-      description: The return's details.
+      description: SUMMARY
       x-schemaName: StoreReturnResponse
       required:
         - return

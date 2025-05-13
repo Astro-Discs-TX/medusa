@@ -26,6 +26,10 @@
  *     description: The list of users.
  *     items:
  *       $ref: "#/components/schemas/AdminUser"
+ *   estimate_count:
+ *     type: number
+ *     title: estimate_count
+ *     description: The user's estimate count.
  * 
 */
 

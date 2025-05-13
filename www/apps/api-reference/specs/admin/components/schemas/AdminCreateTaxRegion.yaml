@@ -54,3 +54,7 @@ properties:
   metadata:
     type: object
     description: The tax region's metadata, used to store custom key-value pairs.
+  provider_id:
+    type: string
+    title: provider_id
+    description: The tax region's provider id.

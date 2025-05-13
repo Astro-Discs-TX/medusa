@@ -24,3 +24,7 @@ properties:
     description: The list of price preferences.
     items:
       $ref: ./AdminPricePreference.yaml
+  estimate_count:
+    type: number
+    title: estimate_count
+    description: The price preference's estimate count.
