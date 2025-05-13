@@ -111,7 +111,7 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
       })
 
       describe.only("Cancel transaction", function () {
-        it.only("should cancel an ongoing execution with async unfinished yet step", async () => {
+        it("should cancel an ongoing execution with async unfinished yet step", async () => {
           const transactionId = "transaction-to-cancel-id"
           const step1 = createStep("step1", async () => {
             return new StepResponse("step1")
@@ -157,7 +157,7 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
           expect(execution[0].state).toEqual(TransactionState.REVERTED)
         })
 
-        it.only("should cancel an ongoing execution with sync steps only", async () => {
+        it("should cancel an ongoing execution with sync steps only", async () => {
           const transactionId = "transaction-to-cancel-id"
           const step1 = createStep("step1", async () => {
             return new StepResponse("step1")
