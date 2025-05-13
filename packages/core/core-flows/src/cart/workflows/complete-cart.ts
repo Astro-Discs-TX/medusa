@@ -332,8 +332,10 @@ export const completeCartWorkflow = createWorkflow(
         })
       )
 
-      createHook("beforePaymentAuthorization", {
+      const beforePaymentAuthorization = createHook("beforePaymentAuthorization", {
         input,
+        cart,
+        paymentSessions,
       })
 
       // We authorize payment sessions at the very end of the workflow to minimize the risk of
@@ -367,7 +369,7 @@ export const completeCartWorkflow = createWorkflow(
 
       addOrderTransactionStep(orderTransactions)
 
-      createHook("orderCreated", {
+      const orderCreated = createHook("orderCreated", {
         order_id: createdOrder.id,
         cart_id: cart.id,
       })
@@ -380,7 +382,7 @@ export const completeCartWorkflow = createWorkflow(
     })
 
     return new WorkflowResponse(result, {
-      hooks: [validate],
+      hooks: [validate, beforePaymentAuthorization, orderCreated],
     })
   }
 )
