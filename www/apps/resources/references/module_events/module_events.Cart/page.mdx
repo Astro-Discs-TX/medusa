@@ -41,19 +41,20 @@ Emitted when a cart's details are updated.
     </Table.Row>
     <Table.Row>
       <Table.Cell>
-[cart.customer_updated](#cartcustomer_updated)
-</Table.Cell>
-      <Table.Cell>
-Emitted when the customer in the cart is updated.
-</Table.Cell>
-    </Table.Row>
-    <Table.Row>
-      <Table.Cell>
 [cart.region_updated](#cartregion_updated)
 </Table.Cell>
       <Table.Cell>
 Emitted when the cart's region is updated. This
 event is emitted alongside the `cart.updated` event.
+</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.Cell>
+[cart.customer_transferred](#cartcustomer_transferred)
+<Tooltip text="This event was added in version v2.8.0"><Badge variant="blue">v2.8.0</Badge></Tooltip>
+</Table.Cell>
+      <Table.Cell>
+Emitted when the customer in the cart is transferred.
 </Table.Cell>
     </Table.Row>
   </Table.Body>
@@ -110,30 +111,6 @@ The following workflows emit this event when they're executed. These workflows a
 
 ---
 
-<EventHeader headerLvl="2" headerProps={{ id: "cartcustomer_updated", children: (<>cart.customer_updated</>), className: "flex flex-wrap justify-center gap-docs_0.25" }} eventName="cart.customer_updated" payload={`\`\`\`ts
-{
-  id, // The ID of the cart
-}
-\`\`\``} />
-
-Emitted when the customer in the cart is updated.
-
-### Payload
-
-```ts
-{
-  id, // The ID of the cart
-}
-```
-
-### Workflows Emitting this Event
-
-The following workflows emit this event when they're executed. These workflows are executed by Medusa's API routes. You can also view the events emitted by API routes in the [Store](https://docs.medusajs.com/api/store) and [Admin](https://docs.medusajs.com/api/admin) API references.
-
-- [updateCartWorkflow](/references/medusa-workflows/updateCartWorkflow)
-
----
-
 <EventHeader headerLvl="2" headerProps={{ id: "cartregion_updated", children: (<>cart.region_updated</>), className: "flex flex-wrap justify-center gap-docs_0.25" }} eventName="cart.region_updated" payload={`\`\`\`ts
 {
   id, // The ID of the cart
@@ -156,3 +133,32 @@ event is emitted alongside the `cart.updated` event.
 The following workflows emit this event when they're executed. These workflows are executed by Medusa's API routes. You can also view the events emitted by API routes in the [Store](https://docs.medusajs.com/api/store) and [Admin](https://docs.medusajs.com/api/admin) API references.
 
 - [updateCartWorkflow](/references/medusa-workflows/updateCartWorkflow)
+
+---
+
+<EventHeader headerLvl="2" headerProps={{ id: "cartcustomer_transferred", children: (<>cart.customer_transferred
+<Tooltip text="This event was added in version v2.8.0">
+<Badge variant="blue">v2.8.0</Badge>
+</Tooltip></>), className: "flex flex-wrap justify-center gap-docs_0.25" }} eventName="cart.customer_transferred" payload={`\`\`\`ts
+{
+  id, // The ID of the cart
+  customer_id, // The ID of the customer
+}
+\`\`\``} />
+
+Emitted when the customer in the cart is transferred.
+
+### Payload
+
+```ts
+{
+  id, // The ID of the cart
+  customer_id, // The ID of the customer
+}
+```
+
+### Workflows Emitting this Event
+
+The following workflows emit this event when they're executed. These workflows are executed by Medusa's API routes. You can also view the events emitted by API routes in the [Store](https://docs.medusajs.com/api/store) and [Admin](https://docs.medusajs.com/api/admin) API references.
+
+- [transferCartCustomerWorkflow](/references/medusa-workflows/transferCartCustomerWorkflow)
