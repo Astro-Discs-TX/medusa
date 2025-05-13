@@ -56,6 +56,10 @@ export const server = [
     "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/product-reviews"
   },
   {
+    "title": "Saved Payment Methods",
+    "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/saved-payment-methods"
+  },
+  {
     "title": "Create Cache Module",
     "path": "https://docs.medusajs.com/resources/infrastructure-modules/cache/create"
   },
@@ -78,6 +82,10 @@ export const server = [
   {
     "title": "Build Wishlist Plugin",
     "path": "https://docs.medusajs.com/resources/plugins/guides/wishlist"
+  },
+  {
+    "title": "Bundled Products",
+    "path": "https://docs.medusajs.com/resources/recipes/bundled-products/examples/standard"
   },
   {
     "title": "Create Auth Provider",

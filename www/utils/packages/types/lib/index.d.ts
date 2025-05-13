@@ -62,6 +62,7 @@ export type FrontmatterData = {
   sidebar_label?: string
   displayed_sidebar?: string
   tags?: Tag[]
+  keywords?: string[]
   [k: string]: unknown
 }
 
@@ -345,4 +346,5 @@ export declare type MedusaEvent = {
   version?: string
   deprecated?: boolean
   deprecated_message?: string
+  version?: string
 }
