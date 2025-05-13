@@ -616,6 +616,10 @@ export const filesMap = [
     "pathname": "/commerce-modules/tax/tax-calculation-with-provider"
   },
   {
+    "filePath": "/www/apps/resources/app/commerce-modules/tax/tax-provider/page.mdx",
+    "pathname": "/commerce-modules/tax/tax-provider"
+  },
+  {
     "filePath": "/www/apps/resources/app/commerce-modules/tax/tax-rates-and-rules/page.mdx",
     "pathname": "/commerce-modules/tax/tax-rates-and-rules"
   },
@@ -738,6 +742,10 @@ export const filesMap = [
   {
     "filePath": "/www/apps/resources/app/how-to-tutorials/tutorials/product-reviews/page.mdx",
     "pathname": "/how-to-tutorials/tutorials/product-reviews"
+  },
+  {
+    "filePath": "/www/apps/resources/app/how-to-tutorials/tutorials/saved-payment-methods/page.mdx",
+    "pathname": "/how-to-tutorials/tutorials/saved-payment-methods"
   },
   {
     "filePath": "/www/apps/resources/app/infrastructure-modules/cache/create/page.mdx",
