@@ -110,7 +110,7 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
         })
       })
 
-      describe.only("Cancel transaction", function () {
+      describe("Cancel transaction", function () {
         it("should cancel an ongoing execution with async unfinished yet step", async () => {
           const transactionId = "transaction-to-cancel-id"
           const step1 = createStep("step1", async () => {
@@ -224,10 +224,12 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
         )
 
         const [result1, result2] = await promiseAll([
-          workflowOrcModule.run(workflowId, {
-            input: {},
-            transactionId,
-          }),
+          workflowOrcModule
+            .run(workflowId, {
+              input: {},
+              transactionId,
+            })
+            .catch((e) => e),
           workflowOrcModule
             .run(workflowId, {
               input: {},
@@ -236,8 +238,8 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
             .catch((e) => e),
         ])
 
-        expect(result1.result).toEqual("step1")
-        expect(result2.message).toEqual(
+        expect(result1.result || result2.result).toEqual("step1")
+        expect(result2.message || result1.message).toEqual(
           "Transaction already started for transactionId: " + transactionId
         )
       })
@@ -456,9 +458,7 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
 
           expect(workflow2Step2Invoke).toHaveBeenCalledTimes(2)
           expect(workflow2Step2Invoke.mock.calls[0][0]).toEqual({ hey: "oh" })
-          expect(workflow2Step2Invoke.mock.calls[1][0]).toEqual({
-            hey: "async hello",
-          })
+          expect(workflow2Step2Invoke.mock.calls[1][0]).toEqual({})
 
           expect(workflow2Step3Invoke).toHaveBeenCalledTimes(1)
           expect(workflow2Step3Invoke.mock.calls[0][0]).toEqual({

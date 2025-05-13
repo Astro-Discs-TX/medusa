@@ -1717,11 +1717,16 @@ export class TransactionOrchestrator extends EventEmitter {
         transaction: curTransaction,
       })
 
-      await TransactionOrchestrator.setStepSuccess(
+      const ret = await TransactionOrchestrator.setStepSuccess(
         curTransaction,
         step,
         response
       )
+
+      if (ret.transactionIsCancelling) {
+        await this.cancelTransaction(curTransaction)
+        return curTransaction
+      }
 
       await this.executeNext(curTransaction)
     } else {
@@ -1771,12 +1776,17 @@ export class TransactionOrchestrator extends EventEmitter {
         transaction: curTransaction,
       })
 
-      await TransactionOrchestrator.setStepFailure(
+      const ret = await TransactionOrchestrator.setStepFailure(
         curTransaction,
         step,
         error,
         0
       )
+
+      if (ret.transactionIsCancelling) {
+        await this.cancelTransaction(curTransaction)
+        return curTransaction
+      }
 
       await this.executeNext(curTransaction)
     } else {

@@ -251,8 +251,8 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
         })
 
         it("should prevent executing twice the same workflow in perfect concurrency with the same transactionId and non idempotent and not async but retention time is set", async () => {
-          const transactionId = "transaction_id"
-          const workflowId = "workflow_id" + ulid()
+          const transactionId = "concurrency_transaction_id"
+          const workflowId = "concurrency_workflow_id" + ulid()
 
           const step1 = createStep("step1", async () => {
             await setTimeout(100)
@@ -270,10 +270,12 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
           )
 
           const [result1, result2] = await promiseAll([
-            workflowOrcModule.run(workflowId, {
-              input: {},
-              transactionId,
-            }),
+            workflowOrcModule
+              .run(workflowId, {
+                input: {},
+                transactionId,
+              })
+              .catch((e) => e),
             workflowOrcModule
               .run(workflowId, {
                 input: {},
@@ -282,8 +284,8 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
               .catch((e) => e),
           ])
 
-          expect(result1.result).toEqual("step1")
-          expect(result2.message).toEqual(
+          expect(result1.result || result2.result).toEqual("step1")
+          expect(result2.message || result1.message).toEqual(
             "Transaction already started for transactionId: " + transactionId
           )
         })
