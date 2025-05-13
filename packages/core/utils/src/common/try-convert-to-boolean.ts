@@ -6,7 +6,7 @@ export function tryConvertToBoolean(value: unknown): boolean | undefined
 export function tryConvertToBoolean<T>(
   value: unknown,
   defaultValue: T
-): number | T
+): boolean | T
 export function tryConvertToBoolean<T>(
   value: unknown,
   defaultValue?: T

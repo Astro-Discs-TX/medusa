@@ -43,46 +43,21 @@ function normalizeValue<T>(value: T): T {
  * and the region name. The iso is converted to lowercase
  */
 function parseVariantPriceColumn(columnName: string, rowNumber: number) {
-  const priceTokens = normalizeValue(columnName)
-    .replace("Variant Price ", "")
-    .split(" ")
+  const normalizedValue = normalizeValue(columnName)
+  const potentialRegion = /\[(.*)\]/g.exec(normalizedValue)?.[1]
+  const iso = normalizedValue.split(" ").pop()
 
-  /**
-   * The price was specified as "Variant Price EUR" or "Variant Price USD"
-   */
-  if (priceTokens.length === 1) {
-    return {
-      region: null,
-      iso: priceTokens[0].toLowerCase(),
-    }
-  }
-
-  /**
-   * The price was specified as "Variant Price [EUR]" or "Variant Price Europe [EUR]"
-   */
-  if (priceTokens.length === 2) {
-    const iso = priceTokens.find(
-      (token) => token.startsWith("[") && token.endsWith("]")
+  if (!iso) {
+    throw createError(
+      rowNumber,
+      `Invalid price format used by "${columnName}". Expect column name to contain the ISO code as the last segment. For example: "Variant Price [Europe] EUR" or "Variant Price EUR"`
     )
-
-    if (!iso) {
-      throw createError(
-        rowNumber,
-        `Invalid price format used by "${columnName}". Expect column name to contain the ISO code inside square brackets. For example: "Variant Price [USD]"`
-      )
-    }
-
-    return {
-      iso: iso.replace(/^\[|\]$/g, "")
-        .toLowerCase(),
-      region: priceTokens.find((token) => token !== iso),
-    }
   }
 
-  throw createError(
-    rowNumber,
-    `Invalid price format used by "${columnName}". Expect column name to contain the ISO code. For example: "Variant Price USD"`
-  )
+  return {
+    iso: iso.toLowerCase(),
+    region: potentialRegion,
+  }
 }
 
 /**
@@ -101,7 +76,7 @@ function processAsString<Output>(
 }
 
 /**
- * Processes the column value as a string
+ * Processes the column value as a boolean
  */
 function processAsBoolean<Output>(
   inputKey: string,

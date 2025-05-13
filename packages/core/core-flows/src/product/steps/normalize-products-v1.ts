@@ -19,21 +19,24 @@ export const normalizeCsvStepId = "normalize-product-csv"
 export const normalizeCsvStep = createStep(
   normalizeCsvStepId,
   async (fileContent: NormalizeProductCsvStepInput, { container }) => {
-    const csvProducts = convertCsvToJson(fileContent)
-    const normalizer = new CSVNormalizer(csvProducts as any)
-    const projects = normalizer.proccess()
+    const csvProducts =
+      convertCsvToJson<ConstructorParameters<typeof CSVNormalizer>[0][0]>(
+        fileContent
+      )
+    const normalizer = new CSVNormalizer(csvProducts)
+    const products = normalizer.proccess()
 
-    const create = Object.keys(projects.toCreate).reduce<
-      (typeof projects)["toCreate"][keyof (typeof projects)["toCreate"]][]
-    >((result, toCreateId) => {
-      result.push(projects.toCreate[toCreateId])
+    const create = Object.keys(products.toCreate).reduce<
+      (typeof products)["toCreate"][keyof (typeof products)["toCreate"]][]
+    >((result, toCreateHandle) => {
+      result.push(products.toCreate[toCreateHandle])
       return result
     }, [])
 
-    const update = Object.keys(projects.toUpdate).reduce<
-      (typeof projects)["toUpdate"][keyof (typeof projects)["toUpdate"]][]
+    const update = Object.keys(products.toUpdate).reduce<
+      (typeof products)["toUpdate"][keyof (typeof products)["toUpdate"]][]
     >((result, toCreateId) => {
-      result.push(projects.toUpdate[toCreateId])
+      result.push(products.toUpdate[toCreateId])
       return result
     }, [])
 
