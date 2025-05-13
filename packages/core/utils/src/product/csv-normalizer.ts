@@ -438,7 +438,10 @@ export class CSVNormalizer {
     }, {})
 
     if (unknownColumns.length) {
-      throw new Error(`Invalid column name(s) "${unknownColumns.join('","')}"`)
+      return new MedusaError(
+        MedusaError.Types.INVALID_DATA,
+        `Invalid column name(s) "${unknownColumns.join('","')}"`
+      )
     }
 
     return normalized
