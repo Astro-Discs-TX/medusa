@@ -33,7 +33,7 @@ function createError(rowNumber: number, message: string) {
  */
 function normalizeValue<T>(value: T): T {
   if (typeof value === "string") {
-    return value.replace(/\\r$/, "") as T
+    return value.replace(/\\r$/, "").trim() as T
   }
   return value
 }
@@ -152,45 +152,45 @@ const productStaticColumns: {
     [K in keyof AdminCreateProduct | "id"]?: any
   }>
 } = {
-  "Product Id": processAsString("Product Id", "id"),
-  "Product Handle": processAsString("Product Handle", "handle"),
-  "Product Title": processAsString("Product Title", "title"),
-  "Product Status": processAsString("Product Status", "status"),
-  "Product Description": processAsString("Product Description", "description"),
-  "Product Subtitle": processAsString("Product Subtitle", "subtitle"),
-  "Product External Id": processAsString("Product External Id", "external_id"),
-  "Product Thumbnail": processAsString("Product Thumbnail", "thumbnail"),
-  "Product Collection Id": processAsString(
-    "Product Collection Id",
+  "product id": processAsString("product id", "id"),
+  "product handle": processAsString("product handle", "handle"),
+  "product title": processAsString("product title", "title"),
+  "product status": processAsString("product status", "status"),
+  "product description": processAsString("product description", "description"),
+  "product subtitle": processAsString("product subtitle", "subtitle"),
+  "product external id": processAsString("product external id", "external_id"),
+  "product thumbnail": processAsString("product thumbnail", "thumbnail"),
+  "product collection id": processAsString(
+    "product collection id",
     "collection_id"
   ),
-  "Product Type Id": processAsString("Product Type Id", "type_id"),
-  "Product Discountable": processAsBoolean(
-    "Product Discountable",
+  "product type id": processAsString("product type id", "type_id"),
+  "product discountable": processAsBoolean(
+    "product discountable",
     "discountable"
   ),
-  "Product Height": processAsNumber("Product Height", "height", {
+  "product height": processAsNumber("product height", "height", {
     asNumericString: true,
   }),
-  "Product Hs Code": processAsString("Product Hs Code", "hs_code"),
-  "Product Length": processAsNumber("Product Length", "length", {
+  "product hs code": processAsString("product hs code", "hs_code"),
+  "product length": processAsNumber("product length", "length", {
     asNumericString: true,
   }),
-  "Product Material": processAsString("Product Material", "material"),
-  "Product Mid Code": processAsString("Product Mid Code", "mid_code"),
-  "Product Origin Country": processAsString(
-    "Product Origin Country",
+  "product material": processAsString("product material", "material"),
+  "product mid code": processAsString("product mid code", "mid_code"),
+  "product origin country": processAsString(
+    "product origin country",
     "origin_country"
   ),
-  "Product Weight": processAsNumber("Product Weight", "weight", {
+  "product weight": processAsNumber("product weight", "weight", {
     asNumericString: true,
   }),
-  "Product Width": processAsNumber("Product Width", "width", {
+  "product width": processAsNumber("product width", "width", {
     asNumericString: true,
   }),
-  "Product Metadata": processAsString("Product Metadata", "metadata"),
-  "Shipping Profile Id": processAsString(
-    "Shipping Profile Id",
+  "product metadata": processAsString("product metadata", "metadata"),
+  "shipping profile id": processAsString(
+    "shipping profile id",
     "shipping_profile_id"
   ),
 }
@@ -204,15 +204,15 @@ const productWildcardColumns: {
     [K in keyof AdminCreateProduct]?: any
   }>
 } = {
-  "Product Category": processAsCounterValue(
-    /Product Category \d/,
+  "product category": processAsCounterValue(
+    /product category \d/,
     "id",
     "categories"
   ),
-  "Product Image": processAsCounterValue(/Product Image \d/, "url", "images"),
-  "Product Tag": processAsCounterValue(/Product Tag \d/, "id", "tags"),
-  "Product Sales Channel": processAsCounterValue(
-    /Product Sales Channel \d/,
+  "product image": processAsCounterValue(/product image \d/, "url", "images"),
+  "product tag": processAsCounterValue(/product tag \d/, "id", "tags"),
+  "product sales channel": processAsCounterValue(
+    /product sales channel \d/,
     "id",
     "sales_channels"
   ),
@@ -227,42 +227,42 @@ const variantStaticColumns: {
     [K in keyof AdminCreateProductVariant | "id"]?: any
   }>
 } = {
-  "Variant Id": processAsString("Variant Id", "id"),
-  "Variant Title": processAsString("Variant Title", "title"),
-  "Variant Sku": processAsString("Variant Sku", "sku"),
-  "Variant Upc": processAsString("Variant Upc", "upc"),
-  "Variant Ean": processAsString("Variant Ean", "ean"),
-  "Variant Hs Code": processAsString("Variant Hs Code", "hs_code"),
-  "Variant Mid Code": processAsString("Variant Mid Code", "mid_code"),
-  "Variant Manage Inventory": processAsBoolean(
-    "Variant Manage Inventory",
+  "variant id": processAsString("variant id", "id"),
+  "variant title": processAsString("variant title", "title"),
+  "variant sku": processAsString("variant sku", "sku"),
+  "variant upc": processAsString("variant upc", "upc"),
+  "variant ean": processAsString("variant ean", "ean"),
+  "variant hs code": processAsString("variant hs code", "hs_code"),
+  "variant mid code": processAsString("variant mid code", "mid_code"),
+  "variant manage inventory": processAsBoolean(
+    "variant manage inventory",
     "manage_inventory"
   ),
-  "Variant Allow Backorder": processAsBoolean(
-    "Variant Allow Backorder",
+  "variant allow backorder": processAsBoolean(
+    "variant allow backorder",
     "allow_backorder"
   ),
-  "Variant Barcode": processAsString("Variant Barcode", "barcode"),
-  "Variant Height": processAsNumber("Variant Height", "height", {
+  "variant barcode": processAsString("variant barcode", "barcode"),
+  "variant height": processAsNumber("variant height", "height", {
     asNumericString: true,
   }),
-  "Variant Length": processAsNumber("Variant Length", "length", {
+  "variant length": processAsNumber("variant length", "length", {
     asNumericString: true,
   }),
-  "Variant Material": processAsString("Variant Material", "material"),
-  "Variant Metadata": processAsString("Variant Metadata", "metadata"),
-  "Variant Origin Country": processAsString(
-    "Variant Origin Country",
+  "variant material": processAsString("variant material", "material"),
+  "variant metadata": processAsString("variant metadata", "metadata"),
+  "variant origin country": processAsString(
+    "variant origin country",
     "origin_country"
   ),
-  "Variant Variant Rank": processAsString(
-    "Variant Variant Rank",
+  "variant variant rank": processAsString(
+    "variant variant rank",
     "variant_rank"
   ),
-  "Variant Width": processAsNumber("Variant Width", "width", {
+  "variant width": processAsNumber("variant width", "width", {
     asNumericString: true,
   }),
-  "Variant Weight": processAsNumber("Variant Weight", "weight", {
+  "variant weight": processAsNumber("variant weight", "weight", {
     asNumericString: true,
   }),
 }
@@ -276,9 +276,9 @@ const variantWildcardColumns: {
     [K in keyof AdminCreateProductVariant]?: any
   }>
 } = {
-  "Variant Price": (csvRow, rowColumns, rowNumber, output) => {
+  "variant price": (csvRow, rowColumns, rowNumber, output) => {
     const pricesColumns = rowColumns.filter((rowKey) => {
-      return rowKey.startsWith("Variant Price ") && isPresent(csvRow[rowKey])
+      return rowKey.startsWith("variant price ") && isPresent(csvRow[rowKey])
     })
     output["prices"] = output["prices"] ?? []
 
@@ -311,8 +311,8 @@ const optionColumns: {
     options: { key: any; value: any }[]
   }>
 } = {
-  "Variant Option": (csvRow, rowColumns, rowNumber, output) => {
-    const matcher = /Variant Option \d+ Name/
+  "variant option": (csvRow, rowColumns, rowNumber, output) => {
+    const matcher = /variant option \d+ name/
     const optionNameColumns = rowColumns.filter((rowKey) => {
       return matcher.test(rowKey) && isPresent(normalizeValue(csvRow[rowKey]))
     })
@@ -320,7 +320,7 @@ const optionColumns: {
     output["options"] = optionNameColumns.map((columnName) => {
       const [, , counter] = columnName.split(" ")
       const key = normalizeValue(csvRow[columnName])
-      const value = normalizeValue(csvRow[`Variant Option ${counter} Value`])
+      const value = normalizeValue(csvRow[`variant option ${counter} value`])
 
       if (!isPresent(value)) {
         throw createError(rowNumber, `Missing option value for "${columnName}"`)
@@ -333,6 +333,16 @@ const optionColumns: {
     })
   },
 }
+
+/**
+ * An array of known columns
+ */
+const knownStaticColumns = Object.keys(productStaticColumns).concat(
+  Object.keys(variantStaticColumns)
+)
+const knownWildcardColumns = Object.keys(productWildcardColumns)
+  .concat(Object.keys(variantWildcardColumns))
+  .concat(Object.keys(optionColumns))
 
 /**
  * CSV normalizer processes all the allowed columns from a CSV file and remaps
@@ -372,8 +382,8 @@ export class CSVNormalizer {
     row: Record<string, string | boolean | number>,
     rowNumber: number
   ) {
-    const productId = row["Product Id"]
-    const productHandle = row["Product Handle"]
+    const productId = row["product id"]
+    const productHandle = row["product handle"]
     if (!isPresent(productId) && !isPresent(productHandle)) {
       throw createError(
         rowNumber,
@@ -408,6 +418,34 @@ export class CSVNormalizer {
       }
     }
     return this.#products.toCreate[handle]!
+  }
+
+  /**
+   * Normalizes a row by converting all keys to lowercase and creating a
+   * new object
+   */
+  #normalizeRow(row: Record<string, any>) {
+    const unknownColumns: string[] = []
+
+    const normalized = Object.keys(row).reduce((result, key) => {
+      const lowerCaseKey = key.toLowerCase()
+      result[lowerCaseKey] = row[key]
+
+      if (
+        !knownStaticColumns.includes(lowerCaseKey) &&
+        !knownWildcardColumns.some((column) => lowerCaseKey.startsWith(column))
+      ) {
+        unknownColumns.push(key)
+      }
+
+      return result
+    }, {})
+
+    if (unknownColumns.length) {
+      throw new Error(`Invalid column name(s) "${unknownColumns.join('","')}"`)
+    }
+
+    return normalized
   }
 
   /**
@@ -487,7 +525,9 @@ export class CSVNormalizer {
    * Process CSV rows. The return value is a tree of products
    */
   proccess() {
-    this.#rows.forEach((row, index) => this.#processRow(row, index + 1))
+    this.#rows.forEach((row, index) =>
+      this.#processRow(this.#normalizeRow(row), index + 1)
+    )
     return this.#products
   }
 }
