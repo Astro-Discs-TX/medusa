@@ -23,9 +23,9 @@ import {
 import { moduleIntegrationTestRunner } from "@medusajs/test-utils"
 import { WorkflowsModuleService } from "@services"
 import { asFunction } from "awilix"
-import { ulid } from "ulid"
 import { setTimeout as setTimeoutSync } from "timers"
 import { setTimeout as setTimeoutPromise } from "timers/promises"
+import { ulid } from "ulid"
 import "../__fixtures__"
 import {
   conditionalStep2Invoke,
@@ -131,6 +131,111 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
           createWorkflow({ name: workflowId, retentionTime: 60 }, function () {
             step1()
             step2().config({ async: true })
+            step3()
+
+            return new WorkflowResponse("finished")
+          })
+
+          await workflowOrcModule.run(workflowId, {
+            input: {},
+            transactionId,
+          })
+
+          await setTimeoutPromise(100)
+
+          await workflowOrcModule.cancel(workflowId, {
+            transactionId,
+          })
+
+          await setTimeoutPromise(1000)
+
+          const execution = await workflowOrcModule.listWorkflowExecutions({
+            transaction_id: transactionId,
+          })
+
+          expect(execution.length).toEqual(1)
+          expect(execution[0].state).toEqual(TransactionState.REVERTED)
+        })
+
+        it("should cancel a complete execution with a sync workflow running as async", async () => {
+          const workflowId = "workflow-to-cancel-id" + ulid()
+          const transactionId = "transaction-to-cancel-id"
+          const step1 = createStep("step1", async () => {
+            return new StepResponse("step1")
+          })
+
+          const step2 = createStep("step2", async () => {
+            return new StepResponse("step2")
+          })
+
+          const step3 = createStep("step3", async () => {
+            return new StepResponse("step3")
+          })
+
+          const subWorkflowId = "sub-workflow-id" + ulid()
+          const subWorkflow = createWorkflow(
+            { name: subWorkflowId, retentionTime: 60 },
+            function () {
+              return new WorkflowResponse(step2())
+            }
+          )
+
+          createWorkflow({ name: workflowId, retentionTime: 60 }, function () {
+            step1()
+            subWorkflow.runAsStep({ input: {} }).config({ async: true })
+            step3()
+
+            return new WorkflowResponse("finished")
+          })
+
+          await workflowOrcModule.run(workflowId, {
+            input: {},
+            transactionId,
+          })
+
+          await setTimeoutPromise(100)
+
+          await workflowOrcModule.cancel(workflowId, {
+            transactionId,
+          })
+
+          await setTimeoutPromise(500)
+
+          const execution = await workflowOrcModule.listWorkflowExecutions({
+            transaction_id: transactionId,
+          })
+
+          expect(execution.length).toEqual(1)
+          expect(execution[0].state).toEqual(TransactionState.REVERTED)
+        })
+
+        it("should cancel an ongoing execution with a sync workflow running as async", async () => {
+          const workflowId = "workflow-to-cancel-id" + ulid()
+          const transactionId = "transaction-to-cancel-id"
+          const step1 = createStep("step1", async () => {
+            return new StepResponse("step1")
+          })
+
+          const step2 = createStep("step2", async () => {
+            await setTimeoutPromise(500)
+            return new StepResponse("step2")
+          })
+
+          const step3 = createStep("step3", async () => {
+            return new StepResponse("step3")
+          })
+
+          const subWorkflowId = "sub-workflow-id" + ulid()
+          const subWorkflow = createWorkflow(
+            { name: subWorkflowId, retentionTime: 60 },
+            function () {
+              return new WorkflowResponse(step2())
+            }
+          )
+
+          createWorkflow({ name: workflowId, retentionTime: 60 }, function () {
+            step1()
+            subWorkflow.runAsStep({ input: {} }).config({ async: true })
             step3()
 
             return new WorkflowResponse("finished")
