@@ -400,9 +400,7 @@ export class CSVNormalizer {
    */
   #getOrInitializeProductById(id: string) {
     if (!this.#products.toUpdate[id]) {
-      this.#products.toUpdate[id] = {
-        variants: [],
-      }
+      this.#products.toUpdate[id] = {}
     }
     return this.#products.toUpdate[id]!
   }
@@ -413,9 +411,7 @@ export class CSVNormalizer {
    */
   #getOrInitializeProductByHandle(handle: string) {
     if (!this.#products.toCreate[handle]) {
-      this.#products.toCreate[handle] = {
-        variants: [],
-      }
+      this.#products.toCreate[handle] = {}
     }
     return this.#products.toCreate[handle]!
   }
@@ -518,6 +514,7 @@ export class CSVNormalizer {
     /**
      * Assign variant to the product
      */
+    product.variants = product.variants ?? []
     product.variants.push(variant)
   }
 
