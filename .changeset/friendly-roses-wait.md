@@ -3,4 +3,4 @@
 "@medusajs/utils": patch
 ---
 
-feat(core-flows): Emit cart trasnferred customer
+feat: create CSV normalizer to normalize a CSV file
