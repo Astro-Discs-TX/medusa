@@ -2,7 +2,7 @@
  * @oas [post] /store/returns
  * operationId: PostReturns
  * summary: Create Return
- * description: Create a return.
+ * description: Create a return for an order's items. The admin receives the return and process it from their side.
  * x-authenticated: false
  * parameters:
  *   - name: x-publishable-api-key
@@ -27,7 +27,20 @@
  *       -H 'Content-Type: application/json' \
  *       --data-raw '{
  *         "order_id": "order_123",
- *         "items": []
+ *         "items": [
+ *           {
+ *             "id": "id_XbfptxUVo2io9EI",
+ *             "quantity": 7916429753974784,
+ *             "reason_id": "{value}",
+ *             "note": "{value}"
+ *           }
+ *         ],
+ *         "return_shipping": {
+ *           "option_id": "{value}",
+ *           "price": 1068364080349184
+ *         },
+ *         "note": "{value}",
+ *         "location_id": "{value}"
  *       }'
  * tags:
  *   - Returns

@@ -75,12 +75,12 @@
  *             description: A workflow ID.
  *   - name: q
  *     in: query
- *     description: The workflows execution's q.
+ *     description: Search query to filter by a workflow execution's searchable fields.
  *     required: false
  *     schema:
  *       type: string
  *       title: q
- *       description: The workflows execution's q.
+ *       description: Search query to filter by a workflow execution's searchable fields.
  * security:
  *   - api_token: []
  *   - cookie_auth: []

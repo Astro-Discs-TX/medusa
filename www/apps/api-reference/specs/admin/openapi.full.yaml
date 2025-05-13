@@ -431,6 +431,12 @@ tags:
     x-associatedSchema:
       $ref: '#/components/schemas/AdminStore'
   - name: Tax Providers
+    description: |
+      A tax provider is a third-party integration or custom logic used to calculate taxes for a cart or an order.
+      These API routes allow admin users to manage tax providers installed in their Medusa application.
+    externalDocs:
+      description: Learn more about the Tax Module Providers
+      url: https://docs.medusajs.com/resources/commerce-modules/tax/tax-provider
     x-associatedSchema:
       $ref: '#/components/schemas/AdminTaxProvider'
   - name: Tax Rates
@@ -6158,7 +6164,7 @@ paths:
             schema:
               allOf:
                 - type: object
-                  description: SUMMARY
+                  description: The collection's details.
                   required:
                     - title
                   properties:
@@ -6172,9 +6178,9 @@ paths:
                       description: The collection's handle.
                     metadata:
                       type: object
-                      description: The collection's metadata.
+                      description: The collection's metadata. Can hold custom key-value pairs.
                 - type: object
-                  description: SUMMARY
+                  description: The collection's details.
                   properties:
                     additional_data:
                       type: object
@@ -6345,7 +6351,7 @@ paths:
             schema:
               allOf:
                 - type: object
-                  description: SUMMARY
+                  description: The details to update in a collection.
                   properties:
                     title:
                       type: string
@@ -6359,7 +6365,7 @@ paths:
                       type: object
                       description: The collection's metadata.
                 - type: object
-                  description: SUMMARY
+                  description: The details to update in a collection.
                   properties:
                     additional_data:
                       type: object
@@ -22109,7 +22115,7 @@ paths:
     delete:
       operationId: DeleteOrderEditsId
       summary: Cancel Order Edit
-      description: Cancel an order edit.
+      description: Cancel a requested order edit.
       x-authenticated: true
       parameters:
         - name: id
@@ -32547,156 +32553,6 @@ paths:
           $ref: '#/components/responses/invalid_request_error'
         '500':
           $ref: '#/components/responses/500_error'
-  /admin/products/imports:
-    post:
-      operationId: PostProductsImports
-      summary: Create Product
-      description: Create a product.
-      x-authenticated: true
-      parameters: []
-      security:
-        - api_token: []
-        - cookie_auth: []
-        - jwt_token: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AdminImportProducts'
-      x-codeSamples:
-        - lang: JavaScript
-          label: JS SDK
-          source: |-
-            import Medusa from "@medusajs/js-sdk"
-
-            export const sdk = new Medusa({
-              baseUrl: import.meta.env.VITE_BACKEND_URL || "/",
-              debug: import.meta.env.DEV,
-              auth: {
-                type: "session",
-              },
-            })
-
-            sdk.admin.product.createImport({
-              file // uploaded File instance
-            })
-            .then(({ transaction_id }) => {
-              console.log(transaction_id)
-            })
-        - lang: Shell
-          label: cURL
-          source: |-
-            curl -X POST '{backend_url}/admin/products/imports' \
-            -H 'Authorization: Bearer {access_token}' \
-            -H 'Content-Type: application/json' \
-            --data-raw '{
-              "file_key": "{value}",
-              "originalname": "{value}",
-              "extension": "{value}",
-              "size": 48,
-              "mime_type": "{value}"
-            }'
-      tags:
-        - Products
-      responses:
-        '202':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AdminImportProductResponse'
-        '400':
-          $ref: '#/components/responses/400_error'
-        '401':
-          $ref: '#/components/responses/unauthorized'
-        '404':
-          $ref: '#/components/responses/not_found_error'
-        '409':
-          $ref: '#/components/responses/invalid_state_error'
-        '422':
-          $ref: '#/components/responses/invalid_request_error'
-        '500':
-          $ref: '#/components/responses/500_error'
-      x-workflow: importProductsWorkflow
-      x-events:
-        - name: product-variant.created
-          payload: |-
-            ```ts
-            [{
-              id, // The ID of the product variant
-            }]
-            ```
-          description: Emitted when product variants are created.
-          deprecated: false
-        - name: product.updated
-          payload: |-
-            ```ts
-            [{
-              id, // The ID of the product
-            }]
-            ```
-          description: Emitted when products are updated.
-          deprecated: false
-        - name: product.created
-          payload: |-
-            ```ts
-            [{
-              id, // The ID of the product
-            }]
-            ```
-          description: Emitted when products are created.
-          deprecated: false
-        - name: product.deleted
-          payload: |-
-            ```ts
-            [{
-              id, // The ID of the product
-            }]
-            ```
-          description: Emitted when products are deleted.
-          deprecated: false
-      x-version: 2.8.0
-  /admin/products/imports/{transaction_id}/confirm:
-    post:
-      operationId: PostProductsImportsTransaction_idConfirm
-      summary: Add Confirm to Product
-      description: Add a Confirm to a product
-      x-authenticated: true
-      parameters:
-        - name: transaction_id
-          in: path
-          description: The product's transaction id.
-          required: true
-          schema:
-            type: string
-      security:
-        - api_token: []
-        - cookie_auth: []
-        - jwt_token: []
-      x-codeSamples:
-        - lang: Shell
-          label: cURL
-          source: |-
-            curl -X POST '{backend_url}/admin/products/imports/{transaction_id}/confirm' \
-            -H 'Authorization: Bearer {access_token}'
-      tags:
-        - Products
-      responses:
-        '202':
-          description: OK
-        '400':
-          $ref: '#/components/responses/400_error'
-        '401':
-          $ref: '#/components/responses/unauthorized'
-        '404':
-          $ref: '#/components/responses/not_found_error'
-        '409':
-          $ref: '#/components/responses/invalid_state_error'
-        '422':
-          $ref: '#/components/responses/invalid_request_error'
-        '500':
-          $ref: '#/components/responses/500_error'
-      x-version: 2.8.0
   /admin/products/{id}:
     get:
       operationId: GetProductsId
@@ -46966,15 +46822,15 @@ paths:
     get:
       operationId: GetTaxProviders
       summary: List Tax Providers
-      description: Retrieve a list of tax providers. The tax providers can be filtered by fields such as `id`. The tax providers can also be sorted or paginated.
+      description: Retrieve a list of tax providers installed in the Medusa application through Tax Module Providers. The tax providers can be filtered by fields such as `id`. The tax providers can also be sorted or paginated.
       x-authenticated: true
       parameters:
         - name: fields
           in: query
           description: |-
             Comma-separated fields that should be included in the returned data.
-             * if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields.
-             * without prefix it will replace the entire default fields.
+            if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields.
+            without prefix it will replace the entire default fields.
           required: false
           schema:
             type: string
@@ -47019,21 +46875,21 @@ paths:
             oneOf:
               - type: string
                 title: id
-                description: The tax provider's ID.
+                description: Filter by a tax provider's ID.
               - type: array
-                description: The tax provider's ID.
+                description: Filter by tax provider IDs.
                 items:
                   type: string
                   title: id
-                  description: The id's ID.
+                  description: A tax provider's ID.
         - name: is_enabled
           in: query
-          description: The tax provider's is enabled.
+          description: Filter by whether the tax provider is enabled.
           required: false
           schema:
             type: boolean
             title: is_enabled
-            description: The tax provider's is enabled.
+            description: Filter by whether the tax provider is enabled.
         - name: $and
           in: query
           description: Join query parameters with an AND condition. Each object's content is the same type as the expected query parameters.
@@ -47091,7 +46947,7 @@ paths:
               schema:
                 allOf:
                   - type: object
-                    description: SUMMARY
+                    description: The pagination details.
                     required:
                       - limit
                       - offset
@@ -47100,27 +46956,28 @@ paths:
                       limit:
                         type: number
                         title: limit
-                        description: The tax provider's limit.
+                        description: The maximum number of items retrieved.
                       offset:
                         type: number
                         title: offset
-                        description: The tax provider's offset.
+                        description: The number of items skipped before retrieving the returned items.
                       count:
                         type: number
                         title: count
-                        description: The tax provider's count.
+                        description: The total number of items available.
                       estimate_count:
                         type: number
                         title: estimate_count
-                        description: The tax provider's estimate count.
+                        description: The estimated count retrieved from the PostgreSQL query planner, which may be inaccurate.
+                        x-featureFlag: index_engine
                   - type: object
-                    description: SUMMARY
+                    description: The list of tax providers.
                     required:
                       - tax_providers
                     properties:
                       tax_providers:
                         type: array
-                        description: The tax provider's tax providers.
+                        description: The list of tax providers.
                         items:
                           $ref: '#/components/schemas/AdminTaxProvider'
         '400':
@@ -49373,27 +49230,27 @@ paths:
               url: '#select-fields-and-relations'
         - name: province_code
           in: query
-          description: The tax region's province code.
+          description: Filter by a tax region's province code.
           required: false
           schema:
             type: string
             title: province_code
-            description: The tax region's province code.
+            description: Filter by a tax region's province code.
         - name: provider_id
           in: query
-          description: The tax region's provider id.
+          description: Filter by a tax provider ID to retrieve the tax regions using it.
           required: false
           schema:
             type: string
             title: provider_id
-            description: The tax region's provider id.
+            description: Filter by a tax provider ID to retrieve the tax regions using it.
         - name: metadata
           in: query
-          description: The tax region's metadata.
+          description: Filter by a tax region's metadata. Refer to the [Object Query Parameter](https://docs.medusajs.com/api/admin#object) section to learn how to filter by object fields.
           required: false
           schema:
             type: object
-            description: The tax region's metadata.
+            description: Filter by a tax region's metadata. Refer to the [Object Query Parameter](https://docs.medusajs.com/api/admin#object) section to learn how to filter by object fields.
       security:
         - api_token: []
         - cookie_auth: []
@@ -49699,55 +49556,6 @@ paths:
           $ref: '#/components/responses/500_error'
       x-workflow: uploadFilesWorkflow
       x-events: []
-  /admin/uploads/presigned-urls:
-    post:
-      operationId: PostUploadsPresignedUrls
-      summary: Create Upload
-      description: Create a upload.
-      x-authenticated: true
-      parameters: []
-      security:
-        - api_token: []
-        - cookie_auth: []
-        - jwt_token: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AdminUploadPreSignedUrl'
-      x-codeSamples:
-        - lang: Shell
-          label: cURL
-          source: |-
-            curl -X POST '{backend_url}/admin/uploads/presigned-urls' \
-            -H 'Authorization: Bearer {access_token}' \
-            -H 'Content-Type: application/json' \
-            --data-raw '{
-              "originalname": "{value}",
-              "size": 29,
-              "mime_type": "{value}"
-            }'
-      tags:
-        - Uploads
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AdminUploadPreSignedUrlResponse'
-        '400':
-          $ref: '#/components/responses/400_error'
-        '401':
-          $ref: '#/components/responses/unauthorized'
-        '404':
-          $ref: '#/components/responses/not_found_error'
-        '409':
-          $ref: '#/components/responses/invalid_state_error'
-        '422':
-          $ref: '#/components/responses/invalid_request_error'
-        '500':
-          $ref: '#/components/responses/500_error'
   /admin/uploads/{id}:
     get:
       operationId: GetUploadsId
@@ -50760,12 +50568,12 @@ paths:
                   description: A workflow ID.
         - name: q
           in: query
-          description: The workflows execution's q.
+          description: Search query to filter by a workflow execution's searchable fields.
           required: false
           schema:
             type: string
             title: q
-            description: The workflows execution's q.
+            description: Search query to filter by a workflow execution's searchable fields.
       security:
         - api_token: []
         - cookie_auth: []
@@ -52952,7 +52760,8 @@ components:
         estimate_count:
           type: number
           title: estimate_count
-          description: The claim's estimate count.
+          description: The estimated count retrieved from the PostgreSQL query planner, which may be inaccurate.
+          x-featureFlag: index_engine
     AdminClaimOrderResponse:
       type: object
       description: The created claim's details.
@@ -53113,7 +52922,8 @@ components:
         estimate_count:
           type: number
           title: estimate_count
-          description: The collection's estimate count.
+          description: The estimated count retrieved from the PostgreSQL query planner, which may be inaccurate.
+          x-featureFlag: index_engine
     AdminCollectionResponse:
       type: object
       description: The collection's details.
@@ -54408,7 +54218,7 @@ components:
         provider_id:
           type: string
           title: provider_id
-          description: The tax region's provider id.
+          description: The ID of the tax provider used to calculate the tax rate in this tax region.
     AdminCreateVariantInventoryItem:
       type: object
       description: The details of the variant-inventory item association.
@@ -54549,7 +54359,8 @@ components:
         estimate_count:
           type: number
           title: estimate_count
-          description: The currency's estimate count.
+          description: The estimated count retrieved from the PostgreSQL query planner, which may be inaccurate.
+          x-featureFlag: index_engine
     AdminCurrencyResponse:
       type: object
       description: The currency's details.
@@ -55667,7 +55478,8 @@ components:
         estimate_count:
           type: number
           title: estimate_count
-          description: The draft order's estimate count.
+          description: The estimated count retrieved from the PostgreSQL query planner, which may be inaccurate.
+          x-featureFlag: index_engine
     AdminDraftOrderPreview:
       type: object
       description: The draft order preview's details.
@@ -56888,7 +56700,8 @@ components:
         estimate_count:
           type: number
           title: estimate_count
-          description: The fulfillment provider's estimate count.
+          description: The estimated count retrieved from the PostgreSQL query planner, which may be inaccurate.
+          x-featureFlag: index_engine
     AdminFulfillmentProviderOption:
       type: object
       description: The fulfillment option's details.
@@ -56935,7 +56748,8 @@ components:
         estimate_count:
           type: number
           title: estimate_count
-          description: The fulfillment provider's estimate count.
+          description: The estimated count retrieved from the PostgreSQL query planner, which may be inaccurate.
+          x-featureFlag: index_engine
     AdminFulfillmentResponse:
       type: object
       description: A fulfillment's details.
@@ -57126,37 +56940,6 @@ components:
               type: number
               title: toUpdate
               description: The number of products that will be updated by this import.
-    AdminImportProducts:
-      type: object
-      description: SUMMARY
-      x-schemaName: AdminImportProducts
-      required:
-        - file_key
-        - originalname
-        - extension
-        - size
-        - mime_type
-      properties:
-        file_key:
-          type: string
-          title: file_key
-          description: The product's file key.
-        originalname:
-          type: string
-          title: originalname
-          description: The product's originalname.
-        extension:
-          type: string
-          title: extension
-          description: The product's extension.
-        size:
-          type: number
-          title: size
-          description: The product's size.
-        mime_type:
-          type: string
-          title: mime_type
-          description: The product's mime type.
     AdminInventoryItem:
       type: object
       description: The inventory item's details.
@@ -57469,7 +57252,8 @@ components:
         estimate_count:
           type: number
           title: estimate_count
-          description: The notification's estimate count.
+          description: The estimated count retrieved from the PostgreSQL query planner, which may be inaccurate.
+          x-featureFlag: index_engine
     AdminNotificationResponse:
       type: object
       description: The notification's details.
@@ -60436,7 +60220,8 @@ components:
         estimate_count:
           type: number
           title: estimate_count
-          description: The price list's estimate count.
+          description: The estimated count retrieved from the PostgreSQL query planner, which may be inaccurate.
+          x-featureFlag: index_engine
     AdminPriceListPrice:
       type: object
       description: The details of a price list's price.
@@ -60617,7 +60402,8 @@ components:
         estimate_count:
           type: number
           title: estimate_count
-          description: The price preference's estimate count.
+          description: The estimated count retrieved from the PostgreSQL query planner, which may be inaccurate.
+          x-featureFlag: index_engine
     AdminPricePreferenceResponse:
       type: object
       description: The price preference's details.
@@ -60931,7 +60717,8 @@ components:
         estimate_count:
           type: number
           title: estimate_count
-          description: The product category's estimate count.
+          description: The estimated count retrieved from the PostgreSQL query planner, which may be inaccurate.
+          x-featureFlag: index_engine
     AdminProductCategoryResponse:
       type: object
       description: The product category's details.
@@ -61217,7 +61004,8 @@ components:
         estimate_count:
           type: number
           title: estimate_count
-          description: The product tag's estimate count.
+          description: The estimated count retrieved from the PostgreSQL query planner, which may be inaccurate.
+          x-featureFlag: index_engine
     AdminProductTagResponse:
       type: object
       description: The product tag's details.
@@ -61315,7 +61103,8 @@ components:
         estimate_count:
           type: number
           title: estimate_count
-          description: The product type's estimate count.
+          description: The estimated count retrieved from the PostgreSQL query planner, which may be inaccurate.
+          x-featureFlag: index_engine
     AdminProductTypeResponse:
       type: object
       description: The product type's details.
@@ -62277,7 +62066,8 @@ components:
         estimate_count:
           type: number
           title: estimate_count
-          description: The return reason's estimate count.
+          description: The estimated count retrieved from the PostgreSQL query planner, which may be inaccurate.
+          x-featureFlag: index_engine
     AdminReturnReasonResponse:
       type: object
       description: The return reason's details.
@@ -62789,7 +62579,7 @@ components:
           $ref: '#/components/schemas/AdminShippingOption'
     AdminShippingOptionRule:
       type: object
-      description: The rule's rules.
+      description: The shipping option rule's details.
       x-schemaName: AdminShippingOptionRule
       required:
         - id
@@ -62804,11 +62594,12 @@ components:
         id:
           type: string
           title: id
-          description: The rule's ID.
+          description: The shipping option rule's ID.
         attribute:
           type: string
           title: attribute
-          description: The rule's attribute.
+          description: The shipping option rule's attribute.
+          example: is_return
         operator:
           type: string
           description: The rule's operator.
@@ -62822,35 +62613,27 @@ components:
             - gte
             - nin
         value:
-          oneOf:
-            - type: string
-              title: value
-              description: The rule's value.
-            - type: array
-              description: The rule's value.
-              items:
-                type: string
-                title: value
-                description: The value's details.
+          type: string
+          title: value
         shipping_option_id:
           type: string
           title: shipping_option_id
-          description: The rule's shipping option id.
+          description: The ID of the shipping option this rule is for.
         created_at:
           type: string
           format: date-time
           title: created_at
-          description: The rule's created at.
+          description: The date the shipping option rule was created.
         updated_at:
           type: string
           format: date-time
           title: updated_at
-          description: The rule's updated at.
+          description: The date the shipping option rule was updated.
         deleted_at:
           type: string
           format: date-time
           title: deleted_at
-          description: The rule's deleted at.
+          description: The date the shipping option rule was deleted.
     AdminShippingOptionType:
       type: object
       description: The shipping option's details.
@@ -63120,7 +62903,8 @@ components:
         estimate_count:
           type: number
           title: estimate_count
-          description: The stock location's estimate count.
+          description: The estimated count retrieved from the PostgreSQL query planner, which may be inaccurate.
+          x-featureFlag: index_engine
     AdminStockLocationResponse:
       type: object
       description: The stock location's details.
@@ -63261,7 +63045,8 @@ components:
         estimate_count:
           type: number
           title: estimate_count
-          description: The store's estimate count.
+          description: The estimated count retrieved from the PostgreSQL query planner, which may be inaccurate.
+          x-featureFlag: index_engine
     AdminStoreResponse:
       type: object
       description: The store's details.
@@ -63273,7 +63058,7 @@ components:
           $ref: '#/components/schemas/AdminStore'
     AdminTaxProvider:
       type: object
-      description: The tax provider's tax providers.
+      description: The tax provider's details.
       x-schemaName: AdminTaxProvider
       required:
         - id
@@ -63283,10 +63068,11 @@ components:
           type: string
           title: id
           description: The tax provider's ID.
+          example: tp_taxjar_taxjar
         is_enabled:
           type: boolean
           title: is_enabled
-          description: The tax provider's is enabled.
+          description: Whether the tax provider is enabled in the Medusa application.
     AdminTaxRate:
       type: object
       description: The tax rate's details.
@@ -64483,7 +64269,7 @@ components:
         provider_id:
           type: string
           title: provider_id
-          description: The tax region's provider id.
+          description: The ID of the tax provider to use when calculating taxes for this tax region.
     AdminUpdateUser:
       type: object
       description: The properties to update in a user.
@@ -64515,69 +64301,6 @@ components:
           type: number
           title: required_quantity
           description: The number of units a single quantity is equivalent to. For example, if a customer orders one quantity of the variant, Medusa checks the availability of the quantity multiplied by the value set for `required_quantity`. When the customer orders the quantity, Medusa reserves the ordered quantity multiplied by the value set for `required_quantity`.
-    AdminUploadPreSignedUrl:
-      type: object
-      description: SUMMARY
-      x-schemaName: AdminUploadPreSignedUrl
-      required:
-        - originalname
-        - size
-        - mime_type
-      properties:
-        originalname:
-          type: string
-          title: originalname
-          description: The upload's originalname.
-        size:
-          type: number
-          title: size
-          description: The upload's size.
-        mime_type:
-          type: string
-          title: mime_type
-          description: The upload's mime type.
-        access:
-          type: string
-          description: The upload's access.
-          enum:
-            - public
-            - private
-    AdminUploadPreSignedUrlResponse:
-      type: object
-      description: SUMMARY
-      x-schemaName: AdminUploadPreSignedUrlResponse
-      required:
-        - url
-        - filename
-        - originalname
-        - mime_type
-        - extension
-        - size
-      properties:
-        url:
-          type: string
-          title: url
-          description: The upload's url.
-        filename:
-          type: string
-          title: filename
-          description: The upload's filename.
-        originalname:
-          type: string
-          title: originalname
-          description: The upload's originalname.
-        mime_type:
-          type: string
-          title: mime_type
-          description: The upload's mime type.
-        extension:
-          type: string
-          title: extension
-          description: The upload's extension.
-        size:
-          type: number
-          title: size
-          description: The upload's size.
     AdminUpsertStockLocationAddress:
       type: object
       description: The details of the stock location address to create.
@@ -64729,7 +64452,8 @@ components:
         estimate_count:
           type: number
           title: estimate_count
-          description: The user's estimate count.
+          description: The estimated count retrieved from the PostgreSQL query planner, which may be inaccurate.
+          x-featureFlag: index_engine
     AdminUserResponse:
       type: object
       description: The user's details.
@@ -64797,14 +64521,14 @@ components:
           description: The date the workflow execution was deleted.
     AdminWorkflowExecutionExecution:
       type: object
-      description: The workflow execution's execution.
+      description: The workflow execution's steps details.
       x-schemaName: AdminWorkflowExecutionExecution
       required:
         - steps
       properties:
         steps:
           type: object
-          description: The execution's steps.
+          description: The execution's steps. Each object key is a step ID, and the value is the object whose properties are shown below.
           required:
             - id
             - invoke
@@ -64821,7 +64545,7 @@ components:
                 description: The step's ID.
               invoke:
                 type: object
-                description: The step's invoke.
+                description: The state of the step's invokation function.
                 x-schemaName: WorkflowExecutionFn
                 required:
                   - state
@@ -64829,7 +64553,7 @@ components:
                 properties:
                   state:
                     type: string
-                    description: The invoke's state.
+                    description: The invokation step's state.
                     enum:
                       - failed
                       - not_started
@@ -64843,7 +64567,7 @@ components:
                       - timeout
                   status:
                     type: string
-                    description: The invoke's status.
+                    description: The invokation step's state.
                     enum:
                       - idle
                       - ok
@@ -64852,60 +64576,61 @@ components:
                       - permanent_failure
               definition:
                 type: object
-                description: The step's definition.
+                description: The step's definition details.
                 x-schemaName: WorkflowExecutionDefinition
                 properties:
                   async:
                     type: boolean
                     title: async
-                    description: The definition's async.
+                    description: Whether the step is async.
                   compensateAsync:
                     type: boolean
                     title: compensateAsync
-                    description: The definition's compensateasync.
+                    description: Whether the compensation function of the step is async.
                   noCompensation:
                     type: boolean
                     title: noCompensation
-                    description: The definition's nocompensation.
+                    description: Whether the step doesn't have a compensation function.
                   continueOnPermanentFailure:
                     type: boolean
                     title: continueOnPermanentFailure
-                    description: The definition's continueonpermanentfailure.
+                    description: Whether the workflow should continue executing even if its status is changed to failed.
                   skipOnPermanentFailure:
                     oneOf:
                       - type: string
                         title: skipOnPermanentFailure
-                        description: The definition's skiponpermanentfailure.
+                        description: The ID of the step to skip to in case of a permanent failure.
                       - type: boolean
                         title: skipOnPermanentFailure
-                        description: The definition's skiponpermanentfailure.
+                        description: Whether the workflow should skip subsequent steps in case of a permanent failure.
                   maxRetries:
                     type: number
                     title: maxRetries
-                    description: The definition's maxretries.
+                    description: The maximum number of times to retry the step.
                   noWait:
                     type: boolean
                     title: noWait
-                    description: The definition's nowait.
+                    description: Whether the workflow shouldn't wait for the step to finish before moving to the next step.
+                    default: false
                   retryInterval:
                     type: number
                     title: retryInterval
-                    description: The definition's retryinterval.
+                    description: The interval in seconds between retry attempts when the step fails.
                   retryIntervalAwaiting:
                     type: number
                     title: retryIntervalAwaiting
-                    description: The definition's retryintervalawaiting.
+                    description: The interval in seconds to retry a step even if its status is `waiting_response`.
                   saveResponse:
                     type: boolean
                     title: saveResponse
-                    description: The definition's saveresponse.
+                    description: Whether the step's response is stored.
                   timeout:
                     type: number
                     title: timeout
-                    description: The definition's timeout.
+                    description: The maximum time in seconds to wait for this step to complete. If the step exceeds this time, the step's state is changed to `timeout`, but the step continues executing.
               compensate:
                 type: object
-                description: The step's compensate.
+                description: The state of the step's compensation function.
                 x-schemaName: WorkflowExecutionFn
                 required:
                   - state
@@ -64913,7 +64638,7 @@ components:
                 properties:
                   state:
                     type: string
-                    description: The compensate's state.
+                    description: The compensation function's state.
                     enum:
                       - failed
                       - not_started
@@ -64927,7 +64652,7 @@ components:
                       - timeout
                   status:
                     type: string
-                    description: The compensate's status.
+                    description: The compensation function's status.
                     enum:
                       - idle
                       - ok
@@ -64937,11 +64662,11 @@ components:
               depth:
                 type: number
                 title: depth
-                description: The step's depth.
+                description: The step's depth in the workflow's execution.
               startedAt:
                 type: number
                 title: startedAt
-                description: The step's startedat.
+                description: The timestamp the step started executing.
     AdminWorkflowExecutionResponse:
       type: object
       description: The workflow execution's details.
@@ -66225,7 +65950,7 @@ components:
           type: string
           title: province
           description: The address's lower-case ISO 3166-2 province code.
-          example: US-CA
+          example: us-ca
           externalDocs:
             url: https://en.wikipedia.org/wiki/ISO_3166-2
             description: Learn more about ISO 3166-2
@@ -71887,7 +71612,7 @@ components:
           description: The ID of the cart this payment collection is for.
     StoreCreateReturn:
       type: object
-      description: SUMMARY
+      description: The details of the return to create.
       x-schemaName: StoreCreateReturn
       required:
         - order_id
@@ -71897,7 +71622,7 @@ components:
         order_id:
           type: string
           title: order_id
-          description: The return's order id.
+          description: The ID of the order this return is created for.
         items:
           type: array
           description: The return's items.
@@ -71908,18 +71633,18 @@ components:
         note:
           type: string
           title: note
-          description: The return's note.
+          description: A note with more details about the return.
         receive_now:
           type: boolean
           title: receive_now
-          description: The return's receive now.
+          description: Whether to mark the return as received.
         location_id:
           type: string
           title: location_id
-          description: The return's location id.
+          description: The ID of the location that items are returned to.
     StoreCreateReturnItem:
       type: object
-      description: The item's items.
+      description: The details of the line item to create.
       x-schemaName: StoreCreateReturnItem
       required:
         - id
@@ -71936,14 +71661,14 @@ components:
         reason_id:
           type: string
           title: reason_id
-          description: The item's reason id.
+          description: The ID of the associated return reason.
         note:
           type: string
           title: note
-          description: The item's note.
+          description: A note with more details about the returned item.
     StoreCreateReturnShipping:
       type: object
-      description: The return's return shipping.
+      description: The return's shipping details.
       x-schemaName: StoreCreateReturnShipping
       required:
         - option_id
@@ -71951,11 +71676,11 @@ components:
         option_id:
           type: string
           title: option_id
-          description: The return shipping's option id.
+          description: The ID of the shipping option to use.
         price:
           type: number
           title: price
-          description: The return shipping's price.
+          description: The shipping's price.
     StoreCurrency:
       type: object
       description: The currency's details.
@@ -72041,7 +71766,8 @@ components:
         estimate_count:
           type: number
           title: estimate_count
-          description: The currency's estimate count.
+          description: The estimated count retrieved from the PostgreSQL query planner, which may be inaccurate.
+          x-featureFlag: index_engine
     StoreCurrencyResponse:
       type: object
       description: The currency's details.
@@ -72253,7 +71979,8 @@ components:
         estimate_count:
           type: number
           title: estimate_count
-          description: The customer's estimate count.
+          description: The estimated count retrieved from the PostgreSQL query planner, which may be inaccurate.
+          x-featureFlag: index_engine
     StoreCustomerAddressResponse:
       type: object
       description: The address's details.
@@ -78918,7 +78645,8 @@ components:
         estimate_count:
           type: number
           title: estimate_count
-          description: The product category's estimate count.
+          description: The estimated count retrieved from the PostgreSQL query planner, which may be inaccurate.
+          x-featureFlag: index_engine
     StoreProductCategoryResponse:
       type: object
       description: The product category's details.
@@ -79127,7 +78855,8 @@ components:
         estimate_count:
           type: number
           title: estimate_count
-          description: The product tag's estimate count.
+          description: The estimated count retrieved from the PostgreSQL query planner, which may be inaccurate.
+          x-featureFlag: index_engine
     StoreProductTagResponse:
       type: object
       description: The product tag's details.
@@ -79203,7 +78932,8 @@ components:
         estimate_count:
           type: number
           title: estimate_count
-          description: The product type's estimate count.
+          description: The estimated count retrieved from the PostgreSQL query planner, which may be inaccurate.
+          x-featureFlag: index_engine
     StoreProductTypeResponse:
       type: object
       description: The product type's details.
@@ -79474,43 +79204,43 @@ components:
         display_id:
           type: number
           title: display_id
-          description: The return's display id.
+          description: The return's display ID.
         created_at:
           type: string
           format: date-time
           title: created_at
-          description: The return's created at.
+          description: The date the return was created.
         order_id:
           type: string
           title: order_id
-          description: The return's order id.
+          description: The ID of the order this return belongs to.
         location_id:
           type: string
           title: location_id
-          description: The return's location id.
+          description: The ID of the location the return items are being returned to.
         canceled_at:
           type: string
           title: canceled_at
-          description: The return's canceled at.
+          description: The date the return was canceled.
         exchange_id:
           type: string
           title: exchange_id
-          description: The return's exchange id.
+          description: The ID of the associated exchange.
         claim_id:
           type: string
           title: claim_id
-          description: The return's claim id.
+          description: The ID of the associated claim.
         refund_amount:
           type: number
           title: refund_amount
-          description: The return's refund amount.
+          description: The amount to be refunded.
         received_at:
           type: string
           title: received_at
-          description: The return's received at.
+          description: The date the return items were received.
     StoreReturnItem:
       type: object
-      description: The item's items.
+      description: The return item's details.
       x-schemaName: StoreReturnItem
       required:
         - id
@@ -79539,22 +79269,22 @@ components:
         reason_id:
           type: string
           title: reason_id
-          description: The item's reason id.
+          description: The ID of the item's reason.
         note:
           type: string
           title: note
-          description: The item's note.
+          description: A note with more details on why the item is returned.
         item_id:
           type: string
           title: item_id
-          description: The item's item id.
+          description: The ID of the item in the order.
         return_id:
           type: string
           title: return_id
-          description: The item's return id.
+          description: The ID of the return this item belongs to.
         metadata:
           type: object
-          description: The item's metadata.
+          description: The item's metadata, can hold custom key-value pairs.
     StoreReturnReason:
       type: object
       description: The return reason's details.
@@ -79606,7 +79336,7 @@ components:
           $ref: '#/components/schemas/StoreReturnReason'
     StoreReturnResponse:
       type: object
-      description: SUMMARY
+      description: The return's details.
       x-schemaName: StoreReturnResponse
       required:
         - return

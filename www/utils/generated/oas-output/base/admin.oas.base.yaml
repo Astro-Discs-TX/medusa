@@ -518,6 +518,14 @@ tags:
     x-associatedSchema:
       $ref: "#/components/schemas/AdminStore"
   - name: Tax Providers
+    description: >
+      A tax provider is a third-party integration or custom logic used to
+      calculate taxes for a cart or an order.
+
+      These API routes allow admin users to manage tax providers installed in their Medusa application.
+    externalDocs:
+      description: Learn more about the Tax Module Providers
+      url: https://docs.medusajs.com/resources/commerce-modules/tax/tax-provider
     x-associatedSchema:
       $ref: "#/components/schemas/AdminTaxProvider"
   - name: Tax Rates

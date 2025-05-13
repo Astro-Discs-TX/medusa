@@ -25,27 +25,27 @@
  *         url: "#select-fields-and-relations"
  *   - name: province_code
  *     in: query
- *     description: The tax region's province code.
+ *     description: Filter by a tax region's province code.
  *     required: false
  *     schema:
  *       type: string
  *       title: province_code
- *       description: The tax region's province code.
+ *       description: Filter by a tax region's province code.
  *   - name: provider_id
  *     in: query
- *     description: The tax region's provider id.
+ *     description: Filter by a tax provider ID to retrieve the tax regions using it.
  *     required: false
  *     schema:
  *       type: string
  *       title: provider_id
- *       description: The tax region's provider id.
+ *       description: Filter by a tax provider ID to retrieve the tax regions using it.
  *   - name: metadata
  *     in: query
- *     description: The tax region's metadata.
+ *     description: Filter by a tax region's metadata. Refer to the [Object Query Parameter](https://docs.medusajs.com/api/admin#object) section to learn how to filter by object fields.
  *     required: false
  *     schema:
  *       type: object
- *       description: The tax region's metadata.
+ *       description: Filter by a tax region's metadata. Refer to the [Object Query Parameter](https://docs.medusajs.com/api/admin#object) section to learn how to filter by object fields.
  * security:
  *   - api_token: []
  *   - cookie_auth: []

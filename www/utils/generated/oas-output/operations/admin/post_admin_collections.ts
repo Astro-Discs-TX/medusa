@@ -27,7 +27,7 @@
  *       schema:
  *         allOf:
  *           - type: object
- *             description: SUMMARY
+ *             description: The collection's details.
  *             required:
  *               - title
  *             properties:
@@ -41,9 +41,9 @@
  *                 description: The collection's handle.
  *               metadata:
  *                 type: object
- *                 description: The collection's metadata.
+ *                 description: The collection's metadata. Can hold custom key-value pairs.
  *           - type: object
- *             description: SUMMARY
+ *             description: The collection's details.
  *             properties:
  *               additional_data:
  *                 type: object

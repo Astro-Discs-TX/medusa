@@ -2,15 +2,15 @@
  * @oas [get] /admin/tax-providers
  * operationId: GetTaxProviders
  * summary: List Tax Providers
- * description: Retrieve a list of tax providers. The tax providers can be filtered by fields such as `id`. The tax providers can also be sorted or paginated.
+ * description: Retrieve a list of tax providers installed in the Medusa application through Tax Module Providers. The tax providers can be filtered by fields such as `id`. The tax providers can also be sorted or paginated.
  * x-authenticated: true
  * parameters:
  *   - name: fields
  *     in: query
  *     description: |-
  *       Comma-separated fields that should be included in the returned data.
- *        * if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields.
- *        * without prefix it will replace the entire default fields.
+ *       if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields.
+ *       without prefix it will replace the entire default fields.
  *     required: false
  *     schema:
  *       type: string
@@ -56,21 +56,21 @@
  *       oneOf:
  *         - type: string
  *           title: id
- *           description: The tax provider's ID.
+ *           description: Filter by a tax provider's ID.
  *         - type: array
- *           description: The tax provider's ID.
+ *           description: Filter by tax provider IDs.
  *           items:
  *             type: string
  *             title: id
- *             description: The id's ID.
+ *             description: A tax provider's ID.
  *   - name: is_enabled
  *     in: query
- *     description: The tax provider's is enabled.
+ *     description: Filter by whether the tax provider is enabled.
  *     required: false
  *     schema:
  *       type: boolean
  *       title: is_enabled
- *       description: The tax provider's is enabled.
+ *       description: Filter by whether the tax provider is enabled.
  *   - name: $and
  *     in: query
  *     description: Join query parameters with an AND condition. Each object's content is the same type as the expected query parameters.
@@ -128,7 +128,7 @@
  *         schema:
  *           allOf:
  *             - type: object
- *               description: SUMMARY
+ *               description: The pagination details.
  *               required:
  *                 - limit
  *                 - offset
@@ -137,27 +137,28 @@
  *                 limit:
  *                   type: number
  *                   title: limit
- *                   description: The tax provider's limit.
+ *                   description: The maximum number of items retrieved.
  *                 offset:
  *                   type: number
  *                   title: offset
- *                   description: The tax provider's offset.
+ *                   description: The number of items skipped before retrieving the returned items.
  *                 count:
  *                   type: number
  *                   title: count
- *                   description: The tax provider's count.
+ *                   description: The total number of items available.
  *                 estimate_count:
  *                   type: number
  *                   title: estimate_count
- *                   description: The tax provider's estimate count.
+ *                   description: The estimated count retrieved from the PostgreSQL query planner, which may be inaccurate.
+ *                   x-featureFlag: index_engine
  *             - type: object
- *               description: SUMMARY
+ *               description: The list of tax providers.
  *               required:
  *                 - tax_providers
  *               properties:
  *                 tax_providers:
  *                   type: array
- *                   description: The tax provider's tax providers.
+ *                   description: The list of tax providers.
  *                   items:
  *                     $ref: "#/components/schemas/AdminTaxProvider"
  *   "400":

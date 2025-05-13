@@ -58,7 +58,7 @@
  *   provider_id:
  *     type: string
  *     title: provider_id
- *     description: The tax region's provider id.
+ *     description: The ID of the tax provider used to calculate the tax rate in this tax region.
  * 
 */
 

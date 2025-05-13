@@ -33,7 +33,7 @@
  *       schema:
  *         allOf:
  *           - type: object
- *             description: SUMMARY
+ *             description: The details to update in a collection.
  *             properties:
  *               title:
  *                 type: string
@@ -47,7 +47,7 @@
  *                 type: object
  *                 description: The collection's metadata.
  *           - type: object
- *             description: SUMMARY
+ *             description: The details to update in a collection.
  *             properties:
  *               additional_data:
  *                 type: object
