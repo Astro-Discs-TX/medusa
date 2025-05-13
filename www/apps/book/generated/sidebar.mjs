@@ -642,6 +642,16 @@ export const generatedSidebars = [
                 "children": [],
                 "chapterTitle": "3.6.11. Retrieve Custom Links",
                 "number": "3.6.11."
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "path": "/learn/fundamentals/api-routes/override",
+                "title": "Override API Routes",
+                "children": [],
+                "chapterTitle": "3.6.12. Override API Routes",
+                "number": "3.6.12."
               }
             ],
             "chapterTitle": "3.6. API Routes",
@@ -668,11 +678,21 @@ export const generatedSidebars = [
                 "loaded": true,
                 "isPathHref": true,
                 "type": "link",
-                "path": "/learn/fundamentals/workflows/variable-manipulation",
-                "title": "Transform Variables",
+                "path": "/learn/fundamentals/workflows/compensation-function",
+                "title": "Compensation Function",
                 "children": [],
-                "chapterTitle": "3.7.2. Transform Variables",
+                "chapterTitle": "3.7.2. Compensation Function",
                 "number": "3.7.2."
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
+                "path": "/learn/fundamentals/workflows/variable-manipulation",
+                "title": "Transform Data",
+                "children": [],
+                "chapterTitle": "3.7.3. Transform Data",
+                "number": "3.7.3."
               },
               {
                 "loaded": true,
@@ -681,18 +701,18 @@ export const generatedSidebars = [
                 "path": "/learn/fundamentals/workflows/conditions",
                 "title": "When-Then Conditions",
                 "children": [],
-                "chapterTitle": "3.7.3. When-Then Conditions",
-                "number": "3.7.3."
+                "chapterTitle": "3.7.4. When-Then Conditions",
+                "number": "3.7.4."
               },
               {
                 "loaded": true,
                 "isPathHref": true,
                 "type": "link",
-                "path": "/learn/fundamentals/workflows/compensation-function",
-                "title": "Compensation Function",
+                "path": "/learn/fundamentals/workflows/errors",
+                "title": "Error Handling",
                 "children": [],
-                "chapterTitle": "3.7.4. Compensation Function",
-                "number": "3.7.4."
+                "chapterTitle": "3.7.5. Error Handling",
+                "number": "3.7.5."
               },
               {
                 "loaded": true,
@@ -701,8 +721,8 @@ export const generatedSidebars = [
                 "path": "/learn/fundamentals/workflows/workflow-hooks",
                 "title": "Workflow Hooks",
                 "children": [],
-                "chapterTitle": "3.7.5. Workflow Hooks",
-                "number": "3.7.5."
+                "chapterTitle": "3.7.6. Workflow Hooks",
+                "number": "3.7.6."
               },
               {
                 "loaded": true,
@@ -711,17 +731,7 @@ export const generatedSidebars = [
                 "path": "/learn/fundamentals/workflows/add-workflow-hook",
                 "title": "Expose a Hook",
                 "children": [],
-                "chapterTitle": "3.7.6. Expose a Hook",
-                "number": "3.7.6."
-              },
-              {
-                "loaded": true,
-                "isPathHref": true,
-                "type": "link",
-                "path": "/learn/fundamentals/workflows/access-workflow-errors",
-                "title": "Access Workflow Errors",
-                "children": [],
-                "chapterTitle": "3.7.7. Access Workflow Errors",
+                "chapterTitle": "3.7.7. Expose a Hook",
                 "number": "3.7.7."
               },
               {

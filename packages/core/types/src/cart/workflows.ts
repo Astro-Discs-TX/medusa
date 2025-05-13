@@ -197,7 +197,7 @@ export interface CreateCartAddressDTO {
   country_code?: string
 
   /**
-   * The province or state of the address.
+   * The lower-case [ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2) province or state of the address.
    */
   province?: string
 
@@ -218,6 +218,8 @@ export interface CreateCartAddressDTO {
 export interface CreateCartWorkflowInputDTO {
   /**
    * The ID of the region that the cart belongs to.
+   * If not provided, the default region of the store is used.
+   * If the store doesn't have a default region, an error is thrown.
    */
   region_id?: string
 

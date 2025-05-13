@@ -339,6 +339,11 @@ export const sidebars = [
                 path: "/learn/fundamentals/api-routes/retrieve-custom-links",
                 title: "Retrieve Custom Links",
               },
+              {
+                type: "link",
+                path: "/learn/fundamentals/api-routes/override",
+                title: "Override API Routes",
+              },
             ],
           },
           {
@@ -353,8 +358,13 @@ export const sidebars = [
               },
               {
                 type: "link",
+                path: "/learn/fundamentals/workflows/compensation-function",
+                title: "Compensation Function",
+              },
+              {
+                type: "link",
                 path: "/learn/fundamentals/workflows/variable-manipulation",
-                title: "Transform Variables",
+                title: "Transform Data",
               },
               {
                 type: "link",
@@ -363,8 +373,8 @@ export const sidebars = [
               },
               {
                 type: "link",
-                path: "/learn/fundamentals/workflows/compensation-function",
-                title: "Compensation Function",
+                path: "/learn/fundamentals/workflows/errors",
+                title: "Error Handling",
               },
               {
                 type: "link",
@@ -375,11 +385,6 @@ export const sidebars = [
                 type: "link",
                 path: "/learn/fundamentals/workflows/add-workflow-hook",
                 title: "Expose a Hook",
-              },
-              {
-                type: "link",
-                path: "/learn/fundamentals/workflows/access-workflow-errors",
-                title: "Access Workflow Errors",
               },
               {
                 type: "link",

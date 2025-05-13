@@ -120,6 +120,11 @@ export const troubleshootingSidebar = [
           },
         ],
       },
+      {
+        type: "link",
+        title: "ValidationError",
+        path: "/troubleshooting/validation-error",
+      },
     ],
   },
   {
@@ -160,6 +165,11 @@ export const troubleshootingSidebar = [
         type: "link",
         path: "/troubleshooting/medusa-admin/blocked-request",
         title: "Blocked Request",
+      },
+      {
+        type: "link",
+        path: "/troubleshooting/medusa-admin/build-error",
+        title: "index.html Error",
       },
     ],
   },
