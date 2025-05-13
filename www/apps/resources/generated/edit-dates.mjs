@@ -6245,5 +6245,6 @@ export const generatedEditDates = {
   "references/events/events.Product/page.mdx": "2025-05-07T15:35:18.140Z",
   "references/events/events.Region/page.mdx": "2025-05-07T15:35:18.145Z",
   "references/events/events.Sales_Channel/page.mdx": "2025-05-07T15:35:18.138Z",
-  "references/events/events.User/page.mdx": "2025-05-07T15:35:18.135Z"
+  "references/events/events.User/page.mdx": "2025-05-07T15:35:18.135Z",
+  "app/how-to-tutorials/tutorials/saved-payment-methods/page.mdx": "2025-05-13T07:40:15.969Z"
 }
