@@ -247,7 +247,7 @@ describe("mikroOrmRepository", () => {
         deleted: {},
       })
 
-      // Doing this to shuffle the physical order of row in the DB
+      // Doing this to shuffle the physical order of rows in the DB
       entity1.title = "en1-update-1"
       entity3.title = "en3-update-1"
       await manager1().upsertWithReplace([entity1, entity3])
