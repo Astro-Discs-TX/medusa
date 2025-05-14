@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { ProductStatus } from "."
+import { ProductStatus } from "./enums"
 
 export const booleanString = () =>
   z
