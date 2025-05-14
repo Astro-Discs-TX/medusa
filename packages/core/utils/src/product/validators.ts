@@ -11,6 +11,11 @@ export const booleanString = () =>
       return value.toString().toLowerCase() === "true"
     })
 
+export const numericString = () =>
+  z.number().transform((value) => {
+    return value !== null && value !== undefined ? String(value) : value
+  })
+
 export const IdAssociation = z.object({
   id: z.string(),
 })
@@ -123,10 +128,10 @@ export const UpdateProductVariant = z
     allow_backorder: booleanString().optional(),
     manage_inventory: booleanString().optional(),
     variant_rank: z.number().optional(),
-    weight: z.number().nullish(),
-    length: z.number().nullish(),
-    height: z.number().nullish(),
-    width: z.number().nullish(),
+    weight: numericString().nullish(),
+    length: numericString().nullish(),
+    height: numericString().nullish(),
+    width: numericString().nullish(),
     origin_country: z.string().nullish(),
     material: z.string().nullish(),
     metadata: z.record(z.unknown()).nullish(),
@@ -136,6 +141,7 @@ export const UpdateProductVariant = z
 
 export const UpdateProduct = z
   .object({
+    id: z.string(),
     title: z.string().optional(),
     discountable: booleanString().optional(),
     is_giftcard: booleanString().optional(),
@@ -154,10 +160,10 @@ export const UpdateProduct = z
     tags: z.array(IdAssociation).optional(),
     sales_channels: z.array(z.object({ id: z.string() })).optional(),
     shipping_profile_id: z.string().nullish(),
-    weight: z.number().nullish(),
-    length: z.number().nullish(),
-    height: z.number().nullish(),
-    width: z.number().nullish(),
+    weight: numericString().nullish(),
+    length: numericString().nullish(),
+    height: numericString().nullish(),
+    width: numericString().nullish(),
     hs_code: z.string().nullish(),
     mid_code: z.string().nullish(),
     origin_country: z.string().nullish(),

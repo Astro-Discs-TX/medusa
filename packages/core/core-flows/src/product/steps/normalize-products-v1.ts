@@ -26,27 +26,34 @@ export const normalizeCsvStep = createStep(
     const normalizer = new CSVNormalizer(csvProducts)
     const products = normalizer.proccess()
 
-    const create = Object.keys(products.toCreate).reduce<
-      (typeof products)["toCreate"][keyof (typeof products)["toCreate"]][]
-    >((result, toCreateHandle) => {
-      result.push(
-        productValidators.CreateProduct.parse(products.toCreate[toCreateHandle])
-      )
-      return result
-    }, [])
+    try {
+      const create = Object.keys(products.toCreate).reduce<
+        (typeof products)["toCreate"][keyof (typeof products)["toCreate"]][]
+      >((result, toCreateHandle) => {
+        result.push(
+          productValidators.CreateProduct.parse(
+            products.toCreate[toCreateHandle]
+          )
+        )
+        return result
+      }, [])
 
-    const update = Object.keys(products.toUpdate).reduce<
-      (typeof products)["toUpdate"][keyof (typeof products)["toUpdate"]][]
-    >((result, toCreateId) => {
-      result.push(
-        productValidators.UpdateProduct.parse(products.toUpdate[toCreateId])
-      )
-      return result
-    }, [])
+      const update = Object.keys(products.toUpdate).reduce<
+        (typeof products)["toUpdate"][keyof (typeof products)["toUpdate"]][]
+      >((result, toCreateId) => {
+        result.push(
+          productValidators.UpdateProduct.parse(products.toUpdate[toCreateId])
+        )
+        return result
+      }, [])
 
-    return new StepResponse({
-      create,
-      update,
-    } as GroupProductsForBatchStepOutput)
+      return new StepResponse({
+        create,
+        update,
+      } as GroupProductsForBatchStepOutput)
+    } catch (error) {
+      console.log("step error", error)
+      throw error
+    }
   }
 )

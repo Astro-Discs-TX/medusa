@@ -170,11 +170,11 @@ const productStaticColumns: {
     "discountable"
   ),
   "product height": processAsNumber("product height", "height", {
-    asNumericString: true,
+    asNumericString: false,
   }),
   "product hs code": processAsString("product hs code", "hs_code"),
   "product length": processAsNumber("product length", "length", {
-    asNumericString: true,
+    asNumericString: false,
   }),
   "product material": processAsString("product material", "material"),
   "product mid code": processAsString("product mid code", "mid_code"),
@@ -183,10 +183,10 @@ const productStaticColumns: {
     "origin_country"
   ),
   "product weight": processAsNumber("product weight", "weight", {
-    asNumericString: true,
+    asNumericString: false,
   }),
   "product width": processAsNumber("product width", "width", {
-    asNumericString: true,
+    asNumericString: false,
   }),
   "product metadata": processAsString("product metadata", "metadata"),
   "shipping profile id": processAsString(
@@ -244,10 +244,10 @@ const variantStaticColumns: {
   ),
   "variant barcode": processAsString("variant barcode", "barcode"),
   "variant height": processAsNumber("variant height", "height", {
-    asNumericString: true,
+    asNumericString: false,
   }),
   "variant length": processAsNumber("variant length", "length", {
-    asNumericString: true,
+    asNumericString: false,
   }),
   "variant material": processAsString("variant material", "material"),
   "variant metadata": processAsString("variant metadata", "metadata"),
@@ -260,10 +260,10 @@ const variantStaticColumns: {
     "variant_rank"
   ),
   "variant width": processAsNumber("variant width", "width", {
-    asNumericString: true,
+    asNumericString: false,
   }),
   "variant weight": processAsNumber("variant weight", "weight", {
-    asNumericString: true,
+    asNumericString: false,
   }),
 }
 
@@ -295,7 +295,7 @@ const variantWildcardColumns: {
       } else {
         output["prices"].push({
           currency_code: iso,
-          amount: String(numericValue),
+          amount: numericValue,
         })
       }
     })
@@ -438,7 +438,7 @@ export class CSVNormalizer {
     }, {})
 
     if (unknownColumns.length) {
-      return new MedusaError(
+      throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
         `Invalid column name(s) "${unknownColumns.join('","')}"`
       )
@@ -509,7 +509,7 @@ export class CSVNormalizer {
       )
       if (!matchingKey) {
         product.options.push({ title: key, values: [value] })
-      } else {
+      } else if (!matchingKey.values.includes(value)) {
         matchingKey.values.push(value)
       }
     })
