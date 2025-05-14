@@ -2,7 +2,7 @@ import express from "express"
 import getPort from "get-port"
 import { resolve } from "path"
 import { MedusaContainer } from "@medusajs/framework/types"
-import { applyEnvVarsToProcess } from "./utils"
+import { applyEnvVarsToProcess, execOrTimeout } from "./utils"
 import { promiseAll, GracefulShutdownServer } from "@medusajs/framework/utils"
 import { logger } from "@medusajs/framework/logger"
 
@@ -68,11 +68,7 @@ export async function startApp({
           medusaShutdown(),
         ])
 
-        const timeoutPromise = new Promise((_, reject) => {
-          setTimeout(() => reject(new Error("Shutdown timeout")), 5000).unref()
-        })
-
-        await Promise.race([shutdownPromise, timeoutPromise])
+        await execOrTimeout(shutdownPromise)
 
         if (typeof global !== "undefined" && global?.gc) {
           global.gc()

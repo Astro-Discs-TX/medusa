@@ -6,6 +6,7 @@ import {
 } from "@mikro-orm/postgresql"
 import { createDatabase, dropDatabase } from "pg-god"
 import { logger } from "@medusajs/framework/logger"
+import { execOrTimeout } from "./medusa-test-runner-utils"
 
 const DB_HOST = process.env.DB_HOST ?? "localhost"
 const DB_USERNAME = process.env.DB_USERNAME ?? ""
@@ -179,11 +180,8 @@ export function getMikroOrmWrapper({
         )
 
         const closePromise = this.orm.close()
-        const timeoutPromise = new Promise((_, reject) => {
-          setTimeout(() => reject(new Error("ORM close timeout")), 5000).unref()
-        })
 
-        await Promise.race([closePromise, timeoutPromise])
+        await execOrTimeout(closePromise)
       } catch (error) {
         logger.error("Error clearing database:", error)
         try {
@@ -266,30 +264,12 @@ export const dbTestUtilFactory = (): any => ({
 
       if (this.pgConnection_?.context) {
         cleanupPromises.push(
-          Promise.race([
-            this.pgConnection_.context.destroy(),
-            new Promise((_, reject) =>
-              setTimeout(
-                () => reject(new Error("Context destroy timeout")),
-                5000
-              ).unref()
-            ),
-          ])
+          execOrTimeout(this.pgConnection_.context.destroy())
         )
       }
 
       if (this.pgConnection_) {
-        cleanupPromises.push(
-          Promise.race([
-            this.pgConnection_.destroy(),
-            new Promise((_, reject) =>
-              setTimeout(
-                () => reject(new Error("Connection destroy timeout")),
-                5000
-              ).unref()
-            ),
-          ])
-        )
+        cleanupPromises.push(execOrTimeout(this.pgConnection_.destroy()))
       }
 
       await Promise.all(cleanupPromises)
