@@ -1,7 +1,12 @@
 import { Product, ProductOption } from "@models"
 
 import { Context, DAL, InferEntityType } from "@medusajs/framework/types"
-import { buildQuery, DALUtils } from "@medusajs/framework/utils"
+import {
+  buildQuery,
+  DALUtils,
+  isPresent,
+  mergeMetadata,
+} from "@medusajs/framework/utils"
 import { SqlEntityManager, wrap } from "@mikro-orm/postgresql"
 
 // eslint-disable-next-line max-len
@@ -67,6 +72,10 @@ export class ProductRepository extends DALUtils.mikroOrmBaseRepositoryFactory(
           ...image,
           rank: index,
         }))
+      }
+
+      if (isPresent(update.metadata)) {
+        update.metadata = mergeMetadata(product.metadata ?? {}, update.metadata)
       }
 
       wrap(product!).assign(update)
