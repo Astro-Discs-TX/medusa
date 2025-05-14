@@ -1,4 +1,4 @@
-import { CSVNormalizer } from "@medusajs/framework/utils"
+import { CSVNormalizer, productValidators } from "@medusajs/framework/utils"
 import { StepResponse, createStep } from "@medusajs/framework/workflows-sdk"
 import { convertCsvToJson } from "../utlils"
 import { GroupProductsForBatchStepOutput } from "./group-products-for-batch"
@@ -29,14 +29,18 @@ export const normalizeCsvStep = createStep(
     const create = Object.keys(products.toCreate).reduce<
       (typeof products)["toCreate"][keyof (typeof products)["toCreate"]][]
     >((result, toCreateHandle) => {
-      result.push(products.toCreate[toCreateHandle])
+      result.push(
+        productValidators.CreateProduct.parse(products.toCreate[toCreateHandle])
+      )
       return result
     }, [])
 
     const update = Object.keys(products.toUpdate).reduce<
       (typeof products)["toUpdate"][keyof (typeof products)["toUpdate"]][]
     >((result, toCreateId) => {
-      result.push(products.toUpdate[toCreateId])
+      result.push(
+        productValidators.UpdateProduct.parse(products.toUpdate[toCreateId])
+      )
       return result
     }, [])
 
