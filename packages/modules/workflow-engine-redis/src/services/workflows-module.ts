@@ -75,7 +75,6 @@ export class WorkflowsModuleService<
           await this.clearExpiredExecutions()
         } catch {}
       }, 1000 * 60 * 60)
-      this.clearTimeout_.unref()
     },
     onApplicationPrepareShutdown: async () => {
       await this.workflowOrchestratorService_.onApplicationPrepareShutdown()
