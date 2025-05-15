@@ -360,6 +360,10 @@ export const filesMap = [
     "pathname": "/commerce-modules/payment/payment"
   },
   {
+    "filePath": "/www/apps/resources/app/commerce-modules/payment/payment-checkout-flow/page.mdx",
+    "pathname": "/commerce-modules/payment/payment-checkout-flow"
+  },
+  {
     "filePath": "/www/apps/resources/app/commerce-modules/payment/payment-collection/page.mdx",
     "pathname": "/commerce-modules/payment/payment-collection"
   },
