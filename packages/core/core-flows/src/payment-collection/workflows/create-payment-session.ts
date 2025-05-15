@@ -118,7 +118,7 @@ export const createPaymentSessionsWorkflow = createWorkflow(
 
       const existingAccountHolder = transform({ customer, input }, (data) => {
         return data.customer.account_holders.find(
-          (ac) => ac.provider_id === data.input.provider_id
+          (ac) => ac && ac.provider_id === data.input.provider_id
         )
       })
 
@@ -148,7 +148,7 @@ export const createPaymentSessionsWorkflow = createWorkflow(
         return (
           !isPresent(
             data.paymentCustomer?.account_holders.find(
-              (ac) => ac.provider_id === data.input.provider_id
+              (ac) => ac && ac.provider_id === data.input.provider_id
             )
           ) && isPresent(data.accountHolder)
         )
