@@ -116,7 +116,7 @@ For example:
 import { createWorkflow } from "@medusajs/framework/workflows-sdk"
 import { 
   sendNotificationsStep, 
-  useQueryGraphStep
+  useQueryGraphStep,
 } from "@medusajs/medusa/core-flows"
 
 type WorkflowInput = {
@@ -130,11 +130,11 @@ export const sendEmailWorkflow = createWorkflow(
       entity: "product",
       fields: [
         "*",
-        "variants.*"
+        "variants.*",
       ],
       filters: {
         id,
-      }
+      },
     })
 
     sendNotificationsStep({
