@@ -1686,7 +1686,7 @@ medusaIntegrationTestRunner({
           adminHeaders
         )
 
-        const productTablet = (
+        const productBottle = (
           await api.post(
             "/admin/products",
             {
@@ -1757,7 +1757,7 @@ medusaIntegrationTestRunner({
           )
         ).data.product
 
-        const cartTablet = (
+        const cartBottle = (
           await api.post(
             `/store/carts`,
             {
@@ -1782,9 +1782,9 @@ medusaIntegrationTestRunner({
               },
               sales_channel_id: salesChannel.id,
               items: [
-                { quantity: 2, variant_id: productTablet.variants[0].id },
-                { quantity: 2, variant_id: productTablet.variants[1].id },
-                { quantity: 2, variant_id: productTablet.variants[2].id },
+                { quantity: 2, variant_id: productBottle.variants[0].id },
+                { quantity: 2, variant_id: productBottle.variants[1].id },
+                { quantity: 2, variant_id: productBottle.variants[2].id },
               ],
             },
             storeHeaders
@@ -1792,30 +1792,30 @@ medusaIntegrationTestRunner({
         ).data.cart
 
         await api.post(
-          `/store/carts/${cartTablet.id}/shipping-methods`,
+          `/store/carts/${cartBottle.id}/shipping-methods`,
           { option_id: shippingOption.id },
           storeHeaders
         )
 
-        const paymentCollectionTablet = (
+        const paymentCollectionBottle = (
           await api.post(
             `/store/payment-collections`,
             {
-              cart_id: cartTablet.id,
+              cart_id: cartBottle.id,
             },
             storeHeaders
           )
         ).data.payment_collection
 
         await api.post(
-          `/store/payment-collections/${paymentCollectionTablet.id}/payment-sessions`,
+          `/store/payment-collections/${paymentCollectionBottle.id}/payment-sessions`,
           { provider_id: "pp_system_default" },
           storeHeaders
         )
 
         const bottleOrder = (
           await api.post(
-            `/store/carts/${cartTablet.id}/complete`,
+            `/store/carts/${cartBottle.id}/complete`,
             {},
             storeHeaders
           )

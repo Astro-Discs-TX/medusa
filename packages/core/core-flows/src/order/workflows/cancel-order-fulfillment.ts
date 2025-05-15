@@ -227,6 +227,10 @@ function prepareInventoryUpdate({
       (i) => i.inventory.id === fulfillmentItem.inventory_item_id
     )
 
+    if (!iitem) {
+      continue
+    }
+
     const reservation = reservations.find(
       (r) =>
         r.inventory_item_id === iitem.inventory.id &&
