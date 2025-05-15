@@ -77,7 +77,7 @@ export const CreateProduct = z
     images: z.array(z.object({ url: z.string() })).optional(),
     thumbnail: z.string().nullish(),
     handle: z.string().optional(),
-    status: statusEnum.nullish().default(ProductStatus.DRAFT),
+    status: statusEnum.optional().default(ProductStatus.DRAFT),
     external_id: z.string().nullish(),
     type_id: z.string().nullish(),
     collection_id: z.string().nullish(),

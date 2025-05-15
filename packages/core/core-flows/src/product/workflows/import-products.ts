@@ -91,7 +91,6 @@ export const importProductsWorkflow = createWorkflow(
     input: WorkflowData<WorkflowTypes.ProductWorkflow.ImportProductsDTO>
   ): WorkflowResponse<WorkflowTypes.ProductWorkflow.ImportProductsSummary> => {
     const batchRequest = normalizeCsvStep(input.fileContent)
-    // const batchRequest = groupProductsForBatchStep(products)
 
     const summary = transform({ batchRequest }, (data) => {
       return {
