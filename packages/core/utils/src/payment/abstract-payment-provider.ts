@@ -328,6 +328,15 @@ export abstract class AbstractPaymentProvider<TConfig = Record<string, unknown>>
    * The `data` property returned by this method will be stored in the created `PaymentSession` record. You can store data relevant to later authorize or process the payment.
    * For example, you can store the ID of the payment session in the third-party provider to reference it later.
    * 
+   * The `data` property is also available to storefronts, allowing you to store data necessary for the storefront to integrate
+   * the payment provider in the checkout flow. For example, you can store the client token to use with the payment provider's SDK.
+   * 
+   * :::note
+   * 
+   * This also means you shouldn't store sensitive data and tokens in the `data` property, as it's publicly accessible.
+   * 
+   * :::
+   * 
    * ![Diagram showcasing data flow between methods](https://res.cloudinary.com/dza7lstvk/image/upload/v1747310699/Medusa%20Resources/initiate-data_ikc05t.jpg)
    *
    * @param input - The input to create the payment session.
