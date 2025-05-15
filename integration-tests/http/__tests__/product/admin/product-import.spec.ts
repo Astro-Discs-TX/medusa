@@ -171,12 +171,12 @@ medusaIntegrationTestRunner({
       // We want to ensure files with different delimiters are supported
       ;[
         {
-          file: "exported-products-comma.csv",
+          file: "products-comma.csv",
           name: "delimited with comma",
           delimiter: ",",
         },
         {
-          file: "exported-products-semicolon.csv",
+          file: "products-semicolon.csv",
           name: "delimited with semicolon",
           delimiter: ";",
         },
