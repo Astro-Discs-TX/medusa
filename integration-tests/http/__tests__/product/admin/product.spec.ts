@@ -3327,7 +3327,7 @@ medusaIntegrationTestRunner({
         })
 
         // https://linear.app/medusajs/issue/SUP-1631/price-differences
-        it.only.each(new Array(5).fill(0).map((_, i) => i + 1))(
+        it.each(new Array(200).fill(0).map((_, i) => i + 1))(
           "should successfully handle successive updates on prices",
           async (i) => {
             const response = await api.post(
