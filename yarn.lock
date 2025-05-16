@@ -5820,26 +5820,26 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@medusajs/analytics-local@workspace:packages/modules/providers/analytics-local":
+"@medusajs/analytics-local@2.8.2, @medusajs/analytics-local@workspace:packages/modules/providers/analytics-local":
   version: 0.0.0-use.local
   resolution: "@medusajs/analytics-local@workspace:packages/modules/providers/analytics-local"
   dependencies:
-    "@medusajs/framework": 2.8.1
+    "@medusajs/framework": 2.8.2
     "@swc/core": ^1.7.28
     "@swc/jest": ^0.2.36
     jest: ^29.7.0
     rimraf: ^5.0.1
     typescript: ^5.6.2
   peerDependencies:
-    "@medusajs/framework": 2.8.1
+    "@medusajs/framework": 2.8.2
   languageName: unknown
   linkType: soft
 
-"@medusajs/analytics-posthog@workspace:packages/modules/providers/analytics-posthog":
+"@medusajs/analytics-posthog@2.8.2, @medusajs/analytics-posthog@workspace:packages/modules/providers/analytics-posthog":
   version: 0.0.0-use.local
   resolution: "@medusajs/analytics-posthog@workspace:packages/modules/providers/analytics-posthog"
   dependencies:
-    "@medusajs/framework": 2.8.1
+    "@medusajs/framework": 2.8.2
     "@swc/core": ^1.7.28
     "@swc/jest": ^0.2.36
     jest: ^29.7.0
@@ -5847,11 +5847,11 @@ __metadata:
     rimraf: ^5.0.1
     typescript: ^5.6.2
   peerDependencies:
-    "@medusajs/framework": 2.8.1
+    "@medusajs/framework": 2.8.2
   languageName: unknown
   linkType: soft
 
-"@medusajs/analytics@workspace:packages/modules/analytics":
+"@medusajs/analytics@2.8.2, @medusajs/analytics@workspace:packages/modules/analytics":
   version: 0.0.0-use.local
   resolution: "@medusajs/analytics@workspace:packages/modules/analytics"
   dependencies:
@@ -6689,6 +6689,9 @@ __metadata:
     "@inquirer/checkbox": ^2.3.11
     "@inquirer/input": ^2.2.9
     "@medusajs/admin-bundler": 2.8.2
+    "@medusajs/analytics": 2.8.2
+    "@medusajs/analytics-local": 2.8.2
+    "@medusajs/analytics-posthog": 2.8.2
     "@medusajs/api-key": 2.8.2
     "@medusajs/auth": 2.8.2
     "@medusajs/auth-emailpass": 2.8.2
