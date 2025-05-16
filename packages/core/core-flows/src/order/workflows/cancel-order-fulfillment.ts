@@ -241,7 +241,7 @@ function prepareInventoryUpdate({
       toCreate.push({
         inventory_item_id: iitem.inventory.id,
         location_id: fulfillment.location_id,
-        quantity: fulfillmentItem.quantity, // <- this is the inventory quantity that is being fulfilled so it menas it does include the required quantity
+        quantity: fulfillmentItem.quantity, // <- this is the inventory quantity that is being fulfilled so it means it does include the required quantity
         line_item_id: fulfillmentItem.line_item_id as string,
       })
     } else {
