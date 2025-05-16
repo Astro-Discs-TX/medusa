@@ -64,14 +64,14 @@ export class PosthogAnalyticsService extends AbstractAnalyticsProviderService {
   }
 
   async identify(data: ProviderIdentifyAnalyticsEventDTO): Promise<void> {
-    if (data.group?.id && data.group?.type) {
+    if ("group" in data) {
       this.client_.groupIdentify({
         groupKey: data.group.id!,
         groupType: data.group.type!,
         properties: data.properties,
         distinctId: data.actor?.id,
       })
-    } else if (data.actor?.id) {
+    } else if ("actor" in data) {
       this.client_.identify({
         distinctId: data.actor.id,
         properties: data.properties,

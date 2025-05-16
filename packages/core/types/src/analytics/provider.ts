@@ -1,10 +1,8 @@
 import { IdentifyAnalyticsEventDTO, TrackAnalyticsEventDTO } from "./mutations"
 
-export interface ProviderTrackAnalyticsEventDTO
-  extends TrackAnalyticsEventDTO {}
+export type ProviderTrackAnalyticsEventDTO = TrackAnalyticsEventDTO
 
-export interface ProviderIdentifyAnalyticsEventDTO
-  extends IdentifyAnalyticsEventDTO {}
+export type ProviderIdentifyAnalyticsEventDTO = IdentifyAnalyticsEventDTO
 
 export interface IAnalyticsProvider {
   /**

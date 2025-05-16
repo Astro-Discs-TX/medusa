@@ -3,6 +3,7 @@ import {
   IdentifyAnalyticsEventDTO,
 } from "@medusajs/types"
 import AnalyticsProviderService from "./provider-service"
+import { MedusaError } from "../../../../core/utils/dist/common"
 
 type InjectedDependencies = {
   analyticsProviderService: AnalyticsProviderService
@@ -17,7 +18,7 @@ export default class AnalyticsService {
 
   __hooks = {
     onApplicationShutdown: async () => {
-      this.analyticsProviderService_.shutdown()
+      await this.analyticsProviderService_.shutdown()
     },
   }
 
@@ -26,10 +27,26 @@ export default class AnalyticsService {
   }
 
   async track(data: TrackAnalyticsEventDTO): Promise<void> {
-    this.analyticsProviderService_.track(data)
+    try {
+      await this.analyticsProviderService_.track(data)
+    } catch (error) {
+      throw new MedusaError(
+        MedusaError.Types.UNEXPECTED_STATE,
+        `Error tracking event for ${data.event}: ${error.message}`
+      )
+    }
   }
 
   async identify(data: IdentifyAnalyticsEventDTO): Promise<void> {
-    this.analyticsProviderService_.identify(data)
+    try {
+      await this.analyticsProviderService_.identify(data)
+    } catch (error) {
+      throw new MedusaError(
+        MedusaError.Types.UNEXPECTED_STATE,
+        `Error identifying event for ${
+          "group" in data ? data.group.id : data.actor.id
+        }: ${error.message}`
+      )
+    }
   }
 }

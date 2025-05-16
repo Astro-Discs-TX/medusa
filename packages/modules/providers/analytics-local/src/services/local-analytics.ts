@@ -37,7 +37,7 @@ export class LocalAnalyticsService extends AbstractAnalyticsProviderService {
   async identify(data: ProviderIdentifyAnalyticsEventDTO): Promise<void> {
     this.logger_.debug(
       `Identifying user: '${data.actor?.id ?? "-"}', group: '${
-        data.group?.id ?? "-"
+        "group" in data ? data.group.id : "-"
       }', properties: '${JSON.stringify(data.properties)}'`
     )
   }
