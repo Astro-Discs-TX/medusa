@@ -6,9 +6,7 @@ export interface TrackAnalyticsEventDTO {
   /**
    * The actor of the event, if there is any
    */
-  actor?: {
-    id: string
-  }
+  actor_id?: string
   /**
    * The group that the event is for, such as an organization or team.
    * The "type" defines the name of the group (eg. "organization"), and the "id" is the id of the group.
@@ -24,9 +22,7 @@ export interface TrackAnalyticsEventDTO {
 }
 
 export interface IdentifyActorDTO {
-  actor: {
-    id: string
-  }
+  actor_id: string
   properties?: Record<string, any>
 }
 
@@ -36,10 +32,8 @@ export interface IdentifyGroupDTO {
     id: string
   }
   // When identifying a group, the actor can potentially be passed as well as metadata.
-  actor?: {
-    id: string
-  }
+  actor_id?: string
   properties?: Record<string, any>
 }
-// Either actorId or groupId must be provided. Depending on the provided identifier, the properties will be set for the actor or group.
+// Either actor_id or group must be provided. Depending on the provided identifier, the properties will be set for the actor or group.
 export type IdentifyAnalyticsEventDTO = IdentifyActorDTO | IdentifyGroupDTO

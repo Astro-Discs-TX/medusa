@@ -44,7 +44,7 @@ export default class AnalyticsService {
       throw new MedusaError(
         MedusaError.Types.UNEXPECTED_STATE,
         `Error identifying event for ${
-          "group" in data ? data.group.id : data.actor.id
+          "group" in data ? data.group.id : data.actor_id
         }: ${error.message}`
       )
     }

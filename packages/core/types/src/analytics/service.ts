@@ -35,9 +35,7 @@ export interface IAnalyticsModuleService extends IModuleService {
    *
    * @example
    * await analyticsModuleService.identify({
-   *   actor: {
-   *     id: "123"
-   *   },
+   *   actor_id: "123",
    *   properties: {
    *     name: "John Doe"
    *   }

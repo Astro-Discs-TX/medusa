@@ -26,8 +26,8 @@ export class LocalAnalyticsService extends AbstractAnalyticsProviderService {
 
   async track(data: ProviderTrackAnalyticsEventDTO): Promise<void> {
     this.logger_.debug(
-      `Tracking event: '${data.event}', actor: '${
-        data.actor?.id ?? "-"
+      `Tracking event: '${data.event}', actor_id: '${
+        data.actor_id ?? "-"
       }', group: '${data.group?.id ?? "-"}', properties: '${JSON.stringify(
         data.properties
       )}'`
@@ -36,7 +36,7 @@ export class LocalAnalyticsService extends AbstractAnalyticsProviderService {
 
   async identify(data: ProviderIdentifyAnalyticsEventDTO): Promise<void> {
     this.logger_.debug(
-      `Identifying user: '${data.actor?.id ?? "-"}', group: '${
+      `Identifying user: '${data.actor_id ?? "-"}', group: '${
         "group" in data ? data.group.id : "-"
       }', properties: '${JSON.stringify(data.properties)}'`
     )

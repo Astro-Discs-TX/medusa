@@ -41,7 +41,7 @@ export class PosthogAnalyticsService extends AbstractAnalyticsProviderService {
       )
     }
 
-    if (!data.actor?.id) {
+    if (!data.actor_id) {
       throw new Error(
         "Actor ID is required when tracking an event with Posthog"
       )
@@ -55,7 +55,7 @@ export class PosthogAnalyticsService extends AbstractAnalyticsProviderService {
 
     this.client_.capture({
       event: data.event,
-      distinctId: data.actor.id,
+      distinctId: data.actor_id,
       properties: data.properties,
       groups: data.group?.id
         ? { [data.group.type!]: data.group.id }
@@ -69,11 +69,11 @@ export class PosthogAnalyticsService extends AbstractAnalyticsProviderService {
         groupKey: data.group.id!,
         groupType: data.group.type!,
         properties: data.properties,
-        distinctId: data.actor?.id,
+        distinctId: data.actor_id,
       })
-    } else if ("actor" in data) {
+    } else if (data.actor_id) {
       this.client_.identify({
-        distinctId: data.actor.id,
+        distinctId: data.actor_id,
         properties: data.properties,
       })
     }

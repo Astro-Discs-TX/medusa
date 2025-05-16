@@ -48,9 +48,7 @@ moduleIntegrationTestRunner<IAnalyticsModuleService>({
       it("should call the provider's track method", async () => {
         await service.track({
           event: "test-event",
-          actor: {
-            id: "test-user",
-          },
+          actor_id: "test-user",
           properties: {
             test: "test",
           },
@@ -58,9 +56,7 @@ moduleIntegrationTestRunner<IAnalyticsModuleService>({
 
         expect(spies.track).toHaveBeenCalledWith({
           event: "test-event",
-          actor: {
-            id: "test-user",
-          },
+          actor_id: "test-user",
           properties: {
             test: "test",
           },
@@ -69,18 +65,14 @@ moduleIntegrationTestRunner<IAnalyticsModuleService>({
 
       it("should call the provider's identify method to identify an actor", async () => {
         await service.identify({
-          actor: {
-            id: "test-user",
-          },
+          actor_id: "test-user",
           properties: {
             test: "test",
           },
         })
 
         expect(spies.identify).toHaveBeenCalledWith({
-          actor: {
-            id: "test-user",
-          },
+          actor_id: "test-user",
           properties: {
             test: "test",
           },
