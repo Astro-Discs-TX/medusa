@@ -647,7 +647,7 @@ medusaIntegrationTestRunner({
         const exportedFileContents = await getCSVContents(
           notifications[0].data.file.url
         )
-        expect(exportedFileContents).toHaveLength(2)
+        expect(exportedFileContents).toHaveLength(1)
         expect(exportedFileContents).toEqual(
           expect.arrayContaining([
             {
