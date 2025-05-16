@@ -21,6 +21,8 @@ export class ProductRepository extends DALUtils.mikroOrmBaseRepositoryFactory(
     ) => void,
     context: Context = {}
   ): Promise<InferEntityType<typeof Product>[]> {
+    updates.forEach((update) => this.correctUpdateDTOTypes(update))
+
     const products = await this.find(
       buildQuery({ id: updates.map((p) => p.id) }, { relations: ["*"] }),
       context
@@ -72,7 +74,21 @@ export class ProductRepository extends DALUtils.mikroOrmBaseRepositoryFactory(
       wrap(product!).assign(update)
     }
 
-    return products
+    // Doing this to ensure updates are returned in the same order they were provided,
+    // since some core flows rely on this.
+    // This is a high level of coupling though.
+    return updates
+      .map((update) => productsMap.get(update.id))
+      .filter((product) => product !== undefined)
+  }
+
+  // We should probably fix the column types in the database to avoid this
+  // It would also match the types in ProductVariant, which are already numbers
+  protected correctUpdateDTOTypes(update: any) {
+    update.weight = update.weight?.toString()
+    update.length = update.length?.toString()
+    update.height = update.height?.toString()
+    update.width = update.width?.toString()
   }
 
   /**
