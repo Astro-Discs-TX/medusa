@@ -15,59 +15,6 @@ import { csv2json } from "json-2-csv"
 
 jest.setTimeout(50000)
 
-const EXPORTED_COLUMNS = [
-  "Product Collection Id",
-  "Product Created At",
-  "Product Deleted At",
-  "Product Description",
-  "Product Discountable",
-  "Product External Id",
-  "Product Handle",
-  "Product Height",
-  "Product Hs Code",
-  "Product Id",
-  "Product Image *",
-  "Product Is Giftcard",
-  "Product Length",
-  "Product Material",
-  "Product Mid Code",
-  "Product Origin Country",
-  "Product Status",
-  "Product Subtitle",
-  "Product Tag *",
-  "Product Thumbnail",
-  "Product Title",
-  "Product Type Id",
-  "Product Updated At",
-  "Product Weight",
-  "Product Width",
-  "Variant Allow Backorder",
-  "Variant Barcode",
-  "Variant Created At",
-  "Variant Deleted At",
-  "Variant Ean",
-  "Variant Height",
-  "Variant Hs Code",
-  "Variant Id",
-  "Variant Length",
-  "Variant Manage Inventory",
-  "Variant Material",
-  "Variant Metadata",
-  "Variant Mid Code",
-  "Variant Option * Name",
-  "Variant Option * Value",
-  "Variant Origin Country",
-  "Variant Price [ISO]",
-  "Variant Product Id",
-  "Variant Sku",
-  "Variant Title",
-  "Variant Upc",
-  "Variant Updated At",
-  "Variant Variant Rank",
-  "Variant Weight",
-  "Variant Width",
-]
-
 const getCSVContents = async (filePath: string) => {
   const asLocalPath = filePath.replace("http://localhost:9000", process.cwd())
   const fileContent = await fs.readFile(asLocalPath, { encoding: "utf-8" })
@@ -92,22 +39,6 @@ const getCSVContents = async (filePath: string) => {
     result.push(rowCopy)
     return result
   }, [])
-}
-
-const assertExportedColumns = (rows: any[]) => {
-  rows.forEach((row) => {
-    EXPORTED_COLUMNS.forEach((column) => {
-      if (column.includes("[ISO]")) {
-        expect(
-          Object.keys(row).filter((rowCol) =>
-            rowCol.startsWith("Variant Price ")
-          ).length
-        ).toBeGreaterThanOrEqual(1)
-      } else {
-        expect(row).toHaveProperty(column.replace("*", "1"))
-      }
-    })
-  })
 }
 
 medusaIntegrationTestRunner({
@@ -329,7 +260,6 @@ medusaIntegrationTestRunner({
           notifications[0].data.file.url
         )
 
-        assertExportedColumns(exportedFileContents)
         expect(exportedFileContents).toEqual([
           {
             "Product Collection Id": expect.any(String),
@@ -532,7 +462,6 @@ medusaIntegrationTestRunner({
           notifications[0].data.file.url
         )
 
-        assertExportedColumns(exportedFileContents)
         expect(exportedFileContents).toEqual([
           {
             "Product Category 1": expect.any(String),
@@ -713,7 +642,6 @@ medusaIntegrationTestRunner({
           notifications[0].data.file.url
         )
 
-        assertExportedColumns(exportedFileContents)
         expect(exportedFileContents).toEqual([
           {
             "Product Collection Id": expect.any(String),
@@ -802,7 +730,6 @@ medusaIntegrationTestRunner({
           notifications[0].data.file.url
         )
 
-        assertExportedColumns(exportedFileContents)
         expect(exportedFileContents).toEqual([
           {
             "Product Collection Id": expect.any(String),
