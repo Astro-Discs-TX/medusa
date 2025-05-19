@@ -53,14 +53,14 @@ export const normalizeCsvV1Step = createStep(
       return result
     }, [])
 
-    await file.createFiles({
+    const { id } = await file.createFiles({
       filename: `${fileKey}.json`,
       content: JSON.stringify({ create, update }),
       mimeType: "application/json",
     })
 
     return new StepResponse({
-      chunks: [`${fileKey}.json`],
+      chunks: [id],
       summary: {
         toCreate: create.length,
         toUpdate: update.length,

@@ -13,7 +13,7 @@ export const processImportChunksStepId = "process-import-chunks"
  */
 export const processImportChunksStep = createStep(
   processImportChunksStepId,
-  async (input: { chunks: string[] }, { container, context }) => {
+  async (input: { chunks: string[] }, { container }) => {
     const file = container.resolve(Modules.FILE)
 
     for (let chunk of input.chunks) {

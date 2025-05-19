@@ -89,10 +89,7 @@ export const importProductsV1WorkflowId = "import-products-v1"
  * Import products from a CSV file.
  */
 export const importProductsV1Workflow = createWorkflow(
-  {
-    name: importProductsV1WorkflowId,
-    store: true,
-  },
+  importProductsV1WorkflowId,
   (
     input: WorkflowData<{ fileKey: string; filename: string }>
   ): WorkflowResponse<WorkflowTypes.ProductWorkflow.ImportProductsSummary> => {
