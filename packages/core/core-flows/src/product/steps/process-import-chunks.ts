@@ -18,8 +18,6 @@ export const processImportChunksStep = createStep(
 
     for (let chunk of input.chunks) {
       const contents = await file.getAsBuffer(chunk)
-      console.log(`processing chunk ${chunk}`)
-
       await batchProductsWorkflow(container).run({
         input: JSON.parse(contents.toString("utf-8")),
       })
