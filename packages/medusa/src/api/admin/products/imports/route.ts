@@ -2,9 +2,8 @@ import {
   MedusaResponse,
   AuthenticatedMedusaRequest,
 } from "@medusajs/framework/http"
-import { Modules } from "@medusajs/framework/utils"
 import type { HttpTypes } from "@medusajs/framework/types"
-import { importProductsWorkflow } from "@medusajs/core-flows"
+import { importProductsV1Workflow } from "@medusajs/core-flows"
 import type { AdminImportProductsType } from "../validators"
 
 /**
@@ -14,15 +13,14 @@ export const POST = async (
   req: AuthenticatedMedusaRequest<AdminImportProductsType>,
   res: MedusaResponse<HttpTypes.AdminImportProductResponse>
 ) => {
-  const fileProvider = req.scope.resolve(Modules.FILE)
-  const file = await fileProvider.getAsBuffer(req.validatedBody.file_key)
-
-  const { result, transaction } = await importProductsWorkflow(req.scope).run({
-    input: {
-      filename: req.validatedBody.originalname,
-      fileContent: file.toString("utf-8"),
-    },
-  })
+  const { result, transaction } = await importProductsV1Workflow(req.scope).run(
+    {
+      input: {
+        filename: req.validatedBody.originalname,
+        fileKey: req.validatedBody.file_key,
+      },
+    }
+  )
 
   res
     .status(202)
