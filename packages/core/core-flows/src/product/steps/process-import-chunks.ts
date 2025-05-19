@@ -1,5 +1,5 @@
 import { Modules } from "@medusajs/framework/utils"
-import { createStep } from "@medusajs/framework/workflows-sdk"
+import { createStep, StepResponse } from "@medusajs/framework/workflows-sdk"
 import { batchProductsWorkflow } from "../workflows/batch-products"
 
 export const processImportChunksStepId = "process-import-chunks"
@@ -13,18 +13,18 @@ export const processImportChunksStepId = "process-import-chunks"
  */
 export const processImportChunksStep = createStep(
   processImportChunksStepId,
-  async (input: { chunks: string[] }, { container }) => {
+  async (input: { chunks: string[] }, { container, context }) => {
     const file = container.resolve(Modules.FILE)
 
-    await Promise.all(
-      input.chunks.map(async (chunk) => {
-        const contents = await file.getAsBuffer(chunk)
-        console.log(`processing chunk ${chunk}`)
+    for (let chunk of input.chunks) {
+      const contents = await file.getAsBuffer(chunk)
+      console.log(`processing chunk ${chunk}`)
 
-        batchProductsWorkflow
-          .runAsStep({ input: JSON.parse(contents.toString("utf-8")) })
-          .config({ async: true, backgroundExecution: true })
+      await batchProductsWorkflow(container).run({
+        input: JSON.parse(contents.toString("utf-8")),
       })
-    )
+    }
+
+    return new StepResponse({ completed: true })
   }
 )
