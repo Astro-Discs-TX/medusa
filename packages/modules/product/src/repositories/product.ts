@@ -22,31 +22,47 @@ export class ProductRepository extends DALUtils.mikroOrmBaseRepositoryFactory(
    * @param update
    * @returns
    */
-  getRelationsToLoad(update: any[]): string[] {
+  static #getProductDeepUpdateRelationsToLoad(
+    productsToUpdate: any[]
+  ): string[] {
     const relationsToLoad = new Set<string>()
-    update.forEach((update) => {
-      if (update.options) {
+    productsToUpdate.forEach((productToUpdate) => {
+      if (productToUpdate.options) {
         relationsToLoad.add("options")
         relationsToLoad.add("options.values")
       }
-      if (update.variants) {
+      if (productToUpdate.variants) {
         relationsToLoad.add("options")
         relationsToLoad.add("options.values")
         relationsToLoad.add("variants")
         relationsToLoad.add("variants.options")
         relationsToLoad.add("variants.options.option")
       }
-      if (update.tags) relationsToLoad.add("tags")
-      if (update.categories) relationsToLoad.add("categories")
-      if (update.images) relationsToLoad.add("images")
-      if (update.collection) relationsToLoad.add("collection")
-      if (update.type) relationsToLoad.add("type")
+      if (productToUpdate.tags) relationsToLoad.add("tags")
+      if (productToUpdate.categories) relationsToLoad.add("categories")
+      if (productToUpdate.images) relationsToLoad.add("images")
+      if (productToUpdate.collection) relationsToLoad.add("collection")
+      if (productToUpdate.type) relationsToLoad.add("type")
     })
     return Array.from(relationsToLoad)
   }
 
+  // We should probably fix the column types in the database to avoid this
+  // It would also match the types in ProductVariant, which are already numbers
+  static #correctUpdateDTOTypes(productToUpdate: {
+    weight?: string | number
+    length?: string | number
+    height?: string | number
+    width?: string | number
+  }) {
+    productToUpdate.weight = productToUpdate.weight?.toString()
+    productToUpdate.length = productToUpdate.length?.toString()
+    productToUpdate.height = productToUpdate.height?.toString()
+    productToUpdate.width = productToUpdate.width?.toString()
+  }
+
   async deepUpdate(
-    updates: ({ id: string } & any)[],
+    productsToUpdate: ({ id: string } & any)[],
     validateVariantOptions: (
       variants: any[],
       options: InferEntityType<typeof ProductOption>[]
@@ -54,18 +70,19 @@ export class ProductRepository extends DALUtils.mikroOrmBaseRepositoryFactory(
     context: Context = {}
   ): Promise<InferEntityType<typeof Product>[]> {
     const productIdsToUpdate: string[] = []
-    updates.forEach((update) => {
-      this.correctUpdateDTOTypes(update)
-      productIdsToUpdate.push(update.id)
+    productsToUpdate.forEach((productToUpdate) => {
+      ProductRepository.#correctUpdateDTOTypes(productToUpdate)
+      productIdsToUpdate.push(productToUpdate.id)
     })
 
-    const relationsToLoad = this.getRelationsToLoad(updates)
+    const relationsToLoad =
+      ProductRepository.#getProductDeepUpdateRelationsToLoad(productsToUpdate)
 
     const findOptions = buildQuery(
       { id: productIdsToUpdate },
       {
         relations: relationsToLoad,
-        take: updates.length,
+        take: productsToUpdate.length,
       }
     )
 
@@ -82,20 +99,20 @@ export class ProductRepository extends DALUtils.mikroOrmBaseRepositoryFactory(
       )
     }
 
-    for (const update of updates) {
-      const product = productsMap.get(update.id)!
+    for (const productToUpdate of productsToUpdate) {
+      const product = productsMap.get(productToUpdate.id)!
       const wrappedProduct = wrap(product)
 
       // Assign the options first, so they'll be available for the variants loop below
-      if (update.options) {
-        wrappedProduct.assign({ options: update.options })
-        delete update.options // already assigned above, so no longer necessary
+      if (productToUpdate.options) {
+        wrappedProduct.assign({ options: productToUpdate.options })
+        delete productToUpdate.options // already assigned above, so no longer necessary
       }
 
-      if (update.variants) {
-        validateVariantOptions(update.variants, product.options)
+      if (productToUpdate.variants) {
+        validateVariantOptions(productToUpdate.variants, product.options)
 
-        update.variants.forEach((variant: any) => {
+        productToUpdate.variants.forEach((variant: any) => {
           if (variant.options) {
             variant.options = Object.entries(variant.options).map(
               ([key, value]) => {
@@ -112,35 +129,34 @@ export class ProductRepository extends DALUtils.mikroOrmBaseRepositoryFactory(
         })
       }
 
-      if (update.tags) {
-        update.tags = update.tags.map((t: { id: string }) => t.id)
+      if (productToUpdate.tags) {
+        productToUpdate.tags = productToUpdate.tags.map(
+          (t: { id: string }) => t.id
+        )
       }
-      if (update.categories) {
-        update.categories = update.categories.map((c: { id: string }) => c.id)
+      if (productToUpdate.categories) {
+        productToUpdate.categories = productToUpdate.categories.map(
+          (c: { id: string }) => c.id
+        )
       }
-      if (update.images) {
-        update.images = update.images.map((image: any, index: number) => ({
-          ...image,
-          rank: index,
-        }))
+      if (productToUpdate.images) {
+        productToUpdate.images = productToUpdate.images.map(
+          (image: any, index: number) => ({
+            ...image,
+            rank: index,
+          })
+        )
       }
 
-      wrappedProduct.assign(update)
+      wrappedProduct.assign(productToUpdate)
     }
 
     // Doing this to ensure updates are returned in the same order they were provided,
     // since some core flows rely on this.
     // This is a high level of coupling though.
-    return updates.map((update) => productsMap.get(update.id)!)
-  }
-
-  // We should probably fix the column types in the database to avoid this
-  // It would also match the types in ProductVariant, which are already numbers
-  protected correctUpdateDTOTypes(update: any) {
-    update.weight = update.weight?.toString()
-    update.length = update.length?.toString()
-    update.height = update.height?.toString()
-    update.width = update.width?.toString()
+    return productsToUpdate.map(
+      (productToUpdate) => productsMap.get(productToUpdate.id)!
+    )
   }
 
   /**
