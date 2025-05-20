@@ -5,7 +5,7 @@
 export const CartWorkflowEvents = {
   /**
    * Emitted when a cart is created.
-   * 
+   *
    * @eventPayload
    * ```ts
    * {
@@ -16,7 +16,7 @@ export const CartWorkflowEvents = {
   CREATED: "cart.created",
   /**
    * Emitted when a cart's details are updated.
-   * 
+   *
    * @eventPayload
    * ```ts
    * {
@@ -27,7 +27,7 @@ export const CartWorkflowEvents = {
   UPDATED: "cart.updated",
   /**
    * Emitted when the customer in the cart is updated.
-   * 
+   *
    * @eventPayload
    * ```ts
    * {
@@ -39,7 +39,7 @@ export const CartWorkflowEvents = {
   /**
    * Emitted when the cart's region is updated. This
    * event is emitted alongside the `cart.updated` event.
-   * 
+   *
    * @eventPayload
    * ```ts
    * {
@@ -48,6 +48,21 @@ export const CartWorkflowEvents = {
    * ```
    */
   REGION_UPDATED: "cart.region_updated",
+
+  /**
+   * Emitted when the customer in the cart is transferred.
+   * 
+   * @version 2.8.0
+   *
+   * @eventPayload
+   * ```ts
+   * {
+   *   id, // The ID of the cart
+   *   customer_id, // The ID of the customer
+   * }
+   * ```
+   */
+  CUSTOMER_TRANSFERRED: "cart.customer_transferred",
 }
 
 /**
@@ -57,7 +72,7 @@ export const CartWorkflowEvents = {
 export const CustomerWorkflowEvents = {
   /**
    * Emitted when a customer is created.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -68,7 +83,7 @@ export const CustomerWorkflowEvents = {
   CREATED: "customer.created",
   /**
    * Emitted when a customer is updated.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -79,7 +94,7 @@ export const CustomerWorkflowEvents = {
   UPDATED: "customer.updated",
   /**
    * Emitted when a customer is deleted.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -98,7 +113,7 @@ export const OrderWorkflowEvents = {
   /**
    * Emitted when the details of an order or draft order is updated. This
    * doesn't include updates made by an edit.
-   * 
+   *
    * @eventPayload
    * ```ts
    * {
@@ -111,7 +126,7 @@ export const OrderWorkflowEvents = {
   /**
    * Emitted when an order is placed, or when a draft order is converted to an
    * order.
-   * 
+   *
    * @eventPayload
    * ```ts
    * {
@@ -122,7 +137,7 @@ export const OrderWorkflowEvents = {
   PLACED: "order.placed",
   /**
    * Emitted when an order is canceld.
-   * 
+   *
    * @eventPayload
    * ```ts
    * {
@@ -133,7 +148,7 @@ export const OrderWorkflowEvents = {
   CANCELED: "order.canceled",
   /**
    * Emitted when orders are completed.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -144,7 +159,7 @@ export const OrderWorkflowEvents = {
   COMPLETED: "order.completed",
   /**
    * Emitted when an order is archived.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -156,7 +171,7 @@ export const OrderWorkflowEvents = {
 
   /**
    * Emitted when a fulfillment is created for an order.
-   * 
+   *
    * @eventPayload
    * ```ts
    * {
@@ -169,7 +184,7 @@ export const OrderWorkflowEvents = {
   FULFILLMENT_CREATED: "order.fulfillment_created",
   /**
    * Emitted when an order's fulfillment is canceled.
-   * 
+   *
    * @eventPayload
    * ```ts
    * {
@@ -183,7 +198,7 @@ export const OrderWorkflowEvents = {
 
   /**
    * Emitted when a return request is confirmed.
-   * 
+   *
    * @eventPayload
    * ```ts
    * {
@@ -195,7 +210,7 @@ export const OrderWorkflowEvents = {
   RETURN_REQUESTED: "order.return_requested",
   /**
    * Emitted when a return is marked as received.
-   * 
+   *
    * @eventPayload
    * ```ts
    * {
@@ -208,7 +223,7 @@ export const OrderWorkflowEvents = {
 
   /**
    * Emitted when a claim is created for an order.
-   * 
+   *
    * @eventPayload
    * ```ts
    * {
@@ -220,7 +235,7 @@ export const OrderWorkflowEvents = {
   CLAIM_CREATED: "order.claim_created",
   /**
    * Emitted when an exchange is created for an order.
-   * 
+   *
    * @eventPayload
    * ```ts
    * {
@@ -234,7 +249,7 @@ export const OrderWorkflowEvents = {
   /**
    * Emitted when an order is requested to be transferred to
    * another customer.
-   * 
+   *
    * @eventPayload
    * ```ts
    * {
@@ -253,9 +268,9 @@ export const OrderWorkflowEvents = {
 export const OrderEditWorkflowEvents = {
   /**
    * Emitted when an order edit is requested.
-   * 
+   *
    * @version 2.8.0
-   * 
+   *
    * @eventPayload
    * ```ts
    * {
@@ -267,9 +282,9 @@ export const OrderEditWorkflowEvents = {
   REQUESTED: "order-edit.requested",
   /**
    * Emitted when an order edit request is confirmed.
-   * 
+   *
    * @version 2.8.0
-   * 
+   *
    * @eventPayload
    * ```ts
    * {
@@ -281,9 +296,9 @@ export const OrderEditWorkflowEvents = {
   CONFIRMED: "order-edit.confirmed",
   /**
    * Emitted when an order edit request is canceled.
-   * 
+   *
    * @version 2.8.0
-   * 
+   *
    * @eventPayload
    * ```ts
    * {
@@ -302,7 +317,7 @@ export const OrderEditWorkflowEvents = {
 export const UserWorkflowEvents = {
   /**
    * Emitted when users are created.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -313,7 +328,7 @@ export const UserWorkflowEvents = {
   CREATED: "user.created",
   /**
    * Emitted when users are updated.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -324,7 +339,7 @@ export const UserWorkflowEvents = {
   UPDATED: "user.updated",
   /**
    * Emitted when users are deleted.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -343,7 +358,7 @@ export const AuthWorkflowEvents = {
   /**
    * Emitted when a reset password token is generated. You can listen to this event
    * to send a reset password email to the user or customer, for example.
-   * 
+   *
    * @eventPayload
    * ```ts
    * {
@@ -363,7 +378,7 @@ export const AuthWorkflowEvents = {
 export const SalesChannelWorkflowEvents = {
   /**
    * Emitted when sales channels are created.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -374,7 +389,7 @@ export const SalesChannelWorkflowEvents = {
   CREATED: "sales-channel.created",
   /**
    * Emitted when sales channels are updated.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -385,7 +400,7 @@ export const SalesChannelWorkflowEvents = {
   UPDATED: "sales-channel.updated",
   /**
    * Emitted when sales channels are deleted.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -403,7 +418,7 @@ export const SalesChannelWorkflowEvents = {
 export const ProductCategoryWorkflowEvents = {
   /**
    * Emitted when product categories are created.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -414,7 +429,7 @@ export const ProductCategoryWorkflowEvents = {
   CREATED: "product-category.created",
   /**
    * Emitted when product categories are updated.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -425,7 +440,7 @@ export const ProductCategoryWorkflowEvents = {
   UPDATED: "product-category.updated",
   /**
    * Emitted when product categories are deleted.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -443,7 +458,7 @@ export const ProductCategoryWorkflowEvents = {
 export const ProductCollectionWorkflowEvents = {
   /**
    * Emitted when product collections are created.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -454,7 +469,7 @@ export const ProductCollectionWorkflowEvents = {
   CREATED: "product-collection.created",
   /**
    * Emitted when product collections are updated.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -465,7 +480,7 @@ export const ProductCollectionWorkflowEvents = {
   UPDATED: "product-collection.updated",
   /**
    * Emitted when product collections are deleted.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -483,7 +498,7 @@ export const ProductCollectionWorkflowEvents = {
 export const ProductVariantWorkflowEvents = {
   /**
    * Emitted when product variants are updated.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -494,7 +509,7 @@ export const ProductVariantWorkflowEvents = {
   UPDATED: "product-variant.updated",
   /**
    * Emitted when product variants are created.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -505,7 +520,7 @@ export const ProductVariantWorkflowEvents = {
   CREATED: "product-variant.created",
   /**
    * Emitted when product variants are deleted.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -523,7 +538,7 @@ export const ProductVariantWorkflowEvents = {
 export const ProductWorkflowEvents = {
   /**
    * Emitted when products are updated.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -534,7 +549,7 @@ export const ProductWorkflowEvents = {
   UPDATED: "product.updated",
   /**
    * Emitted when products are created.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -545,7 +560,7 @@ export const ProductWorkflowEvents = {
   CREATED: "product.created",
   /**
    * Emitted when products are deleted.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -563,7 +578,7 @@ export const ProductWorkflowEvents = {
 export const ProductTypeWorkflowEvents = {
   /**
    * Emitted when product types are updated.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -574,7 +589,7 @@ export const ProductTypeWorkflowEvents = {
   UPDATED: "product-type.updated",
   /**
    * Emitted when product types are created.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -585,7 +600,7 @@ export const ProductTypeWorkflowEvents = {
   CREATED: "product-type.created",
   /**
    * Emitted when product types are deleted.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -603,7 +618,7 @@ export const ProductTypeWorkflowEvents = {
 export const ProductTagWorkflowEvents = {
   /**
    * Emitted when product tags are updated.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -614,7 +629,7 @@ export const ProductTagWorkflowEvents = {
   UPDATED: "product-tag.updated",
   /**
    * Emitted when product tags are created.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -625,7 +640,7 @@ export const ProductTagWorkflowEvents = {
   CREATED: "product-tag.created",
   /**
    * Emitted when product tags are deleted.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -643,7 +658,7 @@ export const ProductTagWorkflowEvents = {
 export const ProductOptionWorkflowEvents = {
   /**
    * Emitted when product options are updated.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -654,7 +669,7 @@ export const ProductOptionWorkflowEvents = {
   UPDATED: "product-option.updated",
   /**
    * Emitted when product options are created.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -665,7 +680,7 @@ export const ProductOptionWorkflowEvents = {
   CREATED: "product-option.created",
   /**
    * Emitted when product options are deleted.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -683,7 +698,7 @@ export const ProductOptionWorkflowEvents = {
 export const InviteWorkflowEvents = {
   /**
    * Emitted when an invite is accepted.
-   * 
+   *
    * @eventPayload
    * ```ts
    * {
@@ -695,7 +710,7 @@ export const InviteWorkflowEvents = {
   /**
    * Emitted when invites are created. You can listen to this event
    * to send an email to the invited users, for example.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -706,7 +721,7 @@ export const InviteWorkflowEvents = {
   CREATED: "invite.created",
   /**
    * Emitted when invites are deleted.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -719,7 +734,7 @@ export const InviteWorkflowEvents = {
    * Emitted when invites should be resent because their token was
    * refreshed. You can listen to this event to send an email to the invited users,
    * for example.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -737,7 +752,7 @@ export const InviteWorkflowEvents = {
 export const RegionWorkflowEvents = {
   /**
    * Emitted when regions are updated.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -748,7 +763,7 @@ export const RegionWorkflowEvents = {
   UPDATED: "region.updated",
   /**
    * Emitted when regions are created.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -759,7 +774,7 @@ export const RegionWorkflowEvents = {
   CREATED: "region.created",
   /**
    * Emitted when regions are deleted.
-   * 
+   *
    * @eventPayload
    * ```ts
    * [{
@@ -777,7 +792,7 @@ export const RegionWorkflowEvents = {
 export const FulfillmentWorkflowEvents = {
   /**
    * Emitted when a shipment is created for an order.
-   * 
+   *
    * @eventPayload
    * ```ts
    * {
@@ -789,7 +804,7 @@ export const FulfillmentWorkflowEvents = {
   SHIPMENT_CREATED: "shipment.created",
   /**
    * Emitted when a fulfillment is marked as delivered.
-   * 
+   *
    * @eventPayload
    * ```ts
    * {
