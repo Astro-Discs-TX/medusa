@@ -4,7 +4,7 @@ import {
 } from "@medusajs/framework/http"
 
 import {
-  importProductsV1WorkflowId,
+  importProductsAsChunksWorkflowId,
   waitConfirmationProductImportStepId,
 } from "@medusajs/core-flows"
 import { IWorkflowEngineService } from "@medusajs/framework/types"
@@ -28,7 +28,7 @@ export const POST = async (
       action: TransactionHandlerType.INVOKE,
       transactionId,
       stepId: waitConfirmationProductImportStepId,
-      workflowId: importProductsV1WorkflowId,
+      workflowId: importProductsAsChunksWorkflowId,
     },
     stepResponse: new StepResponse(true),
   })

@@ -12,16 +12,17 @@ import { convertCsvToJson } from "../utils"
  */
 export type NormalizeProductCsvV1StepInput = string
 
-export const normalizeCsvV1StepId = "normalize-product-csv-v1"
+export const normalizeCsvToChunksStepId = "normalize-product-csv-to-chunks"
+
 /**
- * This step parses a CSV file holding products to import, returning the products as
- * objects that can be imported.
+ * This step parses a CSV file holding products to import, returning the chunks
+ * to be processed. Each chunk is written to a file using the file provider.
  *
  * @example
- * const data = parseProductCsvStep("products.csv")
+ * const data = normalizeCsvToChunksStep("products.csv")
  */
-export const normalizeCsvV1Step = createStep(
-  normalizeCsvV1StepId,
+export const normalizeCsvToChunksStep = createStep(
+  normalizeCsvToChunksStepId,
   async (fileKey: NormalizeProductCsvV1StepInput, { container }) => {
     const file = container.resolve(Modules.FILE)
     const contents = await file.getAsBuffer(fileKey)

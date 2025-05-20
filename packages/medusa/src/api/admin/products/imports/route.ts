@@ -3,8 +3,8 @@ import {
   AuthenticatedMedusaRequest,
 } from "@medusajs/framework/http"
 import type { HttpTypes } from "@medusajs/framework/types"
-import { importProductsV1Workflow } from "@medusajs/core-flows"
 import type { AdminImportProductsType } from "../validators"
+import { importProductsAsChunksWorkflow } from "@medusajs/core-flows"
 
 /**
  * @version 2.8.0
@@ -13,14 +13,14 @@ export const POST = async (
   req: AuthenticatedMedusaRequest<AdminImportProductsType>,
   res: MedusaResponse<HttpTypes.AdminImportProductResponse>
 ) => {
-  const { result, transaction } = await importProductsV1Workflow(req.scope).run(
-    {
-      input: {
-        filename: req.validatedBody.originalname,
-        fileKey: req.validatedBody.file_key,
-      },
-    }
-  )
+  const { result, transaction } = await importProductsAsChunksWorkflow(
+    req.scope
+  ).run({
+    input: {
+      filename: req.validatedBody.originalname,
+      fileKey: req.validatedBody.file_key,
+    },
+  })
 
   res
     .status(202)

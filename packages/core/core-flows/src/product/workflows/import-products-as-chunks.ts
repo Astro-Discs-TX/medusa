@@ -7,12 +7,13 @@ import {
 } from "@medusajs/framework/workflows-sdk"
 import { notifyOnFailureStep, sendNotificationsStep } from "../../notification"
 import {
-  normalizeCsvV1Step,
+  normalizeCsvToChunksStep,
   processImportChunksStep,
   waitConfirmationProductImportStep,
 } from "../steps"
 
-export const importProductsV1WorkflowId = "import-products-v1"
+export const importProductsAsChunksWorkflowId = "import-products-as-chunks"
+
 /**
  * This workflow starts a product import from a CSV file in the background. It's used by the
  * [Import Products Admin API Route](https://docs.medusajs.com/api/admin#products_postproductsimport).
@@ -27,12 +28,11 @@ export const importProductsV1WorkflowId = "import-products-v1"
  * To start the import of a CSV file:
  *
  * ```ts
- * const { result, transaction: { transactionId } } = await importProductsWorkflow(container)
+ * const { result, transaction } = await importProductsAsChunksWorkflow(container)
  * .run({
  *   input: {
- *     // example CSV content
- *     fileContent: "title,description\nShirt,This is a shirt",
  *     filename: "products.csv",
+ *     fileKey: "products.csv",
  *   }
  * })
  * ```
@@ -48,7 +48,7 @@ export const importProductsV1WorkflowId = "import-products-v1"
  *   MedusaResponse,
  * } from "@medusajs/framework/http"
  * import {
- *   importProductsWorkflowId,
+ *   importProductsAsChunksWorkflowId,
  *   waitConfirmationProductImportStepId,
  * } from "@medusajs/core-flows"
  * import { IWorkflowEngineService } from "@medusajs/framework/types"
@@ -69,7 +69,7 @@ export const importProductsV1WorkflowId = "import-products-v1"
  *       action: TransactionHandlerType.INVOKE,
  *       transactionId,
  *       stepId: waitConfirmationProductImportStepId,
- *       workflowId: importProductsWorkflowId,
+ *       workflowId: importProductsAsChunksWorkflowId,
  *     },
  *     stepResponse: new StepResponse(true),
  *   })
@@ -80,7 +80,7 @@ export const importProductsV1WorkflowId = "import-products-v1"
  *
  * :::tip
  *
- * This example API route uses the same implementation as the [Confirm Product Import Admin API Route](https://docs.medusajs.com/api/admin#products_postproductsimporttransaction_idconfirm).
+ * This example API route uses the same implementation as the [Confirm Product Import Admin API Route](https://docs.medusajs.com/api/admin#products_postproductsimportstransaction_idconfirm).
  *
  * :::
  *
@@ -88,12 +88,12 @@ export const importProductsV1WorkflowId = "import-products-v1"
  *
  * Import products from a CSV file.
  */
-export const importProductsV1Workflow = createWorkflow(
-  importProductsV1WorkflowId,
+export const importProductsAsChunksWorkflow = createWorkflow(
+  importProductsAsChunksWorkflowId,
   (
     input: WorkflowData<{ fileKey: string; filename: string }>
   ): WorkflowResponse<WorkflowTypes.ProductWorkflow.ImportProductsSummary> => {
-    const batchRequest = normalizeCsvV1Step(input.fileKey)
+    const batchRequest = normalizeCsvToChunksStep(input.fileKey)
 
     waitConfirmationProductImportStep()
 
