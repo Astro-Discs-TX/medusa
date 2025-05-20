@@ -100,7 +100,6 @@ export const prepareConfirmInventoryInput = (data: {
             0
         )
 
-        // TODO: check if this stock location is avaialable in the input.sales_channel_id
         if (!mapLocationAvailability.has(location_levels.location_id)) {
           mapLocationAvailability.set(location_levels.location_id, new Map())
         }
