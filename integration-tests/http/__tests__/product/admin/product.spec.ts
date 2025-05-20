@@ -3043,12 +3043,20 @@ medusaIntegrationTestRunner({
       describe("batch methods", () => {
         it("successfully creates, updates, and deletes products", async () => {
           const createPayload = getProductFixture({
+            weight: 100,
+            length: 200,
+            height: 300,
+            width: 400,
             title: "Test batch create",
             handle: "test-batch-create",
             shipping_profile_id: shippingProfile.id,
           })
 
           const updatePayload = {
+            weight: 101,
+            length: 201,
+            height: 301,
+            width: 401,
             id: publishedProduct.id,
             title: "Test batch update",
           }
@@ -3324,6 +3332,130 @@ medusaIntegrationTestRunner({
               id: publishedProduct.id,
             })
           )
+        })
+
+        // https://linear.app/medusajs/issue/SUP-1631/price-differences
+        it("should successfully handle successive updates on prices", async () => {
+          const response = await api.post(
+            "/admin/products/batch",
+            {
+              create: [
+                getProductFixture({
+                  title: "title1",
+                  variants: [
+                    {
+                      title: "variant1",
+                      prices: [{ currency_code: "usd", amount: 100 }],
+                    },
+                  ],
+                }),
+                getProductFixture({
+                  title: "title2",
+                  variants: [
+                    {
+                      title: "variant2",
+                      prices: [{ currency_code: "usd", amount: 200 }],
+                    },
+                  ],
+                }),
+                getProductFixture({
+                  title: "title3",
+                  variants: [
+                    {
+                      title: "variant3",
+                      prices: [{ currency_code: "usd", amount: 300 }],
+                    },
+                  ],
+                }),
+              ],
+              update: [],
+              delete: [baseProduct.id],
+            },
+            adminHeaders
+          )
+          const created = response.data.created
+          const created1 = created.find((p) => p.title === "title1")
+          const created2 = created.find((p) => p.title === "title2")
+          const created3 = created.find((p) => p.title === "title3")
+
+          // Update the first and third product price to shuffle their order in the DB
+          await api.post(
+            `/admin/products/batch`,
+            {
+              update: [
+                {
+                  id: created1.id,
+                  variants: [
+                    {
+                      id: created1.variants[0].id,
+                      prices: [{ currency_code: "usd", amount: 101 }],
+                    },
+                  ],
+                },
+                {
+                  id: created3.id,
+                  variants: [
+                    {
+                      id: created3.variants[0].id,
+                      prices: [{ currency_code: "usd", amount: 301 }],
+                    },
+                  ],
+                },
+              ],
+            },
+            adminHeaders
+          )
+
+          // Update all products now
+          await api.post(
+            `/admin/products/batch`,
+            {
+              update: [
+                {
+                  id: created1.id,
+                  variants: [
+                    {
+                      id: created1.variants[0].id,
+                      prices: [{ currency_code: "usd", amount: 102 }],
+                    },
+                  ],
+                },
+                {
+                  id: created2.id,
+                  variants: [
+                    {
+                      id: created2.variants[0].id,
+                      prices: [{ currency_code: "usd", amount: 202 }],
+                    },
+                  ],
+                },
+                {
+                  id: created3.id,
+                  variants: [
+                    {
+                      id: created3.variants[0].id,
+                      prices: [{ currency_code: "usd", amount: 302 }],
+                    },
+                  ],
+                },
+              ],
+            },
+            adminHeaders
+          )
+
+          // Get the first product
+          const product1 = (
+            await api.get(`/admin/products/${created1.id}`, adminHeaders)
+          ).data.product
+          const product2 = (
+            await api.get(`/admin/products/${created2.id}`, adminHeaders)
+          ).data.product
+          const product3 = (
+            await api.get(`/admin/products/${created3.id}`, adminHeaders)
+          ).data.product
+          expect(product1.variants[0].prices[0].amount).toEqual(102)
+          expect(product2.variants[0].prices[0].amount).toEqual(202)
+          expect(product3.variants[0].prices[0].amount).toEqual(302)
         })
       })
 

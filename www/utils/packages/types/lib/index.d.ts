@@ -62,6 +62,7 @@ export type FrontmatterData = {
   sidebar_label?: string
   displayed_sidebar?: string
   tags?: Tag[]
+  keywords?: string[]
   [k: string]: unknown
 }
 
@@ -101,6 +102,7 @@ export type FormattingOptionType = {
   hideTocHeaders?: boolean
   workflowDiagramComponent?: string
   isEventsReference?: boolean
+  sortMembers?: boolean
 }
 
 export type AllowedProjectDocumentsOption = {
@@ -345,4 +347,5 @@ export declare type MedusaEvent = {
   version?: string
   deprecated?: boolean
   deprecated_message?: string
+  version?: string
 }
