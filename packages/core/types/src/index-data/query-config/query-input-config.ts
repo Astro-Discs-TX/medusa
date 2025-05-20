@@ -63,12 +63,16 @@ export type IndexQueryConfig<TEntry extends string> = {
   filters?: IndexFilters<TEntry>
   joinFilters?: IndexFilters<TEntry>
   pagination?: Partial<IndexQueryInput<TEntry>["pagination"]>
-  keepFilteredEntities?: boolean
+  idsOnly?: boolean
 }
 
 export type QueryFunctionReturnPagination = {
   skip: number
   take: number
+  /**
+   * @featureFlag index_engine
+   * @version 2.8.0
+   */
   estimate_count: number
 }
 

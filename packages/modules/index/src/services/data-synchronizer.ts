@@ -250,6 +250,10 @@ export class DataSynchronizer {
     const isLink = !!moduleConfig?.isLink
 
     if (!alias) {
+      this.#logger.info(
+        `[Index engine] Cannot find Entity '${entityName}' alias. Skipping.`
+      )
+
       const acknoledgement = {
         lastCursor: pagination.cursor ?? null,
         done: true,
@@ -328,7 +332,7 @@ export class DataSynchronizer {
         break
       }
 
-      await setTimeout(0)
+      await setTimeout(0, undefined, { ref: false })
     }
 
     let acknoledgement: { lastCursor: string; done?: boolean; err?: Error } = {
