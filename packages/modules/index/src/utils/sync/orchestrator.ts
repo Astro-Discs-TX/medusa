@@ -1,10 +1,15 @@
-import { ILockingModule } from "@medusajs/types"
+import { ILockingModule, Logger } from "@medusajs/types"
 
 export class Orchestrator {
   /**
    * Reference to the locking module
    */
   #lockingModule: ILockingModule
+
+  /**
+   * Reference to the logger
+   */
+  #logger: Logger
 
   /**
    * Owner id when acquiring locks
@@ -74,11 +79,13 @@ export class Orchestrator {
     entities: string[],
     options: {
       lockDuration: number
+      logger: Logger
     }
   ) {
     this.#lockingModule = lockingModule
     this.#entities = entities
     this.#options = options
+    this.#logger = options.logger
   }
 
   /**
@@ -123,9 +130,15 @@ export class Orchestrator {
         this.#state = "error"
         throw error
       } finally {
-        await this.#lockingModule.release(entity, {
-          ownerId: this.#lockingOwner,
-        })
+        await this.#lockingModule
+          .release(entity, {
+            ownerId: this.#lockingOwner,
+          })
+          .catch(() => {
+            this.#logger.error(
+              `[Index engine] failed to release lock for entity '${entity}'`
+            )
+          })
       }
     }
   }

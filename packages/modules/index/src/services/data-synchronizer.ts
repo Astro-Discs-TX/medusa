@@ -85,12 +85,13 @@ export class DataSynchronizer {
       fields: string
       fields_hash: string
     }[],
-    lockDuration: number = 1000 * 60 * 5
+    lockDuration: number = 60 * 5
   ) {
     this.#isReadyOrThrow()
     const entitiesToSync = entities.map((entity) => entity.entity)
     this.#orchestrator = new Orchestrator(this.#locking, entitiesToSync, {
       lockDuration,
+      logger: this.#logger,
     })
     await this.#orchestrator.process(this.#taskRunner.bind(this))
   }
@@ -179,6 +180,8 @@ export class DataSynchronizer {
           }
         }
 
+        await promiseAll(promises)
+
         if (ack.err) {
           this.#logger.error(
             `[Index engine] syncing entity '${entity}' failed with error (+${chunkElapsedTime}ms):\n${ack.err.message}`
@@ -191,8 +194,6 @@ export class DataSynchronizer {
             `[Index engine] syncing entity '${entity}' done (+${elapsedTime}ms)`
           )
         }
-
-        await promiseAll(promises)
 
         chunkStartTime = performance.now()
       },
