@@ -49,10 +49,6 @@ export function getApplicableQuantity(lineItem, maxQuantity) {
   return lineItem.quantity
 }
 
-function getLineItemUnitPrice(lineItem) {
-  return MathBN.div(lineItem.unit_price, lineItem.quantity)
-}
-
 export function calculateAdjustmentAmountFromPromotion(
   lineItem,
   promotion,
@@ -88,7 +84,7 @@ export function calculateAdjustmentAmountFromPromotion(
   */
   if (promotion.allocation === ApplicationMethodAllocation.ACROSS) {
     const quantity = getApplicableQuantity(lineItem, promotion.max_quantity)
-    const lineItemTotal = MathBN.mult(getLineItemUnitPrice(lineItem), quantity)
+    const lineItemTotal = MathBN.mult(lineItem.unit_price, quantity)
     const applicableTotal = MathBN.sub(lineItemTotal, promotion.applied_value)
 
     if (MathBN.lte(applicableTotal, 0)) {
@@ -122,12 +118,9 @@ export function calculateAdjustmentAmountFromPromotion(
       
       We then apply whichever is lower.
   */
-
-  const remainingItemTotal = MathBN.sub(
-    lineItem.subtotal,
-    promotion.applied_value
-  )
-  const unitPrice = MathBN.div(lineItem.subtotal, lineItem.quantity)
+  const lineItemTotal = MathBN.mult(lineItem.unit_price, lineItem.quantity)
+  const remainingItemTotal = MathBN.sub(lineItemTotal, promotion.applied_value)
+  const unitPrice = MathBN.div(lineItemTotal, lineItem.quantity)
   const maximumPromotionTotal = MathBN.mult(
     unitPrice,
     promotion.max_quantity ?? MathBN.convert(1)
