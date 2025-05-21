@@ -7,6 +7,12 @@ addHowToData: true
 
 This guide explains how to build the Medusa Storefront using the provided starter template and deploy the resulting Docker container image to an AWS Elastic Container Registry (ECR). This process is essential for deploying the frontend as part of the Medusa e-commerce solution.
 
+:::note
+
+This guide was submitted through a community contribution.
+
+:::
+
 ## Prerequisites
 
 Before proceeding, ensure you have the following:
@@ -22,7 +28,7 @@ Before proceeding, ensure you have the following:
 
 1. Clone the [`medusa-starter`](https://github.com/u11d-com/medusa-starter/tree/v1) repository to your local machine:
 
-   ```shell
+   ```bash
    git clone https://github.com/u11d-com/medusa-starter.git
    cd medusa-starter
    git checkout -b v1 origin/v1
@@ -30,7 +36,7 @@ Before proceeding, ensure you have the following:
 
 2. Navigate to the `storefront` directory and initialize the repository, this sets up the storefront based on the [Medusa Next.js starter template](https://github.com/medusajs/nextjs-starter-medusa) for version 1:
 
-   ```shell
+   ```bash
    cd storefront
    git init
    git remote add origin https://github.com/medusajs/nextjs-starter-medusa.git
@@ -44,7 +50,7 @@ Before proceeding, ensure you have the following:
 
 1. Build the Docker container image for the storefront:
 
-   ```shell
+   ```bash
    docker build --build-arg MEDUSA_BACKEND_URL="https://my.medusa.backend" -t medusa_storefront:1.0.0 .
    ```
 
@@ -61,7 +67,7 @@ To deploy the storefront, you’ll need to push the Docker container image to an
 
 Run the following command to authenticate Docker to your AWS ECR registry:
 
-```shell
+```bash
 aws ecr get-login-password --region <region> | docker login --username AWS --password-stdin <aws_account_id>.dkr.ecr.<region>.amazonaws.com
 ```
 
@@ -71,7 +77,7 @@ Replace:
 - `<aws_account_id>` with your [AWS account ID](https://docs.aws.amazon.com/accounts/latest/reference/manage-acct-identifiers.html#FindAccountId).
   You can check it by running:
 
-  ```shell
+  ```bash
   aws sts get-caller-identity \
       --query Account \
       --output text
@@ -83,7 +89,7 @@ If you created your ECR repository using the [Terraform Module for Medusa on AWS
 
 Tag the Docker container image with your ECR repository URI:
 
-```shell
+```bash
 docker tag medusa_storefront:1.0.0 <aws_account_id>.dkr.ecr.<region>.amazonaws.com/<repository>:<tag>
 ```
 
@@ -96,13 +102,13 @@ Replace:
 
 Push the Docker container image to your ECR repository:
 
-```shell
+```bash
 docker push <aws_account_id>.dkr.ecr.<region>.amazonaws.com/<repository>:<tag>
 ```
 
 Example:
 
-```shell
+```bash
 docker push 123456789012.dkr.ecr.us-east-1.amazonaws.com/my-storefront:1.0.0
 ```
 
@@ -131,7 +137,7 @@ storefront_create = true
 3. Plan and apply Terraform changes:
 Deploy the updated configuration:
 
-```shell
+```bash
 terraform init
 terraform plan
 terraform apply
@@ -162,9 +168,6 @@ Confirm the changes when prompted.
 
 ## Additional Resources
 
-- [Medusa Documentation](https://docs.medusajs.com/v1/)
-- [Next.js Documentation](https://nextjs.org/)
 - [Terraform Module for Medusa on AWS Provider Documentation](https://registry.terraform.io/modules/u11d-com/medusajs/aws)
 
 ---
-:heart: *Technology made with passion by [u11d](https://u11d.com)*

@@ -5,7 +5,15 @@ addHowToData: true
 
 # Deploy the Medusa Backend using the Terraform Module on AWS
 
-This guide explains how to use the [**Terraform module for Medusa**](https://registry.terraform.io/modules/u11d-com/medusajs/aws) to deploy a production-ready e-commerce backend on AWS. Designed for development teams building Medusa platforms, this module streamlines infrastructure setup while incorporating security best practices. It provides a robust and scalable foundation, enabling teams to quickly deploy a functional backend and then focus on advanced customizations and feature development accelerating development by eliminating the complexities of manual infrastructure provisioning. As a result, teams can rapidly deploy and iterate, significantly minimizing time spent on infrastructure management. This module establishes a reliable groundwork for even the most sophisticated and customized Medusa deployments.
+This guide explains how to use the [**Terraform module for Medusa**](https://registry.terraform.io/modules/u11d-com/medusajs/aws) to deploy a production-ready ecommerce backend on AWS. Designed for development teams building Medusa platforms, this module streamlines infrastructure setup while incorporating security best practices.
+
+This module provides a robust and scalable foundation, enabling teams to quickly deploy a functional backend and then focus on advanced customizations and feature development accelerating development by eliminating the complexities of manual infrastructure provisioning. As a result, teams can rapidly deploy and iterate, significantly minimizing time spent on infrastructure management. This module establishes a reliable groundwork for even the most sophisticated and customized Medusa deployments.
+
+:::note
+
+This guide was submitted through a community contribution.
+
+:::
 
 ## Introduction
 
@@ -38,12 +46,12 @@ Before using Terraform module for Medusa, ensure you have the following tools an
 
 ## Architectural Decisions Behind the Terraform Module
 
-When designing the Terraform module for Medusa, we prioritized scalability, security, and performance while minimizing the operational overhead for development teams. To achieve this, we selected fully managed AWS services, allowing teams to focus on building e-commerce solutions without the complexity of maintaining cloud infrastructure.
+When designing the Terraform module for Medusa, [U11D](https://u11d.com) prioritized scalability, security, and performance while minimizing the operational overhead for development teams. To achieve this, [U11D](https://u11d.com) selected fully managed AWS services, allowing teams to focus on building e-commerce solutions without the complexity of maintaining cloud infrastructure.
 
 Key architectural decisions include:
 
 - Use of Managed Services: All core components — such as Amazon RDS for PostgreSQL, Amazon ElastiCache for Redis, and the Application Load Balancer (ALB) — are fully managed services. This eliminates the need for teams to handle infrastructure maintenance tasks like patching, backups, and scaling operations.
-- Containerization with AWS Fargate: We run Medusa services as ECS tasks on AWS Fargate, removing the need for Kubernetes cluster management. Teams can focus on defining scaling policies without worrying about the underlying infrastructure.
+- Containerization with AWS Fargate: Module run Medusa services as ECS tasks on AWS Fargate, removing the need for Kubernetes cluster management. Teams can focus on defining scaling policies without worrying about the underlying infrastructure.
 - Optimized Docker Images: The Terraform module is complemented by Docker image definitions (provided as Dockerfiles in a separate [repository](https://github.com/u11d-com/medusa-starter/tree/v1)). These images follow best practices for security, performance, and minimal size, ensuring efficient resource utilization in production environments.
 
 By leveraging managed services, this architecture reduces the time, effort, and expertise required to maintain infrastructure. It provides the flexibility to control scalability while ensuring high availability, robust security, and optimal performance — allowing development teams to concentrate on delivering business value through their e-commerce platforms.
@@ -85,7 +93,7 @@ The [Terraform module for Medusa](https://registry.terraform.io/modules/u11d-com
 
 Clone the Terraform module repository to your local machine:
 
-```shell
+```bash
 git clone https://github.com/u11d-com/terraform-aws-medusajs
 cd terraform-u11d-medusajs/examples/minimal
 ```
@@ -108,7 +116,7 @@ owner       = "my-team"
 
 Run the following command to initialize Terraform and download the required providers:
 
-```shell
+```bash
 terraform init
 ```
 
@@ -116,7 +124,7 @@ terraform init
 
 Preview the resources that Terraform will create:
 
-```shell
+```bash
 terraform plan
 ```
 
@@ -124,7 +132,7 @@ terraform plan
 
 Deploy the infrastructure by running:
 
-```shell
+```bash
 terraform apply
 ```
 
@@ -199,7 +207,7 @@ storefront_container_registry_credentials = {
 
 To delete all resources created by Terraform, run:
 
-```shell
+```bash
 terraform destroy
 ```
 
@@ -238,4 +246,3 @@ No, you can use the [medusa-starter repository](https://github.com/u11d-com/medu
 Modify the Terraform configuration files and run `terraform apply` to apply the changes.
 
 ---
-:heart: *Technology made with passion by [u11d](https://u11d.com)*
