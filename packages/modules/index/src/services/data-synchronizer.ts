@@ -176,7 +176,7 @@ export class DataSynchronizer {
           )
 
           if (!ack.done && !ack.err) {
-            promises.push(this.#orchestrator.renewLock(entity))
+            await this.#orchestrator.renewLock(entity)
           }
         }
 
