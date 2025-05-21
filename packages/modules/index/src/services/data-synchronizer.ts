@@ -85,7 +85,7 @@ export class DataSynchronizer {
       fields: string
       fields_hash: string
     }[],
-    lockDuration: number = 60 * 5
+    lockDuration: number = 60 // 1 minute
   ) {
     this.#isReadyOrThrow()
     const entitiesToSync = entities.map((entity) => entity.entity)
