@@ -1,6 +1,5 @@
 import { AdjustmentLineDTO, BigNumberInput } from "@medusajs/types"
 import { isDefined } from "../../common"
-import { BigNumber } from "../big-number"
 import { MathBN } from "../math"
 
 export function calculateAdjustmentTotal({
@@ -25,24 +24,20 @@ export function calculateAdjustmentTotal({
     }
 
     const adjustmentAmount = MathBN.convert(adj.amount)
-    adjustmentsSubtotal = MathBN.add(adjustmentsSubtotal, adjustmentAmount)
 
     if (isDefined(taxRate)) {
       const adjustmentSubtotal = includesTax
         ? MathBN.div(adjustmentAmount, MathBN.add(1, taxRate))
         : adjustmentAmount
 
-      const adjustmentTaxTotal = MathBN.mult(adjustmentSubtotal, taxRate)
-      const adjustmentTotal = MathBN.add(adjustmentSubtotal, adjustmentTaxTotal)
-
-      adj["subtotal"] = new BigNumber(adjustmentSubtotal)
-      adj["total"] = new BigNumber(adjustmentTotal)
+      const adjustmentTaxTotal = MathBN.mult(adjustmentAmount, taxRate)
+      const adjustmentTotal = adjustmentAmount;
 
       adjustmentsTotal = MathBN.add(adjustmentsTotal, adjustmentTotal)
+      adjustmentsSubtotal = MathBN.add(adjustmentsSubtotal, adjustmentSubtotal)
       adjustmentsTaxTotal = MathBN.add(adjustmentsTaxTotal, adjustmentTaxTotal)
     } else {
-      adj["subtotal"] = new BigNumber(adjustmentAmount)
-      adj["adjustmentAmount"] = new BigNumber(adjustmentAmount)
+      adjustmentsSubtotal = MathBN.add(adjustmentsSubtotal, adjustmentAmount)
       adjustmentsTotal = MathBN.add(adjustmentsTotal, adjustmentAmount)
     }
   }

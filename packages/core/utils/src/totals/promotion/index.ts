@@ -1,4 +1,3 @@
-import { BigNumberInput } from "@medusajs/types"
 import {
   ApplicationMethodAllocation,
   ApplicationMethodType,
@@ -51,13 +50,13 @@ export function getApplicableQuantity(lineItem, maxQuantity) {
 }
 
 function getLineItemUnitPrice(lineItem) {
-  return MathBN.div(lineItem.subtotal, lineItem.quantity)
+  return MathBN.div(lineItem.unit_price, lineItem.quantity)
 }
 
 export function calculateAdjustmentAmountFromPromotion(
   lineItem,
   promotion,
-  lineItemsTotal: BigNumberInput = 0
+  lineItemsTotal
 ) {
   /*
     For a promotion with an across allocation, we consider not only the line item total, but also the total of all other line items in the order.
