@@ -108,7 +108,7 @@ function applyPromotionToItems(
     lineItemsTotal = applicableItems.reduce(
       (acc, item) =>
         MathBN.sub(
-          MathBN.add(acc, item.subtotal),
+          MathBN.add(acc, MathBN.mult(item.unit_price, item.quantity)),
           appliedPromotionsMap.get(item.id) ?? 0
         ),
       MathBN.convert(0)
@@ -120,7 +120,7 @@ function applyPromotionToItems(
   }
 
   for (const item of applicableItems) {
-    if (MathBN.lte(item.subtotal, 0)) {
+    if (MathBN.lte(item.unit_price, 0)) {
       continue
     }
 
@@ -196,12 +196,12 @@ function getValidItemsForPromotion(
 
   if (isTargetShippingMethod && !hasTargetRules) {
     return items.filter(
-      (item) => item && "subtotal" in item && MathBN.gt(item.subtotal, 0)
+      (item) => item && "unit_price" in item && MathBN.gt(item.unit_price, 0)
     )
   }
 
   return items.filter((item) => {
-    if (!item || !("subtotal" in item) || MathBN.lte(item.subtotal, 0)) {
+    if (!item || !("unit_price" in item) || MathBN.lte(item.unit_price, 0)) {
       return false
     }
 
