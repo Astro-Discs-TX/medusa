@@ -40,7 +40,6 @@ export class Compiler {
       "integration-tests",
       "test",
       "unit-tests",
-      "src/admin",
     ]
   }
 
