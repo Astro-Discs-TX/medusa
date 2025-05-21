@@ -1,5 +1,5 @@
 import { asValue } from "awilix"
-import { container } from "@medusajs/framework"
+import { container, logger } from "@medusajs/framework"
 import type { IndexTypes } from "@medusajs/types"
 import { Orchestrator } from "@utils"
 
@@ -55,6 +55,7 @@ describe("Orchestrator", () => {
       entities.map((e) => e.entity),
       {
         lockDuration: 60 * 1000,
+        logger: logger,
       }
     )
 
@@ -101,6 +102,7 @@ describe("Orchestrator", () => {
       entities.map((e) => e.entity),
       {
         lockDuration: 60 * 1000,
+        logger: logger,
       }
     )
 
@@ -150,6 +152,7 @@ describe("Orchestrator", () => {
       entityNames,
       {
         lockDuration: 60 * 1000,
+        logger: logger,
       }
     )
 
@@ -162,6 +165,7 @@ describe("Orchestrator", () => {
       entityNames,
       {
         lockDuration: 60 * 1000,
+        logger: logger,
       }
     )
 
@@ -221,6 +225,7 @@ describe("Orchestrator", () => {
       entities.map((e) => e.entity),
       {
         lockDuration: 60 * 1000,
+        logger: logger,
       }
     )
 
@@ -269,6 +274,7 @@ describe("Orchestrator", () => {
       entities.map((e) => e.entity),
       {
         lockDuration: 60 * 1000,
+        logger: logger,
       }
     )
 
