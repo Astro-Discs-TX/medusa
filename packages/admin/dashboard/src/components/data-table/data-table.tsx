@@ -184,11 +184,11 @@ export const DataTable = <TData,>({
         if (
           prefixedFilterIds.includes(getQueryParamKey(key, prefix))
         ) {
-          const prefixedKey = getQueryParamKey(key, prefix)
           if (filter) {
+            const prefixedKey = getQueryParamKey(key, prefix)
             prev.set(prefixedKey, JSON.stringify(filter))
           } else {
-            setNewFilter(prefixedKey)
+            setNewFilter(key)
           }
         }
       })
