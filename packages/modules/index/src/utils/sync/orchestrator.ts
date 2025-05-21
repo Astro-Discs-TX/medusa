@@ -142,7 +142,7 @@ export class Orchestrator {
       }
     } else {
       this.#logger.warn(
-        `[Index engine] failed to acquire lock for entity '${entity}'. It means another process is already processing this entity or a lock is still present in your locking provider.`
+        `[Index engine] failed to acquire lock for entity '${entity}' on pid ${process.pid}. It means another process is already processing this entity or a lock is still present in your locking provider.`
       )
     }
   }
