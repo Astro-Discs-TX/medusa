@@ -15,15 +15,13 @@ This guide was submitted through a community contribution.
 
 :::
 
-## Introduction
-
-### What is Terraform?
+## What is Terraform?
 
 Terraform is an infrastructure-as-code tool that allows you to define and provision cloud resources using code. It simplifies the process of managing cloud infrastructure and ensures consistency across environments. Learn more about Terraform [here](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/infrastructure-as-code).
 
-### Why Use Terraform Module for Medusa?
+## Why Use Terraform Module for Medusa?
 
-[Terraform module for Medusa](https://registry.terraform.io/modules/u11d-com/medusajs/aws) simplifies the deployment of Medusa on AWS by automating the setup of essential infrastructure components. It aligns with Medusa’s [architectural modules](#mapping-medusa-architectural-modules-to-aws-infrastructure) for data caching, event distribution, asset and file access, and workflow management. By providing optional infrastructure services, it empowers developers to make informed decisions and optimize the system for production environments. This module is designed for development teams who want to focus on building their e-commerce stores without the overhead of managing cloud infrastructure.
+[Terraform module for Medusa](https://registry.terraform.io/modules/u11d-com/medusajs/aws) simplifies the deployment of Medusa on AWS by automating the setup of essential infrastructure components. It aligns with Medusa’s [architectural modules](#mapping-medusa-architectural-modules-to-aws-infrastructure) for data caching, event distribution, asset and file access, and workflow management. By providing optional infrastructure services, it empowers developers to make informed decisions and optimize the system for production environments. This module is designed for development teams who want to focus on building their ecommerce stores without the overhead of managing cloud infrastructure.
 
 ---
 
@@ -46,7 +44,7 @@ Before using Terraform module for Medusa, ensure you have the following tools an
 
 ## Architectural Decisions Behind the Terraform Module
 
-When designing the Terraform module for Medusa, [U11D](https://u11d.com) prioritized scalability, security, and performance while minimizing the operational overhead for development teams. To achieve this, [U11D](https://u11d.com) selected fully managed AWS services, allowing teams to focus on building e-commerce solutions without the complexity of maintaining cloud infrastructure.
+When designing the Terraform module for Medusa, [U11D](https://u11d.com) prioritized scalability, security, and performance while minimizing the operational overhead for development teams. To achieve this, [U11D](https://u11d.com) selected fully managed AWS services, allowing teams to focus on building ecommerce solutions without the complexity of maintaining cloud infrastructure.
 
 Key architectural decisions include:
 
@@ -54,7 +52,7 @@ Key architectural decisions include:
 - Containerization with AWS Fargate: Module run Medusa services as ECS tasks on AWS Fargate, removing the need for Kubernetes cluster management. Teams can focus on defining scaling policies without worrying about the underlying infrastructure.
 - Optimized Docker Images: The Terraform module is complemented by Docker image definitions (provided as Dockerfiles in a separate [repository](https://github.com/u11d-com/medusa-starter/tree/v1)). These images follow best practices for security, performance, and minimal size, ensuring efficient resource utilization in production environments.
 
-By leveraging managed services, this architecture reduces the time, effort, and expertise required to maintain infrastructure. It provides the flexibility to control scalability while ensuring high availability, robust security, and optimal performance — allowing development teams to concentrate on delivering business value through their e-commerce platforms.
+By leveraging managed services, this architecture reduces the time, effort, and expertise required to maintain infrastructure. It provides the flexibility to control scalability while ensuring high availability, robust security, and optimal performance — allowing development teams to concentrate on delivering business value through their ecommerce platforms.
 
 ## Overview of the Terraform Module
 
@@ -143,6 +141,8 @@ Confirm the deployment by typing `yes` when prompted.
 1. Check the Terraform outputs for the Medusa backend URL.
 2. Use the URL to verify that the backend is running.
 
+---
+
 ## Connecting Medusa to the Deployed Infrastructure
 
 Once the infrastructure is deployed, the Medusa backend URL will be available in the Terraform outputs. Use this URL to connect your Medusa application to the deployed backend.
@@ -152,19 +152,18 @@ Once the infrastructure is deployed, the Medusa backend URL will be available in
 In addition to the backend, the Terraform module provisions key AWS resources, including an Amazon S3 bucket for object storage and an Amazon ElastiCache (Redis) instance. To integrate these services with your Medusa application:
 
 1. Configure S3 and Redis Plugins:
-
-- Set up the appropriate Medusa plugins for S3 and Redis to enable object storage and caching functionalities.
-  - [Redis Cache Module](https://docs.medusajs.com/v1/development/cache/modules/redis)
-  - [File Service - S3 plugin](https://docs.medusajs.com/v1/plugins/file-service/s3)
-- The same Redis instance can be utilized for multiple Medusa modules, including cache, event handling, file storage, and the workflow engine.
-
+  - Set up the appropriate Medusa plugins for S3 and Redis to enable object storage and caching functionalities.
+    - [Redis Cache Module](https://docs.medusajs.com/v1/development/cache/modules/redis)
+    - [File Service - S3 plugin](https://docs.medusajs.com/v1/plugins/file-service/s3)
+  - The same Redis instance can be utilized for multiple Medusa modules, including cache, event handling, file storage, and the workflow engine.
 2. Use Predefined Environment Variables:
-
-- The Terraform module automatically generates all necessary environment variables, following Medusa’s naming conventions.
-- These variables simplify the configuration process, ensuring seamless compatibility with Medusa.
+  - The Terraform module automatically generates all necessary environment variables, following Medusa’s naming conventions.
+  - These variables simplify the configuration process, ensuring seamless compatibility with Medusa.
 
 All internal connections between services are securely configured with proper access controls, reducing the need for additional security configurations.
 By following these steps, you’ll ensure your Medusa application is fully integrated with the cloud infrastructure, optimized for performance, scalability, and security.
+
+---
 
 ## Optional Features
 
@@ -195,6 +194,8 @@ storefront_container_registry_credentials = {
     password = "your-registry-password"
   }
 ```
+
+---
 
 ## Common Issues and Troubleshooting
 

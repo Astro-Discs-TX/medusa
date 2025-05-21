@@ -5,7 +5,7 @@ addHowToData: true
 
 # Build and Deploy the Medusa Next.js Storefront on AWS
 
-This guide explains how to build the Medusa Storefront using the provided starter template and deploy the resulting Docker container image to an AWS Elastic Container Registry (ECR). This process is essential for deploying the frontend as part of the Medusa e-commerce solution.
+This guide explains how to build the Medusa Storefront using the provided starter template and deploy the resulting Docker container image to an AWS Elastic Container Registry (ECR). This process is essential for deploying the frontend as part of the Medusa ecommerce solution.
 
 :::note
 
