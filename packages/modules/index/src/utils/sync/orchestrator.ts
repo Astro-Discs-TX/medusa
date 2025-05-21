@@ -111,14 +111,14 @@ export class Orchestrator {
   }
 
   /**
-   * Processes the entity at a given index. If there are no entities
+   * Processes the entity. If there are no entities
    * left, the orchestrator state will be set to completed.
    *
    * - Task runner is the implementation function to execute a task.
    *   Orchestrator has no inbuilt execution logic and it relies on
    *   the task runner for the same.
    */
-  async #processAtIndex(
+  async #processEntity(
     taskRunner: (entity: string) => Promise<void>,
     entity: string
   ) {
@@ -165,7 +165,7 @@ export class Orchestrator {
         break
       }
 
-      await this.#processAtIndex(taskRunner, entity)
+      await this.#processEntity(taskRunner, entity)
     }
 
     this.#state = "completed"
