@@ -157,30 +157,25 @@ export class DataSynchronizer {
       ack: async (ack) => {
         const endTime = performance.now()
         const chunkElapsedTime = (endTime - chunkStartTime).toFixed(2)
-        const promises: Promise<any>[] = []
 
         if (ack.lastCursor) {
           this.#logger.debug(
             `[Index engine] syncing entity '${entity}' updating last cursor to ${ack.lastCursor} (+${chunkElapsedTime}ms)`
           )
 
-          promises.push(
-            this.#indexSyncService.update({
-              data: {
-                last_key: ack.lastCursor,
-              },
-              selector: {
-                entity,
-              },
-            })
-          )
+          await this.#indexSyncService.update({
+            data: {
+              last_key: ack.lastCursor,
+            },
+            selector: {
+              entity,
+            },
+          })
 
           if (!ack.done && !ack.err) {
             await this.#orchestrator.renewLock(entity)
           }
         }
-
-        await promiseAll(promises)
 
         if (ack.err) {
           this.#logger.error(
