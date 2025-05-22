@@ -684,7 +684,7 @@ class BlogModuleService {
 }
 ```
 
-Here are examples of typical operations using a repository:
+// Here are examples of typical operations using a repository:
 
 ```ts
 // Create a new blog post
@@ -696,12 +696,14 @@ const post = await postRepository.create({
 })
 
 // Find a specific post
-const post = await postRepository.findOne({
-  where: { id: "post_123456" }
+const [post] = await postRepository.find({
+  where: { id: "post_123456" },
+  options: { take: 1 }
 })
 
 // Update a post
-await postRepository.update("post_123456", {
+await postRepository.update({
+  id: "post_123456",
   status: "published",
   metadata: {
     featured: true
@@ -709,89 +711,34 @@ await postRepository.update("post_123456", {
 })
 
 // Delete a post
-await postRepository.delete("post_123456")
+await postRepository.delete({
+  id: "post_123456"
+})
 
-// Find multiple posts with filtering
+// Find multiple posts
 const posts = await postRepository.find({
   where: { 
     status: "published", 
     author_id: "author_123"
   },
-  take: 10,
-  skip: 0,
-  order: { created_at: "DESC" }
+  options: {
+    take: 10,
+    skip: 0,
+    order: { created_at: "DESC" }
+  }
 })
-```
+'''
 
-You can also create custom repository classes with specialized query methods:
 
-```ts
-import { DALUtils } from "@medusajs/framework/utils"
-import { Post } from "./models/post"
+ // Run Queries
+ // Complex Query Examples
 
-export class PostRepository extends DALUtils.mikroOrmBaseRepositoryFactory(Post) {
-  // Add custom methods for specialized queries
-  async findPublishedPosts() {
-    return await this.find({
-      where: { status: "published" }
-    })
-  }
-  
-  async findFeaturedPosts() {
-    return await this.find({
-      where: { 
-        metadata: {
-          featured: true
-        }
-      }
-    })
-  }
-  
-  async updateStatus(postId: string, status: string) {
-    return await this.update(postId, {
-      status
-    })
-  }
-}
-```
-
-### Complex Transaction Example
-
-Here's a more practical example demonstrating multiple operations in a single transaction:
-
-```ts
-await postRepository.transaction(async (transactionManager) => {
-  // Create a new blog post
-  const post = transactionManager.create(Post, {
-    title: "New Blog Post",
-    content: "This is the content of the post",
-    status: "draft"
-  })
-  
-  // Update author statistics in the same transaction
-  const authorStats = await transactionManager.findOne(AuthorStats, {
-    where: { author_id: post.author_id }
-  })
-  
-  authorStats.post_count = authorStats.post_count + 1
-  
-  // Save both changes atomically
-  await transactionManager.persistAndFlush([post, authorStats])
-  
-  return post
-})
-```
-
-### Advanced SQL Query Examples
-
-Here are examples of more complex SQL queries for a blog module:
-
-```ts
-// Get popular posts with their categories
-async function getPopularPosts() {
-  const knex = this.manager_.getKnex()
-  
-  return await knex.raw(`
+'''
+@InjectManager()
+async getPopularPosts(
+  @MedusaContext() sharedContext?: Context<EntityManager>
+) {
+  return await sharedContext?.manager?.execute(`
     SELECT 
       p.id, 
       p.title, 
@@ -809,11 +756,11 @@ async function getPopularPosts() {
   `)
 }
 
-// Calculate blog metrics
-async function getBlogMetrics() {
-  const knex = this.manager_.getKnex()
-  
-  return await knex.raw(`
+@InjectManager()
+async getBlogMetrics(
+  @MedusaContext() sharedContext?: Context<EntityManager>
+) {
+  return await sharedContext?.manager?.execute(`
     SELECT 
       DATE_TRUNC('month', p.created_at) as month,
       COUNT(p.id) as posts,
@@ -825,4 +772,4 @@ async function getBlogMetrics() {
     LIMIT 12
   `)
 }
-```
+'''
