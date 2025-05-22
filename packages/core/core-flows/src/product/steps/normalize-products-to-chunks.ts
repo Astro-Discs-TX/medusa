@@ -83,21 +83,21 @@ async function createChunks(
   let currentCSVRow = 0
 
   /**
-   * Validated chunks that have been written with the file
-   * provider
-   */
-  const chunks: { id: string; toCreate: number; toUpdate: number }[] = []
-
-  /**
    * Number of rows to process in a chunk. The rows count might go a little
    * up if there are more rows for the same product.
    */
   const rowsToRead = 1000
 
   /**
-   * Current count of processed rows inside a given chunk.
+   * Current count of processed rows for a given chunk.
    */
-  let currentRowNumber = 0
+  let rowsReadSoFar = 0
+
+  /**
+   * Validated chunks that have been written with the file
+   * provider
+   */
+  const chunks: { id: string; toCreate: number; toUpdate: number }[] = []
 
   /**
    * Currently collected rows to be processed as one chunk
@@ -112,7 +112,7 @@ async function createChunks(
   let currentRowUniqueValue: string | undefined
 
   for await (const row of stream) {
-    currentRowNumber++
+    rowsReadSoFar++
     currentCSVRow++
     const normalizedRow = CSVNormalizer.preProcess(row, currentCSVRow)
     const rowValueValue =
@@ -121,7 +121,7 @@ async function createChunks(
     /**
      * Reached rows threshold
      */
-    if (currentRowNumber > rowsToRead) {
+    if (rowsReadSoFar > rowsToRead) {
       /**
        * The current row unique value is not same as the previous row's
        * unique value. Hence we can break the chunk here and process
@@ -133,7 +133,7 @@ async function createChunks(
             file,
             `${fileKey}-${chunks.length + 1}`,
             rows,
-            currentRowNumber
+            currentCSVRow
           )
         )
 
@@ -141,7 +141,7 @@ async function createChunks(
          * Reset for new row
          */
         rows = [normalizedRow]
-        currentRowNumber = 0
+        rowsReadSoFar = 0
       } else {
         rows.push(normalizedRow)
       }
@@ -162,7 +162,7 @@ async function createChunks(
         file,
         `${fileKey}-${chunks.length + 1}`,
         rows,
-        currentRowNumber
+        currentCSVRow
       )
     )
   }
