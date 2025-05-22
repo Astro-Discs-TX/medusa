@@ -9,7 +9,7 @@ const analyticsOptions: FormattingOptionsType = {
     
 :::note
 
-The Analytics Module is available starting [Medusa v2.9.0](https://github.com/medusajs/medusa/releases/tag/v2.9.0).
+The Analytics Module is available starting [Medusa v2.8.3](https://github.com/medusajs/medusa/releases/tag/v2.8.3).
 
 :::`,
     frontmatterData: {
