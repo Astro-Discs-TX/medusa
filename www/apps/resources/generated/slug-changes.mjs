@@ -780,6 +780,11 @@ export const slugChanges = [
     "filePath": "/www/apps/resources/references/core_flows/Cart/Workflows_Cart/functions/core_flows.Cart.Workflows_Cart.refreshPaymentCollectionForCartWorkflow/page.mdx"
   },
   {
+    "origSlug": "/references/core_flows/Cart/Workflows_Cart/functions/core_flows.Cart.Workflows_Cart.refundPaymentAndRecreatePaymentSessionWorkflow",
+    "newSlug": "/references/medusa-workflows/refundPaymentAndRecreatePaymentSessionWorkflow",
+    "filePath": "/www/apps/resources/references/core_flows/Cart/Workflows_Cart/functions/core_flows.Cart.Workflows_Cart.refundPaymentAndRecreatePaymentSessionWorkflow/page.mdx"
+  },
+  {
     "origSlug": "/references/core_flows/Cart/Workflows_Cart/functions/core_flows.Cart.Workflows_Cart.transferCartCustomerWorkflow",
     "newSlug": "/references/medusa-workflows/transferCartCustomerWorkflow",
     "filePath": "/www/apps/resources/references/core_flows/Cart/Workflows_Cart/functions/core_flows.Cart.Workflows_Cart.transferCartCustomerWorkflow/page.mdx"
@@ -2090,6 +2095,11 @@ export const slugChanges = [
     "filePath": "/www/apps/resources/references/core_flows/Order/Workflows_Order/functions/core_flows.Order.Workflows_Order.exchangeRequestItemReturnValidationStep/page.mdx"
   },
   {
+    "origSlug": "/references/core_flows/Order/Workflows_Order/functions/core_flows.Order.Workflows_Order.fetchShippingOptionForOrderWorkflow",
+    "newSlug": "/references/medusa-workflows/fetchShippingOptionForOrderWorkflow",
+    "filePath": "/www/apps/resources/references/core_flows/Order/Workflows_Order/functions/core_flows.Order.Workflows_Order.fetchShippingOptionForOrderWorkflow/page.mdx"
+  },
+  {
     "origSlug": "/references/core_flows/Order/Workflows_Order/functions/core_flows.Order.Workflows_Order.getOrderDetailWorkflow",
     "newSlug": "/references/medusa-workflows/getOrderDetailWorkflow",
     "filePath": "/www/apps/resources/references/core_flows/Order/Workflows_Order/functions/core_flows.Order.Workflows_Order.getOrderDetailWorkflow/page.mdx"
@@ -2108,6 +2118,11 @@ export const slugChanges = [
     "origSlug": "/references/core_flows/Order/Workflows_Order/functions/core_flows.Order.Workflows_Order.markPaymentCollectionAsPaid",
     "newSlug": "/references/medusa-workflows/markPaymentCollectionAsPaid",
     "filePath": "/www/apps/resources/references/core_flows/Order/Workflows_Order/functions/core_flows.Order.Workflows_Order.markPaymentCollectionAsPaid/page.mdx"
+  },
+  {
+    "origSlug": "/references/core_flows/Order/Workflows_Order/functions/core_flows.Order.Workflows_Order.maybeRefreshShippingMethodsWorkflow",
+    "newSlug": "/references/medusa-workflows/maybeRefreshShippingMethodsWorkflow",
+    "filePath": "/www/apps/resources/references/core_flows/Order/Workflows_Order/functions/core_flows.Order.Workflows_Order.maybeRefreshShippingMethodsWorkflow/page.mdx"
   },
   {
     "origSlug": "/references/core_flows/Order/Workflows_Order/functions/core_flows.Order.Workflows_Order.orderClaimAddNewItemValidationStep",
@@ -2825,9 +2840,9 @@ export const slugChanges = [
     "filePath": "/www/apps/resources/references/core_flows/Product/Steps_Product/functions/core_flows.Product.Steps_Product.getVariantAvailabilityStep/page.mdx"
   },
   {
-    "origSlug": "/references/core_flows/Product/Steps_Product/functions/core_flows.Product.Steps_Product.groupProductsForBatchStep",
-    "newSlug": "/references/medusa-workflows/steps/groupProductsForBatchStep",
-    "filePath": "/www/apps/resources/references/core_flows/Product/Steps_Product/functions/core_flows.Product.Steps_Product.groupProductsForBatchStep/page.mdx"
+    "origSlug": "/references/core_flows/Product/Steps_Product/functions/core_flows.Product.Steps_Product.normalizeCsvStep",
+    "newSlug": "/references/medusa-workflows/steps/normalizeCsvStep",
+    "filePath": "/www/apps/resources/references/core_flows/Product/Steps_Product/functions/core_flows.Product.Steps_Product.normalizeCsvStep/page.mdx"
   },
   {
     "origSlug": "/references/core_flows/Product/Steps_Product/functions/core_flows.Product.Steps_Product.parseProductCsvStep",
@@ -4720,6 +4735,11 @@ export const slugChanges = [
     "filePath": "/www/apps/resources/references/js_sdk/admin/Admin/properties/js_sdk.admin.Admin.store/page.mdx"
   },
   {
+    "origSlug": "/references/js_sdk/admin/Admin/properties/js_sdk.admin.Admin.taxProvider",
+    "newSlug": "/references/js-sdk/admin/taxProvider",
+    "filePath": "/www/apps/resources/references/js_sdk/admin/Admin/properties/js_sdk.admin.Admin.taxProvider/page.mdx"
+  },
+  {
     "origSlug": "/references/js_sdk/admin/Admin/properties/js_sdk.admin.Admin.taxRate",
     "newSlug": "/references/js-sdk/admin/taxRate",
     "filePath": "/www/apps/resources/references/js_sdk/admin/Admin/properties/js_sdk.admin.Admin.taxRate/page.mdx"
@@ -4848,11 +4868,6 @@ export const slugChanges = [
     "origSlug": "/references/locking/interfaces/locking.ILockingProvider",
     "newSlug": "/references/locking-module-provider",
     "filePath": "/www/apps/resources/references/locking/interfaces/locking.ILockingProvider/page.mdx"
-  },
-  {
-    "origSlug": "/references/medusa_config/interfaces/medusa_config.ConfigModule",
-    "newSlug": "/references/medusa-config",
-    "filePath": "/www/apps/resources/references/medusa_config/interfaces/medusa_config.ConfigModule/page.mdx"
   },
   {
     "origSlug": "/references/module_events/module_events.Auth",
@@ -7040,11 +7055,6 @@ export const slugChanges = [
     "filePath": "/www/apps/resources/references/sales_channel_models/variables/sales_channel_models.SalesChannel/page.mdx"
   },
   {
-    "origSlug": "/references/search/classes/search.AbstractSearchService",
-    "newSlug": "/references/search-service",
-    "filePath": "/www/apps/resources/references/search/classes/search.AbstractSearchService/page.mdx"
-  },
-  {
     "origSlug": "/references/stock_location_next/IStockLocationService/methods/stock_location_next.IStockLocationService.createStockLocations",
     "newSlug": "/references/stock-location-next/createStockLocations",
     "filePath": "/www/apps/resources/references/stock_location_next/IStockLocationService/methods/stock_location_next.IStockLocationService.createStockLocations/page.mdx"
@@ -7218,6 +7228,11 @@ export const slugChanges = [
     "origSlug": "/references/tax/ITaxModuleService/methods/tax.ITaxModuleService.listAndCountTaxRates",
     "newSlug": "/references/tax/listAndCountTaxRates",
     "filePath": "/www/apps/resources/references/tax/ITaxModuleService/methods/tax.ITaxModuleService.listAndCountTaxRates/page.mdx"
+  },
+  {
+    "origSlug": "/references/tax/ITaxModuleService/methods/tax.ITaxModuleService.listTaxProviders",
+    "newSlug": "/references/tax/listTaxProviders",
+    "filePath": "/www/apps/resources/references/tax/ITaxModuleService/methods/tax.ITaxModuleService.listTaxProviders/page.mdx"
   },
   {
     "origSlug": "/references/tax/ITaxModuleService/methods/tax.ITaxModuleService.listTaxRateRules",
