@@ -13990,37 +13990,6 @@ components:
               type: number
               title: toUpdate
               description: The number of products that will be updated by this import.
-    AdminImportProducts:
-      type: object
-      description: SUMMARY
-      x-schemaName: AdminImportProducts
-      required:
-        - file_key
-        - originalname
-        - extension
-        - size
-        - mime_type
-      properties:
-        file_key:
-          type: string
-          title: file_key
-          description: The product's file key.
-        originalname:
-          type: string
-          title: originalname
-          description: The product's originalname.
-        extension:
-          type: string
-          title: extension
-          description: The product's extension.
-        size:
-          type: number
-          title: size
-          description: The product's size.
-        mime_type:
-          type: string
-          title: mime_type
-          description: The product's mime type.
     AdminInventoryItem:
       type: object
       description: The inventory item's details.
@@ -21389,69 +21358,6 @@ components:
           type: number
           title: required_quantity
           description: The number of units a single quantity is equivalent to. For example, if a customer orders one quantity of the variant, Medusa checks the availability of the quantity multiplied by the value set for `required_quantity`. When the customer orders the quantity, Medusa reserves the ordered quantity multiplied by the value set for `required_quantity`.
-    AdminUploadPreSignedUrl:
-      type: object
-      description: SUMMARY
-      x-schemaName: AdminUploadPreSignedUrl
-      required:
-        - originalname
-        - size
-        - mime_type
-      properties:
-        originalname:
-          type: string
-          title: originalname
-          description: The upload's originalname.
-        size:
-          type: number
-          title: size
-          description: The upload's size.
-        mime_type:
-          type: string
-          title: mime_type
-          description: The upload's mime type.
-        access:
-          type: string
-          description: The upload's access.
-          enum:
-            - public
-            - private
-    AdminUploadPreSignedUrlResponse:
-      type: object
-      description: SUMMARY
-      x-schemaName: AdminUploadPreSignedUrlResponse
-      required:
-        - url
-        - filename
-        - originalname
-        - mime_type
-        - extension
-        - size
-      properties:
-        url:
-          type: string
-          title: url
-          description: The upload's url.
-        filename:
-          type: string
-          title: filename
-          description: The upload's filename.
-        originalname:
-          type: string
-          title: originalname
-          description: The upload's originalname.
-        mime_type:
-          type: string
-          title: mime_type
-          description: The upload's mime type.
-        extension:
-          type: string
-          title: extension
-          description: The upload's extension.
-        size:
-          type: number
-          title: size
-          description: The upload's size.
     AdminUpsertStockLocationAddress:
       type: object
       description: The details of the stock location address to create.
@@ -21672,14 +21578,14 @@ components:
           description: The date the workflow execution was deleted.
     AdminWorkflowExecutionExecution:
       type: object
-      description: The workflow execution's execution.
+      description: The workflow execution's steps details.
       x-schemaName: AdminWorkflowExecutionExecution
       required:
         - steps
       properties:
         steps:
           type: object
-          description: The execution's steps.
+          description: The execution's steps. Each object key is a step ID, and the value is the object whose properties are shown below.
           required:
             - id
             - invoke
@@ -21696,7 +21602,7 @@ components:
                 description: The step's ID.
               invoke:
                 type: object
-                description: The step's invoke.
+                description: The state of the step's invokation function.
                 x-schemaName: WorkflowExecutionFn
                 required:
                   - state
@@ -21704,7 +21610,7 @@ components:
                 properties:
                   state:
                     type: string
-                    description: The invoke's state.
+                    description: The invokation step's state.
                     enum:
                       - failed
                       - not_started
@@ -21718,7 +21624,7 @@ components:
                       - timeout
                   status:
                     type: string
-                    description: The invoke's status.
+                    description: The invokation step's state.
                     enum:
                       - idle
                       - ok
@@ -21727,60 +21633,61 @@ components:
                       - permanent_failure
               definition:
                 type: object
-                description: The step's definition.
+                description: The step's definition details.
                 x-schemaName: WorkflowExecutionDefinition
                 properties:
                   async:
                     type: boolean
                     title: async
-                    description: The definition's async.
+                    description: Whether the step is async.
                   compensateAsync:
                     type: boolean
                     title: compensateAsync
-                    description: The definition's compensateasync.
+                    description: Whether the compensation function of the step is async.
                   noCompensation:
                     type: boolean
                     title: noCompensation
-                    description: The definition's nocompensation.
+                    description: Whether the step doesn't have a compensation function.
                   continueOnPermanentFailure:
                     type: boolean
                     title: continueOnPermanentFailure
-                    description: The definition's continueonpermanentfailure.
+                    description: Whether the workflow should continue executing even if its status is changed to failed.
                   skipOnPermanentFailure:
                     oneOf:
                       - type: string
                         title: skipOnPermanentFailure
-                        description: The definition's skiponpermanentfailure.
+                        description: The ID of the step to skip to in case of a permanent failure.
                       - type: boolean
                         title: skipOnPermanentFailure
-                        description: The definition's skiponpermanentfailure.
+                        description: Whether the workflow should skip subsequent steps in case of a permanent failure.
                   maxRetries:
                     type: number
                     title: maxRetries
-                    description: The definition's maxretries.
+                    description: The maximum number of times to retry the step.
                   noWait:
                     type: boolean
                     title: noWait
-                    description: The definition's nowait.
+                    description: Whether the workflow shouldn't wait for the step to finish before moving to the next step.
+                    default: false
                   retryInterval:
                     type: number
                     title: retryInterval
-                    description: The definition's retryinterval.
+                    description: The interval in seconds between retry attempts when the step fails.
                   retryIntervalAwaiting:
                     type: number
                     title: retryIntervalAwaiting
-                    description: The definition's retryintervalawaiting.
+                    description: The interval in seconds to retry a step even if its status is `waiting_response`.
                   saveResponse:
                     type: boolean
                     title: saveResponse
-                    description: The definition's saveresponse.
+                    description: Whether the step's response is stored.
                   timeout:
                     type: number
                     title: timeout
-                    description: The definition's timeout.
+                    description: The maximum time in seconds to wait for this step to complete. If the step exceeds this time, the step's state is changed to `timeout`, but the step continues executing.
               compensate:
                 type: object
-                description: The step's compensate.
+                description: The state of the step's compensation function.
                 x-schemaName: WorkflowExecutionFn
                 required:
                   - state
@@ -21788,7 +21695,7 @@ components:
                 properties:
                   state:
                     type: string
-                    description: The compensate's state.
+                    description: The compensation function's state.
                     enum:
                       - failed
                       - not_started
@@ -21802,7 +21709,7 @@ components:
                       - timeout
                   status:
                     type: string
-                    description: The compensate's status.
+                    description: The compensation function's status.
                     enum:
                       - idle
                       - ok
@@ -21812,11 +21719,11 @@ components:
               depth:
                 type: number
                 title: depth
-                description: The step's depth.
+                description: The step's depth in the workflow's execution.
               startedAt:
                 type: number
                 title: startedAt
-                description: The step's startedat.
+                description: The timestamp the step started executing.
     AdminWorkflowExecutionResponse:
       type: object
       description: The workflow execution's details.
