@@ -277,6 +277,159 @@ moduleIntegrationTestRunner<IFulfillmentModuleService>({
               }
             )
           })
+
+          it("should include email in order object when creating fulfillment", async () => {
+            const service = appContainer.resolve(
+              "fulfillmentModuleService"
+            ) as IFulfillmentModuleService
+
+            // Create a mock order with ID but no email
+            const orderWithoutEmail = {
+              id: "order_test_email",
+              status: "pending",
+              region_id: "test-region",
+              currency_code: "usd",
+            }
+
+            // Mock the baseRepository_.retrieve to return an order with email
+            const baseRepoSpy = jest.spyOn(
+              (service as any).baseRepository_,
+              "retrieve"
+            )
+            baseRepoSpy.mockImplementationOnce(() =>
+              Promise.resolve({
+                id: "order_test_email",
+                email: "customer@example.com"
+              })
+            )
+
+            // Mock the fulfillmentProviderService_.createFulfillment to capture the order object
+            const createFulfillmentSpy = jest.spyOn(
+              (service as any).fulfillmentProviderService_,
+              "createFulfillment"
+            )
+            createFulfillmentSpy.mockImplementationOnce(
+              (providerId, data, items, order) => {
+                // Check that the order has the email field
+                expect(order).toHaveProperty("email", "customer@example.com")
+                return Promise.resolve({ data: {}, labels: [] })
+              }
+            )
+
+            // Create fulfillment with the order that has no email
+            await service.createFulfillment(
+              generateCreateFulfillmentData({
+                location_id: "test-location",
+                provider_id: "test-provider",
+                order: orderWithoutEmail,
+                items: [
+                  {
+                    title: "Test Item",
+                    quantity: 1,
+                    sku: "test-sku",
+                    barcode: "test-barcode",
+                  },
+                ],
+                delivery_address: {
+                  first_name: "John",
+                  last_name: "Doe",
+                  address_1: "Test street",
+                  city: "Test city",
+                  country_code: "us",
+                  postal_code: "12345",
+                },
+              })
+            )
+
+            // Verify that the repository was called to fetch the order
+            expect(baseRepoSpy).toHaveBeenCalledWith(
+              "order",
+              "order_test_email",
+              expect.objectContaining({
+                select: expect.arrayContaining(["id", "email"])
+              })
+            )
+
+            // Verify that the createFulfillment method was called with the order containing the email
+            expect(createFulfillmentSpy).toHaveBeenCalled()
+          })
+
+          it("should include email in order object when creating return fulfillment", async () => {
+            const service = appContainer.resolve(
+              "fulfillmentModuleService"
+            ) as IFulfillmentModuleService
+
+            // Create a mock order with ID but no email
+            const orderWithoutEmail = {
+              id: "order_test_return_email",
+              status: "pending",
+              region_id: "test-region",
+              currency_code: "usd",
+            }
+
+            // Mock the baseRepository_.retrieve to return an order with email
+            const baseRepoSpy = jest.spyOn(
+              (service as any).baseRepository_,
+              "retrieve"
+            )
+            baseRepoSpy.mockImplementationOnce(() =>
+              Promise.resolve({
+                id: "order_test_return_email",
+                email: "return_customer@example.com"
+              })
+            )
+
+            // Mock the fulfillmentProviderService_.createReturn to capture the order object
+            const createReturnSpy = jest.spyOn(
+              (service as any).fulfillmentProviderService_,
+              "createReturn"
+            )
+            createReturnSpy.mockImplementationOnce(
+              (providerId, fulfillmentData) => {
+                // Check that the fulfillmentData has the order with email field
+                expect(fulfillmentData.order).toHaveProperty("email", "return_customer@example.com")
+                return Promise.resolve({ data: {}, labels: [] })
+              }
+            )
+
+            // Create return fulfillment with the order that has no email
+            await service.createReturnFulfillment(
+              generateCreateFulfillmentData({
+                location_id: "test-location",
+                provider_id: "test-provider",
+                shipping_option_id: "test-shipping-option",
+                order: orderWithoutEmail,
+                items: [
+                  {
+                    title: "Return Item",
+                    quantity: 1,
+                    sku: "return-sku",
+                    barcode: "return-barcode",
+                  },
+                ],
+                delivery_address: {
+                  first_name: "Jane",
+                  last_name: "Doe",
+                  address_1: "Return street",
+                  city: "Return city",
+                  country_code: "us",
+                  postal_code: "54321",
+                },
+              })
+            )
+
+            // Verify that the repository was called to fetch the order
+            expect(baseRepoSpy).toHaveBeenCalledWith(
+              "order",
+              "order_test_return_email",
+              expect.objectContaining({
+                select: expect.arrayContaining(["id", "email"])
+              })
+            )
+
+            // Verify that the createReturn method was called with the order containing the email
+            expect(createReturnSpy).toHaveBeenCalled()
+          })
         })
 
         describe("on update", () => {

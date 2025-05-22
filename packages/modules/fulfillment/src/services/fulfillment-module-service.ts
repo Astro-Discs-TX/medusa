@@ -642,8 +642,9 @@ export default class FulfillmentModuleService
     data: FulfillmentTypes.CreateFulfillmentDTO,
     @MedusaContext() sharedContext: Context = {}
   ): Promise<FulfillmentTypes.FulfillmentDTO> {
-    const { order, ...fulfillmentDataToCreate } = data
+    const { order: originalOrder, ...fulfillmentDataToCreate } = data
 
+    // Create the fulfillment
     const fulfillment = await this.fulfillmentService_.create(
       fulfillmentDataToCreate,
       sharedContext
@@ -657,6 +658,28 @@ export default class FulfillmentModuleService
     } = fulfillment
 
     try {
+      // If order is provided and has an ID but no email, try to fetch the order to get the email
+      let order = originalOrder
+      if (order && order.id && !order.email) {
+        try {
+          // Use remote query to get order details including email
+          const orderDetails = await this.baseRepository_.retrieve(
+            "order",
+            order.id,
+            { select: ["id", "email"] }
+          )
+          
+          if (orderDetails?.email) {
+            order = {
+              ...order,
+              email: orderDetails.email
+            }
+          }
+        } catch (err) {
+          // If we can't get the order details, continue with the original order
+        }
+      }
+
       const providerResult =
         await this.fulfillmentProviderService_.createFulfillment(
           provider_id!, // TODO: should we add a runtime check on provider_id being provided?
@@ -716,7 +739,7 @@ export default class FulfillmentModuleService
     data: FulfillmentTypes.CreateFulfillmentDTO,
     @MedusaContext() sharedContext: Context = {}
   ): Promise<FulfillmentTypes.FulfillmentDTO> {
-    const { order, ...fulfillmentDataToCreate } = data
+    const { order: originalOrder, ...fulfillmentDataToCreate } = data
 
     const fulfillment = await this.fulfillmentService_.create(
       fulfillmentDataToCreate,
@@ -732,13 +755,39 @@ export default class FulfillmentModuleService
     )
 
     try {
+      // If order is provided and has an ID but no email, try to fetch the order to get the email
+      let order = originalOrder
+      if (order && order.id && !order.email) {
+        try {
+          // Use remote query to get order details including email
+          const orderDetails = await this.baseRepository_.retrieve(
+            "order",
+            order.id,
+            { select: ["id", "email"] }
+          )
+          
+          if (orderDetails?.email) {
+            order = {
+              ...order,
+              email: orderDetails.email
+            }
+          }
+        } catch (err) {
+          // If we can't get the order details, continue with the original order
+        }
+      }
+
+      // Include order in the fulfillment data if available
+      const fulfillmentData = {
+        ...fulfillment,
+        shipping_option: shippingOption,
+        order: order
+      }
+
       const providerResult =
         await this.fulfillmentProviderService_.createReturn(
           fulfillment.provider_id!, // TODO: should we add a runtime check on provider_id being provided?,
-          {
-            ...fulfillment,
-            shipping_option: shippingOption,
-          } as Record<any, any>
+          fulfillmentData as Record<any, any>
         )
       await this.fulfillmentService_.update(
         {
