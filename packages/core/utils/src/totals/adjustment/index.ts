@@ -27,11 +27,19 @@ export function calculateAdjustmentTotal({
 
     if (isDefined(taxRate)) {
       const adjustmentSubtotal = includesTax
-        ? MathBN.div(adjustmentAmount, MathBN.add(1, taxRate))
-        : adjustmentAmount
+        ? adjustmentAmount
+        : MathBN.mult(
+            adjustmentAmount,
+            MathBN.div(100, MathBN.add(100, MathBN.mult(taxRate, 100)))
+          )
 
-      const adjustmentTaxTotal = MathBN.mult(adjustmentAmount, taxRate)
-      const adjustmentTotal = adjustmentAmount;
+      const adjustmentTaxTotal = includesTax
+        ? MathBN.mult(adjustmentAmount, taxRate)
+        : MathBN.mult(adjustmentAmount, taxRate)
+
+      const adjustmentTotal = includesTax
+        ? MathBN.add(adjustmentSubtotal, adjustmentTaxTotal)
+        : MathBN.add(adjustmentAmount, adjustmentTaxTotal)
 
       adjustmentsTotal = MathBN.add(adjustmentsTotal, adjustmentTotal)
       adjustmentsSubtotal = MathBN.add(adjustmentsSubtotal, adjustmentSubtotal)

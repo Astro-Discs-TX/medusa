@@ -108,7 +108,7 @@ function applyPromotionToItems(
     lineItemsTotal = applicableItems.reduce(
       (acc, item) =>
         MathBN.sub(
-          MathBN.add(acc, MathBN.mult(item.unit_price, item.quantity)),
+          MathBN.add(acc, MathBN.mult(item.subtotal, item.quantity)),
           appliedPromotionsMap.get(item.id) ?? 0
         ),
       MathBN.convert(0)
@@ -120,7 +120,7 @@ function applyPromotionToItems(
   }
 
   for (const item of applicableItems) {
-    if (MathBN.lte(item.unit_price, 0)) {
+    if (MathBN.lte(item.subtotal, 0)) {
       continue
     }
 
@@ -130,6 +130,7 @@ function applyPromotionToItems(
 
     const appliedPromoValue = appliedPromotionsMap.get(item.id) ?? 0
 
+    //We need to add here the flag taxInclusive for the amount of the promotion OR IS IT IN ITEM?
     const amount = calculateAdjustmentAmountFromPromotion(
       item,
       {
@@ -196,12 +197,12 @@ function getValidItemsForPromotion(
 
   if (isTargetShippingMethod && !hasTargetRules) {
     return items.filter(
-      (item) => item && "unit_price" in item && MathBN.gt(item.unit_price, 0)
+      (item) => item && "subtotal" in item && MathBN.gt(item.subtotal, 0)
     )
   }
 
   return items.filter((item) => {
-    if (!item || !("unit_price" in item) || MathBN.lte(item.unit_price, 0)) {
+    if (!item || !("subtotal" in item) || MathBN.lte(item.subtotal, 0)) {
       return false
     }
 

@@ -107,6 +107,7 @@ export function decorateCartTotals(
   const cartItems = items.map((item, index) => {
     const itemTotals = Object.assign(item, itemsTotals[item.id ?? index] ?? {})
     const itemSubtotal = itemTotals.subtotal
+    const itemOriginalSubtotal = itemTotals.original_subtotal
 
     const itemTotal = MathBN.convert(itemTotals.total)
     const itemOriginalTotal = MathBN.convert(itemTotals.original_total)
@@ -127,7 +128,10 @@ export function decorateCartTotals(
 
     itemsTotal = MathBN.add(itemsTotal, itemTotal)
     itemsOriginalTotal = MathBN.add(itemsOriginalTotal, itemOriginalTotal)
-    itemsOriginalSubtotal = MathBN.add(itemsOriginalSubtotal, itemSubtotal)
+    itemsOriginalSubtotal = MathBN.add(
+      itemsOriginalSubtotal,
+      itemOriginalSubtotal
+    )
 
     itemsSubtotal = MathBN.add(itemsSubtotal, itemSubtotal)
 
@@ -220,7 +224,7 @@ export function decorateCartTotals(
 
   // TODO: subtract (cart.gift_card_total + cart.gift_card_tax_total)
   const tempTotal = MathBN.add(subtotal, taxTotal)
-  const total = MathBN.sub(tempTotal, discountSubtotal, creditLinesTotal)
+  const total = MathBN.sub(tempTotal, creditLinesTotal)
 
   const cart = cartLike as any
 

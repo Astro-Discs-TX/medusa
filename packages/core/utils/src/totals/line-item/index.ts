@@ -33,6 +33,7 @@ export interface GetItemTotalOutput {
   unit_price: BigNumber
 
   subtotal: BigNumber
+  original_subtotal: BigNumber
 
   total: BigNumber
   original_total: BigNumber
@@ -124,7 +125,7 @@ function getLineItemTotals(
     Original Price = Total Price / (1 + Tax Rate)
   */
   const subtotal = isTaxInclusive
-    ? MathBN.div(totalItemPrice, MathBN.add(1, sumTaxRate))
+    ? MathBN.mult(totalItemPrice, MathBN.div(100, MathBN.add(100, sumTax)))
     : totalItemPrice
 
   const {
@@ -139,23 +140,31 @@ function getLineItemTotals(
 
   const taxTotal = calculateTaxTotal({
     taxLines: item.tax_lines || [],
-    taxableAmount: MathBN.sub(subtotal, discountsSubtotal),
+    taxableAmount: isTaxInclusive
+      ? MathBN.sub(totalItemPrice, discountsTotal)
+      : MathBN.sub(subtotal, discountsSubtotal),
     setTotalField: "total",
+    includesTax: isTaxInclusive,
   })
 
   const originalTaxTotal = calculateTaxTotal({
     taxLines: item.tax_lines || [],
-    taxableAmount: subtotal,
+    taxableAmount: isTaxInclusive ? totalItemPrice : subtotal,
     setTotalField: "subtotal",
+    includesTax: isTaxInclusive,
   })
 
   const totals: GetItemTotalOutput = {
     quantity: item.quantity,
     unit_price: item.unit_price,
 
-    subtotal: new BigNumber(subtotal),
+    subtotal: new BigNumber(MathBN.sub(subtotal, discountsSubtotal)),
+    original_subtotal: new BigNumber(subtotal),
+
     total: new BigNumber(
-      MathBN.sum(MathBN.sub(subtotal, discountsSubtotal), taxTotal)
+      isTaxInclusive
+        ? MathBN.sub(totalItemPrice, discountsTotal)
+        : MathBN.add(MathBN.sub(subtotal, discountsSubtotal), taxTotal)
     ),
 
     original_total: new BigNumber(
