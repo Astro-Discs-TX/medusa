@@ -116,7 +116,7 @@ async function createChunks(
     currentCSVRow++
     const normalizedRow = CSVNormalizer.preProcess(row, currentCSVRow)
     const rowValueValue =
-      normalizedRow["Product Id"] || normalizedRow["Product Handle"]
+      normalizedRow["product id"] || normalizedRow["product handle"]
 
     /**
      * Reached rows threshold
