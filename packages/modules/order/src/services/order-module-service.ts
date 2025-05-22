@@ -879,15 +879,40 @@ export default class OrderModuleService
 
     const orderChangeIds = orderChanges.map((orderChange) => orderChange.id)
 
+    const orderItems = await this.orderItemService_.list(
+      { order_id: ids },
+      { select: ["id", "item_id"] },
+      sharedContext
+    )
+
+    const lineItemIds = orderItems.map((orderItem) => orderItem.item_id)
+
+    const orderShipping = await this.orderShippingService_.list(
+      { order_id: ids },
+      { select: ["shipping_method_id"] },
+      sharedContext
+    )
+
+    const orderShippingMethodIds = orderShipping.map(
+      (orderShipping) => orderShipping.shipping_method_id
+    )
+
     await Promise.all([
       this.orderAddressService_.delete(orderAddressIds, sharedContext),
+      // Delete order changes & actions
       this.orderChangeService_.delete(orderChangeIds, sharedContext),
     ])
 
-    // Delete order changes & actions
-    await this.orderChangeService_.delete(orderChangeIds, sharedContext)
-
+    // Delete order, order items, summary, shipping methods and transactions
     await super.deleteOrders(ids, sharedContext)
+
+    await Promise.all([
+      this.orderLineItemService_.delete(lineItemIds, sharedContext),
+      this.orderShippingMethodService_.delete(
+        orderShippingMethodIds,
+        sharedContext
+      ),
+    ])
   }
 
   // @ts-expect-error

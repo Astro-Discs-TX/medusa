@@ -513,7 +513,7 @@ medusaIntegrationTestRunner({
           {
             title: "Custom Item 1",
             quantity: 1,
-            unit_price: 50,
+            unit_price: 20,
             adjustments: [
               {
                 code: "VIP_25 ETH",
@@ -658,12 +658,53 @@ medusaIntegrationTestRunner({
 
       await orderModule.deleteOrders([toDeleteOrder.id])
 
-      const orders = (
-        await api.get("/admin/orders?fields=*shipping_address", adminHeaders)
-      ).data.orders
+      const orderItems = (await dbConnection.raw("select * from order_item;"))
+        .rows
 
-      expect(orders.length).toBe(1)
-      expect(orders[0].id).toBe(persistedOrder.id)
+      expect(orderItems.length).toBe(1)
+      expect(orderItems[0].id).toBe(persistedOrder.items[0].detail.id)
+
+      /**
+       * ORDER ITEMS AND LINE ITEMS
+       */
+
+      const orderLineItems = (
+        await dbConnection.raw("select * from order_line_item;")
+      ).rows
+
+      expect(orderLineItems.length).toBe(1)
+      expect(orderLineItems[0].id).toBe(persistedOrder.items[0].id)
+
+      const orderShipping = (
+        await dbConnection.raw("select * from order_shipping;")
+      ).rows
+
+      expect(orderShipping.length).toBe(1)
+      expect(orderShipping[0]).toEqual(
+        expect.objectContaining({
+          order_id: persistedOrder.id,
+          shipping_method_id: persistedOrder.shipping_methods[0].id,
+        })
+      )
+
+      /**
+       * ORDER SHIPPING AND SHIPPING METHODS
+       */
+
+      const orderShippingMethod = (
+        await dbConnection.raw("select * from order_shipping_method;")
+      ).rows
+
+      expect(orderShippingMethod.length).toBe(1)
+      expect(orderShippingMethod[0]).toEqual(
+        expect.objectContaining({
+          id: persistedOrder.shipping_methods[0].id,
+        })
+      )
+
+      /**
+       * ORDER BILLING AND SHIPPING ADDRESSES
+       */
 
       const addresses = (await dbConnection.raw("select * from order_address;"))
         .rows
@@ -676,12 +717,36 @@ medusaIntegrationTestRunner({
         ])
       )
 
+      /**
+       * ORDER SUMMARY
+       */
+
+      const orderSummary = (
+        await dbConnection.raw("select * from order_summary;")
+      ).rows
+
+      expect(orderSummary.length).toBe(1)
+      expect(orderSummary[0].totals.original_order_total).toBe(
+        persistedOrder.summary.original_order_total
+      )
+
+      /**
+       * ORDER CHANGES
+       */
+
       const orderChangeRows = (
         await dbConnection.raw("select * from order_change;")
       ).rows
 
       expect(orderChangeRows.length).toBe(1)
       expect(orderChangeRows[0].id).toBe(persistedOrderEdit.id)
+
+      const orders = (
+        await api.get("/admin/orders?fields=*shipping_address", adminHeaders)
+      ).data.orders
+
+      expect(orders.length).toBe(1)
+      expect(orders[0].id).toBe(persistedOrder.id)
     })
   },
 })
