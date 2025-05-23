@@ -45,7 +45,8 @@ export const useComboboxData = <
 
   const queryInitialDataBy = defaultValueKey || "id"
   const { data: initialData } = useQuery({
-    queryKey: [...queryKey, defaultValue],
+    // if `query` is not set InifiniteQuery hook will store it's reponse in the same key as this query without default value so this needs to be prefixed with _initial
+    queryKey: [...queryKey, "_initial", defaultValue],
     queryFn: async () => {
       return queryFn({
         [queryInitialDataBy]: defaultValue,
@@ -57,7 +58,7 @@ export const useComboboxData = <
 
   // always load selected value in case current data dosn't contain the value
   const { data: selectedData } = useQuery({
-    queryKey: [...queryKey, selectedValue],
+    queryKey: [...queryKey, "_selected", selectedValue],
     queryFn: async () => {
       return queryFn({
         id: selectedValue,
