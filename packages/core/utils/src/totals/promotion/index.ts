@@ -36,7 +36,7 @@ function getPromotionValueForFixed(
       return promotionValueForItem
     }
 
-    return MathBN.convert(itemTotal).precision(4)
+    return MathBN.convert(itemTotal)
   }
 
   return promotion.value
