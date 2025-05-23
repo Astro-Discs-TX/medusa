@@ -181,11 +181,6 @@ export interface ComputeActionItemLine extends Record<string, unknown> {
   subtotal: BigNumberInput
 
   /**
-   * The unit price of the line item.
-   */
-  unit_price: BigNumberInput
-
-  /**
    * The adjustments applied before on the line item.
    */
   adjustments?: ComputeActionAdjustmentLine[]
@@ -209,11 +204,6 @@ export interface ComputeActionShippingLine extends Record<string, unknown> {
    * The subtotal of the shipping method.
    */
   subtotal: BigNumberInput
-
-  /**
-   * The unit price of the line item.
-   */
-  unit_price: BigNumberInput
 
   /**
    * The adjustments applied before on the shipping method.

@@ -130,7 +130,6 @@ function applyPromotionToItems(
 
     const appliedPromoValue = appliedPromotionsMap.get(item.id) ?? 0
 
-    //We need to add here the flag taxInclusive for the amount of the promotion OR IS IT IN ITEM?
     const amount = calculateAdjustmentAmountFromPromotion(
       item,
       {
