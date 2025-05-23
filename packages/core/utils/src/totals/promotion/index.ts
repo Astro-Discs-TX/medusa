@@ -36,15 +36,7 @@ function getPromotionValueForFixed(
       return promotionValueForItem
     }
 
-    const percentage = MathBN.div(
-      MathBN.mult(itemTotal, 100),
-      promotionValueForItem
-    )
-
-    return MathBN.mult(
-      promotionValueForItem,
-      MathBN.div(percentage, 100)
-    ).precision(4)
+    return MathBN.convert(itemTotal).precision(4)
   }
 
   return promotion.value
