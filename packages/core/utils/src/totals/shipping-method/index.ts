@@ -60,7 +60,7 @@ export function getShippingMethodTotals(
   const sumTax = MathBN.sum(
     ...(shippingMethod.tax_lines?.map((taxLine) => taxLine.rate) ?? [])
   )
-  const sumTaxRate = MathBN.div(sumTax, 100)
+  const sumTaxRate = sumTax ? MathBN.div(sumTax, 100) : MathBN.convert(0)
 
   const subtotal = isTaxInclusive
     ? MathBN.div(shippingMethodAmount, MathBN.add(1, sumTaxRate))

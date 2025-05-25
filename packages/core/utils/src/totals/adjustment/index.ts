@@ -9,7 +9,7 @@ export function calculateAdjustmentTotal({
 }: {
   adjustments: Pick<AdjustmentLineDTO, "amount">[]
   includesTax?: boolean
-  taxRate?: BigNumberInput
+  taxRate: BigNumberInput
 }) {
   // the sum of all adjustment amounts excluding tax
   let adjustmentsSubtotal = MathBN.convert(0)
@@ -25,29 +25,24 @@ export function calculateAdjustmentTotal({
 
     const adjustmentAmount = MathBN.convert(adj.amount)
 
-    if (isDefined(taxRate)) {
-      const adjustmentSubtotal = includesTax
-        ? adjustmentAmount
-        : MathBN.mult(
-            adjustmentAmount,
-            MathBN.div(100, MathBN.add(100, MathBN.mult(taxRate, 100)))
-          )
+    const adjustmentSubtotal = includesTax
+      ? adjustmentAmount
+      : MathBN.mult(
+          adjustmentAmount,
+          MathBN.div(100, MathBN.add(100, MathBN.mult(taxRate, 100)))
+        )
 
-      const adjustmentTaxTotal = includesTax
-        ? MathBN.mult(adjustmentAmount, taxRate)
-        : MathBN.mult(adjustmentAmount, taxRate)
+    const adjustmentTaxTotal = includesTax
+      ? MathBN.mult(adjustmentAmount, taxRate)
+      : MathBN.mult(adjustmentAmount, taxRate)
 
-      const adjustmentTotal = includesTax
-        ? MathBN.add(adjustmentSubtotal, adjustmentTaxTotal)
-        : MathBN.add(adjustmentAmount, adjustmentTaxTotal)
+    const adjustmentTotal = includesTax
+      ? MathBN.add(adjustmentSubtotal, adjustmentTaxTotal)
+      : MathBN.add(adjustmentAmount, adjustmentTaxTotal)
 
-      adjustmentsTotal = MathBN.add(adjustmentsTotal, adjustmentTotal)
-      adjustmentsSubtotal = MathBN.add(adjustmentsSubtotal, adjustmentSubtotal)
-      adjustmentsTaxTotal = MathBN.add(adjustmentsTaxTotal, adjustmentTaxTotal)
-    } else {
-      adjustmentsSubtotal = MathBN.add(adjustmentsSubtotal, adjustmentAmount)
-      adjustmentsTotal = MathBN.add(adjustmentsTotal, adjustmentAmount)
-    }
+    adjustmentsTotal = MathBN.add(adjustmentsTotal, adjustmentTotal)
+    adjustmentsSubtotal = MathBN.add(adjustmentsSubtotal, adjustmentSubtotal)
+    adjustmentsTaxTotal = MathBN.add(adjustmentsTaxTotal, adjustmentTaxTotal)
   }
 
   return {

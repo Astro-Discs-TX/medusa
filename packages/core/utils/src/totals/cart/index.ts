@@ -244,6 +244,7 @@ export function decorateCartTotals(
   // cart.gift_card_tax_total = giftCardTotal.tax_total || 0
 
   cart.original_total = new BigNumber(originalTotal)
+  cart.original_subtotal = new BigNumber(itemsOriginalSubtotal)
   cart.original_tax_total = new BigNumber(originalTaxTotal)
 
   // cart.original_gift_card_total =

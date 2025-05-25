@@ -117,7 +117,7 @@ function getLineItemTotals(
     ...((item.tax_lines ?? []).map((taxLine) => taxLine.rate) ?? [])
   )
 
-  const sumTaxRate = MathBN.div(sumTax, 100)
+  const sumTaxRate = sumTax ? MathBN.div(sumTax, 100) : MathBN.convert(0)
   const totalItemPrice = MathBN.mult(item.unit_price, item.quantity)
 
   /*
