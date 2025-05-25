@@ -194,6 +194,20 @@ export interface IProductModuleService extends IModuleService {
   ): Promise<[ProductDTO[], number]>
 
   /**
+   * This method is used to retrieve a list of random products.
+   *
+   * @param {number} count - The number of random products to retrieve.
+   * @param {Context} sharedContext - A context used to share resources, such as transaction manager, between the application and the module.
+   * @returns {Promise<ProductDTO[]>} The list of random products.
+   *
+   * @example
+   * const randomProducts = await productModuleService.listRandomProducts(5)
+   */
+  listRandomProducts(
+    count: number,
+    sharedContext?: Context
+  ): Promise<ProductDTO[]>
+  /**
    * This method is used to create a list of products.
    *
    * @param {CreateProductDTO[]} data - The products to be created.
