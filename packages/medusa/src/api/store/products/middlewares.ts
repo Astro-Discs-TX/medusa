@@ -106,4 +106,37 @@ export const storeProductRoutesMiddlewares: MiddlewareRoute[] = [
       clearFiltersByKey(["region_id", "country_code", "province", "cart_id"]),
     ],
   },
+  {
+    method: ["GET"],
+    matcher: "/store/products/prueba/:title",
+    middlewares: [
+      authenticate("customer", ["session", "bearer"], {
+        allowUnauthenticated: true,
+      }),
+      validateAndTransformQuery(
+        StoreGetProductsParams,
+        QueryConfig.retrieveProductQueryConfig
+      ),
+      applyParamsAsFilters({ title: "title" }),
+      filterByValidSalesChannels(),
+      maybeApplyLinkFilter({
+        entryPoint: "product_sales_channel",
+        resourceId: "product_id",
+        filterableField: "sales_channel_id",
+      }),
+      applyDefaultFilters({
+        status: ProductStatus.PUBLISHED,
+        categories: (_filters, fields: string[]) => {
+          if (!fields.some((field) => field.startsWith("categories"))) {
+            return
+          }
+          return { is_internal: false, is_active: true }
+        },
+      }),
+      normalizeDataForContext(),
+      setPricingContext(),
+      setTaxContext(),
+      clearFiltersByKey(["region_id", "country_code", "province", "cart_id"]),
+    ],
+  },
 ]

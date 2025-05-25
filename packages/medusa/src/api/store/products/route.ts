@@ -52,7 +52,8 @@ async function getProductsWithIndexEngine(
     context["variants"]["calculated_price"] = QueryContext(req.pricingContext!)
   }
 
-  const filters: Record<string, any> = req.filterableFields
+  // const filters: Record<string, any> = req.filterableFields
+  const filters: Record<string, any> = { ...req.filterableFields }
   if (isPresent(filters.sales_channel_id)) {
     const salesChannelIds = filters.sales_channel_id
 
@@ -60,6 +61,10 @@ async function getProductsWithIndexEngine(
     filters["sales_channels"]["id"] = salesChannelIds
 
     delete filters.sales_channel_id
+  }
+
+  if (isPresent(filters.title && typeof filters.title === "string")) {
+    filters["title"] = { $ilike: `%${filters.title}%` }
   }
 
   const { data: products = [], metadata } = await query.index({
@@ -108,10 +113,20 @@ async function getProducts(
     }
   }
 
+  const filterableFields = { ...req.filterableFields }
+  if (
+    isPresent(filterableFields.title) &&
+    typeof filterableFields.title === "string"
+  ) {
+    console.log("segunda parte filtro")
+    filterableFields.title = { $ilike: `%${filterableFields.title}%` }
+  }
+
   const queryObject = remoteQueryObjectFromString({
     entryPoint: "product",
     variables: {
-      filters: req.filterableFields,
+      // filters: req.filterableFields,
+      filters: filterableFields,
       ...req.queryConfig.pagination,
       ...context,
     },
