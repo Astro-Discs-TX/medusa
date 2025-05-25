@@ -583,3 +583,111 @@ describe("/store/products", () => {
     })
   })
 })
+
+describe("Product Title Search", () => {
+  let medusaProcess
+  let dbConnection
+  let api
+
+  // Products to be created
+  const p1Title = "Test Product One"
+  const p2Title = "Another Test Product"
+  const p3Title = "Unique Product Title"
+  const p4Title = "TEST PRODUCT TWO" // For case-insensitive check with "Test Product"
+  const p5Title = "Channel Product Test" // For sales channel + title filter test
+  const p6Title = "Regular Product Test" // Another product for sales channel test
+
+  let p1, p2, p3, p4, p5, p6
+  let salesChannel
+
+  beforeAll(async () => {
+    const cwd = path.resolve(path.join(__dirname, "..", ".."))
+    dbConnection = await initDb({
+      cwd,
+      env: {
+        CACHE_TTL: 0,
+      },
+    })
+    medusaProcess = await setupServer({ cwd })
+    api = useApi()
+  })
+
+  afterAll(async () => {
+    const db = useDb()
+    await db.shutdown()
+    medusaProcess.kill()
+  })
+
+  beforeEach(async () => {
+    await adminSeeder(dbConnection)
+    // Note: productSeeder creates its own set of products.
+    // For title search, we want a clean slate of specific products.
+    // So, we will clear products after productSeeder or manage it carefully.
+    // For now, let's clear and then add specific ones.
+    const db = useDb()
+    await db.teardown() // Clear previous data
+    await adminSeeder(dbConnection) // Re-seed admin
+
+    p1 = await simpleProductFactory(dbConnection, { title: p1Title, status: "published" })
+    p2 = await simpleProductFactory(dbConnection, { title: p2Title, status: "published" })
+    p3 = await simpleProductFactory(dbConnection, { title: p3Title, status: "published" })
+    p4 = await simpleProductFactory(dbConnection, { title: p4Title, status: "published" })
+
+    // For sales channel test
+    salesChannel = await simpleSalesChannelFactory(dbConnection, {
+      name: "Test Channel",
+      is_disabled: false,
+    })
+
+    p5 = await simpleProductFactory(dbConnection, {
+      title: p5Title,
+      status: "published",
+      sales_channels: [{ id: salesChannel.id }],
+    })
+    p6 = await simpleProductFactory(dbConnection, { title: p6Title, status: "published" })
+  })
+
+  afterEach(async () => {
+    const db = useDb()
+    await db.teardown()
+  })
+
+  it("should find products with partial title match", async () => {
+    const response = await api.get("/store/products?title=Test")
+    expect(response.status).toEqual(200)
+    expect(response.data.products.length).toEqual(4) // p1, p2, p4, p5
+    const titles = response.data.products.map(p => p.title)
+    expect(titles).toEqual(expect.arrayContaining([p1Title, p2Title, p4Title, p5Title]))
+  })
+
+  it("should find products with case-insensitive title match", async () => {
+    const response = await api.get("/store/products?title=test product")
+    expect(response.status).toEqual(200)
+    // Expecting p1, p2, p4
+    expect(response.data.products.length).toEqual(3)
+    const titles = response.data.products.map(p => p.title)
+    expect(titles).toEqual(expect.arrayContaining([p1Title, p2Title, p4Title]))
+  })
+
+  it("should find a unique product by its title", async () => {
+    const response = await api.get("/store/products?title=Unique Product")
+    expect(response.status).toEqual(200)
+    expect(response.data.products.length).toEqual(1)
+    expect(response.data.products[0].title).toEqual(p3Title)
+  })
+
+  it("should return an empty list for no title match", async () => {
+    const response = await api.get("/store/products?title=NonExistentProduct")
+    expect(response.status).toEqual(200)
+    expect(response.data.products.length).toEqual(0)
+  })
+
+  it("should find products matching title and sales_channel_id", async () => {
+    const response = await api.get(
+      `/store/products?title=Product Test&sales_channel_id=${salesChannel.id}`
+    )
+    expect(response.status).toEqual(200)
+    expect(response.data.products.length).toEqual(1) // p5
+    expect(response.data.products[0].title).toEqual(p5Title)
+  })
+})
