@@ -106,11 +106,8 @@ function applyPromotionToItems(
   let lineItemsTotal = MathBN.convert(0)
   if (allocation === ApplicationMethodAllocation.ACROSS) {
     lineItemsTotal = applicableItems.reduce(
-      (acc, item) =>
-        MathBN.sub(
-          MathBN.add(acc, MathBN.mult(item.subtotal, item.quantity)),
-          appliedPromotionsMap.get(item.id) ?? 0
-        ),
+      (acc, item) => MathBN.add(acc, MathBN.mult(item.subtotal, item.quantity)),
+
       MathBN.convert(0)
     )
 
