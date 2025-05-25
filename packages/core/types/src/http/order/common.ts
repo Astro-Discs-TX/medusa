@@ -297,6 +297,10 @@ export interface BaseOrderShippingMethod {
    */
   discount_total: number
   /**
+   * The subtotal discounted amount.
+   */
+  discount_subtotal: number
+  /**
    * The tax total of the shipping method's discounted amount.
    */
   discount_tax_total: number
@@ -475,6 +479,10 @@ export interface BaseOrderLineItem {
    * The total discount applied on the item.
    */
   discount_total: number
+  /**
+   * The subtotal discount applied on the item.
+   */
+  discount_subtotal: number
   /**
    * The total taxes applied on the discounted amount.
    */
@@ -848,6 +856,10 @@ export interface BaseOrder {
    * The total amount discounted.
    */
   discount_total: number
+  /**
+   * The subtotal amount discounted.
+   */
+  discount_subtotal: number
   /**
    * The tax total applied on the order's discounted amount.
    */

@@ -156,6 +156,11 @@ export interface BaseCart {
   discount_total: number
 
   /**
+   * The discount subtotal of the cart.
+   */
+  discount_subtotal: number
+
+  /**
    * The discount tax total of the cart.
    */
   discount_tax_total: number
@@ -385,6 +390,11 @@ export interface BaseCartShippingMethod {
    * The discount total of the cart shipping method.
    */
   discount_total: number
+
+  /**
+   * The discount subtotal of the cart shipping method.
+   */
+  discount_subtotal: number
 
   /**
    * The discount tax total of the cart shipping method.
@@ -620,6 +630,11 @@ export interface BaseCartLineItemTotals {
    * The discount total of the cart line item.
    */
   discount_total: number
+
+  /**
+   * The discount subtotal of the cart line item.
+   */
+  discount_subtotal: number
 
   /**
    * The discount tax total of the cart line item.

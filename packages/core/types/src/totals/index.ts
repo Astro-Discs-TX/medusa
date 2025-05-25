@@ -5,6 +5,7 @@ export * from "./big-number"
 export type CartLikeWithTotals = {
   original_item_subtotal: BigNumberValue
   original_item_tax_total: BigNumberValue
+  original_item_total: BigNumberValue
   item_total: BigNumberValue
   item_subtotal: BigNumberValue
   item_tax_total: BigNumberValue
@@ -15,6 +16,7 @@ export type CartLikeWithTotals = {
   subtotal: BigNumberValue
   tax_total: BigNumberValue
   discount_total: BigNumberValue
+  discount_subtotal: BigNumberValue
   discount_tax_total: BigNumberValue
   gift_card_total: BigNumberValue
   gift_card_tax_total: BigNumberValue

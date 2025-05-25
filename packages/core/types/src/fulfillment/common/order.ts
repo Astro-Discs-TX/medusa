@@ -518,6 +518,11 @@ interface FulfillmentOrderLineItemTotalsDTO {
   discount_total: BigNumberValue
 
   /**
+   * The discount subtotal of the order line item.
+   */
+  discount_subtotal: BigNumberValue
+
+  /**
    * The discount tax total of the order line item.
    */
   discount_tax_total: BigNumberValue

@@ -19,6 +19,7 @@ const INCLUDED_FIELDS = [
   "shipping_tax_total",
   "refundable",
   "original_total",
+  "original_subtotal",
   "original_tax_total",
 ]
 

@@ -471,6 +471,11 @@ export interface OrderShippingMethodDTO {
   discount_total: BigNumberValue
 
   /**
+   * The discount subtotal of the order shipping method.
+   */
+  discount_subtotal: BigNumberValue
+
+  /**
    * The discount tax total of the order shipping method.
    */
   discount_tax_total: BigNumberValue
@@ -585,6 +590,11 @@ export interface OrderLineItemTotalsDTO {
    * The discount total of the order line item.
    */
   discount_total: BigNumberValue
+
+  /**
+   * The discount subtotal of the order line item.
+   */
+  discount_subtotal: BigNumberValue
 
   /**
    * The discount tax total of the order line item.

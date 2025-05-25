@@ -394,6 +394,11 @@ export interface CartShippingMethodDTO {
   discount_total: BigNumberValue
 
   /**
+   * The discount subtotal of the cart shipping method.
+   */
+  discount_subtotal: BigNumberValue
+
+  /**
    * The discount tax total of the cart shipping method.
    */
   discount_tax_total: BigNumberValue
@@ -492,6 +497,11 @@ export interface CartLineItemTotalsDTO {
    * The discount total of the cart line item.
    */
   discount_total: BigNumberValue
+
+  /**
+   * The discount subtotal of the cart shipping method.
+   */
+  discount_subtotal: BigNumberValue
 
   /**
    * The discount tax total of the cart line item.
@@ -883,6 +893,11 @@ export interface CartDTO {
    * The discount total of the cart.
    */
   discount_total: BigNumberValue
+
+  /**
+   * The discount subtotal of the cart shipping method.
+   */
+  discount_subtotal: BigNumberValue
 
   /**
    * The discount tax total of the cart.
