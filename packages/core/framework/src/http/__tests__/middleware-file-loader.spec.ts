@@ -7,8 +7,24 @@ describe("Middleware file loader", () => {
     const loader = new MiddlewareFileLoader()
     await loader.scanDir(BASE_DIR)
 
+    console.log(loader.getBodyParserConfigRoutes())
     expect(loader.getBodyParserConfigRoutes()).toMatchInlineSnapshot(`
       [
+        {
+          "config": {
+            "sizeLimit": "500kb",
+          },
+          "matcher": "/v1*",
+          "methods": [
+            "GET",
+            "POST",
+            "PUT",
+            "PATCH",
+            "DELETE",
+            "OPTIONS",
+            "HEAD",
+          ],
+        },
         {
           "config": {
             "preserveRawBody": true,
