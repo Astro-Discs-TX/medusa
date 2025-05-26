@@ -205,7 +205,7 @@ A module provider's constructor receives two parameters:
 
 <Note>
 
-You'll learn how to set these options when you [add the module provider to Medusa's configurations](#h-add-module-provider-to-medusas-configurations).
+You'll learn how to set this option when you [add the module provider to Medusa's configurations](#h-add-module-provider-to-medusas-configurations).
 
 </Note>
 
@@ -655,11 +655,11 @@ module.exports = defineConfig({
 })
 ```
 
-To pass a Auth Module Provider to the Auth Module, you add the `modules` property to the Medusa configuration and pass the Auth Module in its value.
+To pass an Auth Module Provider to the Auth Module, you add the `modules` property to the Medusa configuration and pass the Auth Module in its value.
 
 The Auth Module accepts a `dependencies` option, allowing you to inject dependencies into the containers of the module and its providers. The Auth Module requires passing the [Cache Module](../../../infrastructure-modules/cache/page.mdx) and Logger, but you also inject the `event_bus` dependency to use the Event Module's service in the Phone Authentication Module Provider.
 
-The Auth Module also accepts a `providers` option, which is an array of Auth Module Providers to register. You register the `emailpass` provider, which is registrated by default when you don't provide any other providers.
+The Auth Module also accepts a `providers` option, which is an array of Auth Module Providers to register. You register the `emailpass` provider, which is registered by default when you don't provide any other providers.
 
 To register the Phone Authentication Module Provider, you add an object to the `providers` array with the following properties:
 
@@ -838,7 +838,7 @@ As mentioned before, this is only for debugging purposes. In the next step, you'
 So, to verify the OTP, you'll send a request to the [Verify Callback API route](!api!/store#auth_postactor_typeauth_providercallback):
 
 ```bash
-curl --X POST 'http://localhost:9000/auth/customer/phone-auth/callback?phone=%2B19077890116&otp=476588'
+curl -X POST 'http://localhost:9000/auth/customer/phone-auth/callback?phone=%2B19077890116&otp=476588'
 ```
 
 You pass the following query parameters:
