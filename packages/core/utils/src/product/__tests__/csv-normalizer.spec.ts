@@ -11,7 +11,7 @@ async function loadFixtureFile(fileName: string) {
 describe("CSV processor", () => {
   it("should error when both Product Id and Handle are missing", async () => {
     expect(() => CSVNormalizer.preProcess({}, 1)).toThrow(
-      "Row 1: Missing product id and handle. One of them are required to process the row"
+      "Row 1: Missing product id and handle. One of these columns are required to process the row"
     )
   })
 

@@ -164,7 +164,7 @@ export class Product {
     headers?: ClientHeaders
   ) {
     return await this.client.fetch<{}>(
-      `/admin/products/imports/${transactionId}/confirm`,
+      `/admin/products/import/${transactionId}/confirm`,
       {
         method: "POST",
         headers,

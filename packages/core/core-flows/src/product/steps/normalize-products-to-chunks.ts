@@ -111,60 +111,72 @@ async function createChunks(
    */
   let currentRowUniqueValue: string | undefined
 
-  for await (const row of stream) {
-    rowsReadSoFar++
-    currentCSVRow++
-    const normalizedRow = CSVNormalizer.preProcess(row, currentCSVRow)
-    const rowValueValue =
-      normalizedRow["product id"] || normalizedRow["product handle"]
+  try {
+    for await (const row of stream) {
+      rowsReadSoFar++
+      currentCSVRow++
+      const normalizedRow = CSVNormalizer.preProcess(row, currentCSVRow)
+      const rowValueValue =
+        normalizedRow["product id"] || normalizedRow["product handle"]
 
-    /**
-     * Reached rows threshold
-     */
-    if (rowsReadSoFar > rowsToRead) {
       /**
-       * The current row unique value is not same as the previous row's
-       * unique value. Hence we can break the chunk here and process
-       * it.
+       * Reached rows threshold
        */
-      if (rowValueValue !== currentRowUniqueValue) {
-        chunks.push(
-          await processChunk(
-            file,
-            `${fileKey}-${chunks.length + 1}`,
-            rows,
-            currentCSVRow
-          )
-        )
-
+      if (rowsReadSoFar > rowsToRead) {
         /**
-         * Reset for new row
+         * The current row unique value is not same as the previous row's
+         * unique value. Hence we can break the chunk here and process
+         * it.
          */
-        rows = [normalizedRow]
-        rowsReadSoFar = 0
+        if (rowValueValue !== currentRowUniqueValue) {
+          chunks.push(
+            await processChunk(
+              file,
+              `${fileKey}-${chunks.length + 1}`,
+              rows,
+              currentCSVRow
+            )
+          )
+
+          /**
+           * Reset for new row
+           */
+          rows = [normalizedRow]
+          rowsReadSoFar = 0
+        } else {
+          rows.push(normalizedRow)
+        }
       } else {
         rows.push(normalizedRow)
       }
-    } else {
-      rows.push(normalizedRow)
+
+      currentRowUniqueValue = rowValueValue
     }
 
-    currentRowUniqueValue = rowValueValue
-  }
-
-  /**
-   * The file has finished and we have collected some rows that were
-   * under the chunk rows size threshold.
-   */
-  if (rows.length) {
-    chunks.push(
-      await processChunk(
-        file,
-        `${fileKey}-${chunks.length + 1}`,
-        rows,
-        currentCSVRow
+    /**
+     * The file has finished and we have collected some rows that were
+     * under the chunk rows size threshold.
+     */
+    if (rows.length) {
+      chunks.push(
+        await processChunk(
+          file,
+          `${fileKey}-${chunks.length + 1}`,
+          rows,
+          currentCSVRow
+        )
       )
-    )
+    }
+  } catch (error) {
+    if (!stream.destroyed) {
+      stream.destroy()
+    }
+
+    /**
+     * Cleanup in case of an error
+     */
+    await file.deleteFiles(chunks.map((chunk) => chunk.id).concat(fileKey))
+    throw error
   }
 
   return chunks
@@ -201,6 +213,11 @@ export const normalizeCsvToChunksStep = createStep(
       },
       { toCreate: 0, toUpdate: 0 }
     )
+
+    /**
+     * Delete CSV file once we have the chunks
+     */
+    await file.deleteFiles(fileKey)
 
     return new StepResponse({
       chunks,

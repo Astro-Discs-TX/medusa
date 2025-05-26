@@ -379,7 +379,7 @@ export class CSVNormalizer {
     if (!isPresent(productId) && !isPresent(productHandle)) {
       throw createError(
         rowNumber,
-        "Missing product id and handle. One of them are required to process the row"
+        "Missing product id and handle. One of these columns are required to process the row"
       )
     }
 

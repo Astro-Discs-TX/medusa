@@ -400,7 +400,7 @@ export const useImportProducts = (
   >
 ) => {
   return useMutation({
-    mutationFn: (payload) => sdk.admin.product.createImport(payload),
+    mutationFn: (payload) => sdk.admin.product.import(payload),
     onSuccess: (data, variables, context) => {
       options?.onSuccess?.(data, variables, context)
     },
