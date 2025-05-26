@@ -85,6 +85,10 @@ export class LocalFileService extends AbstractFileProviderService {
     return
   }
 
+  async bulkDelete(files: FileTypes.ProviderDeleteFileDTO[]): Promise<void> {
+    await Promise.all(files.map((file) => this.delete(file)))
+  }
+
   async getDownloadStream(
     file: FileTypes.ProviderGetFileDTO
   ): Promise<Readable> {

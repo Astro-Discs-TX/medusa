@@ -148,6 +148,25 @@ export class AbstractFileProviderService implements IFileProvider {
   }
 
   /**
+   * This method bulk deletes files from storage. It's used when an admin user deletes a product image,
+   * or other custom file deletions.
+   *
+   * @param {FileTypes.ProviderDeleteFileDTO[]} files - The details of the files to delete.
+   * @returns {Promise<void>} Resolves when the file is deleted.
+   *
+   * @example
+   * class MyFileProviderService extends AbstractFileProviderService {
+   *   // ...
+   *   async bulkDelete(files: ProviderDeleteFileDTO[]): Promise<void> {
+   *     this.client.bulkDelete(files)
+   *   }
+   * }
+   */
+  async bulkDelete(files: FileTypes.ProviderDeleteFileDTO[]): Promise<void> {
+    throw Error("delete must be overridden by the child class")
+  }
+
+  /**
    * This method is used to retrieve a download URL of the file. For some providers,
    * such as S3, a presigned URL indicates a temporary URL to get access to a file.
    *
@@ -181,10 +200,10 @@ export class AbstractFileProviderService implements IFileProvider {
   /**
    * This method retrieves an uploaded file as a stream. This is useful when streaming
    * a file to clients or you want to process the file in chunks.
-   * 
+   *
    * @param {FileTypes.ProviderGetFileDTO} fileData - The details of the file to get its stream.
    * @returns {Promise<Readable>} The file's stream.
-   * 
+   *
    * @version 2.8.0
    *
    * @example
@@ -206,10 +225,10 @@ export class AbstractFileProviderService implements IFileProvider {
   /**
    * This method retrieves an uploaded file as a buffer. This is useful when you want to
    * process the entire file in memory or send it as a response.
-   * 
+   *
    * @param {FileTypes.ProviderGetFileDTO} fileData - The details of the file to get its buffer.
    * @returns {Promise<Buffer>} The file's buffer.
-   * 
+   *
    * @version 2.8.0
    *
    * @example

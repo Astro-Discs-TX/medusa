@@ -1,5 +1,6 @@
 import {
   DeleteObjectCommand,
+  DeleteObjectsCommand,
   GetObjectCommand,
   ObjectCannedACL,
   PutObjectCommand,
@@ -156,6 +157,30 @@ export class S3FileService extends AbstractFileProviderService {
     const command = new DeleteObjectCommand({
       Bucket: this.config_.bucket,
       Key: file.fileKey,
+    })
+
+    try {
+      await this.client_.send(command)
+    } catch (e) {
+      // TODO: Rethrow depending on the error (eg. a file not found error is fine, but a failed request should be rethrown)
+      this.logger_.error(e)
+    }
+  }
+
+  /**
+   * Deletes files in bulk without making multiple network calls
+   */
+  async bulkDelete(files: FileTypes.ProviderDeleteFileDTO[]): Promise<void> {
+    const command = new DeleteObjectsCommand({
+      Bucket: this.config_.bucket,
+      Delete: {
+        Objects: files.map((file) => {
+          return {
+            Key: file.fileKey,
+          }
+        }),
+        Quiet: true,
+      },
     })
 
     try {
