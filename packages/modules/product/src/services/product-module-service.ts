@@ -223,6 +223,29 @@ export default class ProductModuleService
     return [serializedProducts, count]
   }
 
+   @InjectManager()
+  // @ts-ignore
+  async listRandomProducts(
+    count: number,
+    @MedusaContext() sharedContext?: Context
+  ): Promise<ProductTypes.ProductDTO[]> {
+    const allProducts = await this.listProducts({}, {}, sharedContext)
+
+    if (count >= allProducts.length) {
+      return allProducts
+    }
+
+    const randomProducts: ProductTypes.ProductDTO[] = []
+    const availableProducts = [...allProducts] // Create a mutable copy
+
+    for (let i = 0; i < count; i++) {
+      const randomIndex = Math.floor(Math.random() * availableProducts.length)
+      randomProducts.push(availableProducts.splice(randomIndex, 1)[0])
+    }
+
+    return randomProducts
+  }
+  
   protected getProductFindConfig_(
     config?: FindConfig<ProductTypes.ProductDTO>
   ): FindConfig<ProductTypes.ProductDTO> {
