@@ -7,7 +7,6 @@ describe("Middleware file loader", () => {
     const loader = new MiddlewareFileLoader()
     await loader.scanDir(BASE_DIR)
 
-    console.log(loader.getBodyParserConfigRoutes())
     expect(loader.getBodyParserConfigRoutes()).toMatchInlineSnapshot(`
       [
         {
