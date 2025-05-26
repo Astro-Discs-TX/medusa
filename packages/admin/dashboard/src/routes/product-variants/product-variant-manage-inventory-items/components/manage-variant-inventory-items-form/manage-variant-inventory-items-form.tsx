@@ -73,6 +73,10 @@ type VariantInventoryItemRowProps = {
     inventory_item_id: string
     required_quantity: number
   }
+  isItemOptionDisabled: (
+    option: { value: string },
+    inventoryIndex: number
+  ) => boolean
   onRemove: () => void
 }
 
@@ -80,6 +84,7 @@ function VariantInventoryItemRow({
   form,
   inventoryIndex,
   inventoryItem,
+  isItemOptionDisabled,
   onRemove,
 }: VariantInventoryItemRowProps) {
   const { t } = useTranslation()
@@ -128,7 +133,10 @@ function VariantInventoryItemRow({
                 <Form.Control>
                   <Combobox
                     {...field}
-                    options={items.options}
+                    options={items.options.map((o) => ({
+                      ...o,
+                      disabled: isItemOptionDisabled(o, inventoryIndex),
+                    }))}
                     searchValue={items.searchValue}
                     onSearchValueChange={items.onSearchValueChange}
                     onBlur={() => items.onSearchValueChange("")}
@@ -218,6 +226,24 @@ export function ManageVariantInventoryItemsForm({
     control: form.control,
     name: `inventory`,
   })
+
+  const inventoryFormData = useWatch({
+    control: form.control,
+    name: `inventory`,
+  })
+
+  /**
+   * Will mark an option as disabled if another input already selected that option
+   */
+  const isItemOptionDisabled = (
+    option: { value: string },
+    inventoryIndex: number
+  ) => {
+    return !!inventoryFormData?.some(
+      (i, index) =>
+        index != inventoryIndex && i.inventory_item_id === option.value
+    )
+  }
 
   const hasKit = inventory.fields.length > 1
 
@@ -338,6 +364,7 @@ export function ManageVariantInventoryItemsForm({
                   form={form}
                   inventoryIndex={inventoryIndex}
                   inventoryItem={inventoryItem}
+                  isItemOptionDisabled={isItemOptionDisabled}
                   onRemove={() => inventory.remove(inventoryIndex)}
                 />
               ))}
