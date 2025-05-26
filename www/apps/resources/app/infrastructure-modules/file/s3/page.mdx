@@ -125,17 +125,19 @@ Medusa Cloud offers a managed file storage solution with AWS S3 for your Medusa 
        - Choose "Standard" for storage class
        - Confirm by clicking "Create bucket"
     3. Configure public access:
+       - Make sure you have a [domain configured in your Cloudflare account](https://developers.cloudflare.com/dns/manage-dns-records/how-to/create-dns-records/).
        - On your bucket's dashboard, click on the Settings tab.
        - In the General Section look for Custom Domains (recommended for production use)
+       - Click on the Add button to add your domain name.
        - Enter the domain name you want to connect to and select Continue.
        - Review the new record that will be added to the DNS table and select Connect Domain.
     4. Retrieve credentials:
        - [Go to API tokens page](https://dash.cloudflare.com/?to=/:account/r2/api-tokens):
-         - Select "Create API token"
+         - Click "Create User API token"
          - Edit the "R2 Token" name
          - Under Permissions, select Object Read & Write permission types
          - You can optionally specify the buckets that this API token has access to under the "Specify bucket(s)" section.
-         - Once done, click the "Create API Token" button.
+         - Once done, click the "Create User API Token" button.
          - Copy the jurisdiction-specific endpoint for S3 clients to S3_ENDPOINT into your environment variables.
          - Copy the Access Key ID and Secret Access Key to the corresponding fields into your environment variables.
          - Copy your custom domain to `S3_FILE_URL` with leading https:// into your environment variables.
