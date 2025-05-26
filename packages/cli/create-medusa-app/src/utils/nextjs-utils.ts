@@ -9,7 +9,7 @@ import { displayFactBox, FactBoxOptions } from "./facts.js"
 import logMessage from "./log-message.js"
 import ProcessManager from "./process-manager.js"
 
-const NEXTJS_REPO = "https://github.com/medusajs/nextjs-starter-medusa"
+const NEXTJS_REPO = "https://github.com/CHERNANDEZ-DEV/nextjs-starter-medusa"
 const NEXTJS_BRANCH = "main"
 
 export async function askForNextjsStarter(): Promise<boolean> {
