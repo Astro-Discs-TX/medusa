@@ -332,6 +332,9 @@ export const completeCartWorkflow = createWorkflow(
         })
       )
 
+      /**
+       * @ignore
+       */
       createHook("beforePaymentAuthorization", {
         input,
       })
@@ -367,6 +370,9 @@ export const completeCartWorkflow = createWorkflow(
 
       addOrderTransactionStep(orderTransactions)
 
+      /**
+       * @ignore
+       */
       createHook("orderCreated", {
         order_id: createdOrder.id,
         cart_id: cart.id,
