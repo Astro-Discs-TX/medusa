@@ -4,6 +4,7 @@ import {
   enUS,
   es,
   fr,
+  he,
   it,
   ja,
   pl,
@@ -21,10 +22,21 @@ import {
   ru,
   el,
   lt,
+  vi,
+  ko,
+  nl,
+  hu,
+  bs,
 } from "date-fns/locale"
 import { Language } from "./types"
 
 export const languages: Language[] = [
+  {
+    code: "bs",
+    display_name: "Bosanski",
+    ltr: true,
+    date_locale: bs,
+  },
   {
     code: "bg",
     display_name: "Български",
@@ -60,6 +72,18 @@ export const languages: Language[] = [
     display_name: "Français",
     ltr: true,
     date_locale: fr,
+  },
+  {
+    code: "he",
+    display_name: "עברית",
+    ltr: false,
+    date_locale: he,
+  },
+  {
+    code: "hu",
+    display_name: "Magyar",
+    ltr: true,
+    date_locale: hu,
   },
   {
     code: "it",
@@ -156,5 +180,23 @@ export const languages: Language[] = [
     display_name: "Lietuviškai",
     ltr: true,
     date_locale: lt,
+  },
+  {
+    code: "vi",
+    display_name: "Tiếng Việt",
+    ltr: true,
+    date_locale: vi,
+  },
+  {
+    code: "ko",
+    display_name: "한국어",
+    ltr: true,
+    date_locale: ko,
+  },
+  {
+    code: "nl",
+    display_name: "Nederlands",
+    ltr: true,
+    date_locale: nl,
   },
 ]

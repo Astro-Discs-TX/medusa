@@ -10,6 +10,7 @@ import bundleAnalyzer from "@next/bundle-analyzer"
 import mdx from "@next/mdx"
 import mdxPluginOptions from "./mdx-options.mjs"
 import path from "node:path"
+import { catchBadRedirects } from "build-scripts"
 
 const withMDX = mdx({
   extension: /\.mdx?$/,
@@ -58,11 +59,11 @@ const nextConfig = {
   // Configure `pageExtensions` to include MDX files
   pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
 
-  transpilePackages: ["docs-ui"],
+  transpilePackages: ["docs-ui", "next-mdx-remote"],
 
   basePath: process.env.NEXT_PUBLIC_BASE_PATH || "/resources",
   async redirects() {
-    return [
+    return catchBadRedirects([
       {
         source: "/commerce-modules/order/relations-to-other-modules",
         destination: "/commerce-modules/order/links-to-other-modules",
@@ -163,10 +164,79 @@ const nextConfig = {
         destination: "/troubleshooting/workflow-errors/when-then",
         permanent: true,
       },
-    ]
+      {
+        source: "/medusa-cli/commands/start-cluster",
+        destination: "/medusa-cli/commands/start",
+        permanent: true,
+      },
+      {
+        source: "/architectural-modules/:path*",
+        destination: "/infrastructure-modules/:path*",
+        permanent: true,
+      },
+      {
+        source: "/events-reference",
+        destination: "/references/events",
+        permanent: true,
+      },
+      {
+        source: "/commerce-modules/auth/events",
+        destination: "/references/auth/events",
+        permanent: true,
+      },
+      {
+        source: "/commerce-modules/cart/events",
+        destination: "/references/cart/events",
+        permanent: true,
+      },
+      {
+        source: "/commerce-modules/customer/events",
+        destination: "/references/customer/events",
+        permanent: true,
+      },
+      {
+        source: "/commerce-modules/fulfillment/events",
+        destination: "/references/fulfillment/events",
+        permanent: true,
+      },
+      {
+        source: "/commerce-modules/order/events",
+        destination: "/references/order/events",
+        permanent: true,
+      },
+      {
+        source: "/commerce-modules/payment/events",
+        destination: "/references/payment/events",
+        permanent: true,
+      },
+      {
+        source: "/commerce-modules/product/events",
+        destination: "/references/product/events",
+        permanent: true,
+      },
+      {
+        source: "/commerce-modules/region/events",
+        destination: "/references/region/events",
+        permanent: true,
+      },
+      {
+        source: "/commerce-modules/sales-channel/events",
+        destination: "/references/sales-channel/events",
+        permanent: true,
+      },
+      {
+        source: "/commerce-modules/user/events",
+        destination: "/references/user/events",
+        permanent: true,
+      },
+    ])
   },
   outputFileTracingExcludes: {
     "*": ["node_modules/@medusajs/icons"],
+  },
+  outputFileTracingIncludes: {
+    "/md\\-content/\\[\\[\\.\\.\\.slug\\]\\]": ["./app/**/*.mdx"],
+    "/md\\-content/references/**": ["./references/**/*.mdx"],
   },
   experimental: {
     optimizePackageImports: ["@medusajs/icons", "@medusajs/ui", "elkjs"],

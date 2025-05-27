@@ -1,4 +1,5 @@
 import { BaseFilterable, OperatorMap } from "../../../dal"
+import { ApplicationMethodTypeValues } from "../../../promotion"
 import { FindParams, SelectParams } from "../../common"
 
 export interface AdminGetPromotionParams extends SelectParams {}
@@ -13,7 +14,7 @@ export interface AdminGetPromotionsParams
   /**
    * Filter by promotion code.
    */
-  code?: string | string[]
+  code?: string | string[] | OperatorMap<string>
   /**
    * Filter by campaign ID to retrieve promotions by campaign.
    */
@@ -46,7 +47,7 @@ export interface AdminGetPromotionsParams
   /**
    * Filter by the promotion's application method type.
    */
-  application_method_type?: string | string[]
+  application_method_type?: ApplicationMethodTypeValues | ApplicationMethodTypeValues[]
   /**
    * An array of filters to apply on the entity, where each item in the array is joined with an "and" condition.
    */

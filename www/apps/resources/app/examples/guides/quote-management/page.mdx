@@ -40,7 +40,7 @@ export const metadata = {
 
 In this guide, you'll learn how to implement quote management in Medusa.
 
-When you install a Medusa application, you get a fully-fledged commerce platform with a framework for customization. The Medusa application's commerce features are built around [commerce modules](../../../commerce-modules/page.mdx) which are available out-of-the-box.
+When you install a Medusa application, you get a fully-fledged commerce platform with a Framework for customization. The Medusa application's commerce features are built around [Commerce Modules](../../../commerce-modules/page.mdx) which are available out-of-the-box.
 
 By default, the Medusa application provides standard commerce features for orders and carts. However, Medusa's customization capabilities facilitate extending existing features to implement quote-management features.
 
@@ -107,7 +107,7 @@ Start by installing the Medusa application on your machine with the following co
 npx create-medusa-app@latest
 ```
 
-You'll first be asked for the project's name. You can also optionally choose to install the [Next.js starter storefront](../../../nextjs-starter/page.mdx).
+You'll first be asked for the project's name. You can also optionally choose to install the [Next.js Starter Storefront](../../../nextjs-starter/page.mdx).
 
 Afterwards, the installation process will start, which will install the Medusa application in a directory with your project's name. If you chose to install the Next.js starter, it'll be installed in a separate directory with the `{project-name}-storefront` name.
 
@@ -371,7 +371,7 @@ import CartModule from "@medusajs/medusa/cart"
 
 export default defineLink(
   {
-    ...QuoteModule.linkable.quote,
+    linkable: QuoteModule.linkable.quote.id,
     field: "cart_id",
   },
   CartModule.linkable.cart,
@@ -402,7 +402,7 @@ import CustomerModule from "@medusajs/medusa/customer"
 
 export default defineLink(
   {
-    ...QuoteModule.linkable.quote,
+    linkable: QuoteModule.linkable.quote.id,
     field: "customer_id",
   },
   CustomerModule.linkable.customer,
@@ -427,7 +427,7 @@ import OrderModule from "@medusajs/medusa/order"
 
 export default defineLink(
   {
-    ...QuoteModule.linkable.quote,
+    linkable: QuoteModule.linkable.quote.id,
     field: "order_change_id",
   },
   OrderModule.linkable.orderChange,
@@ -452,11 +452,11 @@ import OrderModule from "@medusajs/medusa/order"
 
 export default defineLink(
   {
-    ...QuoteModule.linkable.quote,
+    linkable: QuoteModule.linkable.quote.id,
     field: "draft_order_id",
   },
   {
-    ...OrderModule.linkable.order.id,
+    linkable: OrderModule.linkable.order.id,
     alias: "draft_order",
   },
   {
@@ -583,7 +583,7 @@ You create a step with `createStep` from the Workflows SDK. It accepts two param
 1. The step's unique name, which is `create-quotes`.
 2. An async function that receives two parameters:
     - The step's input, which is in this case an array of quotes to create.
-    - An object that has properties including the [Medusa container](!docs!/learn/fundamentals/medusa-container), which is a registry of framework and commerce tools that you can access in the step.
+    - An object that has properties including the [Medusa container](!docs!/learn/fundamentals/medusa-container), which is a registry of Framework and commerce tools that you can access in the step.
 
 In the step function, you resolve the Quote Module's service from the Medusa container using the `resolve` method of the container, passing it the module's name as a parameter.
 
@@ -3645,7 +3645,7 @@ npm run dev
 Then, send a request to accept a quote for the authenticated customer:
 
 ```bash
-curl 'http://localhost:9000/store/customers/me/quotes/{quote_id}/accept' \
+curl -X POST 'http://localhost:9000/store/customers/me/quotes/{quote_id}/accept' \
 -H 'x-publishable-api-key: {your_publishable_api_key}' \
 -H 'Authorization: Bearer {token}'
 ```

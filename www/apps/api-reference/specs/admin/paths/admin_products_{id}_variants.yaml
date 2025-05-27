@@ -552,6 +552,10 @@ get:
     - cookie_auth: []
     - jwt_token: []
   x-codeSamples:
+    - lang: JavaScript
+      label: JS SDK
+      source:
+        $ref: ../code_samples/JavaScript/admin_products_{id}_variants/get.js
     - lang: Shell
       label: cURL
       source:
@@ -658,6 +662,10 @@ post:
                     `additional_data` parameter.
           description: The product variant's details.
   x-codeSamples:
+    - lang: JavaScript
+      label: JS SDK
+      source:
+        $ref: ../code_samples/JavaScript/admin_products_{id}_variants/post.js
     - lang: Shell
       label: cURL
       source:
@@ -684,3 +692,13 @@ post:
     '500':
       $ref: ../components/responses/500_error.yaml
   x-workflow: createProductVariantsWorkflow
+  x-events:
+    - name: product-variant.created
+      payload: |-
+        ```ts
+        [{
+          id, // The ID of the product variant
+        }]
+        ```
+      description: Emitted when product variants are created.
+      deprecated: false

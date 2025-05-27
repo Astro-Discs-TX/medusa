@@ -151,7 +151,7 @@ medusaIntegrationTestRunner({
       })
 
       describe("POST /store/carts", () => {
-        it("should succesffully create a cart", async () => {
+        it("should successfully create a cart", async () => {
           const response = await api.post(
             `/store/carts`,
             {
@@ -255,10 +255,10 @@ medusaIntegrationTestRunner({
       })
 
       describe("POST /store/carts/:id/line-items", () => {
-        let shippingOption, shippingOptionExpensive
+        let shippingOption, shippingOptionExpensive, stockLocation
 
         beforeEach(async () => {
-          const stockLocation = (
+          stockLocation = (
             await api.post(
               `/admin/stock-locations`,
               { name: "test location" },
@@ -679,7 +679,7 @@ medusaIntegrationTestRunner({
                   unit_price: 1500,
                   compare_at_unit_price: null,
                   is_tax_inclusive: true,
-                  title: "S / Black",
+                  title: "Medusa T-Shirt",
                   quantity: 2,
                   tax_lines: [
                     expect.objectContaining({
@@ -714,7 +714,7 @@ medusaIntegrationTestRunner({
                   compare_at_unit_price: null,
                   is_tax_inclusive: true,
                   quantity: 2,
-                  title: "S / Black",
+                  title: "Medusa T-Shirt",
                   tax_lines: [
                     expect.objectContaining({
                       description: "CA Default Rate",
@@ -729,7 +729,7 @@ medusaIntegrationTestRunner({
                   compare_at_unit_price: null,
                   is_tax_inclusive: true,
                   quantity: 1,
-                  title: "S / White",
+                  title: "Medusa T-Shirt",
                   tax_lines: [
                     expect.objectContaining({
                       description: "CA Default Rate",
@@ -892,6 +892,67 @@ medusaIntegrationTestRunner({
                 ]),
               })
             )
+          })
+        })
+
+        describe("with manage_inventory true", () => {
+          let inventoryItem
+          beforeEach(async () => {
+            await api.post(
+              `/admin/products/${product.id}/variants/${product.variants[0].id}`,
+              { manage_inventory: true },
+              adminHeaders
+            )
+
+            inventoryItem = (
+              await api.post(
+                `/admin/inventory-items`,
+                { sku: "bottle" },
+                adminHeaders
+              )
+            ).data.inventory_item
+          })
+
+          describe("with allow_backorder true", () => {
+            beforeEach(async () => {
+              await api.post(
+                `/admin/products/${product.id}/variants/${product.variants[0].id}`,
+                { allow_backorder: true },
+                adminHeaders
+              )
+            })
+
+            it("should add item to cart even if no inventory locations", async () => {
+              let response = await api.post(
+                `/store/carts/${cart.id}/line-items`,
+                {
+                  variant_id: product.variants[0].id,
+                  quantity: 1,
+                },
+                storeHeaders
+              )
+
+              expect(response.status).toEqual(200)
+            })
+
+            it("should add item to cart even if inventory is empty", async () => {
+              await api.post(
+                `/admin/inventory-items/${inventoryItem.id}/location-levels/batch`,
+                { create: [{ location_id: stockLocation.id }] },
+                adminHeaders
+              )
+
+              let response = await api.post(
+                `/store/carts/${cart.id}/line-items`,
+                {
+                  variant_id: product.variants[0].id,
+                  quantity: 1,
+                },
+                storeHeaders
+              )
+
+              expect(response.status).toEqual(200)
+            })
           })
         })
       })
@@ -1542,11 +1603,11 @@ medusaIntegrationTestRunner({
                 expect.objectContaining({
                   items: expect.arrayContaining([
                     expect.objectContaining({
-                      title: "2-pack",
+                      subtitle: "2-pack",
                       quantity: 1,
                     }),
                     expect.objectContaining({
-                      title: "3-pack",
+                      subtitle: "3-pack",
                       quantity: 1,
                     }),
                   ]),

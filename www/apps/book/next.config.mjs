@@ -11,6 +11,7 @@ import {
 import path from "path"
 import redirects from "./utils/redirects.mjs"
 import { generatedSidebars } from "./generated/sidebar.mjs"
+import { catchBadRedirects } from "build-scripts"
 
 const withMDX = mdx({
   extension: /\.mdx?$/,
@@ -168,7 +169,14 @@ const nextConfig = {
       ],
     }
   },
-  redirects,
+  redirects: async () => {
+    const result = await redirects()
+
+    return catchBadRedirects(result)
+  },
+  outputFileTracingIncludes: {
+    "/md\\-content/\\[\\.\\.\\.slug\\]": ["./app/**/*.mdx"],
+  },
   outputFileTracingExcludes: {
     "*": ["node_modules/@medusajs/icons"],
   },

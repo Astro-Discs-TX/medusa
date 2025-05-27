@@ -50,6 +50,8 @@ type ConvertHooksToFunctions<THooks extends any[]> = THooks extends [
   ? ConvertHookToObject<A> & ConvertHooksToFunctions<R>
   : {}
 
+export type Void = { " $$type": "void" }
+
 /**
  * A step function to be used in a workflow.
  *
@@ -62,7 +64,9 @@ export type StepFunction<
 > = (KeysOfUnion<TInput> extends []
   ? // Function that doesn't expect any input
     {
-      (): WorkflowData<TOutput> & StepFunctionReturnConfig<TOutput>
+      (): TOutput & {} extends never
+        ? WorkflowData<Void> & StepFunctionReturnConfig<TOutput>
+        : WorkflowData<TOutput> & StepFunctionReturnConfig<TOutput>
     }
   : // function that expects an input object
     {
@@ -113,6 +117,13 @@ export type CreateWorkflowComposerContext = {
     fn: StepFunctionResult
   ) => WorkflowData<TOutput>
   hookBinder: (name: string, fn: () => HookHandler) => void
+  stepConditions_: Record<
+    string,
+    {
+      condition: (...args: any[]) => boolean | WorkflowData
+      input: any
+    }
+  >
   parallelizeBinder: <
     TOutput extends (WorkflowData | undefined)[] = WorkflowData[]
   >(
@@ -143,6 +154,11 @@ export interface StepExecutionContext {
    * The idempoency key of the parent step.
    */
   parentStepIdempotencyKey?: string
+
+  /**
+   * Whether to prevent release events.
+   */
+  preventReleaseEvents?: boolean
 
   /**
    * The name of the step.

@@ -1,5 +1,111 @@
 # @medusajs/dashboard
 
+## 2.8.3
+
+### Patch Changes
+
+- [#12476](https://github.com/medusajs/medusa/pull/12476) [`b8ab053252f7c8f854b4b549b74c2cf0521bd8d5`](https://github.com/medusajs/medusa/commit/b8ab053252f7c8f854b4b549b74c2cf0521bd8d5) Thanks [@fPolic](https://github.com/fPolic)! - fix(dashboard): refund payment formatting
+
+- Updated dependencies [[`9f376ff1f122c0f70559cf4f57813b9f2b608f3e`](https://github.com/medusajs/medusa/commit/9f376ff1f122c0f70559cf4f57813b9f2b608f3e), [`fca5ad77b41856867ec68b1e46d04f1bb71cbc76`](https://github.com/medusajs/medusa/commit/fca5ad77b41856867ec68b1e46d04f1bb71cbc76)]:
+  - @medusajs/js-sdk@2.8.3
+  - @medusajs/admin-shared@2.8.3
+  - @medusajs/icons@2.8.3
+  - @medusajs/ui@4.0.13
+
+## 2.8.2
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @medusajs/js-sdk@2.8.2
+  - @medusajs/admin-shared@2.8.2
+  - @medusajs/icons@2.8.2
+  - @medusajs/ui@4.0.12
+
+## 2.8.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @medusajs/admin-shared@2.8.1
+  - @medusajs/js-sdk@2.8.1
+  - @medusajs/icons@2.8.1
+  - @medusajs/ui@4.0.11
+
+## 2.8.0
+
+### Patch Changes
+
+- [#12297](https://github.com/medusajs/medusa/pull/12297) [`9cedeb182dc19d6127b602fc06e4b8850490e2a9`](https://github.com/medusajs/medusa/commit/9cedeb182dc19d6127b602fc06e4b8850490e2a9) Thanks [@fPolic](https://github.com/fPolic)! - feat(dashboard, js-sdk, medusa, tax, types): custom tax providers
+
+- [#12371](https://github.com/medusajs/medusa/pull/12371) [`6aa1ebdee24fd3e2762317f31db4e4adcaba7566`](https://github.com/medusajs/medusa/commit/6aa1ebdee24fd3e2762317f31db4e4adcaba7566) Thanks [@fPolic](https://github.com/fPolic)! - fix(dashboard): inventory kit combobox state
+
+- [#12383](https://github.com/medusajs/medusa/pull/12383) [`3fb4d5beb05510fc3727199f0387fae5c8642520`](https://github.com/medusajs/medusa/commit/3fb4d5beb05510fc3727199f0387fae5c8642520) Thanks [@fPolic](https://github.com/fPolic)! - fix(dashboard): call route modal onClose only on route change
+
+- [#12450](https://github.com/medusajs/medusa/pull/12450) [`32e0194772cd44efa1930f2ee99f147fa2976f1f`](https://github.com/medusajs/medusa/commit/32e0194772cd44efa1930f2ee99f147fa2976f1f) Thanks [@fPolic](https://github.com/fPolic)! - fix(dashboard, medusa): validate provider exists when creating a top level tax region
+
+- [#12346](https://github.com/medusajs/medusa/pull/12346) [`cdb135e491b44c7573e7c568565366517576b90a`](https://github.com/medusajs/medusa/commit/cdb135e491b44c7573e7c568565366517576b90a) Thanks [@pepijn-vanvlaanderen](https://github.com/pepijn-vanvlaanderen)! - Added missing dependencies
+
+- [#12447](https://github.com/medusajs/medusa/pull/12447) [`39e5eadefcf123c364240c665e8b455d1a8c38c0`](https://github.com/medusajs/medusa/commit/39e5eadefcf123c364240c665e8b455d1a8c38c0) Thanks [@fPolic](https://github.com/fPolic)! - fix(dashboard, core-flows): allocation button condition and reservation recreation on fulfilment cancel
+
+- [#11877](https://github.com/medusajs/medusa/pull/11877) [`353906614625ce8cc15c7d60537db697a69e160d`](https://github.com/medusajs/medusa/commit/353906614625ce8cc15c7d60537db697a69e160d) Thanks [@AmbroziuBaban](https://github.com/AmbroziuBaban)! - fix(dashboard): Admin Global Search broken for variants
+
+- Updated dependencies [[`9cedeb182dc19d6127b602fc06e4b8850490e2a9`](https://github.com/medusajs/medusa/commit/9cedeb182dc19d6127b602fc06e4b8850490e2a9), [`4f6362b1cb1b84f01cc4cd277981aae7ae5797c9`](https://github.com/medusajs/medusa/commit/4f6362b1cb1b84f01cc4cd277981aae7ae5797c9)]:
+  - @medusajs/js-sdk@2.8.0
+  - @medusajs/ui@4.0.10
+  - @medusajs/admin-shared@2.8.0
+  - @medusajs/icons@2.8.0
+
+## 2.7.1
+
+### Patch Changes
+
+- [#12198](https://github.com/medusajs/medusa/pull/12198) [`f6b20a943e14ad6689cc1e118ae08ebc49fde603`](https://github.com/medusajs/medusa/commit/f6b20a943e14ad6689cc1e118ae08ebc49fde603) Thanks [@fPolic](https://github.com/fPolic)! - fix(dashboard): properly register settings custom routes
+
+- Updated dependencies [[`01542f69737b48346d924670296c551e4c4b47ec`](https://github.com/medusajs/medusa/commit/01542f69737b48346d924670296c551e4c4b47ec)]:
+  - @medusajs/js-sdk@2.7.1
+  - @medusajs/admin-shared@2.7.1
+  - @medusajs/icons@2.7.1
+  - @medusajs/ui@4.0.9
+
+## 2.7.0
+
+### Patch Changes
+
+- [#12073](https://github.com/medusajs/medusa/pull/12073) [`f01e0868bd669b0203bd0f3db3bb908062b1f2d1`](https://github.com/medusajs/medusa/commit/f01e0868bd669b0203bd0f3db3bb908062b1f2d1) Thanks [@fPolic](https://github.com/fPolic)! - fix(dashboard): product create discountable flag
+
+- [#11720](https://github.com/medusajs/medusa/pull/11720) [`ec56a8bc857a74788df6523af25914da95c4c1d8`](https://github.com/medusajs/medusa/commit/ec56a8bc857a74788df6523af25914da95c4c1d8) Thanks [@kasperkristensen](https://github.com/kasperkristensen)! - fix(medusa,utils,test-utils,types,framework,dashboard,admin-vite-plugin,admib-bundler): Fix broken plugin dependencies in development server
+
+- [#11871](https://github.com/medusajs/medusa/pull/11871) [`5ab15a29889870411b719ebad3fb94786baee45e`](https://github.com/medusajs/medusa/commit/5ab15a29889870411b719ebad3fb94786baee45e) Thanks [@riqwan](https://github.com/riqwan)! - feat(dashboard,js-sdk,admin-shared): add customer addresses + layout change
+
+- [#11734](https://github.com/medusajs/medusa/pull/11734) [`cc4c5c86e227a6693d53ea6b5b9e62d0a7c57fa2`](https://github.com/medusajs/medusa/commit/cc4c5c86e227a6693d53ea6b5b9e62d0a7c57fa2) Thanks [@kasperkristensen](https://github.com/kasperkristensen)! - chore(ui-preset,icons,dashboard): Sync with Figma, and update ArrowRight import
+
+- [#12004](https://github.com/medusajs/medusa/pull/12004) [`3145c5f20de69e42c7cefb981b12ba9814dddae3`](https://github.com/medusajs/medusa/commit/3145c5f20de69e42c7cefb981b12ba9814dddae3) Thanks [@fPolic](https://github.com/fPolic)! - fix(dashboard): product create trim inputs
+
+- [#12028](https://github.com/medusajs/medusa/pull/12028) [`3dba58785fb2d8e79f1ea89daa9e4ab8810821c8`](https://github.com/medusajs/medusa/commit/3dba58785fb2d8e79f1ea89daa9e4ab8810821c8) Thanks [@kasperkristensen](https://github.com/kasperkristensen)! - fix(dashboard,medusa,types): allow searching for promotion rule options
+
+- [#12149](https://github.com/medusajs/medusa/pull/12149) [`95a8c7b57ed751eaf858b6235431781ed0229f28`](https://github.com/medusajs/medusa/commit/95a8c7b57ed751eaf858b6235431781ed0229f28) Thanks [@fPolic](https://github.com/fPolic)! - fix(dashboard): product type metadata form
+
+- [#12007](https://github.com/medusajs/medusa/pull/12007) [`29f6c2a8ddd802398e9ac2d090581832af7603a7`](https://github.com/medusajs/medusa/commit/29f6c2a8ddd802398e9ac2d090581832af7603a7) Thanks [@fPolic](https://github.com/fPolic)! - fix(dashboard): display pending difference in the create return form
+
+- [#12030](https://github.com/medusajs/medusa/pull/12030) [`6d8390a529e784aaae886006af0b5d364c2d2aba`](https://github.com/medusajs/medusa/commit/6d8390a529e784aaae886006af0b5d364c2d2aba) Thanks [@kasperkristensen](https://github.com/kasperkristensen)! - fix(dashboard): Allow empty subpaths for extension routes
+
+- [#11955](https://github.com/medusajs/medusa/pull/11955) [`d53af655f02b7b8429359fd360e8740db773643d`](https://github.com/medusajs/medusa/commit/d53af655f02b7b8429359fd360e8740db773643d) Thanks [@kasperkristensen](https://github.com/kasperkristensen)! - fix(dashboard): Reduce the size of the Notifcations trigger
+
+- [#11825](https://github.com/medusajs/medusa/pull/11825) [`3063d6e6019d442d7bdc7a0d662fa00c232eb627`](https://github.com/medusajs/medusa/commit/3063d6e6019d442d7bdc7a0d662fa00c232eb627) Thanks [@kasperkristensen](https://github.com/kasperkristensen)! - fix(dashboard): Include thumbnail in default product query
+
+- [#11958](https://github.com/medusajs/medusa/pull/11958) [`a8513019db08d1345e79a15aea7f11389b4918d4`](https://github.com/medusajs/medusa/commit/a8513019db08d1345e79a15aea7f11389b4918d4) Thanks [@fPolic](https://github.com/fPolic)! - fix(core-flows,dashboard): handle PaymentCollection managemenet on OrderEdit when there is authorized amount
+
+- [#12021](https://github.com/medusajs/medusa/pull/12021) [`350b6b9a71fc72ffd8a0a1beed685548c1a7cefa`](https://github.com/medusajs/medusa/commit/350b6b9a71fc72ffd8a0a1beed685548c1a7cefa) Thanks [@fPolic](https://github.com/fPolic)! - fix(dashboard): RMA allow shipping unset
+
+- [#11871](https://github.com/medusajs/medusa/pull/11871) [`5ab15a29889870411b719ebad3fb94786baee45e`](https://github.com/medusajs/medusa/commit/5ab15a29889870411b719ebad3fb94786baee45e) Thanks [@riqwan](https://github.com/riqwan)! - feat(dashboard,js-sdk,admin-shared): add customer addresses + layout change
+
+- Updated dependencies [[`c6f2f444ed0118b17ea970942d0256fe3bd4043a`](https://github.com/medusajs/medusa/commit/c6f2f444ed0118b17ea970942d0256fe3bd4043a), [`5ab15a29889870411b719ebad3fb94786baee45e`](https://github.com/medusajs/medusa/commit/5ab15a29889870411b719ebad3fb94786baee45e), [`cc4c5c86e227a6693d53ea6b5b9e62d0a7c57fa2`](https://github.com/medusajs/medusa/commit/cc4c5c86e227a6693d53ea6b5b9e62d0a7c57fa2), [`c3440e5e3812e3d1c6b82e9d4e41287398451611`](https://github.com/medusajs/medusa/commit/c3440e5e3812e3d1c6b82e9d4e41287398451611), [`0cc306bf562d8f1f1f1c09d9658463e2c8def465`](https://github.com/medusajs/medusa/commit/0cc306bf562d8f1f1f1c09d9658463e2c8def465), [`053326950d1e67bff1e39514527de3c6db33225b`](https://github.com/medusajs/medusa/commit/053326950d1e67bff1e39514527de3c6db33225b), [`c40fb01d9200283c5d69f3295e65fccc56a9a76f`](https://github.com/medusajs/medusa/commit/c40fb01d9200283c5d69f3295e65fccc56a9a76f), [`5ab15a29889870411b719ebad3fb94786baee45e`](https://github.com/medusajs/medusa/commit/5ab15a29889870411b719ebad3fb94786baee45e)]:
+  - @medusajs/js-sdk@2.7.0
+  - @medusajs/admin-shared@2.7.0
+  - @medusajs/icons@2.7.0
+  - @medusajs/ui@4.0.8
+
 ## 2.6.1
 
 ### Patch Changes

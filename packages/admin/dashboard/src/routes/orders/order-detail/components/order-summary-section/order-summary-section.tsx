@@ -64,7 +64,6 @@ type OrderSummarySectionProps = {
 
 export const OrderSummarySection = ({ order }: OrderSummarySectionProps) => {
   const { t } = useTranslation()
-  const navigate = useNavigate()
   const prompt = usePrompt()
 
   const { reservations } = useReservationItems(
@@ -115,7 +114,7 @@ export const OrderSummarySection = ({ order }: OrderSummarySectionProps) => {
     }
 
     return false
-  }, [reservations])
+  }, [order.items, reservations])
 
   const unpaidPaymentCollection = order.payment_collections.find(
     (pc) => pc.status === "not_paid"

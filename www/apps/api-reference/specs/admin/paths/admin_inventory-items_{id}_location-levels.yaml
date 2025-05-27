@@ -91,6 +91,11 @@ get:
     - cookie_auth: []
     - jwt_token: []
   x-codeSamples:
+    - lang: JavaScript
+      label: JS SDK
+      source:
+        $ref: >-
+          ../code_samples/JavaScript/admin_inventory-items_{id}_location-levels/get.js
     - lang: Shell
       label: cURL
       source:
@@ -232,3 +237,4 @@ post:
     '500':
       $ref: ../components/responses/500_error.yaml
   x-workflow: createInventoryLevelsWorkflow
+  x-events: []

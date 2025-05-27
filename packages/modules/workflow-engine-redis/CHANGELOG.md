@@ -1,5 +1,63 @@
 # @medusajs/workflow-engine-redis
 
+## 2.8.3
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @medusajs/framework@2.8.3
+
+## 2.8.2
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @medusajs/framework@2.8.2
+
+## 2.8.1
+
+### Patch Changes
+
+- [#12439](https://github.com/medusajs/medusa/pull/12439) [`ab22faaa52008ad952d50f0a3b6b1148515b10c9`](https://github.com/medusajs/medusa/commit/ab22faaa52008ad952d50f0a3b6b1148515b10c9) Thanks [@adrien2p](https://github.com/adrien2p)! - Chore/test runner improvements
+
+- Updated dependencies []:
+  - @medusajs/framework@2.8.1
+
+## 2.8.0
+
+### Patch Changes
+
+- [#12362](https://github.com/medusajs/medusa/pull/12362) [`80007f3afda76eabd5b148fa6bb5590fa6987265`](https://github.com/medusajs/medusa/commit/80007f3afda76eabd5b148fa6bb5590fa6987265) Thanks [@adrien2p](https://github.com/adrien2p)! - feat(workflows-\*): Allow to re run non idempotent but stored workflow with the same transaction id if considered done
+
+- Updated dependencies [[`b868a4ef4deb7df09d6156a907f4c883cd55a3fd`](https://github.com/medusajs/medusa/commit/b868a4ef4deb7df09d6156a907f4c883cd55a3fd)]:
+  - @medusajs/framework@2.8.0
+
+## 2.7.1
+
+### Patch Changes
+
+- [#12196](https://github.com/medusajs/medusa/pull/12196) [`8618e6ee3843069ea189ea64d5191d93db52dc9d`](https://github.com/medusajs/medusa/commit/8618e6ee3843069ea189ea64d5191d93db52dc9d) Thanks [@adrien2p](https://github.com/adrien2p)! - fix(): Properly handle workflow as step now that events are fixed entirely
+
+- Updated dependencies [[`ee35f3ce9097832c10cdf2fd168763088e6c3fcb`](https://github.com/medusajs/medusa/commit/ee35f3ce9097832c10cdf2fd168763088e6c3fcb), [`2f6963a5fbea05537680cb1b1f6a2b9822c36325`](https://github.com/medusajs/medusa/commit/2f6963a5fbea05537680cb1b1f6a2b9822c36325), [`b8902637251e9ed4f8762ef280659bbab6d967de`](https://github.com/medusajs/medusa/commit/b8902637251e9ed4f8762ef280659bbab6d967de)]:
+  - @medusajs/framework@2.7.1
+
+## 2.7.0
+
+### Patch Changes
+
+- [#11771](https://github.com/medusajs/medusa/pull/11771) [`72d2cf92075b3e0849251f233517e2972de1b19c`](https://github.com/medusajs/medusa/commit/72d2cf92075b3e0849251f233517e2972de1b19c) Thanks [@adrien2p](https://github.com/adrien2p)! - fix: workflow retry interval race condition
+
+- [#11800](https://github.com/medusajs/medusa/pull/11800) [`fc652ea51e4fdc19e8b15f1ac8a08effbc68ea30`](https://github.com/medusajs/medusa/commit/fc652ea51e4fdc19e8b15f1ac8a08effbc68ea30) Thanks [@adrien2p](https://github.com/adrien2p)! - fix(workflow-engine-redis): scheduled jobs 2
+
+- [#11844](https://github.com/medusajs/medusa/pull/11844) [`0625f76cd4f040963829b61dcc70563e1d1b7070`](https://github.com/medusajs/medusa/commit/0625f76cd4f040963829b61dcc70563e1d1b7070) Thanks [@carlos-r-l-rodrigues](https://github.com/carlos-r-l-rodrigues)! - chore(workflow-engine): expose cancel method
+
+- [#11822](https://github.com/medusajs/medusa/pull/11822) [`6053ec3976d5ebd18680eba5eff3c71038a108cb`](https://github.com/medusajs/medusa/commit/6053ec3976d5ebd18680eba5eff3c71038a108cb) Thanks [@carlos-r-l-rodrigues](https://github.com/carlos-r-l-rodrigues)! - chore(workflow-engine-redis): remove repeatable jobs from old queue
+
+- [#11873](https://github.com/medusajs/medusa/pull/11873) [`13e159d8ad7ebb3e6977969b4bb10877d7bb7850`](https://github.com/medusajs/medusa/commit/13e159d8ad7ebb3e6977969b4bb10877d7bb7850) Thanks [@adrien2p](https://github.com/adrien2p)! - fix(workflow-engine-\*): Prevent passing shared context reference and workflow.cancel
+
+- Updated dependencies [[`ec56a8bc857a74788df6523af25914da95c4c1d8`](https://github.com/medusajs/medusa/commit/ec56a8bc857a74788df6523af25914da95c4c1d8), [`2a18a75353f872b0cb4c203afc08cfd82f778428`](https://github.com/medusajs/medusa/commit/2a18a75353f872b0cb4c203afc08cfd82f778428)]:
+  - @medusajs/framework@2.7.0
+
 ## 2.6.1
 
 ### Patch Changes

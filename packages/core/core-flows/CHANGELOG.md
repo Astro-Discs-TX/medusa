@@ -1,5 +1,113 @@
 # @medusajs/core-flows
 
+## 2.8.3
+
+### Patch Changes
+
+- [#12527](https://github.com/medusajs/medusa/pull/12527) [`fca5ad77b41856867ec68b1e46d04f1bb71cbc76`](https://github.com/medusajs/medusa/commit/fca5ad77b41856867ec68b1e46d04f1bb71cbc76) Thanks [@thetutlage](https://github.com/thetutlage)! - feat: process import from pre-processed chunks
+
+- [#12567](https://github.com/medusajs/medusa/pull/12567) [`4e49cebcf0f053cb89012276e935a7ec62a12046`](https://github.com/medusajs/medusa/commit/4e49cebcf0f053cb89012276e935a7ec62a12046) Thanks [@shahednasser](https://github.com/shahednasser)! - fix(core-flows, types): export steps and types related to credit lines
+
+- [#12540](https://github.com/medusajs/medusa/pull/12540) [`3071d09a03205597158afe79d55dd43643a97026`](https://github.com/medusajs/medusa/commit/3071d09a03205597158afe79d55dd43643a97026) Thanks [@fPolic](https://github.com/fPolic)! - fix(core-flows): skip location check if variant is not managed when preparing inventory confirm
+
+- Updated dependencies []:
+  - @medusajs/framework@2.8.3
+
+## 2.8.2
+
+### Patch Changes
+
+- [#12503](https://github.com/medusajs/medusa/pull/12503) [`9f4d32b2201d8c87d84c59b9a1ca59e00bcc6af1`](https://github.com/medusajs/medusa/commit/9f4d32b2201d8c87d84c59b9a1ca59e00bcc6af1) Thanks [@fPolic](https://github.com/fPolic)! - fix(core-flows): fulfilment cancelation with shared inventory kit item
+
+- [#12473](https://github.com/medusajs/medusa/pull/12473) [`e149a998862272fff80573a623c4d9010cb0b104`](https://github.com/medusajs/medusa/commit/e149a998862272fff80573a623c4d9010cb0b104) Thanks [@thetutlage](https://github.com/thetutlage)! - feat: define validators and use normalize-products step
+
+- Updated dependencies []:
+  - @medusajs/framework@2.8.2
+
+## 2.8.1
+
+### Patch Changes
+
+- [#12396](https://github.com/medusajs/medusa/pull/12396) [`4602163b568962f8115b83971d67a6c55c2b8a98`](https://github.com/medusajs/medusa/commit/4602163b568962f8115b83971d67a6c55c2b8a98) Thanks [@thetutlage](https://github.com/thetutlage)! - feat: create CSV normalizer to normalize a CSV file
+
+- Updated dependencies []:
+  - @medusajs/framework@2.8.1
+
+## 2.8.0
+
+### Minor Changes
+
+- [#12455](https://github.com/medusajs/medusa/pull/12455) [`2c49e8b7332420c9fc949f9429a339fcbf5637af`](https://github.com/medusajs/medusa/commit/2c49e8b7332420c9fc949f9429a339fcbf5637af) Thanks [@olivermrbl](https://github.com/olivermrbl)! - chore: Restructure the cart-completion workflow
+
+### Patch Changes
+
+- [#12353](https://github.com/medusajs/medusa/pull/12353) [`469ecef3c52797b812c9cb8a4410f632e8de8b8c`](https://github.com/medusajs/medusa/commit/469ecef3c52797b812c9cb8a4410f632e8de8b8c) Thanks [@olivermrbl](https://github.com/olivermrbl)! - chore: Minor revamp of cart completion
+
+- [#12338](https://github.com/medusajs/medusa/pull/12338) [`a53d645f8aab30135baebac29f9645dd35d47632`](https://github.com/medusajs/medusa/commit/a53d645f8aab30135baebac29f9645dd35d47632) Thanks [@shahednasser](https://github.com/shahednasser)! - fix(core-flows,utils): move fulfillment workflow events
+
+- [#12326](https://github.com/medusajs/medusa/pull/12326) [`90c61d189806894c56bfd5686807406c800cfdeb`](https://github.com/medusajs/medusa/commit/90c61d189806894c56bfd5686807406c800cfdeb) Thanks [@carlos-r-l-rodrigues](https://github.com/carlos-r-l-rodrigues)! - fix(core-flows): add missing remove remote links
+
+- [#12380](https://github.com/medusajs/medusa/pull/12380) [`c4dd805849fee483d52ee61078e15f9be111b414`](https://github.com/medusajs/medusa/commit/c4dd805849fee483d52ee61078e15f9be111b414) Thanks [@shahednasser](https://github.com/shahednasser)! - fix(core-flows): export order-related workflows
+
+- [#12320](https://github.com/medusajs/medusa/pull/12320) [`89859987565b1fc872c7cd1c6d23144b97f454bc`](https://github.com/medusajs/medusa/commit/89859987565b1fc872c7cd1c6d23144b97f454bc) Thanks [@fPolic](https://github.com/fPolic)! - feat(core-flows,utils): add Order Edit events
+
+- [#12269](https://github.com/medusajs/medusa/pull/12269) [`d7a273ff2def96420054f31114a46294be6ee968`](https://github.com/medusajs/medusa/commit/d7a273ff2def96420054f31114a46294be6ee968) Thanks [@fPolic](https://github.com/fPolic)! - fix(core-flows): handle inventory kit items in mark-as-shipped and mark-as-delivered flows
+
+- [#12425](https://github.com/medusajs/medusa/pull/12425) [`fff285f8d2f3020a24b83066fa4250130fdcf229`](https://github.com/medusajs/medusa/commit/fff285f8d2f3020a24b83066fa4250130fdcf229) Thanks [@adrien2p](https://github.com/adrien2p)! - feat(core-flows): Emit cart trasnferred customer
+
+- [#12263](https://github.com/medusajs/medusa/pull/12263) [`5fe0e8250d0255866a68db32d4b54dab8ab66e52`](https://github.com/medusajs/medusa/commit/5fe0e8250d0255866a68db32d4b54dab8ab66e52) Thanks [@fPolic](https://github.com/fPolic)! - fix(core-flows): do not cancel authorized payment on cart complete failure
+
+- Updated dependencies [[`b868a4ef4deb7df09d6156a907f4c883cd55a3fd`](https://github.com/medusajs/medusa/commit/b868a4ef4deb7df09d6156a907f4c883cd55a3fd)]:
+  - @medusajs/framework@2.8.0
+
+## 2.7.1
+
+### Patch Changes
+
+- [#12232](https://github.com/medusajs/medusa/pull/12232) [`24af8f2d8e27d0f842e6e596bc4c695882f67737`](https://github.com/medusajs/medusa/commit/24af8f2d8e27d0f842e6e596bc4c695882f67737) Thanks [@thetutlage](https://github.com/thetutlage)! - fix: expose beforeRefreshingPaymentCollection hook
+
+- [#12124](https://github.com/medusajs/medusa/pull/12124) [`01542f69737b48346d924670296c551e4c4b47ec`](https://github.com/medusajs/medusa/commit/01542f69737b48346d924670296c551e4c4b47ec) Thanks [@fPolic](https://github.com/fPolic)! - feat(core-flows,js-sdk,medusa): draft order shipping removal
+
+- [#12115](https://github.com/medusajs/medusa/pull/12115) [`413a0da26c7e9acffe9cc087fd77500efc76191a`](https://github.com/medusajs/medusa/commit/413a0da26c7e9acffe9cc087fd77500efc76191a) Thanks [@fPolic](https://github.com/fPolic)! - fix(core-flows): draft order reservations + emit order placedevent on convert
+
+- [#12227](https://github.com/medusajs/medusa/pull/12227) [`ad74ba2ca4c86b38c91c342edfad077cd132cc2f`](https://github.com/medusajs/medusa/commit/ad74ba2ca4c86b38c91c342edfad077cd132cc2f) Thanks [@fPolic](https://github.com/fPolic)! - fix(core-flows, link-modules): return fulfillment creation
+
+- [#12221](https://github.com/medusajs/medusa/pull/12221) [`19d71fdc63547886cfc238c6b680370a80d50b50`](https://github.com/medusajs/medusa/commit/19d71fdc63547886cfc238c6b680370a80d50b50) Thanks [@shahednasser](https://github.com/shahednasser)! - fix(core-flows): export registerOrderDeliveryStep
+
+- Updated dependencies [[`ee35f3ce9097832c10cdf2fd168763088e6c3fcb`](https://github.com/medusajs/medusa/commit/ee35f3ce9097832c10cdf2fd168763088e6c3fcb), [`2f6963a5fbea05537680cb1b1f6a2b9822c36325`](https://github.com/medusajs/medusa/commit/2f6963a5fbea05537680cb1b1f6a2b9822c36325), [`b8902637251e9ed4f8762ef280659bbab6d967de`](https://github.com/medusajs/medusa/commit/b8902637251e9ed4f8762ef280659bbab6d967de)]:
+  - @medusajs/framework@2.7.1
+
+## 2.7.0
+
+### Minor Changes
+
+- [`386205d0f41828b82d519d2f5b8e07b41907a8ae`](https://github.com/medusajs/medusa/commit/386205d0f41828b82d519d2f5b8e07b41907a8ae) Thanks [@olivermrbl](https://github.com/olivermrbl)! - feat: Change customer to account_holder to be one-to-many
+
+### Patch Changes
+
+- [#12051](https://github.com/medusajs/medusa/pull/12051) [`5f3a82f5c341d4a98a7a2ab92563f6cdae1cdce1`](https://github.com/medusajs/medusa/commit/5f3a82f5c341d4a98a7a2ab92563f6cdae1cdce1) Thanks [@fPolic](https://github.com/fPolic)! - fix(core-flows): applying product type promotion
+
+- [#11832](https://github.com/medusajs/medusa/pull/11832) [`95e89a39f347c8af6a5960943af56965bc3a07ba`](https://github.com/medusajs/medusa/commit/95e89a39f347c8af6a5960943af56965bc3a07ba) Thanks [@fPolic](https://github.com/fPolic)! - fix(core-flows): cancel/refund payment on cart complete error
+
+- [#11891](https://github.com/medusajs/medusa/pull/11891) [`b1b3b484747a110f720d9c1d086696bbfba86bda`](https://github.com/medusajs/medusa/commit/b1b3b484747a110f720d9c1d086696bbfba86bda) Thanks [@thetutlage](https://github.com/thetutlage)! - feat: Set pricing context hook
+
+- [#11569](https://github.com/medusajs/medusa/pull/11569) [`cb6249320e7322e8eabfec8434f1278f8d63e96c`](https://github.com/medusajs/medusa/commit/cb6249320e7322e8eabfec8434f1278f8d63e96c) Thanks [@riqwan](https://github.com/riqwan)! - feat(order,types,medusa,core-flows): fix(types,order,medusa,core-flows): create order credit lines during order refund
+
+- [#11994](https://github.com/medusajs/medusa/pull/11994) [`1f8fab36361aa8e473ffe6c411c8598a916a6d3f`](https://github.com/medusajs/medusa/commit/1f8fab36361aa8e473ffe6c411c8598a916a6d3f) Thanks [@riqwan](https://github.com/riqwan)! - feat(core-flows,types,order,cart): assign tax lines only to regular products
+
+- [#11790](https://github.com/medusajs/medusa/pull/11790) [`8385a5e34d9528eb3d80d16f391ee7f44a6e5d90`](https://github.com/medusajs/medusa/commit/8385a5e34d9528eb3d80d16f391ee7f44a6e5d90) Thanks [@fPolic](https://github.com/fPolic)! - fix(core-flows): recreate fulfilment reservations on cancelation, handle inventory kits in fulfillment flows
+
+- [#11958](https://github.com/medusajs/medusa/pull/11958) [`a8513019db08d1345e79a15aea7f11389b4918d4`](https://github.com/medusajs/medusa/commit/a8513019db08d1345e79a15aea7f11389b4918d4) Thanks [@fPolic](https://github.com/fPolic)! - fix(core-flows,dashboard): handle PaymentCollection managemenet on OrderEdit when there is authorized amount
+
+- [#11872](https://github.com/medusajs/medusa/pull/11872) [`9dd62d93bd9e2acccc2e9f22bc029fd2b0df3234`](https://github.com/medusajs/medusa/commit/9dd62d93bd9e2acccc2e9f22bc029fd2b0df3234) Thanks [@riqwan](https://github.com/riqwan)! - feat(core-flows,types,utils): make payment optional when cart balance is 0
+
+- [#11977](https://github.com/medusajs/medusa/pull/11977) [`01089d5bc81bc92311bb43b2d57d987fee378030`](https://github.com/medusajs/medusa/commit/01089d5bc81bc92311bb43b2d57d987fee378030) Thanks [@carlos-r-l-rodrigues](https://github.com/carlos-r-l-rodrigues)! - chore(core-flows): skip prices list ops when no data
+
+- [#12103](https://github.com/medusajs/medusa/pull/12103) [`9ac74eead4760d6c92676d451e6f25c2305b1852`](https://github.com/medusajs/medusa/commit/9ac74eead4760d6c92676d451e6f25c2305b1852) Thanks [@shahednasser](https://github.com/shahednasser)! - feat(core-flows,types): export fetchShippingOptionForOrderWorkflow
+
+- Updated dependencies [[`ec56a8bc857a74788df6523af25914da95c4c1d8`](https://github.com/medusajs/medusa/commit/ec56a8bc857a74788df6523af25914da95c4c1d8), [`2a18a75353f872b0cb4c203afc08cfd82f778428`](https://github.com/medusajs/medusa/commit/2a18a75353f872b0cb4c203afc08cfd82f778428)]:
+  - @medusajs/framework@2.7.0
+
 ## 2.6.1
 
 ### Patch Changes

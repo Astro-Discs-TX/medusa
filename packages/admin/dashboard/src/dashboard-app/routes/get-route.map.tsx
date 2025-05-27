@@ -1414,6 +1414,13 @@ export function getRouteMap({
                       lazy: () =>
                         import("../../routes/product-types/product-type-edit"),
                     },
+                    {
+                      path: "metadata/edit",
+                      lazy: () =>
+                        import(
+                          "../../routes/product-types/product-type-metadata"
+                        ),
+                    },
                   ],
                 },
               ],
@@ -1583,6 +1590,11 @@ export function getRouteMap({
                       },
                       children: [
                         {
+                          path: "edit",
+                          lazy: () =>
+                            import("../../routes/tax-regions/tax-region-edit"),
+                        },
+                        {
                           path: "provinces/create",
                           lazy: () =>
                             import(
@@ -1707,7 +1719,7 @@ export function getRouteMap({
                 },
               ],
             },
-            ...settingsRoutes,
+            ...(settingsRoutes?.[0]?.children || []),
           ],
         },
       ],

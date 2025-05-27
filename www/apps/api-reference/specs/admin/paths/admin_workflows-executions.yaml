@@ -86,11 +86,23 @@ get:
               type: string
               title: workflow_id
               description: A workflow ID.
+    - name: q
+      in: query
+      description: Search query to filter by a workflow execution's searchable fields.
+      required: false
+      schema:
+        type: string
+        title: q
+        description: Search query to filter by a workflow execution's searchable fields.
   security:
     - api_token: []
     - cookie_auth: []
     - jwt_token: []
   x-codeSamples:
+    - lang: JavaScript
+      label: JS SDK
+      source:
+        $ref: ../code_samples/JavaScript/admin_workflows-executions/get.js
     - lang: Shell
       label: cURL
       source:
