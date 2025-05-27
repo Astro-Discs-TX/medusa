@@ -15,8 +15,8 @@ export const SearchFilters = () => {
             className={clsx(
               "text-compact-small-plus flex-1 p-docs_0.25",
               selectedIndex === index.value && [
-                "shadow-elevation-card-rest bg-medusa-bg-base",
-                "rounded-docs_sm text-medusa-fg-base",
+                "rounded-docs_sm text-medusa-fg-base bg-medusa-bg-base",
+                "shadow-elevation-card-rest dark:shadow-elevation-card-rest-dark",
               ],
               selectedIndex !== index.value && "text-medusa-fg-muted"
             )}
