@@ -8,13 +8,7 @@ function getPromotionValueForPercentage(promotion, lineItemTotal) {
   return MathBN.mult(MathBN.div(promotion.value, 100), lineItemTotal)
 }
 
-function getPromotionValueForFixed(
-  promotion,
-  itemTotal,
-  allItemsTotal,
-  isTaxInclusive,
-  taxLines
-) {
+function getPromotionValueForFixed(promotion, itemTotal, allItemsTotal) {
   if (promotion.allocation === ApplicationMethodAllocation.ACROSS) {
     const promotionValueForItem = MathBN.mult(
       MathBN.div(itemTotal, allItemsTotal),
@@ -31,24 +25,12 @@ function getPromotionValueForFixed(
   return promotion.value
 }
 
-export function getPromotionValue(
-  promotion,
-  lineItemTotal,
-  lineItemsTotal,
-  isTaxInclusive,
-  taxLines
-) {
+export function getPromotionValue(promotion, lineItemTotal, lineItemsTotal) {
   if (promotion.type === ApplicationMethodType.PERCENTAGE) {
     return getPromotionValueForPercentage(promotion, lineItemTotal)
   }
 
-  return getPromotionValueForFixed(
-    promotion,
-    lineItemTotal,
-    lineItemsTotal,
-    isTaxInclusive,
-    taxLines
-  )
+  return getPromotionValueForFixed(promotion, lineItemTotal, lineItemsTotal)
 }
 
 export function getApplicableQuantity(lineItem, maxQuantity) {
@@ -104,9 +86,7 @@ export function calculateAdjustmentAmountFromPromotion(
     const promotionValue = getPromotionValue(
       promotion,
       lineItemTotal,
-      lineItemsTotal,
-      lineItem.is_tax_inclusive,
-      lineItem.tax_lines
+      lineItemsTotal
     )
 
     return MathBN.min(promotionValue, applicableTotal)
@@ -145,9 +125,7 @@ export function calculateAdjustmentAmountFromPromotion(
   const promotionValue = getPromotionValue(
     promotion,
     applicableTotal,
-    lineItemsTotal,
-    lineItem.is_tax_inclusive,
-    lineItem.tax_lines
+    lineItemsTotal
   )
 
   return MathBN.min(promotionValue, applicableTotal)
