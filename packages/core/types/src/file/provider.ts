@@ -121,22 +121,15 @@ export interface IFileProvider {
   upload(file: ProviderUploadFileDTO): Promise<ProviderFileResultDTO>
 
   /**
-   * This method is used to delete a file from storage.
+   * This method is used to delete one or more files from the storage
    *
-   * @param {ProviderDeleteFileDTO} fileData - The details of the file to remove.
+   * @param {ProviderDeleteFileDTO | ProviderDeleteFileDTO[]} fileData - The details of the file to remove.
    * @returns {Promise<void>} Resolves when the file is deleted successfully.
    *
    */
-  delete(fileData: ProviderDeleteFileDTO): Promise<void>
-
-  /**
-   * This method is used to bulk delete files from storage.
-   *
-   * @param {ProviderDeleteFileDTO[]} filesData - The details of the files to remove.
-   * @returns {Promise<void>} Resolves when the file is deleted successfully.
-   *
-   */
-  bulkDelete(filesData: ProviderDeleteFileDTO[]): Promise<void>
+  delete(
+    fileData: ProviderDeleteFileDTO | ProviderDeleteFileDTO[]
+  ): Promise<void>
 
   /**
    * This method is used to retrieve a download URL of the file. For some file services, such as S3, a presigned URL indicates a temporary URL to get access to a file.

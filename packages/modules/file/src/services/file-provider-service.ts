@@ -40,12 +40,12 @@ export default class FileProviderService {
     return this.fileProvider_.upload(file)
   }
 
-  delete(fileData: FileTypes.ProviderDeleteFileDTO): Promise<void> {
+  delete(
+    fileData:
+      | FileTypes.ProviderDeleteFileDTO
+      | FileTypes.ProviderDeleteFileDTO[]
+  ): Promise<void> {
     return this.fileProvider_.delete(fileData)
-  }
-
-  bulkDelete(filesData: FileTypes.ProviderDeleteFileDTO[]): Promise<void> {
-    return this.fileProvider_.bulkDelete(filesData)
   }
 
   getPresignedDownloadUrl(

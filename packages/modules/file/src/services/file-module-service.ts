@@ -81,7 +81,7 @@ export default class FileModuleService implements FileTypes.IFileModuleService {
   async deleteFiles(id: string, sharedContext?: Context): Promise<void>
   async deleteFiles(ids: string[] | string): Promise<void> {
     const input = Array.isArray(ids) ? ids : [ids]
-    await this.fileProviderService_.bulkDelete(
+    await this.fileProviderService_.delete(
       input.map((id) => {
         return { fileKey: id }
       })

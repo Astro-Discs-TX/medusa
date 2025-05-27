@@ -181,7 +181,7 @@ describe.skip("S3 File Plugin", () => {
       content: fixtureAsBinary,
     })
 
-    await s3Service.bulkDelete([
+    await s3Service.delete([
       { fileKey: cat.key },
       { fileKey: cat1.key },
       { fileKey: cat2.key },

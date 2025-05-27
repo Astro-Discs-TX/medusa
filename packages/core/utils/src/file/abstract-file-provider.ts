@@ -125,10 +125,10 @@ export class AbstractFileProviderService implements IFileProvider {
   }
 
   /**
-   * This method deletes the file from storage. It's used when an admin user deletes a product image,
-   * or other custom file deletions.
+   * This method deletes one or more files from the storage. It's used when an admin user
+   * deletes a product image, or other custom file deletions.
    *
-   * @param {FileTypes.ProviderDeleteFileDTO} file - The details of the file to delete.
+   * @param {FileTypes.ProviderDeleteFileDTO | FileTypes.ProviderDeleteFileDTO[]} files - The details of the file(s) to delete.
    * @returns {Promise<void>} Resolves when the file is deleted.
    *
    * @example
@@ -143,26 +143,9 @@ export class AbstractFileProviderService implements IFileProvider {
    *   }
    * }
    */
-  async delete(file: FileTypes.ProviderDeleteFileDTO): Promise<void> {
-    throw Error("delete must be overridden by the child class")
-  }
-
-  /**
-   * This method bulk deletes files from storage. It's used when an admin user deletes a product image,
-   * or other custom file deletions.
-   *
-   * @param {FileTypes.ProviderDeleteFileDTO[]} files - The details of the files to delete.
-   * @returns {Promise<void>} Resolves when the file is deleted.
-   *
-   * @example
-   * class MyFileProviderService extends AbstractFileProviderService {
-   *   // ...
-   *   async bulkDelete(files: ProviderDeleteFileDTO[]): Promise<void> {
-   *     this.client.bulkDelete(files)
-   *   }
-   * }
-   */
-  async bulkDelete(files: FileTypes.ProviderDeleteFileDTO[]): Promise<void> {
+  async delete(
+    files: FileTypes.ProviderDeleteFileDTO | FileTypes.ProviderDeleteFileDTO[]
+  ): Promise<void> {
     throw Error("delete must be overridden by the child class")
   }
 
