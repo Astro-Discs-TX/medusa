@@ -96,6 +96,7 @@ export const listShippingOptionsForCartWorkflow = createWorkflow(
         "items.variant.inventory_items.inventory_item_id",
         "items.variant.inventory_items.inventory.requires_shipping",
         "items.variant.inventory_items.inventory.location_levels.*",
+        "items.product.shipping_options.*",
       ],
       options: { throwIfKeyNotFound: true },
     }).config({ name: "get-cart" })
@@ -236,7 +237,13 @@ export const listShippingOptionsForCartWorkflow = createWorkflow(
 
           const locationId =
             shippingOption.service_zone.fulfillment_set.location.id
-
+          const validForCartItems = cart.items.some(
+            item=>{
+              return item.product.shippingOption.some(itemShippingOption=>{
+                return itemShippingOption.id == itemShippingOption.id
+              })
+            }
+          )
           const itemsAtLocationWithoutAvailableQuantity = cart.items.filter(
             (item) => {
               if (!item.variant?.manage_inventory) {
@@ -244,6 +251,7 @@ export const listShippingOptionsForCartWorkflow = createWorkflow(
               }
 
               return item.variant.inventory_items.some((inventoryItem) => {
+
                 if (!inventoryItem.inventory.requires_shipping) {
                   return false
                 }
@@ -265,6 +273,7 @@ export const listShippingOptionsForCartWorkflow = createWorkflow(
             is_tax_inclusive: !!price?.is_calculated_price_tax_inclusive,
             insufficient_inventory:
               itemsAtLocationWithoutAvailableQuantity.length > 0,
+            valid_for_cart_items:validForCartItems
           }
         })
     )
