@@ -50,8 +50,7 @@ By following this tutorial, you'll learn how to:
 - Install and set up Medusa.
 - Integrate Segment with your Medusa application.
 - Handle Medusa's `order.placed` event to track order placements.
-- Handle a custom `product.viewed` event to track product views.
-- Customize the [Next.js Starter Storefront](../../../nextjs-starter/page.mdx) to send product view events to Segment.
+- Track custom events in your Medusa application with Segment.
 
 You can follow this tutorial whether you're new to Medusa or an advanced Medusa developer.
 
@@ -215,17 +214,27 @@ import { ProviderIdentifyAnalyticsEventDTO } from "@medusajs/types"
 class SegmentAnalyticsProviderService extends AbstractAnalyticsProviderService {
   // ...
   async identify(data: ProviderIdentifyAnalyticsEventDTO): Promise<void> {
-    const userId = "group" in data ? 
-      data.actor_id || data.group.id : data.actor_id
     const anonymousId = data.properties && "anonymousId" in data.properties ? 
       data.properties.anonymousId : undefined
+    const traits = data.properties && "traits" in data.properties ? 
+        data.properties.traits : undefined
 
-    this.client.identify({
-      userId,
-      anonymousId,
-      traits: "group" in data ? data.group : undefined,
-      context: data.properties,
-    })
+    if ("group" in data) {
+      this.client.group({
+        groupId: data.group.id,
+        userId: data.actor_id,
+        anonymousId,
+        traits,
+        context: data.properties
+      })
+    } else {
+      this.client.identify({
+        userId: data.actor_id,
+        anonymousId,
+        traits,
+        context: data.properties
+      })
+    }
   }
 }
 ```
@@ -246,13 +255,13 @@ The method receives other parameters, which you can find in the [Create Analytic
 
 #### Method Logic
 
-In the method, you set the user ID either to the actor or group ID. You also check if the anonymous ID is present in the properties to use it.
+In the method, if the `group` property is present, you call the `group` method of the Segment client to identify a group. Otherwise, you call the `identify` method to identify a user.
 
-Then, you call the `identify` method of the Segment client passing it the user ID, anonymous ID, traits (if the group is present), and context (properties).
+For both methods, you extract the `anonymousId` and `traits` from the `properties` object if they are present. You also pass the `actor_id` as the `userId`, and `group.id` for groups.
 
 ### e. Implement track Method
 
-The `track` method is used to track events in Segment. It can track events like order placements, product views, and more.
+The `track` method is used to track events in Segment. It can track events like order placements, cart updates, and more.
 
 Add the `track` method to the `SegmentAnalyticsProviderService` class:
 
@@ -703,291 +712,68 @@ The event may take a few seconds to appear in the debugger.
 
 ---
 
-## Step 4: Track Product Viewed Event
+## Track Custom Event
 
-Another common event to track is when a customer views a product. This event isn't natively emitted by Medusa, but you can emit a custom event and handle it in a subscriber.
+In your Medusa application, you often need to track custom events that are relevant to your business use case. For example, a B2B business may want to track whenever a user requests a quote.
 
-In this step, you'll:
+In Medusa, you can emit custom events in your workflows when an action occurs. Then, you can create a subscriber that listens to the custom event and executes a workflow to track it in Segment.
 
-1. Create an [API route](!docs!/learn/fundamentals/api-routes) that, when called, emits a custom `product.viewed` event.
-2. Create a workflow that tracks the event in Segment.
-3. Execute the workflow in a subscriber that listens to the `product.viewed` event.
-4. Customize the Next.js Starter Storefront to call the API route when a product is viewed.
+For example, if you have a `createQuoteWorkflow`, you can use Medusa's [emitEventStep](!docs!/learn/fundamentals/events-and-subscribers/emit-event#emit-event-in-a-workflow) to emit a custom event after the quote is created:
 
-### a. Create Product Viewed API Route
-
-An API Route is an endpoint that exposes commerce features to external applications and clients, such as storefronts.
-
-<Note>
-
-Learn more about API routes in [this documentation](!docs!/learn/fundamentals/api-routes).
-
-</Note>
-
-An API route is created in a `route.ts` file under a subdirectory of the `src/api` directory. The path of the API route is the file's path relative to `src/api`.
-
-So, to create an API route at the path `/store/products/:id/viewed`, create the file `src/api/store/products/[id]/viewed/route.ts` with the following content:
-
-export const apiRouteHighlights = [
-  ["10", "customer_id", "Retrieve the authenticated customer's ID."],
-  ["12", "eventModuleService", "Resolve the Event Module's service from the Medusa container."],
-  ["14", "emit", "Emit the `product.viewed` event with the product ID and customer ID."],
-]
-
-```ts title="src/api/store/products/[id]/viewed/route.ts" highlights={apiRouteHighlights}
+```ts title="src/workflows/create-quote.ts"
 import { 
-  AuthenticatedMedusaRequest, 
-  MedusaResponse,
-} from "@medusajs/framework/http"
+  createWorkflow,
+} from "@medusajs/framework/workflows-sdk"
+import {
+  emitEventStep,
+} from "@medusajs/medusa/core-flows"
 
-export async function POST(
-  req: AuthenticatedMedusaRequest,
-  res: MedusaResponse
-) {
-  const customer_id = req.auth_context?.actor_id
-  
-  const eventModuleService = req.scope.resolve("event_bus")
+const createQuoteWorkflow = createWorkflow(
+  "create-quote",
+  () => {
+    // ...
 
-  await eventModuleService.emit({
-    name: "product.viewed",
-    data: {
-      id: req.params.id,
-      customer_id,
-    },
-  })
-
-  res.send({
-    success: true,
-  })
-}
-```
-
-Since you export a `POST` route handler function, you expose an API route at `/store/products/:id/viewed`. The route handler function accepts two parameters:
-
-1. A request object with details and context on the request, such as path parameters or authenticated customer details.
-2. A response object to manipulate and send the response.
-
-In the route handler, you resolve the [Event Module](../../../infrastructure-modules/event/page.mdx)'s service from the Medusa container and emit the `product.viewed` event. You pass in the data payload the product's ID and the customer's ID, if they're authenticated.
-
-### b. Apply Authentication Middleware
-
-To access the authenticated customer's ID in the API route handler, you need to apply the `authenticate` middleware to the API route.
-
-A [middleware](!docs!/learn/fundamentals/api-routes/middlewares) is a function that runs before the route handler. It's useful to protect routes, validate data, or manipulate the request and response objects.
-
-<Note>
-
-Refer to the [Middlewares](!docs!/learn/fundamentals/api-routes/middlewares) documentation to learn more about middlewares.
-
-</Note>
-
-To apply a middleware, create the file `src/api/middlewares.ts` with the following content:
-
-export const middlewareHighlights = [
-  ["11", "authenticate", "Authenticate the request using the customer strategy."],
-  ["12", "allowUnauthenticated", "Allow unauthenticated requests to access the route."]
-]
-
-```ts title="src/api/middlewares.ts" highlights={middlewareHighlights}
-import { 
-  defineMiddlewares,
-  authenticate,
-} from "@medusajs/framework/http"
-
-export default defineMiddlewares({
-  routes: [
-    {
-      matcher: "/store/products/:id/viewed",
-      middlewares: [
-        authenticate("customer", ["session", "bearer"], {
-          allowUnauthenticated: true,
-        }),
-      ],
-    },
-  ],
-})
-```
-
-You apply middlewares by exporting the object returned by `defineMiddlewares` from the Medusa Framework. It accepts an object with a `routes` property, which is an array of route middleware objects.
-
-Each route middleware object has the following properties:
-
-- `matcher`: A string or pattern that matches the route to apply the middleware to.
-- `middlewares`: An array of middlewares to apply to the route.
-
-You apply the `authenticate` middleware to the `/store/products/:id/viewed` route. This middleware authenticates the request using the `customer` authentication strategy, which allows you to access the authenticated customer's ID in the route handler.
-
-Also, by specifying the `allowUnauthenticated` option as `true`, you allow unauthenticated customers to access this API route.
-
-<Note>
-
-Refer to the [Protected API Routes](!docs!/learn/fundamentals/api-routes/protected-routes) documentation to learn more about the `authenticate` middleware.
-
-</Note>
-
-### c. Create Product Viewed Workflow
-
-Next, you'll create a workflow that tracks the `product.viewed` event in Segment.
-
-To create the workflow, create the file `src/workflows/track-product-viewed.ts` with the following content:
-
-export const productViewedWorkflowHighlights = [
-  ["14", "useQueryGraphStep", "Retrieve the product's details."],
-  ["23", "transform", "Prepare data for tracking."],
-  ["35", "trackEventStep", "Track the product viewed event in Segment."]
-]
-
-```ts title="src/workflows/track-product-viewed.ts" highlights={productViewedWorkflowHighlights}
-import { createWorkflow, transform } from "@medusajs/framework/workflows-sdk"
-import { useQueryGraphStep } from "@medusajs/medusa/core-flows"
-import { trackEventStep } from "./steps/track-event"
-
-type TrackProductViewedInput = {
-  product_id: string
-  customer_id?: string
-}
-
-export const trackProductViewedWorkflow = createWorkflow(
-  "track-product-viewed",
-  (input: TrackProductViewedInput) => {
-    // @ts-ignore
-    const { data: products } = useQueryGraphStep({
-      entity: "product",
-      fields: ["id", "title", "handle", "thumbnail"],
-      filters: {
-        id: input.product_id,
+    emitEventStep({
+      eventName: "quote.created",
+      data: {
+        id: "123",
+        // other data payload
       },
-    })
-
-    // Transform data into tracking payload
-    const trackingData = transform(
-      {
-        product: products[0],
-      },
-      (data) => ({
-        product_id: data.product.id,
-        handle: data.product.handle,
-        title: data.product.title,
-        thumbnail: data.product.thumbnail,
-      })
-    )
-
-    trackEventStep({
-      event: "product.viewed",
-      userId: input.customer_id,
-      properties: trackingData,
     })
   }
 )
 ```
 
-The workflow accepts an input object with the following properties:
+You can then create a subscriber that listens to the `quote.created` event and executes a workflow to track it in Segment:
 
-- `product_id`: The ID of the product viewed.
-- `customer_id`: The ID of the customer viewing the product, if they're authenticated.
+```ts title="src/subscribers/quote-created.ts"
+import { SubscriberArgs, type SubscriberConfig } from "@medusajs/framework"
+import { trackQuoteWorkflow } from "../workflows/track-order-placed"
 
-In the workflow's constructor function, you:
-
-1. Retrieve the product details using the `useQueryGraphStep` helper step, passing it the product ID.
-2. Use [transform](!docs!/learn/fundamentals/workflows/variable-manipulation) to prepare the tracking data.
-3. Call the `trackEventStep` you created earlier to track the `product.viewed` event in Segment, passing it the product details and customer ID.
-
-### d. Handle product.viewed Event
-
-Next, you'll create a subscriber that listens to the `product.viewed` event and executes the workflow you created in the previous step.
-
-To create the subscriber, create the file `src/subscribers/product-viewed.ts` with the following content:
-
-export const productViewedSubscriberHighlights = [
-  ["11", "trackProductViewedWorkflow", "Execute the workflow to track the product viewed event."],
-  ["21", "event", "Execute subscriber when a product is viewed."]
-]
-
-```ts title="src/subscribers/product-viewed.ts" highlights={productViewedSubscriberHighlights}
-import type {
-  SubscriberConfig,
-  SubscriberArgs,
-} from "@medusajs/framework"
-import { trackProductViewedWorkflow } from "../workflows/track-product-viewed"
-
-export default async function productViewedHandler({
+export default async function orderPlacedHandler({
   event: { data },
   container,
-}: SubscriberArgs<{ id: string, customer_id?: string }>) {
-  await trackProductViewedWorkflow(container)
+}: SubscriberArgs<{ id: string }>) {
+  await trackQuoteWorkflow(container)
     .run({
       input: {
-        product_id: data.id,
-        customer_id: data.customer_id,
+        id: data.id,
       },
     })
 }
 
 export const config: SubscriberConfig = {
-  event: "product.viewed",
+  event: "quote.created",
 }
 ```
 
-The subscriber listens to the `product.viewed` event and executes the `trackProductViewedWorkflow` you created earlier to track the event in Segment.
-
-### e. Customize Next.js Starter Storefront
-
-Finally, you'll customize the Next.js Starter Storefront to call the API route when a product is viewed.
-
-To do this, you'll add a function that sends a request to the API route when a product is viewed.
-
-In `src/lib/data/products.ts`, add the following function:
-
-```ts title="src/lib/data/products.ts" badgeLabel="Storefront" badgeColor="blue"
-export const productViewed = async (productId: string) => {
-  const headers = {
-    ...(await getAuthHeaders()),
-  }
-  
-  await sdk.client.fetch(`/store/products/${productId}/viewed`, {
-    method: "POST",
-    headers,
-  })
-}
-```
-
-This function receives the product ID as a parameter and uses the [JS SDK](../../../js-sdk/page.mdx) to send a `POST` request to the `/store/products/:id/viewed` API route you created earlier. It also includes the authentication headers so that you can track the customer viewing the product.
-
-<Note title="Tip">
-
-The JS SDK is configured for use in the Next.js Starter Storefront.
-
-</Note>
-
-Next, you'll call this function when a product is viewed.
-
-To do this, in `src/app/[countryCode]/(main)/products/[handle]/page.tsx`, add the following before the `return` statement in the `ProductPage` component:
-
-```ts title="src/app/[countryCode]/(main)/products/[handle]/page.tsx" badgeLabel="Storefront" badgeColor="blue"
-await productViewed(pricedProduct.id)
-```
-
-This will call the `productViewed` function when the product page is loaded, which will track the `product.viewed` event in the Medusa application.
-
-### Test it Out
-
-To test out the product view tracking, start the Medusa application and the Next.js Starter Storefront.
-
-Then, open a product's page in the storefront. This will send a request to the new API route, which triggers the `product.viewed` event. You can confirm the event was triggered in Medusa by checking the Medusa application's logs:
-
-```bash
-info:    Processing product.viewed which has 1 subscribers
-```
-
-You can also check the Segment dashboard to see the `product.viewed` event with the details.
-
-![Product Viewed Event in Segment Debugger](https://res.cloudinary.com/dza7lstvk/image/upload/v1748262928/Medusa%20Book/CleanShot_2025-05-26_at_15.34.46_2x_dfulfx.png)
+The above example assumes you have a `trackQuoteWorkflow` that tracks the quote creation event in Segment, similar to the [trackOrderPlacedWorkflow](#b-create-track-order-placed-workflow) you created earlier.
 
 ---
 
 ## Next Steps
 
-You've now integrated Segment with your Medusa application and tracked common events like order placements and product views. You can expand on the features in this tutorial to:
+You've now integrated Segment with your Medusa application and tracked common events like order placement. You can expand on the features in this tutorial to:
 
 - Track more events in your Medusa application, such as user sign-ups, cart additions, and more. You can refer to the [Events Reference](/references/events) for a full list of events emitted by Medusa.
 - Emit custom events that are relevant for your business use case, and track them in Segment.
