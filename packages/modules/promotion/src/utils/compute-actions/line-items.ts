@@ -106,7 +106,11 @@ function applyPromotionToItems(
   let lineItemsTotal = MathBN.convert(0)
   if (allocation === ApplicationMethodAllocation.ACROSS) {
     lineItemsTotal = applicableItems.reduce(
-      (acc, item) => MathBN.add(acc, MathBN.mult(item.subtotal, item.quantity)),
+      (acc, item) =>
+        MathBN.add(
+          acc,
+          MathBN.mult(item.unit_price as BigNumberInput, item.quantity)
+        ),
 
       MathBN.convert(0)
     )
@@ -192,16 +196,10 @@ function getValidItemsForPromotion(
   const hasTargetRules = targetRules.length > 0
 
   if (isTargetShippingMethod && !hasTargetRules) {
-    return items.filter(
-      (item) => item && "subtotal" in item && MathBN.gt(item.subtotal, 0)
-    )
+    return items
   }
 
   return items.filter((item) => {
-    if (!item || !("subtotal" in item) || MathBN.lte(item.subtotal, 0)) {
-      return false
-    }
-
     if (!isTargetShippingMethod && !("quantity" in item)) {
       return false
     }

@@ -18,18 +18,7 @@ function getPromotionValueForFixed(
   if (promotion.allocation === ApplicationMethodAllocation.ACROSS) {
     const promotionValueForItem = MathBN.mult(
       MathBN.div(itemTotal, allItemsTotal),
-      isTaxInclusive
-        ? MathBN.mult(
-            promotion.value,
-            MathBN.div(
-              100,
-              MathBN.add(
-                100,
-                MathBN.sum(...taxLines.map((taxLine) => taxLine.rate))
-              )
-            )
-          )
-        : promotion.value
+      promotion.value
     )
 
     if (MathBN.lte(promotionValueForItem, itemTotal)) {
@@ -105,7 +94,7 @@ export function calculateAdjustmentAmountFromPromotion(
   */
   if (promotion.allocation === ApplicationMethodAllocation.ACROSS) {
     const quantity = getApplicableQuantity(lineItem, promotion.max_quantity)
-    const lineItemTotal = MathBN.mult(lineItem.subtotal, quantity)
+    const lineItemTotal = MathBN.mult(lineItem.unit_price, quantity)
     const applicableTotal = MathBN.sub(lineItemTotal, promotion.applied_value)
 
     if (MathBN.lte(applicableTotal, 0)) {
@@ -114,7 +103,7 @@ export function calculateAdjustmentAmountFromPromotion(
 
     const promotionValue = getPromotionValue(
       promotion,
-      applicableTotal,
+      lineItemTotal,
       lineItemsTotal,
       lineItem.is_tax_inclusive,
       lineItem.tax_lines
