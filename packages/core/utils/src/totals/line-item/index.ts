@@ -140,16 +140,17 @@ function getLineItemTotals(
 
   const taxTotal = calculateTaxTotal({
     taxLines: item.tax_lines || [],
-    taxableAmount: isTaxInclusive
-      ? MathBN.sub(totalItemPrice, discountsTotal)
-      : MathBN.sub(subtotal, discountsSubtotal),
+    taxableAmount: MathBN.sub(
+      totalItemPrice,
+      isTaxInclusive ? discountsTotal : discountsSubtotal
+    ),
     setTotalField: "total",
     includesTax: isTaxInclusive,
   })
 
   const originalTaxTotal = calculateTaxTotal({
     taxLines: item.tax_lines || [],
-    taxableAmount: isTaxInclusive ? totalItemPrice : subtotal,
+    taxableAmount: totalItemPrice,
     setTotalField: "subtotal",
     includesTax: isTaxInclusive,
   })
