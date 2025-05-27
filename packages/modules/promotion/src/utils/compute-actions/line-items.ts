@@ -107,9 +107,9 @@ function applyPromotionToItems(
   if (allocation === ApplicationMethodAllocation.ACROSS) {
     lineItemsTotal = applicableItems.reduce(
       (acc, item) =>
-        MathBN.add(
-          acc,
-          MathBN.mult(item.unit_price as BigNumberInput, item.quantity)
+        MathBN.sub(
+          MathBN.add(acc, MathBN.mult(item.unit_price, item.quantity)),
+          appliedPromotionsMap.get(item.id) ?? 0
         ),
 
       MathBN.convert(0)
@@ -121,10 +121,6 @@ function applyPromotionToItems(
   }
 
   for (const item of applicableItems) {
-    if (MathBN.lte(item.subtotal, 0)) {
-      continue
-    }
-
     if (isTargetShippingMethod) {
       item.quantity = 1
     }
