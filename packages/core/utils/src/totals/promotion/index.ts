@@ -44,7 +44,7 @@ export function getApplicableQuantity(lineItem, maxQuantity) {
 export function calculateAdjustmentAmountFromPromotion(
   lineItem,
   promotion,
-  lineItemsTotal //subtotal * quantity of all items
+  lineItemsTotal
 ) {
   /*
     For a promotion with an across allocation, we consider not only the line item total, but also the total of all other line items in the order.

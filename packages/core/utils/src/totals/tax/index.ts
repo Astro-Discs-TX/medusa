@@ -46,12 +46,13 @@ export function calculateAmountsWithTax({
   amount: number
   includesTax?: boolean
 }) {
-  const sumTaxRate = MathBN.sum(
-    ...((taxLines ?? []).map((taxLine) => taxLine.rate) ?? [])
+  const sumTaxRate = MathBN.div(
+    MathBN.sum(...((taxLines ?? []).map((taxLine) => taxLine.rate) ?? [])),
+    100
   )
 
   const taxableAmount = includesTax
-    ? MathBN.mult(amount, MathBN.div(100, MathBN.add(100, sumTaxRate)))
+    ? MathBN.div(amount, MathBN.add(1, sumTaxRate))
     : amount
 
   const tax = calculateTaxTotal({
