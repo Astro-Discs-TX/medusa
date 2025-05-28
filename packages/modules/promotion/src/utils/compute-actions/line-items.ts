@@ -125,7 +125,10 @@ function applyPromotionToItems(
       item.quantity = 1
     }
 
-    const appliedPromoValue = appliedPromotionsMap.get(item.id) ?? 0
+    const appliedPromoValue = Array.from(appliedPromotionsMap.values()).reduce(
+      (sum, value) => MathBN.add(sum, value),
+      MathBN.convert(0)
+    )
 
     const amount = calculateAdjustmentAmountFromPromotion(
       item,
