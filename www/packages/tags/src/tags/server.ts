@@ -96,6 +96,10 @@ export const server = [
     "path": "https://docs.medusajs.com/resources/recipes/bundled-products/examples/standard"
   },
   {
+    "title": "Use Analytics Module",
+    "path": "https://docs.medusajs.com/resources/references/analytics/service"
+  },
+  {
     "title": "Create Auth Provider",
     "path": "https://docs.medusajs.com/resources/references/auth/provider"
   },

@@ -400,7 +400,7 @@ const redirects = async () => {
       permanent: true,
     },
     {
-      source: "/development/path*",
+      source: "/development/:path*",
       destination: "/v1/development/:path*",
       permanent: true,
     },
