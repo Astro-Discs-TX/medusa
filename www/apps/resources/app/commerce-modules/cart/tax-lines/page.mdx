@@ -18,7 +18,7 @@ A tax line indicates the tax rate of a line item or a shipping method. The [Line
 
 By default, the tax amount is calculated by taking the tax rate from the line item or shipping method’s amount, and then adding them to the item/method’s subtotal.
 
-However, line items and shipping methods have an `is_tax_inclusive` property that, when enabled, indicates that the item or method’s price already includes taxes.
+However, line items and shipping methods have an `is_tax_inclusive` property that, when enabled, indicates that the item’s unit price already includes taxes.
 
 So, instead of calculating the tax rate and adding it to the item/method’s subtotal, it’s calculated as part of the subtotal.
 
@@ -30,7 +30,11 @@ The following diagram is a simplified showcase of how a subtotal is calculated f
 
 ![A diagram showing an example of calculating the subtotal of a line item using its taxes](https://res.cloudinary.com/dza7lstvk/image/upload/v1711535295/Medusa%20Resources/cart-tax-inclusive_shpr3t.jpg)
 
-For example, if a line item's amount is `5000`, the tax rate is `10`, and tax inclusivity is enabled, the tax amount is 10% of `5000`, which is `500`, making the unit price of the line item `4500`.
+For example, if a line item's unit price is `5000` and the tax rate is `10%`:
+
+**With tax inclusivity enabled:** The unit price of `5000` includes tax, so the subtotal becomes `4545.45` (5000 ÷ 1.10) and the tax amount is `454.55` (10% of subtotal), totaling `5000`.
+
+**With tax inclusivity disabled:** The unit price of `5000` excludes tax, so the subtotal remains `5000`, the tax amount is `500` (10% of subtotal), and the total becomes `5500`.
 
 ---
 
@@ -57,8 +61,7 @@ const taxLines = await taxModuleService.getTaxLines(
   {
     address: {
       ...cart.shipping_address,
-      country_code:
-        cart.shipping_address.country_code || "us",
+      country_code: cart.shipping_address.country_code || "us",
     },
   }
 )
