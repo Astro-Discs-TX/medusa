@@ -897,7 +897,7 @@ export default class OrderModuleService
       (orderShipping) => orderShipping.shipping_method_id
     )
 
-    await Promise.all([
+    await promiseAll([
       this.orderAddressService_.delete(orderAddressIds, sharedContext),
       // Delete order changes & actions
       this.orderChangeService_.delete(orderChangeIds, sharedContext),
@@ -906,7 +906,7 @@ export default class OrderModuleService
     // Delete order, order items, summary, shipping methods and transactions
     await super.deleteOrders(ids, sharedContext)
 
-    await Promise.all([
+    await promiseAll([
       this.orderLineItemService_.delete(lineItemIds, sharedContext),
       this.orderShippingMethodService_.delete(
         orderShippingMethodIds,
