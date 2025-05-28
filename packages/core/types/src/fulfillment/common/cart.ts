@@ -45,6 +45,10 @@ export type CartPropsForFulfillment = {
        */
       material: string
       /**
+       * Holds custom data in key-value pairs.
+       */
+      metadata: Record<string, unknown> | null;
+      /**
        * The variant's associated product.
        */
       product: {
@@ -52,6 +56,10 @@ export type CartPropsForFulfillment = {
          * The product's ID.
          */
         id: string
+        /**
+         * Holds custom data in key-value pairs.
+         */
+        metadata: Record<string, unknown> | null;
       }
     }
     /**
