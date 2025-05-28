@@ -110,10 +110,10 @@ export function calculateAdjustmentAmountFromPromotion(
       
       We then apply whichever is lower.
   */
-  const lineItemTotal = MathBN.mult(lineItem.subtotal, lineItem.quantity)
+  const lineItemTotal = MathBN.mult(lineItem.unit_price, lineItem.quantity)
   const remainingItemTotal = MathBN.sub(lineItemTotal, promotion.applied_value)
   const maximumPromotionTotal = MathBN.mult(
-    lineItem.subtotal,
+    lineItem.unit_price,
     promotion.max_quantity ?? MathBN.convert(1)
   )
   const applicableTotal = MathBN.min(remainingItemTotal, maximumPromotionTotal)
