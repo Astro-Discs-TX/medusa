@@ -85,7 +85,7 @@ export function calculateAdjustmentAmountFromPromotion(
 
     const promotionValue = getPromotionValue(
       promotion,
-      lineItemTotal,
+      applicableTotal,
       lineItemsTotal
     )
 
