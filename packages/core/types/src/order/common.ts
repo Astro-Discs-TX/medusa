@@ -1158,6 +1158,11 @@ export interface OrderDTO {
   updated_at: string | Date
 
   /**
+   * When the order was deleted.
+   */
+  deleted_at?: string | Date
+
+  /**
    * The original item total of the order.
    */
   original_item_total: BigNumberValue
