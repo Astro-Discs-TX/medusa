@@ -103,14 +103,21 @@ export const updateCartPromotionsWorkflow = createWorkflow(
       return data.input.action || PromotionActions.ADD
     })
 
+    const cartWithoutNonDiscountableItems = transform({ cart }, ({ cart }) => {
+      return {
+        ...cart,
+        items: cart.items.filter((item) => item.is_discountable),
+      }
+    })
+
     const promotionCodesToApply = getPromotionCodesToApply({
-      cart: cart,
+      cart: cartWithoutNonDiscountableItems,
       promo_codes,
       action: action as PromotionActions,
     })
 
     const actions = getActionsToComputeFromPromotionsStep({
-      cart,
+      cart: cartWithoutNonDiscountableItems,
       promotionCodesToApply,
     })
 
