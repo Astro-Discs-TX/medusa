@@ -149,16 +149,6 @@ export class LocalFileService extends AbstractFileProviderService {
       )
     }
 
-    // const uploadUrl = new URL(
-    //   "upload",
-    //   `${this.backendUrl_.replace(/\/$/, "")}/`
-    // )
-
-    // uploadUrl.searchParams.set("filename", fileData.filename)
-    // if (fileData.mimeType) {
-    //   uploadUrl.searchParams.set("type", fileData.mimeType)
-    // }
-
     return {
       url: "/admin/uploads",
       key: fileData.filename,
