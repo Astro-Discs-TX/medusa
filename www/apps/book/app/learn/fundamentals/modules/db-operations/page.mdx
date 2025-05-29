@@ -686,66 +686,6 @@ class BlogModuleService {
 
 #### Run Queries
 
-### Examples of Repository Operations
-
-Here are examples of typical operations using a repository:
-
-#### Create a new blog post
-
-```ts
-const post = await postRepository.create({
-  title: "Introduction to Medusa",
-  content: "Medusa is a composable commerce platform...",
-  author_id: "author_123",
-  status: "draft"
-})
-```
-
-#### Find a specific post
-
-```ts highlights={[["24"]]}
-const [post] = await postRepository.find({
-  where: { id: "post_123456" },
-  options: { take: 1 }
-})
-```
-
-#### Update a post
-
-```ts highlights={[["24"]]}
-await postRepository.update({
-  id: "post_123456",
-  status: "published",
-  metadata: {
-    featured: true
-  }
-})
-```
-
-#### Delete a post
-
-```ts highlights={[["24"]]}
-await postRepository.delete({
-  id: "post_123456"
-})
-```
-
-#### Find multiple posts
-
-```ts highlights={[["24"]]}
-const posts = await postRepository.find({
-  where: { 
-    status: "published", 
-    author_id: "author_123"
-  },
-  options: {
-    take: 10,
-    skip: 0,
-    order: { created_at: "DESC" }
-  }
-})
-```
-
 #### **Complex Query Examples**
 
 ```ts highlights={[["24"]]}
