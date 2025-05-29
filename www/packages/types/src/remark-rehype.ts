@@ -104,6 +104,60 @@ export interface UnistTree extends Node {
   children: UnistNode[]
 }
 
+export interface UnistFunctionDeclarationNode extends UnistNode {
+  type: "FunctionDeclaration"
+  body: {
+    type: "BlockStatement"
+    body: UnistNode[]
+  }
+}
+
+export interface UnistReturnStatementNode extends UnistNode {
+  type: "ReturnStatement"
+  argument: UnistFragmentNode
+}
+
+export interface UnistFragmentNode extends UnistNode {
+  type: "JSXFragment"
+  openingElement: {
+    type: "JSXOpeningFragment"
+  }
+  closingElement: {
+    type: "JSXClosingFragment"
+  }
+  children: UnistNode[]
+}
+
+export interface UnistImportDeclarationNode extends UnistNode {
+  type: "ImportDeclaration"
+  source: {
+    type: "Literal"
+    value: string
+  }
+  specifiers: {
+    type: "ImportSpecifier"
+    imported: {
+      type: "Identifier"
+      name: string
+    }
+    local: {
+      type: "Identifier"
+      name: string
+    }
+  }[]
+}
+
+export interface UnistProgram extends UnistNode {
+  type: "Program"
+  body: (
+    | UnistNode
+    | UnistFunctionDeclarationNode
+    | UnistImportDeclarationNode
+  )[]
+  sourceType: "module" | "script"
+  comments?: UnistNode[]
+}
+
 export declare type CloudinaryConfig = {
   cloudName?: string
   flags?: string[]

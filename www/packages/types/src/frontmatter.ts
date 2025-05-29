@@ -15,4 +15,6 @@ export declare type FrontMatter = {
   )[]
   title?: string
   description?: string
+  products?: string[]
+  toc_max_depth?: number
 }
