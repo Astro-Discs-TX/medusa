@@ -884,6 +884,10 @@ export const filesMap = [
     "pathname": "/integrations/guides/sanity"
   },
   {
+    "filePath": "/www/apps/resources/app/integrations/guides/segment/page.mdx",
+    "pathname": "/integrations/guides/segment"
+  },
+  {
     "filePath": "/www/apps/resources/app/integrations/guides/shipstation/page.mdx",
     "pathname": "/integrations/guides/shipstation"
   },
@@ -10072,6 +10076,10 @@ export const filesMap = [
     "pathname": "/references/events/Order/variables/events.Order.OrderWorkflowEvents"
   },
   {
+    "filePath": "/www/apps/resources/references/events/Payment/variables/events.Payment.PaymentEvents/page.mdx",
+    "pathname": "/references/events/Payment/variables/events.Payment.PaymentEvents"
+  },
+  {
     "filePath": "/www/apps/resources/references/events/Product/variables/events.Product.ProductCategoryWorkflowEvents/page.mdx",
     "pathname": "/references/events/Product/variables/events.Product.ProductCategoryWorkflowEvents"
   },
@@ -10134,6 +10142,10 @@ export const filesMap = [
   {
     "filePath": "/www/apps/resources/references/events/events.Order/page.mdx",
     "pathname": "/references/events/events.Order"
+  },
+  {
+    "filePath": "/www/apps/resources/references/events/events.Payment/page.mdx",
+    "pathname": "/references/events/events.Payment"
   },
   {
     "filePath": "/www/apps/resources/references/events/events.Product/page.mdx",
@@ -13686,6 +13698,10 @@ export const filesMap = [
   {
     "filePath": "/www/apps/resources/references/module_events/module_events.Order/page.mdx",
     "pathname": "/references/module_events/module_events.Order"
+  },
+  {
+    "filePath": "/www/apps/resources/references/module_events/module_events.Payment/page.mdx",
+    "pathname": "/references/module_events/module_events.Payment"
   },
   {
     "filePath": "/www/apps/resources/references/module_events/module_events.Product/page.mdx",
