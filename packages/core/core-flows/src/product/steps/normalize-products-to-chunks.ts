@@ -209,7 +209,6 @@ export const normalizeCsvToChunksStep = createStep(
         })
 
         contents.on("error", reject)
-        transformer.on("error", reject)
 
         const chunks = await createChunks(
           file,
