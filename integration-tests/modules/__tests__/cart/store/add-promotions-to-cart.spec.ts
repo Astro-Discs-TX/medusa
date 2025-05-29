@@ -175,13 +175,6 @@ medusaIntegrationTestRunner({
                 value: 1000,
                 apply_to_quantity: 1,
                 currency_code: "usd",
-                target_rules: [
-                  {
-                    attribute: "product_id",
-                    operator: "eq",
-                    values: "prod_mat",
-                  },
-                ],
               },
             })
 
