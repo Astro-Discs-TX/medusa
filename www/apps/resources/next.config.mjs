@@ -50,6 +50,7 @@ const withMDX = mdx({
       ],
     ],
     remarkPlugins: mdxPluginOptions.options.remarkPlugins,
+    recmaPlugins: mdxPluginOptions.options.recmaPlugins,
     jsx: true,
   },
 })

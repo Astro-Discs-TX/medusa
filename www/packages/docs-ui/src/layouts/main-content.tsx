@@ -69,7 +69,7 @@ export const MainContentLayout = ({
         >
           <div className="flex justify-center">{children}</div>
         </div>
-        <ContentMenu />
+        {showContentMenu && <ContentMenu />}
       </div>
     </div>
   )

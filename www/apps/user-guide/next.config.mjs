@@ -11,8 +11,11 @@ import {
   resolveAdmonitionsPlugin,
   crossProjectLinksPlugin,
   prerequisitesLinkFixerPlugin,
+  remarkAttachFrontmatterDataPlugin,
+  recmaInjectMdxDataPlugin,
 } from "remark-rehype-plugins"
 import bundleAnalyzer from "@next/bundle-analyzer"
+import withExtractedTableOfContents from "@stefanprobst/rehype-extract-toc"
 
 const withMDX = mdx({
   extension: /\.mdx?$/,
@@ -88,12 +91,15 @@ const withMDX = mdx({
           checkLinksType: "value",
         },
       ],
+      [withExtractedTableOfContents],
     ],
     remarkPlugins: [
       [remarkFrontmatter],
       [remarkDirective],
       [resolveAdmonitionsPlugin],
+      [remarkAttachFrontmatterDataPlugin],
     ],
+    recmaPlugins: [[recmaInjectMdxDataPlugin]],
     jsx: true,
   },
 })

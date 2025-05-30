@@ -60,7 +60,9 @@ export default function RootLayout({
       htmlClassName={clsx(inter.variable, robotoMono.variable)}
       gaId={process.env.NEXT_PUBLIC_GA_ID}
     >
-      <TightLayout ProvidersComponent={Providers}>{children}</TightLayout>
+      <TightLayout ProvidersComponent={Providers} showContentMenu={false}>
+        {children}
+      </TightLayout>
     </BareboneLayout>
   )
 }

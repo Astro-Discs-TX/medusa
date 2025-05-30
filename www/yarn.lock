@@ -15039,6 +15039,7 @@ __metadata:
     "@medusajs/icons": 2.8.3
     "@next/bundle-analyzer": ^15.1.1
     "@next/mdx": 15.3.1
+    "@stefanprobst/rehype-extract-toc": ^3.0.0
     "@types/mdx": ^2.0.13
     "@types/node": ^20
     "@types/react": "npm:types-react@rc"
@@ -17247,6 +17248,7 @@ turbo@latest:
     "@mdx-js/react": ^3.1.0
     "@medusajs/icons": 2.8.3
     "@next/mdx": 15.0.4
+    "@stefanprobst/rehype-extract-toc": ^3.0.0
     "@types/mdx": ^2.0.13
     "@types/node": ^20
     "@types/react": "npm:types-react@rc"

@@ -4,9 +4,12 @@ import {
   cloudinaryImgRehypePlugin,
   resolveAdmonitionsPlugin,
   crossProjectLinksPlugin,
+  recmaInjectMdxDataPlugin,
+  remarkAttachFrontmatterDataPlugin,
 } from "remark-rehype-plugins"
 import remarkFrontmatter from "remark-frontmatter"
 import remarkDirective from "remark-directive"
+import withExtractedTableOfContents from "@stefanprobst/rehype-extract-toc"
 
 /** @type {import("@next/mdx").NextMDXOptions} */
 const mdxPluginOptions = {
@@ -57,12 +60,15 @@ const mdxPluginOptions = {
           },
         },
       ],
+      [withExtractedTableOfContents],
     ],
     remarkPlugins: [
       [remarkFrontmatter],
+      [remarkAttachFrontmatterDataPlugin],
       [remarkDirective],
       [resolveAdmonitionsPlugin],
     ],
+    recmaPlugins: [[recmaInjectMdxDataPlugin]],
   },
 }
 

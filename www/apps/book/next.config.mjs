@@ -15,7 +15,7 @@ import redirects from "./utils/redirects.mjs"
 import { generatedSidebars } from "./generated/sidebar.mjs"
 import { catchBadRedirects } from "build-scripts"
 import remarkFrontmatter from "remark-frontmatter"
-import withToc from "@stefanprobst/rehype-extract-toc"
+import withExtractedTableOfContents from "@stefanprobst/rehype-extract-toc"
 
 const withMDX = mdx({
   extension: /\.mdx?$/,
@@ -90,7 +90,7 @@ const withMDX = mdx({
           sidebar: generatedSidebars[0].items,
         },
       ],
-      [withToc],
+      [withExtractedTableOfContents],
     ],
     remarkPlugins: [[remarkFrontmatter], [remarkAttachFrontmatterDataPlugin]],
     recmaPlugins: [[recmaInjectMdxDataPlugin]],
