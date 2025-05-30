@@ -2,7 +2,7 @@
 
 import React, { useEffect } from "react"
 import clsx from "clsx"
-import { MainNav, useIsBrowser, useLayout, useSidebar } from ".."
+import { MainNav, useIsBrowser, useLayout, useSidebar, useSiteConfig } from ".."
 import { ContentMenu } from "../components/ContentMenu"
 
 export type MainContentLayoutProps = {
@@ -21,6 +21,7 @@ export const MainContentLayout = ({
   const { isBrowser } = useIsBrowser()
   const { desktopSidebarOpen } = useSidebar()
   const { mainContentRef } = useLayout()
+  const { frontmatter } = useSiteConfig()
 
   useEffect(() => {
     if (!isBrowser) {
@@ -69,7 +70,7 @@ export const MainContentLayout = ({
         >
           <div className="flex justify-center">{children}</div>
         </div>
-        {showContentMenu && <ContentMenu />}
+        {showContentMenu && !frontmatter.hide_content_menu && <ContentMenu />}
       </div>
     </div>
   )
