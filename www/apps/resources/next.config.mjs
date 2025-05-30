@@ -2,6 +2,7 @@ import {
   brokenLinkCheckerPlugin,
   localLinksRehypePlugin,
   prerequisitesLinkFixerPlugin,
+  recmaInjectMdxDataPlugin,
   typeListLinkFixerPlugin,
   workflowDiagramLinkFixerPlugin,
 } from "remark-rehype-plugins"
@@ -50,7 +51,7 @@ const withMDX = mdx({
       ],
     ],
     remarkPlugins: mdxPluginOptions.options.remarkPlugins,
-    recmaPlugins: mdxPluginOptions.options.recmaPlugins,
+    recmaPlugins: [[recmaInjectMdxDataPlugin]],
     jsx: true,
   },
 })

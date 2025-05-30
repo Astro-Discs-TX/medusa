@@ -10,8 +10,8 @@ export type SiteConfigContextType = {
   setConfig: React.Dispatch<React.SetStateAction<DocsConfig>>
   frontmatter: FrontMatter
   setFrontmatter: React.Dispatch<React.SetStateAction<FrontMatter>>
-  toc: ToCItem[]
-  setToc: React.Dispatch<React.SetStateAction<ToCItem[]>>
+  toc: ToCItem[] | null
+  setToc: React.Dispatch<React.SetStateAction<ToCItem[] | null>>
 }
 
 const SiteConfigContext = createContext<SiteConfigContextType | null>(null)
@@ -42,7 +42,7 @@ export const SiteConfigProvider = ({
     )
   )
   const [frontmatter, setFrontmatter] = useState<FrontMatter>({})
-  const [toc, setToc] = useState<ToCItem[]>([])
+  const [toc, setToc] = useState<ToCItem[] | null>(null)
 
   return (
     <SiteConfigContext.Provider

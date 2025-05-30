@@ -114,7 +114,7 @@ export interface UnistFunctionDeclarationNode extends UnistNode {
 
 export interface UnistReturnStatementNode extends UnistNode {
   type: "ReturnStatement"
-  argument: UnistFragmentNode
+  argument: UnistFragmentNode | UnistCallExpressionNode | UnistJSXElementNode
 }
 
 export interface UnistFragmentNode extends UnistNode {
@@ -126,6 +126,16 @@ export interface UnistFragmentNode extends UnistNode {
     type: "JSXClosingFragment"
   }
   children: UnistNode[]
+}
+
+export interface UnistCallExpressionNode extends UnistNode {
+  type: "CallExpression"
+  arguments: UnistNode[]
+}
+
+export interface UnistJSXElementNode extends UnistNode {
+  type: "JSXElement"
+  // TODO add correct type if necessary
 }
 
 export interface UnistImportDeclarationNode extends UnistNode {

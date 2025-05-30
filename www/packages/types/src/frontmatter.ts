@@ -17,4 +17,5 @@ export declare type FrontMatter = {
   description?: string
   products?: string[]
   toc_max_depth?: number
+  generate_toc?: boolean
 }

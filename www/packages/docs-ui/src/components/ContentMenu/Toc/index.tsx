@@ -1,17 +1,51 @@
 "use client"
 
 import React, { useEffect } from "react"
-import { ToCItem } from "types"
-import { useActiveOnScroll, useScrollController } from "../../../hooks"
+import { ToCItem, ToCItemUi } from "types"
+import {
+  ActiveOnScrollItem,
+  useActiveOnScroll,
+  useScrollController,
+} from "../../../hooks"
 import clsx from "clsx"
 import Link from "next/link"
 import { useSiteConfig } from "../../../providers"
+import { Loading } from "../../Loading"
 
 export const ContentMenuToc = () => {
-  const { toc: items } = useSiteConfig()
-  const { activeItemId } = useActiveOnScroll({
+  const { toc: items, frontmatter, setToc } = useSiteConfig()
+  const { items: generatedItems, activeItemId } = useActiveOnScroll({
     maxLevel: 4,
   })
+
+  const formatHeadingContent = (content: string | null): string => {
+    return content?.replaceAll(/#$/g, "") || ""
+  }
+
+  const formatHeadingObject = ({
+    heading,
+    children,
+  }: ActiveOnScrollItem): ToCItemUi => {
+    const level = parseInt(heading.tagName.replace("H", ""))
+    return {
+      title: formatHeadingContent(heading.textContent),
+      id: heading.id,
+      level,
+      children: children?.map(formatHeadingObject),
+      associatedHeading: heading as HTMLHeadingElement,
+    }
+  }
+
+  useEffect(() => {
+    if (
+      frontmatter.generate_toc &&
+      generatedItems &&
+      items?.length !== generatedItems.length
+    ) {
+      const tocItems: ToCItem[] = generatedItems.map(formatHeadingObject)
+      setToc(tocItems)
+    }
+  }, [frontmatter, generatedItems])
 
   useEffect(() => {
     const activeElement = document.querySelector(
@@ -28,17 +62,21 @@ export const ContentMenuToc = () => {
     })
   }, [activeItemId])
 
+  if (items && !items.length) {
+    return <></>
+  }
+
   return (
-    <div className="h-max max-h-full overflow-y-hidden flex relative">
+    <div className="h-max max-h-full overflow-y-hidden flex relative flex-col">
       <div className="absolute -left-px top-0 h-full w-[1.5px] bg-medusa-border-base" />
-      {items.length > 0 && (
+      {items !== null && (
         <TocList
           items={items}
           activeItemId={activeItemId}
           className="relative overflow-y-auto"
         />
       )}
-      {!items.length && <EmptyTocItems />}
+      {items === null && <EmptyTocItems />}
     </div>
   )
 }
@@ -98,14 +136,8 @@ const TocItem = ({ item, activeItemId }: TocItemProps) => {
 
 const EmptyTocItems = () => {
   return (
-    <ul className="animate-pulse">
-      {Array(5)
-        .fill(0)
-        .map((_, index) => (
-          <li className="w-full pt-docs_0.5 px-docs_0.75" key={index}>
-            <span className="block w-full bg-medusa-bg-disabled h-[18px] rounded-md" />
-          </li>
-        ))}
-    </ul>
+    <div className="animate-pulse">
+      <Loading count={5} className="pt-docs_0.5 px-docs_0.75 !my-0" />
+    </div>
   )
 }
