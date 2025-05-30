@@ -26,7 +26,11 @@ export const ContentMenuProducts = () => {
   }
 
   const getProductUrl = (product: Product) => {
-    return `${config.baseUrl}${config.basePath}${product.path}`
+    return `${config.baseUrl}${product.path}`
+  }
+
+  const getProductImageUrl = (product: Product) => {
+    return `${config.basePath}${product.image}`
   }
 
   return (
@@ -42,7 +46,7 @@ export const ContentMenuProducts = () => {
         >
           <BorderedIcon
             wrapperClassName={clsx("bg-medusa-bg-base")}
-            icon={product.image}
+            icon={getProductImageUrl(product)}
           />
           <span className="text-medusa-fg-subtle text-x-small-plus">
             {product.title}

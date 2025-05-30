@@ -50,8 +50,8 @@ export const ContentMenuVersion = () => {
         height: 40,
       }}
       className={clsx(
-        "!border-0",
-        (!showNewVersion || version.hide) && "invisible"
+        "!border-0"
+        // (!showNewVersion || version.hide) && "invisible"
       )}
     />
   )
