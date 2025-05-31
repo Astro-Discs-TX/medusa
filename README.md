@@ -1,3 +1,4 @@
+[![Medusa Pipeline](https://github.com/chakaliabhishek/medusa/actions/workflows/medusa_pipeline.yml/badge.svg)](https://github.com/chakaliabhishek/medusa/actions/workflows/medusa_pipeline.yml)
 <p align="center">
   <a href="https://www.medusajs.com">
   <picture>
