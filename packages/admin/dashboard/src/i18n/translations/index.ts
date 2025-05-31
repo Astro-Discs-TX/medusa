@@ -26,6 +26,7 @@ import vi from "./vi.json"
 import ko from "./ko.json"
 import nl from "./nl.json"
 import bs from "./bs.json"
+import id from "./id.json"
 
 export default {
   bs: {
@@ -111,5 +112,8 @@ export default {
   },
   nl: {
     translation: nl,
+  },
+  id: {
+    translation: id,
   },
 }
