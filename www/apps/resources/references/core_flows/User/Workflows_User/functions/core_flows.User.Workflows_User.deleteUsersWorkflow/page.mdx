@@ -24,7 +24,7 @@ setAuthAppMetadataStep. Learn more about auth identities in
 You can use this workflow within your customizations or your own custom workflows, allowing you to
 delete users within your custom flows.
 
-<SourceCodeLink link="https://github.com/medusajs/medusa/blob/ecf3556589c1fb64ad8bdc0b88307b11a6f7c89f/packages/core/core-flows/src/user/workflows/delete-users.ts#L35" />
+<SourceCodeLink link="https://github.com/medusajs/medusa/blob/4936315b2dc777fbaaf2869b16bf48602fc7e69b/packages/core/core-flows/src/user/workflows/delete-users.ts#L35" />
 
 ## Examples
 
@@ -157,6 +157,9 @@ Description
       <Table.HeaderCell>
 Payload
 </Table.HeaderCell>
+      <Table.HeaderCell>
+Action
+</Table.HeaderCell>
     </Table.Row>
   </Table.Header>
   <Table.Body>
@@ -173,6 +176,16 @@ Emitted when users are deleted.
   id, // The ID of the user
 }]
 ```
+</Table.Cell>
+      <Table.Cell>
+<CopyGeneratedSnippetButton tooltipText="Copy subscriber for event" type="subscriber" options={{
+        event: "user.deleted",
+        payload: `\`\`\`ts
+[{
+  id, // The ID of the user
+}]
+\`\`\``
+        }}/>
 </Table.Cell>
     </Table.Row>
   </Table.Body>

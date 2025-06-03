@@ -1,15 +1,13 @@
 import clsx from "clsx"
 import React from "react"
-import { LlmDropdown } from "../../LlmDropdown"
 
-type H1Props = React.HTMLAttributes<HTMLHeadingElement> & {
+export type H1Props = React.HTMLAttributes<HTMLHeadingElement> & {
   id?: string
-  hideLlmDropdown?: boolean
 }
 
-export const H1 = ({ className, hideLlmDropdown, ...props }: H1Props) => {
+export const H1 = ({ className, ...props }: H1Props) => {
   return (
-    <div className="flex items-start justify-between gap-2">
+    <div className="flex items-start justify-between gap-2 h1-wrapper">
       <h1
         className={clsx(
           "h1-docs [&_code]:!h1-docs [&_code]:!font-mono mb-docs_1 text-medusa-fg-base",
@@ -18,7 +16,6 @@ export const H1 = ({ className, hideLlmDropdown, ...props }: H1Props) => {
         )}
         {...props}
       />
-      {!hideLlmDropdown && <LlmDropdown />}
     </div>
   )
 }

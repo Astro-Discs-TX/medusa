@@ -2,7 +2,7 @@
  * @oas [delete] /admin/order-edits/{id}
  * operationId: DeleteOrderEditsId
  * summary: Cancel Order Edit
- * description: Cancel an order edit.
+ * description: Cancel a requested order edit.
  * x-authenticated: true
  * parameters:
  *   - name: id
@@ -90,6 +90,7 @@
  *       ```
  *     description: Emitted when an order edit request is canceled.
  *     deprecated: false
+ *     version: 2.8.0
  * 
 */
 

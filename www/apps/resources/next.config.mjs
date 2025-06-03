@@ -2,6 +2,7 @@ import {
   brokenLinkCheckerPlugin,
   localLinksRehypePlugin,
   prerequisitesLinkFixerPlugin,
+  recmaInjectMdxDataPlugin,
   typeListLinkFixerPlugin,
   workflowDiagramLinkFixerPlugin,
 } from "remark-rehype-plugins"
@@ -19,6 +20,13 @@ const withMDX = mdx({
       [
         brokenLinkCheckerPlugin,
         {
+          rootBasePath: {
+            default: "app",
+            overrides: {
+              "/references": "",
+            },
+          },
+          hasGeneratedSlugs: true,
           crossProjects: {
             docs: {
               projectPath: path.resolve("..", "book"),
@@ -29,6 +37,10 @@ const withMDX = mdx({
             },
             "user-guide": {
               projectPath: path.resolve("..", "user-guide"),
+            },
+            api: {
+              projectPath: path.resolve("..", "api-reference"),
+              skipSlugValidation: true,
             },
           },
         },
@@ -50,6 +62,7 @@ const withMDX = mdx({
       ],
     ],
     remarkPlugins: mdxPluginOptions.options.remarkPlugins,
+    recmaPlugins: [[recmaInjectMdxDataPlugin]],
     jsx: true,
   },
 })

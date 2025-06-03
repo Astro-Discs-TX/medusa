@@ -4,13 +4,16 @@ import {
 } from "@medusajs/framework/http"
 
 import {
-  importProductsWorkflowId,
+  importProductsAsChunksWorkflowId,
   waitConfirmationProductImportStepId,
 } from "@medusajs/core-flows"
 import { IWorkflowEngineService } from "@medusajs/framework/types"
 import { Modules, TransactionHandlerType } from "@medusajs/framework/utils"
 import { StepResponse } from "@medusajs/framework/workflows-sdk"
 
+/**
+ * @version 2.8.0
+ */
 export const POST = async (
   req: AuthenticatedMedusaRequest,
   res: MedusaResponse
@@ -25,7 +28,7 @@ export const POST = async (
       action: TransactionHandlerType.INVOKE,
       transactionId,
       stepId: waitConfirmationProductImportStepId,
-      workflowId: importProductsWorkflowId,
+      workflowId: importProductsAsChunksWorkflowId,
     },
     stepResponse: new StepResponse(true),
   })

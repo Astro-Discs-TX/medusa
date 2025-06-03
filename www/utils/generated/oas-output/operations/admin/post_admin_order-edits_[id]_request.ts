@@ -71,6 +71,7 @@
  *       ```
  *     description: Emitted when an order edit is requested.
  *     deprecated: false
+ *     version: 2.8.0
  * 
 */
 
