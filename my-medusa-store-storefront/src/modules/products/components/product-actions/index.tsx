@@ -33,6 +33,8 @@ export default function ProductActions({
 }: ProductActionsProps) {
   const [options, setOptions] = useState<Record<string, string | undefined>>({})
   const [isAdding, setIsAdding] = useState(false)
+  const [quantity, setQuantity] = useState(1)
+  const [addedToCart, setAddedToCart] = useState(false)
   const countryCode = useParams().countryCode as string
 
   // If there is only 1 variant, preselect the options
@@ -98,6 +100,19 @@ export default function ProductActions({
 
   const inView = useIntersection(actionsRef, "0px")
 
+  // Handle quantity adjustments
+  const incrementQuantity = () => {
+    if (quantity < 10) {
+      setQuantity(quantity + 1)
+    }
+  }
+
+  const decrementQuantity = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1)
+    }
+  }
+
   // add the selected variant to the cart
   const handleAddToCart = async () => {
     if (!selectedVariant?.id) return null
@@ -106,40 +121,77 @@ export default function ProductActions({
 
     await addToCart({
       variantId: selectedVariant.id,
-      quantity: 1,
+      quantity: quantity,
       countryCode,
     })
 
     setIsAdding(false)
+    setAddedToCart(true)
+    
+    // Reset added to cart state after 3 seconds
+    setTimeout(() => {
+      setAddedToCart(false)
+    }, 3000)
   }
 
   return (
     <>
-      <div className="flex flex-col gap-y-2" ref={actionsRef}>
-        <div>
-          {(product.variants?.length ?? 0) > 1 && (
-            <div className="flex flex-col gap-y-4">
-              {(product.options || []).map((option) => {
-                return (
-                  <div key={option.id}>
-                    <OptionSelect
-                      option={option}
-                      current={options[option.id]}
-                      updateOption={setOptionValue}
-                      title={option.title ?? ""}
-                      data-testid="product-options"
-                      disabled={!!disabled || isAdding}
-                    />
-                  </div>
-                )
-              })}
-              <Divider />
-            </div>
-          )}
+      <div className="flex flex-col gap-y-4" ref={actionsRef}>
+        {/* Variants */}
+        {(product.variants?.length ?? 0) > 1 && (
+          <div className="flex flex-col gap-y-4">
+            {(product.options || []).map((option) => {
+              return (
+                <div key={option.id} className="product-option">
+                  <OptionSelect
+                    option={option}
+                    current={options[option.id]}
+                    updateOption={setOptionValue}
+                    title={option.title ?? ""}
+                    data-testid="product-options"
+                    disabled={!!disabled || isAdding}
+                  />
+                </div>
+              )
+            })}
+            <div className="h-px bg-luxury-gold/20 my-2"></div>
+          </div>
+        )}
+
+        {/* Price display */}
+        <div className="mb-2">
+          <ProductPrice product={product} variant={selectedVariant} />
+        </div>
+        
+        {/* Quantity selector */}
+        <div className="flex flex-col gap-y-2">
+          <p className="text-small-semi uppercase tracking-wider text-luxury-charcoal/70">Quantity</p>
+          <div className="flex items-center">
+            <button 
+              className="w-8 h-8 flex items-center justify-center border border-luxury-gold/30 text-luxury-gold hover:bg-luxury-cream transition-colors"
+              onClick={decrementQuantity}
+              disabled={quantity <= 1 || !!disabled || isAdding}
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M20 12H4"></path>
+              </svg>
+            </button>
+            
+            <span className="w-12 text-center text-luxury-charcoal">{quantity}</span>
+            
+            <button 
+              className="w-8 h-8 flex items-center justify-center border border-luxury-gold/30 text-luxury-gold hover:bg-luxury-cream transition-colors"
+              onClick={incrementQuantity}
+              disabled={quantity >= 10 || !!disabled || isAdding}
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 4v16m8-8H4"></path>
+              </svg>
+            </button>
+          </div>
         </div>
 
-        <ProductPrice product={product} variant={selectedVariant} />
-
+        {/* Add to cart button */}
         <Button
           onClick={handleAddToCart}
           disabled={
@@ -150,7 +202,11 @@ export default function ProductActions({
             !isValidVariant
           }
           variant="primary"
-          className="w-full h-10"
+          className={`w-full h-12 mt-2 font-medium tracking-wider uppercase transition-all duration-300 ${
+            addedToCart 
+              ? 'bg-emerald-600 hover:bg-emerald-700' 
+              : 'bg-luxury-gold hover:bg-luxury-gold/90'
+          }`}
           isLoading={isAdding}
           data-testid="add-product-button"
         >
@@ -158,8 +214,27 @@ export default function ProductActions({
             ? "Select variant"
             : !inStock || !isValidVariant
             ? "Out of stock"
+            : addedToCart
+            ? "Added to cart!"
             : "Add to cart"}
         </Button>
+        
+        {/* Additional info */}
+        <div className="text-xs text-luxury-charcoal/60 mt-2">
+          <p className="flex items-center">
+            <svg className="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
+            </svg>
+            Free shipping on orders over $150
+          </p>
+          <p className="flex items-center mt-1">
+            <svg className="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+            </svg>
+            Each purchase is protected by our quality guarantee
+          </p>
+        </div>
+        
         <MobileActions
           product={product}
           variant={selectedVariant}

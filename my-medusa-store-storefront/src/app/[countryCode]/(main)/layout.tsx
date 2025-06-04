@@ -1,44 +1,33 @@
+import { Suspense } from "react"
 import { Metadata } from "next"
 
-import { listCartOptions, retrieveCart } from "@lib/data/cart"
-import { retrieveCustomer } from "@lib/data/customer"
-import { getBaseURL } from "@lib/util/env"
-import { StoreCartShippingOption } from "@medusajs/types"
-import CartMismatchBanner from "@modules/layout/components/cart-mismatch-banner"
-import Footer from "@modules/layout/templates/footer"
-import Nav from "@modules/layout/templates/nav"
-import FreeShippingPriceNudge from "@modules/shipping/components/free-shipping-price-nudge"
+import AnimatedHeader from "@modules/layout/components/animated-header"
+import Footer from "@modules/layout/components/footer"
+import PageTransition from "@modules/common/components/page-transition"
+import LoadingSpinner from "@modules/common/components/loading-spinner"
 
 export const metadata: Metadata = {
-  metadataBase: new URL(getBaseURL()),
+  title: "Marble Craft Luxury Store",
+  description: "Exquisite handcrafted marble products for your home",
 }
 
-export default async function PageLayout(props: { children: React.ReactNode }) {
-  const customer = await retrieveCustomer()
-  const cart = await retrieveCart()
-  let shippingOptions: StoreCartShippingOption[] = []
-
-  if (cart) {
-    const { shipping_options } = await listCartOptions()
-
-    shippingOptions = shipping_options
-  }
-
+export default function PageLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
     <>
-      <Nav />
-      {customer && cart && (
-        <CartMismatchBanner customer={customer} cart={cart} />
-      )}
-
-      {cart && (
-        <FreeShippingPriceNudge
-          variant="popup"
-          cart={cart}
-          shippingOptions={shippingOptions}
-        />
-      )}
-      {props.children}
+      <AnimatedHeader />
+      <Suspense fallback={
+        <div className="flex items-center justify-center min-h-[calc(100vh-200px)]">
+          <LoadingSpinner size="large" />
+        </div>
+      }>
+        <PageTransition className="min-h-[calc(100vh-200px)]">
+          {children}
+        </PageTransition>
+      </Suspense>
       <Footer />
     </>
   )

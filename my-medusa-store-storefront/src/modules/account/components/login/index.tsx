@@ -1,4 +1,6 @@
-import { login } from "@lib/data/customer"
+"use client"
+
+import { handleLogin } from "@lib/data/client-actions"
 import { LOGIN_VIEW } from "@modules/account/templates/login-template"
 import ErrorMessage from "@modules/checkout/components/error-message"
 import { SubmitButton } from "@modules/checkout/components/submit-button"
@@ -10,7 +12,7 @@ type Props = {
 }
 
 const Login = ({ setCurrentView }: Props) => {
-  const [message, formAction] = useActionState(login, null)
+  const [state, formAction] = useActionState(handleLogin, null)
 
   return (
     <div
@@ -41,7 +43,7 @@ const Login = ({ setCurrentView }: Props) => {
             data-testid="password-input"
           />
         </div>
-        <ErrorMessage error={message} data-testid="login-error-message" />
+        {state?.error && <ErrorMessage error={state.error} data-testid="login-error-message" />}
         <SubmitButton data-testid="sign-in-button" className="w-full mt-6">
           Sign in
         </SubmitButton>

@@ -1,6 +1,6 @@
 "use client"
 
-import { transferCart } from "@lib/data/customer"
+import { handleTransferCart } from "@lib/data/client-actions"
 import { ExclamationCircleSolid } from "@medusajs/icons"
 import { StoreCart, StoreCustomer } from "@medusajs/types"
 import { Button } from "@medusajs/ui"
@@ -23,7 +23,7 @@ function CartMismatchBanner(props: {
       setIsPending(true)
       setActionText("Transferring..")
 
-      await transferCart()
+      await handleTransferCart()
     } catch {
       setActionText("Run transfer again")
       setIsPending(false)

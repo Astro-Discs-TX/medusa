@@ -10,7 +10,7 @@ import MapPin from "@modules/common/icons/map-pin"
 import Package from "@modules/common/icons/package"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { HttpTypes } from "@medusajs/types"
-import { signout } from "@lib/data/customer"
+import { handleSignout } from "@lib/data/client-actions"
 
 const AccountNav = ({
   customer,
@@ -21,7 +21,7 @@ const AccountNav = ({
   const { countryCode } = useParams() as { countryCode: string }
 
   const handleLogout = async () => {
-    await signout(countryCode)
+    await handleSignout(countryCode)
   }
 
   return (

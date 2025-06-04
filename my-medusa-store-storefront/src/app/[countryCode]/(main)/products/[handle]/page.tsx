@@ -69,12 +69,16 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   }
 
   return {
-    title: `${product.title} | Medusa Store`,
-    description: `${product.title}`,
+    title: `${product.title} | Marble Luxe`,
+    description: product.description?.substring(0, 160) || `Discover the exquisite ${product.title}, a handcrafted marble piece from our luxury collection.`,
     openGraph: {
-      title: `${product.title} | Medusa Store`,
-      description: `${product.title}`,
+      title: `${product.title} | Marble Luxe`,
+      description: product.description?.substring(0, 160) || `Discover the exquisite ${product.title}, a handcrafted marble piece from our luxury collection.`,
       images: product.thumbnail ? [product.thumbnail] : [],
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
     },
   }
 }

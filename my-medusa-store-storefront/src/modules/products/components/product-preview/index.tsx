@@ -27,6 +27,14 @@ export default async function ProductPreview({
   const { cheapestPrice } = getProductPrice({
     product,
   })
+  
+  // Check for product tags to display appropriate badges
+  const isLimitedEdition = product.tags?.some(tag => 
+    tag.value?.toLowerCase().includes("limited") || 
+    tag.value?.toLowerCase().includes("edition")
+  )
+  
+  const isHandcrafted = true // All our products are handcrafted
 
   return (
     <LocalizedClientLink 
@@ -48,36 +56,59 @@ export default async function ProductPreview({
           
           {/* Gold gradient overlay on hover */}
           <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{
-            background: 'linear-gradient(to bottom, rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0.25))'
+            background: 'linear-gradient(to bottom, rgba(212, 175, 55, 0.15), rgba(212, 175, 55, 0.3))'
           }}></div>
           
-          {/* "View Details" text appears on hover */}
+          {/* "View Details" button appears on hover */}
           <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 z-20 transform translate-y-4 group-hover:translate-y-0">
-            <span className="bg-luxury-ivory/90 border border-luxury-gold px-5 py-2 text-luxury-charcoal text-small-semi uppercase tracking-wider">
+            <span className="bg-luxury-ivory/95 border border-luxury-gold px-6 py-2.5 text-luxury-charcoal text-small-semi uppercase tracking-wider hover:bg-luxury-gold hover:text-luxury-ivory transition-colors duration-300">
               View Details
             </span>
           </div>
           
-          {/* Product tag - if on sale */}
+          {/* Product badges container */}
+          <div className="absolute top-4 left-4 z-10 flex flex-col gap-2">
+            {/* Handcrafted badge */}
+            {isHandcrafted && (
+              <div className="badge-container">
+                <span className="bg-luxury-ivory/95 border border-luxury-gold/60 px-3 py-1.5 text-luxury-charcoal text-[10px] uppercase tracking-wider font-medium flex items-center">
+                  <svg className="w-3 h-3 mr-1.5 text-luxury-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11"></path>
+                  </svg>
+                  Handcrafted
+                </span>
+              </div>
+            )}
+            
+            {/* Limited Edition badge */}
+            {isLimitedEdition && (
+              <div className="badge-container">
+                <span className="bg-luxury-gold/90 px-3 py-1.5 text-luxury-ivory text-[10px] uppercase tracking-wider font-medium flex items-center">
+                  <svg className="w-3 h-3 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                  </svg>
+                  Limited Edition
+                </span>
+              </div>
+            )}
+          </div>
+          
+          {/* Sale badge */}
           {cheapestPrice?.price_type === "sale" && (
             <div className="absolute top-4 right-4 z-10">
-              <span className="bg-luxury-gold px-3 py-1 text-luxury-ivory text-[10px] uppercase tracking-wider font-medium">
+              <span className="bg-luxury-gold/90 px-3 py-1.5 text-luxury-ivory text-[10px] uppercase tracking-wider font-medium flex items-center">
+                <svg className="w-3 h-3 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
                 Sale
               </span>
             </div>
           )}
-          
-          {/* Handcrafted tag */}
-          <div className="absolute top-4 left-4 z-10">
-            <span className="bg-luxury-ivory/90 border border-luxury-gold/50 px-3 py-1 text-luxury-charcoal text-[10px] uppercase tracking-wider font-medium">
-              Handcrafted
-            </span>
-          </div>
         </div>
         
         <div className="mt-6 pb-2 px-4">
-          <div className="flex justify-between items-start mb-2">
-            <h3 className="font-display text-lg group-hover:text-luxury-gold transition-colors duration-300 pr-4" data-testid="product-title">
+          <div className="flex justify-between items-start mb-3">
+            <h3 className="font-display text-lg text-luxury-charcoal group-hover:text-luxury-gold transition-colors duration-300 pr-4" data-testid="product-title">
               {product.title}
             </h3>
             
@@ -88,19 +119,19 @@ export default async function ProductPreview({
           
           <div className="flex justify-between items-end">
             <p className="text-serif-italic text-sm text-luxury-charcoal/70 max-w-[75%]">
-              {product.description?.substring(0, 50)?.split(' ').slice(0, 6).join(' ')}
-              {product.description && product.description.length > 50 ? '...' : ''}
+              {product.description?.substring(0, 60)?.split(' ').slice(0, 7).join(' ')}
+              {product.description && product.description.length > 60 ? '...' : ''}
             </p>
             
-            <div className="w-8 h-8 rounded-full border border-luxury-gold/30 flex items-center justify-center transform transition-transform duration-300 group-hover:rotate-45">
+            <div className="w-8 h-8 rounded-full border border-luxury-gold/30 flex items-center justify-center transform transition-transform duration-300 group-hover:scale-110 group-hover:border-luxury-gold group-hover:bg-luxury-cream/20">
               <svg className="w-4 h-4 text-luxury-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
               </svg>
             </div>
           </div>
           
-          {/* Decorative line */}
-          <div className="w-12 h-px bg-luxury-gold mt-4 group-hover:w-full transition-all duration-500"></div>
+          {/* Decorative underline that animates on hover */}
+          <div className="h-px bg-luxury-gold/30 mt-4 w-0 group-hover:w-full transition-all duration-700 ease-in-out"></div>
         </div>
       </div>
     </LocalizedClientLink>
