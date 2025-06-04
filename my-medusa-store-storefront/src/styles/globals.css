@@ -1,6 +1,38 @@
+/* Import luxury fonts */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
+
+:root {
+  --color-luxury-gold: #D4AF37;
+  --color-luxury-lightgold: #F8EAC0;
+  --color-luxury-maroon: #800020;
+  --color-luxury-ivory: #FFFFF0;
+  --color-luxury-charcoal: #36454F;
+  --color-luxury-cream: #F5F5DC;
+  --color-luxury-darkgold: #996515;
+}
+
+@layer base {
+  body {
+    @apply bg-luxury-ivory text-luxury-charcoal;
+    background-image: linear-gradient(to right, rgba(248, 234, 192, 0.05) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(248, 234, 192, 0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+  
+  p {
+    @apply font-sans;
+  }
+}
 
 @layer utilities {
   /* Chrome, Safari and Opera */
@@ -35,9 +67,9 @@
   select:-webkit-autofill,
   select:-webkit-autofill:hover,
   select:-webkit-autofill:focus {
-    border: 1px solid #212121;
-    -webkit-text-fill-color: #212121;
-    -webkit-box-shadow: 0 0 0px 1000px #fff inset;
+    border: 1px solid var(--color-luxury-charcoal);
+    -webkit-text-fill-color: var(--color-luxury-charcoal);
+    -webkit-box-shadow: 0 0 0px 1000px var(--color-luxury-ivory) inset;
     transition: background-color 5000s ease-in-out 0s;
   }
 
@@ -47,6 +79,77 @@
   input[type="search"]::-webkit-search-results-decoration {
     -webkit-appearance: none;
   }
+  
+  /* Luxury-specific utilities */
+  .gold-gradient {
+    background: linear-gradient(135deg, var(--color-luxury-gold) 0%, var(--color-luxury-lightgold) 50%, var(--color-luxury-gold) 100%);
+  }
+  
+  .gold-text {
+    background: linear-gradient(135deg, var(--color-luxury-gold) 0%, var(--color-luxury-lightgold) 50%, var(--color-luxury-gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+  }
+  
+  .luxury-border {
+    border: 1px solid var(--color-luxury-gold);
+  }
+
+  .luxury-shadow {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(212, 175, 55, 0.2);
+  }
+  
+  .elegant-hover {
+    transition: all 0.3s ease;
+  }
+  
+  .elegant-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(212, 175, 55, 0.2);
+  }
+  
+  .bg-luxury-marble {
+    background-image: url('/marble-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  
+  /* Animated underline effect */
+  .animated-underline {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .animated-underline::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: -2px;
+    left: 0;
+    background-color: var(--color-luxury-gold);
+    transition: width 0.3s ease;
+  }
+  
+  .animated-underline:hover::after {
+    width: 100%;
+  }
+  
+  /* Luxury image hover effect */
+  .luxury-image-hover {
+    overflow: hidden;
+  }
+  
+  .luxury-image-hover img {
+    transition: transform 0.7s ease;
+  }
+  
+  .luxury-image-hover:hover img {
+    transform: scale(1.05);
+  }
 }
 
 @layer components {
@@ -55,7 +158,15 @@
   }
 
   .contrast-btn {
-    @apply px-4 py-2 border border-black rounded-full hover:bg-black hover:text-white transition-colors duration-200 ease-in;
+    @apply px-6 py-3 border border-luxury-gold bg-luxury-ivory text-luxury-charcoal rounded-none hover:bg-luxury-gold hover:text-luxury-ivory transition-colors duration-300 ease-in-out uppercase tracking-wider text-sm font-medium;
+  }
+  
+  .luxury-btn {
+    @apply px-6 py-3 bg-luxury-gold text-luxury-ivory rounded-none hover:bg-luxury-darkgold transition-colors duration-300 ease-in-out uppercase tracking-wider text-sm font-medium;
+  }
+  
+  .luxury-btn-outline {
+    @apply px-6 py-3 border border-luxury-gold text-luxury-gold rounded-none hover:bg-luxury-gold hover:text-luxury-ivory transition-colors duration-300 ease-in-out uppercase tracking-wider text-sm font-medium;
   }
 
   .text-xsmall-regular {
@@ -108,5 +219,58 @@
 
   .text-3xl-semi {
     @apply text-[32px] leading-[44px] font-semibold;
+  }
+  
+  /* Luxury text styles */
+  .text-display-regular {
+    @apply font-display text-[42px] leading-[1.2] font-normal tracking-wide;
+  }
+  
+  .text-display-semi {
+    @apply font-display text-[42px] leading-[1.2] font-semibold tracking-wide;
+  }
+  
+  .text-display-large {
+    @apply font-display text-[56px] leading-[1.1] font-normal tracking-wide;
+  }
+  
+  .text-serif-regular {
+    @apply font-serif text-base leading-[1.6] font-normal;
+  }
+  
+  .text-serif-italic {
+    @apply font-serif text-base leading-[1.6] font-normal italic;
+  }
+  
+  /* Luxury card */
+  .luxury-card {
+    @apply bg-luxury-ivory border border-luxury-lightgold p-6 transition-all duration-300 ease-in-out shadow-luxury-sm hover:shadow-luxury-md;
+  }
+  
+  /* Section title with decoration */
+  .luxury-section-title {
+    @apply font-display text-2xl sm:text-3xl mb-2 relative inline-block;
+  }
+  
+  .luxury-section-title::after {
+    content: '';
+    @apply block h-px w-1/2 bg-luxury-gold mx-auto mt-2;
+  }
+  
+  /* Featured product card */
+  .featured-product-card {
+    @apply luxury-card p-0 overflow-hidden;
+  }
+  
+  .featured-product-card .image-container {
+    @apply relative h-64 overflow-hidden;
+  }
+  
+  .featured-product-card .content {
+    @apply p-6;
+  }
+  
+  .featured-product-card .price {
+    @apply text-luxury-gold font-medium mt-2;
   }
 }

@@ -34,6 +34,17 @@ module.exports = {
           80: "#1F2937",
           90: "#111827",
         },
+        luxury: {
+          gold: "#D4AF37",
+          lightgold: "#F8EAC0",
+          maroon: "#800020",
+          ivory: "#FFFFF0", 
+          charcoal: "#36454F",
+          cream: "#F5F5DC",
+          darkgold: "#996515",
+          black: "#000000",
+          white: "#FFFFFF",
+        }
       },
       borderRadius: {
         none: "0px",
@@ -57,9 +68,12 @@ module.exports = {
       },
       fontSize: {
         "3xl": "2rem",
+        "4xl": "2.5rem",
+        "5xl": "3rem",
       },
       fontFamily: {
         sans: [
+          "Montserrat",
           "Inter",
           "-apple-system",
           "BlinkMacSystemFont",
@@ -68,6 +82,17 @@ module.exports = {
           "Helvetica Neue",
           "Ubuntu",
           "sans-serif",
+        ],
+        serif: [
+          "Playfair Display",
+          "Cormorant Garamond",
+          "Georgia",
+          "Times New Roman",
+          "serif",
+        ],
+        display: [
+          "Playfair Display",
+          "serif",
         ],
       },
       keyframes: {
@@ -93,6 +118,14 @@ module.exports = {
           "100%": {
             opacity: "1",
             transform: "translateY(0)",
+          },
+        },
+        "fade-in": {
+          "0%": {
+            opacity: "0",
+          },
+          "100%": {
+            opacity: "1",
           },
         },
         "fade-out-top": {
@@ -140,12 +173,21 @@ module.exports = {
           "0%": { transform: "translateY(-100%)" },
           "100%": { transform: "translateY(0)" },
         },
+        "elegant-pulse": {
+          "0%, 100%": { opacity: 1 },
+          "50%": { opacity: 0.8 },
+        },
+        "gentle-float": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-5px)" },
+        },
       },
       animation: {
         ring: "ring 2.2s cubic-bezier(0.5, 0, 0.5, 1) infinite",
         "fade-in-right":
           "fade-in-right 0.3s cubic-bezier(0.5, 0, 0.5, 1) forwards",
         "fade-in-top": "fade-in-top 0.2s cubic-bezier(0.5, 0, 0.5, 1) forwards",
+        "fade-in": "fade-in 0.7s ease-in-out forwards",
         "fade-out-top":
           "fade-out-top 0.2s cubic-bezier(0.5, 0, 0.5, 1) forwards",
         "accordion-open":
@@ -155,6 +197,14 @@ module.exports = {
         enter: "enter 200ms ease-out",
         "slide-in": "slide-in 1.2s cubic-bezier(.41,.73,.51,1.02)",
         leave: "leave 150ms ease-in forwards",
+        "elegant-pulse": "elegant-pulse 3s ease-in-out infinite",
+        "gentle-float": "gentle-float 6s ease-in-out infinite",
+      },
+      boxShadow: {
+        'luxury-sm': '0 1px 2px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(212, 175, 55, 0.1)',
+        'luxury-md': '0 4px 6px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(212, 175, 55, 0.2)',
+        'luxury-lg': '0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(212, 175, 55, 0.2)',
+        'luxury-xl': '0 20px 25px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(212, 175, 55, 0.1)',
       },
     },
   },

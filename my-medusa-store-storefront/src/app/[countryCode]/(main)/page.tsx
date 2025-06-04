@@ -1,41 +1,31 @@
+"use server"
+
+import { redirect } from "next/navigation"
 import { Metadata } from "next"
 
 import FeaturedProducts from "@modules/home/components/featured-products"
 import Hero from "@modules/home/components/hero"
+import TestimonialSection from "@modules/home/components/testimonial-section"
+import CraftmanshipSection from "@modules/home/components/craftmanship-section"
 import { listCollections } from "@lib/data/collections"
 import { getRegion } from "@lib/data/regions"
 
 export const metadata: Metadata = {
-  title: "Medusa Next.js Starter Template",
+  title: "Marble Luxe - Fine Marble Handicrafts",
   description:
-    "A performant frontend ecommerce starter template with Next.js 15 and Medusa.",
+    "Discover exquisite handcrafted marble artifacts. Each piece is meticulously crafted by master artisans.",
 }
 
-export default async function Home(props: {
-  params: Promise<{ countryCode: string }>
+export default async function MainRedirect(props: {
+  params: { countryCode: string }
 }) {
-  const params = await props.params
-
-  const { countryCode } = params
-
+  const { countryCode } = props.params
   const region = await getRegion(countryCode)
 
-  const { collections } = await listCollections({
-    fields: "id, handle, title",
-  })
-
-  if (!collections || !region) {
+  if (!region) {
     return null
   }
 
-  return (
-    <>
-      <Hero />
-      <div className="py-12">
-        <ul className="flex flex-col gap-x-6">
-          <FeaturedProducts collections={collections} region={region} />
-        </ul>
-      </div>
-    </>
-  )
+  // Redirect to the home page outside of the (main) route group
+  redirect(`/${countryCode}`)
 }
