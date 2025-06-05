@@ -10,52 +10,54 @@ type ShippingDetailsProps = {
 
 const ShippingDetails = ({ order }: ShippingDetailsProps) => {
   return (
-    <div>
-      <Heading level="h2" className="flex flex-row text-3xl-regular my-6">
+    <div className="flex flex-col">
+      <Heading level="h2" className="flex flex-row text-xl font-serif text-[#43372f] mb-4 pb-2 border-b border-[var(--color-luxury-lightgold)]">
         Delivery
       </Heading>
-      <div className="flex items-start gap-x-8">
+      <div className="flex flex-col md:flex-row items-start gap-y-6 md:gap-x-8">
         <div
-          className="flex flex-col w-1/3"
+          className="flex flex-col w-full md:w-1/3"
           data-testid="shipping-address-summary"
         >
-          <Text className="txt-medium-plus text-ui-fg-base mb-1">
+          <Text className="font-medium text-[#43372f] mb-2">
             Shipping Address
           </Text>
-          <Text className="txt-medium text-ui-fg-subtle">
-            {order.shipping_address?.first_name}{" "}
-            {order.shipping_address?.last_name}
-          </Text>
-          <Text className="txt-medium text-ui-fg-subtle">
-            {order.shipping_address?.address_1}{" "}
-            {order.shipping_address?.address_2}
-          </Text>
-          <Text className="txt-medium text-ui-fg-subtle">
-            {order.shipping_address?.postal_code},{" "}
-            {order.shipping_address?.city}
-          </Text>
-          <Text className="txt-medium text-ui-fg-subtle">
-            {order.shipping_address?.country_code?.toUpperCase()}
-          </Text>
+          <div className="flex flex-col gap-y-1 text-[#8a7f72]">
+            <Text>
+              {order.shipping_address?.first_name}{" "}
+              {order.shipping_address?.last_name}
+            </Text>
+            <Text>
+              {order.shipping_address?.address_1}{" "}
+              {order.shipping_address?.address_2}
+            </Text>
+            <Text>
+              {order.shipping_address?.postal_code},{" "}
+              {order.shipping_address?.city}
+            </Text>
+            <Text>
+              {order.shipping_address?.country_code?.toUpperCase()}
+            </Text>
+          </div>
         </div>
 
         <div
-          className="flex flex-col w-1/3 "
+          className="flex flex-col w-full md:w-1/3"
           data-testid="shipping-contact-summary"
         >
-          <Text className="txt-medium-plus text-ui-fg-base mb-1">Contact</Text>
-          <Text className="txt-medium text-ui-fg-subtle">
-            {order.shipping_address?.phone}
-          </Text>
-          <Text className="txt-medium text-ui-fg-subtle">{order.email}</Text>
+          <Text className="font-medium text-[#43372f] mb-2">Contact</Text>
+          <div className="flex flex-col gap-y-1 text-[#8a7f72]">
+            <Text>{order.shipping_address?.phone}</Text>
+            <Text>{order.email}</Text>
+          </div>
         </div>
 
         <div
-          className="flex flex-col w-1/3"
+          className="flex flex-col w-full md:w-1/3"
           data-testid="shipping-method-summary"
         >
-          <Text className="txt-medium-plus text-ui-fg-base mb-1">Method</Text>
-          <Text className="txt-medium text-ui-fg-subtle">
+          <Text className="font-medium text-[#43372f] mb-2">Method</Text>
+          <Text className="text-[#8a7f72]">
             {(order as any).shipping_methods[0]?.name} (
             {convertToLocale({
               amount: order.shipping_methods?.[0].total ?? 0,

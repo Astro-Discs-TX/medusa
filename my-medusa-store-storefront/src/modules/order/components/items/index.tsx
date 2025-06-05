@@ -2,7 +2,6 @@ import repeat from "@lib/util/repeat"
 import { HttpTypes } from "@medusajs/types"
 import { Table } from "@medusajs/ui"
 
-import Divider from "@modules/common/components/divider"
 import Item from "@modules/order/components/item"
 import SkeletonLineItem from "@modules/skeletons/components/skeleton-line-item"
 
@@ -15,9 +14,9 @@ const Items = ({ order }: ItemsProps) => {
 
   return (
     <div className="flex flex-col">
-      <Divider className="!mb-0" />
+      <div className="h-px w-full border-b border-[#e2d9cf] mb-4"></div>
       <Table>
-        <Table.Body data-testid="products-table">
+        <Table.Body className="border-collapse" data-testid="products-table">
           {items?.length
             ? items
                 .sort((a, b) => {
@@ -37,6 +36,7 @@ const Items = ({ order }: ItemsProps) => {
               })}
         </Table.Body>
       </Table>
+      <div className="h-px w-full border-b border-[#e2d9cf] mt-4"></div>
     </div>
   )
 }
