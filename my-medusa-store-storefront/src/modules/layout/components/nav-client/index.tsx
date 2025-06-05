@@ -15,10 +15,10 @@ interface NavClientProps {
 const NavClient: React.FC<NavClientProps> = ({ regions, scrolled = false }) => {
   const [hoveredLink, setHoveredLink] = useState<string | null>(null)
   
-  // Navigation links data
+  // Navigation links data with refined labeling
   const navLinks = [
     { href: "/collections", label: "Collections", testId: "nav-collections-link" },
-    { href: "/products", label: "Products", testId: "nav-products-link" },
+    { href: "/products", label: "Treasures", testId: "nav-products-link" },
     { href: "/about", label: "Craftsmanship", testId: "nav-about-link" },
   ]
   
@@ -27,11 +27,11 @@ const NavClient: React.FC<NavClientProps> = ({ regions, scrolled = false }) => {
     { href: "/contact", label: "Contact", testId: "nav-contact-link" },
   ]
 
-  // Animation variants for links
+  // Animation variants for links with refined motion
   const linkVariants = {
     hover: {
       y: -2,
-      transition: { duration: 0.2, ease: "easeOut" }
+      transition: { duration: 0.3, ease: [0.25, 1, 0.5, 1] }
     }
   }
 
@@ -65,10 +65,10 @@ const NavClient: React.FC<NavClientProps> = ({ regions, scrolled = false }) => {
                   <motion.div 
                     className="absolute bottom-0 left-0 right-0 h-px bg-luxury-gold"
                     layoutId="underline"
-                    initial={{ width: 0, opacity: 0 }}
-                    animate={{ width: "100%", opacity: 1 }}
-                    exit={{ width: 0, opacity: 0 }}
-                    transition={{ duration: 0.3, ease: [0.65, 0, 0.35, 1] }}
+                    initial={{ width: 0, opacity: 0, left: "25%" }}
+                    animate={{ width: "100%", opacity: 1, left: 0 }}
+                    exit={{ width: 0, opacity: 0, left: "75%" }}
+                    transition={{ duration: 0.4, ease: [0.65, 0, 0.35, 1] }}
                   />
                 )}
               </AnimatePresence>
@@ -77,11 +77,11 @@ const NavClient: React.FC<NavClientProps> = ({ regions, scrolled = false }) => {
         </div>
       </div>
 
-      {/* Logo */}
+      {/* Logo with refined animations */}
       <motion.div 
         className="flex items-center h-full"
         animate={{ 
-          scale: scrolled ? 0.9 : 1,
+          scale: scrolled ? 0.92 : 1,
           y: scrolled ? -1 : 0
         }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
@@ -93,15 +93,15 @@ const NavClient: React.FC<NavClientProps> = ({ regions, scrolled = false }) => {
         >
           <motion.span 
             className="font-display text-2xl text-luxury-gold hover:opacity-90 transition-all duration-300 relative group"
-            whileHover={{ scale: 1.02 }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            whileHover={{ scale: 1.03, letterSpacing: "0.02em" }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
           >
             MARBLE LUXE
             <motion.span 
               className="absolute -bottom-px left-0 h-px bg-luxury-gold"
               initial={{ width: 0 }}
               whileHover={{ width: "100%" }}
-              transition={{ duration: 0.4, ease: [0.65, 0, 0.35, 1] }}
+              transition={{ duration: 0.5, ease: [0.65, 0, 0.35, 1] }}
             />
           </motion.span>
           <motion.span 
@@ -114,7 +114,7 @@ const NavClient: React.FC<NavClientProps> = ({ regions, scrolled = false }) => {
         </LocalizedClientLink>
       </motion.div>
 
-      {/* Right side links */}
+      {/* Right side links with refined hover effects */}
       <div className="flex items-center gap-x-6 h-full flex-1 basis-0 justify-end">
         <div className="hidden small:flex items-center gap-x-8 h-full">
           {rightLinks.map((link) => (
@@ -138,10 +138,10 @@ const NavClient: React.FC<NavClientProps> = ({ regions, scrolled = false }) => {
                   <motion.div 
                     className="absolute bottom-0 left-0 right-0 h-px bg-luxury-gold"
                     layoutId="underline-right"
-                    initial={{ width: 0, opacity: 0 }}
-                    animate={{ width: "100%", opacity: 1 }}
-                    exit={{ width: 0, opacity: 0 }}
-                    transition={{ duration: 0.3, ease: [0.65, 0, 0.35, 1] }}
+                    initial={{ width: 0, opacity: 0, left: "25%" }}
+                    animate={{ width: "100%", opacity: 1, left: 0 }}
+                    exit={{ width: 0, opacity: 0, left: "75%" }}
+                    transition={{ duration: 0.4, ease: [0.65, 0, 0.35, 1] }}
                   />
                 )}
               </AnimatePresence>

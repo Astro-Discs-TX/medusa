@@ -40,20 +40,20 @@ const Addresses = ({
   const [message, formAction] = useActionState(setAddresses, null)
 
   return (
-    <div className="bg-white">
-      <div className="flex flex-row items-center justify-between mb-6">
+    <div>
+      <div className="flex flex-row items-center justify-between mb-8">
         <Heading
           level="h2"
-          className="flex flex-row text-3xl-regular gap-x-2 items-baseline"
+          className="flex flex-row font-serif text-[#43372f] text-2xl gap-x-2 items-baseline"
         >
           Shipping Address
-          {!isOpen && <CheckCircleSolid />}
+          {!isOpen && <CheckCircleSolid className="text-[#9b8b7e]" />}
         </Heading>
         {!isOpen && cart?.shipping_address && (
           <Text>
             <button
               onClick={handleEdit}
-              className="text-ui-fg-interactive hover:text-ui-fg-interactive-hover"
+              className="text-[#8a7f72] hover:text-[#43372f] transition-colors duration-150 ease-in-out font-medium"
               data-testid="edit-address-button"
             >
               Edit
@@ -75,7 +75,7 @@ const Addresses = ({
               <div>
                 <Heading
                   level="h2"
-                  className="text-3xl-regular gap-x-4 pb-6 pt-8"
+                  className="font-serif text-[#43372f] text-2xl gap-x-4 pb-6 pt-8"
                 >
                   Billing address
                 </Heading>
@@ -83,7 +83,10 @@ const Addresses = ({
                 <BillingAddress cart={cart} />
               </div>
             )}
-            <SubmitButton className="mt-6" data-testid="submit-address-button">
+            <SubmitButton 
+              className="mt-8 bg-[#43372f] hover:bg-[#2a221e] text-white border-none px-8 py-3 rounded-md" 
+              data-testid="submit-address-button"
+            >
               Continue to delivery
             </SubmitButton>
             <ErrorMessage error={message} data-testid="address-error-message" />
@@ -99,22 +102,22 @@ const Addresses = ({
                     className="flex flex-col w-1/3"
                     data-testid="shipping-address-summary"
                   >
-                    <Text className="txt-medium-plus text-ui-fg-base mb-1">
+                    <Text className="font-medium text-[#43372f] mb-2">
                       Shipping Address
                     </Text>
-                    <Text className="txt-medium text-ui-fg-subtle">
+                    <Text className="text-[#8a7f72]">
                       {cart.shipping_address.first_name}{" "}
                       {cart.shipping_address.last_name}
                     </Text>
-                    <Text className="txt-medium text-ui-fg-subtle">
+                    <Text className="text-[#8a7f72]">
                       {cart.shipping_address.address_1}{" "}
                       {cart.shipping_address.address_2}
                     </Text>
-                    <Text className="txt-medium text-ui-fg-subtle">
+                    <Text className="text-[#8a7f72]">
                       {cart.shipping_address.postal_code},{" "}
                       {cart.shipping_address.city}
                     </Text>
-                    <Text className="txt-medium text-ui-fg-subtle">
+                    <Text className="text-[#8a7f72]">
                       {cart.shipping_address.country_code?.toUpperCase()}
                     </Text>
                   </div>
@@ -123,13 +126,13 @@ const Addresses = ({
                     className="flex flex-col w-1/3 "
                     data-testid="shipping-contact-summary"
                   >
-                    <Text className="txt-medium-plus text-ui-fg-base mb-1">
+                    <Text className="font-medium text-[#43372f] mb-2">
                       Contact
                     </Text>
-                    <Text className="txt-medium text-ui-fg-subtle">
+                    <Text className="text-[#8a7f72]">
                       {cart.shipping_address.phone}
                     </Text>
-                    <Text className="txt-medium text-ui-fg-subtle">
+                    <Text className="text-[#8a7f72]">
                       {cart.email}
                     </Text>
                   </div>
@@ -138,29 +141,29 @@ const Addresses = ({
                     className="flex flex-col w-1/3"
                     data-testid="billing-address-summary"
                   >
-                    <Text className="txt-medium-plus text-ui-fg-base mb-1">
+                    <Text className="font-medium text-[#43372f] mb-2">
                       Billing Address
                     </Text>
 
                     {sameAsBilling ? (
-                      <Text className="txt-medium text-ui-fg-subtle">
+                      <Text className="text-[#8a7f72]">
                         Billing- and delivery address are the same.
                       </Text>
                     ) : (
                       <>
-                        <Text className="txt-medium text-ui-fg-subtle">
+                        <Text className="text-[#8a7f72]">
                           {cart.billing_address?.first_name}{" "}
                           {cart.billing_address?.last_name}
                         </Text>
-                        <Text className="txt-medium text-ui-fg-subtle">
+                        <Text className="text-[#8a7f72]">
                           {cart.billing_address?.address_1}{" "}
                           {cart.billing_address?.address_2}
                         </Text>
-                        <Text className="txt-medium text-ui-fg-subtle">
+                        <Text className="text-[#8a7f72]">
                           {cart.billing_address?.postal_code},{" "}
                           {cart.billing_address?.city}
                         </Text>
-                        <Text className="txt-medium text-ui-fg-subtle">
+                        <Text className="text-[#8a7f72]">
                           {cart.billing_address?.country_code?.toUpperCase()}
                         </Text>
                       </>
@@ -176,7 +179,6 @@ const Addresses = ({
           </div>
         </div>
       )}
-      <Divider className="mt-8" />
     </div>
   )
 }

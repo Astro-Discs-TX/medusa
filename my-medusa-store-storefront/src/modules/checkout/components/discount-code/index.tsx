@@ -52,29 +52,25 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
   const [message, formAction] = useActionState(submitPromotionForm, null)
 
   return (
-    <div className="w-full bg-white flex flex-col">
-      <div className="txt-medium">
+    <div className="w-full flex flex-col">
+      <div className="text-[#8a7f72]">
         <form action={(a) => addPromotionCode(a)} className="w-full mb-5">
           <Label className="flex gap-x-1 my-2 items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
               type="button"
-              className="txt-medium text-ui-fg-interactive hover:text-ui-fg-interactive-hover"
+              className="font-medium text-[#43372f] hover:text-[#2a221e] transition-colors duration-150 ease-in-out"
               data-testid="add-discount-button"
             >
               Add Promotion Code(s)
             </button>
-
-            {/* <Tooltip content="You can add multiple promotion codes">
-              <InformationCircleSolid color="var(--fg-muted)" />
-            </Tooltip> */}
           </Label>
 
           {isOpen && (
             <>
               <div className="flex w-full gap-x-2">
                 <Input
-                  className="size-full"
+                  className="size-full border-[#e2d9cf] rounded-md focus:border-[#43372f] transition-all duration-150 ease-in-out"
                   id="promotion-input"
                   name="code"
                   type="text"
@@ -83,6 +79,7 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
                 />
                 <SubmitButton
                   variant="secondary"
+                  className="bg-[#43372f] hover:bg-[#2a221e] text-white border-none px-4 py-2 rounded-md"
                   data-testid="discount-apply-button"
                 >
                   Apply
@@ -100,7 +97,7 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
         {promotions.length > 0 && (
           <div className="w-full flex items-center">
             <div className="flex flex-col w-full">
-              <Heading className="txt-medium mb-2">
+              <Heading className="font-medium text-[#43372f] text-base mb-2">
                 Promotion(s) applied:
               </Heading>
 
@@ -111,11 +108,12 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
                     className="flex items-center justify-between w-full max-w-full mb-2"
                     data-testid="discount-row"
                   >
-                    <Text className="flex gap-x-1 items-baseline txt-small-plus w-4/5 pr-1">
+                    <Text className="flex gap-x-1 items-baseline text-sm w-4/5 pr-1">
                       <span className="truncate" data-testid="discount-code">
                         <Badge
                           color={promotion.is_automatic ? "green" : "grey"}
                           size="small"
+                          className="bg-[#f3efe9] text-[#43372f] border-[#e2d9cf]"
                         >
                           {promotion.code}
                         </Badge>{" "}
@@ -136,16 +134,11 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
                             </>
                           )}
                         )
-                        {/* {promotion.is_automatic && (
-                          <Tooltip content="This promotion is automatically applied">
-                            <InformationCircleSolid className="inline text-zinc-400" />
-                          </Tooltip>
-                        )} */}
                       </span>
                     </Text>
                     {!promotion.is_automatic && (
                       <button
-                        className="flex items-center"
+                        className="flex items-center text-[#9b8b7e] hover:text-[#43372f] transition-colors duration-150 ease-in-out"
                         onClick={() => {
                           if (!promotion.code) {
                             return

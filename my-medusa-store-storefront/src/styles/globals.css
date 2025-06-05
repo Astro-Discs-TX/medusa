@@ -263,7 +263,24 @@
 
 @layer components {
   .content-container {
-    @apply max-w-[1440px] w-full mx-auto px-6;
+    @apply max-w-[1440px] w-full mx-auto px-4 sm:px-8 md:px-16;
+  }
+
+  .constrast-btn {
+    @apply py-3 px-4 flex items-center justify-center bg-ui-bg-base hover:bg-ui-bg-base-hover border border-ui-border-base rounded-rounded;
+  }
+
+  .arrow {
+    @apply absolute left-[50%] -ml-[7.5px] -mt-2 h-3 w-3 rotate-45 bg-white border-t border-l border-ui-border-base;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
   }
 
   .contrast-btn {
@@ -412,4 +429,72 @@
   .luxury-badge-outline {
     @apply bg-transparent border border-luxury-gold/60 text-luxury-charcoal;
   }
+}
+
+/* Luxury Checkout Styles */
+
+/* Input styles */
+.input-container input, 
+.input-container select {
+  border-color: #e2d9cf !important;
+  border-radius: 0.375rem !important;
+  transition: all 0.2s ease-in-out;
+}
+
+.input-container input:focus, 
+.input-container select:focus {
+  border-color: #43372f !important;
+  box-shadow: 0 0 0 1px rgba(67, 55, 47, 0.2) !important;
+}
+
+/* Button hover effects */
+button.luxury-btn {
+  transition: all 0.2s ease-in-out;
+}
+
+button.luxury-btn:hover {
+  transform: translateY(-1px);
+}
+
+/* Animated dividers */
+.luxury-divider {
+  border-color: #e2d9cf !important;
+}
+
+/* Section transitions */
+.checkout-section {
+  transition: all 0.3s ease-in-out;
+}
+
+.checkout-section:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Custom scrollbar for checkout page */
+.checkout-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.checkout-container::-webkit-scrollbar-track {
+  background: #f9f6f2;
+}
+
+.checkout-container::-webkit-scrollbar-thumb {
+  background-color: #9b8b7e;
+  border-radius: 10px;
+}
+
+/* Fonts */
+.serif-text {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+/* Custom checkbox for billing/shipping same address */
+.luxury-checkbox {
+  border-color: #9b8b7e !important;
+}
+
+.luxury-checkbox:checked {
+  background-color: #43372f !important;
+  border-color: #43372f !important;
 }

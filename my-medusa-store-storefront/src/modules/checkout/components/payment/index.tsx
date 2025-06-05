@@ -56,63 +56,36 @@ const Payment = ({
   const paymentReady =
     (activeSession && cart?.shipping_methods.length !== 0) || paidByGiftcard
 
-  const createQueryString = useCallback(
-    (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams)
-      params.set(name, value)
-
-      return params.toString()
-    },
-    [searchParams]
-  )
-
-  const handleEdit = () => {
-    router.push(pathname + "?" + createQueryString("step", "payment"), {
-      scroll: false,
-    })
-  }
-
   const handleSubmit = async () => {
     setIsLoading(true)
-    try {
-      const shouldInputCard =
-        isStripeFunc(selectedPaymentMethod) && !activeSession
+    let success = true
 
-      const checkActiveSession =
-        activeSession?.provider_id === selectedPaymentMethod
-
-      if (!checkActiveSession) {
-        await initiatePaymentSession(cart, {
-          provider_id: selectedPaymentMethod,
-        })
+    if (!paidByGiftcard) {
+      if (!isStripe && !selectedPaymentMethod) {
+        setError("Please select a payment method")
+        success = false
       }
-
-      if (!shouldInputCard) {
-        return router.push(
-          pathname + "?" + createQueryString("step", "review"),
-          {
-            scroll: false,
-          }
-        )
-      }
-    } catch (err: any) {
-      setError(err.message)
-    } finally {
-      setIsLoading(false)
     }
+
+    if (!success) {
+      setIsLoading(false)
+      return
+    }
+
+    router.push(pathname + "?step=review")
   }
 
-  useEffect(() => {
-    setError(null)
-  }, [isOpen])
+  const handleEdit = () => {
+    router.push(pathname + "?step=payment")
+  }
 
   return (
-    <div className="bg-white">
-      <div className="flex flex-row items-center justify-between mb-6">
+    <div>
+      <div className="flex flex-row items-center justify-between mb-8">
         <Heading
           level="h2"
           className={clx(
-            "flex flex-row text-3xl-regular gap-x-2 items-baseline",
+            "flex flex-row font-serif text-[#43372f] text-2xl gap-x-2 items-baseline",
             {
               "opacity-50 pointer-events-none select-none":
                 !isOpen && !paymentReady,
@@ -120,13 +93,13 @@ const Payment = ({
           )}
         >
           Payment
-          {!isOpen && paymentReady && <CheckCircleSolid />}
+          {!isOpen && paymentReady && <CheckCircleSolid className="text-[#9b8b7e]" />}
         </Heading>
         {!isOpen && paymentReady && (
           <Text>
             <button
               onClick={handleEdit}
-              className="text-ui-fg-interactive hover:text-ui-fg-interactive-hover"
+              className="text-[#8a7f72] hover:text-[#43372f] transition-colors duration-150 ease-in-out font-medium"
               data-testid="edit-payment-button"
             >
               Edit
@@ -168,11 +141,11 @@ const Payment = ({
 
           {paidByGiftcard && (
             <div className="flex flex-col w-1/3">
-              <Text className="txt-medium-plus text-ui-fg-base mb-1">
+              <Text className="font-medium text-[#43372f] mb-2">
                 Payment method
               </Text>
               <Text
-                className="txt-medium text-ui-fg-subtle"
+                className="text-[#8a7f72]"
                 data-testid="payment-method-summary"
               >
                 Gift card
@@ -187,7 +160,7 @@ const Payment = ({
 
           <Button
             size="large"
-            className="mt-6"
+            className="mt-8 bg-[#43372f] hover:bg-[#2a221e] text-white border-none px-8 py-3 rounded-md"
             onClick={handleSubmit}
             isLoading={isLoading}
             disabled={
@@ -206,54 +179,35 @@ const Payment = ({
           {cart && paymentReady && activeSession ? (
             <div className="flex items-start gap-x-1 w-full">
               <div className="flex flex-col w-1/3">
-                <Text className="txt-medium-plus text-ui-fg-base mb-1">
+                <Text className="font-medium text-[#43372f] mb-2">
                   Payment method
                 </Text>
                 <Text
-                  className="txt-medium text-ui-fg-subtle"
+                  className="text-[#8a7f72]"
                   data-testid="payment-method-summary"
                 >
                   {paymentInfoMap[activeSession?.provider_id]?.title ||
                     activeSession?.provider_id}
                 </Text>
               </div>
+            </div>
+          ) : (
+            <div className="flex items-start gap-x-1 w-full">
               <div className="flex flex-col w-1/3">
-                <Text className="txt-medium-plus text-ui-fg-base mb-1">
-                  Payment details
+                <Text className="font-medium text-[#43372f] mb-2">
+                  Payment method
                 </Text>
-                <div
-                  className="flex gap-2 txt-medium text-ui-fg-subtle items-center"
-                  data-testid="payment-details-summary"
+                <Text
+                  className="text-[#8a7f72]"
+                  data-testid="payment-method-summary"
                 >
-                  <Container className="flex items-center h-7 w-fit p-2 bg-ui-button-neutral-hover">
-                    {paymentInfoMap[selectedPaymentMethod]?.icon || (
-                      <CreditCard />
-                    )}
-                  </Container>
-                  <Text>
-                    {isStripeFunc(selectedPaymentMethod) && cardBrand
-                      ? cardBrand
-                      : "Another step will appear"}
-                  </Text>
-                </div>
+                  {paidByGiftcard && "Gift card"}
+                </Text>
               </div>
             </div>
-          ) : paidByGiftcard ? (
-            <div className="flex flex-col w-1/3">
-              <Text className="txt-medium-plus text-ui-fg-base mb-1">
-                Payment method
-              </Text>
-              <Text
-                className="txt-medium text-ui-fg-subtle"
-                data-testid="payment-method-summary"
-              >
-                Gift card
-              </Text>
-            </div>
-          ) : null}
+          )}
         </div>
       </div>
-      <Divider className="mt-8" />
     </div>
   )
 }

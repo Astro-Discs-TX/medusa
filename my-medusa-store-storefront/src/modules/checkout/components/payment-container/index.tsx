@@ -1,21 +1,30 @@
-import { Radio as RadioGroupOption } from "@headlessui/react"
-import { Text, clx } from "@medusajs/ui"
+import { RadioGroup } from "@headlessui/react"
+import { isManual } from "@lib/constants"
+import { Container, Text, clx } from "@medusajs/ui"
 import React, { useContext, useMemo, type JSX } from "react"
 
-import Radio from "@modules/common/components/radio"
-
-import { isManual } from "@lib/constants"
 import SkeletonCardDetails from "@modules/skeletons/components/skeleton-card-details"
 import { CardElement } from "@stripe/react-stripe-js"
 import { StripeCardElementOptions } from "@stripe/stripe-js"
 import PaymentTest from "../payment-test"
 import { StripeContext } from "../payment-wrapper/stripe-wrapper"
+import MedusaRadio from "@modules/common/components/radio"
+
+const RadioGroupOption = ({ children, ...props }: any) => {
+  return (
+    <RadioGroup.Option {...props}>
+      {({ checked }) => {
+        return children
+      }}
+    </RadioGroup.Option>
+  )
+}
 
 type PaymentContainerProps = {
   paymentProviderId: string
-  selectedPaymentOptionId: string | null
-  disabled?: boolean
+  selectedPaymentOptionId: string
   paymentInfoMap: Record<string, { title: string; icon: JSX.Element }>
+  disabled?: boolean
   children?: React.ReactNode
 }
 
@@ -34,24 +43,27 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
       value={paymentProviderId}
       disabled={disabled}
       className={clx(
-        "flex flex-col gap-y-2 text-small-regular cursor-pointer py-4 border rounded-rounded px-8 mb-2 hover:shadow-borders-interactive-with-active",
+        "flex flex-col gap-y-2 text-small-regular cursor-pointer py-4 border rounded-md px-8 mb-4 hover:border-[#43372f] transition-all duration-150 ease-in-out",
         {
-          "border-ui-border-interactive":
-            selectedPaymentOptionId === paymentProviderId,
+          "border-[#43372f] shadow-sm": selectedPaymentOptionId === paymentProviderId,
+          "border-[#e2d9cf]": selectedPaymentOptionId !== paymentProviderId,
         }
       )}
     >
-      <div className="flex items-center justify-between ">
+      <div className="flex items-center justify-between">
         <div className="flex items-center gap-x-4">
-          <Radio checked={selectedPaymentOptionId === paymentProviderId} />
-          <Text className="text-base-regular">
+          <MedusaRadio
+            checked={selectedPaymentOptionId === paymentProviderId}
+            className={selectedPaymentOptionId === paymentProviderId ? "text-[#43372f] border-[#43372f]" : "border-[#9b8b7e]"}
+          />
+          <span className="text-base font-medium text-[#43372f]">
             {paymentInfoMap[paymentProviderId]?.title || paymentProviderId}
-          </Text>
+          </span>
           {isManual(paymentProviderId) && isDevelopment && (
             <PaymentTest className="hidden small:block" />
           )}
         </div>
-        <span className="justify-self-end text-ui-fg-base">
+        <span className="justify-self-end text-[#8a7f72]">
           {paymentInfoMap[paymentProviderId]?.icon}
         </span>
       </div>
@@ -65,18 +77,20 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
 
 export default PaymentContainer
 
-export const StripeCardContainer = ({
+export const StripeCardContainer: React.FC<
+  {
+    setCardBrand: (brand: string | null) => void
+    setCardComplete: (complete: boolean) => void
+    setError: (error: string | null) => void
+  } & PaymentContainerProps
+> = ({
   paymentProviderId,
   selectedPaymentOptionId,
   paymentInfoMap,
-  disabled = false,
   setCardBrand,
   setError,
   setCardComplete,
-}: Omit<PaymentContainerProps, "children"> & {
-  setCardBrand: (brand: string) => void
-  setError: (error: string | null) => void
-  setCardComplete: (complete: boolean) => void
+  disabled = false,
 }) => {
   const stripeReady = useContext(StripeContext)
 
@@ -107,7 +121,7 @@ export const StripeCardContainer = ({
       {selectedPaymentOptionId === paymentProviderId &&
         (stripeReady ? (
           <div className="my-4 transition-all duration-150 ease-in-out">
-            <Text className="txt-medium-plus text-ui-fg-base mb-1">
+            <Text className="font-medium text-[#43372f] mb-2">
               Enter your card details:
             </Text>
             <CardElement
