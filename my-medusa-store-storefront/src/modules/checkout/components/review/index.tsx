@@ -33,27 +33,25 @@ const Review = ({ cart }: { cart: any }) => {
           Review
         </Heading>
       </div>
-      {isOpen && previousStepsCompleted && (
-        <>
-          <div className="flex items-start gap-x-1 w-full mb-8">
-            <div className="w-full">
-              <Text className="text-[#8a7f72] mb-1">
-                By clicking the Place Order button, you confirm that you have
-                read, understand and accept our Terms of Use, Terms of Sale and
-                Returns Policy and acknowledge that you have read Marble
-                Luxe&apos;s Privacy Policy.
-              </Text>
-            </div>
-          </div>
-          <div className="w-full">
-            <PaymentButton 
-              cart={cart} 
-              data-testid="submit-order-button" 
-              className="w-full bg-[#43372f] hover:bg-[#2a221e] text-white border-none px-8 py-3 rounded-md"
-            />
-          </div>
-        </>
-      )}
+      
+      <div className="flex items-start gap-x-1 w-full mb-8">
+        <div className="w-full">
+          <Text className="text-[#8a7f72] mb-1">
+            By clicking the Place Order button, you confirm that you have
+            read, understand and accept our Terms of Use, Terms of Sale and
+            Returns Policy and acknowledge that you have read Marble
+            Luxe&apos;s Privacy Policy.
+          </Text>
+        </div>
+      </div>
+      
+      <div className="w-full">
+        <PaymentButton 
+          cart={cart} 
+          data-testid="submit-order-button" 
+          className="w-full bg-[var(--color-luxury-gold)] hover:bg-[var(--color-luxury-darkgold)] text-white border-none px-8 py-3 rounded-md luxury-btn"
+        />
+      </div>
     </div>
   )
 }

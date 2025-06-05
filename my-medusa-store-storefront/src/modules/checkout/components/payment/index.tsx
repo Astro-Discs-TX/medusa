@@ -72,6 +72,19 @@ const Payment = ({
       return
     }
 
+    // Make sure we initialize the payment session before moving to review
+    if (selectedPaymentMethod) {
+      try {
+        await initiatePaymentSession(cart, {
+          provider_id: selectedPaymentMethod,
+        })
+      } catch (err: any) {
+        setError(err.message)
+        setIsLoading(false)
+        return
+      }
+    }
+
     router.push(pathname + "?step=review")
   }
 
