@@ -1,0 +1,31 @@
+/**
+ * @schema AdminUploadPreSignedUrl
+ * type: object
+ * description: SUMMARY
+ * x-schemaName: AdminUploadPreSignedUrl
+ * required:
+ *   - originalname
+ *   - size
+ *   - mime_type
+ * properties:
+ *   originalname:
+ *     type: string
+ *     title: originalname
+ *     description: The upload's originalname.
+ *   size:
+ *     type: number
+ *     title: size
+ *     description: The upload's size.
+ *   mime_type:
+ *     type: string
+ *     title: mime_type
+ *     description: The upload's mime type.
+ *   access:
+ *     type: string
+ *     description: The upload's access.
+ *     enum:
+ *       - public
+ *       - private
+ * 
+*/
+
