@@ -96,4 +96,101 @@
   100% {
     transform: rotate(360deg);
   }
+}
+
+/* Luxury reveal animation */
+.luxury-reveal {
+  position: relative;
+  overflow: hidden;
+}
+
+.luxury-reveal::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #D4AF37;
+  transform: translateX(-100%);
+  animation: reveal 1s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+@keyframes reveal {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Elegant text reveal */
+.text-reveal {
+  overflow: hidden;
+}
+
+.text-reveal span {
+  display: inline-block;
+  transform: translateY(100%);
+  animation: textReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes textReveal {
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* Staggered children animation */
+.stagger-children > * {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.stagger-children.in-view > *:nth-child(1) { 
+  animation: staggerFadeIn 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards 0.1s; 
+}
+.stagger-children.in-view > *:nth-child(2) { 
+  animation: staggerFadeIn 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards 0.2s; 
+}
+.stagger-children.in-view > *:nth-child(3) { 
+  animation: staggerFadeIn 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards 0.3s; 
+}
+.stagger-children.in-view > *:nth-child(4) { 
+  animation: staggerFadeIn 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards 0.4s; 
+}
+.stagger-children.in-view > *:nth-child(5) { 
+  animation: staggerFadeIn 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards 0.5s; 
+}
+
+@keyframes staggerFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Elegant hover line animation */
+.hover-line {
+  position: relative;
+  display: inline-block;
+}
+
+.hover-line::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: #D4AF37;
+  transition: width 0.4s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.hover-line:hover::after {
+  width: 100%;
 } 

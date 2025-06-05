@@ -5,7 +5,7 @@ import { StoreRegion } from "@medusajs/types"
 import SideMenu from "@modules/layout/components/side-menu"
 import CartButton from "@modules/layout/components/cart-button"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 
 interface NavClientProps {
   regions: StoreRegion[]
@@ -27,6 +27,14 @@ const NavClient: React.FC<NavClientProps> = ({ regions, scrolled = false }) => {
     { href: "/contact", label: "Contact", testId: "nav-contact-link" },
   ]
 
+  // Animation variants for links
+  const linkVariants = {
+    hover: {
+      y: -2,
+      transition: { duration: 0.2, ease: "easeOut" }
+    }
+  }
+
   return (
     <div className="w-full flex items-center justify-between">
       <div className="flex-1 basis-0 h-full flex items-center">
@@ -37,7 +45,12 @@ const NavClient: React.FC<NavClientProps> = ({ regions, scrolled = false }) => {
         {/* Navigation links - desktop */}
         <div className="hidden small:flex items-center gap-x-8 h-full ml-8">
           {navLinks.map((link) => (
-            <div key={link.href} className="relative">
+            <motion.div 
+              key={link.href} 
+              className="relative"
+              whileHover="hover"
+              variants={linkVariants}
+            >
               <LocalizedClientLink
                 className="hover:text-luxury-gold transition-colors duration-300 uppercase tracking-wider text-small-semi py-2"
                 href={link.href}
@@ -47,16 +60,19 @@ const NavClient: React.FC<NavClientProps> = ({ regions, scrolled = false }) => {
               >
                 {link.label}
               </LocalizedClientLink>
-              {hoveredLink === link.href && (
-                <motion.div 
-                  className="absolute bottom-0 left-0 right-0 h-px bg-luxury-gold"
-                  layoutId="underline"
-                  initial={{ width: 0 }}
-                  animate={{ width: "100%" }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
-                />
-              )}
-            </div>
+              <AnimatePresence>
+                {hoveredLink === link.href && (
+                  <motion.div 
+                    className="absolute bottom-0 left-0 right-0 h-px bg-luxury-gold"
+                    layoutId="underline"
+                    initial={{ width: 0, opacity: 0 }}
+                    animate={{ width: "100%", opacity: 1 }}
+                    exit={{ width: 0, opacity: 0 }}
+                    transition={{ duration: 0.3, ease: [0.65, 0, 0.35, 1] }}
+                  />
+                )}
+              </AnimatePresence>
+            </motion.div>
           ))}
         </div>
       </div>
@@ -68,20 +84,33 @@ const NavClient: React.FC<NavClientProps> = ({ regions, scrolled = false }) => {
           scale: scrolled ? 0.9 : 1,
           y: scrolled ? -1 : 0
         }}
-        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       >
         <LocalizedClientLink
           href="/"
           className="flex flex-col items-center"
           data-testid="nav-store-link"
         >
-          <span className="font-display text-2xl text-luxury-gold hover:opacity-80 transition-all duration-300 relative group">
+          <motion.span 
+            className="font-display text-2xl text-luxury-gold hover:opacity-90 transition-all duration-300 relative group"
+            whileHover={{ scale: 1.02 }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          >
             MARBLE LUXE
-            <span className="absolute -bottom-px left-0 w-0 h-px bg-luxury-gold group-hover:w-full transition-all duration-500 ease-in-out"></span>
-          </span>
-          <span className={`text-luxury-charcoal/70 text-[10px] uppercase tracking-[0.2em] mt-0.5 transition-opacity duration-300 ${scrolled ? 'opacity-0' : 'opacity-100'}`}>
+            <motion.span 
+              className="absolute -bottom-px left-0 h-px bg-luxury-gold"
+              initial={{ width: 0 }}
+              whileHover={{ width: "100%" }}
+              transition={{ duration: 0.4, ease: [0.65, 0, 0.35, 1] }}
+            />
+          </motion.span>
+          <motion.span 
+            className={`text-luxury-charcoal/70 text-[10px] uppercase tracking-[0.2em] mt-0.5 transition-all duration-300 ${scrolled ? 'opacity-0 translate-y-1' : 'opacity-100'}`}
+            animate={{ opacity: scrolled ? 0 : 1, y: scrolled ? 5 : 0 }}
+            transition={{ duration: 0.3 }}
+          >
             Fine Handicrafts
-          </span>
+          </motion.span>
         </LocalizedClientLink>
       </motion.div>
 
@@ -89,7 +118,12 @@ const NavClient: React.FC<NavClientProps> = ({ regions, scrolled = false }) => {
       <div className="flex items-center gap-x-6 h-full flex-1 basis-0 justify-end">
         <div className="hidden small:flex items-center gap-x-8 h-full">
           {rightLinks.map((link) => (
-            <div key={link.href} className="relative">
+            <motion.div 
+              key={link.href} 
+              className="relative"
+              whileHover="hover"
+              variants={linkVariants}
+            >
               <LocalizedClientLink
                 className="hover:text-luxury-gold transition-colors duration-300 uppercase tracking-wider text-small-semi py-2"
                 href={link.href}
@@ -99,16 +133,19 @@ const NavClient: React.FC<NavClientProps> = ({ regions, scrolled = false }) => {
               >
                 {link.label}
               </LocalizedClientLink>
-              {hoveredLink === link.href && (
-                <motion.div 
-                  className="absolute bottom-0 left-0 right-0 h-px bg-luxury-gold"
-                  layoutId="underline"
-                  initial={{ width: 0 }}
-                  animate={{ width: "100%" }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
-                />
-              )}
-            </div>
+              <AnimatePresence>
+                {hoveredLink === link.href && (
+                  <motion.div 
+                    className="absolute bottom-0 left-0 right-0 h-px bg-luxury-gold"
+                    layoutId="underline-right"
+                    initial={{ width: 0, opacity: 0 }}
+                    animate={{ width: "100%", opacity: 1 }}
+                    exit={{ width: 0, opacity: 0 }}
+                    transition={{ duration: 0.3, ease: [0.65, 0, 0.35, 1] }}
+                  />
+                )}
+              </AnimatePresence>
+            </motion.div>
           ))}
         </div>
         <div className="h-full flex items-center">

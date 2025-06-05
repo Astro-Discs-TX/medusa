@@ -26,7 +26,7 @@ export default function Nav() {
     fetchRegions()
   }, [])
 
-  // Handle scroll behavior for header visibility
+  // Handle scroll behavior for header visibility with smoother transitions
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollPos = window.scrollY
@@ -34,8 +34,8 @@ export default function Nav() {
       // Determine if we're scrolling up or down
       const isScrolledDown = currentScrollPos > prevScrollPos
       
-      // Only hide header after scrolling down a bit (100px)
-      if (currentScrollPos > 100) {
+      // Only hide header after scrolling down a bit (80px) for better UX
+      if (currentScrollPos > 80) {
         setVisible(!isScrolledDown)
       } else {
         setVisible(true)
@@ -61,7 +61,7 @@ export default function Nav() {
         top: visible ? 0 : -100 
       }}
       transition={{ 
-        duration: 0.4,
+        duration: 0.5,
         ease: [0.16, 1, 0.3, 1]  // Custom ease curve for elegant motion
       }}
     >
@@ -69,17 +69,17 @@ export default function Nav() {
         className={`relative mx-auto border-b duration-500 transition-all ${
           scrolled 
             ? "h-16 bg-luxury-ivory/95 backdrop-blur-md shadow-luxury-md border-luxury-gold/10" 
-            : "h-20 bg-luxury-ivory border-luxury-lightgold shadow-luxury-sm"
+            : "h-20 bg-luxury-ivory border-luxury-lightgold/10 shadow-luxury-sm"
         }`}
       >
         {/* Decorative gold gradient line at the top */}
-        <div className="absolute top-0 left-0 right-0 h-0.5 gold-gradient"></div>
+        <div className="absolute top-0 left-0 right-0 h-0.5 gold-gradient opacity-70"></div>
         
         {/* Animated highlight that appears when scrolled */}
         {scrolled && (
           <motion.div 
             className="absolute bottom-0 left-0 right-0 h-0.5 bg-luxury-gold/30"
-            initial={{ scaleX: 0 }}
+            initial={{ scaleX: 0, transformOrigin: "left" }}
             animate={{ scaleX: 1 }}
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
           />
@@ -88,7 +88,11 @@ export default function Nav() {
         <nav className={`content-container txt-xsmall-plus text-luxury-charcoal flex items-center justify-between w-full h-full text-small-regular transition-all duration-300 ${
           scrolled ? "py-0" : "py-1"
         }`}>
-          <Suspense fallback={<div className="w-full h-full"></div>}>
+          <Suspense fallback={
+            <div className="w-full h-full flex items-center justify-center">
+              <div className="spinner"></div>
+            </div>
+          }>
             <NavClient regions={regions} scrolled={scrolled} />
           </Suspense>
         </nav>

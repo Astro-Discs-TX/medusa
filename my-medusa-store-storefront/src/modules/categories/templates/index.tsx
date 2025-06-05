@@ -1,5 +1,8 @@
+"use client"
+
 import { notFound } from "next/navigation"
 import { Suspense } from "react"
+import { motion } from "framer-motion"
 
 import InteractiveLink from "@modules/common/components/interactive-link"
 import SkeletonProductGrid from "@modules/skeletons/templates/skeleton-product-grid"
@@ -36,62 +39,136 @@ export default function CategoryTemplate({
 
   getParents(category)
 
+  // Animation variants for staggered children
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    show: { 
+      opacity: 1, 
+      y: 0,
+      transition: { 
+        duration: 0.5,
+        ease: [0.25, 1, 0.5, 1],
+      }
+    },
+  }
+
   return (
-    <div
-      className="flex flex-col small:flex-row small:items-start py-6 content-container"
+    <motion.div
+      className="flex flex-col small:flex-row small:items-start py-10 content-container"
       data-testid="category-container"
+      initial="hidden"
+      animate="show"
+      variants={containerVariants}
     >
       <RefinementList sortBy={sort} data-testid="sort-by-container" />
       <div className="w-full">
-        <div className="flex flex-row mb-8 text-2xl-semi gap-4">
+        {/* Breadcrumb navigation with elegant styling */}
+        <motion.div 
+          className="flex flex-row mb-8 items-center gap-2 flex-wrap"
+          variants={itemVariants}
+        >
+          {parents.length > 0 && (
+            <div className="flex items-center text-luxury-charcoal/70 text-base-regular">
+              <LocalizedClientLink
+                className="hover:text-luxury-gold transition-colors duration-300"
+                href="/categories"
+              >
+                Categories
+              </LocalizedClientLink>
+              <span className="mx-2">/</span>
+            </div>
+          )}
+          
           {parents &&
             parents.map((parent) => (
-              <span key={parent.id} className="text-ui-fg-subtle">
+              <div key={parent.id} className="flex items-center text-luxury-charcoal/70">
                 <LocalizedClientLink
-                  className="mr-4 hover:text-black"
+                  className="hover:text-luxury-gold transition-colors duration-300"
                   href={`/categories/${parent.handle}`}
                   data-testid="sort-by-link"
                 >
                   {parent.name}
                 </LocalizedClientLink>
-                /
-              </span>
+                <span className="mx-2">/</span>
+              </div>
             ))}
-          <h1 data-testid="category-page-title">{category.name}</h1>
-        </div>
+          
+          <h1 
+            className="font-display text-2xl text-luxury-charcoal"
+            data-testid="category-page-title"
+          >
+            {category.name}
+          </h1>
+        </motion.div>
+        
+        {/* Category description with elegant styling */}
         {category.description && (
-          <div className="mb-8 text-base-regular">
+          <motion.div 
+            className="mb-8 text-base-regular text-luxury-charcoal/80 max-w-2xl"
+            variants={itemVariants}
+          >
             <p>{category.description}</p>
-          </div>
+          </motion.div>
         )}
-        {category.category_children && (
-          <div className="mb-8 text-base-large">
-            <ul className="grid grid-cols-1 gap-2">
+        
+        {/* Child categories with luxury styling */}
+        {category.category_children && category.category_children.length > 0 && (
+          <motion.div 
+            className="mb-12 text-base-large"
+            variants={itemVariants}
+          >
+            <h2 className="font-display text-xl mb-4 text-luxury-charcoal">Browse Subcategories</h2>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               {category.category_children?.map((c) => (
-                <li key={c.id}>
-                  <InteractiveLink href={`/categories/${c.handle}`}>
-                    {c.name}
-                  </InteractiveLink>
-                </li>
+                <motion.li 
+                  key={c.id}
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  transition={{ duration: 0.3, ease: [0.25, 1, 0.5, 1] }}
+                >
+                  <LocalizedClientLink 
+                    href={`/categories/${c.handle}`}
+                    className="block p-4 border border-luxury-gold/10 rounded-md bg-luxury-ivory hover:border-luxury-gold/30 hover:shadow-luxury-sm transition-all duration-300"
+                  >
+                    <span className="text-luxury-gold font-display">{c.name}</span>
+                    {c.description && (
+                      <p className="mt-1 text-sm text-luxury-charcoal/70">{c.description}</p>
+                    )}
+                  </LocalizedClientLink>
+                </motion.li>
               ))}
             </ul>
-          </div>
+          </motion.div>
         )}
-        <Suspense
-          fallback={
-            <SkeletonProductGrid
-              numberOfProducts={category.products?.length ?? 8}
+        
+        {/* Products grid */}
+        <motion.div variants={itemVariants}>
+          <Suspense
+            fallback={
+              <SkeletonProductGrid
+                numberOfProducts={category.products?.length ?? 8}
+              />
+            }
+          >
+            <PaginatedProducts
+              sortBy={sort}
+              page={pageNumber}
+              categoryId={category.id}
+              countryCode={countryCode}
             />
-          }
-        >
-          <PaginatedProducts
-            sortBy={sort}
-            page={pageNumber}
-            categoryId={category.id}
-            countryCode={countryCode}
-          />
-        </Suspense>
+          </Suspense>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   )
 }
