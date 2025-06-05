@@ -8,12 +8,12 @@ import Divider from "@modules/common/components/divider"
 const CheckoutSummary = ({ cart }: { cart: any }) => {
   return (
     <div className="sticky top-4 flex flex-col-reverse small:flex-col gap-y-8 py-8 small:py-0">
-      <div className="w-full bg-white flex flex-col p-8 rounded-md shadow-sm border border-[#e2d9cf]">
+      <div className="w-full bg-white flex flex-col p-8 rounded-md shadow-sm border border-[#e2d9cf] checkout-section hover:shadow-luxury-sm">
         <Heading
           level="h2"
-          className="font-serif text-[#43372f] text-2xl mb-6"
+          className="font-serif text-[#43372f] text-2xl mb-6 gold-text"
         >
-          In your Cart
+          Your Order
         </Heading>
         <CartTotals totals={cart} />
         <Divider className="my-6 border-[#e2d9cf]" />

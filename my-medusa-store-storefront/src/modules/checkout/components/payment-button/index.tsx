@@ -149,7 +149,7 @@ const StripePaymentButton = ({
         size="large"
         isLoading={submitting}
         data-testid={dataTestId}
-        className={className || "bg-[#43372f] hover:bg-[#2a221e] text-white border-none px-8 py-3 rounded-md"}
+        className={className || "bg-[var(--color-luxury-gold)] hover:bg-[var(--color-luxury-darkgold)] text-white border-none px-8 py-3 rounded-md luxury-btn"}
       >
         Place order
       </Button>
@@ -197,7 +197,7 @@ const ManualTestPaymentButton = ({
         onClick={handlePayment}
         size="large"
         data-testid={dataTestId || "submit-order-button"}
-        className={className || "bg-[#43372f] hover:bg-[#2a221e] text-white border-none px-8 py-3 rounded-md"}
+        className={className || "bg-[var(--color-luxury-gold)] hover:bg-[var(--color-luxury-darkgold)] text-white border-none px-8 py-3 rounded-md luxury-btn"}
       >
         Place order
       </Button>

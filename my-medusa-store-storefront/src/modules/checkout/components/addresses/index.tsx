@@ -84,7 +84,7 @@ const Addresses = ({
               </div>
             )}
             <SubmitButton 
-              className="mt-8 bg-[#43372f] hover:bg-[#2a221e] text-white border-none px-8 py-3 rounded-md" 
+              className="mt-8 bg-[var(--color-luxury-gold)] hover:bg-[var(--color-luxury-darkgold)] text-white border-none px-8 py-3 rounded-md luxury-btn" 
               data-testid="submit-address-button"
             >
               Continue to delivery

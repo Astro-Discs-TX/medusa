@@ -1,6 +1,5 @@
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import ChevronDown from "@modules/common/icons/chevron-down"
-import MedusaCTA from "@modules/layout/components/medusa-cta"
 
 export default function CheckoutLayout({
   children,
@@ -26,7 +25,7 @@ export default function CheckoutLayout({
           </LocalizedClientLink>
           <LocalizedClientLink
             href="/"
-            className="text-xl font-serif text-[#43372f] tracking-wide"
+            className="text-xl font-serif text-[#43372f] tracking-wide gold-text"
             data-testid="store-link"
           >
             MARBLE LUXE
@@ -38,7 +37,6 @@ export default function CheckoutLayout({
       <div className="py-8 w-full flex items-center justify-center bg-white border-t border-[#e2d9cf] mt-12">
         <div className="text-center text-[#8a7f72] text-sm">
           <p className="mb-1">© 2023 Marble Luxe. All rights reserved.</p>
-          <MedusaCTA />
         </div>
       </div>
     </div>
