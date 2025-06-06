@@ -111,7 +111,7 @@ const CartDropdown = ({
         >
           <PopoverPanel
             static
-            className="hidden small:block absolute top-[calc(100%+1px)] right-0 bg-luxury-ivory border border-luxury-lightgold shadow-luxury-md w-[420px] text-luxury-charcoal"
+            className="hidden small:block absolute top-[calc(100%+1px)] right-0 bg-luxury-ivory border border-luxury-lightgold shadow-luxury-md w-[360px] text-luxury-charcoal"
             data-testid="nav-cart-dropdown"
           >
             {/* Gold line at top */}
@@ -131,13 +131,13 @@ const CartDropdown = ({
                     })
                     .map((item) => (
                       <div
-                        className="grid grid-cols-[122px_1fr] gap-x-4 pb-4 border-b border-luxury-lightgold/20 last:border-0"
+                        className="grid grid-cols-[100px_1fr] gap-x-3 pb-4 border-b border-luxury-lightgold/20 last:border-0"
                         key={item.id}
                         data-testid="cart-item"
                       >
                         <LocalizedClientLink
                           href={`/products/${item.product_handle}`}
-                          className="w-24 overflow-hidden group"
+                          className="w-[90px] overflow-hidden group"
                         >
                           <div className="relative">
                             <Thumbnail
@@ -151,7 +151,7 @@ const CartDropdown = ({
                         <div className="flex flex-col justify-between flex-1">
                           <div className="flex flex-col flex-1">
                             <div className="flex items-start justify-between">
-                              <div className="flex flex-col overflow-ellipsis whitespace-nowrap mr-4 w-[180px]">
+                              <div className="flex flex-col overflow-ellipsis whitespace-nowrap mr-4 w-[150px]">
                                 <h3 className="font-display text-base overflow-hidden text-ellipsis">
                                   <LocalizedClientLink
                                     href={`/products/${item.product_handle}`}

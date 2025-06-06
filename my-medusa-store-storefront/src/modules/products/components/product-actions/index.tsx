@@ -125,6 +125,10 @@ export default function ProductActions({
       countryCode,
     })
 
+    // Notify other components about cart update via localStorage
+    localStorage.setItem('last_cart_addition', Date.now().toString())
+    window.dispatchEvent(new Event('storage'))
+
     setIsAdding(false)
     setAddedToCart(true)
     
