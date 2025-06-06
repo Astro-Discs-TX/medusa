@@ -10,23 +10,29 @@ import NavContent from './nav-content'
 export default async function NavWrapper(props: any) {
   try {
     // Handle each data fetch separately to prevent one failure from affecting others
-    const productCategoriesPromise = listCategories().catch(() => []);
-    const collectionsPromise = getCollectionsList().catch(() => ({ collections: [] }));
-    const strapiCollectionsPromise = getCollectionsData().catch(() => ({ data: [] }));
+    const productCategoriesPromise = listCategories().catch(() => [])
+    const collectionsPromise = getCollectionsList().catch(() => ({
+      collections: [],
+    }))
+    const strapiCollectionsPromise = getCollectionsData().catch(() => ({
+      data: [],
+    }))
     const productsPromise = getProductsList({
       pageParam: 0,
       queryParams: { limit: 4 },
       countryCode: props.countryCode,
-    }).then(({ response }) => response).catch(() => ({ products: [], count: 0 }));
+    })
+      .then(({ response }) => response)
+      .catch(() => ({ products: [], count: 0 }))
 
     // Await all promises
-    const [productCategories, collectionsData, strapiCollections, products] = 
+    const [productCategories, collectionsData, strapiCollections, products] =
       await Promise.all([
         productCategoriesPromise,
         collectionsPromise,
         strapiCollectionsPromise,
         productsPromise,
-      ]);
+      ])
 
     return (
       <Container
@@ -46,8 +52,8 @@ export default async function NavWrapper(props: any) {
       </Container>
     )
   } catch (error) {
-    console.error('Error rendering navigation:', error);
-    
+    console.error('Error rendering navigation:', error)
+
     // Fallback minimal navigation
     return (
       <Container

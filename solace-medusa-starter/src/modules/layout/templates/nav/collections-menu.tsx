@@ -20,7 +20,13 @@ export default function CollectionsMenu({
   medusaCollections: StoreCollection[]
 }) {
   const validCollections = useMemo(() => {
-    if (!cmsCollections?.data || !Array.isArray(cmsCollections.data) || !cmsCollections.data.length || !medusaCollections.length) return null
+    if (
+      !cmsCollections?.data ||
+      !Array.isArray(cmsCollections.data) ||
+      !cmsCollections.data.length ||
+      !medusaCollections.length
+    )
+      return null
     const collections = cmsCollections.data.filter((cmsCollection) =>
       medusaCollections.some(
         (medusaCollection) => medusaCollection.handle === cmsCollection.Handle
@@ -38,7 +44,14 @@ export default function CollectionsMenu({
   if (!newestCollections) return null
 
   return (
-    <Container className="grid grid-cols-3 gap-2 !px-14 !pb-8 !pt-5">
+    <Container className="grid grid-cols-3 gap-4 !px-14 !pb-8 !pt-5">
+      <div className="col-span-3 mb-2">
+        <Button variant="tonal" className="w-max !px-3 !py-2" asChild>
+          <LocalizedClientLink href="/collections">
+            View all Collections
+          </LocalizedClientLink>
+        </Button>
+      </div>
       {newestCollections.slice(0, 3).map((element, id) => (
         <CollectionTile
           key={id}
@@ -64,18 +77,18 @@ const CollectionTile = ({
   imgSrc: string
 }) => {
   return (
-    <Box className="group relative max-h-[282px]">
+    <Box className="group relative max-h-[282px] overflow-hidden rounded-md shadow-sm transition-transform hover:shadow-md">
       <Image
         src={imgSrc || ''}
         alt={`${title || 'Collection'} collection image`}
         width={600}
         height={300}
-        className="h-full w-full object-cover object-center"
+        className="h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
       />
-      <Box className="absolute left-0 top-0 flex h-full w-full flex-col p-10">
+      <Box className="absolute left-0 top-0 flex h-full w-full flex-col bg-gradient-to-t from-black/70 to-transparent p-10">
         <Button
           asChild
-          className="w-max self-end transition-all duration-500 ease-in-out"
+          className="w-max self-end opacity-0 transition-all duration-300 group-hover:opacity-100"
         >
           <LocalizedClientLink href={`/collections/${handle}`}>
             Discover
@@ -92,7 +105,7 @@ const CollectionTile = ({
           </LocalizedClientLink>
           <Text
             size="lg"
-            className="line-clamp-2 transition-all duration-500 ease-in-out"
+            className="line-clamp-2 max-w-[90%] transition-all duration-300"
           >
             {description}
           </Text>

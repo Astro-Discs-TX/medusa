@@ -66,26 +66,26 @@ export default function Nav() {
       }}
     >
       <header 
-        className={`relative mx-auto border-b duration-500 transition-all ${
+        className={`relative mx-auto border-b duration-300 transition-all ${
           scrolled 
-            ? "h-16 bg-luxury-ivory/95 backdrop-blur-md shadow-luxury-md border-luxury-gold/10" 
-            : "h-20 bg-luxury-ivory border-luxury-lightgold/10 shadow-luxury-sm"
+            ? "h-16 bg-luxury-ivory/98 backdrop-blur-md shadow-md border-luxury-gold/5" 
+            : "h-20 bg-luxury-ivory border-luxury-lightgold/10"
         }`}
       >
         {/* Decorative gold gradient line at the top */}
-        <div className="absolute top-0 left-0 right-0 h-0.5 gold-gradient opacity-70"></div>
+        <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-luxury-gold/40 via-luxury-gold/80 to-luxury-gold/40"></div>
         
         {/* Animated highlight that appears when scrolled */}
         {scrolled && (
           <motion.div 
-            className="absolute bottom-0 left-0 right-0 h-0.5 bg-luxury-gold/30"
+            className="absolute bottom-0 left-0 right-0 h-[1px] bg-luxury-gold/20"
             initial={{ scaleX: 0, transformOrigin: "left" }}
             animate={{ scaleX: 1 }}
-            transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+            transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
           />
         )}
         
-        <nav className={`content-container txt-xsmall-plus text-luxury-charcoal flex items-center justify-between w-full h-full text-small-regular transition-all duration-300 ${
+        <nav className={`max-w-screen-2xl mx-auto px-6 sm:px-8 lg:px-12 text-luxury-charcoal flex items-center justify-between w-full h-full transition-all duration-300 ${
           scrolled ? "py-0" : "py-1"
         }`}>
           <Suspense fallback={

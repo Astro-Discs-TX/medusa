@@ -40,10 +40,10 @@ export default function Home() {
           
           <motion.div variants={fadeIn}>
             <AnimatedButton variant="gold" size="large" className="mr-4">
-              Explore Collection
+              Browse Products
             </AnimatedButton>
             <AnimatedButton variant="outline" size="large">
-              Our Craftsmanship
+              About Us
             </AnimatedButton>
           </motion.div>
         </div>
@@ -65,7 +65,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4">
           <ScrollReveal>
             <Heading level="h2" className="text-3xl md:text-4xl mb-12 text-center">
-              Featured Collections
+              Our Collections
             </Heading>
           </ScrollReveal>
           
@@ -116,7 +116,7 @@ export default function Home() {
             <div className="flex-1">
               <ScrollReveal>
                 <Heading level="h2" className="text-3xl md:text-4xl mb-6">
-                  Artisan Craftsmanship
+                  About Our Craftsmanship
                 </Heading>
               </ScrollReveal>
               
@@ -133,7 +133,7 @@ export default function Home() {
               </ScrollReveal>
               
               <ScrollReveal delay={0.3}>
-                <AnimatedButton variant="gold">Our Process</AnimatedButton>
+                <AnimatedButton variant="gold">About Us</AnimatedButton>
               </ScrollReveal>
             </div>
           </div>

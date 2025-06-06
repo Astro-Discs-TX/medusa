@@ -139,7 +139,12 @@ export const createNavigation = (
   collections?: StoreCollection[]
 ) => [
   {
-    name: 'Shop',
+    name: 'Home',
+    handle: '/',
+    category_children: null,
+  },
+  {
+    name: 'Products',
     handle: '/shop',
     category_children: productCategories
       .filter((category) => !category.parent_category)

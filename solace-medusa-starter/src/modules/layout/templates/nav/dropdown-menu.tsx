@@ -43,9 +43,9 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
         asChild
       >
         <LocalizedClientLink href={`${activeItem?.handle ?? '/'}`}>
-          Shop all{' '}
-          {activeItem?.name === 'Shop' || activeItem?.name === 'Collections'
-            ? ''
+          View all{' '}
+          {activeItem?.name === 'Home' || activeItem?.name === 'Collections'
+            ? 'Products'
             : activeItem?.name}
         </LocalizedClientLink>
       </Button>
@@ -54,7 +54,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
           <div key={index} className="flex flex-col gap-2">
             <NavigationItem
               href={subItem.handle}
-              className="w-max py-2 text-lg text-basic-primary !duration-150 hover:border-b hover:border-action-primary"
+              className="w-max py-2 text-lg font-medium text-basic-primary !duration-150 hover:text-action-primary"
               data-testid={formatNameForTestId(
                 `${subItem.name}-category-title`
               )}
@@ -67,7 +67,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
                   <NavigationItem
                     key={childIndex}
                     href={childItem.handle}
-                    className="py-1.5 text-md text-secondary"
+                    className="py-1.5 text-md text-secondary transition-colors hover:text-action-primary"
                     data-testid={formatNameForTestId(
                       `${childItem.name}-category-item`
                     )}
@@ -93,7 +93,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
       {item.category_children && (
         <Box
           className={cn(
-            'absolute left-0 top-full z-50 w-full translate-y-0 bg-primary shadow-lg transition-all duration-300',
+            'absolute left-0 top-full z-50 w-full translate-y-0 bg-primary shadow-lg transition-all duration-200',
             isOpen
               ? 'pointer-events-auto opacity-100'
               : 'pointer-events-none invisible opacity-0'

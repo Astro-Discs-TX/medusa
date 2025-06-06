@@ -9,20 +9,18 @@ import LocalizedClientLink from "@modules/common/components/localized-client-lin
 import CountrySelect from "../country-select"
 import { HttpTypes } from "@medusajs/types"
 import { listCategories } from "@lib/data/categories"
-import { listCollections } from "@lib/data/collections"
 
 const menuItems = [
   { name: "Home", href: "/" },
   { name: "Collections", href: "/collections" },
   { name: "Products", href: "/products" },
-  { name: "Craftsmanship", href: "/about" },
+  { name: "About Us", href: "/about" },
   { name: "Contact", href: "/contact" },
 ]
 
 const SideMenu = ({ regions }: { regions: HttpTypes.StoreRegion[] | null }) => {
   const toggleState = useToggleState()
   const [categories, setCategories] = useState<any[]>([])
-  const [collections, setCollections] = useState<any[]>([])
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
   
   useEffect(() => {
@@ -30,11 +28,8 @@ const SideMenu = ({ regions }: { regions: HttpTypes.StoreRegion[] | null }) => {
       try {
         const categoriesData = await listCategories()
         setCategories(categoriesData || [])
-        
-        const collectionsData = await listCollections()
-        setCollections(collectionsData.collections || [])
       } catch (error) {
-        console.error("Error fetching categories and collections:", error)
+        console.error("Error fetching categories:", error)
       }
     }
     
@@ -73,13 +68,13 @@ const SideMenu = ({ regions }: { regions: HttpTypes.StoreRegion[] | null }) => {
                   data-testid="nav-menu-button"
                   className="relative h-full flex items-center transition-all ease-out duration-200 focus:outline-none text-luxury-charcoal hover:text-luxury-gold group"
                 >
-                  <span className="flex items-center uppercase tracking-wider text-small-semi">
+                  <span className="flex items-center text-sm font-medium tracking-wide">
                     <svg className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
                     Menu
                   </span>
-                  <span className="absolute -bottom-px left-0 w-0 h-px bg-luxury-gold group-hover:w-full transition-all duration-300 ease-in-out"></span>
+                  <span className="absolute -bottom-px left-0 w-0 h-0.5 bg-luxury-gold group-hover:w-full transition-all duration-300 ease-in-out"></span>
                 </Popover.Button>
               </div>
 
@@ -96,12 +91,12 @@ const SideMenu = ({ regions }: { regions: HttpTypes.StoreRegion[] | null }) => {
                 <PopoverPanel className="flex flex-col absolute w-full pr-4 sm:pr-0 sm:w-2/3 lg:w-1/2 2xl:w-1/3 h-[calc(100vh-1rem)] z-30 inset-x-0 text-sm m-2">
                   <motion.div
                     data-testid="nav-menu-popup"
-                    className="flex flex-col h-full bg-luxury-ivory/95 backdrop-blur-lg rounded-sm border border-luxury-gold/20 shadow-luxury-md justify-between p-8"
+                    className="flex flex-col h-full bg-luxury-ivory/98 backdrop-blur-lg rounded-md border border-luxury-gold/10 shadow-xl justify-between p-6 sm:p-8"
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                   >
-                    <div className="flex justify-between items-center border-b border-luxury-gold/20 pb-4">
+                    <div className="flex justify-between items-center border-b border-luxury-gold/10 pb-4">
                       <h2 className="font-display text-xl text-luxury-gold">MARBLE LUXE</h2>
                       <button 
                         data-testid="close-menu-button" 
@@ -112,35 +107,35 @@ const SideMenu = ({ regions }: { regions: HttpTypes.StoreRegion[] | null }) => {
                       </button>
                     </div>
                     
-                    <div className="flex flex-1 overflow-hidden">
+                    <div className="flex-1 overflow-y-auto py-6">
                       {/* Main navigation */}
-                      <div className="w-1/3 border-r border-luxury-gold/10 pr-6 py-6 overflow-y-auto">
-                        <motion.ul 
-                          className="flex flex-col gap-5"
-                          variants={containerVariants}
-                          initial="hidden"
-                          animate="visible"
-                        >
-                          {menuItems.map((item) => (
-                            <motion.li key={item.name} variants={itemVariants}>
-                              <LocalizedClientLink
-                                href={item.href}
-                                className="text-xl font-display text-luxury-charcoal hover:text-luxury-gold transition-colors duration-300 flex items-center justify-between group"
-                                onClick={close}
-                                data-testid={`${item.name.toLowerCase()}-link`}
-                              >
-                                <span>{item.name}</span>
-                                <svg className="w-4 h-4 opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 5l7 7-7 7"></path>
-                                </svg>
-                              </LocalizedClientLink>
-                            </motion.li>
-                          ))}
-                        </motion.ul>
-                        
-                        {/* Categories section */}
-                        <div className="mt-10 pt-6 border-t border-luxury-gold/10">
-                          <h3 className="text-small-semi uppercase tracking-wider text-luxury-charcoal/70 mb-4">Categories</h3>
+                      <motion.ul 
+                        className="flex flex-col gap-5 mb-10"
+                        variants={containerVariants}
+                        initial="hidden"
+                        animate="visible"
+                      >
+                        {menuItems.map((item) => (
+                          <motion.li key={item.name} variants={itemVariants}>
+                            <LocalizedClientLink
+                              href={item.href}
+                              className="text-lg font-medium text-luxury-charcoal hover:text-luxury-gold transition-colors duration-300 flex items-center justify-between group"
+                              onClick={close}
+                              data-testid={`${item.name.toLowerCase()}-link`}
+                            >
+                              <span>{item.name}</span>
+                              <svg className="w-4 h-4 opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 5l7 7-7 7"></path>
+                              </svg>
+                            </LocalizedClientLink>
+                          </motion.li>
+                        ))}
+                      </motion.ul>
+                      
+                      {/* Categories section */}
+                      {categories && categories.length > 0 && (
+                        <div className="pt-6 border-t border-luxury-gold/10">
+                          <h3 className="text-sm font-medium uppercase tracking-wide text-luxury-charcoal/70 mb-4">Categories</h3>
                           <ul className="flex flex-col gap-3">
                             {categories?.filter(c => !c.parent_category).slice(0, 6).map((category) => (
                               <li key={category.id}>
@@ -172,7 +167,7 @@ const SideMenu = ({ regions }: { regions: HttpTypes.StoreRegion[] | null }) => {
                                     animate={{ opacity: 1, height: 'auto' }}
                                     transition={{ duration: 0.3 }}
                                   >
-                                    {category.category_children.map((child) => (
+                                    {category.category_children.map((child: any) => (
                                       <motion.li 
                                         key={child.id}
                                         initial={{ opacity: 0, x: -10 }}
@@ -194,43 +189,10 @@ const SideMenu = ({ regions }: { regions: HttpTypes.StoreRegion[] | null }) => {
                             ))}
                           </ul>
                         </div>
-                      </div>
-                      
-                      {/* Featured collections */}
-                      <div className="w-2/3 pl-6 py-6 overflow-y-auto">
-                        <h3 className="text-small-semi uppercase tracking-wider text-luxury-charcoal/70 mb-4">Featured Collections</h3>
-                        <div className="grid grid-cols-2 gap-4">
-                          {collections?.slice(0, 4).map((collection) => (
-                            <LocalizedClientLink
-                              key={collection.id}
-                              href={`/collections/${collection.handle}`}
-                              onClick={close}
-                              className="group"
-                            >
-                              <div className="relative aspect-[4/3] overflow-hidden bg-luxury-cream mb-2">
-                                {collection.thumbnail && (
-                                  <div className="absolute inset-0">
-                                    <img 
-                                      src={collection.thumbnail} 
-                                      alt={collection.title}
-                                      className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110"
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-luxury-charcoal/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                  </div>
-                                )}
-                                <div className="absolute bottom-0 left-0 right-0 p-3 text-center">
-                                  <h4 className="text-luxury-ivory font-display text-sm bg-luxury-charcoal/60 group-hover:bg-luxury-gold/90 backdrop-blur-sm py-1 px-2 transition-colors duration-300">
-                                    {collection.title}
-                                  </h4>
-                                </div>
-                              </div>
-                            </LocalizedClientLink>
-                          ))}
-                        </div>
-                      </div>
+                      )}
                     </div>
                     
-                    <div className="flex flex-col gap-y-6 pt-4 border-t border-luxury-gold/20">
+                    <div className="flex flex-col gap-y-6 pt-4 border-t border-luxury-gold/10">
                       <div
                         className="flex justify-between items-center"
                         onMouseEnter={toggleState.open}

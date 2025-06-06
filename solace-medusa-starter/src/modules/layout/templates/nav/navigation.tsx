@@ -37,11 +37,12 @@ export default function Navigation({
   )
 
   return (
-    <Box className="hidden gap-4 self-stretch large:flex">
+    <Box className="hidden gap-6 self-stretch large:flex">
       {navigation.map((item: any, index: number) => {
         const handle = item.name.toLowerCase().replace(' ', '-')
         const isCategories =
-          handle === 'shop' && pathname.includes(`/${countryCode}/categories`)
+          handle === 'products' &&
+          pathname.includes(`/${countryCode}/categories`)
         const active = pathname.includes(`/${countryCode}/${handle}`)
 
         return (
@@ -70,9 +71,13 @@ export default function Navigation({
             >
               <NavigationItem
                 href={`/${countryCode}${item.handle}`}
-                className={cn('!py-2 px-2', {
-                  'border-b border-action-primary': active || isCategories,
-                })}
+                className={cn(
+                  '!py-2 px-3 font-medium transition-colors hover:text-action-primary',
+                  {
+                    'border-b-2 border-action-primary text-action-primary':
+                      active || isCategories,
+                  }
+                )}
               >
                 {item.name}
               </NavigationItem>

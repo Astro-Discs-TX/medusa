@@ -7,10 +7,13 @@ import { Text, clx } from "@medusajs/ui"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { motion } from "framer-motion"
 import Image from "next/image"
+import RegionSelector from "@modules/layout/components/region-selector"
+import { listRegions } from "@lib/data/regions"
 
 export default function Footer() {
   const [collections, setCollections] = useState<any[]>([])
   const [categories, setCategories] = useState<any[]>([])
+  const [regions, setRegions] = useState<any[]>([])
   const [email, setEmail] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
@@ -24,6 +27,9 @@ export default function Footer() {
       
       const categoriesData = await listCategories()
       setCategories(categoriesData || [])
+      
+      const regionsData = await listRegions()
+      setRegions(regionsData || [])
     }
     
     fetchData()
@@ -286,6 +292,11 @@ export default function Footer() {
                   </li>
                 ))}
               </ul>
+            </div>
+
+            {/* Region selector */}
+            <div className="flex flex-col gap-y-3">
+              <RegionSelector regions={regions} variant="footer" />
             </div>
           </div>
         </div>

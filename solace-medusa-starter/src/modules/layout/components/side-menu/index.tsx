@@ -168,7 +168,9 @@ const SideMenu = ({
   }
 
   const shouldRenderButton =
-    !currentCategory || currentCategory.name !== 'Collections'
+    !currentCategory ||
+    (currentCategory.name !== 'Collections' &&
+      currentCategory.name !== 'Products')
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenDialogChange}>
@@ -222,10 +224,10 @@ const SideMenu = ({
                       currentCategory ? `${currentCategory.handle}` : `/shop`
                     }
                   >
-                    Shop all{' '}
-                    {currentCategory && currentCategory.name !== 'Shop'
+                    View all{' '}
+                    {currentCategory && currentCategory.name !== 'Home'
                       ? currentCategory.name
-                      : ''}
+                      : 'Products'}
                   </LocalizedClientLink>
                 </Button>
               )}
