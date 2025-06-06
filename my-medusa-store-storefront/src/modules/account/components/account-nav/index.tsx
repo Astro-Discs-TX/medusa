@@ -30,7 +30,7 @@ const AccountNav = ({
         {route !== `/${countryCode}/account` ? (
           <LocalizedClientLink
             href="/account"
-            className="flex items-center gap-x-2 text-small-regular py-2"
+            className="flex items-center gap-x-2 text-[var(--color-luxury-charcoal)] py-2"
             data-testid="account-main-link"
           >
             <>
@@ -40,7 +40,7 @@ const AccountNav = ({
           </LocalizedClientLink>
         ) : (
           <>
-            <div className="text-xl-semi mb-4 px-8">
+            <div className="font-display text-xl mb-4 px-8 text-[var(--color-luxury-charcoal)]">
               Hello {customer?.first_name}
             </div>
             <div className="text-base-regular">
@@ -48,58 +48,58 @@ const AccountNav = ({
                 <li>
                   <LocalizedClientLink
                     href="/account/profile"
-                    className="flex items-center justify-between py-4 border-b border-gray-200 px-8"
+                    className="flex items-center justify-between py-4 border-b border-[var(--color-luxury-lightgold)]/30 px-8"
                     data-testid="profile-link"
                   >
                     <>
-                      <div className="flex items-center gap-x-2">
+                      <div className="flex items-center gap-x-2 text-[var(--color-luxury-charcoal)]">
                         <User size={20} />
                         <span>Profile</span>
                       </div>
-                      <ChevronDown className="transform -rotate-90" />
+                      <ChevronDown className="transform -rotate-90 text-[var(--color-luxury-gold)]" />
                     </>
                   </LocalizedClientLink>
                 </li>
                 <li>
                   <LocalizedClientLink
                     href="/account/addresses"
-                    className="flex items-center justify-between py-4 border-b border-gray-200 px-8"
+                    className="flex items-center justify-between py-4 border-b border-[var(--color-luxury-lightgold)]/30 px-8"
                     data-testid="addresses-link"
                   >
                     <>
-                      <div className="flex items-center gap-x-2">
+                      <div className="flex items-center gap-x-2 text-[var(--color-luxury-charcoal)]">
                         <MapPin size={20} />
                         <span>Addresses</span>
                       </div>
-                      <ChevronDown className="transform -rotate-90" />
+                      <ChevronDown className="transform -rotate-90 text-[var(--color-luxury-gold)]" />
                     </>
                   </LocalizedClientLink>
                 </li>
                 <li>
                   <LocalizedClientLink
                     href="/account/orders"
-                    className="flex items-center justify-between py-4 border-b border-gray-200 px-8"
+                    className="flex items-center justify-between py-4 border-b border-[var(--color-luxury-lightgold)]/30 px-8"
                     data-testid="orders-link"
                   >
-                    <div className="flex items-center gap-x-2">
+                    <div className="flex items-center gap-x-2 text-[var(--color-luxury-charcoal)]">
                       <Package size={20} />
                       <span>Orders</span>
                     </div>
-                    <ChevronDown className="transform -rotate-90" />
+                    <ChevronDown className="transform -rotate-90 text-[var(--color-luxury-gold)]" />
                   </LocalizedClientLink>
                 </li>
                 <li>
                   <button
                     type="button"
-                    className="flex items-center justify-between py-4 border-b border-gray-200 px-8 w-full"
+                    className="flex items-center justify-between py-4 border-b border-[var(--color-luxury-lightgold)]/30 px-8 w-full"
                     onClick={handleLogout}
                     data-testid="logout-button"
                   >
-                    <div className="flex items-center gap-x-2">
+                    <div className="flex items-center gap-x-2 text-[var(--color-luxury-charcoal)]">
                       <ArrowRightOnRectangle />
                       <span>Log out</span>
                     </div>
-                    <ChevronDown className="transform -rotate-90" />
+                    <ChevronDown className="transform -rotate-90 text-[var(--color-luxury-gold)]" />
                   </button>
                 </li>
               </ul>
@@ -110,7 +110,8 @@ const AccountNav = ({
       <div className="hidden small:block" data-testid="account-nav">
         <div>
           <div className="pb-4">
-            <h3 className="text-base-semi">Account</h3>
+            <h3 className="font-display text-xl text-[var(--color-luxury-charcoal)]">Account</h3>
+            <div className="h-0.5 w-16 gold-gradient mt-2"></div>
           </div>
           <div className="text-base-regular">
             <ul className="flex mb-0 justify-start items-start flex-col gap-y-4">
@@ -150,10 +151,11 @@ const AccountNav = ({
                   Orders
                 </AccountNavLink>
               </li>
-              <li className="text-grey-700">
+              <li>
                 <button
                   type="button"
                   onClick={handleLogout}
+                  className="text-[var(--color-luxury-charcoal)]/70 hover:text-[var(--color-luxury-gold)] transition-colors duration-150"
                   data-testid="logout-button"
                 >
                   Log out
@@ -186,8 +188,8 @@ const AccountNavLink = ({
   return (
     <LocalizedClientLink
       href={href}
-      className={clx("text-ui-fg-subtle hover:text-ui-fg-base", {
-        "text-ui-fg-base font-semibold": active,
+      className={clx("text-[var(--color-luxury-charcoal)]/70 hover:text-[var(--color-luxury-gold)] transition-colors duration-150", {
+        "text-[var(--color-luxury-gold)] font-medium": active,
       })}
       data-testid={dataTestId}
     >
