@@ -189,7 +189,7 @@ export function createWorkflow<TData, TResult, THooks extends any[]>(
     const workflowCompositionContext =
       global[OrchestrationUtils.SymbolMedusaWorkflowComposerContext]
 
-    let runAsAsync = workflowCompositionContext.isAsync || context.isAsync
+    const runAsAsync = workflowCompositionContext.isAsync || context.isAsync
     const step = createStep(
       {
         name: `${name}-as-step`,
