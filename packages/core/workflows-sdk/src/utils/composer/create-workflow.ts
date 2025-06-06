@@ -198,7 +198,7 @@ export function createWorkflow<TData, TResult, THooks extends any[]>(
       },
       async (stepInput: TData, stepContext) => {
         const { container, ...sharedContext } = stepContext
-        const isAsync = stepContext[" stepDefinition"]?.async ?? runAsAsync
+        const isAsync = stepContext[" stepDefinition"]?.async
 
         const workflowEngine = container.resolve(Modules.WORKFLOW_ENGINE, {
           allowUnregistered: true,
@@ -238,7 +238,7 @@ export function createWorkflow<TData, TResult, THooks extends any[]>(
         }
 
         const { container, ...sharedContext } = stepContext
-        const isAsync = stepContext[" stepDefinition"]?.async ?? runAsAsync
+        const isAsync = stepContext[" stepDefinition"]?.async
 
         const workflowEngine = container.resolve(Modules.WORKFLOW_ENGINE, {
           allowUnregistered: true,
