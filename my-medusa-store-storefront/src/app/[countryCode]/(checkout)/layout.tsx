@@ -10,50 +10,9 @@ export default function CheckoutLayout({
 }) {
   return (
     <>
-      {/* Custom checkout header */}
-      <div className="h-20 bg-white border-b border-[#e2d9cf] absolute top-0 left-0 w-full z-50">
-        <nav className="flex h-full items-center max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 justify-between">
-          <LocalizedClientLink
-            href="/cart"
-            className="text-small-semi text-[#8a7f72] flex items-center gap-x-2 uppercase flex-1 basis-0 transition-colors duration-150 ease-in-out hover:text-[#43372f]"
-            data-testid="back-to-cart-link"
-          >
-            <ChevronDown className="rotate-90" size={16} />
-            <span className="mt-px hidden small:block font-medium">
-              Back to shopping cart
-            </span>
-            <span className="mt-px block small:hidden font-medium">
-              Back
-            </span>
-          </LocalizedClientLink>
-          <LocalizedClientLink
-            href="/"
-            className="text-xl font-serif text-[#43372f] tracking-wide gold-text"
-            data-testid="store-link"
-          >
-            MARBLE LUXE
-          </LocalizedClientLink>
-          <div className="flex-1 basis-0" />
-        </nav>
-      </div>
-
-      {/* Hide the parent layout's header and footer */}
-      <style jsx global>{`
-        #store-nav, #store-footer {
-          display: none !important;
-        }
-      `}</style>
-
       {/* Main content */}
-      <div className="w-full bg-[#f9f6f2] relative small:min-h-screen pt-20">
+      <div className="w-full bg-[#f9f6f2] relative">
         <div className="relative" data-testid="checkout-container">{children}</div>
-        
-        {/* Custom checkout footer */}
-        <div className="py-8 w-full flex items-center justify-center bg-white border-t border-[#e2d9cf] mt-12">
-          <div className="text-center text-[#8a7f72] text-sm">
-            <p className="mb-1">© 2023 Marble Luxe. All rights reserved.</p>
-          </div>
-        </div>
       </div>
     </>
   )

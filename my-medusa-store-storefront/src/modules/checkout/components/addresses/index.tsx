@@ -4,8 +4,7 @@ import { setAddresses } from "@lib/data/cart"
 import compareAddresses from "@lib/util/compare-addresses"
 import { CheckCircleSolid } from "@medusajs/icons"
 import { HttpTypes } from "@medusajs/types"
-import { Heading, Text, useToggleState } from "@medusajs/ui"
-import Divider from "@modules/common/components/divider"
+import { useToggleState } from "@medusajs/ui"
 import Spinner from "@modules/common/icons/spinner"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { useActionState } from "react"
@@ -42,23 +41,18 @@ const Addresses = ({
   return (
     <div>
       <div className="flex flex-row items-center justify-between mb-8">
-        <Heading
-          level="h2"
-          className="flex flex-row font-serif text-[#43372f] text-2xl gap-x-2 items-baseline"
-        >
+        <h2 className="flex flex-row font-display text-2xl text-luxury-charcoal gap-x-2 items-baseline">
           Shipping Address
-          {!isOpen && <CheckCircleSolid className="text-[#9b8b7e]" />}
-        </Heading>
+          {!isOpen && <CheckCircleSolid className="text-luxury-gold" />}
+        </h2>
         {!isOpen && cart?.shipping_address && (
-          <Text>
-            <button
-              onClick={handleEdit}
-              className="text-[#8a7f72] hover:text-[#43372f] transition-colors duration-150 ease-in-out font-medium"
-              data-testid="edit-address-button"
-            >
-              Edit
-            </button>
-          </Text>
+          <button
+            onClick={handleEdit}
+            className="text-luxury-charcoal/70 hover:text-luxury-gold transition-colors duration-150 ease-in-out font-medium text-sm uppercase tracking-wider"
+            data-testid="edit-address-button"
+          >
+            Edit
+          </button>
         )}
       </div>
       {isOpen ? (
@@ -73,18 +67,15 @@ const Addresses = ({
 
             {!sameAsBilling && (
               <div>
-                <Heading
-                  level="h2"
-                  className="font-serif text-[#43372f] text-2xl gap-x-4 pb-6 pt-8"
-                >
+                <h2 className="font-display text-2xl text-luxury-charcoal gap-x-4 pb-6 pt-8">
                   Billing address
-                </Heading>
+                </h2>
 
                 <BillingAddress cart={cart} />
               </div>
             )}
             <SubmitButton 
-              className="mt-8 bg-[var(--color-luxury-gold)] hover:bg-[var(--color-luxury-darkgold)] text-white border-none px-8 py-3 rounded-md luxury-btn" 
+              className="mt-8 bg-luxury-gold hover:bg-luxury-gold/90 text-white border-none px-8 py-3 rounded-md luxury-btn font-medium tracking-wider uppercase transition-all duration-300" 
               data-testid="submit-address-button"
             >
               Continue to delivery
@@ -102,70 +93,70 @@ const Addresses = ({
                     className="flex flex-col w-1/3"
                     data-testid="shipping-address-summary"
                   >
-                    <Text className="font-medium text-[#43372f] mb-2">
+                    <p className="font-medium text-luxury-charcoal mb-2">
                       Shipping Address
-                    </Text>
-                    <Text className="text-[#8a7f72]">
+                    </p>
+                    <p className="text-luxury-charcoal/70">
                       {cart.shipping_address.first_name}{" "}
                       {cart.shipping_address.last_name}
-                    </Text>
-                    <Text className="text-[#8a7f72]">
+                    </p>
+                    <p className="text-luxury-charcoal/70">
                       {cart.shipping_address.address_1}{" "}
                       {cart.shipping_address.address_2}
-                    </Text>
-                    <Text className="text-[#8a7f72]">
+                    </p>
+                    <p className="text-luxury-charcoal/70">
                       {cart.shipping_address.postal_code},{" "}
                       {cart.shipping_address.city}
-                    </Text>
-                    <Text className="text-[#8a7f72]">
+                    </p>
+                    <p className="text-luxury-charcoal/70">
                       {cart.shipping_address.country_code?.toUpperCase()}
-                    </Text>
+                    </p>
                   </div>
 
                   <div
                     className="flex flex-col w-1/3 "
                     data-testid="shipping-contact-summary"
                   >
-                    <Text className="font-medium text-[#43372f] mb-2">
+                    <p className="font-medium text-luxury-charcoal mb-2">
                       Contact
-                    </Text>
-                    <Text className="text-[#8a7f72]">
+                    </p>
+                    <p className="text-luxury-charcoal/70">
                       {cart.shipping_address.phone}
-                    </Text>
-                    <Text className="text-[#8a7f72]">
+                    </p>
+                    <p className="text-luxury-charcoal/70">
                       {cart.email}
-                    </Text>
+                    </p>
                   </div>
 
                   <div
                     className="flex flex-col w-1/3"
                     data-testid="billing-address-summary"
                   >
-                    <Text className="font-medium text-[#43372f] mb-2">
+                    <p className="font-medium text-luxury-charcoal mb-2">
                       Billing Address
-                    </Text>
+                    </p>
 
                     {sameAsBilling ? (
-                      <Text className="text-[#8a7f72]">
+                      <p className="text-luxury-charcoal/70">
                         Billing- and delivery address are the same.
-                      </Text>
+                      </p>
                     ) : (
                       <>
-                        <Text className="text-[#8a7f72]">
+                        <p className="text-luxury-charcoal/70">
                           {cart.billing_address?.first_name}{" "}
                           {cart.billing_address?.last_name}
-                        </Text>
-                        <Text className="text-[#8a7f72]">
+                        </p>
+                        <p className="text-luxury-charcoal/70">
                           {cart.billing_address?.address_1}{" "}
                           {cart.billing_address?.address_2}
-                        </Text>
-                        <Text className="text-[#8a7f72]">
+                        </p>
+                        <p className="text-luxury-charcoal/70">
                           {cart.billing_address?.postal_code},{" "}
                           {cart.billing_address?.city}
-                        </Text>
-                        <Text className="text-[#8a7f72]">
+                        </p>
+                        <p className="text-luxury-charcoal/70">
                           {cart.billing_address?.country_code?.toUpperCase()}
-                        </Text>
+                        </p>
                       </>
                     )}
                   </div>
