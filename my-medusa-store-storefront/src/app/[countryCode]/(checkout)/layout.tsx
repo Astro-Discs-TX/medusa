@@ -1,3 +1,5 @@
+"use client"
+
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import ChevronDown from "@modules/common/icons/chevron-down"
 
@@ -7,8 +9,9 @@ export default function CheckoutLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="w-full bg-[#f9f6f2] relative small:min-h-screen">
-      <div className="h-20 bg-white border-b border-[#e2d9cf]">
+    <>
+      {/* Custom checkout header */}
+      <div className="h-20 bg-white border-b border-[#e2d9cf] absolute top-0 left-0 w-full z-50">
         <nav className="flex h-full items-center max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 justify-between">
           <LocalizedClientLink
             href="/cart"
@@ -33,12 +36,25 @@ export default function CheckoutLayout({
           <div className="flex-1 basis-0" />
         </nav>
       </div>
-      <div className="relative" data-testid="checkout-container">{children}</div>
-      <div className="py-8 w-full flex items-center justify-center bg-white border-t border-[#e2d9cf] mt-12">
-        <div className="text-center text-[#8a7f72] text-sm">
-          <p className="mb-1">© 2023 Marble Luxe. All rights reserved.</p>
+
+      {/* Hide the parent layout's header and footer */}
+      <style jsx global>{`
+        #store-nav, #store-footer {
+          display: none !important;
+        }
+      `}</style>
+
+      {/* Main content */}
+      <div className="w-full bg-[#f9f6f2] relative small:min-h-screen pt-20">
+        <div className="relative" data-testid="checkout-container">{children}</div>
+        
+        {/* Custom checkout footer */}
+        <div className="py-8 w-full flex items-center justify-center bg-white border-t border-[#e2d9cf] mt-12">
+          <div className="text-center text-[#8a7f72] text-sm">
+            <p className="mb-1">© 2023 Marble Luxe. All rights reserved.</p>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
