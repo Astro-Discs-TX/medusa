@@ -9,7 +9,7 @@ import { motion, AnimatePresence } from "framer-motion"
 
 interface RegionSelectorProps {
   regions: StoreRegion[]
-  variant?: "header" | "footer"
+  variant?: "header" | "footer" | "mobile"
 }
 
 interface CountryOption {
@@ -59,6 +59,91 @@ const RegionSelector: React.FC<RegionSelectorProps> = ({
   const handleSelectCountry = (option: CountryOption) => {
     updateRegion(option.country, currentPath)
     setIsOpen(false)
+  }
+
+  // For mobile variant
+  if (variant === "mobile") {
+    return (
+      <div className="w-full max-w-xs">
+        <div className="flex flex-col gap-y-3 items-center">
+          <span className="font-display text-base text-luxury-gold border-b border-luxury-gold/20 pb-1 w-full text-center">
+            Select Region
+          </span>
+          <button
+            className="flex items-center justify-center gap-x-2 focus:outline-none group w-full bg-luxury-cream/20 py-2 px-4 rounded-sm"
+            onClick={() => setIsOpen(!isOpen)}
+            aria-expanded={isOpen}
+            aria-haspopup="true"
+          >
+            {currentCountry && (
+              <span className="flex items-center gap-x-2">
+                <ReactCountryFlag
+                  svg
+                  style={{
+                    width: "18px",
+                    height: "18px",
+                  }}
+                  countryCode={currentCountry.country}
+                />
+                <span className="text-sm font-medium">{currentCountry.label}</span>
+              </span>
+            )}
+            <svg
+              className={`w-4 h-4 transition-transform duration-200 ${
+                isOpen ? "rotate-180" : ""
+              }`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="1.5"
+                d="M19 9l-7 7-7-7"
+              ></path>
+            </svg>
+          </button>
+        </div>
+
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={{ duration: 0.2 }}
+              className="mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-luxury-gold/5 focus:outline-none"
+            >
+              <div className="max-h-60 overflow-y-auto py-1">
+                {countryOptions?.map((option, index) => (
+                  <button
+                    key={index}
+                    className={`flex w-full items-center gap-x-2 px-4 py-2 text-sm ${
+                      currentCountry?.country === option.country
+                        ? "bg-luxury-cream/50 text-luxury-gold"
+                        : "text-luxury-charcoal hover:bg-luxury-cream/20"
+                    }`}
+                    onClick={() => handleSelectCountry(option)}
+                  >
+                    <ReactCountryFlag
+                      svg
+                      style={{
+                        width: "16px",
+                        height: "16px",
+                      }}
+                      countryCode={option.country}
+                    />
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    )
   }
 
   // For header variant

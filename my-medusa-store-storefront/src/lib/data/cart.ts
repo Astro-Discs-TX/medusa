@@ -447,7 +447,10 @@ export async function updateRegion(countryCode: string, currentPath: string) {
   const productsCacheTag = await getCacheTag("products")
   revalidateTag(productsCacheTag)
 
-  redirect(`/${countryCode}${currentPath}`)
+  // Ensure currentPath doesn't start with a slash to avoid double slashes
+  const cleanPath = currentPath.startsWith('/') ? currentPath.substring(1) : currentPath
+  
+  redirect(`/${countryCode}/${cleanPath}`)
 }
 
 export async function listCartOptions() {

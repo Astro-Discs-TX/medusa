@@ -1,6 +1,6 @@
 import React from "react"
 import Footer from "@modules/layout/templates/footer"
-import Nav from "@modules/layout/templates/nav"
+import AnimatedHeader from "@modules/layout/components/animated-header"
 
 export default function StoreLayout({
   children,
@@ -14,7 +14,7 @@ export default function StoreLayout({
   return (
     <div className="flex flex-col min-h-screen">
       <div id="store-nav">
-        <Nav />
+        <AnimatedHeader />
       </div>
       <main className="flex-1 relative">{children}</main>
       <div id="store-footer">
