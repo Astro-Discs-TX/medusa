@@ -14,7 +14,7 @@ const Items = ({ order }: ItemsProps) => {
 
   return (
     <div className="flex flex-col">
-      <div className="h-px w-full border-b border-[#e2d9cf] mb-4"></div>
+      <div className="h-px w-full border-b border-[var(--color-luxury-lightgold)]/30 mb-4"></div>
       <Table>
         <Table.Body className="border-collapse" data-testid="products-table">
           {items?.length
@@ -36,7 +36,7 @@ const Items = ({ order }: ItemsProps) => {
               })}
         </Table.Body>
       </Table>
-      <div className="h-px w-full border-b border-[#e2d9cf] mt-4"></div>
+      <div className="h-px w-full border-b border-[var(--color-luxury-lightgold)]/30 mt-4"></div>
     </div>
   )
 }

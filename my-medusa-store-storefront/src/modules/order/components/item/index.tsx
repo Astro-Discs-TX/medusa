@@ -13,7 +13,7 @@ type ItemProps = {
 
 const Item = ({ item, currencyCode }: ItemProps) => {
   return (
-    <Table.Row className="w-full border-b border-[#e2d9cf] last:border-b-0 hover:bg-[#f9f6f1] transition-colors duration-150" data-testid="product-row">
+    <Table.Row className="w-full border-b border-[var(--color-luxury-lightgold)]/30 last:border-b-0 hover:bg-[var(--color-luxury-ivory)] transition-colors duration-150" data-testid="product-row">
       <Table.Cell className="!pl-0 p-4 w-24">
         <div className="flex w-16 luxury-shadow-sm rounded-sm overflow-hidden">
           <Thumbnail thumbnail={item.thumbnail} size="square" />
@@ -22,7 +22,7 @@ const Item = ({ item, currencyCode }: ItemProps) => {
 
       <Table.Cell className="text-left">
         <Text
-          className="font-medium text-[#43372f]"
+          className="font-medium text-[var(--color-luxury-charcoal)]"
           data-testid="product-name"
         >
           {item.product_title}
@@ -33,7 +33,7 @@ const Item = ({ item, currencyCode }: ItemProps) => {
       <Table.Cell className="!pr-0">
         <span className="!pr-0 flex flex-col items-end h-full justify-center">
           <span className="flex gap-x-1">
-            <Text className="text-[#8a7f72]">
+            <Text className="text-[var(--color-luxury-charcoal)]/70">
               <span data-testid="product-quantity">{item.quantity}</span>x{" "}
             </Text>
             <LineItemUnitPrice
