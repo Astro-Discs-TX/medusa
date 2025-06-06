@@ -164,6 +164,8 @@ function createContextualWorkflowRunner<
       result = transaction.getContext().invoke?.[resultFrom]
     }
 
+    thrownError ??= errors?.[0]?.error
+
     return {
       errors,
       transaction,
