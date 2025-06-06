@@ -1,23 +1,29 @@
-import { Heading, Text } from "@medusajs/ui"
-
-import InteractiveLink from "@modules/common/components/interactive-link"
+import { Button } from "@medusajs/ui"
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
 
 const EmptyCartMessage = () => {
   return (
-    <div className="py-48 px-2 flex flex-col justify-center items-start" data-testid="empty-cart-message">
-      <Heading
-        level="h1"
-        className="flex flex-row text-3xl-regular gap-x-2 items-baseline"
-      >
-        Cart
-      </Heading>
-      <Text className="text-base-regular mt-4 mb-6 max-w-[32rem]">
-        You don&apos;t have anything in your cart. Let&apos;s change that, use
-        the link below to start browsing our products.
-      </Text>
-      <div>
-        <InteractiveLink href="/store">Explore products</InteractiveLink>
+    <div className="py-24 flex flex-col justify-center items-center bg-luxury-ivory border border-luxury-lightgold/30 shadow-luxury-sm" data-testid="empty-cart-message">
+      {/* Gold line at top */}
+      <div className="h-0.5 w-full gold-gradient absolute top-0"></div>
+      
+      <div className="w-20 h-20 flex items-center justify-center rounded-full border border-luxury-lightgold mb-6">
+        <svg className="w-10 h-10 text-luxury-gold/80" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+        </svg>
       </div>
+      
+      <h1 className="font-display text-2xl text-luxury-charcoal mb-2">Your cart is empty</h1>
+      
+      <p className="text-luxury-charcoal/70 text-center max-w-md mb-8 px-6">
+        Discover our collection of handcrafted marble pieces to add elegance to your space.
+      </p>
+      
+      <LocalizedClientLink href="/products">
+        <Button className="luxury-btn font-medium tracking-wider uppercase transition-all duration-300 bg-luxury-gold hover:bg-luxury-gold/90">
+          Explore Collection
+        </Button>
+      </LocalizedClientLink>
     </div>
   )
 }

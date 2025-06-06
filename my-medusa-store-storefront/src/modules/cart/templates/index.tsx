@@ -16,12 +16,12 @@ const CartTemplate = ({
     <div className="py-12">
       <div className="content-container" data-testid="cart-container">
         {cart?.items?.length ? (
-          <div className="grid grid-cols-1 small:grid-cols-[1fr_360px] gap-x-40">
-            <div className="flex flex-col bg-white py-6 gap-y-6">
+          <div className="grid grid-cols-1 small:grid-cols-[1fr_360px] gap-x-8 small:gap-x-16">
+            <div className="flex flex-col bg-luxury-ivory border border-luxury-lightgold/30 shadow-luxury-sm py-6 gap-y-6">
               {!customer && (
                 <>
                   <SignInPrompt />
-                  <Divider />
+                  <div className="h-px bg-luxury-gold/20 mx-6"></div>
                 </>
               )}
               <ItemsTemplate cart={cart} />
@@ -30,7 +30,9 @@ const CartTemplate = ({
               <div className="flex flex-col gap-y-8 sticky top-12">
                 {cart && cart.region && (
                   <>
-                    <div className="bg-white py-6">
+                    <div className="bg-luxury-ivory border border-luxury-lightgold/30 shadow-luxury-sm py-6">
+                      {/* Gold line at top */}
+                      <div className="h-0.5 w-full gold-gradient mb-4"></div>
                       <Summary cart={cart as any} />
                     </div>
                   </>
