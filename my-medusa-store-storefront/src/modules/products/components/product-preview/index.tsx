@@ -1,3 +1,5 @@
+"use client"
+
 import { Text } from "@medusajs/ui"
 import { listProducts } from "@lib/data/products"
 import { getProductPrice } from "@lib/util/get-product-price"
@@ -6,7 +8,7 @@ import LocalizedClientLink from "@modules/common/components/localized-client-lin
 import Thumbnail from "../thumbnail"
 import PreviewPrice from "./price"
 
-export default async function ProductPreview({
+export default function ProductPreview({
   product,
   isFeatured,
   region,
@@ -40,6 +42,7 @@ export default async function ProductPreview({
     <LocalizedClientLink 
       href={`/products/${product.handle}`} 
       className="group block relative luxury-image-hover"
+      aria-label={`View ${product.title}`}
     >
       <div data-testid="product-wrapper" className="overflow-hidden">
         <div className="relative">
@@ -113,7 +116,7 @@ export default async function ProductPreview({
             </h3>
             
             <div className="flex items-center">
-              {cheapestPrice && <PreviewPrice price={cheapestPrice} />}
+              {cheapestPrice && <PreviewPrice price={cheapestPrice} regionCode={region?.country_code || "us"} />}
             </div>
           </div>
           

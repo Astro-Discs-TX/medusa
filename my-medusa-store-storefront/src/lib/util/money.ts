@@ -15,12 +15,24 @@ export const convertToLocale = ({
   maximumFractionDigits,
   locale = "en-US",
 }: ConvertToLocaleParams) => {
-  return currency_code && !isEmpty(currency_code)
-    ? new Intl.NumberFormat(locale, {
-        style: "currency",
-        currency: currency_code,
-        minimumFractionDigits,
-        maximumFractionDigits,
-      }).format(amount)
-    : amount.toString()
+  // Handle invalid inputs
+  if (amount === undefined || amount === null || isNaN(amount)) {
+    return "Price unavailable"
+  }
+  
+  if (!currency_code || isEmpty(currency_code)) {
+    return amount.toString()
+  }
+  
+  try {
+    return new Intl.NumberFormat(locale, {
+      style: "currency",
+      currency: currency_code,
+      minimumFractionDigits,
+      maximumFractionDigits,
+    }).format(amount)
+  } catch (error) {
+    console.error("Error formatting currency:", error)
+    return `${amount} ${currency_code}`
+  }
 }

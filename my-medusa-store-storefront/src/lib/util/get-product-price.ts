@@ -7,22 +7,33 @@ export const getPricesForVariant = (variant: any) => {
     return null
   }
 
+  // Ensure we have valid numbers
+  const calculatedAmount = typeof variant.calculated_price.calculated_amount === 'number' 
+    ? variant.calculated_price.calculated_amount 
+    : 0
+    
+  const originalAmount = typeof variant.calculated_price.original_amount === 'number'
+    ? variant.calculated_price.original_amount
+    : calculatedAmount // Default to calculated amount if original is not available
+
+  const currencyCode = variant.calculated_price.currency_code || 'USD'
+  
   return {
-    calculated_price_number: variant.calculated_price.calculated_amount,
+    calculated_price_number: calculatedAmount,
     calculated_price: convertToLocale({
-      amount: variant.calculated_price.calculated_amount,
-      currency_code: variant.calculated_price.currency_code,
+      amount: calculatedAmount,
+      currency_code: currencyCode,
     }),
-    original_price_number: variant.calculated_price.original_amount,
+    original_price_number: originalAmount,
     original_price: convertToLocale({
-      amount: variant.calculated_price.original_amount,
-      currency_code: variant.calculated_price.currency_code,
+      amount: originalAmount,
+      currency_code: currencyCode,
     }),
-    currency_code: variant.calculated_price.currency_code,
-    price_type: variant.calculated_price.calculated_price.price_list_type,
+    currency_code: currencyCode,
+    price_type: variant.calculated_price.calculated_price?.price_list_type || 'default',
     percentage_diff: getPercentageDiff(
-      variant.calculated_price.original_amount,
-      variant.calculated_price.calculated_amount
+      originalAmount,
+      calculatedAmount
     ),
   }
 }

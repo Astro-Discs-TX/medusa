@@ -2,6 +2,7 @@
 
 import { Button } from "@medusajs/ui"
 import Link from "next/link"
+import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
 
 const Hero = () => {
@@ -26,15 +27,27 @@ const Hero = () => {
   return (
     <div ref={heroRef} className="relative min-h-[100vh] w-full overflow-hidden">
       {/* Luxury background with parallax effect */}
-      <div 
-        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: 'url("/marble-bg.jpg")',
-          transform: `translateY(${scrollY}px)`,
-          backgroundPosition: "center",
-          filter: "brightness(0.9)"
-        }}
-      />
+      <div className="absolute inset-0 z-0">
+        <div 
+          className="relative w-full h-full"
+          style={{
+            transform: `translateY(${scrollY}px)`,
+          }}
+        >
+          <Image 
+            src="/marble-bg.jpg"
+            alt="Luxury marble background"
+            fill
+            priority={true}
+            sizes="100vw"
+            quality={90}
+            className="object-cover object-center"
+            style={{ filter: "brightness(0.9)" }}
+            placeholder="blur"
+            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkqAcAAIUAgUW0RjgAAAAASUVORK5CYII="
+          />
+        </div>
+      </div>
       
       {/* Overlay gradient */}
       <div className="absolute inset-0 z-1 bg-gradient-to-b from-luxury-charcoal/90 via-luxury-charcoal/60 to-transparent"></div>
@@ -113,6 +126,18 @@ const Hero = () => {
                     <div className="h-px w-12 bg-luxury-gold mx-auto my-4"></div>
                   </div>
                 </div>
+                <div className="absolute inset-0 z-0">
+                  <Image 
+                    src="/categories/monuments.jpg" 
+                    alt="Architectural Marvels" 
+                    fill 
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    className="object-cover opacity-40"
+                    loading="eager"
+                    placeholder="blur"
+                    blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkqAcAAIUAgUW0RjgAAAAASUVORK5CYII="
+                  />
+                </div>
               </div>
               <div className="text-center">
                 <h3 className="font-display text-xl mb-2">Taj Mahal & Monuments</h3>
@@ -132,6 +157,18 @@ const Hero = () => {
                     <div className="h-px w-12 bg-luxury-gold mx-auto my-4"></div>
                   </div>
                 </div>
+                <div className="absolute inset-0 z-0">
+                  <Image 
+                    src="/categories/sculptures.jpg" 
+                    alt="Divine Sculptures" 
+                    fill 
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    className="object-cover opacity-40"
+                    loading="eager"
+                    placeholder="blur"
+                    blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkqAcAAIUAgUW0RjgAAAAASUVORK5CYII="
+                  />
+                </div>
               </div>
               <div className="text-center">
                 <h3 className="font-display text-xl mb-2">Spiritual Artifacts</h3>
@@ -150,6 +187,18 @@ const Hero = () => {
                     <span className="text-luxury-gold font-display text-2xl">Epoxy Tables</span>
                     <div className="h-px w-12 bg-luxury-gold mx-auto my-4"></div>
                   </div>
+                </div>
+                <div className="absolute inset-0 z-0">
+                  <Image 
+                    src="/categories/tables.jpg" 
+                    alt="Epoxy Tables" 
+                    fill 
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    className="object-cover opacity-40"
+                    loading="eager"
+                    placeholder="blur"
+                    blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkqAcAAIUAgUW0RjgAAAAASUVORK5CYII="
+                  />
                 </div>
               </div>
               <div className="text-center">

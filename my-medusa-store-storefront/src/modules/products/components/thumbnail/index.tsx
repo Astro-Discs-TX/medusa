@@ -1,6 +1,8 @@
+"use client"
+
 import { Container, clx } from "@medusajs/ui"
 import Image from "next/image"
-import React from "react"
+import React, { useState } from "react"
 
 import PlaceholderImage from "@modules/common/icons/placeholder-image"
 
@@ -41,7 +43,7 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
       )}
       data-testid={dataTestid}
     >
-      <ImageOrPlaceholder image={initialImage} size={size} />
+      <ImageOrPlaceholder image={initialImage} size={size} isFeatured={isFeatured} />
     </Container>
   )
 }
@@ -49,16 +51,32 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
 const ImageOrPlaceholder = ({
   image,
   size,
-}: Pick<ThumbnailProps, "size"> & { image?: string }) => {
+  isFeatured,
+}: Pick<ThumbnailProps, "size" | "isFeatured"> & { image?: string }) => {
+  const [isLoading, setIsLoading] = useState(true)
+
+  // Define appropriate sizes based on component size
+  const imageSizes = 
+    size === "small" ? "180px" :
+    size === "medium" ? "290px" :
+    size === "large" ? "440px" :
+    size === "full" ? "(max-width: 576px) 100vw, (max-width: 768px) 50vw, 33vw" :
+    "(max-width: 768px) 100vw, 33vw"
+
   return image ? (
     <Image
       src={image}
       alt="Thumbnail"
-      className="absolute inset-0 object-cover object-center"
+      className={`absolute inset-0 object-cover object-center ${isLoading ? 'scale-110 blur-sm' : 'scale-100 blur-0'} transition-all duration-300`}
       draggable={false}
-      quality={50}
-      sizes="(max-width: 576px) 280px, (max-width: 768px) 360px, (max-width: 992px) 480px, 800px"
+      quality={isFeatured ? 85 : 75}
+      sizes={imageSizes}
       fill
+      priority={isFeatured ? true : false}
+      loading={isFeatured ? "eager" : "lazy"}
+      onLoadingComplete={() => setIsLoading(false)}
+      placeholder="blur"
+      blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkqAcAAIUAgUW0RjgAAAAASUVORK5CYII="
     />
   ) : (
     <div className="w-full h-full absolute inset-0 flex items-center justify-center">

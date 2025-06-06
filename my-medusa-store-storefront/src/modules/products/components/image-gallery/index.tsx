@@ -6,13 +6,14 @@ import { HttpTypes } from "@medusajs/types"
 import Image from "next/image"
 
 type ImageGalleryProps = {
-  images: HttpTypes.StoreImage[]
+  images: { id: string; url: string }[]
 }
 
 const ImageGallery = ({ images }: ImageGalleryProps) => {
   const [selectedImage, setSelectedImage] = useState(0)
   const [isZoomed, setIsZoomed] = useState(false)
   const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 })
+  const [imageLoading, setImageLoading] = useState(true)
   
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!isZoomed) return
@@ -26,6 +27,11 @@ const ImageGallery = ({ images }: ImageGalleryProps) => {
   
   const handleZoomToggle = () => {
     setIsZoomed(!isZoomed)
+  }
+  
+  const handleImageChange = (index: number) => {
+    setImageLoading(true)
+    setSelectedImage(index)
   }
 
   if (!images.length) {
@@ -57,8 +63,9 @@ const ImageGallery = ({ images }: ImageGalleryProps) => {
               src={images[selectedImage].url}
               alt={`Product image ${selectedImage + 1}`}
               fill
-              sizes="(max-width: 576px) 100vw, (max-width: 768px) 50vw, 33vw"
-              className={`object-cover ${isZoomed ? 'scale-150' : ''} transition-transform duration-300`}
+              priority={selectedImage === 0}
+              sizes="(max-width: 576px) 100vw, (max-width: 768px) 80vw, (max-width: 992px) 60vw, 50vw"
+              className={`object-cover ${isZoomed ? 'scale-150' : ''} transition-transform duration-300 ${imageLoading ? 'scale-110 blur-sm' : 'scale-100 blur-0'}`}
               style={
                 isZoomed 
                   ? { 
@@ -66,6 +73,10 @@ const ImageGallery = ({ images }: ImageGalleryProps) => {
                     } 
                   : undefined
               }
+              quality={90}
+              onLoadingComplete={() => setImageLoading(false)}
+              placeholder="blur"
+              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkqAcAAIUAgUW0RjgAAAAASUVORK5CYII="
             />
           </motion.div>
         </AnimatePresence>
@@ -91,10 +102,11 @@ const ImageGallery = ({ images }: ImageGalleryProps) => {
                 ? "border-amber-500" 
                 : "border-transparent hover:border-gray-200"
             }`}
-            onClick={() => setSelectedImage(index)}
+            onClick={() => handleImageChange(index)}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             transition={{ duration: 0.2 }}
+            aria-label={`View product image ${index + 1}`}
           >
             <Image
               src={image.url}
@@ -102,6 +114,10 @@ const ImageGallery = ({ images }: ImageGalleryProps) => {
               fill
               sizes="(max-width: 768px) 25vw, 10vw"
               className="object-cover"
+              loading="eager"
+              quality={60}
+              placeholder="blur"
+              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkqAcAAIUAgUW0RjgAAAAASUVORK5CYII="
             />
           </motion.button>
         ))}
