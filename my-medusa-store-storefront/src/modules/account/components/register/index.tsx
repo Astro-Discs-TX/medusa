@@ -7,13 +7,40 @@ import ErrorMessage from "@modules/checkout/components/error-message"
 import { SubmitButton } from "@modules/checkout/components/submit-button"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { handleSignup } from "@lib/data/client-actions"
+import { useState } from "react"
 
 type Props = {
   setCurrentView: (view: LOGIN_VIEW) => void
 }
 
 const Register = ({ setCurrentView }: Props) => {
-  const [state, formAction] = useActionState(handleSignup, null)
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
+
+    const form = e.target as HTMLFormElement
+    const formData = new FormData(form)
+
+    try {
+      const result = await handleSignup(formData)
+      
+      if (result.error) {
+        setError(result.error)
+      } else if (result.success) {
+        // Registration successful, redirect or show success message
+        window.location.href = "/account"
+      }
+    } catch (err) {
+      setError("An unexpected error occurred. Please try again.")
+      console.error("Registration error:", err)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <div
@@ -37,7 +64,7 @@ const Register = ({ setCurrentView }: Props) => {
         Create your Marble Luxe Member profile, and get access to an enhanced
         shopping experience.
       </p>
-      <form className="w-full max-w-sm flex flex-col" action={formAction}>
+      <form className="w-full max-w-sm flex flex-col" onSubmit={handleSubmit} encType="multipart/form-data">
         <div className="flex flex-col w-full gap-y-4">
           <Input
             label="First name"
@@ -82,7 +109,11 @@ const Register = ({ setCurrentView }: Props) => {
             className="luxury-input"
           />
         </div>
-        {state?.error && <ErrorMessage error={state.error} />}
+        {error && (
+          <div className="bg-red-100 p-4 rounded mt-4 text-red-700">
+            {error}
+          </div>
+        )}
         <span className="text-center text-[var(--color-luxury-charcoal)]/70 mt-8 text-sm">
           By creating an account, you agree to Marble Luxe&apos;s{" "}
           <LocalizedClientLink
@@ -98,12 +129,14 @@ const Register = ({ setCurrentView }: Props) => {
           </LocalizedClientLink>
           .
         </span>
-        <SubmitButton 
-          className="w-full mt-8 bg-gradient-to-r from-[var(--color-luxury-darkgold)] to-[var(--color-luxury-gold)] hover:from-[var(--color-luxury-gold)] hover:to-[var(--color-luxury-darkgold)] text-white px-6 py-3 rounded luxury-btn" 
+        <button 
+          type="submit"
+          disabled={loading}
+          className="w-full mt-8 bg-gradient-to-r from-[var(--color-luxury-darkgold)] to-[var(--color-luxury-gold)] hover:from-[var(--color-luxury-gold)] hover:to-[var(--color-luxury-darkgold)] text-white px-6 py-3 rounded luxury-btn disabled:opacity-70" 
           data-testid="register-button"
         >
-          Join
-        </SubmitButton>
+          {loading ? "Creating Account..." : "Join"}
+        </button>
       </form>
       <div className="w-full max-w-sm flex items-center my-8">
         <div className="flex-grow h-px bg-[var(--color-luxury-lightgold)]/20"></div>

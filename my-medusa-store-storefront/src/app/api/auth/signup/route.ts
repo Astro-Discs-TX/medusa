@@ -5,13 +5,54 @@ import { NextRequest, NextResponse } from "next/server"
 
 export async function POST(req: NextRequest) {
   try {
-    const formData = await req.formData()
-    const password = formData.get("password") as string
-    const customerForm = {
-      email: formData.get("email") as string,
-      first_name: formData.get("first_name") as string,
-      last_name: formData.get("last_name") as string,
-      phone: formData.get("phone") as string,
+    let customerForm: any = {};
+    let password: string = "";
+    
+    // Check content type and handle accordingly
+    const contentType = req.headers.get("content-type") || "";
+    
+    if (contentType.includes("application/json")) {
+      // Handle JSON request
+      const jsonData = await req.json();
+      password = jsonData.password;
+      customerForm = {
+        email: jsonData.email,
+        first_name: jsonData.first_name,
+        last_name: jsonData.last_name,
+        phone: jsonData.phone,
+      };
+    } else {
+      // Handle FormData request
+      try {
+        const formData = await req.formData();
+        password = formData.get("password") as string;
+        customerForm = {
+          email: formData.get("email") as string,
+          first_name: formData.get("first_name") as string,
+          last_name: formData.get("last_name") as string,
+          phone: formData.get("phone") as string,
+        };
+      } catch (formError) {
+        console.error("Error parsing form data:", formError);
+        return NextResponse.json(
+          { 
+            success: false, 
+            error: "Invalid form data. Please check your input and try again." 
+          }, 
+          { status: 400 }
+        );
+      }
+    }
+
+    // Validate required fields
+    if (!customerForm.email || !password) {
+      return NextResponse.json(
+        { 
+          success: false, 
+          error: "Email and password are required." 
+        }, 
+        { status: 400 }
+      );
     }
 
     // Register the user
