@@ -13,9 +13,11 @@ export default async function AccountPageLayout({
   const customer = await retrieveCustomer().catch(() => null)
 
   return (
-    <AccountLayout customer={customer}>
-      {customer ? dashboard : login}
-      <Toaster />
-    </AccountLayout>
+    <div className="luxury-pattern py-6 min-h-[calc(100vh-64px)]">
+      <AccountLayout customer={customer}>
+        {customer ? dashboard : login}
+        <Toaster />
+      </AccountLayout>
+    </div>
   )
 }

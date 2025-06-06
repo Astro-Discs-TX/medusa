@@ -42,29 +42,28 @@ const AccountInfo = ({
   }, [isSuccess, close])
 
   return (
-    <div className="text-small-regular" data-testid={dataTestid}>
-      <div className="flex items-end justify-between">
+    <div className="text-small-regular account-card p-6 mb-6" data-testid={dataTestid}>
+      <div className="flex items-end justify-between account-card-header mb-4">
         <div className="flex flex-col">
-          <span className="uppercase text-ui-fg-base">{label}</span>
-          <div className="flex items-center flex-1 basis-0 justify-end gap-x-4">
+          <span className="uppercase text-[var(--color-luxury-charcoal)]/70 text-sm tracking-wider mb-2">{label}</span>
+          <div className="flex items-center flex-1 basis-0 justify-end gap-x-4 text-[var(--color-luxury-charcoal)]">
             {typeof currentInfo === "string" ? (
-              <span className="font-semibold" data-testid="current-info">{currentInfo}</span>
+              <span className="font-medium" data-testid="current-info">{currentInfo}</span>
             ) : (
               currentInfo
             )}
           </div>
         </div>
         <div>
-          <Button
-            variant="secondary"
-            className="w-[100px] min-h-[25px] py-1"
+          <button
+            className="edit-button"
             onClick={handleToggle}
             type={state ? "reset" : "button"}
             data-testid="edit-button"
             data-active={state}
           >
             {state ? "Cancel" : "Edit"}
-          </Button>
+          </button>
         </div>
       </div>
 
@@ -81,9 +80,9 @@ const AccountInfo = ({
           )}
           data-testid="success-message"
         >
-          <Badge className="p-2 my-4" color="green">
-            <span>{label} updated succesfully</span>
-          </Badge>
+          <div className="p-3 my-4 bg-[#f0f9f0] border border-[#c3e6cb] text-[#155724] rounded">
+            <span>{label} updated successfully</span>
+          </div>
         </Disclosure.Panel>
       </Disclosure>
 
@@ -100,9 +99,9 @@ const AccountInfo = ({
           )}
           data-testid="error-message"
         >
-          <Badge className="p-2 my-4" color="red">
+          <div className="p-3 my-4 bg-[#f8d7da] border border-[#f5c6cb] text-[#721c24] rounded">
             <span>{errorMessage}</span>
-          </Badge>
+          </div>
         </Disclosure.Panel>
       </Disclosure>
 
@@ -117,17 +116,17 @@ const AccountInfo = ({
             }
           )}
         >
-          <div className="flex flex-col gap-y-2 py-4">
-            <div>{children}</div>
-            <div className="flex items-center justify-end mt-2">
-              <Button
-                isLoading={pending}
-                className="w-full small:max-w-[140px]"
+          <div className="flex flex-col gap-y-4 py-4">
+            <div className="account-card-content">{children}</div>
+            <div className="flex items-center justify-end mt-4">
+              <button
+                disabled={pending}
+                className="luxury-btn"
                 type="submit"
                 data-testid="save-button"
               >
-                Save changes
-              </Button>
+                {pending ? "Saving..." : "Save changes"}
+              </button>
             </div>
           </div>
         </Disclosure.Panel>

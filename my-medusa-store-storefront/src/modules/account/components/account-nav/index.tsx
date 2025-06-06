@@ -110,11 +110,11 @@ const AccountNav = ({
       <div className="hidden small:block" data-testid="account-nav">
         <div>
           <div className="pb-4">
-            <h3 className="font-display text-xl text-[var(--color-luxury-charcoal)]">Account</h3>
-            <div className="h-0.5 w-16 gold-gradient mt-2"></div>
+            <h3 className="font-display text-2xl text-[var(--color-luxury-charcoal)]">Account</h3>
+            <div className="h-0.5 w-24 gold-gradient mt-2"></div>
           </div>
-          <div className="text-base-regular">
-            <ul className="flex mb-0 justify-start items-start flex-col gap-y-4">
+          <div className="text-base-regular mt-8">
+            <ul className="flex mb-0 justify-start items-start flex-col gap-y-6">
               <li>
                 <AccountNavLink
                   href="/account"
@@ -151,14 +151,15 @@ const AccountNav = ({
                   Orders
                 </AccountNavLink>
               </li>
-              <li>
+              <li className="mt-4">
                 <button
                   type="button"
                   onClick={handleLogout}
-                  className="text-[var(--color-luxury-charcoal)]/70 hover:text-[var(--color-luxury-gold)] transition-colors duration-150"
+                  className="text-[var(--color-luxury-charcoal)]/70 hover:text-[var(--color-luxury-gold)] transition-colors duration-150 flex items-center gap-x-2"
                   data-testid="logout-button"
                 >
-                  Log out
+                  <ArrowRightOnRectangle className="w-4 h-4" />
+                  <span>Log out</span>
                 </button>
               </li>
             </ul>
@@ -188,8 +189,8 @@ const AccountNavLink = ({
   return (
     <LocalizedClientLink
       href={href}
-      className={clx("text-[var(--color-luxury-charcoal)]/70 hover:text-[var(--color-luxury-gold)] transition-colors duration-150", {
-        "text-[var(--color-luxury-gold)] font-medium": active,
+      className={clx("account-nav-link text-[var(--color-luxury-charcoal)]/70 hover:text-[var(--color-luxury-gold)] transition-colors duration-150", {
+        "active text-[var(--color-luxury-gold)] font-medium": active,
       })}
       data-testid={dataTestId}
     >
