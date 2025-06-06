@@ -173,7 +173,9 @@ export function applyStep<
         ...localConfig,
       }
 
-      newConfig.nested ||= newConfig.async
+      if (isDefined(newConfig.nested)) {
+        newConfig.nested ||= newConfig.async
+      }
 
       delete localConfig.name
 
