@@ -114,7 +114,7 @@ export function createStepHandler<
             output,
           }
         }
-      : () => void 0,
+      : undefined,
   }
 
   return handler
