@@ -3,7 +3,7 @@
 import { Stripe, StripeElementsOptions } from "@stripe/stripe-js"
 import { Elements } from "@stripe/react-stripe-js"
 import { HttpTypes } from "@medusajs/types"
-import { createContext } from "react"
+import { createContext, useEffect, useState } from "react"
 
 type StripeWrapperProps = {
   paymentSession: HttpTypes.StorePaymentSession
@@ -20,8 +20,32 @@ const StripeWrapper: React.FC<StripeWrapperProps> = ({
   stripePromise,
   children,
 }) => {
+  const [stripeLoaded, setStripeLoaded] = useState(false)
+  
+  // Pre-load Stripe elements as soon as component mounts
+  useEffect(() => {
+    if (stripePromise) {
+      // Touch the promise to start loading
+      stripePromise.then(() => {
+        setStripeLoaded(true)
+      }).catch(error => {
+        console.error("Failed to load Stripe:", error)
+      })
+    }
+  }, [stripePromise])
+
   const options: StripeElementsOptions = {
     clientSecret: paymentSession!.data?.client_secret as string | undefined,
+    appearance: {
+      theme: 'stripe',
+      variables: {
+        colorPrimary: '#C6A97C', // Luxury gold
+        colorBackground: '#FFFDF8', // Ivory
+        colorText: '#43372F', // Luxury charcoal
+        borderRadius: '4px',
+      },
+    },
+    loader: 'auto', // Use auto for better performance
   }
 
   if (!stripeKey) {
@@ -43,7 +67,7 @@ const StripeWrapper: React.FC<StripeWrapperProps> = ({
   }
 
   return (
-    <StripeContext.Provider value={true}>
+    <StripeContext.Provider value={stripeLoaded}>
       <Elements options={options} stripe={stripePromise}>
         {children}
       </Elements>

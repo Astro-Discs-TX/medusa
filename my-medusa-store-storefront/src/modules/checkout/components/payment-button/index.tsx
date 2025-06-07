@@ -64,15 +64,30 @@ const StripePaymentButton = ({
 }) => {
   const [submitting, setSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [orderProcessing, setOrderProcessing] = useState<boolean>(false)
 
   const onPaymentCompleted = async () => {
-    await placeOrder()
-      .catch((err) => {
-        setErrorMessage(err.message)
-      })
-      .finally(() => {
-        setSubmitting(false)
-      })
+    try {
+      setOrderProcessing(true)
+      
+      // Set a minimum loading time for better UX
+      const startTime = Date.now()
+      
+      // Place the order
+      await placeOrder()
+      
+      // Ensure loading state shows for at least 500ms for better UX
+      const elapsedTime = Date.now() - startTime
+      if (elapsedTime < 500) {
+        await new Promise(resolve => setTimeout(resolve, 500 - elapsedTime))
+      }
+      
+      // Note: We don't need to manually reset state here as the redirect will unmount the component
+    } catch (err: any) {
+      setErrorMessage(err.message || "An error occurred while placing your order")
+      setSubmitting(false)
+      setOrderProcessing(false)
+    }
   }
 
   const stripe = useStripe()
@@ -86,77 +101,92 @@ const StripePaymentButton = ({
   const disabled = !stripe || !elements ? true : false
 
   const handlePayment = async () => {
+    if (submitting || orderProcessing) return
+    
     setSubmitting(true)
+    setErrorMessage(null)
 
     if (!stripe || !elements || !card || !cart) {
       setSubmitting(false)
       return
     }
 
-    await stripe
-      .confirmCardPayment(session?.data.client_secret as string, {
-        payment_method: {
-          card: card,
-          billing_details: {
-            name:
-              cart.billing_address?.first_name +
-              " " +
-              cart.billing_address?.last_name,
-            address: {
-              city: cart.billing_address?.city ?? undefined,
-              country: cart.billing_address?.country_code ?? undefined,
-              line1: cart.billing_address?.address_1 ?? undefined,
-              line2: cart.billing_address?.address_2 ?? undefined,
-              postal_code: cart.billing_address?.postal_code ?? undefined,
-              state: cart.billing_address?.province ?? undefined,
+    try {
+      // Use Promise.race to add a timeout for Stripe operations
+      const { error, paymentIntent } = await Promise.race([
+        stripe.confirmCardPayment(session?.data.client_secret as string, {
+          payment_method: {
+            card: card,
+            billing_details: {
+              name:
+                cart.billing_address?.first_name +
+                " " +
+                cart.billing_address?.last_name,
+              address: {
+                city: cart.billing_address?.city ?? undefined,
+                country: cart.billing_address?.country_code ?? undefined,
+                line1: cart.billing_address?.address_1 ?? undefined,
+                line2: cart.billing_address?.address_2 ?? undefined,
+                postal_code: cart.billing_address?.postal_code ?? undefined,
+                state: cart.billing_address?.province ?? undefined,
+              },
+              email: cart.email,
+              phone: cart.billing_address?.phone ?? undefined,
             },
-            email: cart.email,
-            phone: cart.billing_address?.phone ?? undefined,
           },
-        },
-      })
-      .then(({ error, paymentIntent }) => {
-        if (error) {
-          const pi = error.payment_intent
+        }),
+        new Promise((_, reject) => 
+          setTimeout(() => reject(new Error("Payment processing timed out")), 15000)
+        )
+      ]) as any;
 
-          if (
-            (pi && pi.status === "requires_capture") ||
-            (pi && pi.status === "succeeded")
-          ) {
-            onPaymentCompleted()
-          }
-
-          setErrorMessage(error.message || null)
-          return
-        }
+      if (error) {
+        const pi = error.payment_intent
 
         if (
-          (paymentIntent && paymentIntent.status === "requires_capture") ||
-          paymentIntent.status === "succeeded"
+          (pi && pi.status === "requires_capture") ||
+          (pi && pi.status === "succeeded")
         ) {
           return onPaymentCompleted()
         }
 
+        setErrorMessage(error.message || "Payment failed")
+        setSubmitting(false)
         return
-      })
+      }
+
+      if (
+        (paymentIntent && paymentIntent.status === "requires_capture") ||
+        paymentIntent.status === "succeeded"
+      ) {
+        return onPaymentCompleted()
+      }
+
+      setSubmitting(false)
+    } catch (err: any) {
+      setErrorMessage(err.message || "An error occurred during payment processing")
+      setSubmitting(false)
+    }
   }
 
   return (
     <>
       <Button
-        disabled={disabled || notReady}
+        disabled={disabled || notReady || orderProcessing}
         onClick={handlePayment}
         size="large"
         isLoading={submitting}
         data-testid={dataTestId}
         className={className || "bg-[var(--color-luxury-gold)] hover:bg-[var(--color-luxury-darkgold)] text-white border-none px-8 py-3 rounded-md luxury-btn"}
       >
-        Place order
+        {orderProcessing ? "Processing order..." : "Place order"}
       </Button>
-      <ErrorMessage
-        error={errorMessage}
-        data-testid="stripe-payment-error-message"
-      />
+      {errorMessage && (
+        <ErrorMessage
+          error={errorMessage}
+          data-testid="stripe-payment-error-message"
+        />
+      )}
     </>
   )
 }
@@ -172,39 +202,62 @@ const ManualTestPaymentButton = ({
 }) => {
   const [submitting, setSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [orderProcessing, setOrderProcessing] = useState<boolean>(false)
 
   const onPaymentCompleted = async () => {
-    await placeOrder()
-      .catch((err) => {
-        setErrorMessage(err.message)
-      })
-      .finally(() => {
-        setSubmitting(false)
-      })
+    try {
+      setOrderProcessing(true)
+      
+      // Set a minimum loading time for better UX
+      const startTime = Date.now()
+      
+      // Place the order
+      await placeOrder()
+      
+      // Ensure loading state shows for at least 500ms for better UX
+      const elapsedTime = Date.now() - startTime
+      if (elapsedTime < 500) {
+        await new Promise(resolve => setTimeout(resolve, 500 - elapsedTime))
+      }
+      
+      // Note: We don't need to manually reset state here as the redirect will unmount the component
+    } catch (err: any) {
+      setErrorMessage(err.message || "An error occurred while placing your order")
+      setSubmitting(false)
+      setOrderProcessing(false)
+    }
   }
 
   const handlePayment = () => {
+    if (submitting || orderProcessing) return
+    
     setSubmitting(true)
-
-    onPaymentCompleted()
+    setErrorMessage(null)
+    
+    // Use requestAnimationFrame to ensure UI updates before heavy processing
+    requestAnimationFrame(() => {
+      onPaymentCompleted()
+    })
   }
 
   return (
     <>
       <Button
-        disabled={notReady}
+        disabled={notReady || orderProcessing}
         isLoading={submitting}
         onClick={handlePayment}
         size="large"
         data-testid={dataTestId || "submit-order-button"}
         className={className || "bg-[var(--color-luxury-gold)] hover:bg-[var(--color-luxury-darkgold)] text-white border-none px-8 py-3 rounded-md luxury-btn"}
       >
-        Place order
+        {orderProcessing ? "Processing order..." : "Place order"}
       </Button>
-      <ErrorMessage
-        error={errorMessage}
-        data-testid="manual-payment-error-message"
-      />
+      {errorMessage && (
+        <ErrorMessage
+          error={errorMessage}
+          data-testid="manual-payment-error-message"
+        />
+      )}
     </>
   )
 }

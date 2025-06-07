@@ -1,7 +1,7 @@
 "use client"
 
 import { loadStripe } from "@stripe/stripe-js"
-import React from "react"
+import React, { useEffect, useState } from "react"
 import StripeWrapper from "./stripe-wrapper"
 import { HttpTypes } from "@medusajs/types"
 import { isStripe } from "@lib/constants"
@@ -11,10 +11,22 @@ type PaymentWrapperProps = {
   children: React.ReactNode
 }
 
+// Initialize Stripe outside the component for better performance
 const stripeKey = process.env.NEXT_PUBLIC_STRIPE_KEY
 const stripePromise = stripeKey ? loadStripe(stripeKey) : null
 
 const PaymentWrapper: React.FC<PaymentWrapperProps> = ({ cart, children }) => {
+  const [isInitialized, setIsInitialized] = useState(false)
+  
+  // Mark the component as initialized after a short delay to ensure good UX
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsInitialized(true)
+    }, 100)
+    
+    return () => clearTimeout(timer)
+  }, [])
+  
   const paymentSession = cart.payment_collection?.payment_sessions?.find(
     (s) => s.status === "pending"
   )

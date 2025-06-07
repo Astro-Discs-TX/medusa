@@ -396,31 +396,54 @@ export async function placeOrder(cartId?: string) {
     throw new Error("No existing cart found when placing an order")
   }
 
+  // Start pre-fetching order cache invalidation to save time later
+  const orderCacheTagPromise = getCacheTag("orders")
+  const cartCacheTagPromise = getCacheTag("carts")
+
   const headers = {
     ...(await getAuthHeaders()),
   }
 
-  const cartRes = await sdk.store.cart
-    .complete(id, {}, headers)
-    .then(async (cartRes) => {
-      const cartCacheTag = await getCacheTag("carts")
-      revalidateTag(cartCacheTag)
-      return cartRes
-    })
-    .catch(medusaError)
+  try {
+    // Set a timeout to prevent hanging on slow connections
+    const cartRes = await Promise.race([
+      sdk.store.cart.complete(id, {}, headers),
+      new Promise((_, reject) => 
+        setTimeout(() => reject(new Error("Order placement timed out")), 10000)
+      )
+    ]) as any;
 
-  if (cartRes?.type === "order") {
-    const countryCode =
-      cartRes.order.shipping_address?.country_code?.toLowerCase()
+    // We can now use the pre-fetched cache tags
+    const [orderCacheTag, cartCacheTag] = await Promise.all([
+      orderCacheTagPromise,
+      cartCacheTagPromise
+    ]);
 
-    const orderCacheTag = await getCacheTag("orders")
+    // Revalidate caches
+    revalidateTag(cartCacheTag)
     revalidateTag(orderCacheTag)
 
-    removeCartId()
-    redirect(`/${countryCode}/order/${cartRes?.order.id}/confirmed`)
-  }
+    if (cartRes?.type === "order") {
+      const countryCode =
+        cartRes.order.shipping_address?.country_code?.toLowerCase()
 
-  return cartRes.cart
+      // Clear cart before redirect to prevent unnecessary redirects
+      await removeCartId()
+
+      // Revalidate related data
+      revalidateTag("products") // Potentially update inventory
+      
+      redirect(`/${countryCode}/order/${cartRes?.order.id}/confirmed`)
+    }
+
+    return cartRes.cart
+  } catch (error) {
+    console.error("Error placing order:", error)
+    // Revalidate cart to ensure UI is consistent
+    const cartCacheTag = await cartCacheTagPromise
+    revalidateTag(cartCacheTag)
+    throw error
+  }
 }
 
 /**
