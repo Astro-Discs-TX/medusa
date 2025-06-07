@@ -1,7 +1,8 @@
 import { listProducts } from "@lib/data/products"
 import { getRegion } from "@lib/data/regions"
+import { parallelFetch } from "@lib/util/parallel-fetch"
 import { HttpTypes } from "@medusajs/types"
-import Product from "../../components/product-preview/server"
+import ProductPreview from "../../components/product-preview/server"
 
 type RelatedProductsProps = {
   product: HttpTypes.StoreProduct
@@ -12,27 +13,34 @@ export default async function RelatedProducts({
   product,
   countryCode,
 }: RelatedProductsProps) {
+  // Prepare query params
+  const prepareQueryParams = (region: HttpTypes.StoreRegion | null) => {
+    const queryParams: HttpTypes.StoreProductParams = {}
+    if (region?.id) {
+      queryParams.region_id = region.id
+    }
+    if (product.collection_id) {
+      queryParams.collection_id = [product.collection_id]
+    }
+    if (product.tags) {
+      queryParams.tag_id = product.tags
+        .map((t) => t.id)
+        .filter(Boolean) as string[]
+    }
+    queryParams.is_giftcard = false
+    return queryParams
+  }
+
+  // Fetch region and prepare for products fetch
   const region = await getRegion(countryCode)
 
   if (!region) {
     return null
   }
 
-  // edit this function to define your related products logic
-  const queryParams: HttpTypes.StoreProductParams = {}
-  if (region?.id) {
-    queryParams.region_id = region.id
-  }
-  if (product.collection_id) {
-    queryParams.collection_id = [product.collection_id]
-  }
-  if (product.tags) {
-    queryParams.tag_id = product.tags
-      .map((t) => t.id)
-      .filter(Boolean) as string[]
-  }
-  queryParams.is_giftcard = false
+  const queryParams = prepareQueryParams(region)
 
+  // Fetch products
   const products = await listProducts({
     queryParams,
     countryCode,
@@ -60,7 +68,7 @@ export default async function RelatedProducts({
       <ul className="grid grid-cols-2 small:grid-cols-3 medium:grid-cols-4 gap-x-6 gap-y-8">
         {products.map((product) => (
           <li key={product.id}>
-            <Product region={region} product={product} />
+            <ProductPreview region={region} product={product} />
           </li>
         ))}
       </ul>
