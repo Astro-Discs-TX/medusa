@@ -32,4 +32,8 @@ dist/**
 /packages/**/.cache
 *.log
 *.sql
+# Medusa specific
+solace-medusa-starter/
 solace-medusa-starter/*
+example-medusa-storefrone/
+example-medusa-storefrone/*
