@@ -11,8 +11,10 @@ interface CollectionsPageProps {
   }
 }
 
-export default async function CollectionsPage({ params }: CollectionsPageProps) {
-  const region = await getRegion(params.countryCode)
+export default async function CollectionsPage(props: CollectionsPageProps) {
+  const params = await props.params
+  const countryCode = params.countryCode
+  const region = await getRegion(countryCode)
 
   if (!region) {
     notFound()

@@ -10,8 +10,10 @@ interface AboutPageProps {
   }
 }
 
-export default async function AboutPage({ params }: AboutPageProps) {
-  const region = await getRegion(params.countryCode)
+export default async function AboutPage(props: AboutPageProps) {
+  const params = await props.params
+  const countryCode = params.countryCode
+  const region = await getRegion(countryCode)
 
   if (!region) {
     notFound()

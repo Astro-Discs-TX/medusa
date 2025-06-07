@@ -11,8 +11,10 @@ interface ProductsPageProps {
   }
 }
 
-export default async function ProductsPage({ params }: ProductsPageProps) {
-  const region = await getRegion(params.countryCode)
+export default async function ProductsPage(props: ProductsPageProps) {
+  const params = await props.params
+  const countryCode = params.countryCode
+  const region = await getRegion(countryCode)
 
   if (!region) {
     notFound()

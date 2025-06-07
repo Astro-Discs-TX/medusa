@@ -8,11 +8,11 @@ import CategoryTemplate from "@modules/categories/templates"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 
 type Props = {
-  params: Promise<{ category: string[]; countryCode: string }>
-  searchParams: Promise<{
+  params: { category: string[]; countryCode: string }
+  searchParams: {
     sortBy?: SortOptions
     page?: string
-  }>
+  }
 }
 
 export async function generateStaticParams() {
@@ -64,11 +64,13 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 }
 
 export default async function CategoryPage(props: Props) {
-  const searchParams = await props.searchParams
+  const searchParams = props.searchParams
   const params = await props.params
   const { sortBy, page } = searchParams
+  const category = params.category
+  const countryCode = params.countryCode
 
-  const productCategory = await getCategoryByHandle(params.category)
+  const productCategory = await getCategoryByHandle(category)
 
   if (!productCategory) {
     notFound()
@@ -79,7 +81,7 @@ export default async function CategoryPage(props: Props) {
       category={productCategory}
       sortBy={sortBy}
       page={page}
-      countryCode={params.countryCode}
+      countryCode={countryCode}
     />
   )
 }

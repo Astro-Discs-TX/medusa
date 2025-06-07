@@ -4,6 +4,7 @@ import { notFound } from "next/navigation"
 import { getCollectionByHandle, listCollections } from "@lib/data/collections"
 import { listRegions } from "@lib/data/regions"
 import { parallelFetch } from "@lib/util/parallel-fetch"
+import { batchFetch } from "@lib/util/batch-fetch"
 import { StoreCollection, StoreRegion } from "@medusajs/types"
 import CollectionTemplate from "@modules/collections/templates"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
@@ -22,25 +23,32 @@ export const dynamic = "force-static" // Force static generation
 export const revalidate = 600 // Revalidate every 10 minutes
 
 export async function generateStaticParams() {
-  // Fetch collections and regions in parallel
-  const [collectionsData, regions] = await parallelFetch([
-    async () => {
-      const result = await listCollections({
-        fields: "*products",
-      })
-      return result.collections || []
+  // Fetch collections and regions using batch fetch
+  const responses = await batchFetch([
+    {
+      path: "/store/collections",
+      query: { fields: "*products" },
+      cacheTags: ["collections"],
+      cacheRevalidate: 600
     },
-    async () => {
-      return await listRegions()
-    },
+    {
+      path: "/store/regions",
+      cacheTags: ["regions"],
+      cacheRevalidate: 600
+    }
   ])
+
+  const collectionsData = (responses[0].data as any)?.collections || []
+  const regionsData = (responses[1].data as any)?.regions || []
+  
+  const regions = regionsData || []
 
   if (!collectionsData.length) {
     return []
   }
 
   const countryCodes = regions
-    ?.map((r) => r.countries?.map((c) => c.iso_2))
+    ?.map((r: any) => r.countries?.map((c: any) => c.iso_2))
     .flat()
     .filter(Boolean) as string[]
 
@@ -60,27 +68,62 @@ export async function generateStaticParams() {
   return staticParams
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const collection = await getCollectionByHandle(params.handle)
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params
+  const handle = params.handle
+
+  const response = await batchFetch([
+    {
+      path: "/store/collections",
+      query: { handle: handle, fields: "*products" },
+      cacheTags: ["collections"],
+      cacheRevalidate: 600
+    }
+  ])
+
+  const collection = (response[0].data as any)?.collections?.[0]
 
   if (!collection) {
     notFound()
   }
 
   const metadata = {
-    title: `${collection.title} | Medusa Store`,
-    description: `${collection.title} collection`,
+    title: `${collection.title} | Marble Luxe`,
+    description: collection.handle ? 
+      `Explore our exclusive ${collection.title} collection of premium marble products. Each piece is crafted with exceptional quality and timeless design.` : 
+      "Discover our luxury marble collections, each showcasing the finest craftsmanship and materials.",
+    openGraph: {
+      title: `${collection.title} | Marble Luxe`,
+      description: collection.handle ? 
+        `Explore our exclusive ${collection.title} collection of premium marble products. Each piece is crafted with exceptional quality and timeless design.` : 
+        "Discover our luxury marble collections, each showcasing the finest craftsmanship and materials.",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+    },
   } as Metadata
 
   return metadata
 }
 
-export default async function CollectionPage({ params, searchParams }: Props) {
+export default async function CollectionPage(props: Props) {
+  const searchParams = props.searchParams
+  const params = await props.params
   const { sortBy, page } = searchParams
+  const handle = params.handle
+  const countryCode = params.countryCode
 
-  const collection = await getCollectionByHandle(params.handle).then(
-    (collection: StoreCollection) => collection
-  )
+  const response = await batchFetch([
+    {
+      path: "/store/collections",
+      query: { handle: handle, fields: "*products" },
+      cacheTags: ["collections"],
+      cacheRevalidate: 600
+    }
+  ])
+
+  const collection = (response[0].data as any)?.collections?.[0]
 
   if (!collection) {
     notFound()
@@ -111,7 +154,7 @@ export default async function CollectionPage({ params, searchParams }: Props) {
         collection={collection}
         page={page}
         sortBy={sortBy}
-        countryCode={params.countryCode}
+        countryCode={countryCode}
       />
     </Suspense>
   )

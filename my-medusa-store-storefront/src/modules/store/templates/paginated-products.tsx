@@ -1,6 +1,8 @@
+"use server"
+
 import { listProductsWithSort } from "@lib/data/products"
 import { getRegion } from "@lib/data/regions"
-import { parallelFetch } from "@lib/util/parallel-fetch"
+import { batchFetch } from "@lib/util/batch-fetch"
 import ProductPreview from "@modules/products/components/product-preview/server"
 import { Pagination } from "@modules/store/components/pagination"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
@@ -15,6 +17,44 @@ type PaginatedProductsParams = {
   category_id?: string[]
   id?: string[]
   order?: string
+}
+
+// Pre-fetch data outside of the component
+async function fetchProductData(
+  countryCode: string,
+  page: number,
+  queryParams: PaginatedProductsParams,
+  sortBy?: SortOptions
+) {
+  // Fetch region using batchFetch
+  const responses = await batchFetch([
+    {
+      path: `/store/regions`,
+      cacheTags: ["regions"],
+      cacheRevalidate: 60
+    }
+  ])
+
+  const regionResponse = (responses[0].data as any)
+  const regions = regionResponse?.regions || []
+  const region = regions.find((r: any) => r.countries.some((c: any) => c.iso_2 === countryCode))
+  
+  if (!region) {
+    return { region: null, productsData: { response: { products: [], count: 0 }, nextPage: null } }
+  }
+  
+  // Now use the region to fetch products
+  const productsData = await listProductsWithSort({
+    page,
+    queryParams: {
+      ...queryParams,
+      region_id: region.id
+    },
+    sortBy,
+    countryCode,
+  })
+  
+  return { region, productsData }
 }
 
 export default async function PaginatedProducts({
@@ -52,16 +92,13 @@ export default async function PaginatedProducts({
     queryParams["order"] = "created_at"
   }
 
-  // Fetch region and products in parallel
-  const [region, productsData] = await parallelFetch([
-    () => getRegion(countryCode),
-    () => listProductsWithSort({
-      page,
-      queryParams,
-      sortBy,
-      countryCode,
-    })
-  ])
+  // Fetch data using optimized function
+  const { region, productsData } = await fetchProductData(
+    countryCode, 
+    page, 
+    queryParams, 
+    sortBy
+  )
 
   if (!region) {
     return null

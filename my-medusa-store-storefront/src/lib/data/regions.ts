@@ -2,31 +2,42 @@
 
 import { sdk } from "@lib/config"
 import medusaError from "@lib/util/medusa-error"
+import { deduplicateRequest } from "@lib/util/request-cache"
 import { HttpTypes } from "@medusajs/types"
 import { getStaticDataCacheOptions } from "./optimize-fetching"
 
 export const listRegions = async () => {
   const cacheOptions = getStaticDataCacheOptions()
 
-  return sdk.client
-    .fetch<{ regions: HttpTypes.StoreRegion[] }>(`/store/regions`, {
-      method: "GET",
-      next: cacheOptions.next,
-    })
-    .then(({ regions }) => regions)
-    .catch(medusaError)
+  return deduplicateRequest(
+    "/store/regions",
+    () => sdk.client
+      .fetch<{ regions: HttpTypes.StoreRegion[] }>(`/store/regions`, {
+        method: "GET",
+        next: cacheOptions.next,
+      })
+      .then(({ regions }) => regions)
+      .catch(medusaError),
+    undefined,
+    60 * 1000 // 1 minute TTL
+  )
 }
 
 export const retrieveRegion = async (id: string) => {
   const cacheOptions = getStaticDataCacheOptions()
 
-  return sdk.client
-    .fetch<{ region: HttpTypes.StoreRegion }>(`/store/regions/${id}`, {
-      method: "GET",
-      next: cacheOptions.next,
-    })
-    .then(({ region }) => region)
-    .catch(medusaError)
+  return deduplicateRequest(
+    `/store/regions/${id}`,
+    () => sdk.client
+      .fetch<{ region: HttpTypes.StoreRegion }>(`/store/regions/${id}`, {
+        method: "GET",
+        next: cacheOptions.next,
+      })
+      .then(({ region }) => region)
+      .catch(medusaError),
+    undefined,
+    60 * 1000 // 1 minute TTL
+  )
 }
 
 // In-memory cache for regions by country code
