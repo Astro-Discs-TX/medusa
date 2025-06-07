@@ -1,14 +1,13 @@
 "use client"
 
 import { Text } from "@medusajs/ui"
-import { listProducts } from "@lib/data/products"
 import { getProductPrice } from "@lib/util/get-product-price"
 import { HttpTypes } from "@medusajs/types"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import Thumbnail from "../thumbnail"
 import PreviewPrice from "./price"
 
-export default function ProductPreview({
+export default function ProductPreviewClient({
   product,
   isFeatured,
   region,
@@ -17,15 +16,8 @@ export default function ProductPreview({
   isFeatured?: boolean
   region: HttpTypes.StoreRegion
 }) {
-  // const pricedProduct = await listProducts({
-  //   regionId: region.id,
-  //   queryParams: { id: [product.id!] },
-  // }).then(({ response }) => response.products[0])
-
-  // if (!pricedProduct) {
-  //   return null
-  // }
-
+  // The product should already have price data from the server component
+  // Get the cheapest price from all variants
   const { cheapestPrice } = getProductPrice({
     product,
   })
@@ -116,7 +108,11 @@ export default function ProductPreview({
             </h3>
             
             <div className="flex items-center">
-              {cheapestPrice && <PreviewPrice price={cheapestPrice} regionCode={region?.country_code || "us"} />}
+              {cheapestPrice && (
+                <Text className="text-luxury-gold font-medium text-base-regular">
+                  {cheapestPrice.calculated_price}
+                </Text>
+              )}
             </div>
           </div>
           
