@@ -10,9 +10,8 @@ export const retrieveOrder = async (id: string) => {
     ...(await getAuthHeaders()),
   }
 
-  const next = {
-    ...(await getCacheOptions("orders")),
-  }
+  const { getDynamicDataCacheOptions } = await import("./optimize-fetching")
+  const cacheOptions = getDynamicDataCacheOptions()
 
   return sdk.client
     .fetch<HttpTypes.StoreOrderResponse>(`/store/orders/${id}`, {
@@ -22,8 +21,7 @@ export const retrieveOrder = async (id: string) => {
           "*payment_collections.payments,*items,*items.metadata,*items.variant,*items.product",
       },
       headers,
-      next,
-      cache: "force-cache",
+      next: cacheOptions.next,
     })
     .then(({ order }) => order)
     .catch((err) => medusaError(err))
@@ -38,23 +36,31 @@ export const listOrders = async (
     ...(await getAuthHeaders()),
   }
 
-  const next = {
-    ...(await getCacheOptions("orders")),
+  const { getDynamicDataCacheOptions, createDedupKey } = await import("./optimize-fetching")
+  const cacheOptions = getDynamicDataCacheOptions()
+  const query = {
+    limit,
+    offset,
+    order: "-created_at",
+    fields: "*items,+items.metadata,*items.variant,*items.product",
+    ...filters,
+  }
+
+  // Add a deduplication key based on the query parameters
+  const dedupKey = createDedupKey('/store/orders', query)
+  const enhancedCache = {
+    next: {
+      ...cacheOptions.next,
+      tags: [...(cacheOptions.next?.tags || []), dedupKey]
+    }
   }
 
   return sdk.client
     .fetch<HttpTypes.StoreOrderListResponse>(`/store/orders`, {
       method: "GET",
-      query: {
-        limit,
-        offset,
-        order: "-created_at",
-        fields: "*items,+items.metadata,*items.variant,*items.product",
-        ...filters,
-      },
+      query,
       headers,
-      next,
-      cache: "force-cache",
+      ...enhancedCache,
     })
     .then(({ orders }) => orders)
     .catch((err) => medusaError(err))
