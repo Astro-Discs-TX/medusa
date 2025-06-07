@@ -1,10 +1,13 @@
 import { retrieveCart } from "@lib/data/cart"
 import { retrieveCustomer } from "@lib/data/customer"
+import { parallelFetch } from "@lib/util/parallel-fetch"
 import PaymentWrapper from "@modules/checkout/components/payment-wrapper"
 import CheckoutForm from "@modules/checkout/templates/checkout-form"
 import CheckoutSummary from "@modules/checkout/templates/checkout-summary"
+import CheckoutSkeleton from "@modules/skeletons/templates/checkout-skeleton"
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
+import { Suspense } from "react"
 import "./checkout.css"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import ChevronDown from "@modules/common/icons/chevron-down"
@@ -14,13 +17,29 @@ export const metadata: Metadata = {
 }
 
 export default async function Checkout() {
-  const cart = await retrieveCart()
+  // Fetch cart and customer in parallel
+  const [cart, customer] = await parallelFetch([
+    async () => {
+      try {
+        return await retrieveCart()
+      } catch (error) {
+        console.error(error)
+        return null
+      }
+    },
+    async () => {
+      try {
+        return await retrieveCustomer()
+      } catch (error) {
+        console.error(error)
+        return null
+      }
+    }
+  ])
 
   if (!cart) {
     return notFound()
   }
-
-  const customer = await retrieveCustomer()
 
   return (
     <div className="bg-[#f9f6f2] checkout-container py-12">
@@ -37,9 +56,11 @@ export default async function Checkout() {
         </LocalizedClientLink>
         
         <div className="grid grid-cols-1 small:grid-cols-[1fr_416px] gap-x-8 small:gap-x-16 py-6 fade-in">
-          <PaymentWrapper cart={cart}>
-            <CheckoutForm cart={cart} customer={customer} />
-          </PaymentWrapper>
+          <Suspense fallback={<CheckoutSkeleton />}>
+            <PaymentWrapper cart={cart}>
+              <CheckoutForm cart={cart} customer={customer} />
+            </PaymentWrapper>
+          </Suspense>
           <CheckoutSummary cart={cart} />
         </div>
       </div>

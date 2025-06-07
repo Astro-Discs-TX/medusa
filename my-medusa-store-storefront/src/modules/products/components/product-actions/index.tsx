@@ -119,23 +119,38 @@ export default function ProductActions({
 
     setIsAdding(true)
 
-    await addToCart({
-      variantId: selectedVariant.id,
-      quantity: quantity,
-      countryCode,
-    })
+    try {
+      // Add the loading state immediately for better UX
+      const startTime = Date.now()
+      
+      await addToCart({
+        variantId: selectedVariant.id,
+        quantity: quantity,
+        countryCode,
+      })
 
-    // Notify other components about cart update via localStorage
-    localStorage.setItem('last_cart_addition', Date.now().toString())
-    window.dispatchEvent(new Event('storage'))
+      // Ensure we show the loading state for at least 500ms for better UX
+      const elapsedTime = Date.now() - startTime
+      if (elapsedTime < 500) {
+        await new Promise(resolve => setTimeout(resolve, 500 - elapsedTime))
+      }
 
-    setIsAdding(false)
-    setAddedToCart(true)
-    
-    // Reset added to cart state after 3 seconds
-    setTimeout(() => {
-      setAddedToCart(false)
-    }, 3000)
+      // Notify other components about cart update via localStorage
+      localStorage.setItem('last_cart_addition', Date.now().toString())
+      window.dispatchEvent(new Event('storage'))
+      
+      setAddedToCart(true)
+      
+      // Reset added to cart state after 3 seconds
+      setTimeout(() => {
+        setAddedToCart(false)
+      }, 3000)
+    } catch (error) {
+      console.error("Failed to add to cart:", error)
+      // Could add error state handling here
+    } finally {
+      setIsAdding(false)
+    }
   }
 
   return (

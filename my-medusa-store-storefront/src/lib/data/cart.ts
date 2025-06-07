@@ -32,7 +32,8 @@ export async function retrieveCart(cartId?: string) {
   }
 
   const next = {
-    ...(await getCacheOptions("carts")),
+    revalidate: 5,
+    tags: ['cart', `cart-${id}`],
   }
 
   return await sdk.client

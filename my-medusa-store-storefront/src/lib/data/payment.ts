@@ -9,8 +9,10 @@ export const listCartPaymentMethods = async (regionId: string) => {
     ...(await getAuthHeaders()),
   }
 
+  // Update caching options to be more efficient
   const next = {
-    ...(await getCacheOptions("payment_providers")),
+    revalidate: 120, // Cache payment providers for 2 minutes
+    tags: ['payment', `region-payment-${regionId}`], // Tag for selective revalidation
   }
 
   return sdk.client
@@ -29,7 +31,8 @@ export const listCartPaymentMethods = async (regionId: string) => {
         return a.id > b.id ? 1 : -1
       })
     )
-    .catch(() => {
+    .catch((error) => {
+      console.error("Error fetching payment providers:", error)
       return null
     })
 }

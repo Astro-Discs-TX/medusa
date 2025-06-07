@@ -1,10 +1,12 @@
 import { listCartShippingMethods } from "@lib/data/fulfillment"
 import { listCartPaymentMethods } from "@lib/data/payment"
+import { parallelFetch } from "@lib/util/parallel-fetch"
 import { HttpTypes } from "@medusajs/types"
 import Addresses from "@modules/checkout/components/addresses"
 import Payment from "@modules/checkout/components/payment"
 import Review from "@modules/checkout/components/review"
 import Shipping from "@modules/checkout/components/shipping"
+import { Suspense } from "react"
 
 export default async function CheckoutForm({
   cart,
@@ -17,8 +19,11 @@ export default async function CheckoutForm({
     return null
   }
 
-  const shippingMethods = await listCartShippingMethods(cart.id)
-  const paymentMethods = await listCartPaymentMethods(cart.region?.id ?? "")
+  // Fetch shipping and payment methods in parallel
+  const [shippingMethods, paymentMethods] = await parallelFetch([
+    () => listCartShippingMethods(cart.id),
+    () => listCartPaymentMethods(cart.region?.id ?? "")
+  ])
 
   if (!shippingMethods || !paymentMethods) {
     return null

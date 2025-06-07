@@ -10,7 +10,8 @@ export const listCartShippingMethods = async (cartId: string) => {
   }
 
   const next = {
-    ...(await getCacheOptions("fulfillment")),
+    revalidate: 60,
+    tags: ['shipping', `cart-shipping-${cartId}`],
   }
 
   return sdk.client
@@ -29,7 +30,8 @@ export const listCartShippingMethods = async (cartId: string) => {
       }
     )
     .then(({ shipping_options }) => shipping_options)
-    .catch(() => {
+    .catch((error) => {
+      console.error("Error fetching shipping options:", error)
       return null
     })
 }
