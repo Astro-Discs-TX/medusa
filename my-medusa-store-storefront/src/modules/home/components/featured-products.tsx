@@ -30,7 +30,7 @@ export default async function FeaturedProducts({ countryCode }: { countryCode: s
     <div className="max-w-7xl mx-auto px-4">
       <ScrollReveal>
         <Heading level="h2" className="text-3xl md:text-4xl mb-12 text-center">
-          Our Collections
+          Featured Products
         </Heading>
       </ScrollReveal>
       
