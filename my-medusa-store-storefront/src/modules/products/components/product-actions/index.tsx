@@ -50,10 +50,19 @@ export default function ProductActions({
       return
     }
 
-    return product.variants.find((v) => {
+    const variant = product.variants.find((v) => {
       const variantOptions = optionsAsKeymap(v.options)
       return isEqual(variantOptions, options)
     })
+    
+    // Store the selected variant ID in localStorage for other components to use
+    if (variant?.id) {
+      localStorage.setItem('selectedVariantId', variant.id)
+      // Dispatch storage event to notify other components
+      window.dispatchEvent(new Event('storage'))
+    }
+    
+    return variant
   }, [product.variants, options])
 
   // update the options when a variant is selected
@@ -224,14 +233,18 @@ export default function ProductActions({
           className={`w-full h-12 mt-2 font-medium tracking-wider uppercase transition-all duration-300 ${
             addedToCart 
               ? 'bg-emerald-600 hover:bg-emerald-700' 
-              : 'bg-luxury-gold hover:bg-luxury-gold/90'
+              : !selectedVariant || !isValidVariant 
+                ? 'bg-neutral-200 text-neutral-600 hover:bg-neutral-300'
+                : 'bg-luxury-gold hover:bg-luxury-gold/90'
           }`}
           isLoading={isAdding}
           data-testid="add-product-button"
         >
-          {!selectedVariant && !options
-            ? "Select variant"
-            : !inStock || !isValidVariant
+          {!selectedVariant && !Object.keys(options).length
+            ? "Select options to continue"
+            : !selectedVariant || !isValidVariant
+            ? "Select all options"
+            : !inStock
             ? "Out of stock"
             : addedToCart
             ? "Added to cart!"

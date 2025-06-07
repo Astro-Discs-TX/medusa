@@ -3,7 +3,7 @@ import React, { Suspense } from "react"
 import ImageGallery from "@modules/products/components/image-gallery"
 import ProductActions from "@modules/products/components/product-actions"
 import ProductOnboardingCta from "@modules/products/components/product-onboarding-cta"
-import ProductTabs from "@modules/products/components/product-tabs"
+import ProductTabsWrapper from "@modules/products/components/product-tabs-wrapper"
 import RelatedProducts from "@modules/products/components/related-products"
 import ProductInfo from "@modules/products/templates/product-info"
 import SkeletonRelatedProducts from "@modules/skeletons/templates/skeleton-related-products"
@@ -82,7 +82,11 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
           <div className="border-b border-luxury-gold/20 mb-8">
             <h2 className="font-display text-2xl text-luxury-charcoal">Product Details</h2>
           </div>
-          <ProductTabs product={product} />
+          <Suspense fallback={<div className="h-[200px] flex items-center justify-center">
+            <p className="text-luxury-charcoal/50">Loading product details...</p>
+          </div>}>
+            <ProductTabsWrapper product={product} />
+          </Suspense>
         </div>
       </div>
       
