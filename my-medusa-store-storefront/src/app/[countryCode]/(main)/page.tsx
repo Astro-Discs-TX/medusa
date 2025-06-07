@@ -5,9 +5,12 @@ import { Metadata } from "next"
 
 import FeaturedProducts from "@modules/home/components/featured-products"
 import Hero from "@modules/home/components/hero"
-import TestimonialSection from "@modules/home/components/testimonial-section"
-import CraftmanshipSection from "@modules/home/components/craftmanship-section"
-import { listCollections } from "@lib/data/collections"
+import Collections from "@modules/home/components/collections"
+import Craftsmanship from "@modules/home/components/craftsmanship"
+import Testimonials from "@modules/home/components/testimonials"
+import Newsletter from "@modules/home/components/newsletter"
+import { Suspense } from "react"
+import FeaturedProductsSkeleton from "@modules/skeletons/components/featured-products-skeleton"
 import { getRegion } from "@lib/data/regions"
 
 export const metadata: Metadata = {
@@ -16,7 +19,11 @@ export const metadata: Metadata = {
     "Discover exquisite handcrafted marble artifacts. Each piece is meticulously crafted by master artisans.",
 }
 
-export default async function MainRedirect(props: {
+// Set dynamic rendering options for this page
+export const dynamic = "force-static" // Force static generation
+export const revalidate = 60 * 60 // Revalidate every hour
+
+export default async function Home(props: {
   params: { countryCode: string }
 }) {
   const { countryCode } = props.params
@@ -26,6 +33,29 @@ export default async function MainRedirect(props: {
     return null
   }
 
-  // Redirect to the home page outside of the (main) route group
-  redirect(`/${countryCode}`)
+  return (
+    <div>
+      {/* Hero Section */}
+      <Hero />
+      
+      {/* Featured Products Section */}
+      <section className="py-16 bg-white">
+        <Suspense fallback={<FeaturedProductsSkeleton />}>
+          <FeaturedProducts countryCode={countryCode} />
+        </Suspense>
+      </section>
+      
+      {/* Collections Section */}
+      <Collections />
+      
+      {/* Craftsmanship Section */}
+      <Craftsmanship />
+      
+      {/* Testimonials Section */}
+      <Testimonials />
+      
+      {/* Newsletter Section */}
+      <Newsletter />
+    </div>
+  )
 }

@@ -2,11 +2,18 @@ import { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { listProducts } from "@lib/data/products"
 import { getRegion, listRegions } from "@lib/data/regions"
+import { parallelFetch } from "@lib/util/parallel-fetch"
 import ProductTemplate from "@modules/products/templates"
+import { Suspense } from "react"
+import SkeletonProductPage from "@modules/skeletons/templates/skeleton-product-page"
 
 type Props = {
-  params: Promise<{ countryCode: string; handle: string }>
+  params: { countryCode: string; handle: string }
 }
+
+// Set dynamic rendering options for this page
+export const dynamic = "force-static" // Force static generation
+export const revalidate = 60 * 5 // Revalidate every 5 minutes
 
 export async function generateStaticParams() {
   try {
@@ -18,19 +25,20 @@ export async function generateStaticParams() {
       return []
     }
 
-    const promises = countryCodes.map(async (country) => {
-      const { response } = await listProducts({
-        countryCode: country,
-        queryParams: { limit: 100, fields: "handle" },
+    // For each country, fetch product handles in parallel
+    const countryProducts = await Promise.all(
+      countryCodes.map(async (country) => {
+        const { response } = await listProducts({
+          countryCode: country,
+          queryParams: { limit: 100, fields: "handle" },
+        })
+
+        return {
+          country,
+          products: response.products,
+        }
       })
-
-      return {
-        country,
-        products: response.products,
-      }
-    })
-
-    const countryProducts = await Promise.all(promises)
+    )
 
     return countryProducts
       .flatMap((countryData) =>
@@ -50,17 +58,16 @@ export async function generateStaticParams() {
   }
 }
 
-export async function generateMetadata(props: Props): Promise<Metadata> {
-  const params = await props.params
-  const { handle } = params
-  const region = await getRegion(params.countryCode)
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { handle, countryCode } = params
+  const region = await getRegion(countryCode)
 
   if (!region) {
     notFound()
   }
 
   const product = await listProducts({
-    countryCode: params.countryCode,
+    countryCode: countryCode,
     queryParams: { handle },
   }).then(({ response }) => response.products[0])
 
@@ -83,28 +90,35 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   }
 }
 
-export default async function ProductPage(props: Props) {
-  const params = await props.params
-  const region = await getRegion(params.countryCode)
+export default async function ProductPage({ params }: Props) {
+  const { countryCode, handle } = params
+  
+  // Fetch region and product data in parallel
+  const [region, productData] = await parallelFetch([
+    () => getRegion(countryCode),
+    () => listProducts({
+      countryCode: countryCode,
+      queryParams: { handle: handle },
+    })
+  ])
 
   if (!region) {
     notFound()
   }
 
-  const pricedProduct = await listProducts({
-    countryCode: params.countryCode,
-    queryParams: { handle: params.handle },
-  }).then(({ response }) => response.products[0])
+  const pricedProduct = productData.response.products[0]
 
   if (!pricedProduct) {
     notFound()
   }
 
   return (
-    <ProductTemplate
-      product={pricedProduct}
-      region={region}
-      countryCode={params.countryCode}
-    />
+    <Suspense fallback={<SkeletonProductPage />}>
+      <ProductTemplate
+        product={pricedProduct}
+        region={region}
+        countryCode={countryCode}
+      />
+    </Suspense>
   )
 }

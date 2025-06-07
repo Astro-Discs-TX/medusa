@@ -10,14 +10,16 @@ import { SortOptions } from "@modules/store/components/refinement-list/sort-prod
 import { Suspense } from "react"
 
 type Props = {
-  params: Promise<{ handle: string; countryCode: string }>
-  searchParams: Promise<{
+  params: { handle: string; countryCode: string }
+  searchParams: {
     page?: string
     sortBy?: SortOptions
-  }>
+  }
 }
 
-export const PRODUCT_LIMIT = 12
+// Set dynamic rendering options for this page
+export const dynamic = "force-static" // Force static generation
+export const revalidate = 60 * 10 // Revalidate every 10 minutes
 
 export async function generateStaticParams() {
   // Fetch collections and regions in parallel
@@ -58,8 +60,7 @@ export async function generateStaticParams() {
   return staticParams
 }
 
-export async function generateMetadata(props: Props): Promise<Metadata> {
-  const params = await props.params
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const collection = await getCollectionByHandle(params.handle)
 
   if (!collection) {
@@ -74,9 +75,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   return metadata
 }
 
-export default async function CollectionPage(props: Props) {
-  const searchParams = await props.searchParams
-  const params = await props.params
+export default async function CollectionPage({ params, searchParams }: Props) {
   const { sortBy, page } = searchParams
 
   const collection = await getCollectionByHandle(params.handle).then(
