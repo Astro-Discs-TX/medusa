@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 
 // Set dynamic rendering options for this page
 export const dynamic = "force-static" // Force static generation
-export const revalidate = 60 * 60 // Revalidate every hour
+export const revalidate = 3600 // Revalidate every hour
 
 export default async function Home(props: {
   params: { countryCode: string }

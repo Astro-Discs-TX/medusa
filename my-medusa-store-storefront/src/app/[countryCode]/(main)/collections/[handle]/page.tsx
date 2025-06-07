@@ -19,7 +19,7 @@ type Props = {
 
 // Set dynamic rendering options for this page
 export const dynamic = "force-static" // Force static generation
-export const revalidate = 60 * 10 // Revalidate every 10 minutes
+export const revalidate = 600 // Revalidate every 10 minutes
 
 export async function generateStaticParams() {
   // Fetch collections and regions in parallel
