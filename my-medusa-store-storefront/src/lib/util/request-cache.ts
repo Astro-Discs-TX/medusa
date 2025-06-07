@@ -8,9 +8,30 @@ type CacheRecord = {
   data: any;
 }
 
+// Cache for in-flight requests to handle request coalescence
+const pendingRequests = new Map<string, Promise<any>>();
+
 // Cache with expiration
 const requestCache = new Map<string, CacheRecord>();
-const DEFAULT_TTL = 60 * 1000; // 60 seconds in milliseconds
+const DEFAULT_TTL = 5 * 60 * 1000; // 5 minutes in milliseconds
+
+// TTL configurations for different types of data
+const TTL_CONFIG = {
+  regions: 10 * 60 * 1000,    // 10 minutes for regions
+  products: 5 * 60 * 1000,    // 5 minutes for products
+  collections: 10 * 60 * 1000,// 10 minutes for collections
+  default: 5 * 60 * 1000      // 5 minutes default
+};
+
+/**
+ * Get TTL for a specific URL
+ */
+async function getTtlForUrl(url: string): Promise<number> {
+  if (url.includes('/regions')) return TTL_CONFIG.regions;
+  if (url.includes('/products')) return TTL_CONFIG.products;
+  if (url.includes('/collections')) return TTL_CONFIG.collections;
+  return TTL_CONFIG.default;
+}
 
 /**
  * Generate a cache key from a URL and optional query parameters
@@ -32,39 +53,65 @@ export async function generateCacheKey(url: string, params?: Record<string, any>
 }
 
 /**
- * Deduplicate requests by caching responses
+ * Deduplicate requests by caching responses and coalescing in-flight requests
  * @param url The URL to fetch
  * @param fetcher The function that performs the actual fetch
- * @param ttl Time to live in milliseconds
+ * @param params Optional query parameters
+ * @param ttl Optional custom TTL in milliseconds
  * @returns The cached or fresh response
  */
 export async function deduplicateRequest<T>(
   url: string,
   fetcher: () => Promise<T>,
   params?: Record<string, any>,
-  ttl: number = DEFAULT_TTL
+  ttl?: number
 ): Promise<T> {
   const cacheKey = await generateCacheKey(url, params);
   const now = Date.now();
   
+  // If TTL is not provided, use the URL-specific TTL
+  const effectiveTtl = ttl || await getTtlForUrl(url);
+  
   // Check if we have a valid cached response
   const cached = requestCache.get(cacheKey);
-  if (cached && now - cached.timestamp < ttl) {
+  if (cached && now - cached.timestamp < effectiveTtl) {
     console.log(`Cache hit for ${cacheKey}`);
     return cached.data as T;
   }
   
+  // Check if there's already an in-flight request for this key
+  if (pendingRequests.has(cacheKey)) {
+    console.log(`Request coalescence for ${cacheKey}`);
+    return pendingRequests.get(cacheKey) as Promise<T>;
+  }
+  
   // If not cached or expired, fetch fresh data
   console.log(`Cache miss for ${cacheKey}`);
-  const result = await fetcher();
   
-  // Cache the result
-  requestCache.set(cacheKey, {
-    timestamp: now,
-    data: result
-  });
+  // Create a new request and store it in pending requests
+  const requestPromise = fetcher()
+    .then(result => {
+      // Cache the result
+      requestCache.set(cacheKey, {
+        timestamp: Date.now(),
+        data: result
+      });
+      
+      // Clean up the pending request
+      pendingRequests.delete(cacheKey);
+      
+      return result;
+    })
+    .catch(error => {
+      // Clean up the pending request on error
+      pendingRequests.delete(cacheKey);
+      throw error;
+    });
   
-  return result;
+  // Store the promise in pending requests
+  pendingRequests.set(cacheKey, requestPromise);
+  
+  return requestPromise;
 }
 
 /**

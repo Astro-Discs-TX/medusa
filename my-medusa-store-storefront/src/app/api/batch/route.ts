@@ -11,6 +11,23 @@ type BatchRequest = {
 }
 
 /**
+ * Generate a unique key for a request based on its properties
+ */
+function generateRequestKey(request: BatchRequest): string {
+  const { path, method = "GET", query = {}, body = {} } = request
+  
+  // For GET requests, include query params in the key
+  if (method === "GET") {
+    const queryStr = Object.keys(query).sort().map(key => `${key}=${JSON.stringify(query[key])}`).join('&')
+    return `${method}:${path}${queryStr ? `?${queryStr}` : ''}`
+  }
+  
+  // For non-GET requests, include the body in the key
+  const bodyStr = Object.keys(body).length > 0 ? JSON.stringify(body) : ''
+  return `${method}:${path}${bodyStr ? `:${bodyStr}` : ''}`
+}
+
+/**
  * Handles batch API requests in a single endpoint
  * This reduces the number of HTTP requests made to the Medusa backend
  */
@@ -25,26 +42,29 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    // Group requests by URL to deduplicate identical requests within a batch
-    const groupedRequests = requests.reduce((acc, request) => {
-      const key = `${request.path}:${request.method || 'GET'}`
-      if (!acc[key]) {
-        acc[key] = []
+    // Improved request grouping by path, method, query params, and body
+    const requestsMap = new Map<string, { request: BatchRequest, indices: number[] }>()
+    
+    // Group requests by their unique properties
+    requests.forEach((request, index) => {
+      const key = generateRequestKey(request)
+      
+      if (!requestsMap.has(key)) {
+        requestsMap.set(key, { request, indices: [index] })
+      } else {
+        requestsMap.get(key)!.indices.push(index)
       }
-      acc[key].push(request)
-      return acc
-    }, {} as Record<string, BatchRequest[]>)
+    })
 
     // Process each unique request in parallel
     const uniqueResults = await Promise.all(
-      (Object.entries(groupedRequests) as [string, BatchRequest[]][]).map(async ([key, requestsGroup]) => {
-        // Use the first request as the representative for this group
-        const request = requestsGroup[0]
+      Array.from(requestsMap.entries()).map(async ([key, { request, indices }]) => {
         const { path, method = "GET", query = {}, body = {}, headers = {} } = request
 
         if (!path) {
           return {
             key,
+            indices,
             result: {
               error: "Missing path in batch request",
               status: 400,
@@ -54,6 +74,11 @@ export async function POST(req: NextRequest) {
 
         try {
           // Use request deduplication to avoid multiple identical requests
+          // with intelligent TTL based on request type
+          const ttl = path.includes('/regions') ? 10 * 60 * 1000 : // 10 minutes for regions
+                     path.includes('/products') ? 5 * 60 * 1000 : // 5 minutes for products
+                     60 * 1000 // 1 minute default for batch requests
+          
           const response = await deduplicateRequest(
             path,
             () => sdk.client.fetch(path, {
@@ -63,11 +88,12 @@ export async function POST(req: NextRequest) {
               headers,
             }),
             method === "GET" ? query : undefined,
-            10 * 1000 // 10 seconds TTL for batch requests
+            ttl
           )
 
           return {
             key,
+            indices,
             result: {
               data: response,
               path,
@@ -79,6 +105,7 @@ export async function POST(req: NextRequest) {
           
           return {
             key,
+            indices,
             result: {
               error: error.message || "Unknown error",
               path,
@@ -90,11 +117,13 @@ export async function POST(req: NextRequest) {
     )
 
     // Map results back to original request order
-    const results = requests.map(request => {
-      const key = `${request.path}:${request.method || 'GET'}`
-      const resultEntry = uniqueResults.find(r => r.key === key)
-      return resultEntry?.result
-    })
+    const results = new Array(requests.length)
+    
+    for (const { indices, result } of uniqueResults) {
+      for (const index of indices) {
+        results[index] = result
+      }
+    }
 
     return NextResponse.json(results)
   } catch (error) {
