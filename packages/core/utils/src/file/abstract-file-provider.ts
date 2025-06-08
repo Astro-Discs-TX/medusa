@@ -125,10 +125,10 @@ export class AbstractFileProviderService implements IFileProvider {
   }
 
   /**
-   * This method deletes the file from storage. It's used when an admin user deletes a product image,
-   * or other custom file deletions.
+   * This method deletes one or more files from the storage. It's used when an admin user
+   * deletes a product image, or other custom file deletions.
    *
-   * @param {FileTypes.ProviderDeleteFileDTO} file - The details of the file to delete.
+   * @param {FileTypes.ProviderDeleteFileDTO | FileTypes.ProviderDeleteFileDTO[]} files - The details of the file(s) to delete.
    * @returns {Promise<void>} Resolves when the file is deleted.
    *
    * @example
@@ -136,13 +136,16 @@ export class AbstractFileProviderService implements IFileProvider {
    *   // ...
    *   async delete(file: ProviderDeleteFileDTO): Promise<void> {
    *     // TODO logic to remove the file from storage
-   *     // Use the `file.fileKey` to delete the file
+   *     // Use the `file.fileKey` to delete the file, which is the identifier of the file
+   *    // in the provider's storage.
    *     // for example:
    *     this.client.delete(file.fileKey)
    *   }
    * }
    */
-  async delete(file: FileTypes.ProviderDeleteFileDTO): Promise<void> {
+  async delete(
+    files: FileTypes.ProviderDeleteFileDTO | FileTypes.ProviderDeleteFileDTO[]
+  ): Promise<void> {
     throw Error("delete must be overridden by the child class")
   }
 
@@ -164,7 +167,8 @@ export class AbstractFileProviderService implements IFileProvider {
    *     fileData: ProviderGetFileDTO
    *   ): Promise<string> {
    *     // TODO logic to get the presigned URL
-   *     // Use the `file.fileKey` to delete the file
+   *     // Use the `file.fileKey` to delete the file, which is the identifier of the file
+   *    // in the provider's storage.
    *     // for example:
    *     return this.client.getPresignedUrl(fileData.fileKey)
    *   }
@@ -177,27 +181,47 @@ export class AbstractFileProviderService implements IFileProvider {
   }
 
   /**
-   * Get the file contents as a readable stream.
+   * This method retrieves an uploaded file as a stream. This is useful when streaming
+   * a file to clients or you want to process the file in chunks.
+   *
+   * @param {FileTypes.ProviderGetFileDTO} fileData - The details of the file to get its stream.
+   * @returns {Promise<Readable>} The file's stream.
+   *
+   * @version 2.8.0
    *
    * @example
    * class MyFileProviderService extends AbstractFileProviderService {
    *   // ...
    *   async getAsStream(file: ProviderDeleteFileDTO): Promise<Readable> {
+   *    // TODO logic to get the file as a stream
+   *    // Use the `file.fileKey` to get the file, which is the identifier of the file
+   *    // in the provider's storage.
+   *    // for example:
    *     this.client.getAsStream(file.fileKey)
    *   }
    * }
    */
-  getAsStream(fileData: FileTypes.ProviderGetFileDTO): Promise<Readable> {
-    throw Error("getAsStream must be overridden by the child class")
+  getDownloadStream(fileData: FileTypes.ProviderGetFileDTO): Promise<Readable> {
+    throw Error("getDownloadStream must be overridden by the child class")
   }
 
   /**
-   * Get the file contents as a Node.js Buffer
+   * This method retrieves an uploaded file as a buffer. This is useful when you want to
+   * process the entire file in memory or send it as a response.
+   *
+   * @param {FileTypes.ProviderGetFileDTO} fileData - The details of the file to get its buffer.
+   * @returns {Promise<Buffer>} The file's buffer.
+   *
+   * @version 2.8.0
    *
    * @example
    * class MyFileProviderService extends AbstractFileProviderService {
    *   // ...
    *   async getAsBuffer(file: ProviderDeleteFileDTO): Promise<Buffer> {
+   *     // TODO logic to get the file as a buffer
+   *     // Use the `file.fileKey` to get the file, which is the identifier of the file
+   *     // in the provider's storage.
+   *     // for example:
    *     this.client.getAsBuffer(file.fileKey)
    *   }
    * }

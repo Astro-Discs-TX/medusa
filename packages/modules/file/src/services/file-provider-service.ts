@@ -40,7 +40,11 @@ export default class FileProviderService {
     return this.fileProvider_.upload(file)
   }
 
-  delete(fileData: FileTypes.ProviderDeleteFileDTO): Promise<void> {
+  delete(
+    fileData:
+      | FileTypes.ProviderDeleteFileDTO
+      | FileTypes.ProviderDeleteFileDTO[]
+  ): Promise<void> {
     return this.fileProvider_.delete(fileData)
   }
 
@@ -70,8 +74,8 @@ export default class FileProviderService {
     return this.fileProvider_.getPresignedUploadUrl(fileData)
   }
 
-  getAsStream(fileData: FileTypes.ProviderGetFileDTO): Promise<Readable> {
-    return this.fileProvider_.getAsStream(fileData)
+  getDownloadStream(fileData: FileTypes.ProviderGetFileDTO): Promise<Readable> {
+    return this.fileProvider_.getDownloadStream(fileData)
   }
 
   getAsBuffer(fileData: FileTypes.ProviderGetFileDTO): Promise<Buffer> {

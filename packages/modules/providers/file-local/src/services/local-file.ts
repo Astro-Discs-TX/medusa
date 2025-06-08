@@ -66,26 +66,36 @@ export class LocalFileService extends AbstractFileProviderService {
     }
   }
 
-  async delete(file: FileTypes.ProviderDeleteFileDTO): Promise<void> {
-    const baseDir = file.fileKey.startsWith("private-")
-      ? this.privateUploadDir_
-      : this.uploadDir_
+  async delete(
+    files: FileTypes.ProviderDeleteFileDTO | FileTypes.ProviderDeleteFileDTO[]
+  ): Promise<void> {
+    files = Array.isArray(files) ? files : [files]
 
-    const filePath = this.getUploadFilePath(baseDir, file.fileKey)
-    try {
-      await fs.access(filePath, fs.constants.W_OK)
-      await fs.unlink(filePath)
-    } catch (e) {
-      // The file does not exist, we don't do anything
-      if (e.code !== "ENOENT") {
-        throw e
-      }
-    }
+    await Promise.all(
+      files.map(async (file) => {
+        const baseDir = file.fileKey.startsWith("private-")
+          ? this.privateUploadDir_
+          : this.uploadDir_
+
+        const filePath = this.getUploadFilePath(baseDir, file.fileKey)
+        try {
+          await fs.access(filePath, fs.constants.W_OK)
+          await fs.unlink(filePath)
+        } catch (e) {
+          // The file does not exist, we don't do anything
+          if (e.code !== "ENOENT") {
+            throw e
+          }
+        }
+      })
+    )
 
     return
   }
 
-  async getAsStream(file: FileTypes.ProviderGetFileDTO): Promise<Readable> {
+  async getDownloadStream(
+    file: FileTypes.ProviderGetFileDTO
+  ): Promise<Readable> {
     const baseDir = file.fileKey.startsWith("private-")
       ? this.privateUploadDir_
       : this.uploadDir_
@@ -122,6 +132,47 @@ export class LocalFileService extends AbstractFileProviderService {
     }
 
     return this.getUploadFileUrl(file.fileKey)
+  }
+
+  /**
+   * Returns the pre-signed URL that the client (frontend) can use to trigger
+   * a file upload. In this case, the Medusa backend will implement the
+   * "/upload" endpoint to perform the file upload.
+   *
+   * Since, we do not want the client to perform link detection on the frontend
+   * and then prepare a different kind of request for cloud providers and different
+   * request for the local server, we will have to make these URLs self sufficient.
+   *
+   * What is a self sufficient URL
+   *
+   * - There should be no need to specify the MIME type or filename separately in request body (cloud providers don't allow it).
+   * - There should be no need to pass auth headers like cookies. Again cloud providers
+   *   won't allow it and will likely result in a CORS error.
+   */
+  async getPresignedUploadUrl(
+    fileData: FileTypes.ProviderGetPresignedUploadUrlDTO
+  ): Promise<FileTypes.ProviderFileResultDTO> {
+    if (!fileData?.filename) {
+      throw new MedusaError(
+        MedusaError.Types.INVALID_DATA,
+        `No filename provided`
+      )
+    }
+
+    const uploadUrl = new URL(
+      "upload",
+      `${this.backendUrl_.replace(/\/$/, "")}/`
+    )
+
+    uploadUrl.searchParams.set("filename", fileData.filename)
+    if (fileData.mimeType) {
+      uploadUrl.searchParams.set("type", fileData.mimeType)
+    }
+
+    return {
+      url: uploadUrl.toString(),
+      key: fileData.filename,
+    }
   }
 
   private getUploadFilePath = (baseDir: string, fileKey: string) => {

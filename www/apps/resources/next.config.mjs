@@ -2,6 +2,7 @@ import {
   brokenLinkCheckerPlugin,
   localLinksRehypePlugin,
   prerequisitesLinkFixerPlugin,
+  recmaInjectMdxDataPlugin,
   typeListLinkFixerPlugin,
   workflowDiagramLinkFixerPlugin,
 } from "remark-rehype-plugins"
@@ -10,6 +11,7 @@ import bundleAnalyzer from "@next/bundle-analyzer"
 import mdx from "@next/mdx"
 import mdxPluginOptions from "./mdx-options.mjs"
 import path from "node:path"
+import { catchBadRedirects } from "build-scripts"
 
 const withMDX = mdx({
   extension: /\.mdx?$/,
@@ -18,6 +20,13 @@ const withMDX = mdx({
       [
         brokenLinkCheckerPlugin,
         {
+          rootBasePath: {
+            default: "app",
+            overrides: {
+              "/references": "",
+            },
+          },
+          hasGeneratedSlugs: true,
           crossProjects: {
             docs: {
               projectPath: path.resolve("..", "book"),
@@ -28,6 +37,10 @@ const withMDX = mdx({
             },
             "user-guide": {
               projectPath: path.resolve("..", "user-guide"),
+            },
+            api: {
+              projectPath: path.resolve("..", "api-reference"),
+              skipSlugValidation: true,
             },
           },
         },
@@ -49,6 +62,7 @@ const withMDX = mdx({
       ],
     ],
     remarkPlugins: mdxPluginOptions.options.remarkPlugins,
+    recmaPlugins: [[recmaInjectMdxDataPlugin]],
     jsx: true,
   },
 })
@@ -62,7 +76,7 @@ const nextConfig = {
 
   basePath: process.env.NEXT_PUBLIC_BASE_PATH || "/resources",
   async redirects() {
-    return [
+    return catchBadRedirects([
       {
         source: "/commerce-modules/order/relations-to-other-modules",
         destination: "/commerce-modules/order/links-to-other-modules",
@@ -228,7 +242,7 @@ const nextConfig = {
         destination: "/references/user/events",
         permanent: true,
       },
-    ]
+    ])
   },
   outputFileTracingExcludes: {
     "*": ["node_modules/@medusajs/icons"],
