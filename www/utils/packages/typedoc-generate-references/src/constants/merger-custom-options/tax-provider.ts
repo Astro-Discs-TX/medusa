@@ -18,6 +18,7 @@ const taxProviderOptions: FormattingOptionsType = {
     shouldIncrementAfterStartSections: true,
     expandMembers: true,
     expandProperties: true,
+    sortMembers: true,
     startSections: [
       `## Overview
 
@@ -71,7 +72,7 @@ export default ModuleProvider(Modules.TAX, {
 
 This exports the module provider's definition, indicating that the \`MyTaxProvider\` is the module provider's service.
 
-<Note title="Tip>
+<Note title="Tip">
 
 A tax module provider can have export multiple provider services, where each are registered as a separate tax provider.
 
