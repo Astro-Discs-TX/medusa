@@ -10,12 +10,16 @@ import { getRegion, retrieveRegion } from "./regions"
 
 export const listProducts = async ({
   pageParam = 1,
-  queryParams,
+  queryParams = {},
   countryCode,
   regionId,
 }: {
   pageParam?: number
-  queryParams?: HttpTypes.FindParams & HttpTypes.StoreProductParams
+  queryParams?: HttpTypes.FindParams & HttpTypes.StoreProductParams & {
+    category_id?: string | string[]
+    tags?: string | string[]
+    price?: { gte?: number; lte?: number }
+  }
   countryCode?: string
   regionId?: string
 }): Promise<{
@@ -55,8 +59,8 @@ export const listProducts = async ({
     tags: ['products'],
   }
 
-  // Use request deduplication
-  const queryObject = {
+  // Process query parameters
+  const processedQueryParams: Record<string, any> = {
     limit,
     offset,
     region_id: region?.id,
@@ -64,6 +68,33 @@ export const listProducts = async ({
     ...queryParams,
   }
 
+  // Process category filter
+  if (queryParams.category_id) {
+    processedQueryParams.category_id = Array.isArray(queryParams.category_id) 
+      ? queryParams.category_id 
+      : [queryParams.category_id]
+  }
+
+  // Process tag filter
+  if (queryParams.tags) {
+    processedQueryParams.tags = Array.isArray(queryParams.tags) 
+      ? queryParams.tags 
+      : [queryParams.tags]
+  }
+
+  // Process price filter
+  if (queryParams.price) {
+    if (queryParams.price.gte !== undefined) {
+      processedQueryParams.price_from = queryParams.price.gte
+    }
+    if (queryParams.price.lte !== undefined) {
+      processedQueryParams.price_to = queryParams.price.lte
+    }
+    // Remove the original price object as it's not compatible with the API
+    delete processedQueryParams.price
+  }
+
+  // Use request deduplication
   return await deduplicateRequest(
     `/store/products`,
     () => sdk.client
@@ -71,7 +102,7 @@ export const listProducts = async ({
         `/store/products`,
         {
           method: "GET",
-          query: queryObject,
+          query: processedQueryParams,
           headers,
           next,
           cache: "force-cache",
@@ -89,7 +120,7 @@ export const listProducts = async ({
           queryParams,
         }
       }),
-    queryObject,
+    processedQueryParams,
     30 * 1000 // 30 seconds TTL
   )
 }
@@ -105,7 +136,11 @@ export const listProductsWithSort = async ({
   countryCode,
 }: {
   page?: number
-  queryParams?: HttpTypes.FindParams & HttpTypes.StoreProductParams
+  queryParams?: HttpTypes.FindParams & HttpTypes.StoreProductParams & {
+    category_id?: string | string[]
+    tags?: string | string[]
+    price?: { gte?: number; lte?: number }
+  }
   sortBy?: SortOptions
   countryCode: string
 }): Promise<{

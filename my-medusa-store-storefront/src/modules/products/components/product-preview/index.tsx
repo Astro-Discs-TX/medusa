@@ -36,16 +36,16 @@ export default function ProductPreviewClient({
       className="group block relative luxury-image-hover"
       aria-label={`View ${product.title}`}
     >
-      <div data-testid="product-wrapper" className="overflow-hidden">
+      <div data-testid="product-wrapper" className="overflow-hidden rounded-sm border border-luxury-gold/10 bg-luxury-ivory/10 transition-all duration-300 group-hover:shadow-md group-hover:border-luxury-gold/30 group-hover:-translate-y-1">
         <div className="relative">
-          {/* Product thumbnail */}
-          <div className="w-full h-full overflow-hidden">
+          {/* Product thumbnail - slightly reduced in height */}
+          <div className="w-full overflow-hidden relative" style={{ height: '320px' }}>
             <Thumbnail
               thumbnail={product.thumbnail}
               images={product.images}
               size="full"
               isFeatured={isFeatured}
-              className="transition-transform duration-700 group-hover:scale-110"
+              className="transition-transform duration-700 group-hover:scale-110 object-cover w-full h-full"
             />
           </div>
           
@@ -56,7 +56,7 @@ export default function ProductPreviewClient({
           
           {/* "View Details" button appears on hover */}
           <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 z-20 transform translate-y-4 group-hover:translate-y-0">
-            <span className="bg-luxury-ivory/95 border border-luxury-gold px-6 py-2.5 text-luxury-charcoal text-small-semi uppercase tracking-wider hover:bg-luxury-gold hover:text-luxury-ivory transition-colors duration-300">
+            <span className="bg-luxury-ivory/95 border border-luxury-gold px-6 py-2.5 text-luxury-charcoal text-small-semi uppercase tracking-wider hover:bg-luxury-gold hover:text-luxury-ivory transition-colors duration-300 shadow-sm">
               View Details
             </span>
           </div>
@@ -101,8 +101,8 @@ export default function ProductPreviewClient({
           )}
         </div>
         
-        <div className="mt-6 pb-2 px-4">
-          <div className="flex justify-between items-start mb-3">
+        <div className="mt-4 pb-4 px-5">
+          <div className="flex justify-between items-start mb-2">
             <h3 className="font-display text-lg text-luxury-charcoal group-hover:text-luxury-gold transition-colors duration-300 pr-4" data-testid="product-title">
               {product.title}
             </h3>
