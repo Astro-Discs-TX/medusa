@@ -6527,5 +6527,6 @@ export const generatedEditDates = {
   "references/events/Payment/variables/events.Payment.PaymentEvents/page.mdx": "2025-05-28T13:06:45.060Z",
   "references/events/events.Payment/page.mdx": "2025-05-28T13:06:45.059Z",
   "references/module_events/module_events.Payment/page.mdx": "2025-05-28T13:06:45.066Z",
-  "app/integrations/guides/segment/page.mdx": "2025-05-26T14:46:22.757Z"
+  "app/integrations/guides/segment/page.mdx": "2025-05-26T14:46:22.757Z",
+  "app/integrations/guides/slack/page.mdx": "2025-06-03T09:37:42.528Z"
 }
