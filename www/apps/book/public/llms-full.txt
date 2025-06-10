@@ -17723,274 +17723,6 @@ const myWorkflow = createWorkflow(
 ```
 
 
-# Store Workflow Executions
-
-In this chapter, you'll learn how to store workflow executions in the database and access them later.
-
-## Workflow Execution Retention
-
-Medusa doesn't store your workflow's execution details by default. However, you can configure a workflow to keep its execution details stored in the database.
-
-This is useful for auditing and debugging purposes. When you store a workflow's execution, you can view details around its steps, their states and their output. You can also check whether the workflow or any of its steps failed.
-
-You can view stored workflow executions from the Medusa Admin dashboard by going to Settings -> Workflows.
-
-***
-
-## How to Store Workflow's Executions?
-
-### Prerequisites
-
-- [Redis Workflow Engine must be installed and configured.](https://docs.medusajs.com/resources/infrastructure-modules/workflow-engine/redis/index.html.md)
-
-`createWorkflow` from the Workflows SDK can accept an object as a first parameter to set the workflow's configuration. To enable storing a workflow's executions:
-
-- Enable the `store` option. If your workflow is a [Long-Running Workflow](https://docs.medusajs.com/learn/fundamentals/workflows/long-running-workflow/index.html.md), this option is enabled by default.
-- Set the `retentionTime` option to the number of seconds that the workflow execution should be stored in the database.
-
-For example:
-
-```ts highlights={highlights}
-import { createStep, createWorkflow } from "@medusajs/framework/workflows-sdk"
-
-const step1 = createStep(
-  {
-    name: "step-1",
-  },
-  async () => {
-    console.log("Hello from step 1")
-  }
-)
-
-export const helloWorkflow = createWorkflow(
-  {
-    name: "hello-workflow",
-    retentionTime: 99999,
-    store: true,
-  },
-  () => {
-    step1()
-  }
-)
-```
-
-Whenever you execute the `helloWorkflow` now, its execution details will be stored in the database.
-
-***
-
-## Retrieve Workflow Executions
-
-You can view stored workflow executions from the Medusa Admin dashboard by going to Settings -> Workflows.
-
-When you execute a workflow, the returned object has a `transaction` property containing the workflow execution's transaction details:
-
-```ts
-const { transaction } = await helloWorkflow(container).run()
-```
-
-To retrieve a workflow's execution details from the database, resolve the Workflow Engine Module from the container and use its `listWorkflowExecutions` method.
-
-For example, you can create a `GET` API Route at `src/workflows/[id]/route.ts` that retrieves a workflow execution for the specified transaction ID:
-
-```ts title="src/workflows/[id]/route.ts" highlights={retrieveHighlights}
-import { MedusaRequest, MedusaResponse } from "@medusajs/framework"
-import { Modules } from "@medusajs/framework/utils"
-
-export async function GET(
-  req: MedusaRequest,
-  res: MedusaResponse
-) {
-  const { transaction_id } = req.params
-  
-  const workflowEngineService = req.scope.resolve(
-    Modules.WORKFLOW_ENGINE
-  )
-
-  const [workflowExecution] = await workflowEngineService.listWorkflowExecutions({
-    transaction_id: transaction_id,
-  })
-
-  res.json({
-    workflowExecution,
-  })
-}
-```
-
-In the above example, you resolve the Workflow Engine Module from the container and use its `listWorkflowExecutions` method, passing the `transaction_id` as a filter to retrieve its workflow execution details.
-
-A workflow execution object will be similar to the following:
-
-```json
-{
-  "workflow_id": "hello-workflow",
-  "transaction_id": "01JJC2T6AVJCQ3N4BRD1EB88SP",
-  "id": "wf_exec_01JJC2T6B3P76JD35F12QTTA78",
-  "execution": {
-    "state": "done",
-    "steps": {},
-    "modelId": "hello-workflow",
-    "options": {},
-    "metadata": {},
-    "startedAt": 1737719880027,
-    "definition": {},
-    "timedOutAt": null,
-    "hasAsyncSteps": false,
-    "transactionId": "01JJC2T6AVJCQ3N4BRD1EB88SP",
-    "hasFailedSteps": false,
-    "hasSkippedSteps": false,
-    "hasWaitingSteps": false,
-    "hasRevertedSteps": false,
-    "hasSkippedOnFailureSteps": false
-  },
-  "context": {
-    "data": {},
-    "errors": []
-  },
-  "state": "done",
-  "created_at": "2025-01-24T09:58:00.036Z",
-  "updated_at": "2025-01-24T09:58:00.046Z",
-  "deleted_at": null
-}
-```
-
-### Example: Check if Stored Workflow Execution Failed
-
-To check if a stored workflow execution failed, you can check its `state` property:
-
-```ts
-if (workflowExecution.state === "failed") {
-  return res.status(500).json({
-    error: "Workflow failed",
-  })
-}
-```
-
-Other state values include `done`, `invoking`, and `compensating`.
-
-
-# Retry Failed Steps
-
-In this chapter, you’ll learn how to configure steps to allow retrial on failure.
-
-## What is a Step Retrial?
-
-A step retrial is a mechanism that allows a step to be retried automatically when it fails. This is useful for handling transient errors, such as network issues or temporary unavailability of a service.
-
-When a step fails, the workflow engine can automatically retry the step a specified number of times before marking the workflow as failed. This can help improve the reliability and resilience of your workflows.
-
-You can also configure the interval between retries, allowing you to wait for a certain period before attempting the step again. This is useful when the failure is due to a temporary issue that may resolve itself after some time.
-
-For example, if a step captures a payment, you may want to retry it the next day until the payment is successful or the maximum number of retries is reached.
-
-***
-
-## Configure a Step’s Retrial
-
-By default, when an error occurs in a step, the step and the workflow fail, and the execution stops.
-
-You can configure the step to retry on failure. The `createStep` function can accept a configuration object instead of the step’s name as a first parameter.
-
-For example:
-
-```ts title="src/workflows/hello-world.ts" highlights={[["10"]]} collapsibleLines="1-6" expandButtonLabel="Show Imports"
-import { 
-  createStep, 
-  createWorkflow,
-  WorkflowResponse,
-} from "@medusajs/framework/workflows-sdk"
-
-const step1 = createStep(
-  {
-    name: "step-1",
-    maxRetries: 2,
-  },
-  async () => {
-    console.log("Executing step 1")
-
-    throw new Error("Oops! Something happened.")
-  }
-)
-
-const myWorkflow = createWorkflow(
-  "hello-world", 
-  function () {
-  const str1 = step1()
-
-  return new WorkflowResponse({
-    message: str1,
-  })
-})
-
-export default myWorkflow
-```
-
-The step’s configuration object accepts a `maxRetries` property, which is a number indicating the number of times a step can be retried when it fails.
-
-When you execute the above workflow, you’ll see the following result in the terminal:
-
-```bash
-Executing step 1
-Executing step 1
-Executing step 1
-error:   Oops! Something happened.
-Error: Oops! Something happened.
-```
-
-The first line indicates the first time the step was executed, and the next two lines indicate the times the step was retried. After that, the step and workflow fail.
-
-***
-
-## Step Retry Intervals
-
-By default, a step is retried immediately after it fails. To specify a wait time before a step is retried, pass a `retryInterval` property to the step's configuration object. Its value is a number of seconds to wait before retrying the step.
-
-For example:
-
-```ts title="src/workflows/hello-world.ts" highlights={[["5"]]}
-const step1 = createStep(
-  {
-    name: "step-1",
-    maxRetries: 2,
-    retryInterval: 2, // 2 seconds
-  },
-  async () => {
-    // ...
-  }
-)
-```
-
-In this example, if the step fails, it will be retried after two seconds.
-
-### Maximum Retry Interval
-
-The `retryInterval` property's maximum value is [Number.MAX\_SAFE\_INTEGER](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER). So, you can set a very long wait time before the step is retried, allowing you to retry steps after a long period.
-
-For example, to retry a step after a day:
-
-```ts title="src/workflows/hello-world.ts" highlights={[["5"]]}
-const step1 = createStep(
-  {
-    name: "step-1",
-    maxRetries: 2,
-    retryInterval: 86400, // 1 day
-  },
-  async () => {
-    // ...
-  }
-)
-```
-
-In this example, if the step fails, it will be retried after `86400` seconds (one day).
-
-### Interval Changes Workflow to Long-Running
-
-By setting `retryInterval` on a step, a workflow that uses that step becomes a [long-running workflow](https://docs.medusajs.com/learn/fundamentals/workflows/long-running-workflow/index.html.md) that runs asynchronously in the background. This is useful when creating workflows that may fail and should run for a long time until they succeed, such as waiting for a payment to be captured or a shipment to be delivered.
-
-However, since the long-running workflow runs in the background, you won't receive its result or errors immediately when you execute the workflow.
-
-Instead, you must subscribe to the workflow's execution using the Workflow Engine Module Service. Learn more about it in [this chapter](https://docs.medusajs.com/learn/fundamentals/workflows/long-running-workflow#access-long-running-workflow-status-and-result/index.html.md).
-
-
 # Workflow Hooks
 
 In this chapter, you'll learn what a workflow hook is and how to consume them.
@@ -18642,16 +18374,15 @@ import { da } from "date-fns/locale"
 export const languages: Language[] = [
   // other languages...
   {
-    name: "step-1",
-    timeout: 2, // 2 seconds
+    code: "da",
+    display_name: "Danish",
+    ltr: true,
+    date_locale: da,
   },
-  async () => {
-    // ...
-  }
-)
+]
 ```
 
-This step's executions fail if they run longer than two seconds.
+`languages` is an array having the following properties:
 
 - `code`: The ISO-2 name of the language. For example, `da` for Danish.
 - `display_name`: The language's name to be displayed in the admin.
@@ -23263,6 +22994,67 @@ A reservation item, represented by the [ReservationItem](https://docs.medusajs.c
 The reserved quantity is associated with a location, so it has a similar relation to that of the `InventoryLevel` with the Stock Location Module.
 
 
+# Inventory Module in Medusa Flows
+
+This document explains how the Inventory Module is used within the Medusa application's flows.
+
+## Product Variant Creation
+
+When a product variant is created and its `manage_inventory` property's value is `true`, the Medusa application creates an inventory item associated with that product variant.
+
+This flow is implemented within the [createProductVariantsWorkflow](https://docs.medusajs.com/references/medusa-workflows/createProductVariantsWorkflow/index.html.md)
+
+![A diagram showcasing how the Inventory Module is used in the product variant creation form](https://res.cloudinary.com/dza7lstvk/image/upload/v1709661511/Medusa%20Resources/inventory-product-create_khz2hk.jpg)
+
+***
+
+## Add to Cart
+
+When a product variant with `manage_inventory` set to `true` is added to cart, the Medusa application checks whether there's sufficient stocked quantity. If not, an error is thrown and the product variant won't be added to the cart.
+
+This flow is implemented within the [addToCartWorkflow](https://docs.medusajs.com/references/medusa-workflows/addToCartWorkflow/index.html.md)
+
+![A diagram showcasing how the Inventory Module is used in the add to cart flow](https://res.cloudinary.com/dza7lstvk/image/upload/v1709711645/Medusa%20Resources/inventory-cart-flow_achwq9.jpg)
+
+***
+
+## Order Placed
+
+When an order is placed, the Medusa application creates a reservation item for each product variant with `manage_inventory` set to `true`.
+
+This flow is implemented within the [completeCartWorkflow](https://docs.medusajs.com/references/medusa-workflows/completeCartWorkflow/index.html.md)
+
+![A diagram showcasing how the Inventory Module is used in the order placed flow](https://res.cloudinary.com/dza7lstvk/image/upload/v1709712005/Medusa%20Resources/inventory-order-placed_qdxqdn.jpg)
+
+***
+
+## Order Fulfillment
+
+When an item in an order is fulfilled and the associated variant has its `manage_inventory` property set to `true`, the Medusa application:
+
+- Subtracts the `reserved_quantity` from the `stocked_quantity` in the inventory level associated with the variant's inventory item.
+- Resets the `reserved_quantity` to `0`.
+- Deletes the associated reservation item.
+
+This flow is implemented within the [createOrderFulfillmentWorkflow](https://docs.medusajs.com/references/medusa-workflows/createOrderFulfillmentWorkflow/index.html.md)
+
+![A diagram showcasing how the Inventory Module is used in the order fulfillment flow](https://res.cloudinary.com/dza7lstvk/image/upload/v1709712390/Medusa%20Resources/inventory-order-fulfillment_o9wdxh.jpg)
+
+***
+
+## Order Return
+
+When an item in an order is returned and the associated variant has its `manage_inventory` property set to `true`, the Medusa application increments the `stocked_quantity` of the inventory item's level with the returned quantity.
+
+This flow is implemented within the [confirmReturnReceiveWorkflow](https://docs.medusajs.com/references/medusa-workflows/confirmReturnReceiveWorkflow/index.html.md)
+
+![A diagram showcasing how the Inventory Module is used in the order return flow](https://res.cloudinary.com/dza7lstvk/image/upload/v1709712457/Medusa%20Resources/inventory-order-return_ihftyk.jpg)
+
+### Dismissed Returned Items
+
+If a returned item is considered damaged or is dismissed, its quantity doesn't increment the `stocked_quantity` of the inventory item's level.
+
+
 # Inventory Kits
 
 In this guide, you'll learn how inventory kits can be used in the Medusa application to support use cases like multi-part products, bundled products, and shared inventory across products.
@@ -23653,67 +23445,6 @@ The bundled product has the same inventory items as those of the products part o
 You can now [execute the workflow](https://docs.medusajs.com/docs/learn/fundamentals/workflows#3-execute-the-workflow/index.html.md) in [API routes](https://docs.medusajs.com/docs/learn/fundamentals/api-routes/index.html.md), [scheduled jobs](https://docs.medusajs.com/docs/learn/fundamentals/scheduled-jobs/index.html.md), or [subscribers](https://docs.medusajs.com/docs/learn/fundamentals/events-and-subscribers/index.html.md).
 
 
-# Inventory Module in Medusa Flows
-
-This document explains how the Inventory Module is used within the Medusa application's flows.
-
-## Product Variant Creation
-
-When a product variant is created and its `manage_inventory` property's value is `true`, the Medusa application creates an inventory item associated with that product variant.
-
-This flow is implemented within the [createProductVariantsWorkflow](https://docs.medusajs.com/references/medusa-workflows/createProductVariantsWorkflow/index.html.md)
-
-![A diagram showcasing how the Inventory Module is used in the product variant creation form](https://res.cloudinary.com/dza7lstvk/image/upload/v1709661511/Medusa%20Resources/inventory-product-create_khz2hk.jpg)
-
-***
-
-## Add to Cart
-
-When a product variant with `manage_inventory` set to `true` is added to cart, the Medusa application checks whether there's sufficient stocked quantity. If not, an error is thrown and the product variant won't be added to the cart.
-
-This flow is implemented within the [addToCartWorkflow](https://docs.medusajs.com/references/medusa-workflows/addToCartWorkflow/index.html.md)
-
-![A diagram showcasing how the Inventory Module is used in the add to cart flow](https://res.cloudinary.com/dza7lstvk/image/upload/v1709711645/Medusa%20Resources/inventory-cart-flow_achwq9.jpg)
-
-***
-
-## Order Placed
-
-When an order is placed, the Medusa application creates a reservation item for each product variant with `manage_inventory` set to `true`.
-
-This flow is implemented within the [completeCartWorkflow](https://docs.medusajs.com/references/medusa-workflows/completeCartWorkflow/index.html.md)
-
-![A diagram showcasing how the Inventory Module is used in the order placed flow](https://res.cloudinary.com/dza7lstvk/image/upload/v1709712005/Medusa%20Resources/inventory-order-placed_qdxqdn.jpg)
-
-***
-
-## Order Fulfillment
-
-When an item in an order is fulfilled and the associated variant has its `manage_inventory` property set to `true`, the Medusa application:
-
-- Subtracts the `reserved_quantity` from the `stocked_quantity` in the inventory level associated with the variant's inventory item.
-- Resets the `reserved_quantity` to `0`.
-- Deletes the associated reservation item.
-
-This flow is implemented within the [createOrderFulfillmentWorkflow](https://docs.medusajs.com/references/medusa-workflows/createOrderFulfillmentWorkflow/index.html.md)
-
-![A diagram showcasing how the Inventory Module is used in the order fulfillment flow](https://res.cloudinary.com/dza7lstvk/image/upload/v1709712390/Medusa%20Resources/inventory-order-fulfillment_o9wdxh.jpg)
-
-***
-
-## Order Return
-
-When an item in an order is returned and the associated variant has its `manage_inventory` property set to `true`, the Medusa application increments the `stocked_quantity` of the inventory item's level with the returned quantity.
-
-This flow is implemented within the [confirmReturnReceiveWorkflow](https://docs.medusajs.com/references/medusa-workflows/confirmReturnReceiveWorkflow/index.html.md)
-
-![A diagram showcasing how the Inventory Module is used in the order return flow](https://res.cloudinary.com/dza7lstvk/image/upload/v1709712457/Medusa%20Resources/inventory-order-return_ihftyk.jpg)
-
-### Dismissed Returned Items
-
-If a returned item is considered damaged or is dismissed, its quantity doesn't increment the `stocked_quantity` of the inventory item's level.
-
-
 # Links between Inventory Module and Other Modules
 
 This document showcases the module links defined between the Inventory Module and other Commerce Modules.
@@ -24100,6 +23831,63 @@ Payments made on an order, whether they’re capture or refund payments, are rec
 An order can have multiple transactions. The sum of these transactions must be equal to the order summary’s total. Otherwise, there’s an outstanding amount.
 
 Learn more about transactions in [this guide](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/commerce-modules/order/transactions/index.html.md).
+
+
+# Order Edit
+
+In this document, you'll learn about order edits.
+
+Refer to this [Medusa Admin User Guide](https://docs.medusajs.com/user-guide/orders/edit/index.html.md) to learn how to edit an order's items using the dashboard.
+
+## What is an Order Edit?
+
+A merchant can edit an order to add new items or change the quantity of existing items in the order.
+
+An order edit is represented by the [OrderChange data model](https://docs.medusajs.com/references/order/models/OrderChange/index.html.md).
+
+The `OrderChange` data model is associated with any type of change, including a return or exchange. However, its `change_type` property distinguishes the type of change it's making.
+
+In the case of an order edit, the `OrderChange`'s type is `edit`.
+
+***
+
+## Add Items in an Order Edit
+
+When the merchant adds new items to the order in the order edit, the item is added as an [OrderItem](https://docs.medusajs.com/references/order/models/OrderItem/index.html.md).
+
+Also, an `OrderChangeAction` is created. The [OrderChangeAction data model](https://docs.medusajs.com/references/order/models/OrderChangeAction/index.html.md) represents a change made by an `OrderChange`, such as an item added.
+
+So, when an item is added, an `OrderChangeAction` is created with the type `ITEM_ADD`. In its `details` property, the item's ID, price, and quantity are stored.
+
+***
+
+## Update Items in an Order Edit
+
+A merchant can update an existing item's quantity or price.
+
+This change is added as an `OrderChangeAction` with the type `ITEM_UPDATE`. In its `details` property, the item's ID, new price, and new quantity are stored.
+
+***
+
+## Shipping Methods of New Items in the Edit
+
+Adding new items to the order requires adding shipping methods for those items.
+
+These shipping methods are represented by the [OrderShippingMethod data model](https://docs.medusajs.com/references/order/models/OrderItem/index.html.md). Also, an `OrderChangeAction` is created with the type `SHIPPING_ADD`
+
+***
+
+## How Order Edits Impact an Order’s Version
+
+When an order edit is confirmed, the order’s version is incremented.
+
+***
+
+## Payments and Refunds for Order Edit Changes
+
+Once the Order Edit is confirmed, any additional payment or refund required can be made on the original order.
+
+This is determined by the comparison between the `OrderSummary` and the order's transactions, as mentioned in [this guide](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/commerce-modules/order/transactions#checking-outstanding-amount/index.html.md).
 
 
 # Order Exchange
@@ -26094,97 +25882,6 @@ You can then:
 Some payment providers allow capturing the payment automatically once it’s authorized. In that case, you don’t need to do it manually.
 
 
-# Payment Session
-
-In this document, you’ll learn what a payment session is.
-
-## What's a Payment Session?
-
-A payment session, represented by the [PaymentSession data model](https://docs.medusajs.com/references/payment/models/PaymentSession/index.html.md), is a payment amount to be authorized. It’s associated with a payment provider that handles authorizing it.
-
-A payment collection can have multiple payment sessions. Using this feature, you can implement payment in installments or payments using multiple providers.
-
-![Diagram showcasing how every payment session has a different payment provider](https://res.cloudinary.com/dza7lstvk/image/upload/v1711565056/Medusa%20Resources/payment-session-provider_guxzqt.jpg)
-
-***
-
-## data Property
-
-Payment providers may need additional data to process the payment later. For example, the ID of the session in the third-party provider.
-
-The `PaymentSession` data model has a `data` property used to store that data. It's set by the [payment provider in Medusa](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/commerce-modules/payment/payment-provider/index.html.md) when the payment is initialized.
-
-Then, when the payment session is authorized, the `data` property is used by the payment provider in Medusa to process the payment with the third-party provider.
-
-If you're building a custom payment provider, learn more about initializing the payment session and setting the `data` property in the [Create Payment Provider](https://docs.medusajs.com/references/payment/provider/index.html.md) guide.
-
-### data Property in the Storefront
-
-This `data` property is accessible in the storefront as well. So, only store in it data that can be publicly shared, and data that is useful in the storefront.
-
-For example, you can also store the client token used to initialize the payment session in the storefront with the third-party provider.
-
-***
-
-## Payment Session Status
-
-The `status` property of a payment session indicates its current status. Its value can be:
-
-- `pending`: The payment session is awaiting authorization.
-- `requires_more`: The payment session requires an action before it’s authorized. For example, to enter a 3DS code.
-- `authorized`: The payment session is authorized.
-- `error`: An error occurred while authorizing the payment.
-- `canceled`: The authorization of the payment session has been canceled.
-
-
-# Payment Webhook Events
-
-In this guide, you’ll learn how you can handle payment webhook events in your Medusa application and using the Payment Module.
-
-## What's a Payment Webhook Event?
-
-A payment webhook event is a request sent from a third-party payment provider to your application. It indicates a change in a payment’s status.
-
-This is useful in many cases such as:
-
-- When a payment is processed (authorized or captured) asynchronously.
-- When a payment is managed on the third-party payment provider's side.
-- When a payment action on the frontend was interrupted, leading the payment to be processed without an order being created in the Medusa application.
-
-So, it's essential to handle webhook events to ensure that your application is aware of updated payment statuses and can take appropriate actions.
-
-***
-
-## How to Handle Payment Webhook Events
-
-### Webhook Listener API Route
-
-The Medusa application has a `/hooks/payment/[identifier]_[provider]` API route out-of-the-box that allows you to listen to webhook events from third-party payment providers, where:
-
-- `[identifier]` is the `identifier` static property defined in the payment provider. For example, `stripe`.
-- `[provider]` is the ID of the provider. For example, `stripe`.
-
-For example, when integrating basic Stripe payments with the [Stripe Module Provider](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/commerce-modules/payment/payment-provider/stripe/index.html.md), the webhook listener route is `/hooks/payment/stripe_stripe`.
-
-You can use this webhook listener when configuring webhook events in your third-party payment provider.
-
-### getWebhookActionAndData Method
-
-The webhook listener API route executes the [getWebhookActionAndData method](https://docs.medusajs.com/references/payment/getWebhookActionAndData/index.html.md) of the Payment Module's main service. This method delegates handling of incoming webhook events to the relevant payment provider.
-
-Payment providers have a similar [getWebhookActionAndData method](https://docs.medusajs.com/references/payment/provider/index.html.md) to process the webhook event. So, if you're implementing a custom payment provider, make sure to implement it to handle webhook events.
-
-![A diagram showcasing the steps of how the getWebhookActionAndData method words](https://res.cloudinary.com/dza7lstvk/image/upload/v1711567415/Medusa%20Resources/payment-webhook_seaocg.jpg)
-
-If the `getWebhookActionAndData` method returns an `authorized` or `captured` action, the Medusa application will perform one of the following actions:
-
-View the full flow of the webhook event processing in the [processPaymentWorkflow](https://docs.medusajs.com/references/medusa-workflows/processPaymentWorkflow/index.html.md) reference.
-
-- If the method returns an `authorized` action, Medusa will set the associated payment session to `authorized`.
-- If the method returns a `captured` action, Medusa will set the associated payment session to `captured`.
-- In either cases, if the cart associated with the payment session is not completed yet, Medusa will complete the cart.
-
-
 # Payment Module Provider
 
 In this guide, you’ll learn about the Payment Module Provider and how it's used.
@@ -27124,6 +26821,11 @@ const price = await pricingModuleService.calculatePrices(
 
 In this Pricing Module guide, you'll learn about tired prices, price rules for price sets and price lists, and how to add rules to a price.
 
+You can manage prices and tiers using the Medusa Admin:
+
+- [Edit shipping option prices with conditions](https://docs.medusajs.com/user-guide/settings/locations-and-shipping/locations#fixed-and-conditional-shipping-option-prices/index.html.md).
+- [Add price lists to set prices with conditions for product variants](https://docs.medusajs.com/user-guide/price-lists/index.html.md).
+
 ## Tiered Pricing
 
 Each price, represented by the [Price data model](https://docs.medusajs.com/references/pricing/models/Price/index.html.md), has two optional properties that can be used to create tiered prices:
@@ -27173,6 +26875,10 @@ For most use cases where you're building customizations in the Medusa applicatio
 ### Using Medusa Workflows
 
 ```ts highlights={tieredPricingHighlights}
+import { createProductsWorkflow } from "@medusajs/medusa/core-flows"
+
+// ...
+
 const { result } = await createProductsWorkflow(container)
   .run({
     input: {
@@ -27301,18 +27007,19 @@ const { result } = await createShippingOptionsWorkflow(container)
         {
           currency_code: "usd",
           amount: 10,
-          rules: {},
+          rules: [],
         },
         // price if cart total >= $100
         {
           currency_code: "usd",
           amount: 0,
-          rules: {
-            item_total: {
+          rules: [
+            {
+              attribute: "item_total",
               operator: "gte",
               value: 100,
             },
-          },
+          ],
         },
       ],
     }],
@@ -27387,6 +27094,575 @@ You can also apply the rule on nested relations and properties. For example, to 
 In this example, the price is only applied if a cart's customer belongs to the customer group of ID `cusgrp_123`.
 
 These same rules apply to product variant prices as well, or any other resource that has a price.
+
+***
+
+## Examples
+
+This section provides some examples of implementing price tiers and rules for products and shipping options.
+
+### Product Variant Price by Quantity
+
+### Using Medusa Workflows
+
+```ts
+import { createProductsWorkflow } from "@medusajs/medusa/core-flows"
+
+// ...
+
+const { result } = await createProductsWorkflow(container)
+  .run({
+    input: {
+      products: [{
+        title: "Premium T-Shirt",
+        variants: [{
+          title: "Small / Black",
+          prices: [
+            // default price
+            {
+              amount: 20,
+              currency_code: "usd",
+            },
+            // buy 5 or more, get a small discount
+            {
+              amount: 18,
+              currency_code: "usd",
+              min_quantity: 5,
+              max_quantity: 9,
+            },
+            // buy 10 or more, get a bigger discount
+            {
+              amount: 15,
+              currency_code: "usd",
+              min_quantity: 10,
+            },
+          ],
+        }],
+      }],
+    },
+  })
+```
+
+### Using the Pricing Module
+
+```ts
+const priceSet = await pricingModule.addPrices({
+  // this is the price set of the product variant
+  priceSetId: "pset_product_123",
+  prices: [
+    // default price: $20.00
+    {
+      amount: 20,
+      currency_code: "usd",
+    },
+    // buy 5-9 shirts: $18.00 each
+    {
+      amount: 18,
+      currency_code: "usd",
+      min_quantity: 5,
+      max_quantity: 9,
+    },
+    // buy 10+ shirts: $15.00 each
+    {
+      amount: 15,
+      currency_code: "usd",
+      min_quantity: 10,
+    },
+  ],
+})
+```
+
+### Product Variant Price by Customer Group
+
+### Using Medusa Workflows
+
+```ts
+import { createProductsWorkflow } from "@medusajs/medusa/core-flows"
+
+// ...
+
+const { result } = await createProductsWorkflow(container)
+  .run({
+    input: {
+      products: [{
+        title: "Premium T-Shirt",
+        variants: [{
+          title: "Small / Black",
+          prices: [
+            // default price
+            {
+              amount: 40,
+              currency_code: "usd",
+            },
+            // discounted price for VIP customers
+            {
+              amount: 30,
+              currency_code: "usd",
+              rules: {
+                "customer.groups.id": "cusgrp_vip123",
+              },
+            },
+            // special price for wholesale customers
+            {
+              amount: 20,
+              currency_code: "usd",
+              rules: {
+                "customer.groups.id": "cusgrp_wholesale456",
+              },
+            },
+          ],
+        }],
+      }],
+    },
+  })
+```
+
+### Using the Pricing Module
+
+```ts
+const priceSet = await pricingModule.addPrices({
+  // this is the price set of the product variant
+  priceSetId: "pset_product_123",
+  prices: [
+    // default price
+    {
+      amount: 40,
+      currency_code: "usd",
+    },
+    // discounted price for VIP customers
+    {
+      amount: 30,
+      currency_code: "usd",
+      rules: {
+        "customer.groups.id": "cusgrp_vip123",
+      },
+    },
+    // special price for wholesale customers
+    {
+      amount: 20,
+      currency_code: "usd",
+      rules: {
+        "customer.groups.id": "cusgrp_wholesale456",
+      },
+    },
+  ],
+})
+```
+
+### Free Shipping for Orders Above a Certain Amount
+
+### Using Medusa Workflows
+
+```ts
+const { result } = await createShippingOptionsWorkflow(container)
+  .run({
+    input: [{
+      name: "Standard Shipping",
+      service_zone_id: "serzo_123",
+      shipping_profile_id: "sp_123",
+      provider_id: "prov_123",
+      type: {
+        label: "Standard",
+        description: "Standard shipping (2-5 business days)",
+        code: "standard",
+      },
+      price_type: "flat",
+      prices: [
+        // regular shipping price
+        {
+          currency_code: "usd",
+          amount: 10,
+          rules: [],
+        },
+        // free shipping for carts over $100
+        {
+          currency_code: "usd",
+          amount: 0,
+          rules: [
+            {
+              attribute: "item_total",
+              operator: "gte",
+              value: 100,
+            },
+          ],
+        },
+      ],
+    }],
+  })
+```
+
+### Using the Pricing Module
+
+```ts
+const priceSet = await pricingModule.addPrices({
+  priceSetId: "pset_shipping_123",
+  prices: [
+    // regular shipping price
+    {
+      currency_code: "usd",
+      amount: 10,
+      rules: {},
+    },
+    // free shipping for orders over $100
+    {
+      currency_code: "usd",
+      amount: 0,
+      rules: {
+        item_total: [
+          {
+            operator: "gte",
+            value: 100,
+          },
+        ],
+      },
+    },
+  ],
+})
+```
+
+### Shipping Prices Based on Customer Groups
+
+### Using Medusa Workflows
+
+```ts
+const { result } = await createShippingOptionsWorkflow(container)
+  .run({
+    input: [{
+      name: "Express Shipping",
+      service_zone_id: "serzo_456",
+      shipping_profile_id: "sp_456",
+      provider_id: "prov_456",
+      type: {
+        label: "Express",
+        description: "Express shipping (1-2 business days)",
+        code: "express",
+      },
+      price_type: "flat",
+      prices: [
+        // regular express shipping price
+        {
+          currency_code: "usd",
+          amount: 20,
+          rules: [],
+        },
+        // discounted express shipping for VIP customers
+        {
+          currency_code: "usd",
+          amount: 15,
+          rules: [
+            {
+              attribute: "customer.groups.id",
+              operator: "in",
+              value: ["cusgrp_vip123"],
+            },
+          ],
+        },
+        // special rate for B2B customers
+        {
+          currency_code: "usd",
+          amount: 13,
+          rules: [
+            {
+              attribute: "customer.groups.id",
+              operator: "in",
+              value: ["cusgrp_b2b789"],
+            },
+          ],
+        },
+      ],
+    }],
+  })
+```
+
+### Using the Pricing Module
+
+```ts
+const priceSet = await pricingModule.addPrices({
+  priceSetId: "pset_shipping_456",
+  prices: [
+    // regular express shipping
+    {
+      currency_code: "usd",
+      amount: 20,
+      rules: {},
+    },
+    // VIP customer express shipping
+    {
+      currency_code: "usd",
+      amount: 15,
+      rules: {
+        "customer.groups.id": [
+          {
+            operator: "in",
+            value: ["cusgrp_vip123"],
+          },
+        ],
+      },
+    },
+    // B2B customer express shipping
+    {
+      currency_code: "usd",
+      amount: 13,
+      rules: {
+        "customer.groups.id": [
+          {
+            operator: "in",
+            value: ["cusgrp_b2b789"],
+          },
+        ],
+      },
+    },
+  ],
+})
+```
+
+### Combined Tiered and Rule-Based Shipping Pricing
+
+### Using Medusa Workflows
+
+```ts
+const { result } = await createShippingOptionsWorkflow(container)
+  .run({
+    input: [{
+      name: "Bulk Shipping",
+      service_zone_id: "serzo_789",
+      shipping_profile_id: "sp_789",
+      provider_id: "prov_789",
+      type: {
+        label: "Bulk",
+        description: "Shipping for bulk orders",
+        code: "bulk",
+      },
+      price_type: "flat",
+      prices: [
+        // base shipping price
+        {
+          currency_code: "usd",
+          amount: 20,
+          rules: [],
+        },
+        // discounted shipping for 5-10 items
+        {
+          currency_code: "usd",
+          amount: 18,
+          min_quantity: 5,
+          max_quantity: 10,
+          rules: [],
+        },
+        // heavily discounted shipping for 10+ items
+        {
+          currency_code: "usd",
+          amount: 15,
+          min_quantity: 11,
+          rules: [],
+        },
+        // free shipping for VIP customers with carts over $200
+        {
+          currency_code: "usd",
+          amount: 0,
+          rules: {
+            "customer.groups.id": [
+              {
+                operator: "in",
+                value: ["cusgrp_vip123"],
+              },
+            ],
+            item_total: [
+              {
+                operator: "gte",
+                value: 200,
+              },
+            ],
+          },
+        },
+      ],
+    }],
+  })
+```
+
+### Using the Pricing Module
+
+```ts
+const priceSet = await pricingModule.addPrices({
+  priceSetId: "pset_shipping_789",
+  prices: [
+    // base shipping price: $20.00
+    {
+      currency_code: "usd",
+      amount: 20,
+      rules: {},
+    },
+    // 5-10 items: $18.00
+    {
+      currency_code: "usd",
+      amount: 18,
+      min_quantity: 5,
+      max_quantity: 10,
+      rules: {},
+    },
+    // 11+ items: $15.00
+    {
+      currency_code: "usd",
+      amount: 15,
+      min_quantity: 11,
+      rules: {},
+    },
+    // VIP customers with orders over $200: FREE
+    {
+      currency_code: "usd",
+      amount: 0,
+      rules: [
+        {
+          attribute: "customer.groups.id",
+          operator: "in",
+          value: ["cusgrp_vip123"],
+        },
+        {
+          attribute: "item_total",
+          operator: "gte",
+          value: 200,
+        },
+      ],
+    },
+  ],
+})
+```
+
+### Shipping Prices Based on Geographical Rules
+
+### Using Medusa Workflows
+
+```ts
+const { result } = await createShippingOptionsWorkflow(container)
+  .run({
+    input: [{
+      name: "Regional Shipping",
+      service_zone_id: "serzo_geo123",
+      shipping_profile_id: "sp_standard",
+      provider_id: "prov_standard",
+      type: {
+        label: "Standard",
+        description: "Standard shipping with regional pricing",
+        code: "standard_regional",
+      },
+      price_type: "flat",
+      prices: [
+        // default shipping price
+        {
+          currency_code: "usd",
+          amount: 15,
+          rules: [],
+        },
+        // special price for specific zip codes (metropolitan areas)
+        {
+          currency_code: "usd",
+          amount: 10,
+          rules: [
+            {
+              attribute: "shipping_address.postal_code",
+              operator: "in",
+              value: ["10001", "10002", "10003", "90001", "90002", "90003"],
+            },
+          ],
+        },
+        // higher price for remote areas
+        {
+          currency_code: "usd",
+          amount: 25,
+          rules: [
+            {
+              attribute: "shipping_address.postal_code",
+              operator: "in",
+              value: ["99501", "99502", "99503", "00601", "00602", "00603"],
+            },
+          ],
+        },
+        // different price for a specific region
+        {
+          currency_code: "usd",
+          amount: 12,
+          rules: [
+            {
+              attribute: "region.id",
+              operator: "eq",
+              value: "reg_123",
+            },
+          ],
+        },
+        // different price for a specific country
+        {
+          currency_code: "usd",
+          amount: 20,
+          rules: [
+            {
+              attribute: "shipping_address.country_code",
+              operator: "eq",
+              value: "ca",
+            },
+          ],
+        },
+      ],
+    }],
+  })
+```
+
+### Using the Pricing Module
+
+```ts
+const priceSet = await pricingModule.addPrices({
+  priceSetId: "pset_shipping_geo",
+  prices: [
+    // default shipping price: $15.00
+    {
+      currency_code: "usd",
+      amount: 15,
+      rules: {},
+    },
+    // metropolitan areas: $10.00
+    {
+      currency_code: "usd",
+      amount: 10,
+      rules: {
+        "shipping_address.postal_code": [
+          {
+            operator: "in",
+            value: ["10001", "10002", "10003", "90001", "90002", "90003"],
+          },
+        ],
+      },
+    },
+    // remote areas: $25.00
+    {
+      currency_code: "usd",
+      amount: 25,
+      rules: {
+        "shipping_address.postal_code": [
+          {
+            operator: "in",
+            value: ["99501", "99502", "99503", "00601", "00602", "00603"],
+          },
+        ],
+      },
+    },
+    // Northeast region: $12.00
+    {
+      currency_code: "usd",
+      amount: 12,
+      rules: {
+        "region.id": "reg_123",
+      },
+    },
+    // Canada: $20.00
+    {
+      currency_code: "usd",
+      amount: 20,
+      rules: {
+        "shipping_address.country_code": "ca",
+      },
+    },
+  ],
+})
+```
 
 
 # Tax-Inclusive Pricing
@@ -28594,39 +28870,41 @@ The following guides provide more details on inventory management in the Medusa 
 - [Storefront guide: how to retrieve a product variant's inventory details](https://docs.medusajs.com/resources/storefront-development/products/inventory/index.html.md).
 
 
-# Configure Selling Products
+# Promotion Actions
 
-In this guide, you'll learn how to set up and configure your products based on their shipping and inventory requirements, the product type, how you want to sell them, or your commerce ecosystem.
+In this document, you’ll learn about promotion actions and how they’re computed using the [computeActions method](https://docs.medusajs.com/references/promotion/computeActions/index.html.md).
 
-The concepts in this guide are applicable starting from Medusa v2.5.1.
+## computeActions Method
 
-## Scenario
+The Promotion Module's main service has a [computeActions method](https://docs.medusajs.com/references/promotion/computeActions/index.html.md) that returns an array of actions to perform on a cart when one or more promotions are applied.
 
-Businesses can have different selling requirements:
-
-1. They may sell physical or digital items.
-2. They may sell items that don't require shipping or inventory management, such as selling digital products, services, or booking appointments.
-3. They may sell items whose inventory is managed by an external system, such as an ERP.
-
-Medusa supports these different selling requirements by allowing you to configure shipping and inventory requirements for products and their variants. This guide explains how these configurations work, then provides examples of setting up different use cases.
+Actions inform you what adjustment must be made to a cart item or shipping method. Each action is an object having the `action` property indicating the type of action.
 
 ***
 
-## Configuring Shipping Requirements
+## Action Types
 
-The Medusa application defines a link between the `Product` data model and a [ShippingProfile](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/commerce-modules/fulfillment/concepts#shipping-profile/index.html.md) in the [Fulfillment Module](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/commerce-modules/fulfillment/index.html.md), allowing you to associate a product with a shipping profile.
+### `addItemAdjustment` Action
 
-When a product is associated with a shipping profile, its variants require shipping and fulfillment when purchased. This is useful for physical products or digital products that require custom fulfillment.
+The `addItemAdjustment` action indicates that an adjustment must be made to an item. For example, removing $5 off its amount.
 
-If a product doesn't have an associated shipping profile, its variants don't require shipping and fulfillment when purchased. This is useful for digital products, for example, that don't require shipping.
+This action has the following format:
 
-### Overriding Shipping Requirements for Variants
+```ts
+export interface AddItemAdjustmentAction {
+  action: "addItemAdjustment"
+  item_id: string
+  amount: number
+  code: string
+  description?: string
+}
+```
 
-A product variant whose inventory is managed by Medusa (its `manage_inventory` property is enabled) has an [inventory item](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/commerce-modules/inventory/concepts#inventoryitem/index.html.md). The inventory item has a `requires_shipping` property that can be used to override its shipping requirement. This is useful if the product has an associated shipping profile but you want to disable shipping for a specific variant, or vice versa.
+This action means that a new record should be created of the `LineItemAdjustment` data model in the Cart Module, or `OrderLineItemAdjustment` data model in the Order Module.
 
-Learn more about product variant's inventory in [this guide](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/commerce-modules/product/variant-inventory/index.html.md).
+Refer to [this reference](https://docs.medusajs.com/references/promotion/interfaces/promotion.AddItemAdjustmentAction/index.html.md) for details on the object’s properties.
 
-When a product variant is purchased, the Medusa application decides whether the purchased item requires shipping in the following order:
+### `removeItemAdjustment` Action
 
 The `removeItemAdjustment` action indicates that an adjustment must be removed from a line item. For example, remove the $5 discount.
 
@@ -28705,25 +28983,39 @@ Refer to [this reference](https://docs.medusajs.com/references/promotion/interfa
 
 # Application Method
 
-In this document, you’ll learn about the main concepts in the Pricing Module.
+In this document, you'll learn what an application method is.
 
-## Price Set
+## What is an Application Method?
 
-A [PriceSet](https://docs.medusajs.com/references/pricing/models/PriceSet/index.html.md) represents a collection of prices that are linked to a resource (for example, a product or a shipping option).
+The [ApplicationMethod data model](https://docs.medusajs.com/references/promotion/models/ApplicationMethod/index.html.md) defines how a promotion is applied:
 
-Each of these prices are represented by the [Price data module](https://docs.medusajs.com/references/pricing/models/Price/index.html.md).
+|Property|Purpose|
+|---|---|
+|\`type\`|Does the promotion discount a fixed amount or a percentage?|
+|\`target\_type\`|Is the promotion applied on a cart item, shipping method, or the entire order?|
+|\`allocation\`|Is the discounted amount applied on each item or split between the applicable items?|
 
-![A diagram showcasing the relation between the price set and price](https://res.cloudinary.com/dza7lstvk/image/upload/v1709648650/Medusa%20Resources/price-set-money-amount_xeees0.jpg)
+## Target Promotion Rules
+
+When the promotion is applied to a cart item or a shipping method, you can restrict which items/shipping methods the promotion is applied to.
+
+The `ApplicationMethod` data model has a collection of `PromotionRule` records to restrict which items or shipping methods the promotion applies to. The `target_rules` property represents this relation.
+
+![A diagram showcasing the target\_rules relation between the ApplicationMethod and PromotionRule data models](https://res.cloudinary.com/dza7lstvk/image/upload/v1709898273/Medusa%20Resources/application-method-target-rules_hqaymz.jpg)
+
+In this example, the promotion is only applied on products in the cart having the SKU `SHIRT`.
 
 ***
 
-## Price List
+## Buy Promotion Rules
 
-A [PriceList](https://docs.medusajs.com/references/pricing/models/PriceList/index.html.md) is a group of prices only enabled if their conditions and rules are satisfied.
+When the promotion’s type is `buyget`, you must specify the “buy X” condition. For example, a cart must have two shirts before the promotion can be applied.
 
-A price list has optional `start_date` and `end_date` properties that indicate the date range in which a price list can be applied.
+The application method has a collection of `PromotionRule` items to define the “buy X” rule. The `buy_rules` property represents this relation.
 
-Its associated prices are represented by the `Price` data model.
+![A diagram showcasing the buy\_rules relation between the ApplicationMethod and PromotionRule data models](https://res.cloudinary.com/dza7lstvk/image/upload/v1709898453/Medusa%20Resources/application-method-buy-rules_djjuhw.jpg)
+
+In this example, the cart must have two products with the SKU `SHIRT` for the promotion to be applied.
 
 
 # Campaign
@@ -28920,1363 +29212,43 @@ This document showcases the module links defined between the Promotion Module an
 
 ## Summary
 
-The Pricing Module has the following links to other modules:
-
-|First Data Model|Second Data Model|Type|Description|
-|---|---|---|---|
-|ShippingOption|PriceSet|Stored - one-to-one|Learn more|
-|ProductVariant|PriceSet|Stored - one-to-one|Learn more|
-
-***
-
-## Fulfillment Module
-
-The Fulfillment Module provides fulfillment-related functionalities, including shipping options that the customer chooses from when they place their order. However, it doesn't provide pricing-related functionalities for these options.
-
-Medusa defines a link between the `PriceSet` and `ShippingOption` data models. A shipping option's price is stored as a price set.
-
-![A diagram showcasing an example of how data models from the Pricing and Fulfillment modules are linked](https://res.cloudinary.com/dza7lstvk/image/upload/v1716561747/Medusa%20Resources/pricing-fulfillment_spywwa.jpg)
-
-### Retrieve with Query
-
-To retrieve the shipping option of a price set with [Query](https://docs.medusajs.com/docs/learn/fundamentals/module-links/query/index.html.md), pass `shipping_option.*` in `fields`:
-
-### query.graph
-
-```ts
-const { data: priceSets } = await query.graph({
-  entity: "price_set",
-  fields: [
-    "shipping_option.*",
-  ],
-})
-
-// priceSets[0].shipping_option
-```
-
-### useQueryGraphStep
-
-```ts
-import { useQueryGraphStep } from "@medusajs/medusa/core-flows"
-
-// ...
-
-const { data: priceSets } = useQueryGraphStep({
-  entity: "price_set",
-  fields: [
-    "shipping_option.*",
-  ],
-})
-
-// priceSets[0].shipping_option
-```
-
-### Manage with Link
-
-To manage the price set of a shipping option, use [Link](https://docs.medusajs.com/docs/learn/fundamentals/module-links/link/index.html.md):
-
-### link.create
-
-```ts
-import { Modules } from "@medusajs/framework/utils"
-
-// ...
-
-await link.create({
-  [Modules.FULFILLMENT]: {
-    shipping_option_id: "so_123",
-  },
-  [Modules.PRICING]: {
-    price_set_id: "pset_123",
-  },
-})
-```
-
-### createRemoteLinkStep
-
-```ts
-import { Modules } from "@medusajs/framework/utils"
-import { createRemoteLinkStep } from "@medusajs/medusa/core-flows"
-
-// ...
-
-createRemoteLinkStep({
-  [Modules.FULFILLMENT]: {
-    shipping_option_id: "so_123",
-  },
-  [Modules.PRICING]: {
-    price_set_id: "pset_123",
-  },
-})
-```
-
-***
-
-## Product Module
-
-The Product Module doesn't store or manage the prices of product variants.
-
-Medusa defines a link between the `ProductVariant` and the `PriceSet`. A product variant’s prices are stored as prices belonging to a price set.
-
-![A diagram showcasing an example of how data models from the Pricing and Product Module are linked. The PriceSet is linked to the ProductVariant of the Product Module.](https://res.cloudinary.com/dza7lstvk/image/upload/v1709651039/Medusa%20Resources/pricing-product_m4xaut.jpg)
-
-So, when you want to add prices for a product variant, you create a price set and add the prices to it.
-
-You can then benefit from adding rules to prices or using the `calculatePrices` method to retrieve the price of a product variant within a specified context.
-
-### Retrieve with Query
-
-To retrieve the variant of a price set with [Query](https://docs.medusajs.com/docs/learn/fundamentals/module-links/query/index.html.md), pass `variant.*` in `fields`:
-
-### query.graph
-
-```ts
-const { data: priceSets } = await query.graph({
-  entity: "price_set",
-  fields: [
-    "variant.*",
-  ],
-})
-
-// priceSets[0].variant
-```
-
-### useQueryGraphStep
-
-```ts
-import { useQueryGraphStep } from "@medusajs/medusa/core-flows"
-
-// ...
-
-const { data: priceSets } = useQueryGraphStep({
-  entity: "price_set",
-  fields: [
-    "variant.*",
-  ],
-})
-
-// priceSets[0].variant
-```
-
-### Manage with Link
-
-To manage the price set of a variant, use [Link](https://docs.medusajs.com/docs/learn/fundamentals/module-links/link/index.html.md):
-
-### link.create
-
-```ts
-import { Modules } from "@medusajs/framework/utils"
-
-// ...
-
-await link.create({
-  [Modules.PRODUCT]: {
-    variant_id: "variant_123",
-  },
-  [Modules.PRICING]: {
-    price_set_id: "pset_123",
-  },
-})
-```
-
-### createRemoteLinkStep
-
-```ts
-import { Modules } from "@medusajs/framework/utils"
-import { createRemoteLinkStep } from "@medusajs/medusa/core-flows"
-
-// ...
-
-createRemoteLinkStep({
-  [Modules.PRODUCT]: {
-    variant_id: "variant_123",
-  },
-  [Modules.PRICING]: {
-    price_set_id: "pset_123",
-  },
-})
-```
-
-
-# Prices Calculation
-
-In this document, you'll learn how prices are calculated when you use the [calculatePrices method](https://docs.medusajs.com/references/pricing/calculatePrices/index.html.md) of the Pricing Module's main service.
-
-## calculatePrices Method
-
-The [calculatePrices method](https://docs.medusajs.com/references/pricing/calculatePrices/index.html.md) accepts as parameters the ID of one or more price sets and a context.
-
-It returns a price object with the best matching price for each price set.
-
-### Calculation Context
-
-The calculation context is an optional object passed as a second parameter to the `calculatePrices` method. It accepts rules to restrict the selected prices in the price set.
-
-For example:
-
-```ts
-const price = await pricingModuleService.calculatePrices(
-  { id: [priceSetId] },
-  {
-    context: {
-      currency_code: currencyCode,
-      region_id: "reg_123",
-    },
-  }
-)
-```
-
-In this example, you retrieve the prices in a price set for the specified currency code and region ID.
-
-### Returned Price Object
-
-For each price set, the `calculatePrices` method selects two prices:
-
-- A calculated price: Either a price that belongs to a price list and best matches the specified context, or the same as the original price.
-- An original price, which is either:
-  - The same price as the calculated price if the price list it belongs to is of type `override`;
-  - Or a price that doesn't belong to a price list and best matches the specified context.
-
-Both prices are returned in an object that has the following properties:
-
-- id: (\`string\`) The ID of the price set from which the price was selected.
-- is\_calculated\_price\_price\_list: (\`boolean\`) Whether the calculated price belongs to a price list.
-- calculated\_amount: (\`number\`) The amount of the calculated price, or \`null\` if there isn't a calculated price. This is the amount shown to the customer.
-- is\_original\_price\_price\_list: (\`boolean\`) Whether the original price belongs to a price list.
-- original\_amount: (\`number\`) The amount of the original price, or \`null\` if there isn't an original price. This amount is useful to compare with the \`calculated\_amount\`, such as to check for discounted value.
-- currency\_code: (\`string\`) The currency code of the calculated price, or \`null\` if there isn't a calculated price.
-- is\_calculated\_price\_tax\_inclusive: (\`boolean\`) Whether the calculated price is tax inclusive. Learn more about tax-inclusivity in \[this document]\(../tax-inclusive-pricing/page.mdx)
-- is\_original\_price\_tax\_inclusive: (\`boolean\`) Whether the original price is tax inclusive. Learn more about tax-inclusivity in \[this document]\(../tax-inclusive-pricing/page.mdx)
-- calculated\_price: (\`object\`) The calculated price's price details.
-
-  - id: (\`string\`) The ID of the price.
-
-  - price\_list\_id: (\`string\`) The ID of the associated price list.
-
-  - price\_list\_type: (\`string\`) The price list's type. For example, \`sale\`.
-
-  - min\_quantity: (\`number\`) The price's min quantity condition.
-
-  - max\_quantity: (\`number\`) The price's max quantity condition.
-- original\_price: (\`object\`) The original price's price details.
-
-  - id: (\`string\`) The ID of the price.
-
-  - price\_list\_id: (\`string\`) The ID of the associated price list.
-
-  - price\_list\_type: (\`string\`) The price list's type. For example, \`sale\`.
-
-  - min\_quantity: (\`number\`) The price's min quantity condition.
-
-  - max\_quantity: (\`number\`) The price's max quantity condition.
-
-***
-
-## Examples
-
-Consider the following price set:
-
-```ts
-const priceSet = await pricingModuleService.createPriceSets({
-  prices: [
-    // default price
-    {
-      amount: 500,
-      currency_code: "EUR",
-      rules: {},
-    },
-    // prices with rules
-    {
-      amount: 400,
-      currency_code: "EUR",
-      rules: {
-        region_id: "reg_123",
-      },
-    },
-    {
-      amount: 450,
-      currency_code: "EUR",
-      rules: {
-        city: "krakow",
-      },
-    },
-    {
-      amount: 500,
-      currency_code: "EUR",
-      rules: {
-        city: "warsaw",
-        region_id: "reg_123",
-      },
-    },
-    {
-      amount: 200,
-      currency_code: "EUR",
-      min_quantity: 100,
-    },
-  ],
-})
-```
-
-### Default Price Selection
-
-### Code
-
-```ts
-const price = await pricingModuleService.calculatePrices(
-  { id: [priceSet.id] },
-  {
-    context: {
-      currency_code: "EUR"
-    }
-  }
-)
-```
-
-### Result
-
-### Calculate Prices with Rules
-
-### Code
-
-```ts
-const price = await pricingModuleService.calculatePrices(
-  { id: [priceSet.id] },
-  {
-    context: {
-      currency_code: "EUR",
-      region_id: "reg_123",
-      city: "krakow"
-    }
-  }
-)
-```
-
-### Result
-
-### Tiered Pricing Selection
-
-### Code
-
-```ts
-const price = await pricingModuleService.calculatePrices(
-  { id: [priceSet.id] },
-  {
-    context: {
-      cart: {
-        items: [
-          {
-            id: "item_1",
-            quantity: 200,
-            // assuming the price set belongs to this variant
-            variant_id: "variant_1",
-            // ...
-          }
-        ],
-        // ...
-      }
-    }
-  }
-)
-```
-
-### Result
-
-### Price Selection with Price List
-
-### Code
-
-```ts
-const priceList = pricingModuleService.createPriceLists([{
-  title: "Summer Price List",
-  description: "Price list for summer sale",
-  starts_at: Date.parse("01/10/2023").toString(),
-  ends_at: Date.parse("31/10/2023").toString(),
-  rules: {
-    region_id: ['PL']
-  },
-  type: "sale",
-  prices: [
-    {
-      amount: 400,
-      currency_code: "EUR",
-      price_set_id: priceSet.id,
-    },
-    {
-      amount: 450,
-      currency_code: "EUR",
-      price_set_id: priceSet.id,
-    },
-  ],
-}]);
-
-const price = await pricingModuleService.calculatePrices(
-  { id: [priceSet.id] },
-  {
-    context: {
-      currency_code: "EUR",
-      region_id: "PL",
-      city: "krakow"
-    }
-  }
-)
-```
-
-### Result
-
-
-# Price Tiers and Rules
-
-In this Pricing Module guide, you'll learn about tired prices, price rules for price sets and price lists, and how to add rules to a price.
-
-You can manage prices and tiers using the Medusa Admin:
-
-- [Edit shipping option prices with conditions](https://docs.medusajs.com/user-guide/settings/locations-and-shipping/locations#fixed-and-conditional-shipping-option-prices/index.html.md).
-- [Add price lists to set prices with conditions for product variants](https://docs.medusajs.com/user-guide/price-lists/index.html.md).
-
-## Tiered Pricing
-
-Each price, represented by the [Price data model](https://docs.medusajs.com/references/pricing/models/Price/index.html.md), has two optional properties that can be used to create tiered prices:
-
-- `min_quantity`: The minimum quantity that must be in the cart for the price to be applied.
-- `max_quantity`: The maximum quantity that can be in the cart for the price to be applied.
-
-This is useful to set tiered pricing for resources like product variants and shipping options.
-
-For example, you can set a variant's price to:
-
-- `$10` by default.
-- `$8` when the customer adds `10` or more of the variant to the cart.
-- `$6` when the customer adds `20` or more of the variant to the cart.
-
-These price definitions would look like this:
-
-```json title="Example Prices"
-[
-  // default price
-  {
-    "amount": 10,
-    "currency_code": "usd",
-  },
-  {
-    "amount": 8,
-    "currency_code": "usd",
-    "min_quantity": 10,
-    "max_quantity": 19,
-  },
-  {
-    "amount": 6,
-    "currency_code": "usd",
-    "min_quantity": 20,
-  },
-],
-```
-
-### How to Create Tiered Prices?
-
-When you create prices, you can specify a `min_quantity` and `max_quantity` for each price. This allows you to create tiered pricing, where the price changes based on the quantity of items in the cart.
-
-For example:
-
-For most use cases where you're building customizations in the Medusa application, it's highly recommended to use [Medusa's workflows](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/medusa-workflows-reference/index.html.md) rather than using the Pricing Module directly. Medusa's workflows already implement extensive functionalities that you can re-use in your custom flows, with reliable roll-back mechanism.
-
-### Using Medusa Workflows
-
-```ts highlights={tieredPricingHighlights}
-import { createProductsWorkflow } from "@medusajs/medusa/core-flows"
-
-// ...
-
-const { result } = await createProductsWorkflow(container)
-  .run({
-    input: {
-      products: [{
-        variants: [{
-          id: "variant_1",
-          prices: [
-            // default price
-            {
-              amount: 10,
-              currency_code: "usd",
-            },
-            {
-              amount: 8,
-              currency_code: "usd",
-              min_quantity: 10,
-              max_quantity: 19,
-            },
-            {
-              amount: 6,
-              currency_code: "usd",
-              min_quantity: 20,
-            },
-          ],
-          // ...
-        }],
-      }],
-      // ...
-    },
-  })
-```
-
-### Using the Pricing Module
-
-```ts
-const priceSet = await pricingModule.addPrices({
-  priceSetId: "pset_1",
-  prices: [
-    // default price
-    {
-      amount: 10,
-      currency_code: "usd",
-    },
-    // tiered prices
-    {
-      amount: 8,
-      currency_code: "usd",
-      min_quantity: 10,
-      max_quantity: 19,
-    },
-    {
-      amount: 6,
-      currency_code: "usd",
-      min_quantity: 20,
-    },
-  ],
-})
-```
-
-In this example, you create a product with a variant whose default price is `$10`. You also add two tiered prices that set the price to `$8` when the quantity is between `10` and `19`, and to `$6` when the quantity is `20` or more.
-
-### How are Tiered Prices Applied?
-
-The [price calculation](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/commerce-modules/pricing/price-calculation/index.html.md) mechanism considers the cart's items as a context when choosing the best price to apply.
-
-For example, consider the customer added the `variant_1` product variant (created in the workflow snippet of the [above section](#how-to-create-tiered-prices)) to their cart with a quantity of `15`.
-
-The price calculation mechanism will choose the second price, which is `$8`, because the quantity of `15` is between `10` and `19`.
-
-If there are other rules applied to the price, they may affect the price calculation. Keep reading to learn about other price rules, and refer to the [Price Calculation](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/commerce-modules/pricing/price-calculation/index.html.md) guide for more details on the calculation mechanism.
-
-***
-
-## Price Rule
-
-You can also restrict prices by advanced rules, such as a customer's group, zip code, or a cart's total.
-
-Each rule of a price is represented by the [PriceRule data model](https://docs.medusajs.com/references/pricing/models/PriceRule/index.html.md).
-
-The `Price` data model has a `rules_count` property, which indicates how many rules, represented by `PriceRule`, are applied to the price.
-
-For exmaple, you create a price restricted to `10557` zip codes.
-
-![A diagram showcasing the relation between the PriceRule and Price](https://res.cloudinary.com/dza7lstvk/image/upload/v1709648772/Medusa%20Resources/price-rule-1_vy8bn9.jpg)
-
-A price can have multiple price rules.
-
-For example, a price can be restricted by a region and a zip code.
-
-![A diagram showcasing the relation between the PriceRule and Price with multiple rules.](https://res.cloudinary.com/dza7lstvk/image/upload/v1709649296/Medusa%20Resources/price-rule-3_pwpocz.jpg)
-
-### Price List Rules
-
-Rules applied to a price list are represented by the [PriceListRule data model](https://docs.medusajs.com/references/pricing/models/PriceListRule/index.html.md).
-
-The `rules_count` property of a `PriceList` indicates how many rules are applied to it.
-
-![A diagram showcasing the relation between the PriceSet, PriceList, Price, RuleType, and PriceListRuleValue](https://res.cloudinary.com/dza7lstvk/image/upload/v1709641999/Medusa%20Resources/price-list_zd10yd.jpg)
-
-### How to Create Prices with Rules?
-
-When you create prices, you can specify rules for each price. This allows you to create complex pricing strategies based on different contexts.
-
-For example:
-
-For most use cases where you're building customizations in the Medusa application, it's highly recommended to use [Medusa's workflows](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/medusa-workflows-reference/index.html.md) rather than using the Pricing Module directly. Medusa's workflows already implement extensive functionalities that you can re-use in your custom flows, with reliable roll-back mechanism.
-
-### Using Medusa Workflows
-
-```ts highlights={workflowHighlights}
-const { result } = await createShippingOptionsWorkflow(container)
-  .run({
-    input: [{
-      name: "Standard Shipping",
-      service_zone_id: "serzo_123",
-      shipping_profile_id: "sp_123",
-      provider_id: "prov_123",
-      type: {
-        label: "Standard",
-        description: "Standard shipping",
-        code: "standard",
-      },
-      price_type: "flat",
-      prices: [
-        // default price
-        {
-          currency_code: "usd",
-          amount: 10,
-          rules: [],
-        },
-        // price if cart total >= $100
-        {
-          currency_code: "usd",
-          amount: 0,
-          rules: [
-            {
-              attribute: "item_total",
-              operator: "gte",
-              value: 100,
-            },
-          ],
-        },
-      ],
-    }],
-  })
-```
-
-### Using the Pricing Module
-
-```ts
-const priceSet = await pricingModule.addPrices({
-  priceSetId: "pset_1",
-  prices: [
-    // default price
-    {
-      currency_code: "usd",
-      amount: 10,
-      rules: {},
-    },
-    // price if cart total >= $100
-    {
-      currency_code: "usd",
-      amount: 0,
-      rules: {
-        item_total: {
-          operator: "gte",
-          value: 100,
-        },
-      },
-    },
-  ],
-})
-```
-
-In this example, you create a shipping option whose default price is `$10`. When the total of the cart or order using this shipping option is greater than `$100`, the shipping option's price becomes free.
-
-### How is the Price Rule Applied?
-
-The [price calculation](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/commerce-modules/pricing/price-calculation/index.html.md) mechanism considers a price applicable when the resource that this price is in matches the specified rules.
-
-For example, a [cart object](https://docs.medusajs.com/api/store#carts_cart_schema) has an `item_total` property. So, if a shipping option has the following price:
-
-```json
-{
-  "currency_code": "usd",
-  "amount": 0,
-  "rules": {
-    "item_total": {
-      "operator": "gte",
-      "value": 100,
-    }
-  }
-}
-```
-
-The shipping option's price is applied when the cart's `item_total` is greater than or equal to `$100`.
-
-You can also apply the rule on nested relations and properties. For example, to apply a shipping option's price based on the customer's group, you can apply a rule on the `customer.group.id` attribute:
-
-```json
-{
-  "currency_code": "usd",
-  "amount": 0,
-  "rules": {
-    "customer.group.id": {
-      "operator": "eq",
-      "value": "cusgrp_123"
-    }
-  }
-}
-```
-
-In this example, the price is only applied if a cart's customer belongs to the customer group of ID `cusgrp_123`.
-
-These same rules apply to product variant prices as well, or any other resource that has a price.
-
-***
-
-## Examples
-
-This section provides some examples of implementing price tiers and rules for products and shipping options.
-
-### Product Variant Price by Quantity
-
-### Using Medusa Workflows
-
-```ts
-import { createProductsWorkflow } from "@medusajs/medusa/core-flows"
-
-// ...
-
-const { result } = await createProductsWorkflow(container)
-  .run({
-    input: {
-      products: [{
-        title: "Premium T-Shirt",
-        variants: [{
-          title: "Small / Black",
-          prices: [
-            // default price
-            {
-              amount: 20,
-              currency_code: "usd",
-            },
-            // buy 5 or more, get a small discount
-            {
-              amount: 18,
-              currency_code: "usd",
-              min_quantity: 5,
-              max_quantity: 9,
-            },
-            // buy 10 or more, get a bigger discount
-            {
-              amount: 15,
-              currency_code: "usd",
-              min_quantity: 10,
-            },
-          ],
-        }],
-      }],
-    },
-  })
-```
-
-### Using the Pricing Module
-
-```ts
-const priceSet = await pricingModule.addPrices({
-  // this is the price set of the product variant
-  priceSetId: "pset_product_123",
-  prices: [
-    // default price: $20.00
-    {
-      amount: 20,
-      currency_code: "usd",
-    },
-    // buy 5-9 shirts: $18.00 each
-    {
-      amount: 18,
-      currency_code: "usd",
-      min_quantity: 5,
-      max_quantity: 9,
-    },
-    // buy 10+ shirts: $15.00 each
-    {
-      amount: 15,
-      currency_code: "usd",
-      min_quantity: 10,
-    },
-  ],
-})
-```
-
-### Product Variant Price by Customer Group
-
-### Using Medusa Workflows
-
-```ts
-import { createProductsWorkflow } from "@medusajs/medusa/core-flows"
-
-// ...
-
-const { result } = await createProductsWorkflow(container)
-  .run({
-    input: {
-      products: [{
-        title: "Premium T-Shirt",
-        variants: [{
-          title: "Small / Black",
-          prices: [
-            // default price
-            {
-              amount: 40,
-              currency_code: "usd",
-            },
-            // discounted price for VIP customers
-            {
-              amount: 30,
-              currency_code: "usd",
-              rules: {
-                "customer.groups.id": "cusgrp_vip123",
-              },
-            },
-            // special price for wholesale customers
-            {
-              amount: 20,
-              currency_code: "usd",
-              rules: {
-                "customer.groups.id": "cusgrp_wholesale456",
-              },
-            },
-          ],
-        }],
-      }],
-    },
-  })
-```
-
-### Using the Pricing Module
-
-```ts
-const priceSet = await pricingModule.addPrices({
-  // this is the price set of the product variant
-  priceSetId: "pset_product_123",
-  prices: [
-    // default price
-    {
-      amount: 40,
-      currency_code: "usd",
-    },
-    // discounted price for VIP customers
-    {
-      amount: 30,
-      currency_code: "usd",
-      rules: {
-        "customer.groups.id": "cusgrp_vip123",
-      },
-    },
-    // special price for wholesale customers
-    {
-      amount: 20,
-      currency_code: "usd",
-      rules: {
-        "customer.groups.id": "cusgrp_wholesale456",
-      },
-    },
-  ],
-})
-```
-
-### Free Shipping for Orders Above a Certain Amount
-
-### Using Medusa Workflows
-
-```ts
-const { result } = await createShippingOptionsWorkflow(container)
-  .run({
-    input: [{
-      name: "Standard Shipping",
-      service_zone_id: "serzo_123",
-      shipping_profile_id: "sp_123",
-      provider_id: "prov_123",
-      type: {
-        label: "Standard",
-        description: "Standard shipping (2-5 business days)",
-        code: "standard",
-      },
-      price_type: "flat",
-      prices: [
-        // regular shipping price
-        {
-          currency_code: "usd",
-          amount: 10,
-          rules: [],
-        },
-        // free shipping for carts over $100
-        {
-          currency_code: "usd",
-          amount: 0,
-          rules: [
-            {
-              attribute: "item_total",
-              operator: "gte",
-              value: 100,
-            },
-          ],
-        },
-      ],
-    }],
-  })
-```
-
-### Using the Pricing Module
-
-```ts
-const priceSet = await pricingModule.addPrices({
-  priceSetId: "pset_shipping_123",
-  prices: [
-    // regular shipping price
-    {
-      currency_code: "usd",
-      amount: 10,
-      rules: {},
-    },
-    // free shipping for orders over $100
-    {
-      currency_code: "usd",
-      amount: 0,
-      rules: {
-        item_total: [
-          {
-            operator: "gte",
-            value: 100,
-          },
-        ],
-      },
-    },
-  ],
-})
-```
-
-### Shipping Prices Based on Customer Groups
-
-### Using Medusa Workflows
-
-```ts
-const { result } = await createShippingOptionsWorkflow(container)
-  .run({
-    input: [{
-      name: "Express Shipping",
-      service_zone_id: "serzo_456",
-      shipping_profile_id: "sp_456",
-      provider_id: "prov_456",
-      type: {
-        label: "Express",
-        description: "Express shipping (1-2 business days)",
-        code: "express",
-      },
-      price_type: "flat",
-      prices: [
-        // regular express shipping price
-        {
-          currency_code: "usd",
-          amount: 20,
-          rules: [],
-        },
-        // discounted express shipping for VIP customers
-        {
-          currency_code: "usd",
-          amount: 15,
-          rules: [
-            {
-              attribute: "customer.groups.id",
-              operator: "in",
-              value: ["cusgrp_vip123"],
-            },
-          ],
-        },
-        // special rate for B2B customers
-        {
-          currency_code: "usd",
-          amount: 13,
-          rules: [
-            {
-              attribute: "customer.groups.id",
-              operator: "in",
-              value: ["cusgrp_b2b789"],
-            },
-          ],
-        },
-      ],
-    }],
-  })
-```
-
-### Using the Pricing Module
-
-```ts
-const priceSet = await pricingModule.addPrices({
-  priceSetId: "pset_shipping_456",
-  prices: [
-    // regular express shipping
-    {
-      currency_code: "usd",
-      amount: 20,
-      rules: {},
-    },
-    // VIP customer express shipping
-    {
-      currency_code: "usd",
-      amount: 15,
-      rules: {
-        "customer.groups.id": [
-          {
-            operator: "in",
-            value: ["cusgrp_vip123"],
-          },
-        ],
-      },
-    },
-    // B2B customer express shipping
-    {
-      currency_code: "usd",
-      amount: 13,
-      rules: {
-        "customer.groups.id": [
-          {
-            operator: "in",
-            value: ["cusgrp_b2b789"],
-          },
-        ],
-      },
-    },
-  ],
-})
-```
-
-### Combined Tiered and Rule-Based Shipping Pricing
-
-### Using Medusa Workflows
-
-```ts
-const { result } = await createShippingOptionsWorkflow(container)
-  .run({
-    input: [{
-      name: "Bulk Shipping",
-      service_zone_id: "serzo_789",
-      shipping_profile_id: "sp_789",
-      provider_id: "prov_789",
-      type: {
-        label: "Bulk",
-        description: "Shipping for bulk orders",
-        code: "bulk",
-      },
-      price_type: "flat",
-      prices: [
-        // base shipping price
-        {
-          currency_code: "usd",
-          amount: 20,
-          rules: [],
-        },
-        // discounted shipping for 5-10 items
-        {
-          currency_code: "usd",
-          amount: 18,
-          min_quantity: 5,
-          max_quantity: 10,
-          rules: [],
-        },
-        // heavily discounted shipping for 10+ items
-        {
-          currency_code: "usd",
-          amount: 15,
-          min_quantity: 11,
-          rules: [],
-        },
-        // free shipping for VIP customers with carts over $200
-        {
-          currency_code: "usd",
-          amount: 0,
-          rules: {
-            "customer.groups.id": [
-              {
-                operator: "in",
-                value: ["cusgrp_vip123"],
-              },
-            ],
-            item_total: [
-              {
-                operator: "gte",
-                value: 200,
-              },
-            ],
-          },
-        },
-      ],
-    }],
-  })
-```
-
-### Using the Pricing Module
-
-```ts
-const priceSet = await pricingModule.addPrices({
-  priceSetId: "pset_shipping_789",
-  prices: [
-    // base shipping price: $20.00
-    {
-      currency_code: "usd",
-      amount: 20,
-      rules: {},
-    },
-    // 5-10 items: $18.00
-    {
-      currency_code: "usd",
-      amount: 18,
-      min_quantity: 5,
-      max_quantity: 10,
-      rules: {},
-    },
-    // 11+ items: $15.00
-    {
-      currency_code: "usd",
-      amount: 15,
-      min_quantity: 11,
-      rules: {},
-    },
-    // VIP customers with orders over $200: FREE
-    {
-      currency_code: "usd",
-      amount: 0,
-      rules: [
-        {
-          attribute: "customer.groups.id",
-          operator: "in",
-          value: ["cusgrp_vip123"],
-        },
-        {
-          attribute: "item_total",
-          operator: "gte",
-          value: 200,
-        },
-      ],
-    },
-  ],
-})
-```
-
-### Shipping Prices Based on Geographical Rules
-
-### Using Medusa Workflows
-
-```ts
-const { result } = await createShippingOptionsWorkflow(container)
-  .run({
-    input: [{
-      name: "Regional Shipping",
-      service_zone_id: "serzo_geo123",
-      shipping_profile_id: "sp_standard",
-      provider_id: "prov_standard",
-      type: {
-        label: "Standard",
-        description: "Standard shipping with regional pricing",
-        code: "standard_regional",
-      },
-      price_type: "flat",
-      prices: [
-        // default shipping price
-        {
-          currency_code: "usd",
-          amount: 15,
-          rules: [],
-        },
-        // special price for specific zip codes (metropolitan areas)
-        {
-          currency_code: "usd",
-          amount: 10,
-          rules: [
-            {
-              attribute: "shipping_address.postal_code",
-              operator: "in",
-              value: ["10001", "10002", "10003", "90001", "90002", "90003"],
-            },
-          ],
-        },
-        // higher price for remote areas
-        {
-          currency_code: "usd",
-          amount: 25,
-          rules: [
-            {
-              attribute: "shipping_address.postal_code",
-              operator: "in",
-              value: ["99501", "99502", "99503", "00601", "00602", "00603"],
-            },
-          ],
-        },
-        // different price for a specific region
-        {
-          currency_code: "usd",
-          amount: 12,
-          rules: [
-            {
-              attribute: "region.id",
-              operator: "eq",
-              value: "reg_123",
-            },
-          ],
-        },
-        // different price for a specific country
-        {
-          currency_code: "usd",
-          amount: 20,
-          rules: [
-            {
-              attribute: "shipping_address.country_code",
-              operator: "eq",
-              value: "ca",
-            },
-          ],
-        },
-      ],
-    }],
-  })
-```
-
-### Using the Pricing Module
-
-```ts
-const priceSet = await pricingModule.addPrices({
-  priceSetId: "pset_shipping_geo",
-  prices: [
-    // default shipping price: $15.00
-    {
-      currency_code: "usd",
-      amount: 15,
-      rules: {},
-    },
-    // metropolitan areas: $10.00
-    {
-      currency_code: "usd",
-      amount: 10,
-      rules: {
-        "shipping_address.postal_code": [
-          {
-            operator: "in",
-            value: ["10001", "10002", "10003", "90001", "90002", "90003"],
-          },
-        ],
-      },
-    },
-    // remote areas: $25.00
-    {
-      currency_code: "usd",
-      amount: 25,
-      rules: {
-        "shipping_address.postal_code": [
-          {
-            operator: "in",
-            value: ["99501", "99502", "99503", "00601", "00602", "00603"],
-          },
-        ],
-      },
-    },
-    // Northeast region: $12.00
-    {
-      currency_code: "usd",
-      amount: 12,
-      rules: {
-        "region.id": "reg_123",
-      },
-    },
-    // Canada: $20.00
-    {
-      currency_code: "usd",
-      amount: 20,
-      rules: {
-        "shipping_address.country_code": "ca",
-      },
-    },
-  ],
-})
-```
-
-
-# Tax-Inclusive Pricing
-
-In this document, you’ll learn about tax-inclusive pricing and how it's used when calculating prices.
-
-## What is Tax-Inclusive Pricing?
-
-A tax-inclusive price is a price of a resource that includes taxes. Medusa calculates the tax amount from the price rather than adds the amount to it.
-
-For example, if a product’s price is $50, the tax rate is 2%, and tax-inclusive pricing is enabled, then the product's price is $49, and the applied tax amount is $1.
-
-***
-
-## How is Tax-Inclusive Pricing Set?
-
-The [PricePreference data model](https://docs.medusajs.com/references/pricing/models/PricePreference/index.html.md) holds the tax-inclusive setting for a context. It has two properties that indicate the context:
-
-- `attribute`: The name of the attribute to compare against. For example, `region_id` or `currency_code`.
-- `value`: The attribute’s value. For example, `reg_123` or `usd`.
-
-Only `region_id` and `currency_code` are supported as an `attribute` at the moment.
-
-The `is_tax_inclusive` property indicates whether tax-inclusivity is enabled in the specified context.
-
-For example:
-
-```json
-{
-  "attribute": "currency_code",
-  "value": "USD",
-  "is_tax_inclusive": true,
-}
-```
-
-In this example, tax-inclusivity is enabled for the `USD` currency code.
-
-***
-
-## Tax-Inclusive Pricing in Price Calculation
-
-### Tax Context
-
-As mentioned in the [Price Calculation documentation](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/commerce-modules/pricing/price-calculation#calculation-context/index.html.md), The `calculatePrices` method accepts as a parameter a calculation context.
-
-To get accurate tax results, pass the `region_id` and / or `currency_code` in the calculation context.
-
-### Returned Tax Properties
-
-The `calculatePrices` method returns two properties related to tax-inclusivity:
-
-Learn more about the returned properties in [this guide](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/commerce-modules/pricing/price-calculation#returned-price-object/index.html.md).
-
-- `is_calculated_price_tax_inclusive`: Whether the selected `calculated_price` is tax-inclusive.
-- `is_original_price_tax_inclusive` : Whether the selected `original_price` is tax-inclusive.
-
-A price is considered tax-inclusive if:
-
-1. It belongs to the region or currency code specified in the calculation context;
-2. and the region or currency code has a price preference with `is_tax_inclusive` enabled.
-
-### Tax Context Precedence
-
-A region’s price preference’s `is_tax_inclusive`'s value takes higher precedence in determining whether a price is tax-inclusive if:
-
-- both the `region_id` and `currency_code` are provided in the calculation context;
-- the selected price belongs to the region;
-- and the region has a price preference
-
-
-# Links between Region Module and Other Modules
-
-This document showcases the module links defined between the Region Module and other Commerce Modules.
-
-## Summary
-
-The Region Module has the following links to other modules:
+The Promotion Module has the following links to other modules:
 
 Read-only links are used to query data across modules, but the relations aren't stored in a pivot table in the database.
 
 |First Data Model|Second Data Model|Type|Description|
 |---|---|---|---|
-|Cart|Region|Read-only - has one|Learn more|
-|Order|Region|Read-only - has one|Learn more|
-|Region|PaymentProvider|Stored - many-to-many|Learn more|
+|Cart|Promotion|Stored - many-to-many|Learn more|
+|LineItemAdjustment|Promotion|Read-only - has one|Learn more|
+|Order|Promotion|Stored - many-to-many|Learn more|
 
 ***
 
 ## Cart Module
 
-Medusa defines a read-only link between the [Cart Module](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/commerce-modules/cart/index.html.md)'s `Cart` data model and the `Region` data model. Because the link is read-only from the `Cart`'s side, you can only retrieve the region of a cart, and not the other way around.
+A promotion can be applied on line items and shipping methods of a cart. Medusa defines a link between the `Cart` and `Promotion` data models.
+
+![A diagram showcasing an example of how data models from the Cart and Promotion modules are linked](https://res.cloudinary.com/dza7lstvk/image/upload/v1711538015/Medusa%20Resources/cart-promotion_kuh9vm.jpg)
+
+Medusa also defines a read-only link between the [Cart Module](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/commerce-modules/cart/index.html.md)'s `LineItemAdjustment` data model and the `Promotion` data model. Because the link is read-only from the `LineItemAdjustment`'s side, you can only retrieve the promotion applied on a line item, and not the other way around.
 
 ### Retrieve with Query
 
-To retrieve the region of a cart with [Query](https://docs.medusajs.com/docs/learn/fundamentals/module-links/query/index.html.md), pass `region.*` in `fields`:
+To retrieve the carts that a promotion is applied on with [Query](https://docs.medusajs.com/docs/learn/fundamentals/module-links/query/index.html.md), pass `carts.*` in `fields`:
+
+To retrieve the promotion of a line item adjustment, pass `promotion.*` in `fields`.
 
 ### query.graph
 
 ```ts
-const { data: carts } = await query.graph({
-  entity: "cart",
+const { data: promotions } = await query.graph({
+  entity: "promotion",
   fields: [
-    "region.*",
+    "carts.*",
   ],
 })
 
-// carts[0].region
+// promotions[0].carts
 ```
 
 ### useQueryGraphStep
@@ -30286,37 +29258,78 @@ import { useQueryGraphStep } from "@medusajs/medusa/core-flows"
 
 // ...
 
-const { data: carts } = useQueryGraphStep({
-  entity: "cart",
+const { data: promotions } = useQueryGraphStep({
+  entity: "promotion",
   fields: [
-    "region.*",
+    "carts.*",
   ],
 })
 
-// carts[0].region
+// promotions[0].carts
+```
+
+### Manage with Link
+
+To manage the promotions of a cart, use [Link](https://docs.medusajs.com/docs/learn/fundamentals/module-links/link/index.html.md):
+
+### link.create
+
+```ts
+import { Modules } from "@medusajs/framework/utils"
+
+// ...
+
+await link.create({
+  [Modules.CART]: {
+    cart_id: "cart_123",
+  },
+  [Modules.PROMOTION]: {
+    promotion_id: "promo_123",
+  },
+})
+```
+
+### createRemoteLinkStep
+
+```ts
+import { Modules } from "@medusajs/framework/utils"
+import { createRemoteLinkStep } from "@medusajs/medusa/core-flows"
+
+// ...
+
+createRemoteLinkStep({
+  [Modules.CART]: {
+    cart_id: "cart_123",
+  },
+  [Modules.PROMOTION]: {
+    promotion_id: "promo_123",
+  },
+})
 ```
 
 ***
 
 ## Order Module
 
-Medusa defines a read-only link between the [Order Module](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/commerce-modules/order/index.html.md)'s `Order` data model and the `Region` data model. Because the link is read-only from the `Order`'s side, you can only retrieve the region of an order, and not the other way around.
+An order is associated with the promotion applied on it. Medusa defines a link between the `Order` and `Promotion` data models.
+
+![A diagram showcasing an example of how data models from the Order and Promotion modules are linked](https://res.cloudinary.com/dza7lstvk/image/upload/v1716555015/Medusa%20Resources/order-promotion_dgjzzd.jpg)
 
 ### Retrieve with Query
 
-To retrieve the region of an order with [Query](https://docs.medusajs.com/docs/learn/fundamentals/module-links/query/index.html.md), pass `region.*` in `fields`:
+To retrieve the orders a promotion is applied on with [Query](https://docs.medusajs.com/docs/learn/fundamentals/module-links/query/index.html.md), pass `orders.*` in `fields`:
 
 ### query.graph
 
 ```ts
-const { data: orders } = await query.graph({
-  entity: "order",
+const { data: promotions } = await query.graph({
+  entity: "promotion",
   fields: [
-    "region.*",
+    "orders.*",
   ],
 })
 
-// orders[0].region
+// promotions[0].orders
 ```
 
 ### useQueryGraphStep
@@ -30326,63 +29339,19 @@ import { useQueryGraphStep } from "@medusajs/medusa/core-flows"
 
 // ...
 
-const { data: orders } = useQueryGraphStep({
-  entity: "order",
+const { data: promotions } = useQueryGraphStep({
+  entity: "promotion",
   fields: [
-    "region.*",
+    "orders.*",
   ],
 })
 
-// orders[0].region
-```
-
-***
-
-## Payment Module
-
-You can specify for each region which payment providers are available for use.
-
-Medusa defines a module link between the `PaymentProvider` and the `Region` data models.
-
-![A diagram showcasing an example of how resources from the Payment and Region modules are linked](https://res.cloudinary.com/dza7lstvk/image/upload/v1711569520/Medusa%20Resources/payment-region_jyo2dz.jpg)
-
-### Retrieve with Query
-
-To retrieve the payment providers of a region with [Query](https://docs.medusajs.com/docs/learn/fundamentals/module-links/query/index.html.md), pass `payment_providers.*` in `fields`:
-
-### query.graph
-
-```ts
-const { data: regions } = await query.graph({
-  entity: "region",
-  fields: [
-    "payment_providers.*",
-  ],
-})
-
-// regions[0].payment_providers
-```
-
-### useQueryGraphStep
-
-```ts
-import { useQueryGraphStep } from "@medusajs/medusa/core-flows"
-
-// ...
-
-const { data: regions } = useQueryGraphStep({
-  entity: "region",
-  fields: [
-    "payment_providers.*",
-  ],
-})
-
-// regions[0].payment_providers
+// promotions[0].orders
 ```
 
 ### Manage with Link
 
-To manage the payment providers in a region, use [Link](https://docs.medusajs.com/docs/learn/fundamentals/module-links/link/index.html.md):
+To manage the promotion of an order, use [Link](https://docs.medusajs.com/docs/learn/fundamentals/module-links/link/index.html.md):
 
 ### link.create
 
@@ -30392,11 +29361,11 @@ import { Modules } from "@medusajs/framework/utils"
 // ...
 
 await link.create({
-  [Modules.REGION]: {
-    region_id: "reg_123",
+  [Modules.ORDER]: {
+    order_id: "order_123",
   },
-  [Modules.PAYMENT]: {
-    payment_provider_id: "pp_stripe_stripe",
+  [Modules.PROMOTION]: {
+    promotion_id: "promo_123",
   },
 })
 ```
@@ -30410,11 +29379,11 @@ import { createRemoteLinkStep } from "@medusajs/medusa/core-flows"
 // ...
 
 createRemoteLinkStep({
-  [Modules.REGION]: {
-    region_id: "reg_123",
+  [Modules.ORDER]: {
+    order_id: "order_123",
   },
-  [Modules.PAYMENT]: {
-    payment_provider_id: "pp_stripe_stripe",
+  [Modules.PROMOTION]: {
+    promotion_id: "promo_123",
   },
 })
 ```
@@ -30889,23 +29858,6 @@ export const config = {
 Learn more about workflows in [this documentation](https://docs.medusajs.com/docs/learn/fundamentals/workflows/index.html.md).
 
 ***
-
-
-# Stock Location Concepts
-
-In this document, you’ll learn about the main concepts in the Stock Location Module.
-
-## Stock Location
-
-A stock location, represented by the `StockLocation` data model, represents a location where stock items are kept. For example, a warehouse.
-
-Medusa uses stock locations to provide inventory details, from the Inventory Module, per location.
-
-***
-
-## StockLocationAddress
-
-The `StockLocationAddress` data model belongs to the `StockLocation` data model. It provides more detailed information of the location, such as country code or street address.
 
 
 # Links between Sales Channel Module and Other Modules
@@ -32746,7 +31698,7 @@ module.exports = defineConfig({
           {
             resolve: "@medusajs/analytics-local",
             id: "local",
-          }
+          },
         ],
       },
     },
@@ -33058,385 +32010,6 @@ module.exports = defineConfig({
               posthogEventsKey: process.env.POSTHOG_EVENTS_API_KEY,
               posthogHost: process.env.POSTHOG_HOST,
             },
-          }
-        ],
-      },
-    },
-  ],
-})
-```
-
-### Environment Variables
-
-Make sure to add the following environment variables:
-
-```bash
-POSTHOG_EVENTS_API_KEY=<YOUR_POSTHOG_EVENTS_API_KEY>
-POSTHOG_HOST=<YOUR_POSTHOG_HOST>
-```
-
-### PostHog Analytics Module Options
-
-|Option|Description|Default|
-|---|---|---|
-|\`eventsKey\`|The PostHog API key for tracking events. This is required to authenticate your requests to the PostHog API.|-|
-|\`posthogHost\`|The PostHog API host URL.|\`https://eu.i.posthog.com\`|
-
-***
-
-## Test out the Module
-
-To test the module out, you'll track in PostHog when an order is placed.
-
-You'll first create a [workflow](https://docs.medusajs.com/docs/learn/fundamentals/workflows/index.html.md) that tracks the order completion event. Then, you can execute the workflow in a [subscriber](https://docs.medusajs.com/docs/learn/fundamentals/events-and-subscribers/index.html.md) that listens to the `order.placed` event.
-
-For example, create a workflow at `src/workflows/track-order-placed.ts` with the following content:
-
-```ts title="src/workflows/track-order-created.ts" highlights={workflowHighlights}
-import { createWorkflow } from "@medusajs/framework/workflows-sdk"
-import { createStep } from "@medusajs/framework/workflows-sdk"
-import { Modules } from "@medusajs/framework/utils"
-import { OrderDTO } from "@medusajs/framework/types"
-
-type StepInput = {
-  order: OrderDTO
-}
-
-const trackOrderCreatedStep = createStep(
-  "track-order-created-step",
-  async ({ order }: StepInput, { container }) => {
-    const analyticsModuleService = container.resolve(Modules.ANALYTICS)
-
-    await analyticsModuleService.track({
-      event: "order_created",
-      userId: order.customer_id,
-      properties: {
-        order_id: order.id,
-        total: order.total,
-        items: order.items.map((item) => ({
-          variant_id: item.variant_id,
-          product_id: item.product_id,
-          quantity: item.quantity,
-        })),
-        customer_id: order.customer_id,
-      },
-    })
-  }
-)
-
-type WorkflowInput = {
-  order_id: string
-}
-
-export const trackOrderCreatedWorkflow = createWorkflow(
-  "track-order-created-workflow",
-  ({ order_id }: WorkflowInput) => {
-    const { data: orders } = useQueryGraphStep({
-      entity: "order",
-      fields: [
-        "*",
-        "customer.*",
-        "items.*",
-      ],
-      filters: {
-        id: order_id,
-      },
-    })
-    trackOrderCreatedStep({
-      order: orders[0],
-    })
-  }
-)
-```
-
-This workflow retrieves the order details using the `useQueryGraphStep` and then tracks the order creation event using the `trackOrderCreatedStep`.
-
-In the step, you resolve the service of the Analytics Module from the [Medusa container](https://docs.medusajs.com/docs/learn/fundamentals/medusa-container/index.html.md) and use its `track` method to track the event. This method will use the underlying provider configured (which is the PostHog Analytics Module Provider, in this case) to track the event.
-
-Next, create a subscriber at `src/subscribers/order-placed.ts` with the following content:
-
-```ts title="src/subscribers/order-placed.ts"
-import type {
-  SubscriberArgs,
-  SubscriberConfig,
-} from "@medusajs/framework"
-import { trackOrderCreatedWorkflow } from "../workflows/track-order-created"
-
-export default async function orderPlacedHandler({
-  event: { data },
-  container,
-}: SubscriberArgs<{ id: string }>) {
-  await trackOrderCreatedWorkflow(container).run({
-    input: {
-      order_id: data.id,
-    },
-  })
-}
-
-export const config: SubscriberConfig = {
-  event: "order.placed",
-}
-```
-
-This subscriber listens to the `order.placed` event and executes the `trackOrderCreatedWorkflow` workflow, passing the order ID as input.
-
-You'll now track the order creation event whenever an order is placed in your Medusa application. You can test this out by placing an order and checking your PostHog dashboard for the tracked event.
-
-***
-
-## Additional Resources
-
-- [How to Use the Analytics Module](https://docs.medusajs.com/references/analytics/service/index.html.md)
-
-
-# File Module
-
-In this document, you'll learn about the File Module and its providers.
-
-## What is the File Module?
-
-The File Module exposes the functionalities to upload assets, such as product images, to the Medusa application. Medusa uses the File Module in its core commerce features for all file operations, and you can use it in your custom features as well.
-
-***
-
-## How to Use the File Module?
-
-You can use the File Module as part of the [workflows](https://docs.medusajs.com/docs/learn/fundamentals/workflows/index.html.md) you build for your custom features. A workflow is a special function composed of a series of steps that guarantees data consistency and reliable roll-back mechanism.
-
-In a step of your workflow, you can resolve the File Module's service and use its methods to upload files, retrieve files, or delete files.
-
-For example:
-
-```ts
-import { Modules } from "@medusajs/framework/utils"
-import { 
-  createStep,
-  createWorkflow,
-  StepResponse,
-  WorkflowResponse,
-} from "@medusajs/framework/workflows-sdk"
-
-const step1 = createStep(
-  "step-1",
-  async ({}, { container }) => {
-    const fileModuleService = container.resolve(
-      Modules.FILE
-    )
-
-    const { url } = await fileModuleService.retrieveFile("image.png")
-
-    return new StepResponse(url)
-  } 
-)
-
-export const workflow = createWorkflow(
-  "workflow-1",
-  () => {
-    const url = step1()
-
-    return new WorkflowResponse(url)
-  }
-)
-```
-
-In the example above, you create a workflow that has a step. In the step, you resolve the service of the File Module from the [Medusa container](https://docs.medusajs.com/docs/learn/fundamentals/medusa-container/index.html.md).
-
-Then, you use the `retrieveFile` method of the File Module to retrieve the URL of the file with the name `"image.png"`. The URL is then returned as a response from the step and the workflow.
-
-***
-
-### What is a File Module Provider?
-
-A File Module Provider implements the underlying logic of handling uploads and downloads of assets, such as integrating third-party services. The File Module then uses the registered File Module Provider to handle file operations.
-
-Only one File Module Provider can be registered at a time. If you register multiple providers, the File Module will throw an error.
-
-By default, Medusa uses the [Local File Module](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/infrastructure-modules/file/local/index.html.md). This module uploads files to the `uploads` directory of your Medusa application.
-
-This is useful for development. However, for production, it’s highly recommended to use other File Module Providers, such as the S3 File Module Provider. You can also [Create a File Provider](https://docs.medusajs.com/references/file-provider-module/index.html.md).
-
-- [Local](https://docs.medusajs.com/infrastructure-modules/file/local/index.html.md)
-- [AWS S3 (and Compatible APIs)](https://docs.medusajs.com/infrastructure-modules/file/s3/index.html.md)
-
-
-# Local Analytics Module Provider
-
-The Local Analytics Module Provider is a simple analytics provider for Medusa that logs analytics events to the console. It's useful for development and debugging purposes.
-
-The Analytics Module and its providers are available starting [Medusa v2.8.3](https://github.com/medusajs/medusa/releases/tag/v2.8.3).
-
-***
-
-## Register the Local Analytics Module
-
-Add the module into the `provider` object of the Analytics Module:
-
-You can use only one Analytics Module Provider in your Medusa application.
-
-```ts title="medusa-config.ts"
-module.exports = defineConfig({
-  // ...
-  modules: [
-    {
-      resolve: "@medusajs/medusa/analytics",
-      options: {
-        providers: [
-          {
-            resolve: "@medusajs/analytics-local",
-            id: "local",
-          },
-        ],
-      },
-    },
-  ],
-})
-```
-
-***
-
-## Test out the Module
-
-To test the module out, you'll track in the console when an order is placed.
-
-You'll first create a [workflow](https://docs.medusajs.com/docs/learn/fundamentals/workflows/index.html.md) that tracks the order completion event. Then, you can execute the workflow in a [subscriber](https://docs.medusajs.com/docs/learn/fundamentals/events-and-subscribers/index.html.md) that listens to the `order.placed` event.
-
-For example, create a workflow at `src/workflows/track-order-placed.ts` with the following content:
-
-```ts title="src/workflows/track-order-created.ts" highlights={workflowHighlights}
-import { createWorkflow } from "@medusajs/framework/workflows-sdk"
-import { createStep } from "@medusajs/framework/workflows-sdk"
-import { Modules } from "@medusajs/framework/utils"
-import { OrderDTO } from "@medusajs/framework/types"
-
-type StepInput = {
-  order: OrderDTO
-}
-
-const trackOrderCreatedStep = createStep(
-  "track-order-created-step",
-  async ({ order }: StepInput, { container }) => {
-    const analyticsModuleService = container.resolve(Modules.ANALYTICS)
-
-    await analyticsModuleService.track({
-      event: "order_created",
-      userId: order.customer_id,
-      properties: {
-        order_id: order.id,
-        total: order.total,
-        items: order.items.map((item) => ({
-          variant_id: item.variant_id,
-          product_id: item.product_id,
-          quantity: item.quantity,
-        })),
-        customer_id: order.customer_id,
-      },
-    })
-  }
-)
-
-type WorkflowInput = {
-  order_id: string
-}
-
-export const trackOrderCreatedWorkflow = createWorkflow(
-  "track-order-created-workflow",
-  ({ order_id }: WorkflowInput) => {
-    const { data: orders } = useQueryGraphStep({
-      entity: "order",
-      fields: [
-        "*",
-        "customer.*",
-        "items.*",
-      ],
-      filters: {
-        id: order_id,
-      },
-    })
-    trackOrderCreatedStep({
-      order: orders[0],
-    })
-  }
-)
-```
-
-This workflow retrieves the order details using the `useQueryGraphStep` and then tracks the order creation event using the `trackOrderCreatedStep`.
-
-In the step, you resolve the service of the Analytics Module from the [Medusa container](https://docs.medusajs.com/docs/learn/fundamentals/medusa-container/index.html.md) and use its `track` method to track the event. This method will use the underlying provider configured (which is the Local Analytics Module Provider, in this case) to track the event.
-
-Next, create a subscriber at `src/subscribers/order-placed.ts` with the following content:
-
-```ts title="src/subscribers/order-placed.ts"
-import type {
-  SubscriberArgs,
-  SubscriberConfig,
-} from "@medusajs/framework"
-import { trackOrderCreatedWorkflow } from "../workflows/track-order-created"
-
-export default async function orderPlacedHandler({
-  event: { data },
-  container,
-}: SubscriberArgs<{ id: string }>) {
-  await trackOrderCreatedWorkflow(container).run({
-    input: {
-      order_id: data.id,
-    },
-  })
-}
-
-export const config: SubscriberConfig = {
-  event: "order.placed",
-}
-```
-
-This subscriber listens to the `order.placed` event and executes the `trackOrderCreatedWorkflow` workflow, passing the order ID as input.
-
-You'll now track the order creation event whenever an order is placed in your Medusa application. You can test this out by placing an order and checking the console for the tracked event.
-
-***
-
-## Additional Resources
-
-- [How to Use the Analytics Module](https://docs.medusajs.com/references/analytics/service/index.html.md)
-
-
-# PostHog Analytics Module Provider
-
-The PostHog Analytics Module Provider allows you to integrate [PostHog](https://posthog.com/) with Medusa.
-
-PostHog is an open-source product analytics platform that helps you track user interactions and analyze user behavior in your commerce application.
-
-By integrating PostHog with Medusa, you can track events such as cart additions, order completions, and user sign-ups, enabling you to gain insights into user behavior and optimize your application accordingly.
-
-The Analytics Module and its providers are available starting [Medusa v2.8.3](https://github.com/medusajs/medusa/releases/tag/v2.8.3).
-
-***
-
-## Register the PostHog Analytics Module
-
-### Prerequisites
-
-- [PostHog account](https://app.posthog.com/signup)
-- [PostHog API Key](https://posthog.com/docs/getting-started/api-key)
-
-Add the module into the `provider` object of the Analytics Module:
-
-You can use only one provider in your Medusa application.
-
-```ts title="medusa-config.ts"
-module.exports = defineConfig({
-  // ...
-  modules: [
-    {
-      resolve: "@medusajs/medusa/analytics",
-      options: {
-        providers: [
-          {
-            resolve: "@medusajs/analytics-posthog",
-            id: "posthog",
-            options: {
-              posthogEventsKey: process.env.POSTHOG_EVENTS_API_KEY,
-              posthogHost: process.env.POSTHOG_HOST,
-            },
           },
         ],
       },
@@ -33566,72 +32139,6 @@ You'll now track the order creation event whenever an order is placed in your Me
 ## Additional Resources
 
 - [How to Use the Analytics Module](https://docs.medusajs.com/references/analytics/service/index.html.md)
-
-
-# Redis Cache Module
-
-The Redis Cache Module uses Redis to cache data in your store. In production, it's recommended to use this module.
-
-***
-
-## Register the Redis Cache Module
-
-### Prerequisites
-
-- [Redis installed and Redis server running](https://redis.io/docs/getting-started/installation/)
-
-Add the module into the `modules` property of the exported object in `medusa-config.ts`:
-
-```ts title="medusa-config.ts" highlights={highlights}
-import { Modules } from "@medusajs/framework/utils"
-
-// ...
-
-module.exports = defineConfig({
-  // ...
-  modules: [
-    {
-      resolve: "@medusajs/medusa/cache-redis",
-      options: { 
-        redisUrl: process.env.CACHE_REDIS_URL,
-      },
-    },
-  ],
-})
-```
-
-### Environment Variables
-
-Make sure to add the following environment variables:
-
-```bash
-CACHE_REDIS_URL=<YOUR_REDIS_URL>
-```
-
-### Redis Cache Module Options
-
-|Option|Description|Required|Default|
-|---|---|---|---|---|---|---|
-|\`redisUrl\`|A string indicating the Redis connection URL.|Yes|-|
-|\`redisOptions\`|An object of Redis options. Refer to the |No|-|
-|\`ttl\`|The number of seconds an item can live in the cache before it’s removed.|No|\`30\`|
-|\`namespace\`|A string used to prefix all cached keys with |No|\`medusa\`|
-
-***
-
-## Test the Module
-
-To test the module, start the Medusa application:
-
-```bash npm2yarn
-npm run dev
-```
-
-You'll see the following message in the terminal's logs:
-
-```bash noCopy noReport
-Connection to Redis in module 'cache-redis' established
-```
 
 
 # How to Create a Cache Module
@@ -33910,21 +32417,19 @@ Medusa provides the following Cache Modules. You can use one of them, or [Create
 
 # Redis Cache Module
 
-The Local Event Module uses Node EventEmitter to implement Medusa's pub/sub events system. The Node EventEmitter is limited to a single process environment.
-
-This module is useful for development and testing, but it’s not recommended to be used in production.
-
-For production, it’s recommended to use modules like [Redis Event Bus Module](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/infrastructure-modules/event/redis/index.html.md).
+The Redis Cache Module uses Redis to cache data in your store. In production, it's recommended to use this module.
 
 ***
 
-## Register the Local Event Module
+## Register the Redis Cache Module
 
-The Local Event Module is registered by default in your application.
+### Prerequisites
+
+- [Redis installed and Redis server running](https://redis.io/docs/getting-started/installation/)
 
 Add the module into the `modules` property of the exported object in `medusa-config.ts`:
 
-```ts title="medusa-config.ts"
+```ts title="medusa-config.ts" highlights={highlights}
 import { Modules } from "@medusajs/framework/utils"
 
 // ...
@@ -33933,11 +32438,31 @@ module.exports = defineConfig({
   // ...
   modules: [
     {
-      resolve: "@medusajs/medusa/event-bus-local",
+      resolve: "@medusajs/medusa/cache-redis",
+      options: { 
+        redisUrl: process.env.CACHE_REDIS_URL,
+      },
     },
   ],
 })
 ```
+
+### Environment Variables
+
+Make sure to add the following environment variables:
+
+```bash
+CACHE_REDIS_URL=<YOUR_REDIS_URL>
+```
+
+### Redis Cache Module Options
+
+|Option|Description|Required|Default|
+|---|---|---|---|---|---|---|
+|\`redisUrl\`|A string indicating the Redis connection URL.|Yes|-|
+|\`redisOptions\`|An object of Redis options. Refer to the |No|-|
+|\`ttl\`|The number of seconds an item can live in the cache before it’s removed.|No|\`30\`|
+|\`namespace\`|A string used to prefix all cached keys with |No|\`medusa\`|
 
 ***
 
@@ -33952,7 +32477,7 @@ npm run dev
 You'll see the following message in the terminal's logs:
 
 ```bash noCopy noReport
-Local Event Bus installed. This is not recommended for production.
+Connection to Redis in module 'cache-redis' established
 ```
 
 
@@ -35945,12 +34470,11 @@ Connection to Redis in module 'workflow-engine-redis' established
 - [refreshCartShippingMethodsWorkflow](https://docs.medusajs.com/references/medusa-workflows/refreshCartShippingMethodsWorkflow/index.html.md)
 - [refreshPaymentCollectionForCartWorkflow](https://docs.medusajs.com/references/medusa-workflows/refreshPaymentCollectionForCartWorkflow/index.html.md)
 - [refundPaymentAndRecreatePaymentSessionWorkflow](https://docs.medusajs.com/references/medusa-workflows/refundPaymentAndRecreatePaymentSessionWorkflow/index.html.md)
+- [transferCartCustomerWorkflow](https://docs.medusajs.com/references/medusa-workflows/transferCartCustomerWorkflow/index.html.md)
 - [updateCartPromotionsWorkflow](https://docs.medusajs.com/references/medusa-workflows/updateCartPromotionsWorkflow/index.html.md)
 - [updateCartWorkflow](https://docs.medusajs.com/references/medusa-workflows/updateCartWorkflow/index.html.md)
 - [updateLineItemInCartWorkflow](https://docs.medusajs.com/references/medusa-workflows/updateLineItemInCartWorkflow/index.html.md)
 - [updateTaxLinesWorkflow](https://docs.medusajs.com/references/medusa-workflows/updateTaxLinesWorkflow/index.html.md)
-- [updateLineItemInCartWorkflow](https://docs.medusajs.com/references/medusa-workflows/updateLineItemInCartWorkflow/index.html.md)
-- [refreshPaymentCollectionForCartWorkflow](https://docs.medusajs.com/references/medusa-workflows/refreshPaymentCollectionForCartWorkflow/index.html.md)
 - [validateExistingPaymentCollectionStep](https://docs.medusajs.com/references/medusa-workflows/validateExistingPaymentCollectionStep/index.html.md)
 - [batchLinksWorkflow](https://docs.medusajs.com/references/medusa-workflows/batchLinksWorkflow/index.html.md)
 - [createLinksWorkflow](https://docs.medusajs.com/references/medusa-workflows/createLinksWorkflow/index.html.md)
@@ -35969,6 +34493,7 @@ Connection to Redis in module 'workflow-engine-redis' established
 - [linkCustomerGroupsToCustomerWorkflow](https://docs.medusajs.com/references/medusa-workflows/linkCustomerGroupsToCustomerWorkflow/index.html.md)
 - [linkCustomersToCustomerGroupWorkflow](https://docs.medusajs.com/references/medusa-workflows/linkCustomersToCustomerGroupWorkflow/index.html.md)
 - [updateCustomerGroupsWorkflow](https://docs.medusajs.com/references/medusa-workflows/updateCustomerGroupsWorkflow/index.html.md)
+- [createDefaultsWorkflow](https://docs.medusajs.com/references/medusa-workflows/createDefaultsWorkflow/index.html.md)
 - [addDraftOrderItemsWorkflow](https://docs.medusajs.com/references/medusa-workflows/addDraftOrderItemsWorkflow/index.html.md)
 - [addDraftOrderPromotionWorkflow](https://docs.medusajs.com/references/medusa-workflows/addDraftOrderPromotionWorkflow/index.html.md)
 - [addDraftOrderShippingMethodsWorkflow](https://docs.medusajs.com/references/medusa-workflows/addDraftOrderShippingMethodsWorkflow/index.html.md)
@@ -35983,8 +34508,9 @@ Connection to Redis in module 'workflow-engine-redis' established
 - [removeDraftOrderPromotionsWorkflow](https://docs.medusajs.com/references/medusa-workflows/removeDraftOrderPromotionsWorkflow/index.html.md)
 - [removeDraftOrderShippingMethodWorkflow](https://docs.medusajs.com/references/medusa-workflows/removeDraftOrderShippingMethodWorkflow/index.html.md)
 - [requestDraftOrderEditWorkflow](https://docs.medusajs.com/references/medusa-workflows/requestDraftOrderEditWorkflow/index.html.md)
-- [updateDraftOrderActionShippingMethodWorkflow](https://docs.medusajs.com/references/medusa-workflows/updateDraftOrderActionShippingMethodWorkflow/index.html.md)
 - [updateDraftOrderActionItemWorkflow](https://docs.medusajs.com/references/medusa-workflows/updateDraftOrderActionItemWorkflow/index.html.md)
+- [updateDraftOrderActionShippingMethodWorkflow](https://docs.medusajs.com/references/medusa-workflows/updateDraftOrderActionShippingMethodWorkflow/index.html.md)
+- [updateDraftOrderItemWorkflow](https://docs.medusajs.com/references/medusa-workflows/updateDraftOrderItemWorkflow/index.html.md)
 - [updateDraftOrderShippingMethodWorkflow](https://docs.medusajs.com/references/medusa-workflows/updateDraftOrderShippingMethodWorkflow/index.html.md)
 - [updateDraftOrderStep](https://docs.medusajs.com/references/medusa-workflows/updateDraftOrderStep/index.html.md)
 - [updateDraftOrderWorkflow](https://docs.medusajs.com/references/medusa-workflows/updateDraftOrderWorkflow/index.html.md)
@@ -35998,9 +34524,8 @@ Connection to Redis in module 'workflow-engine-redis' established
 - [createServiceZonesWorkflow](https://docs.medusajs.com/references/medusa-workflows/createServiceZonesWorkflow/index.html.md)
 - [createShipmentWorkflow](https://docs.medusajs.com/references/medusa-workflows/createShipmentWorkflow/index.html.md)
 - [createShippingOptionsWorkflow](https://docs.medusajs.com/references/medusa-workflows/createShippingOptionsWorkflow/index.html.md)
-- [createServiceZonesWorkflow](https://docs.medusajs.com/references/medusa-workflows/createServiceZonesWorkflow/index.html.md)
-- [deleteFulfillmentSetsWorkflow](https://docs.medusajs.com/references/medusa-workflows/deleteFulfillmentSetsWorkflow/index.html.md)
 - [createShippingProfilesWorkflow](https://docs.medusajs.com/references/medusa-workflows/createShippingProfilesWorkflow/index.html.md)
+- [deleteFulfillmentSetsWorkflow](https://docs.medusajs.com/references/medusa-workflows/deleteFulfillmentSetsWorkflow/index.html.md)
 - [deleteServiceZonesWorkflow](https://docs.medusajs.com/references/medusa-workflows/deleteServiceZonesWorkflow/index.html.md)
 - [deleteShippingOptionsWorkflow](https://docs.medusajs.com/references/medusa-workflows/deleteShippingOptionsWorkflow/index.html.md)
 - [markFulfillmentAsDeliveredWorkflow](https://docs.medusajs.com/references/medusa-workflows/markFulfillmentAsDeliveredWorkflow/index.html.md)
@@ -36014,7 +34539,6 @@ Connection to Redis in module 'workflow-engine-redis' established
 - [createInventoryItemsWorkflow](https://docs.medusajs.com/references/medusa-workflows/createInventoryItemsWorkflow/index.html.md)
 - [createInventoryLevelsWorkflow](https://docs.medusajs.com/references/medusa-workflows/createInventoryLevelsWorkflow/index.html.md)
 - [deleteInventoryItemWorkflow](https://docs.medusajs.com/references/medusa-workflows/deleteInventoryItemWorkflow/index.html.md)
-- [createInventoryItemsWorkflow](https://docs.medusajs.com/references/medusa-workflows/createInventoryItemsWorkflow/index.html.md)
 - [deleteInventoryLevelsWorkflow](https://docs.medusajs.com/references/medusa-workflows/deleteInventoryLevelsWorkflow/index.html.md)
 - [updateInventoryItemsWorkflow](https://docs.medusajs.com/references/medusa-workflows/updateInventoryItemsWorkflow/index.html.md)
 - [updateInventoryLevelsWorkflow](https://docs.medusajs.com/references/medusa-workflows/updateInventoryLevelsWorkflow/index.html.md)
@@ -36238,8 +34762,6 @@ Connection to Redis in module 'workflow-engine-redis' established
 - [addOrRemoveCampaignPromotionsWorkflow](https://docs.medusajs.com/references/medusa-workflows/addOrRemoveCampaignPromotionsWorkflow/index.html.md)
 - [batchPromotionRulesWorkflow](https://docs.medusajs.com/references/medusa-workflows/batchPromotionRulesWorkflow/index.html.md)
 - [createCampaignsWorkflow](https://docs.medusajs.com/references/medusa-workflows/createCampaignsWorkflow/index.html.md)
-- [batchPromotionRulesWorkflow](https://docs.medusajs.com/references/medusa-workflows/batchPromotionRulesWorkflow/index.html.md)
-- [addOrRemoveCampaignPromotionsWorkflow](https://docs.medusajs.com/references/medusa-workflows/addOrRemoveCampaignPromotionsWorkflow/index.html.md)
 - [createPromotionRulesWorkflow](https://docs.medusajs.com/references/medusa-workflows/createPromotionRulesWorkflow/index.html.md)
 - [createPromotionsWorkflow](https://docs.medusajs.com/references/medusa-workflows/createPromotionsWorkflow/index.html.md)
 - [deleteCampaignsWorkflow](https://docs.medusajs.com/references/medusa-workflows/deleteCampaignsWorkflow/index.html.md)
@@ -36249,7 +34771,6 @@ Connection to Redis in module 'workflow-engine-redis' established
 - [updatePromotionRulesWorkflow](https://docs.medusajs.com/references/medusa-workflows/updatePromotionRulesWorkflow/index.html.md)
 - [updatePromotionsStatusWorkflow](https://docs.medusajs.com/references/medusa-workflows/updatePromotionsStatusWorkflow/index.html.md)
 - [updatePromotionsValidationStep](https://docs.medusajs.com/references/medusa-workflows/updatePromotionsValidationStep/index.html.md)
-- [updatePromotionRulesWorkflow](https://docs.medusajs.com/references/medusa-workflows/updatePromotionRulesWorkflow/index.html.md)
 - [updatePromotionsWorkflow](https://docs.medusajs.com/references/medusa-workflows/updatePromotionsWorkflow/index.html.md)
 - [createRegionsWorkflow](https://docs.medusajs.com/references/medusa-workflows/createRegionsWorkflow/index.html.md)
 - [deleteRegionsWorkflow](https://docs.medusajs.com/references/medusa-workflows/deleteRegionsWorkflow/index.html.md)
@@ -36265,23 +34786,16 @@ Connection to Redis in module 'workflow-engine-redis' established
 - [deleteSalesChannelsWorkflow](https://docs.medusajs.com/references/medusa-workflows/deleteSalesChannelsWorkflow/index.html.md)
 - [linkProductsToSalesChannelWorkflow](https://docs.medusajs.com/references/medusa-workflows/linkProductsToSalesChannelWorkflow/index.html.md)
 - [updateSalesChannelsWorkflow](https://docs.medusajs.com/references/medusa-workflows/updateSalesChannelsWorkflow/index.html.md)
-- [validateStepShippingProfileDelete](https://docs.medusajs.com/references/medusa-workflows/validateStepShippingProfileDelete/index.html.md)
 - [deleteShippingProfileWorkflow](https://docs.medusajs.com/references/medusa-workflows/deleteShippingProfileWorkflow/index.html.md)
+- [validateStepShippingProfileDelete](https://docs.medusajs.com/references/medusa-workflows/validateStepShippingProfileDelete/index.html.md)
 - [createLocationFulfillmentSetWorkflow](https://docs.medusajs.com/references/medusa-workflows/createLocationFulfillmentSetWorkflow/index.html.md)
 - [createStockLocationsWorkflow](https://docs.medusajs.com/references/medusa-workflows/createStockLocationsWorkflow/index.html.md)
 - [deleteStockLocationsWorkflow](https://docs.medusajs.com/references/medusa-workflows/deleteStockLocationsWorkflow/index.html.md)
 - [linkSalesChannelsToStockLocationWorkflow](https://docs.medusajs.com/references/medusa-workflows/linkSalesChannelsToStockLocationWorkflow/index.html.md)
 - [updateStockLocationsWorkflow](https://docs.medusajs.com/references/medusa-workflows/updateStockLocationsWorkflow/index.html.md)
-- [deleteStockLocationsWorkflow](https://docs.medusajs.com/references/medusa-workflows/deleteStockLocationsWorkflow/index.html.md)
-- [linkSalesChannelsToStockLocationWorkflow](https://docs.medusajs.com/references/medusa-workflows/linkSalesChannelsToStockLocationWorkflow/index.html.md)
+- [createStoresWorkflow](https://docs.medusajs.com/references/medusa-workflows/createStoresWorkflow/index.html.md)
 - [deleteStoresWorkflow](https://docs.medusajs.com/references/medusa-workflows/deleteStoresWorkflow/index.html.md)
 - [updateStoresWorkflow](https://docs.medusajs.com/references/medusa-workflows/updateStoresWorkflow/index.html.md)
-- [createStoresWorkflow](https://docs.medusajs.com/references/medusa-workflows/createStoresWorkflow/index.html.md)
-- [createUserAccountWorkflow](https://docs.medusajs.com/references/medusa-workflows/createUserAccountWorkflow/index.html.md)
-- [removeUserAccountWorkflow](https://docs.medusajs.com/references/medusa-workflows/removeUserAccountWorkflow/index.html.md)
-- [deleteUsersWorkflow](https://docs.medusajs.com/references/medusa-workflows/deleteUsersWorkflow/index.html.md)
-- [createUsersWorkflow](https://docs.medusajs.com/references/medusa-workflows/createUsersWorkflow/index.html.md)
-- [updateUsersWorkflow](https://docs.medusajs.com/references/medusa-workflows/updateUsersWorkflow/index.html.md)
 - [createTaxRateRulesWorkflow](https://docs.medusajs.com/references/medusa-workflows/createTaxRateRulesWorkflow/index.html.md)
 - [createTaxRatesWorkflow](https://docs.medusajs.com/references/medusa-workflows/createTaxRatesWorkflow/index.html.md)
 - [createTaxRegionsWorkflow](https://docs.medusajs.com/references/medusa-workflows/createTaxRegionsWorkflow/index.html.md)
@@ -36377,16 +34891,15 @@ Connection to Redis in module 'workflow-engine-redis' established
 - [createFulfillmentSets](https://docs.medusajs.com/references/medusa-workflows/steps/createFulfillmentSets/index.html.md)
 - [createFulfillmentStep](https://docs.medusajs.com/references/medusa-workflows/steps/createFulfillmentStep/index.html.md)
 - [createReturnFulfillmentStep](https://docs.medusajs.com/references/medusa-workflows/steps/createReturnFulfillmentStep/index.html.md)
-- [createShippingOptionsPriceSetsStep](https://docs.medusajs.com/references/medusa-workflows/steps/createShippingOptionsPriceSetsStep/index.html.md)
+- [createServiceZonesStep](https://docs.medusajs.com/references/medusa-workflows/steps/createServiceZonesStep/index.html.md)
 - [createShippingOptionRulesStep](https://docs.medusajs.com/references/medusa-workflows/steps/createShippingOptionRulesStep/index.html.md)
 - [createShippingOptionsPriceSetsStep](https://docs.medusajs.com/references/medusa-workflows/steps/createShippingOptionsPriceSetsStep/index.html.md)
 - [createShippingProfilesStep](https://docs.medusajs.com/references/medusa-workflows/steps/createShippingProfilesStep/index.html.md)
 - [deleteFulfillmentSetsStep](https://docs.medusajs.com/references/medusa-workflows/steps/deleteFulfillmentSetsStep/index.html.md)
 - [deleteServiceZonesStep](https://docs.medusajs.com/references/medusa-workflows/steps/deleteServiceZonesStep/index.html.md)
-- [createShippingProfilesStep](https://docs.medusajs.com/references/medusa-workflows/steps/createShippingProfilesStep/index.html.md)
 - [deleteShippingOptionRulesStep](https://docs.medusajs.com/references/medusa-workflows/steps/deleteShippingOptionRulesStep/index.html.md)
-- [setShippingOptionsPricesStep](https://docs.medusajs.com/references/medusa-workflows/steps/setShippingOptionsPricesStep/index.html.md)
 - [deleteShippingOptionsStep](https://docs.medusajs.com/references/medusa-workflows/steps/deleteShippingOptionsStep/index.html.md)
+- [setShippingOptionsPricesStep](https://docs.medusajs.com/references/medusa-workflows/steps/setShippingOptionsPricesStep/index.html.md)
 - [updateFulfillmentStep](https://docs.medusajs.com/references/medusa-workflows/steps/updateFulfillmentStep/index.html.md)
 - [updateServiceZonesStep](https://docs.medusajs.com/references/medusa-workflows/steps/updateServiceZonesStep/index.html.md)
 - [updateShippingOptionRulesStep](https://docs.medusajs.com/references/medusa-workflows/steps/updateShippingOptionRulesStep/index.html.md)
@@ -36412,7 +34925,6 @@ Connection to Redis in module 'workflow-engine-redis' established
 - [deleteLineItemsStep](https://docs.medusajs.com/references/medusa-workflows/steps/deleteLineItemsStep/index.html.md)
 - [listLineItemsStep](https://docs.medusajs.com/references/medusa-workflows/steps/listLineItemsStep/index.html.md)
 - [updateLineItemsStepWithSelector](https://docs.medusajs.com/references/medusa-workflows/steps/updateLineItemsStepWithSelector/index.html.md)
-- [listLineItemsStep](https://docs.medusajs.com/references/medusa-workflows/steps/listLineItemsStep/index.html.md)
 - [notifyOnFailureStep](https://docs.medusajs.com/references/medusa-workflows/steps/notifyOnFailureStep/index.html.md)
 - [sendNotificationsStep](https://docs.medusajs.com/references/medusa-workflows/steps/sendNotificationsStep/index.html.md)
 - [addOrderTransactionStep](https://docs.medusajs.com/references/medusa-workflows/steps/addOrderTransactionStep/index.html.md)
@@ -36423,11 +34935,13 @@ Connection to Redis in module 'workflow-engine-redis' established
 - [cancelOrderFulfillmentStep](https://docs.medusajs.com/references/medusa-workflows/steps/cancelOrderFulfillmentStep/index.html.md)
 - [cancelOrderReturnStep](https://docs.medusajs.com/references/medusa-workflows/steps/cancelOrderReturnStep/index.html.md)
 - [cancelOrdersStep](https://docs.medusajs.com/references/medusa-workflows/steps/cancelOrdersStep/index.html.md)
+- [completeOrdersStep](https://docs.medusajs.com/references/medusa-workflows/steps/completeOrdersStep/index.html.md)
 - [createCompleteReturnStep](https://docs.medusajs.com/references/medusa-workflows/steps/createCompleteReturnStep/index.html.md)
 - [createOrderChangeStep](https://docs.medusajs.com/references/medusa-workflows/steps/createOrderChangeStep/index.html.md)
-- [createOrderClaimsStep](https://docs.medusajs.com/references/medusa-workflows/steps/createOrderClaimsStep/index.html.md)
 - [createOrderClaimItemsFromActionsStep](https://docs.medusajs.com/references/medusa-workflows/steps/createOrderClaimItemsFromActionsStep/index.html.md)
+- [createOrderClaimsStep](https://docs.medusajs.com/references/medusa-workflows/steps/createOrderClaimsStep/index.html.md)
 - [createOrderExchangeItemsFromActionsStep](https://docs.medusajs.com/references/medusa-workflows/steps/createOrderExchangeItemsFromActionsStep/index.html.md)
+- [createOrderExchangesStep](https://docs.medusajs.com/references/medusa-workflows/steps/createOrderExchangesStep/index.html.md)
 - [createOrderLineItemsStep](https://docs.medusajs.com/references/medusa-workflows/steps/createOrderLineItemsStep/index.html.md)
 - [createOrdersStep](https://docs.medusajs.com/references/medusa-workflows/steps/createOrdersStep/index.html.md)
 - [createReturnsStep](https://docs.medusajs.com/references/medusa-workflows/steps/createReturnsStep/index.html.md)
@@ -36453,8 +34967,8 @@ Connection to Redis in module 'workflow-engine-redis' established
 - [updateReturnsStep](https://docs.medusajs.com/references/medusa-workflows/steps/updateReturnsStep/index.html.md)
 - [authorizePaymentSessionStep](https://docs.medusajs.com/references/medusa-workflows/steps/authorizePaymentSessionStep/index.html.md)
 - [cancelPaymentStep](https://docs.medusajs.com/references/medusa-workflows/steps/cancelPaymentStep/index.html.md)
-- [refundPaymentStep](https://docs.medusajs.com/references/medusa-workflows/steps/refundPaymentStep/index.html.md)
 - [capturePaymentStep](https://docs.medusajs.com/references/medusa-workflows/steps/capturePaymentStep/index.html.md)
+- [refundPaymentStep](https://docs.medusajs.com/references/medusa-workflows/steps/refundPaymentStep/index.html.md)
 - [refundPaymentsStep](https://docs.medusajs.com/references/medusa-workflows/steps/refundPaymentsStep/index.html.md)
 - [createPaymentAccountHolderStep](https://docs.medusajs.com/references/medusa-workflows/steps/createPaymentAccountHolderStep/index.html.md)
 - [createPaymentSessionStep](https://docs.medusajs.com/references/medusa-workflows/steps/createPaymentSessionStep/index.html.md)
@@ -36491,18 +35005,16 @@ Connection to Redis in module 'workflow-engine-redis' established
 - [deleteCollectionsStep](https://docs.medusajs.com/references/medusa-workflows/steps/deleteCollectionsStep/index.html.md)
 - [deleteProductOptionsStep](https://docs.medusajs.com/references/medusa-workflows/steps/deleteProductOptionsStep/index.html.md)
 - [deleteProductTagsStep](https://docs.medusajs.com/references/medusa-workflows/steps/deleteProductTagsStep/index.html.md)
-- [deleteProductOptionsStep](https://docs.medusajs.com/references/medusa-workflows/steps/deleteProductOptionsStep/index.html.md)
 - [deleteProductTypesStep](https://docs.medusajs.com/references/medusa-workflows/steps/deleteProductTypesStep/index.html.md)
 - [deleteProductVariantsStep](https://docs.medusajs.com/references/medusa-workflows/steps/deleteProductVariantsStep/index.html.md)
 - [deleteProductsStep](https://docs.medusajs.com/references/medusa-workflows/steps/deleteProductsStep/index.html.md)
 - [generateProductCsvStep](https://docs.medusajs.com/references/medusa-workflows/steps/generateProductCsvStep/index.html.md)
+- [getAllProductsStep](https://docs.medusajs.com/references/medusa-workflows/steps/getAllProductsStep/index.html.md)
 - [getProductsStep](https://docs.medusajs.com/references/medusa-workflows/steps/getProductsStep/index.html.md)
 - [getVariantAvailabilityStep](https://docs.medusajs.com/references/medusa-workflows/steps/getVariantAvailabilityStep/index.html.md)
 - [normalizeCsvStep](https://docs.medusajs.com/references/medusa-workflows/steps/normalizeCsvStep/index.html.md)
 - [normalizeCsvToChunksStep](https://docs.medusajs.com/references/medusa-workflows/steps/normalizeCsvToChunksStep/index.html.md)
 - [parseProductCsvStep](https://docs.medusajs.com/references/medusa-workflows/steps/parseProductCsvStep/index.html.md)
-- [normalizeCsvStep](https://docs.medusajs.com/references/medusa-workflows/steps/normalizeCsvStep/index.html.md)
-- [normalizeCsvToChunksStep](https://docs.medusajs.com/references/medusa-workflows/steps/normalizeCsvToChunksStep/index.html.md)
 - [processImportChunksStep](https://docs.medusajs.com/references/medusa-workflows/steps/processImportChunksStep/index.html.md)
 - [updateCollectionsStep](https://docs.medusajs.com/references/medusa-workflows/steps/updateCollectionsStep/index.html.md)
 - [updateProductOptionsStep](https://docs.medusajs.com/references/medusa-workflows/steps/updateProductOptionsStep/index.html.md)
@@ -38416,6 +36928,68 @@ npx medusa --help
 ***
 
 
+# build Command - Medusa CLI Reference
+
+Create a standalone build of the Medusa application.
+
+This creates a build that:
+
+- Doesn't rely on the source TypeScript files.
+- Can be copied to a production server reliably.
+
+The build is outputted to a new `.medusa/server` directory.
+
+```bash
+npx medusa build
+```
+
+Refer to [this section](#run-built-medusa-application) for next steps.
+
+## Options
+
+|Option|Description|
+|---|---|---|
+|\`--admin-only\`|Whether to only build the admin to host it separately. If this option is not passed, the admin is built to the |
+
+***
+
+## Run Built Medusa Application
+
+After running the `build` command, use the following step to run the built Medusa application:
+
+- Change to the `.medusa/server` directory and install the dependencies:
+
+```bash npm2yarn
+cd .medusa/server && npm install
+```
+
+- When running the application locally, make sure to copy the `.env` file from the root project's directory. In production, use system environment variables instead.
+
+```bash npm2yarn
+cp .env .medusa/server/.env.production
+```
+
+- In the system environment variables, set `NODE_ENV` to `production`:
+
+```bash
+NODE_ENV=production
+```
+
+- Use the `start` command to run the application:
+
+```bash npm2yarn
+cd .medusa/server && npm run start
+```
+
+***
+
+## Build Medusa Admin
+
+By default, the Medusa Admin is built to the `.medusa/server/public/admin` directory.
+
+If you want a separate build to host the admin standalone, such as on Vercel, pass the `--admin-only` option as explained in the [Options](#options) section. This outputs the admin to the `.medusa/admin` directory instead.
+
+
 # db Commands - Medusa CLI Reference
 
 Commands starting with `db:` perform actions on the database.
@@ -38554,93 +37128,18 @@ npx medusa develop
 
 # exec Command - Medusa CLI Reference
 
-Create a standalone build of the Medusa application.
-
-This creates a build that:
-
-- Doesn't rely on the source TypeScript files.
-- Can be copied to a production server reliably.
-
-The build is outputted to a new `.medusa/server` directory.
+Run a custom CLI script. Learn more about it in [this guide](https://docs.medusajs.com/docs/learn/fundamentals/custom-cli-scripts/index.html.md).
 
 ```bash
-npx medusa build
-```
-
-Refer to [this section](#run-built-medusa-application) for next steps.
-
-## Options
-
-|Option|Description|
-|---|---|---|
-|\`--admin-only\`|Whether to only build the admin to host it separately. If this option is not passed, the admin is built to the |
-
-***
-
-## Run Built Medusa Application
-
-After running the `build` command, use the following step to run the built Medusa application:
-
-- Change to the `.medusa/server` directory and install the dependencies:
-
-```bash npm2yarn
-cd .medusa/server && npm install
-```
-
-- When running the application locally, make sure to copy the `.env` file from the root project's directory. In production, use system environment variables instead.
-
-```bash npm2yarn
-cp .env .medusa/server/.env.production
-```
-
-- In the system environment variables, set `NODE_ENV` to `production`:
-
-```bash
-NODE_ENV=production
-```
-
-- Use the `start` command to run the application:
-
-```bash npm2yarn
-cd .medusa/server && npm run start
-```
-
-***
-
-## Build Medusa Admin
-
-By default, the Medusa Admin is built to the `.medusa/server/public/admin` directory.
-
-If you want a separate build to host the admin standalone, such as on Vercel, pass the `--admin-only` option as explained in the [Options](#options) section. This outputs the admin to the `.medusa/admin` directory instead.
-
-
-# new Command - Medusa CLI Reference
-
-Create a new Medusa application. Unlike the `create-medusa-app` CLI tool, this command provides more flexibility for experienced Medusa developers in creating and configuring their project.
-
-```bash
-medusa new [<dir_name> [<starter_url>]]
+npx medusa exec [file] [args...]
 ```
 
 ## Arguments
 
-|Argument|Description|Required|Default|
-|---|---|---|---|---|---|---|
-|\`dir\_name\`|The name of the directory to create the Medusa application in.|Yes|-|
-|\`starter\_url\`|The URL of the starter repository to create the project from.|No|\`https://github.com/medusajs/medusa-starter-default\`|
-
-## Options
-
-|Option|Description|
-|---|---|---|
-|\`-y\`|Skip all prompts, such as databaes prompts. A database might not be created if default PostgreSQL credentials don't work.|
-|\`--skip-db\`|Skip database creation.|
-|\`--skip-env\`|Skip populating |
-|\`--db-user \<user>\`|The database user to use for database setup.|
-|\`--db-database \<database>\`|The name of the database used for database setup.|
-|\`--db-pass \<password>\`|The database password to use for database setup.|
-|\`--db-port \<port>\`|The database port to use for database setup.|
-|\`--db-host \<host>\`|The database host to use for database setup.|
+|Argument|Description|Required|
+|---|---|---|---|---|
+|\`file\`|The path to the TypeScript or JavaScript file holding the function to execute.|Yes|
+|\`args\`|A list of arguments to pass to the function. These arguments are passed in the |No|
 
 
 # new Command - Medusa CLI Reference
@@ -63920,14 +62419,14 @@ class SegmentAnalyticsProviderService extends AbstractAnalyticsProviderService {
         userId: data.actor_id,
         anonymousId,
         traits,
-        context: data.properties
+        context: data.properties,
       })
     } else {
       this.client.identify({
         userId: data.actor_id,
         anonymousId,
         traits,
-        context: data.properties
+        context: data.properties,
       })
     }
   }
@@ -67617,6 +66116,7 @@ To learn more about the commerce features that Medusa provides, check out Medusa
 ## JS SDK Admin
 
 - [batchSalesChannels](https://docs.medusajs.com/references/js_sdk/admin/ApiKey/methods/js_sdk.admin.ApiKey.batchSalesChannels/index.html.md)
+- [create](https://docs.medusajs.com/references/js_sdk/admin/ApiKey/methods/js_sdk.admin.ApiKey.create/index.html.md)
 - [delete](https://docs.medusajs.com/references/js_sdk/admin/ApiKey/methods/js_sdk.admin.ApiKey.delete/index.html.md)
 - [list](https://docs.medusajs.com/references/js_sdk/admin/ApiKey/methods/js_sdk.admin.ApiKey.list/index.html.md)
 - [retrieve](https://docs.medusajs.com/references/js_sdk/admin/ApiKey/methods/js_sdk.admin.ApiKey.retrieve/index.html.md)
@@ -67738,7 +66238,6 @@ To learn more about the commerce features that Medusa provides, check out Medusa
 - [batchUpdateLevels](https://docs.medusajs.com/references/js_sdk/admin/InventoryItem/methods/js_sdk.admin.InventoryItem.batchUpdateLevels/index.html.md)
 - [create](https://docs.medusajs.com/references/js_sdk/admin/InventoryItem/methods/js_sdk.admin.InventoryItem.create/index.html.md)
 - [delete](https://docs.medusajs.com/references/js_sdk/admin/InventoryItem/methods/js_sdk.admin.InventoryItem.delete/index.html.md)
-- [batchUpdateLevels](https://docs.medusajs.com/references/js_sdk/admin/InventoryItem/methods/js_sdk.admin.InventoryItem.batchUpdateLevels/index.html.md)
 - [deleteLevel](https://docs.medusajs.com/references/js_sdk/admin/InventoryItem/methods/js_sdk.admin.InventoryItem.deleteLevel/index.html.md)
 - [list](https://docs.medusajs.com/references/js_sdk/admin/InventoryItem/methods/js_sdk.admin.InventoryItem.list/index.html.md)
 - [listLevels](https://docs.medusajs.com/references/js_sdk/admin/InventoryItem/methods/js_sdk.admin.InventoryItem.listLevels/index.html.md)
@@ -67770,7 +66269,6 @@ To learn more about the commerce features that Medusa provides, check out Medusa
 - [addItems](https://docs.medusajs.com/references/js_sdk/admin/OrderEdit/methods/js_sdk.admin.OrderEdit.addItems/index.html.md)
 - [cancelRequest](https://docs.medusajs.com/references/js_sdk/admin/OrderEdit/methods/js_sdk.admin.OrderEdit.cancelRequest/index.html.md)
 - [confirm](https://docs.medusajs.com/references/js_sdk/admin/OrderEdit/methods/js_sdk.admin.OrderEdit.confirm/index.html.md)
-- [retrieve](https://docs.medusajs.com/references/js_sdk/admin/Order/methods/js_sdk.admin.Order.retrieve/index.html.md)
 - [initiateRequest](https://docs.medusajs.com/references/js_sdk/admin/OrderEdit/methods/js_sdk.admin.OrderEdit.initiateRequest/index.html.md)
 - [removeAddedItem](https://docs.medusajs.com/references/js_sdk/admin/OrderEdit/methods/js_sdk.admin.OrderEdit.removeAddedItem/index.html.md)
 - [request](https://docs.medusajs.com/references/js_sdk/admin/OrderEdit/methods/js_sdk.admin.OrderEdit.request/index.html.md)
@@ -67783,7 +66281,6 @@ To learn more about the commerce features that Medusa provides, check out Medusa
 - [retrieve](https://docs.medusajs.com/references/js_sdk/admin/Payment/methods/js_sdk.admin.Payment.retrieve/index.html.md)
 - [create](https://docs.medusajs.com/references/js_sdk/admin/PaymentCollection/methods/js_sdk.admin.PaymentCollection.create/index.html.md)
 - [delete](https://docs.medusajs.com/references/js_sdk/admin/PaymentCollection/methods/js_sdk.admin.PaymentCollection.delete/index.html.md)
-- [retrieve](https://docs.medusajs.com/references/js_sdk/admin/Payment/methods/js_sdk.admin.Payment.retrieve/index.html.md)
 - [markAsPaid](https://docs.medusajs.com/references/js_sdk/admin/PaymentCollection/methods/js_sdk.admin.PaymentCollection.markAsPaid/index.html.md)
 - [list](https://docs.medusajs.com/references/js_sdk/admin/Plugin/methods/js_sdk.admin.Plugin.list/index.html.md)
 - [batchPrices](https://docs.medusajs.com/references/js_sdk/admin/PriceList/methods/js_sdk.admin.PriceList.batchPrices/index.html.md)
@@ -67869,7 +66366,6 @@ To learn more about the commerce features that Medusa provides, check out Medusa
 - [addReturnShipping](https://docs.medusajs.com/references/js_sdk/admin/Return/methods/js_sdk.admin.Return.addReturnShipping/index.html.md)
 - [cancel](https://docs.medusajs.com/references/js_sdk/admin/Return/methods/js_sdk.admin.Return.cancel/index.html.md)
 - [cancelReceive](https://docs.medusajs.com/references/js_sdk/admin/Return/methods/js_sdk.admin.Return.cancelReceive/index.html.md)
-- [addReturnItem](https://docs.medusajs.com/references/js_sdk/admin/Return/methods/js_sdk.admin.Return.addReturnItem/index.html.md)
 - [cancelRequest](https://docs.medusajs.com/references/js_sdk/admin/Return/methods/js_sdk.admin.Return.cancelRequest/index.html.md)
 - [confirmReceive](https://docs.medusajs.com/references/js_sdk/admin/Return/methods/js_sdk.admin.Return.confirmReceive/index.html.md)
 - [confirmRequest](https://docs.medusajs.com/references/js_sdk/admin/Return/methods/js_sdk.admin.Return.confirmRequest/index.html.md)
@@ -67877,10 +66373,8 @@ To learn more about the commerce features that Medusa provides, check out Medusa
 - [dismissItems](https://docs.medusajs.com/references/js_sdk/admin/Return/methods/js_sdk.admin.Return.dismissItems/index.html.md)
 - [initiateReceive](https://docs.medusajs.com/references/js_sdk/admin/Return/methods/js_sdk.admin.Return.initiateReceive/index.html.md)
 - [initiateRequest](https://docs.medusajs.com/references/js_sdk/admin/Return/methods/js_sdk.admin.Return.initiateRequest/index.html.md)
-- [deleteReturnShipping](https://docs.medusajs.com/references/js_sdk/admin/Return/methods/js_sdk.admin.Return.deleteReturnShipping/index.html.md)
-- [initiateReceive](https://docs.medusajs.com/references/js_sdk/admin/Return/methods/js_sdk.admin.Return.initiateReceive/index.html.md)
-- [receiveItems](https://docs.medusajs.com/references/js_sdk/admin/Return/methods/js_sdk.admin.Return.receiveItems/index.html.md)
 - [list](https://docs.medusajs.com/references/js_sdk/admin/Return/methods/js_sdk.admin.Return.list/index.html.md)
+- [receiveItems](https://docs.medusajs.com/references/js_sdk/admin/Return/methods/js_sdk.admin.Return.receiveItems/index.html.md)
 - [removeDismissItem](https://docs.medusajs.com/references/js_sdk/admin/Return/methods/js_sdk.admin.Return.removeDismissItem/index.html.md)
 - [removeReceiveItem](https://docs.medusajs.com/references/js_sdk/admin/Return/methods/js_sdk.admin.Return.removeReceiveItem/index.html.md)
 - [removeReturnItem](https://docs.medusajs.com/references/js_sdk/admin/Return/methods/js_sdk.admin.Return.removeReturnItem/index.html.md)
@@ -67969,7 +66463,6 @@ To learn more about the commerce features that Medusa provides, check out Medusa
 - [order](https://docs.medusajs.com/references/js-sdk/store/order/index.html.md)
 - [payment](https://docs.medusajs.com/references/js-sdk/store/payment/index.html.md)
 - [product](https://docs.medusajs.com/references/js-sdk/store/product/index.html.md)
-- [fulfillment](https://docs.medusajs.com/references/js-sdk/store/fulfillment/index.html.md)
 - [region](https://docs.medusajs.com/references/js-sdk/store/region/index.html.md)
 
 
@@ -68742,152 +67235,6 @@ export const config = defineRouteConfig({
 
 export default CustomPage
 ```
-
-
-# Header - Admin Components
-
-Each section in the Medusa Admin has a header with a title, and optionally a subtitle with buttons to perform an action.
-
-![Example of a header in a section](https://res.cloudinary.com/dza7lstvk/image/upload/v1728288562/Medusa%20Resources/header_dtz4gl.png)
-
-To create a component that uses the same header styling and structure, create the file `src/admin/components/header.tsx` with the following content:
-
-```tsx title="src/admin/components/header.tsx"
-import { Heading, Button, Text } from "@medusajs/ui"
-import React from "react"
-import { Link, LinkProps } from "react-router-dom"
-import { ActionMenu, ActionMenuProps } from "./action-menu"
-
-export type HeadingProps = {
-  title: string
-  subtitle?: string
-  actions?: (
-    {
-      type: "button",
-      props: React.ComponentProps<typeof Button>
-      link?: LinkProps
-    } |  
-    {
-      type: "action-menu"
-      props: ActionMenuProps
-    } |
-    {
-      type: "custom"
-      children: React.ReactNode
-    }
-  )[]
-}
-
-export const Header = ({
-  title,
-  subtitle,
-  actions = [],
-}: HeadingProps) => {
-  return (
-    <div className="flex items-center justify-between px-6 py-4">
-      <div>
-        <Heading level="h2">{title}</Heading>
-        {subtitle && (
-          <Text className="text-ui-fg-subtle" size="small">
-            {subtitle}
-          </Text>
-        )}
-      </div>
-      {actions.length > 0 && (
-        <div className="flex items-center justify-center gap-x-2">
-          {actions.map((action, index) => (
-            <>
-              {action.type === "button" && (
-                <Button 
-                  {...action.props} 
-                  size={action.props.size || "small"}
-                  key={index}
-                >
-                  <>
-                    {action.props.children}
-                    {action.link && <Link {...action.link} />}
-                  </>
-                </Button>
-              )}
-              {action.type === "action-menu" && (
-                <ActionMenu {...action.props} />
-              )}
-              {action.type === "custom" && action.children}
-            </>
-          ))}
-        </div>
-      )}
-    </div>
-  )
-}
-```
-
-The `Header` component shows a title, and optionally a subtitle and action buttons.
-
-The component also uses the [Action Menu](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/admin-components/components/action-menu/index.html.md) custom component.
-
-It accepts the following props:
-
-- title: (\`string\`) The section's title.
-- subtitle: (\`string\`) The section's subtitle.
-- actions: (\`object\[]\`) An array of actions to show.
-
-  - type: (\`button\` \\| \`action-menu\` \\| \`custom\`) The type of action to add.
-
-    \- If its value is \`button\`, it'll show a button that can have a link or an on-click action.
-
-    \- If its value is \`action-menu\`, it'll show a three dot icon with a dropdown of actions.
-
-    \- If its value is \`custom\`, you can pass any React nodes to render.
-
-  - props: (object)
-
-  - children: (React.ReactNode) This property is only accepted if \`type\` is \`custom\`. Its content is rendered as part of the actions.
-
-***
-
-## Example
-
-Use the `Header` component in any widget or UI route.
-
-For example, create the widget `src/admin/widgets/product-widget.tsx` with the following content:
-
-```tsx title="src/admin/widgets/product-widget.tsx"
-import { defineWidgetConfig } from "@medusajs/admin-sdk"
-import { Container } from "../components/container"
-import { Header } from "../components/header"
-
-const ProductWidget = () => {
-  return (
-    <Container>
-      <Header 
-        title="Product Widget"
-        subtitle="This is my custom product widget"
-        actions={[
-          {
-            type: "button",
-            props: {
-              children: "Click me",
-              variant: "secondary",
-              onClick: () => {
-                alert("You clicked the button.")
-              },
-            },
-          },
-        ]}
-      />
-    </Container>
-  )
-}
-
-export const config = defineWidgetConfig({
-  zone: "product.details.before",
-})
-
-export default ProductWidget
-```
-
-This widget also uses a [Container](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/admin-components/components/container/index.html.md) custom component.
 
 
 # Forms - Admin Components
@@ -70457,42 +68804,120 @@ Learn more about accepted filters in [this documentation](https://docs.medusajs.
 
 # list Method - Service Factory Reference
 
-This method deletes one or more records.
+This method retrieves a list of records.
 
-## Delete One Record
+## Retrieve List of Records
 
 ```ts
-await postModuleService.deletePosts("123")
+const posts = await postModuleService.listPosts()
 ```
 
-To delete one record, pass its ID as a parameter of the method.
+If no parameters are passed, the method returns an array of the first `15` records.
 
 ***
 
-## Delete Multiple Records
+## Filter Records
 
 ```ts
-await postModuleService.deletePosts([
-  "123",
-  "321",
-])
-```
-
-To delete multiple records, pass an array of IDs as a parameter of the method.
-
-***
-
-## Delete Records Matching Filters
-
-```ts
-await postModuleService.deletePosts({
-  name: "My Post",
+const posts = await postModuleService.listPosts({
+  id: ["123", "321"],
 })
 ```
 
-To delete records matching a set of filters, pass an object of filters as a parameter.
+### Parameters
+
+To retrieve records matching a set of filters, pass an object of the filters as a first parameter.
 
 Learn more about accepted filters in [this documentation](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/service-factory-reference/tips/filtering/index.html.md).
+
+### Returns
+
+The method returns an array of the first `15` records matching the filters.
+
+***
+
+## Retrieve Relations
+
+This applies to relations between data models of the same module. To retrieve linked records of different modules, use [Query](https://docs.medusajs.com/docs/learn/fundamentals/module-links/query/index.html.md).
+
+```ts
+const posts = await postModuleService.listPosts({}, {
+  relations: ["author"],
+})
+```
+
+### Parameters
+
+To retrieve records with their relations, pass as a second parameter an object having a `relations` property. `relations`'s value is an array of relation names.
+
+### Returns
+
+The method returns an array of the first `15` records matching the filters.
+
+***
+
+## Select Properties
+
+```ts
+const posts = await postModuleService.listPosts({}, {
+  select: ["id", "name"],
+})
+```
+
+### Parameters
+
+By default, retrieved records have all their properties. To select specific properties to retrieve, pass in the second object parameter a `select` property.
+
+`select`'s value is an array of property names to retrieve.
+
+### Returns
+
+The method returns an array of the first `15` records matching the filters.
+
+***
+
+## Paginate Relations
+
+```ts
+const posts = await postModuleService.listPosts({}, {
+  take: 20,
+  skip: 10,
+})
+```
+
+### Parameters
+
+To paginate the returned records, the second object parameter accepts the following properties:
+
+- `take`: a number indicating how many records to retrieve. By default, it's `15`.
+- `skip`: a number indicating how many records to skip before the retrieved records. By default, it's `0`.
+
+### Returns
+
+The method returns an array of records. The number of records is less than or equal to `take`'s value.
+
+***
+
+## Sort Records
+
+```ts
+const posts = await postModuleService.listPosts({}, {
+  order: {
+    name: "ASC",
+  },
+})
+```
+
+### Parameters
+
+To sort records by one or more properties, pass to the second object parameter the `order` property. Its value is an object whose keys are the property names, and values can either be:
+
+- `ASC` to sort by this property in the ascending order.
+- `DESC` to sort by this property in the descending order.
+
+### Returns
+
+The method returns an array of the first `15` records matching the filters.
 
 
 # listAndCount Method - Service Factory Reference
@@ -70631,31 +69056,75 @@ The method returns an array with two items:
 2. The second is the total count of records.
 
 
-# list Method - Service Factory Reference
+# restore Method - Service Factory Reference
 
-This method retrieves a list of records.
+This method restores one or more records of the data model that were [soft-deleted](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/service-factory-reference/methods/soft-delete/index.html.md).
 
-## Retrieve List of Records
+## Restore One Record
 
 ```ts
-const posts = await postModuleService.listPosts()
+const restoredPosts = await postModuleService.restorePosts("123")
 ```
 
-If no parameters are passed, the method returns an array of the first `15` records.
+### Parameters
+
+To restore one record, pass its ID as a parameter of the method.
+
+### Returns
+
+The method returns an object, whose keys are of the format `{camel_case_data_model_name}_id`, and their values are arrays of restored records' IDs.
+
+For example, the returned object of the above example is:
+
+```ts
+restoredPosts = {
+  post_id: ["123"],
+}
+```
 
 ***
 
-## Filter Records
+## Restore Multiple Records
 
 ```ts
-const posts = await postModuleService.listPosts({
-  id: ["123", "321"],
+const restoredPosts = await postModuleService.restorePosts([
+  "123",
+  "321",
+])
+```
+
+### Parameters
+
+To restore multiple records, pass an array of IDs as a parameter of the method.
+
+### Returns
+
+The method returns an object, whose keys are of the format `{camel_case_data_model_name}_id`, and their values are arrays of restored records' IDs.
+
+For example, the returned object of the above example is:
+
+```ts
+restoredPosts = {
+  post_id: [
+    "123",
+    "321",
+  ],
+}
+```
+
+***
+
+## Restore Records Matching Filters
+
+```ts
+const restoredPosts = await postModuleService.restorePosts({
+  name: "My Post",
 })
 ```
 
 ### Parameters
 
-To retrieve records matching a set of filters, pass an object of the filters as a first parameter.
+To restore records matching a set of filters, pass an object of fitlers as a parameter of the method.
 
 Learn more about accepted filters in [this documentation](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/service-factory-reference/tips/filtering/index.html.md).
 
