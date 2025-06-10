@@ -300,7 +300,7 @@
  *     type: string
  *     format: date-time
  *     title: deleted_at
- *     description: The order's deleted at.
+ *     description: The date the order was deleted.
  * 
 */
 

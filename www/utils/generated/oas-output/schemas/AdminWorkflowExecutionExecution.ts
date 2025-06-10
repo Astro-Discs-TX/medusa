@@ -1,14 +1,14 @@
 /**
  * @schema AdminWorkflowExecutionExecution
  * type: object
- * description: The workflow execution's execution.
+ * description: The workflow execution's steps details.
  * x-schemaName: AdminWorkflowExecutionExecution
  * required:
  *   - steps
  * properties:
  *   steps:
  *     type: object
- *     description: The execution's steps.
+ *     description: The execution's steps. Each object key is a step ID, and the value is the object whose properties are shown below.
  *     required:
  *       - id
  *       - invoke
@@ -25,7 +25,7 @@
  *           description: The step's ID.
  *         invoke:
  *           type: object
- *           description: The step's invoke.
+ *           description: The state of the step's invokation function.
  *           x-schemaName: WorkflowExecutionFn
  *           required:
  *             - state
@@ -33,7 +33,7 @@
  *           properties:
  *             state:
  *               type: string
- *               description: The invoke's state.
+ *               description: The invokation step's state.
  *               enum:
  *                 - failed
  *                 - not_started
@@ -47,7 +47,7 @@
  *                 - timeout
  *             status:
  *               type: string
- *               description: The invoke's status.
+ *               description: The invokation step's state.
  *               enum:
  *                 - idle
  *                 - ok
@@ -56,60 +56,61 @@
  *                 - permanent_failure
  *         definition:
  *           type: object
- *           description: The step's definition.
+ *           description: The step's definition details.
  *           x-schemaName: WorkflowExecutionDefinition
  *           properties:
  *             async:
  *               type: boolean
  *               title: async
- *               description: The definition's async.
+ *               description: Whether the step is async.
  *             compensateAsync:
  *               type: boolean
  *               title: compensateAsync
- *               description: The definition's compensateasync.
+ *               description: Whether the compensation function of the step is async.
  *             noCompensation:
  *               type: boolean
  *               title: noCompensation
- *               description: The definition's nocompensation.
+ *               description: Whether the step doesn't have a compensation function.
  *             continueOnPermanentFailure:
  *               type: boolean
  *               title: continueOnPermanentFailure
- *               description: The definition's continueonpermanentfailure.
+ *               description: Whether the workflow should continue executing even if its status is changed to failed.
  *             skipOnPermanentFailure:
  *               oneOf:
  *                 - type: string
  *                   title: skipOnPermanentFailure
- *                   description: The definition's skiponpermanentfailure.
+ *                   description: The ID of the step to skip to in case of a permanent failure.
  *                 - type: boolean
  *                   title: skipOnPermanentFailure
- *                   description: The definition's skiponpermanentfailure.
+ *                   description: Whether the workflow should skip subsequent steps in case of a permanent failure.
  *             maxRetries:
  *               type: number
  *               title: maxRetries
- *               description: The definition's maxretries.
+ *               description: The maximum number of times to retry the step.
  *             noWait:
  *               type: boolean
  *               title: noWait
- *               description: The definition's nowait.
+ *               description: Whether the workflow shouldn't wait for the step to finish before moving to the next step.
+ *               default: false
  *             retryInterval:
  *               type: number
  *               title: retryInterval
- *               description: The definition's retryinterval.
+ *               description: The interval in seconds between retry attempts when the step fails.
  *             retryIntervalAwaiting:
  *               type: number
  *               title: retryIntervalAwaiting
- *               description: The definition's retryintervalawaiting.
+ *               description: The interval in seconds to retry a step even if its status is `waiting_response`.
  *             saveResponse:
  *               type: boolean
  *               title: saveResponse
- *               description: The definition's saveresponse.
+ *               description: Whether the step's response is stored.
  *             timeout:
  *               type: number
  *               title: timeout
- *               description: The definition's timeout.
+ *               description: The maximum time in seconds to wait for this step to complete. If the step exceeds this time, the step's state is changed to `timeout`, but the step continues executing.
  *         compensate:
  *           type: object
- *           description: The step's compensate.
+ *           description: The state of the step's compensation function.
  *           x-schemaName: WorkflowExecutionFn
  *           required:
  *             - state
@@ -117,7 +118,7 @@
  *           properties:
  *             state:
  *               type: string
- *               description: The compensate's state.
+ *               description: The compensation function's state.
  *               enum:
  *                 - failed
  *                 - not_started
@@ -131,7 +132,7 @@
  *                 - timeout
  *             status:
  *               type: string
- *               description: The compensate's status.
+ *               description: The compensation function's status.
  *               enum:
  *                 - idle
  *                 - ok
@@ -141,11 +142,10 @@
  *         depth:
  *           type: number
  *           title: depth
- *           description: The step's depth.
+ *           description: The step's depth in the workflow's execution.
  *         startedAt:
  *           type: number
  *           title: startedAt
- *           description: The step's startedat.
- * 
-*/
-
+ *           description: The timestamp the step started executing.
+ *
+ */

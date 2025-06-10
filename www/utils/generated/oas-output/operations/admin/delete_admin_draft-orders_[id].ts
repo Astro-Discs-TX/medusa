@@ -57,6 +57,6 @@
  *     $ref: "#/components/responses/500_error"
  * x-workflow: deleteDraftOrdersWorkflow
  * x-events: []
- * 
+ * x-version: 2.8.4
 */
 
