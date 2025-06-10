@@ -1,8 +1,8 @@
 post:
   operationId: PostDraftOrdersIdEditPromotions
-  summary: Add Promotions to Draft Order
+  summary: Add Promotions to Draft Order Edit
   x-sidebar-summary: Add Promotions
-  description: Add promotions to a draft order.
+  description: Add promotions to a draft order edit.
   x-authenticated: true
   parameters:
     - name: id
@@ -52,11 +52,12 @@ post:
     '500':
       $ref: ../components/responses/500_error.yaml
   x-workflow: addDraftOrderPromotionWorkflow
+  x-events: []
 delete:
   operationId: DeleteDraftOrdersIdEditPromotions
-  summary: Remove Promotions from Draft Order
+  summary: Remove Promotions from Draft Order Edit
   x-sidebar-summary: Remove Promotions
-  description: Remove specified promotions from a draft order.
+  description: Remove specified promotions from a draft order edit.
   x-authenticated: true
   parameters:
     - name: id
@@ -107,3 +108,4 @@ delete:
       application/json:
         schema:
           $ref: ../components/schemas/AdminRemoveDraftOrderPromotions.yaml
+  x-events: []

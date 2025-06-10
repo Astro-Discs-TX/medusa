@@ -1,13 +1,18 @@
 import {
   Context,
   DAL,
+  FilterableWorkflowExecutionProps,
+  FindConfig,
   InferEntityType,
   InternalModuleDeclaration,
   ModulesSdkTypes,
+  WorkflowExecutionDTO,
   WorkflowsSdkTypes,
 } from "@medusajs/framework/types"
 import {
+  InjectManager,
   InjectSharedContext,
+  isDefined,
   MedusaContext,
   ModulesSdkUtils,
 } from "@medusajs/framework/utils"
@@ -65,14 +70,6 @@ export class WorkflowsModuleService<
   }
 
   __hooks = {
-    onApplicationShutdown: async () => {
-      await this.workflowOrchestratorService_.onApplicationShutdown()
-      await this.redisDisconnectHandler_()
-      clearInterval(this.clearTimeout_)
-    },
-    onApplicationPrepareShutdown: async () => {
-      await this.workflowOrchestratorService_.onApplicationPrepareShutdown()
-    },
     onApplicationStart: async () => {
       await this.workflowOrchestratorService_.onApplicationStart()
 
@@ -83,6 +80,76 @@ export class WorkflowsModuleService<
         } catch {}
       }, 1000 * 60 * 60)
     },
+    onApplicationPrepareShutdown: async () => {
+      await this.workflowOrchestratorService_.onApplicationPrepareShutdown()
+    },
+    onApplicationShutdown: async () => {
+      await this.workflowOrchestratorService_.onApplicationShutdown()
+      await this.redisDisconnectHandler_()
+      clearInterval(this.clearTimeout_)
+    },
+  }
+
+  static prepareFilters<T>(filters: T & { q?: string }) {
+    const filters_ = { ...filters } // shallow copy
+    if (filters_?.q) {
+      const q = filters_.q
+      delete filters_.q
+
+      const textSearch = { $ilike: `%${q}%` }
+      const textSearchFilters = {
+        $or: [
+          {
+            transaction_id: textSearch,
+          },
+          {
+            workflow_id: textSearch,
+          },
+          {
+            state: textSearch,
+          },
+          {
+            execution: {
+              runId: textSearch,
+            },
+          },
+        ],
+      }
+
+      if (!Object.keys(filters_).length) {
+        return textSearchFilters
+      } else {
+        return { $and: [filters, textSearchFilters] }
+      }
+    }
+
+    return filters
+  }
+
+  @InjectManager()
+  // @ts-expect-error
+  async listWorkflowExecutions(
+    filters: FilterableWorkflowExecutionProps = {},
+    config?: FindConfig<WorkflowExecutionDTO>,
+    @MedusaContext() sharedContext?: Context
+  ) {
+    const filters_ = WorkflowsModuleService.prepareFilters(filters)
+    return await super.listWorkflowExecutions(filters_, config, sharedContext)
+  }
+
+  @InjectManager()
+  // @ts-expect-error
+  async listAndCountWorkflowExecutions(
+    filters: FilterableWorkflowExecutionProps = {},
+    config?: FindConfig<WorkflowExecutionDTO>,
+    @MedusaContext() sharedContext?: Context
+  ) {
+    const filters_ = WorkflowsModuleService.prepareFilters(filters)
+    return await super.listAndCountWorkflowExecutions(
+      filters_,
+      config,
+      sharedContext
+    )
   }
 
   @InjectSharedContext()
@@ -102,13 +169,38 @@ export class WorkflowsModuleService<
       transactionManager,
       preventReleaseEvents,
       transactionId,
+      parentStepIdempotencyKey,
       ...restContext
     } = context
 
-    options_.context ??= restContext
-    options_.context.preventReleaseEvents ??=
-      !!options_.context.parentStepIdempotencyKey
-    delete options_.context.parentStepIdempotencyKey
+    let localPreventReleaseEvents = false
+
+    if (isDefined(options_.context?.preventReleaseEvents)) {
+      localPreventReleaseEvents = options_.context!.preventReleaseEvents!
+    } else {
+      if (
+        isDefined(context.eventGroupId) &&
+        isDefined(options_.context?.eventGroupId) &&
+        context.eventGroupId === options_.context?.eventGroupId
+      ) {
+        localPreventReleaseEvents = true
+      }
+    }
+
+    let eventGroupId
+
+    if (options_.context?.eventGroupId) {
+      eventGroupId = options_.context.eventGroupId
+    } else if (localPreventReleaseEvents && context.eventGroupId) {
+      eventGroupId = context.eventGroupId
+    }
+
+    options_.context = {
+      ...(restContext ?? {}),
+      ...(options_.context ?? {}),
+      eventGroupId,
+      preventReleaseEvents: localPreventReleaseEvents,
+    }
 
     const ret = await this.workflowOrchestratorService_.run<
       TWorkflow extends ReturnWorkflow<any, any, any>
@@ -145,13 +237,16 @@ export class WorkflowsModuleService<
     },
     @MedusaContext() context: Context = {}
   ) {
-    options ??= {}
-    options.context ??= context
+    const options_ = JSON.parse(JSON.stringify(options ?? {}))
+
+    const { manager, transactionManager, ...restContext } = context
+
+    options_.context ??= restContext
 
     return await this.workflowOrchestratorService_.setStepSuccess({
       idempotencyKey,
       stepResponse,
-      options,
+      options: options_,
     } as any)
   }
 
@@ -168,13 +263,16 @@ export class WorkflowsModuleService<
     },
     @MedusaContext() context: Context = {}
   ) {
-    options ??= {}
-    options.context ??= context
+    const options_ = JSON.parse(JSON.stringify(options ?? {}))
+
+    const { manager, transactionManager, ...restContext } = context
+
+    options_.context ??= restContext
 
     return await this.workflowOrchestratorService_.setStepFailure({
       idempotencyKey,
       stepResponse,
-      options,
+      options: options_,
     } as any)
   }
 
@@ -217,6 +315,6 @@ export class WorkflowsModuleService<
     options: WorkflowOrchestratorCancelOptions,
     @MedusaContext() context: Context = {}
   ) {
-    return this.workflowOrchestratorService_.cancel(workflowId, options)
+    return await this.workflowOrchestratorService_.cancel(workflowId, options)
   }
 }

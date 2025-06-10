@@ -79,7 +79,7 @@
  *           "address_2": "{value}",
  *           "city": "{value}",
  *           "country_code": "{value}",
- *           "province": "{value}",
+ *           "province": "us-ca",
  *           "postal_code": "{value}",
  *           "metadata": {}
  *         },
@@ -132,6 +132,7 @@
  *   "500":
  *     $ref: "#/components/responses/500_error"
  * x-workflow: createFulfillmentWorkflow
+ * x-events: []
  * 
 */
 

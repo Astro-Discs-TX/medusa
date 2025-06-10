@@ -73,6 +73,7 @@ describe("Transaction Orchestrator", () => {
     await strategy.resume(transaction)
 
     expect(transaction.transactionId).toBe("transaction_id_123")
+    expect(transaction.runId).toEqual(expect.any(String))
     expect(transaction.getState()).toBe(TransactionState.DONE)
 
     expect(mocks.one).toBeCalledWith(
@@ -1246,7 +1247,7 @@ describe("Transaction Orchestrator", () => {
       expect(transaction.getState()).toBe(TransactionState.REVERTED)
     })
 
-    it("should continue the transaction and skip children steps when the Transaction Step Timeout is reached but the step is set to 'continueOnPermanentFailure'", async () => {
+    it("should continue the transaction and skip children steps when the Transaction Step Timeout is reached but the step is set to 'skipOnPermanentFailure'", async () => {
       const mocks = {
         f1: jest.fn(() => {
           return "content f1"
@@ -1313,7 +1314,7 @@ describe("Transaction Orchestrator", () => {
             {
               timeout: 0.1, // 100ms
               action: "action2",
-              continueOnPermanentFailure: true,
+              skipOnPermanentFailure: true,
               next: {
                 action: "action4",
               },

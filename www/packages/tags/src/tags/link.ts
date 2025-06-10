@@ -40,6 +40,10 @@ export const link = [
     "path": "https://docs.medusajs.com/resources/references/medusa-workflows/refreshCartItemsWorkflow"
   },
   {
+    "title": "refundPaymentAndRecreatePaymentSessionWorkflow",
+    "path": "https://docs.medusajs.com/resources/references/medusa-workflows/refundPaymentAndRecreatePaymentSessionWorkflow"
+  },
+  {
     "title": "transferCartCustomerWorkflow",
     "path": "https://docs.medusajs.com/resources/references/medusa-workflows/transferCartCustomerWorkflow"
   },
@@ -86,6 +90,14 @@ export const link = [
   {
     "title": "updateLinksWorkflow",
     "path": "https://docs.medusajs.com/resources/references/medusa-workflows/updateLinksWorkflow"
+  },
+  {
+    "title": "confirmDraftOrderEditWorkflow",
+    "path": "https://docs.medusajs.com/resources/references/medusa-workflows/confirmDraftOrderEditWorkflow"
+  },
+  {
+    "title": "requestDraftOrderEditWorkflow",
+    "path": "https://docs.medusajs.com/resources/references/medusa-workflows/requestDraftOrderEditWorkflow"
   },
   {
     "title": "deleteFulfillmentSetsWorkflow",
@@ -144,12 +156,20 @@ export const link = [
     "path": "https://docs.medusajs.com/resources/references/medusa-workflows/markPaymentCollectionAsPaid"
   },
   {
-    "title": "requestOrderEditRequestWorkflow",
-    "path": "https://docs.medusajs.com/resources/references/medusa-workflows/requestOrderEditRequestWorkflow"
+    "title": "processPaymentWorkflow",
+    "path": "https://docs.medusajs.com/resources/references/medusa-workflows/processPaymentWorkflow"
   },
   {
     "title": "createPaymentSessionsWorkflow",
     "path": "https://docs.medusajs.com/resources/references/medusa-workflows/createPaymentSessionsWorkflow"
+  },
+  {
+    "title": "deletePriceListsWorkflow",
+    "path": "https://docs.medusajs.com/resources/references/medusa-workflows/deletePriceListsWorkflow"
+  },
+  {
+    "title": "deletePricePreferencesWorkflow",
+    "path": "https://docs.medusajs.com/resources/references/medusa-workflows/deletePricePreferencesWorkflow"
   },
   {
     "title": "createVariantPricingLinkStep",
@@ -168,6 +188,18 @@ export const link = [
     "path": "https://docs.medusajs.com/resources/references/medusa-workflows/createProductsWorkflow"
   },
   {
+    "title": "deleteCollectionsWorkflow",
+    "path": "https://docs.medusajs.com/resources/references/medusa-workflows/deleteCollectionsWorkflow"
+  },
+  {
+    "title": "deleteProductOptionsWorkflow",
+    "path": "https://docs.medusajs.com/resources/references/medusa-workflows/deleteProductOptionsWorkflow"
+  },
+  {
+    "title": "deleteProductTypesWorkflow",
+    "path": "https://docs.medusajs.com/resources/references/medusa-workflows/deleteProductTypesWorkflow"
+  },
+  {
     "title": "deleteProductVariantsWorkflow",
     "path": "https://docs.medusajs.com/resources/references/medusa-workflows/deleteProductVariantsWorkflow"
   },
@@ -184,6 +216,10 @@ export const link = [
     "path": "https://docs.medusajs.com/resources/references/medusa-workflows/upsertVariantPricesWorkflow"
   },
   {
+    "title": "deleteProductCategoriesWorkflow",
+    "path": "https://docs.medusajs.com/resources/references/medusa-workflows/deleteProductCategoriesWorkflow"
+  },
+  {
     "title": "setRegionsPaymentProvidersStep",
     "path": "https://docs.medusajs.com/resources/references/medusa-workflows/steps/setRegionsPaymentProvidersStep"
   },
@@ -192,8 +228,16 @@ export const link = [
     "path": "https://docs.medusajs.com/resources/references/medusa-workflows/createRegionsWorkflow"
   },
   {
+    "title": "deleteRegionsWorkflow",
+    "path": "https://docs.medusajs.com/resources/references/medusa-workflows/deleteRegionsWorkflow"
+  },
+  {
     "title": "updateRegionsWorkflow",
     "path": "https://docs.medusajs.com/resources/references/medusa-workflows/updateRegionsWorkflow"
+  },
+  {
+    "title": "deleteReturnReasonsWorkflow",
+    "path": "https://docs.medusajs.com/resources/references/medusa-workflows/deleteReturnReasonsWorkflow"
   },
   {
     "title": "associateLocationsWithSalesChannelsStep",
@@ -230,5 +274,17 @@ export const link = [
   {
     "title": "linkSalesChannelsToStockLocationWorkflow",
     "path": "https://docs.medusajs.com/resources/references/medusa-workflows/linkSalesChannelsToStockLocationWorkflow"
+  },
+  {
+    "title": "deleteStoresWorkflow",
+    "path": "https://docs.medusajs.com/resources/references/medusa-workflows/deleteStoresWorkflow"
+  },
+  {
+    "title": "deleteUsersWorkflow",
+    "path": "https://docs.medusajs.com/resources/references/medusa-workflows/deleteUsersWorkflow"
+  },
+  {
+    "title": "removeUserAccountWorkflow",
+    "path": "https://docs.medusajs.com/resources/references/medusa-workflows/removeUserAccountWorkflow"
   }
 ]

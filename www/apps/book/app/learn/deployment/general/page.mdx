@@ -128,11 +128,11 @@ By default, your Medusa application uses modules and providers useful for develo
 
 It’s highly recommended to instead use modules and providers suitable for production, including:
 
-- [Redis Cache Module](!resources!/architectural-modules/cache/redis)
-- [Redis Event Bus Module](!resources!/architectural-modules/event/redis)
-- [Workflow Engine Redis Module](!resources!/architectural-modules/workflow-engine/redis)
-- [S3 File Module Provider](!resources!/architectural-modules/file/s3) (or other file module providers production-ready).
-- [SendGrid Notification Module Provider](!resources!/architectural-modules/notification/sendgrid) (or other notification module providers production-ready).
+- [Redis Cache Module](!resources!/infrastructure-modules/cache/redis)
+- [Redis Event Bus Module](!resources!/infrastructure-modules/event/redis)
+- [Workflow Engine Redis Module](!resources!/infrastructure-modules/workflow-engine/redis)
+- [S3 File Module Provider](!resources!/infrastructure-modules/file/s3) (or other file module providers production-ready).
+- [SendGrid Notification Module Provider](!resources!/infrastructure-modules/notification/sendgrid) (or other notification module providers production-ready).
 
 Then, add these modules in `medusa-config.ts`:
 
@@ -168,7 +168,7 @@ module.exports = defineConfig({
 
 <Note title="Tip">
 
-Check out the [Integrations](!resources!/integrations) and [Architectural Modules](!resources!/architectural-modules) documentation for other modules and providers to use.
+Check out the [Integrations](!resources!/integrations) and [Infrastructure Modules](!resources!/infrastructure-modules) documentation for other modules and providers to use.
 
 </Note>
 
@@ -203,7 +203,7 @@ AUTH_CORS= # STOREFRONT AND ADMIN URLS, SEPARATED BY COMMAS
 DISABLE_MEDUSA_ADMIN=false
 MEDUSA_WORKER_MODE=server
 PORT=9000
-DATABASE_URL # POSTGRES DATABASE URL
+DATABASE_URL= # POSTGRES DATABASE URL
 REDIS_URL= # REDIS DATABASE URL
 ```
 
@@ -217,7 +217,7 @@ Where:
 - Set the PostgreSQL database's connection URL as the value of `DATABASE_URL`
 - Set the Redis database's connection URL as the value of `REDIS_URL`.
 
-Feel free to add any other relevant environment variables, such as for integrations and architectural modules. If you're using environment variables in your admin customizations, make sure to set them as well, as they're inlined during the build process.
+Feel free to add any other relevant environment variables, such as for integrations and Infrastructure Modules. If you're using environment variables in your admin customizations, make sure to set them as well, as they're inlined during the build process.
 
 ### Set Start Command
 
@@ -285,7 +285,7 @@ JWT_SECRET=supersecret  # TODO GENERATE SECURE SECRET
 DISABLE_MEDUSA_ADMIN=true
 MEDUSA_WORKER_MODE=worker
 PORT=9000
-DATABASE_URL # POSTGRES DATABASE URL
+DATABASE_URL= # POSTGRES DATABASE URL
 REDIS_URL= # REDIS DATABASE URL
 ```
 
@@ -296,7 +296,7 @@ Where:
 - Set the PostgreSQL database's connection URL as the value of `DATABASE_URL`
 - Set the Redis database's connection URL as the value of `REDIS_URL`.
 
-Feel free to add any other relevant environment variables, such as for integrations and architectural modules.
+Feel free to add any other relevant environment variables, such as for integrations and Infrastructure Modules.
 
 ### Set Start Command
 
@@ -305,7 +305,7 @@ The Medusa application's production build, which is created using the `build` co
 If your hosting provider doesn't support setting a current-working directory, set the start command to the following:
 
 ```bash npm2yarn
-cd .medusa/server && npm run install && npm run start
+cd .medusa/server && npm install && npm run start
 ```
 
 ---

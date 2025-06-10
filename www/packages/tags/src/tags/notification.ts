@@ -1,15 +1,15 @@
 export const notification = [
   {
-    "title": "Send Notification",
-    "path": "https://docs.medusajs.com/resources/architectural-modules/notification/send-notification"
-  },
-  {
     "title": "Handle Password Reset Event",
     "path": "https://docs.medusajs.com/resources/commerce-modules/auth/reset-password"
   },
   {
     "title": "Abandoned Cart Notification",
     "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/abandoned-cart"
+  },
+  {
+    "title": "Send Notification",
+    "path": "https://docs.medusajs.com/resources/infrastructure-modules/notification/send-notification"
   },
   {
     "title": "notifyOnFailureStep",
@@ -22,6 +22,10 @@ export const notification = [
   {
     "title": "exportProductsWorkflow",
     "path": "https://docs.medusajs.com/resources/references/medusa-workflows/exportProductsWorkflow"
+  },
+  {
+    "title": "importProductsAsChunksWorkflow",
+    "path": "https://docs.medusajs.com/resources/references/medusa-workflows/importProductsAsChunksWorkflow"
   },
   {
     "title": "importProductsWorkflow",

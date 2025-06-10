@@ -1,5 +1,65 @@
 # @medusajs/index
 
+## 2.8.4
+
+### Patch Changes
+
+- Updated dependencies [[`7685d66c0775167994150e61a8b628ad6289ce23`](https://github.com/medusajs/medusa/commit/7685d66c0775167994150e61a8b628ad6289ce23), [`cf0297f74af1b043363ffbd5a23ca0933097a69d`](https://github.com/medusajs/medusa/commit/cf0297f74af1b043363ffbd5a23ca0933097a69d), [`1f5f50010ae42f8d5b9924edcd75612b1f336463`](https://github.com/medusajs/medusa/commit/1f5f50010ae42f8d5b9924edcd75612b1f336463)]:
+  - @medusajs/framework@2.8.4
+
+## 2.8.3
+
+### Patch Changes
+
+- [#12530](https://github.com/medusajs/medusa/pull/12530) [`dd667204048d3d9e0a6a9edc5426128293145c86`](https://github.com/medusajs/medusa/commit/dd667204048d3d9e0a6a9edc5426128293145c86) Thanks [@adrien2p](https://github.com/adrien2p)! - feat(index): Only run the synchronisation in worker/shared mode
+
+- [#12528](https://github.com/medusajs/medusa/pull/12528) [`ac49eb9a6c4ba0bd82b146f465790fd4546701c9`](https://github.com/medusajs/medusa/commit/ac49eb9a6c4ba0bd82b146f465790fd4546701c9) Thanks [@adrien2p](https://github.com/adrien2p)! - Typo/index logs
+
+- [#12501](https://github.com/medusajs/medusa/pull/12501) [`59bbff62d81861282d55a32d6c0c45285203c4e0`](https://github.com/medusajs/medusa/commit/59bbff62d81861282d55a32d6c0c45285203c4e0) Thanks [@carlos-r-l-rodrigues](https://github.com/carlos-r-l-rodrigues)! - fix(index): limit partition table name and index enum fields
+
+- [#12557](https://github.com/medusajs/medusa/pull/12557) [`499381d1194b33c8212e6e995a3208364c3ab188`](https://github.com/medusajs/medusa/commit/499381d1194b33c8212e6e995a3208364c3ab188) Thanks [@adrien2p](https://github.com/adrien2p)! - chore(index): Few adjustments
+
+- [#12543](https://github.com/medusajs/medusa/pull/12543) [`ebe5cc7acddb7c61dc82fd8ec7f2fe3779104a99`](https://github.com/medusajs/medusa/commit/ebe5cc7acddb7c61dc82fd8ec7f2fe3779104a99) Thanks [@carlos-r-l-rodrigues](https://github.com/carlos-r-l-rodrigues)! - chore(index): return ids only
+
+- Updated dependencies []:
+  - @medusajs/framework@2.8.3
+
+## 2.8.2
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @medusajs/framework@2.8.2
+
+## 2.8.1
+
+### Patch Changes
+
+- [#12480](https://github.com/medusajs/medusa/pull/12480) [`c661e064885ca0a874a443b293f9bb48b2742cf7`](https://github.com/medusajs/medusa/commit/c661e064885ca0a874a443b293f9bb48b2742cf7) Thanks [@carlos-r-l-rodrigues](https://github.com/carlos-r-l-rodrigues)! - fix(index): query builder handle json array
+
+- Updated dependencies []:
+  - @medusajs/framework@2.8.1
+
+## 2.8.0
+
+### Patch Changes
+
+- [#11898](https://github.com/medusajs/medusa/pull/11898) [`b868a4ef4deb7df09d6156a907f4c883cd55a3fd`](https://github.com/medusajs/medusa/commit/b868a4ef4deb7df09d6156a907f4c883cd55a3fd) Thanks [@carlos-r-l-rodrigues](https://github.com/carlos-r-l-rodrigues)! - feat(index): add filterable fields to link definition
+
+- Updated dependencies [[`b868a4ef4deb7df09d6156a907f4c883cd55a3fd`](https://github.com/medusajs/medusa/commit/b868a4ef4deb7df09d6156a907f4c883cd55a3fd)]:
+  - @medusajs/framework@2.8.0
+
+## 2.7.1
+
+### Patch Changes
+
+- [#12183](https://github.com/medusajs/medusa/pull/12183) [`4ea1a2e09fc220555166c9bb013c0e11c99b4235`](https://github.com/medusajs/medusa/commit/4ea1a2e09fc220555166c9bb013c0e11c99b4235) Thanks [@adrien2p](https://github.com/adrien2p)! - fix(index): Default schema typings
+
+- [#12157](https://github.com/medusajs/medusa/pull/12157) [`2f6963a5fbea05537680cb1b1f6a2b9822c36325`](https://github.com/medusajs/medusa/commit/2f6963a5fbea05537680cb1b1f6a2b9822c36325) Thanks [@adrien2p](https://github.com/adrien2p)! - fix: event group propagation and event managements
+
+- Updated dependencies [[`ee35f3ce9097832c10cdf2fd168763088e6c3fcb`](https://github.com/medusajs/medusa/commit/ee35f3ce9097832c10cdf2fd168763088e6c3fcb), [`2f6963a5fbea05537680cb1b1f6a2b9822c36325`](https://github.com/medusajs/medusa/commit/2f6963a5fbea05537680cb1b1f6a2b9822c36325), [`b8902637251e9ed4f8762ef280659bbab6d967de`](https://github.com/medusajs/medusa/commit/b8902637251e9ed4f8762ef280659bbab6d967de)]:
+  - @medusajs/framework@2.7.1
+
 ## 2.7.0
 
 ### Patch Changes

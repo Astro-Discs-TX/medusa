@@ -4,8 +4,9 @@ post:
   x-sidebar-summary: Create Edit
   description: >-
     Create an edit on a draft order. This will allow you to make changes to the
-    draft order's items, shipping methods, or promotions before confirming them
-    later.
+    draft order's items, shipping methods, or promotions. Once you've made the
+    necessar changes, you can later either request the edit (which requires a
+    confirmation from the customer), or force-confirm the edit.
   x-authenticated: true
   parameters:
     - name: id
@@ -45,6 +46,7 @@ post:
     '500':
       $ref: ../components/responses/500_error.yaml
   x-workflow: beginDraftOrderEditWorkflow
+  x-events: []
 delete:
   operationId: DeleteDraftOrdersIdEdit
   summary: Cancel Edit on Draft Order
@@ -89,3 +91,4 @@ delete:
     '500':
       $ref: ../components/responses/500_error.yaml
   x-workflow: cancelDraftOrderEditWorkflow
+  x-events: []

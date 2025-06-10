@@ -31,6 +31,7 @@ export type WorkflowOrchestratorRunOptions<T> = Omit<
   "container"
 > & {
   transactionId?: string
+  runId?: string
   container?: ContainerLike
 }
 
@@ -140,7 +141,7 @@ export class WorkflowOrchestratorService {
     let { throwOnError, context } = options ?? {}
     throwOnError ??= true
     context ??= {}
-    context.transactionId = transactionId ?? ulid()
+    context.transactionId = transactionId ?? "auto-" + ulid()
 
     const workflowId = isString(workflowIdOrWorkflow)
       ? workflowIdOrWorkflow
@@ -207,8 +208,12 @@ export class WorkflowOrchestratorService {
       await this.triggerParentStep(ret.transaction, result)
     }
 
-    if (throwOnError && ret.thrownError) {
-      throw ret.thrownError
+    if (throwOnError && (ret.thrownError || ret.errors?.length)) {
+      if (ret.thrownError) {
+        throw ret.thrownError
+      }
+
+      throw ret.errors[0].error
     }
 
     return { acknowledgement, ...ret }
@@ -259,7 +264,10 @@ export class WorkflowOrchestratorService {
     const transaction = await this.getRunningTransaction(
       workflowId,
       transactionId,
-      options
+      {
+        ...options,
+        isCancelling: true,
+      }
     )
 
     if (!transaction) {
@@ -313,8 +321,12 @@ export class WorkflowOrchestratorService {
       await this.triggerParentStep(ret.transaction, result)
     }
 
-    if (throwOnError && ret.thrownError) {
-      throw ret.thrownError
+    if (throwOnError && (ret.thrownError || ret.errors?.length)) {
+      if (ret.thrownError) {
+        throw ret.thrownError
+      }
+
+      throw ret.errors[0].error
     }
 
     return { acknowledgement, ...ret }
@@ -407,8 +419,12 @@ export class WorkflowOrchestratorService {
       await this.triggerParentStep(ret.transaction, result)
     }
 
-    if (throwOnError && ret.thrownError) {
-      throw ret.thrownError
+    if (throwOnError && (ret.thrownError || ret.errors?.length)) {
+      if (ret.thrownError) {
+        throw ret.thrownError
+      }
+
+      throw ret.errors[0].error
     }
 
     return ret
@@ -473,8 +489,12 @@ export class WorkflowOrchestratorService {
       await this.triggerParentStep(ret.transaction, result)
     }
 
-    if (throwOnError && ret.thrownError) {
-      throw ret.thrownError
+    if (throwOnError && (ret.thrownError || ret.errors?.length)) {
+      if (ret.thrownError) {
+        throw ret.thrownError
+      }
+
+      throw ret.errors[0].error
     }
 
     return ret

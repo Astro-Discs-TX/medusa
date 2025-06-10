@@ -11,8 +11,11 @@ import {
   resolveAdmonitionsPlugin,
   crossProjectLinksPlugin,
   prerequisitesLinkFixerPlugin,
+  remarkAttachFrontmatterDataPlugin,
+  recmaInjectMdxDataPlugin,
 } from "remark-rehype-plugins"
 import bundleAnalyzer from "@next/bundle-analyzer"
+import withExtractedTableOfContents from "@stefanprobst/rehype-extract-toc"
 
 const withMDX = mdx({
   extension: /\.mdx?$/,
@@ -32,6 +35,10 @@ const withMDX = mdx({
             resources: {
               projectPath: path.resolve("..", "resources"),
               hasGeneratedSlugs: true,
+            },
+            api: {
+              projectPath: path.resolve("..", "api-reference"),
+              skipSlugValidation: true,
             },
           },
         },
@@ -88,12 +95,15 @@ const withMDX = mdx({
           checkLinksType: "value",
         },
       ],
+      [withExtractedTableOfContents],
     ],
     remarkPlugins: [
       [remarkFrontmatter],
       [remarkDirective],
       [resolveAdmonitionsPlugin],
+      [remarkAttachFrontmatterDataPlugin],
     ],
+    recmaPlugins: [[recmaInjectMdxDataPlugin]],
     jsx: true,
   },
 })
@@ -105,6 +115,9 @@ const nextConfig = {
 
   transpilePackages: ["docs-ui"],
   basePath: process.env.NEXT_PUBLIC_BASE_PATH || "/user-guide",
+  outputFileTracingIncludes: {
+    "/md\\-content/\\[\\[\\.\\.\\.slug\\]\\]": ["./app/**/*.mdx"],
+  },
   outputFileTracingExcludes: {
     "*": ["node_modules/@medusajs/icons"],
   },

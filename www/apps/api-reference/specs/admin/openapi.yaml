@@ -568,6 +568,18 @@ tags:
       url: https://docs.medusajs.com/resources/commerce-modules/store
     x-associatedSchema:
       $ref: ./components/schemas/AdminStore.yaml
+  - name: Tax Providers
+    description: >
+      A tax provider is a third-party integration or custom logic used to
+      calculate taxes for a cart or an order.
+
+      These API routes allow admin users to manage tax providers installed in
+      their Medusa application.
+    externalDocs:
+      description: Learn more about the Tax Module Providers
+      url: https://docs.medusajs.com/resources/commerce-modules/tax/tax-provider
+    x-associatedSchema:
+      $ref: ./components/schemas/AdminTaxProvider.yaml
   - name: Tax Rates
     description: >
       A tax rate is a percentage amount used to calculate the tax amount of each
@@ -610,7 +622,7 @@ tags:
       such as CSV files used to import products.
     externalDocs:
       description: Check out available file module providers.
-      url: https://docs.medusajs.com/resources/architectural-modules/file
+      url: https://docs.medusajs.com/resources/infrastructure-modules/file
   - name: Users
     description: >
       A user is an admin user that can authenticate and perform functionalities
@@ -638,7 +650,7 @@ tags:
     externalDocs:
       description: Check out available Workflow Engine Modules
       url: >-
-        https://docs.medusajs.com/resources/architectural-modules/workflow-engine
+        https://docs.medusajs.com/resources/infrastructure-modules/workflow-engine
 paths:
   /admin/api-keys:
     $ref: paths/admin_api-keys.yaml
@@ -1014,6 +1026,8 @@ paths:
     $ref: paths/admin_stores.yaml
   /admin/stores/{id}:
     $ref: paths/admin_stores_{id}.yaml
+  /admin/tax-providers:
+    $ref: paths/admin_tax-providers.yaml
   /admin/tax-rates:
     $ref: paths/admin_tax-rates.yaml
   /admin/tax-rates/{id}:
