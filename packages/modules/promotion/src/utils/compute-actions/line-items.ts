@@ -201,11 +201,15 @@ function getValidItemsForPromotion(
   }
 
   return items.filter((item) => {
+    if (!item) {
+      return false
+    }
+
     if ("is_discountable" in item && !item.is_discountable) {
       return false
     }
 
-    if (!item || !("subtotal" in item) || MathBN.lte(item.subtotal, 0)) {
+    if (!("subtotal" in item) || MathBN.lte(item.subtotal, 0)) {
       return false
     }
 
