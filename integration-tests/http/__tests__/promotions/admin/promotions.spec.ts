@@ -716,7 +716,7 @@ medusaIntegrationTestRunner({
 
           const cart = (
             await api.post(
-              `/store/carts?fields=*items.adjustments`,
+              `/store/carts?fields=*items,*items.adjustments`,
               {
                 currency_code: "dkk",
                 sales_channel_id: salesChannel.id,
@@ -766,12 +766,27 @@ medusaIntegrationTestRunner({
               shipping_total: 0,
               shipping_subtotal: 0,
               shipping_tax_total: 0,
+
               original_shipping_tax_total: 0,
               original_shipping_subtotal: 0,
               original_shipping_total: 0,
 
               items: expect.arrayContaining([
                 expect.objectContaining({
+                  quantity: 1,
+                  unit_price: 1300,
+
+                  subtotal: 1040,
+                  tax_total: 240,
+                  total: 1200,
+
+                  original_total: 1300,
+                  original_tax_total: 260,
+
+                  discount_total: 100,
+                  discount_subtotal: 80,
+                  discount_tax_total: 20,
+
                   adjustments: expect.arrayContaining([
                     expect.objectContaining({
                       amount: 100,
