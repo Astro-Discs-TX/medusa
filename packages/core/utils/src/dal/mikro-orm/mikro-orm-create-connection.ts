@@ -1,7 +1,7 @@
 import { ModuleServiceInitializeOptions } from "@medusajs/types"
 import { Filter as MikroORMFilter } from "@mikro-orm/core"
 import { TSMigrationGenerator } from "@mikro-orm/migrations"
-import { isString } from "../../common"
+import { isString, retryExecution } from "../../common"
 import { normalizeMigrationSQL } from "../utils"
 
 type FilterDef = Parameters<typeof MikroORMFilter>[0]
@@ -83,38 +83,51 @@ export async function mikroOrmCreateConnection(
   }
 
   const { MikroORM, defineConfig } = await import("@mikro-orm/postgresql")
-  return await MikroORM.init(
-    defineConfig({
-      discovery: { disableDynamicFileAccess: true, warnWhenNoEntities: false },
-      entities,
-      debug: database.debug ?? process.env.NODE_ENV?.startsWith("dev") ?? false,
-      baseDir: process.cwd(),
-      clientUrl,
-      schema,
-      driverOptions,
-      tsNode: process.env.APP_ENV === "development",
-      filters: database.filters ?? {},
-      assign: {
-        convertCustomTypes: true,
+  const mikroOrmConfig = defineConfig({
+    discovery: { disableDynamicFileAccess: true, warnWhenNoEntities: false },
+    entities,
+    debug: database.debug ?? process.env.NODE_ENV?.startsWith("dev") ?? false,
+    baseDir: process.cwd(),
+    clientUrl,
+    schema,
+    driverOptions,
+    tsNode: process.env.APP_ENV === "development",
+    filters: database.filters ?? {},
+    assign: {
+      convertCustomTypes: true,
+    },
+    migrations: {
+      disableForeignKeys: false,
+      path: pathToMigrations,
+      snapshotName: database.snapshotName,
+      generator: CustomTsMigrationGenerator,
+      silent: !(
+        database.debug ??
+        process.env.NODE_ENV?.startsWith("dev") ??
+        false
+      ),
+    },
+    schemaGenerator: {
+      disableForeignKeys: false,
+    },
+    pool: {
+      min: 2,
+      ...database.pool,
+    },
+  })
+
+  return await retryExecution(
+    async () => {
+      return await MikroORM.init(mikroOrmConfig)
+    },
+    {
+      retryDelay: (retries) => {
+        // exponential backoff up to 5 seconds
+        return Math.min(500 * 2 ** retries, 5000)
       },
-      migrations: {
-        disableForeignKeys: false,
-        path: pathToMigrations,
-        snapshotName: database.snapshotName,
-        generator: CustomTsMigrationGenerator,
-        silent: !(
-          database.debug ??
-          process.env.NODE_ENV?.startsWith("dev") ??
-          false
-        ),
+      shouldRetry: (error) => {
+        return error.code === "ECONNREFUSED"
       },
-      schemaGenerator: {
-        disableForeignKeys: false,
-      },
-      pool: {
-        min: 2,
-        ...database.pool,
-      },
-    })
+    }
   )
 }
