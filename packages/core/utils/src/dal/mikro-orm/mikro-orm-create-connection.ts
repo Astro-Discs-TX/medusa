@@ -1,7 +1,7 @@
 import { ModuleServiceInitializeOptions } from "@medusajs/types"
 import { Filter as MikroORMFilter } from "@mikro-orm/core"
 import { TSMigrationGenerator } from "@mikro-orm/migrations"
-import { isString, retryExecution } from "../../common"
+import { isString, retryExecution, stringifyCircular } from "../../common"
 import { normalizeMigrationSQL } from "../utils"
 
 type FilterDef = Parameters<typeof MikroORMFilter>[0]
@@ -116,14 +116,27 @@ export async function mikroOrmCreateConnection(
     },
   })
 
+  const maxRetries = process.env.__MEDUSA_DB_CONNECTION_MAX_RETRIES
+    ? parseInt(process.env.__MEDUSA_DB_CONNECTION_MAX_RETRIES)
+    : 5
+
+  const retryDelay = process.env.__MEDUSA_DB_CONNECTION_RETRY_DELAY
+    ? parseInt(process.env.__MEDUSA_DB_CONNECTION_RETRY_DELAY)
+    : 1000
+
   return await retryExecution(
     async () => {
       return await MikroORM.init(mikroOrmConfig)
     },
     {
-      retryDelay: (retries) => {
-        // exponential backoff up to 5 seconds
-        return Math.min(500 * 2 ** retries, 5000)
+      maxRetries,
+      retryDelay,
+      onRetry: (error) => {
+        console.warn(
+          `MikroORM failed to connect to the database. Retrying...\n${stringifyCircular(
+            error
+          )}`
+        )
       },
     }
   )

@@ -51,14 +51,21 @@ export async function pgConnectionLoader(): Promise<
     },
   })
 
+  const maxRetries = process.env.__MEDUSA_DB_CONNECTION_MAX_RETRIES
+    ? parseInt(process.env.__MEDUSA_DB_CONNECTION_MAX_RETRIES)
+    : 5
+
+  const retryDelay = process.env.__MEDUSA_DB_CONNECTION_RETRY_DELAY
+    ? parseInt(process.env.__MEDUSA_DB_CONNECTION_RETRY_DELAY)
+    : 1000
+
   await retryExecution(
     async () => {
       await pgConnection.raw("SELECT 1")
     },
     {
-      retryDelay: (retries) => {
-        return Math.min(500 * 2 ** retries, 5000)
-      },
+      maxRetries,
+      retryDelay,
       onRetry: (error) => {
         logger.warn(
           `Pg connection failed to connect to the database. Retrying...\n${stringifyCircular(
