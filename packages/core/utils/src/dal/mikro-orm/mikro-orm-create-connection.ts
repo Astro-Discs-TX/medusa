@@ -1,7 +1,7 @@
 import { ModuleServiceInitializeOptions } from "@medusajs/types"
 import { Filter as MikroORMFilter } from "@mikro-orm/core"
 import { TSMigrationGenerator } from "@mikro-orm/migrations"
-import { isString, retryExecution, stringifyCircular } from "../../common"
+import { isString, retryExecution } from "../../common"
 import { normalizeMigrationSQL } from "../utils"
 
 type FilterDef = Parameters<typeof MikroORMFilter>[0]
