@@ -2,10 +2,12 @@ import {
   ContainerRegistrationKeys,
   ModulesSdkUtils,
   retryExecution,
+  stringifyCircular,
 } from "@medusajs/utils"
 import { asValue } from "awilix"
-import { container } from "../container"
 import { configManager } from "../config"
+import { container } from "../container"
+import { logger } from "../logger"
 
 /**
  * Initialize a knex connection that can then be shared to any resources if needed
@@ -56,6 +58,13 @@ export async function pgConnectionLoader(): Promise<
     {
       retryDelay: (retries) => {
         return Math.min(500 * 2 ** retries, 5000)
+      },
+      onRetry: (error) => {
+        logger.warn(
+          `Pg connection failed to connect to the database. Retrying...\n${stringifyCircular(
+            error
+          )}`
+        )
       },
     }
   )
