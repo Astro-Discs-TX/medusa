@@ -40,7 +40,7 @@ export default class PackageManager {
       await this.setPackageManager(execOptions)
     }
 
-    const command = this.packageManager === "yarn" ? `yarn install` : `npm install --legacy-peer-deps`
+    const command = this.packageManager === "yarn" ? `yarn install` : `npm install`
 
     await this.processManager.runProcess({
       process: async () => {
