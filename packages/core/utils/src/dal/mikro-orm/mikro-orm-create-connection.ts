@@ -125,9 +125,6 @@ export async function mikroOrmCreateConnection(
         // exponential backoff up to 5 seconds
         return Math.min(500 * 2 ** retries, 5000)
       },
-      shouldRetry: (error) => {
-        return error.code === "ECONNREFUSED"
-      },
     }
   )
 }
