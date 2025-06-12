@@ -12,5 +12,6 @@ curl -X POST '{backend_url}/admin/shipping-options' \
     "description": "{value}",
     "code": "{value}"
   },
-  "prices": []
+  "prices": [],
+  "metadata": {}
 }'

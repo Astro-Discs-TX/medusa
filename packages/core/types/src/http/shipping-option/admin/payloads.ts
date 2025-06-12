@@ -156,6 +156,10 @@ export interface AdminCreateShippingOption {
    * documentation.
    */
   rules?: AdminCreateShippingOptionRule[]
+  /**
+   * Custom key-value pairs that can be added to the shipping option.
+   */
+  metadata?: Record<string, unknown>
 }
 
 export interface AdminUpdateShippingOptionRule
@@ -253,6 +257,10 @@ export interface AdminUpdateShippingOption {
    * documentation.
    */
   rules?: (AdminUpdateShippingOptionRule | AdminCreateShippingOptionRule)[]
+  /**
+   * Custom key-value pairs that can be added to the shipping option.
+   */
+  metadata?: Record<string, unknown>
 }
 
 export interface AdminUpdateShippingOptionRules {

@@ -108,3 +108,6 @@ properties:
     description: >-
       Whether the shipping option's location doesn't have sufficient quantity
       for any of the cart's items.
+  metadata:
+    type: object
+    description: The shipping option's metadata, can hold custom key-value pairs.

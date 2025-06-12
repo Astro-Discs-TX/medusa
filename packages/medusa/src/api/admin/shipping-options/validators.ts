@@ -143,6 +143,7 @@ export const AdminCreateShippingOption = z
       AdminCreateShippingOptionPriceWithRegion
     ).array(),
     rules: AdminCreateShippingOptionRule.array().optional(),
+    metadata: z.record(z.unknown()).optional(),
   })
   .strict()
 
@@ -165,5 +166,6 @@ export const AdminUpdateShippingOption = z
     rules: AdminUpdateShippingOptionRule.or(AdminCreateShippingOptionRule)
       .array()
       .optional(),
+    metadata: z.record(z.unknown()).optional(),
   })
   .strict()

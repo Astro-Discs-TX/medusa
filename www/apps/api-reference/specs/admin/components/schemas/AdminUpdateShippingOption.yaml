@@ -1,27 +1,11 @@
 type: object
-description: The shipping option's details.
-x-schemaName: AdminCreateShippingOption
-required:
-  - name
-  - service_zone_id
-  - shipping_profile_id
-  - price_type
-  - provider_id
-  - type
-  - prices
+description: The properties to update in the shipping option.
+x-schemaName: AdminUpdateShippingOption
 properties:
   name:
     type: string
     title: name
     description: The shipping option's name.
-  service_zone_id:
-    type: string
-    title: service_zone_id
-    description: The ID of the associated service zone.
-  shipping_profile_id:
-    type: string
-    title: shipping_profile_id
-    description: The ID of the associated shipping profile.
   data:
     type: object
     description: >-
@@ -43,6 +27,10 @@ properties:
     type: string
     title: provider_id
     description: The ID of the fulfillment provider handling this shipping option.
+  shipping_profile_id:
+    type: string
+    title: shipping_profile_id
+    description: The ID of the associated shipping profile.
   type:
     $ref: ./AdminCreateShippingOptionType.yaml
   prices:
@@ -52,11 +40,12 @@ properties:
       oneOf:
         - type: object
           description: The price's details.
-          x-schemaName: AdminCreateShippingOptionPriceWithCurrency
-          required:
-            - currency_code
-            - amount
+          x-schemaName: AdminUpdateShippingOptionPriceWithCurrency
           properties:
+            id:
+              type: string
+              title: id
+              description: The ID of the shipping option price.
             currency_code:
               type: string
               title: currency_code
@@ -68,11 +57,12 @@ properties:
               description: The price's amount.
         - type: object
           description: The price's details.
-          x-schemaName: AdminCreateShippingOptionPriceWithRegion
-          required:
-            - region_id
-            - amount
+          x-schemaName: AdminUpdateShippingOptionPriceWithRegion
           properties:
+            id:
+              type: string
+              title: id
+              description: The ID of the shipping option price.
             region_id:
               type: string
               title: region_id
@@ -85,7 +75,9 @@ properties:
     type: array
     description: The shipping option's rules.
     items:
-      $ref: ./AdminCreateShippingOptionRule.yaml
+      oneOf:
+        - $ref: ./AdminCreateShippingOptionRule.yaml
+        - $ref: ./AdminUpdateShippingOptionRule.yaml
   metadata:
     type: object
-    description: The shipping option's metadata, used to store custom key-value pairs.
+    description: The shipping option's metadata, can hold custom key-value pairs. 
