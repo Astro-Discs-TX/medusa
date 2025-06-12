@@ -40,21 +40,16 @@ export default class PackageManager {
       await this.setPackageManager(execOptions)
     }
 
-    if (this.packageManager === "yarn") {
-      await this.processManager.runProcess({
-        process: async () => {
-          await execute([`yarn`, execOptions], { verbose: this.verbose })
-        },
-        ignoreERESOLVE: true,
-      })
-    } else {
-      await this.processManager.runProcess({
-        process: async () => {
-          await execute([`npm install --legacy-peer-deps`, execOptions], { verbose: this.verbose })
-        },
-        ignoreERESOLVE: true,
-      })
-    }
+    const command = this.packageManager === "yarn" ? `yarn install` : `npm install --legacy-peer-deps`
+
+    await this.processManager.runProcess({
+      process: async () => {
+        await execute([command, execOptions], {
+          verbose: this.verbose
+        })
+      },
+      ignoreERESOLVE: true,
+    })
   }
 
   async runCommand(
@@ -65,20 +60,27 @@ export default class PackageManager {
       await this.setPackageManager(execOptions)
     }
 
-    if (this.packageManager === "yarn") {
-      await this.processManager.runProcess({
+    const commandStr = this.getCommandStr(command)
+
+    await this.processManager.runProcess({
         process: async () => {
-          await execute([`yarn ${command}`, execOptions], { verbose: this.verbose })
+          await execute([commandStr, execOptions], {
+            verbose: this.verbose
+          })
         },
         ignoreERESOLVE: true,
       })
-    } else {
-      await this.processManager.runProcess({
-        process: async () => {
-          await execute([`npm run ${command}`, execOptions], { verbose: this.verbose })
-        },
-        ignoreERESOLVE: true,
-      })
+  }
+
+  getCommandStr(
+    command: string,
+  ): string {
+    if (!this.packageManager) {
+      throw new Error("Package manager not set")
     }
+
+    return this.packageManager === "yarn"
+      ? `yarn ${command}`
+      : `npm run ${command}`
   }
 }

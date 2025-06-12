@@ -25,6 +25,7 @@ type PreparePluginOptions = {
   processManager: ProcessManager
   abortController?: AbortController
   verbose?: boolean
+  packageManager: PackageManager
 }
 
 type PrepareProjectOptions = {
@@ -43,6 +44,7 @@ type PrepareProjectOptions = {
   nextjsDirectory?: string
   client: Client | null
   verbose?: boolean
+  packageManager: PackageManager
 }
 
 type PrepareOptions = PreparePluginOptions | PrepareProjectOptions
@@ -67,14 +69,13 @@ async function preparePlugin({
   processManager,
   abortController,
   verbose = false,
+  packageManager,
 }: PreparePluginOptions) {
   // initialize execution options
   const execOptions = {
     cwd: directory,
     signal: abortController?.signal,
   }
-
-  const packageManager = new PackageManager(processManager, verbose)
 
   const factBoxOptions: FactBoxOptions = {
     interval: null,
@@ -126,14 +127,13 @@ async function prepareProject({
   nextjsDirectory = "",
   client,
   verbose = false,
+  packageManager,
 }: PrepareProjectOptions) {
   // initialize execution options
   const execOptions = {
     cwd: directory,
     signal: abortController?.signal,
   }
-
-  const packageManager = new PackageManager(processManager, verbose)
 
   const npxOptions = {
     ...execOptions,
