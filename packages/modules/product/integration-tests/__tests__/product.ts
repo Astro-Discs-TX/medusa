@@ -312,7 +312,7 @@ moduleIntegrationTestRunner<Service>({
           )
         })
 
-        it("should update a single product and its allowed", async () => {
+        it("should update a single product and its allowed relations", async () => {
           const updateData = {
             id: productOne.id,
             title: "update test 1",
