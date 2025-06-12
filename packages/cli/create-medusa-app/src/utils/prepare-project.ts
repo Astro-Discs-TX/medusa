@@ -6,6 +6,7 @@ import { EOL } from "os"
 import { displayFactBox, FactBoxOptions } from "./facts.js"
 import ProcessManager from "./process-manager.js"
 import type { Client } from "pg"
+import PackageManager from "./package-manager.js"
 
 const ADMIN_EMAIL = "admin@medusa-test.com"
 let STORE_CORS = "http://localhost:8000"
@@ -73,6 +74,8 @@ async function preparePlugin({
     signal: abortController?.signal,
   }
 
+  const packageManager = new PackageManager(processManager, verbose)
+
   const factBoxOptions: FactBoxOptions = {
     interval: null,
     spinner,
@@ -98,20 +101,7 @@ async function preparePlugin({
     processManager,
   })
 
-  await processManager.runProcess({
-    process: async () => {
-      try {
-        await execute([`yarn`, execOptions], { verbose })
-      } catch (e) {
-        // yarn isn't available
-        // use npm
-        await execute([`npm install --legacy-peer-deps`, execOptions], {
-          verbose,
-        })
-      }
-    },
-    ignoreERESOLVE: true,
-  })
+  await packageManager.installDependencies(execOptions)
 
   factBoxOptions.interval = displayFactBox({
     ...factBoxOptions,
@@ -142,6 +132,8 @@ async function prepareProject({
     cwd: directory,
     signal: abortController?.signal,
   }
+
+  const packageManager = new PackageManager(processManager, verbose)
 
   const npxOptions = {
     ...execOptions,
@@ -196,20 +188,7 @@ async function prepareProject({
     processManager,
   })
 
-  await processManager.runProcess({
-    process: async () => {
-      try {
-        await execute([`yarn`, execOptions], { verbose })
-      } catch (e) {
-        // yarn isn't available
-        // use npm
-        await execute([`npm install --legacy-peer-deps`, execOptions], {
-          verbose,
-        })
-      }
-    },
-    ignoreERESOLVE: true,
-  })
+  await packageManager.installDependencies(execOptions)
 
   factBoxOptions.interval = displayFactBox({
     ...factBoxOptions,
@@ -285,18 +264,7 @@ async function prepareProject({
       title: "Seeding database...",
     })
 
-    await processManager.runProcess({
-      process: async () => {
-        try {
-          await execute([`yarn seed`, execOptions], { verbose })
-        } catch (e) {
-          // yarn isn't available
-          // use npm
-          await execute([`npm run seed`, execOptions], { verbose })
-        }
-      },
-      ignoreERESOLVE: true,
-    })
+    await packageManager.runCommand("seed", execOptions)
 
     displayFactBox({
       ...factBoxOptions,
