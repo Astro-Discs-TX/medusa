@@ -40,7 +40,8 @@ export default class PackageManager {
       await this.setPackageManager(execOptions)
     }
 
-    const command = this.packageManager === "yarn" ? `yarn install` : `npm install`
+    const command = this.packageManager === "yarn" ? 
+      `yarn` : `npm install`
 
     await this.processManager.runProcess({
       process: async () => {
