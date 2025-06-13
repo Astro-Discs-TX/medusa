@@ -1,5 +1,25 @@
 # @medusajs/product
 
+## 2.8.4
+
+### Patch Changes
+
+- Updated dependencies [[`7685d66c0775167994150e61a8b628ad6289ce23`](https://github.com/medusajs/medusa/commit/7685d66c0775167994150e61a8b628ad6289ce23), [`cf0297f74af1b043363ffbd5a23ca0933097a69d`](https://github.com/medusajs/medusa/commit/cf0297f74af1b043363ffbd5a23ca0933097a69d), [`1f5f50010ae42f8d5b9924edcd75612b1f336463`](https://github.com/medusajs/medusa/commit/1f5f50010ae42f8d5b9924edcd75612b1f336463)]:
+  - @medusajs/framework@2.8.4
+
+## 2.8.3
+
+### Patch Changes
+
+- [#12508](https://github.com/medusajs/medusa/pull/12508) [`52bd9f9a53f6e63e5fbe0beb1fb2c650d88f7c88`](https://github.com/medusajs/medusa/commit/52bd9f9a53f6e63e5fbe0beb1fb2c650d88f7c88) Thanks [@adrien2p](https://github.com/adrien2p)! - chore(product, modules-sdk): Add missing index for select-in strategy + allow to pass top level strategy to force the behaviour
+
+- [#12538](https://github.com/medusajs/medusa/pull/12538) [`41054a34199168f0b949c3cda0bbe667da2c5993`](https://github.com/medusajs/medusa/commit/41054a34199168f0b949c3cda0bbe667da2c5993) Thanks [@adrien2p](https://github.com/adrien2p)! - fix(product): Deep update data retrieval bottleneck
+
+- [#12478](https://github.com/medusajs/medusa/pull/12478) [`c5a6573e26b403b86f53b88c307ea311a1bd9230`](https://github.com/medusajs/medusa/commit/c5a6573e26b403b86f53b88c307ea311a1bd9230) Thanks [@fPolic](https://github.com/fPolic)! - fix(product, utils): handle metadata key deletion on product update
+
+- Updated dependencies []:
+  - @medusajs/framework@2.8.3
+
 ## 2.8.2
 
 ### Patch Changes

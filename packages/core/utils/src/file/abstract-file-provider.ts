@@ -125,25 +125,32 @@ export class AbstractFileProviderService implements IFileProvider {
   }
 
   /**
-   * This method deletes the file from storage. It's used when an admin user deletes a product image,
-   * or other custom file deletions.
+   * This method deletes one or more files from the storage. It's used when an admin user
+   * deletes a product image, or other custom file deletions.
    *
-   * @param {FileTypes.ProviderDeleteFileDTO} file - The details of the file to delete.
-   * @returns {Promise<void>} Resolves when the file is deleted.
+   * @param {FileTypes.ProviderDeleteFileDTO | FileTypes.ProviderDeleteFileDTO[]} files - The details of the files to delete.
+   * @returns {Promise<void>} Resolves when the files are deleted.
    *
    * @example
    * class MyFileProviderService extends AbstractFileProviderService {
    *   // ...
-   *   async delete(file: ProviderDeleteFileDTO): Promise<void> {
+   *   async delete(
+   *     files: FileTypes.ProviderDeleteFileDTO | FileTypes.ProviderDeleteFileDTO[]
+   *   ): Promise<void> {
    *     // TODO logic to remove the file from storage
    *     // Use the `file.fileKey` to delete the file, which is the identifier of the file
    *    // in the provider's storage.
    *     // for example:
-   *     this.client.delete(file.fileKey)
+   *     const fileArray = Array.isArray(files) ? files : [files]
+   *     for (const file of fileArray) {
+   *       this.client.delete(file.fileKey)
+   *     }
    *   }
    * }
    */
-  async delete(file: FileTypes.ProviderDeleteFileDTO): Promise<void> {
+  async delete(
+    files: FileTypes.ProviderDeleteFileDTO | FileTypes.ProviderDeleteFileDTO[]
+  ): Promise<void> {
     throw Error("delete must be overridden by the child class")
   }
 
@@ -181,10 +188,10 @@ export class AbstractFileProviderService implements IFileProvider {
   /**
    * This method retrieves an uploaded file as a stream. This is useful when streaming
    * a file to clients or you want to process the file in chunks.
-   * 
+   *
    * @param {FileTypes.ProviderGetFileDTO} fileData - The details of the file to get its stream.
    * @returns {Promise<Readable>} The file's stream.
-   * 
+   *
    * @version 2.8.0
    *
    * @example
@@ -206,10 +213,10 @@ export class AbstractFileProviderService implements IFileProvider {
   /**
    * This method retrieves an uploaded file as a buffer. This is useful when you want to
    * process the entire file in memory or send it as a response.
-   * 
+   *
    * @param {FileTypes.ProviderGetFileDTO} fileData - The details of the file to get its buffer.
    * @returns {Promise<Buffer>} The file's buffer.
-   * 
+   *
    * @version 2.8.0
    *
    * @example

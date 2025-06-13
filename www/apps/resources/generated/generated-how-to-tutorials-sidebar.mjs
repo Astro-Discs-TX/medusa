@@ -154,6 +154,14 @@ const generatedgeneratedHowToTutorialsSidebarSidebar = {
               "loaded": true,
               "isPathHref": true,
               "type": "ref",
+              "title": "Use Analytics Module",
+              "path": "https://docs.medusajs.com/resources/references/analytics/service",
+              "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "ref",
               "title": "Use Cache Module",
               "path": "https://docs.medusajs.com/resources/references/cache-service",
               "children": []
@@ -362,6 +370,15 @@ const generatedgeneratedHowToTutorialsSidebarSidebar = {
           "loaded": true,
           "isPathHref": true,
           "type": "ref",
+          "title": "Analytics with Segment",
+          "path": "/integrations/guides/segment",
+          "description": "Learn how to integrate Segment with Medusa to track user interactions and events.",
+          "children": []
+        },
+        {
+          "loaded": true,
+          "isPathHref": true,
+          "type": "ref",
           "title": "Bundled Products",
           "path": "/recipes/bundled-products/examples/standard",
           "description": "Learn how to implement bundled products in your Medusa store.",
@@ -444,6 +461,15 @@ const generatedgeneratedHowToTutorialsSidebarSidebar = {
           "title": "Magento Migration",
           "path": "/integrations/guides/magento",
           "description": "Learn how to migrate data from Magento to Medusa.",
+          "children": []
+        },
+        {
+          "loaded": true,
+          "isPathHref": true,
+          "type": "link",
+          "title": "Phone Authentication",
+          "path": "/how-to-tutorials/tutorials/phone-auth",
+          "description": "Learn how to allow users to authenticate using their phone numbers.",
           "children": []
         },
         {

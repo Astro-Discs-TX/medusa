@@ -117,6 +117,13 @@ export type CreateWorkflowComposerContext = {
     fn: StepFunctionResult
   ) => WorkflowData<TOutput>
   hookBinder: (name: string, fn: () => HookHandler) => void
+  stepConditions_: Record<
+    string,
+    {
+      condition: (...args: any[]) => boolean | WorkflowData
+      input: any
+    }
+  >
   parallelizeBinder: <
     TOutput extends (WorkflowData | undefined)[] = WorkflowData[]
   >(
@@ -191,6 +198,11 @@ export interface StepExecutionContext {
    * Adding a space hides the method from the autocomplete
    */
   " getStepResult"(stepId: string, action?: "invoke" | "compensate"): any
+
+  /**
+   * Get access to the definition of the step.
+   */
+  " stepDefinition": TransactionStepsDefinition
 }
 
 export type WorkflowTransactionContext = StepExecutionContext &

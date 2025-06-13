@@ -73,6 +73,13 @@ export const howToTutorialsSidebar = [
 While tutorials show you a specific use case, they also help you understand how to implement similar use cases in your own projects. Also, you can implement the use case in a tutorial differently to fit your business requirements.`,
     children: [
       {
+        type: "ref",
+        title: "Analytics with Segment",
+        path: "/integrations/guides/segment",
+        description:
+          "Learn how to integrate Segment with Medusa to track user interactions and events.",
+      },
+      {
         type: "link",
         title: "Abandoned Cart",
         path: "/how-to-tutorials/tutorials/abandoned-cart",
@@ -112,6 +119,13 @@ While tutorials show you a specific use case, they also help you understand how 
         title: "Magento Migration",
         path: "/integrations/guides/magento",
         description: "Learn how to migrate data from Magento to Medusa.",
+      },
+      {
+        type: "link",
+        title: "Phone Authentication",
+        path: "/how-to-tutorials/tutorials/phone-auth",
+        description:
+          "Learn how to allow users to authenticate using their phone numbers.",
       },
       {
         type: "link",

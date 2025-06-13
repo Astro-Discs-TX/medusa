@@ -1598,11 +1598,9 @@ export interface IProductModuleService extends IModuleService {
    * const options = await productModuleService.createProductOptionValues([
    *   {
    *     value: "Blue",
-   *     option_id: "opt_123",
    *   },
    *   {
    *     value: "Green",
-   *     option_id: "opt_123",
    *   },
    * ])
    *
@@ -1622,7 +1620,6 @@ export interface IProductModuleService extends IModuleService {
    * @example
    * const option = await productModuleService.createProductOptionValues({
    *   value: "Blue",
-   *   option_id: "opt_123",
    * })
    *
    */
