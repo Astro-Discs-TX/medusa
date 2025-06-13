@@ -44,42 +44,7 @@ Your Medusa application doesn't need specific configurations to be deployed to C
     - [Redis Workflow Engine Module](!resources!/infrastructure-modules/workflow-engine/redis)
     - [S3 File Provider Module](!resources!/infrastructure-modules/file/s3)
 
-So, you don't need to add any of these modules to your Medusa application before deploying it to Cloud, unless you want to add custom options to them.
-
-#### S3 File Provider Module Options
-
-If you want to add custom options to the S3 File Provider Module, make sure to include the `authentication_method: "s3-iam-role"` option.
-
-For example:
-
-```ts title="medusa-config.ts" highlights={[["12"]]}
-module.exports = defineConfig({
-  // ...
-  modules: [
-    {
-      resolve: "@medusajs/medusa/file",
-      options: {
-        providers: [
-          {
-            resolve: "@medusajs/medusa/file-s3",
-            id: "s3",
-            options: {
-              authentication_method: "s3-iam-role",
-              prefix: process.env.S3_PREFIX,
-              file_url: process.env.S3_FILE_URL,
-              region: process.env.S3_REGION,
-              bucket: process.env.S3_BUCKET,
-              endpoint: process.env.S3_ENDPOINT,
-              // other options...
-            },
-          },
-        ],
-      },
-    },
-    // ...
-  ]
-})
-```
+So, make sure to remove any of these modules from your `medusa-config.ts` file, unless you want to use custom options for them. In that case, you're expected to set up and manage those resources externally and configure them in your Medusa application.
 
 ### Steps to Create a Project
 
