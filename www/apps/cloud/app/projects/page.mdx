@@ -29,7 +29,7 @@ Before creating a project, ensure you have:
 - A Medusa application whose codebase is hosted in a GitHub repository.
     - If you don't have a Medusa application yet, refer to the [Installation](!docs!/learn/installation) guide to set up a new Medusa application.
 - A Cloud account with a valid plan that allows creating more projects.
-    - If you've exceeded the number of projects limit for your plan, you can [contact our sales team to upgrade your plan](https://medusajs.com/contact).
+    - If you've exceeded the number of projects limit for your plan, you can [contact support to upgrade your plan](#).
 
 #### Medusa Application Configurations
 
@@ -44,7 +44,42 @@ Your Medusa application doesn't need specific configurations to be deployed to C
     - [Redis Workflow Engine Module](!resources!/infrastructure-modules/workflow-engine/redis)
     - [S3 File Provider Module](!resources!/infrastructure-modules/file/s3)
 
-So, if you have any of these modules configured in your Medusa application, remove them from your `medusa-config.ts` file before deploying to Cloud. Cloud will automatically configure them for you.
+So, you don't need to add any of these modules to your Medusa application before deploying it to Cloud, unless you want to add custom options to them.
+
+#### S3 File Provider Module Options
+
+If you want to add custom options to the S3 File Provider Module, make sure to include the `authentication_method: "s3-iam-role"` option.
+
+For example:
+
+```ts title="medusa-config.ts" highlights={[["12"]]}
+module.exports = defineConfig({
+  // ...
+  modules: [
+    {
+      resolve: "@medusajs/medusa/file",
+      options: {
+        providers: [
+          {
+            resolve: "@medusajs/medusa/file-s3",
+            id: "s3",
+            options: {
+              authentication_method: "s3-iam-role",
+              prefix: process.env.S3_PREFIX,
+              file_url: process.env.S3_FILE_URL,
+              region: process.env.S3_REGION,
+              bucket: process.env.S3_BUCKET,
+              endpoint: process.env.S3_ENDPOINT,
+              // other options...
+            },
+          },
+        ],
+      },
+    },
+    // ...
+  ]
+})
+```
 
 ### Steps to Create a Project
 
@@ -102,20 +137,6 @@ Once the project is created and deployed, you'll receive a notification in the C
 
 ![The project status in the list of projects](https://res.cloudinary.com/dza7lstvk/image/upload/v1749743107/Cloud/CleanShot_2025-06-12_at_18.40.07_2x_asgpxm.png)
 
-### Access the Deployed Application
-
-To open the deployed Medusa Admin, click on the URL in the "Production" card of the project's dashboard. It will open the Medusa Admin in a new tab.
-
-![The project dashboard with the production deployment URL highlighted](https://res.cloudinary.com/dza7lstvk/image/upload/v1749743331/Cloud/CleanShot_2025-06-12_at_18.48.24_2x_zgo8ws.png)
-
-You can then log in using the email and password you set during the project creation.
-
-<Note>
-
-Lost your Medusa Admin email or password? You can [contact support](#) or [reset your password in the Medusa Admin](!user-guide!/reset-password) if your Medusa project has a Notification Module Provider configured.
-
-</Note>
-
 ### Troubleshooting Project Creation
 
 If you encounter any issues while creating a project, here are some common troubleshooting steps:
@@ -127,9 +148,40 @@ If you encounter any issues while creating a project, here are some common troub
 
 ---
 
+## Open Deployed Medusa Admin
+
+To open the deployed Medusa Admin of a project:
+
+1. Make sure you're viewing the [correct organization's dashboard in Cloud](../organizations/page.mdx#switch-organization).
+2. Open the project's dashboard by clicking on the project card in the organization's dashboard.
+3. Click on the URL in the "Production" card of the project's dashboard. It will open the Medusa Admin in a new tab.
+
+![The project dashboard with the production deployment URL highlighted](https://res.cloudinary.com/dza7lstvk/image/upload/v1749743331/Cloud/CleanShot_2025-06-12_at_18.48.24_2x_zgo8ws.png)
+
+You can then log in using the email and password you set during the project creation.
+
+<Note>
+
+Lost your Medusa Admin email or password? You can [contact support](#) or [reset your password in the Medusa Admin](!user-guide!/reset-password) if your Medusa project has a Notification Module Provider configured.
+
+</Note>
+
+---
+
+## Access Server through SSH
+
+Cloud doesn't support SSH access to the server instances of a project. However, you can still access the server's [runtime and build logs](#) to debug issues or monitor the application's performance.
+
+If this isn't sufficient for your use case, you can [contact support](#) to discuss alternatives.
+
+---
+
 ## Open Project Dashboard
 
-To open a project's dashboard, you need to be in the organization's dashboard where the project is located. Then, you can click on the card of the project you want to view.
+To open a project's dashboard:
+
+1. Make sure you're viewing the [correct organization's dashboard in Cloud](../organizations/page.mdx#switch-organization).
+2. Open the project's dashboard by clicking on the project card in the organization's dashboard.
 
 When you open a project's dashboard, its name will be shown at the top left next to the [organization switcher](../organizations/page.mdx#organization-switcher).
 
@@ -188,7 +240,7 @@ To edit a project's general details:
 
 ### Editing Previews Settings
 
-You can also edit the Previews settings of a project from the "Settings" tab, which are general settings related to Previews environments.
+You can also edit the "Previews" settings of a project from the "Settings" tab, which are general settings related to Previews environments.
 
 Learn more in the [Environments documentation](#).
 
