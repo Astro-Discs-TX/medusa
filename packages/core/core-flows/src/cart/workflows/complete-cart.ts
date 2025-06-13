@@ -24,6 +24,8 @@ import {
   useQueryGraphStep,
   useRemoteQueryStep,
 } from "../../common"
+import { acquireLockStep } from "../../locking/acquire-lock"
+import { releaseLockStep } from "../../locking/release-lock"
 import { addOrderTransactionStep } from "../../order/steps/add-order-transaction"
 import { createOrdersStep } from "../../order/steps/create-orders"
 import { authorizePaymentSessionStep } from "../../payment/steps/authorize-payment-session"
@@ -60,7 +62,9 @@ export type CompleteCartWorkflowOutput = {
   id: string
 }
 
-export const THREE_DAYS = 60 * 60 * 24 * 3
+const THREE_DAYS = 60 * 60 * 24 * 3
+const THIRTY_SECONDS = 30
+const TWO_MINUTES = 60 * 2
 
 export const completeCartWorkflowId = "complete-cart"
 /**
@@ -84,8 +88,6 @@ export const completeCartWorkflowId = "complete-cart"
  * Complete a cart and place an order.
  *
  * @property hooks.validate - This hook is executed before all operations. You can consume this hook to perform any custom validation. If validation fails, you can throw an error to stop the workflow execution.
- * @property hooks.beforePaymentAuthorization - This hook is executed before the payment authorization. You can consume this hook to perform any custom logic before the payment is authorized, such as validation with custom payment providers.
- * @property hooks.orderCreated - This hook is executed after the order is created. You can consume this hook to perform any custom logic after the order is created, such as creating custom models linked to the order.
  */
 export const completeCartWorkflow = createWorkflow(
   {
@@ -95,6 +97,12 @@ export const completeCartWorkflow = createWorkflow(
     retentionTime: THREE_DAYS,
   },
   (input: WorkflowData<CompleteCartWorkflowInput>) => {
+    acquireLockStep({
+      key: input.id,
+      timeout: THIRTY_SECONDS,
+      ttl: TWO_MINUTES,
+    })
+
     const orderCart = useQueryGraphStep({
       entity: "order_cart",
       fields: ["cart_id", "order_id"],
@@ -217,6 +225,21 @@ export const completeCartWorkflow = createWorkflow(
           .map((adjustment) => adjustment.code)
           .filter(Boolean)
 
+        const shippingAddress = cart.shipping_address
+          ? { ...cart.shipping_address }
+          : null
+        const billingAddress = cart.billing_address
+          ? { ...cart.billing_address }
+          : null
+
+        if (shippingAddress) {
+          delete shippingAddress.id
+        }
+
+        if (billingAddress) {
+          delete billingAddress.id
+        }
+
         return {
           region_id: cart.region?.id,
           customer_id: cart.customer?.id,
@@ -224,8 +247,8 @@ export const completeCartWorkflow = createWorkflow(
           status: OrderStatus.PENDING,
           email: cart.email,
           currency_code: cart.currency_code,
-          shipping_address: cart.shipping_address,
-          billing_address: cart.billing_address,
+          shipping_address: shippingAddress,
+          billing_address: billingAddress,
           no_notification: false,
           items: allItems,
           shipping_methods: shippingMethods,
@@ -334,6 +357,9 @@ export const completeCartWorkflow = createWorkflow(
         })
       )
 
+      /**
+       * @ignore
+       */
       createHook("beforePaymentAuthorization", {
         input,
       })
@@ -369,12 +395,19 @@ export const completeCartWorkflow = createWorkflow(
 
       addOrderTransactionStep(orderTransactions)
 
+      /**
+       * @ignore
+       */
       createHook("orderCreated", {
         order_id: createdOrder.id,
         cart_id: cart.id,
       })
 
       return createdOrder
+    })
+
+    releaseLockStep({
+      key: input.id,
     })
 
     const result = transform({ order, orderId }, ({ order, orderId }) => {

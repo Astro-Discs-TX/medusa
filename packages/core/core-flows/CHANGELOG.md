@@ -1,5 +1,31 @@
 # @medusajs/core-flows
 
+## 2.8.4
+
+### Patch Changes
+
+- [#12546](https://github.com/medusajs/medusa/pull/12546) [`c4dd29046183bfe3c99b7ec00414449e53478d22`](https://github.com/medusajs/medusa/commit/c4dd29046183bfe3c99b7ec00414449e53478d22) Thanks [@fPolic](https://github.com/fPolic)! - fix(core-flows): reservation management on order edit and draft order confirm
+
+- [#12646](https://github.com/medusajs/medusa/pull/12646) [`490bd7647fca30951d14c7c78c1b809379ebd870`](https://github.com/medusajs/medusa/commit/490bd7647fca30951d14c7c78c1b809379ebd870) Thanks [@carlos-r-l-rodrigues](https://github.com/carlos-r-l-rodrigues)! - fix(core-flows): use cart_id to complete cart on payment webhook and lock cart before completion
+
+- [#12574](https://github.com/medusajs/medusa/pull/12574) [`cf0297f74af1b043363ffbd5a23ca0933097a69d`](https://github.com/medusajs/medusa/commit/cf0297f74af1b043363ffbd5a23ca0933097a69d) Thanks [@thetutlage](https://github.com/thetutlage)! - feat: implement stream based processing of the files
+
+- Updated dependencies [[`7685d66c0775167994150e61a8b628ad6289ce23`](https://github.com/medusajs/medusa/commit/7685d66c0775167994150e61a8b628ad6289ce23), [`cf0297f74af1b043363ffbd5a23ca0933097a69d`](https://github.com/medusajs/medusa/commit/cf0297f74af1b043363ffbd5a23ca0933097a69d), [`1f5f50010ae42f8d5b9924edcd75612b1f336463`](https://github.com/medusajs/medusa/commit/1f5f50010ae42f8d5b9924edcd75612b1f336463)]:
+  - @medusajs/framework@2.8.4
+
+## 2.8.3
+
+### Patch Changes
+
+- [#12527](https://github.com/medusajs/medusa/pull/12527) [`fca5ad77b41856867ec68b1e46d04f1bb71cbc76`](https://github.com/medusajs/medusa/commit/fca5ad77b41856867ec68b1e46d04f1bb71cbc76) Thanks [@thetutlage](https://github.com/thetutlage)! - feat: process import from pre-processed chunks
+
+- [#12567](https://github.com/medusajs/medusa/pull/12567) [`4e49cebcf0f053cb89012276e935a7ec62a12046`](https://github.com/medusajs/medusa/commit/4e49cebcf0f053cb89012276e935a7ec62a12046) Thanks [@shahednasser](https://github.com/shahednasser)! - fix(core-flows, types): export steps and types related to credit lines
+
+- [#12540](https://github.com/medusajs/medusa/pull/12540) [`3071d09a03205597158afe79d55dd43643a97026`](https://github.com/medusajs/medusa/commit/3071d09a03205597158afe79d55dd43643a97026) Thanks [@fPolic](https://github.com/fPolic)! - fix(core-flows): skip location check if variant is not managed when preparing inventory confirm
+
+- Updated dependencies []:
+  - @medusajs/framework@2.8.3
+
 ## 2.8.2
 
 ### Patch Changes
