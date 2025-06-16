@@ -1,0 +1,122 @@
+import { Prerequisites } from "docs-ui"
+
+export const metadata = {
+  title: `Data Migration Scripts Guide`,
+}
+
+# {metadata.title}
+
+In this guide, you'll learn how to write and run data migration scripts for your Medusa project.  
+Data migration scripts help you safely update existing data structures when you deploy new changes to your database schema or business logic.
+
+<Prerequisites
+  items={[
+    {
+      text: "Basic understanding of your Medusa data models.",
+      link: "/learn",
+    },
+    {
+      text: "Access to your project's source code and database.",
+      link: "/learn",
+    },
+  ]}
+/>
+
+---
+
+## 1. What are Data Migration Scripts?
+
+Data migration scripts are custom scripts you write to:
+
+- Transform or migrate existing data to match updated models.
+- Fix data inconsistencies.
+- Perform batch updates that can't be handled by simple database migrations.
+
+They run **after** schema migrations to ensure your data aligns with your codebase.
+
+---
+
+## 2. Create a Migration Script
+
+You can store migration scripts in a dedicated folder, for example `./scripts/migrations`.
+
+Here’s an example `update-product-status.js` script:
+
+```js title="scripts/migrations/update-product-status.js"
+const { getConfigFile } = require("medusa-core-utils")
+const { Medusa } = require("@medusajs/medusa")
+
+/**
+ * Example: Update product status field for all products.
+ */
+;(async () => {
+  const { configModule } = getConfigFile("medusa-config")
+  const medusa = await Medusa.create(configModule)
+
+  const productService = medusa.resolve("productService")
+
+  const products = await productService.list({}, { relations: [] })
+  for (const product of products) {
+    // Example update: set status to "published" if undefined
+    if (!product.status) {
+      await productService.update(product.id, {
+        status: "published",
+      })
+    }
+  }
+
+  console.log("✅ Product statuses updated successfully")
+  process.exit(0)
+})()
+```
+
+---
+
+## 3. Run a Migration Script
+
+After creating your script, run it whenever you need to apply the migration to your data.
+
+To run the script, execute it with `node`:
+
+```bash title="Run the migration script"
+node scripts/migrations/update-product-status.js
+```
+
+Make sure to run your script in the same environment as your production or staging database, and test locally first!
+
+---
+
+## 4. Best Practices
+
+<Note>
+
+Make sure to run your script in the same environment as your production or staging database, and test locally first!
+
+</Note>
+
+**1. Version your scripts**: Name them with timestamps or versions.  
+Example: `20230901-add-default-status.js`
+
+**2. Log progress**: Use `console.log` to see which records are processed.
+
+**3. Run backups**: Always back up your database before running migration scripts.
+
+**4. Test on staging**: Never run untested scripts directly on production.
+
+---
+
+## 5. Automate in CI/CD
+
+**Optionally**, you can run your migration script automatically in your deployment pipeline, right after your schema migrations.
+
+Add a `predeploy` script in your `package.json`:
+
+```json title="package.json"
+"scripts": {
+  // ...
+  "predeploy": "medusa db:migrate && node scripts/migrations/update-product-status.js"
+}
+
+```
+
+This ensures data migrations run automatically after schema changes.
