@@ -49,6 +49,14 @@ const generatedgeneratedInfrastructureModulesSidebarSidebar = {
               "path": "/infrastructure-modules/analytics/posthog",
               "title": "PostHog",
               "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "ref",
+              "path": "/integrations/guides/segment",
+              "title": "Segment",
+              "children": []
             }
           ]
         },
@@ -416,6 +424,14 @@ const generatedgeneratedInfrastructureModulesSidebarSidebar = {
               "type": "ref",
               "path": "/integrations/guides/resend",
               "title": "Integrate Resend",
+              "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "ref",
+              "title": "Integrate Slack",
+              "path": "https://docs.medusajs.com/resources/integrations/guides/slack",
               "children": []
             },
             {
