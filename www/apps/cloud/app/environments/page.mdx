@@ -11,7 +11,9 @@ In this guide, you'll learn about environments, how to create and manage them, a
 
 ## What is an Environment?
 
-An environment represents a stage of a [project](../projects/page.mdx)'s development, such as staging or production. Each environment has its own resources and configurations. For example, you can have Production and Staging environments.
+A project can have multiple environments, each representing a different stage of your application. For example, you can have a Production environment for your live application, and a Staging environment for testing new features.
+
+Each environment has its own resources, such as a database and server instance. They allow you to test changes in isolation without affecting other environments.
 
 By default, a project has at least a Production environment, and you can create custom environments based on your development needs.
 
@@ -41,13 +43,13 @@ In the project's dashboard, you'll find a card for every environment in your pro
 
 ## Create a Long-Lived Environment
 
-It's recommended to create long-lived environments for different stages of your project.
+It's recommended to create long-lived environments for different stages of your project's development.
 
 For example, you can create a Staging environment to test new features and updates before deploying them to Production. That way, you can test changes in a production-like environment without affecting the live application.
 
 This section explains how to create a long-lived environment in Cloud.
 
-### Prerequisites
+### Prerequisites: Create Environment Branch
 
 A long-lived environment is associated with a specific branch in your GitHub repository. So, before creating an environment, make sure you have the necessary branch for it in your repository.
 
@@ -71,7 +73,7 @@ To create a long-lived environment:
 
 ![Side window with the form to create an environment](https://res.cloudinary.com/dza7lstvk/image/upload/v1749812846/Cloud/CleanShot_2025-06-13_at_14.04.53_2x_apb634.png)
 
-After you create an environment, it will appear in the [project's dashboard](../projects/page.mdx) as a card.
+The created environment will appear in the [project's dashboard](../projects/page.mdx) as a card.
 
 ### Trigger Environment Deployment
 
@@ -294,7 +296,7 @@ Learn more in the [Database](#) guide.
 
 A preview environment is a short-lived environment that is automatically created for each pull request (PR) opened towards a branch with a long-lived environment in Cloud.
 
-Preview environments facilitate testing a PR's changes in a live environment before merging them into the main branch. They allow you to test changes in an environment that closely resembles the production environment.
+Preview environments facilitate testing a PR's changes in a live environment before merging them. They allow you to test changes in an environment that closely resembles the target long-lived environment.
 
 ### View Preview Environments
 
