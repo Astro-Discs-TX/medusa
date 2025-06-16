@@ -103,6 +103,7 @@ const light = {
 
   "--docs-alpha-white-alpha-6": "rgba(255, 255, 255, 0.06)",
   "--docs-alpha-white-alpha-12": "rgba(255, 255, 255, 0.12)",
+  "--docs-alphas-alpha-250": "rgba(24, 24, 27, 0.1)",
 }
 
 const dark = {
@@ -207,6 +208,8 @@ const dark = {
   "--docs-contrast-border-base": "rgba(82, 82, 91, 1)",
   "--docs-contrast-border-top": "rgba(24, 24, 27, 1)",
   "--docs-contrast-border-bot": "rgba(255, 255, 255, 0.08)",
+
+  "--docs-alphas-alpha-250": "rgba(255, 255, 255, 0.1)",
 }
 
 module.exports = {

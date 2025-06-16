@@ -120,6 +120,7 @@ export const MDXComponents: MDXComponentsType = {
     const { key, ...rest } = props
     return <ZoomImg {...rest} />
   },
+  // a: (props) => <Link {...props} variant="content" />,
   a: Link,
 }
 

@@ -193,6 +193,11 @@ module.exports = {
               },
             },
           },
+          alphas: {
+            alpha: {
+              250: "var(--docs-alphas-alpha-250)",
+            }
+          }
         },
       },
       boxShadow: {
