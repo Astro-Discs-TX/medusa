@@ -104,7 +104,7 @@ export const generatedEditDates = {
   "app/deployment/medusa-application/railway/page.mdx": "2025-04-17T08:28:58.981Z",
   "app/deployment/storefront/vercel/page.mdx": "2025-05-20T07:51:40.712Z",
   "app/deployment/page.mdx": "2025-05-20T07:51:40.711Z",
-  "app/integrations/page.mdx": "2025-05-26T14:47:43.842Z",
+  "app/integrations/page.mdx": "2025-06-16T10:14:28.400Z",
   "app/medusa-cli/page.mdx": "2024-08-28T11:25:32.382Z",
   "app/medusa-container-resources/page.mdx": "2025-04-17T08:48:10.255Z",
   "app/medusa-workflows-reference/page.mdx": "2025-01-20T08:21:29.962Z",
@@ -6048,7 +6048,7 @@ export const generatedEditDates = {
   "app/troubleshooting/workflow-errors/step-x-defined/page.mdx": "2025-03-21T07:09:02.741Z",
   "app/troubleshooting/workflow-errors/when-then/page.mdx": "2025-03-21T08:35:45.145Z",
   "app/how-to-tutorials/tutorials/abandoned-cart/page.mdx": "2025-05-20T07:51:40.713Z",
-  "app/integrations/guides/algolia/page.mdx": "2025-05-20T07:51:40.715Z",
+  "app/integrations/guides/algolia/page.mdx": "2025-06-16T09:29:42.556Z",
   "app/integrations/guides/magento/page.mdx": "2025-05-20T07:51:40.716Z",
   "app/js-sdk/auth/overview/page.mdx": "2025-03-28T08:05:32.622Z",
   "app/how-to-tutorials/tutorials/loyalty-points/page.mdx": "2025-05-01T15:33:24.035Z",
@@ -6545,5 +6545,6 @@ export const generatedEditDates = {
   "references/utils/Payment/variables/utils.Payment.PaymentEvents/page.mdx": "2025-06-05T19:05:53.491Z",
   "references/utils/types/utils.NormalizedRow/page.mdx": "2025-06-05T19:05:53.365Z",
   "references/utils/utils.Payment/page.mdx": "2025-06-05T19:05:53.489Z",
-  "app/integrations/guides/slack/page.mdx": "2025-06-03T09:37:42.528Z"
+  "app/integrations/guides/slack/page.mdx": "2025-06-03T09:37:42.528Z",
+  "app/integrations/guides/sentry/page.mdx": "2025-06-16T10:11:29.955Z"
 }
