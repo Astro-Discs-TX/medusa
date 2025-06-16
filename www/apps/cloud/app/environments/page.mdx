@@ -11,11 +11,9 @@ In this guide, you'll learn about environments, how to create and manage them, a
 
 ## What is an Environment?
 
-An environment is an isolated space for different stages of a [project](../projects/page.mdx) that has its own resources and configurations. For example, you can have Production and Staging environments.
+An environment represents a stage of a [project](../projects/page.mdx)'s development, such as staging or production. Each environment has its own resources and configurations. For example, you can have Production and Staging environments.
 
 By default, a project has at least a Production environment, and you can create custom environments based on your development needs.
-
-An environment is associated with a specific branch in your GitHub repository. So, to create a Staging environment, you need a `staging` branch in your repository.
 
 Environments are useful to test changes in production-like conditions before actually pushing them to production. You can test out new features, bug fixes, and integrations without affecting the live application.
 
@@ -35,7 +33,7 @@ To view a project's environments:
 1. Make sure you're viewing the [correct organization's dashboard in Cloud](../organizations/page.mdx#switch-organization).
 2. Click on the project whose environments you want to view.
 
-In the project's dashboard, you'll find a card for every environment in your project.
+In the project's dashboard, you'll find a card for every environment in your project. For example, you may have Production, Staging, and Previews cards.
 
 ![Project dashboard showing the environment cards](https://res.cloudinary.com/dza7lstvk/image/upload/v1750081123/Cloud/CleanShot_2025-06-16_at_16.37.50_2x_wgqkws.png)
 
@@ -43,30 +41,32 @@ In the project's dashboard, you'll find a card for every environment in your pro
 
 ## Create a Long-Lived Environment
 
-It's recommended to create long-lived environments for different stages of your project. For example, you can create a Staging environment to test new features and updates before deploying them to Production. 
+It's recommended to create long-lived environments for different stages of your project.
 
-That way, you can test changes in a production-like environment without affecting the live application.
+For example, you can create a Staging environment to test new features and updates before deploying them to Production. That way, you can test changes in a production-like environment without affecting the live application.
+
+This section explains how to create a long-lived environment in Cloud.
 
 ### Prerequisites
 
-As mentioned earlier, an environment is associated with a specific branch in your GitHub repository. So, before creating an environment, make sure you have the necessary branch for it in your repository.
+A long-lived environment is associated with a specific branch in your GitHub repository. So, before creating an environment, make sure you have the necessary branch for it in your repository.
 
 For example, if you're creating a Staging environment, create and push a `staging` branch in your repository:
 
 ```bash
-git checkout -b staging
-git push origin staging
+git checkout -b staging # create branch
+git push origin staging # push branch to remote
 ```
 
-### Steps to Create an Environment
+### Steps to Create a Long-Lived Environment
 
-To create an environment:
+To create a long-lived environment:
 
 1. In the [project's dashboard](../projects/page.mdx#open-project-dashboard), click on the "Add environment" button at the top right.
 2. In the side window that opens:
     - Enter the name of the environment. For example, `Staging`.
     - Select the branch you want to associate with this environment. For example, `staging`.
-    - Set the custom subdomain for the environment. All environments are subdomains of `medusajs.app`. So, if you set the subdomain to `staging-my-project`, the environment will be accessible at `staging-my-project.medusajs.app`.
+    - Set the custom subdomain for the environment. All environments are subdomains of `medusajs.app`. So, if you set the subdomain to `staging-my-project`, the environment's URL will be `staging-my-project.medusajs.app`.
 3. Once you're done, click the "Create" button.
 
 ![Side window with the form to create an environment](https://res.cloudinary.com/dza7lstvk/image/upload/v1749812846/Cloud/CleanShot_2025-06-13_at_14.04.53_2x_apb634.png)
@@ -75,9 +75,11 @@ After you create an environment, it will appear in the [project's dashboard](../
 
 ### Trigger Environment Deployment
 
-After creating the environment, you need to trigger its deployment by pushing a commit to the environment's branch. The first time you push a commit, Cloud will:
+After creating the environment, you need to trigger its deployment by pushing a commit to the environment's branch (in this example, `staging`).
 
-- Deploy the environment with the latest code from the associated branch.
+The first time you push a commit, Cloud will:
+
+- Deploy the environment from the associated branch.
 - Set up the database and resources for the environment. These are different from the resources of other environments.
 
 After that, Cloud will automatically deploy the environment whenever you push a new commit to the associated branch.
@@ -86,7 +88,7 @@ After that, Cloud will automatically deploy the environment whenever you push a 
 
 ### Create Medusa Admin User in Environment
 
-After the environment is deployed, you need to set the email and password for the admin user before you access the Medusa Admin.
+After the environment is deployed, you need to set the email and password for the environment's Medusa Admin user.
 
 To set the email and password for the admin user:
 
@@ -109,14 +111,16 @@ Make sure to replace the values with your desired email and password.
 
 4. Click the "Save" button to save the environment variables.
 
-After adding environment variables, you need to redeploy the environment for the changes to take effect:
+### Redeploy Environment
+
+After adding the environment variables, you need to redeploy the environment for the changes to take effect:
 
 1. Go back to the environment's dashboard by clicking the "Overview" tab.
 2. Click on the "Redeploy" button to redeploy the environment with the new environment variables.
 
 ![Redeploy button at the top right of the environment's dashboard](https://res.cloudinary.com/dza7lstvk/image/upload/v1750081204/Cloud/CleanShot_2025-06-16_at_16.39.44_2x_d3yij6.png)
 
-Wait for the deployment to finish. You can check its status in the "Deployments" section. Once it's deployed, you can [access the Medusa Admin](#access-medusa-admin).
+Then, wait for the deployment to finish. You can check its status in the "Deployments" section. Once it's deployed, you can [access the Medusa Admin](#access-medusa-admin).
 
 ---
 
@@ -206,7 +210,7 @@ To add environment variables to an environment:
 
 <Note title="Important">
 
-After adding the environment variables, you must [redeploy the environment](#trigger-environment-deployment) for the changes to take effect.
+After adding the environment variables, you must [redeploy the environment](#redeploy-environment) for the changes to take effect.
 
 </Note>
 
@@ -228,7 +232,7 @@ To edit an environment variable:
 
 <Note title="Important">
 
-After editing the environment variable, you must [redeploy the environment](#trigger-environment-deployment) for the changes to take effect.
+After editing the environment variable, you must [redeploy the environment](#redeploy-environment) for the changes to take effect.
 
 </Note>
 
@@ -245,7 +249,7 @@ To delete an environment variable:
 
 <Note title="Important">
 
-After deleting the environment variable, you must [redeploy the environment](#trigger-environment-deployment) for the changes to take effect.
+After deleting the environment variable, you must [redeploy the environment](#redeploy-environment) for the changes to take effect.
 
 </Note>
 
@@ -253,16 +257,16 @@ After deleting the environment variable, you must [redeploy the environment](#tr
 
 ### Export Environment Variables
 
-You can export the environment variables of an environment as a `.env` file. This is useful for debugging issues that require you to have the same environment variables.
+You can export an environment's variables as a `.env` file. This is useful for debugging issues that require you to have the same environment variables.
 
-To export the environment variables:
+To export an environment's variables:
 
 1. In the [environment's dashboard](#open-environment-dashboard), click on the "Settings" tab.
 2. In the "Environment variables" section, click on the "Export .env" button at the top right of the section.
 
 A file download will start with the name `env.txt`, which contains the environment variables in `.env` format.
 
-You can rename the file to `.env` if you want to use it in your local development.
+You can rename the file to `.env` and use it in your local development.
 
 ![Export env button in the environment's settings tab](https://res.cloudinary.com/dza7lstvk/image/upload/v1749816591/Cloud/CleanShot_2025-06-13_at_15.09.37_2x_k5t0nz.png)
 
@@ -298,7 +302,7 @@ To view the preview environments for a project, go to the [project's dashboard](
 
 ![Project dashboard with the Previews card highlighted](https://res.cloudinary.com/dza7lstvk/image/upload/v1750081308/Cloud/CleanShot_2025-06-16_at_16.41.30_2x_ocwoqf.png)
 
-### Create Preview Environment Deployment
+### Create Preview Environment
 
 To create a new preview environment, create a PR towards a branch that has a long-lived environment in Cloud, such as Production.
 
@@ -329,11 +333,7 @@ Then, you can manage the preview environment just like any other long-lived envi
 
 While you can manage each preview environment's settings individually, you can also manage shared settings between all preview environments in the project. By using the shared settings, you don't need to replicate the same settings for each preview environment.
 
-<Note>
-
-Making changes to the shared settings will affect all preview environments created after the changes. Existing preview environments will not be affected by the changes.
-
-</Note>
+For example, you can define environment variables that are common to all preview environments.
 
 To manage the shared settings for preview environments:
 
@@ -343,23 +343,31 @@ To manage the shared settings for preview environments:
     - Manage environment variables, as explained in the [Manage Environment Variables](#manage-environment-variables) section. All preview environments created after making changes will inherit these variables.
     - Specify which database to create the preview environment's database from. By default, a new database will be created from the Production environment's database. You can change this to use a different environment's database, such as Staging.
 
+<Note>
+
+Making changes to the shared settings will affect all preview environments created after the changes. Existing preview environments will not be affected by the changes.
+
+</Note>
+
 ![Previews settings in the project's settings tab](https://res.cloudinary.com/dza7lstvk/image/upload/v1749818069/Cloud/CleanShot_2025-06-13_at_15.34.15_2x_zdh3ha.png)
 
 ### Preview Environment's Database
 
 Each preview environment has its own resources, including its own database, separate from the production environment.
 
-By default, the preview environment's database will be replicated from the Production environment's database.
+By default, the preview environment's database will be replicated from the Production environment's database. This means you can test changes in the preview environment with the same data in production, without actually affecting the production database.
 
 You can change the environment from which the preview environment's database is replicated in the [shared Previews settings](#manage-shared-previews-settings).
 
-#### Limitations of Preview Environments
+#### Preview Environment Inactivity
 
-Preview environments are put to sleep after ten minutes of inactivity. So, if you're testing scheduled jobs or events, they may not work as expected in preview environments. They will work as expected in long-lived environments, such as Staging or Production.
+Since Preview environments are only meant for testing, they are put to sleep after ten minutes of inactivity.
+
+So, if you're testing scheduled jobs or events, they may not work as expected in preview environments. They will work as expected in long-lived environments, such as Staging or Production.
 
 ### Delete Preview Environment
 
-Preview environments are automatically deleted when the PR is merged or closed. However, you can also delete them manually if needed.
+Preview environments are automatically deleted when their PR is merged or closed. However, you can also delete them manually if needed.
 
 To delete a preview environment, you can follow the same steps in the [Delete an Environment](#delete-an-environment) section.
 
@@ -379,6 +387,6 @@ To delete an environment:
 
 1. In the environment's dashboard, click on the "Settings" tab.
 2. Scroll down to the "Delete environment" section.
-3. Click the "Delete environment" button.
+3. Click the "Delete Environment" button.
 
 ![Delete environment button in the environment's settings tab](https://res.cloudinary.com/dza7lstvk/image/upload/v1749816910/Cloud/CleanShot_2025-06-13_at_15.14.50_2x_qm8hfi.png)
