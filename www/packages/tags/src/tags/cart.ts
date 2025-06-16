@@ -184,10 +184,6 @@ export const cart = [
     "path": "https://docs.medusajs.com/resources/references/medusa-workflows/deleteLineItemsWorkflow"
   },
   {
-    "title": "processPaymentWorkflow",
-    "path": "https://docs.medusajs.com/resources/references/medusa-workflows/processPaymentWorkflow"
-  },
-  {
     "title": "cart",
     "path": "https://docs.medusajs.com/resources/references/js-sdk/store/cart"
   }
