@@ -12,7 +12,7 @@ Cloud offers a managed PostgreSQL database service for your project environments
 
 So, when you create a new project, Cloud creates a production database for the production environment. If you create a staging environment, Cloud creates a separate database for that environment as well.
 
-This isolation between environment databases allows you to safely test changes in other environments without affecting the production database.
+This isolation between environment databases allows you to safely test changes in environments without affecting one another, especially the production environment and its data.
 
 ---
 
@@ -24,7 +24,7 @@ Cloud automatically configures the database for your environments. So, you don't
 
 ## Database Backups
 
-Cloud provides automatic backups for your environment databases. These backups are retained for 14 days and allow you to restore your database to a previous state if needed.
+Cloud provides automatic backups for your environment databases. These backups are retained for 14 days and allow you to restore your database to a previous state, if needed.
 
 If you need to restore a database backup, you can [contact support](#) to request a point-in-time recovery. This is useful if you accidentally delete data or need to revert changes made to the database.
 
@@ -32,13 +32,13 @@ If you need to restore a database backup, you can [contact support](#) to reques
 
 ## Accessing the Database
 
-In some cases, you may need to access the database directly, such as to export or import data. However, since Cloud is a managed service, you can't directly access the database server.
+In some cases, you may need to access the database directly, such as to export or import data. However, since Cloud is a managed service, you can't directly access your database. Cloud also doesn't expose the database connection details.
 
-This section provides alternative ways to interact with your database.
+This section provides alternative ways to interact with your database based on your needs.
 
 ### Option 1: Database Dump
 
-Cloud allows you to export and import database dumps for any environment. This is useful for backing up data, seeding the database with initial data, or debugging issues locally.
+Cloud allows you to export and import database dumps for any environment. This is useful for seeding the database with initial data, migrating from other hosting platforms, or debugging issues locally.
 
 To import or export a database dump for an environment:
 
@@ -61,7 +61,7 @@ Make sure you're generating the database dump from PostgreSQL v16 and that [pg_d
 
 </Note>
 
-- **Export**: Download the current database as a dump file. You'll then receive a notification once the export is ready for download. You can restore the database dump locally using `pg_restore`. For example:
+- **Export**: Download the current database as a dump file. You'll then receive a notification once the export is ready for download. Then, you can restore the database dump locally using `pg_restore`. For example:
 
 ```bash
 pg_restore --no-acl --no-owner --no-privileges --clean --if-exists -d 'postgres://postgres:secret@localhost:5432/mydatabase' <filename>
@@ -73,7 +73,7 @@ pg_restore --no-acl --no-owner --no-privileges --clean --if-exists -d 'postgres:
 
 In some cases, you may need more flexibility interacting with the database. For example, you might need to retrieve specific data for analysis, or update data coming from an external source.
 
-To interact with the database with more flexibility, you can:
+To interact with an environment's database with more flexibility, you can:
 
 - [Create a custom API route](!docs!/learn/fundamentals/api-routes) that retrieves or updates data in the database.
     - Make sure to create the API route under the `/admin` prefix, or [protect the API route with an API key](!docs!/learn/fundamentals/api-routes/protected-routes).
@@ -97,7 +97,7 @@ Where:
 - `my-project.medusajs.app` is the [environment's URL](../deployments/page.mdx#find-environments-url).
 - `my-route` is the path to the custom API route you created.
 
-This approach allows you to perform any database operations you need, such as retrieving or updating data, without directly accessing the database server.
+This approach allows you to perform any database operations you need, such as retrieving or updating data, without directly accessing the database.
 
 ---
 
