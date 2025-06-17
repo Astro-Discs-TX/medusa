@@ -14,6 +14,8 @@ So, when you create a new project, Cloud creates a production database for the p
 
 This isolation between environment databases allows you to safely test changes in environments without affecting one another, especially the production environment and its data.
 
+![Diagram showcasing isolation between environment databases](https://res.cloudinary.com/dza7lstvk/image/upload/v1750174759/Cloud/databases-cloud_hzjyrn.jpg)
+
 ---
 
 ## Database Configurations
@@ -47,6 +49,8 @@ To import or export a database dump for an environment:
 3. In the environment's dashboard, click on the "Settings" tab.
 4. Scroll down to the "Database dump" section.
 
+![Database dump section highlighted in the environment settings](https://res.cloudinary.com/dza7lstvk/image/upload/v1750169625/Cloud/CleanShot_2025-06-17_at_17.13.21_2x_l7vw3w.png)
+
 In this section, you can either:
 
 - **Import**: Upload a database dump file to import data into the environment's database. You can generate a database dump using `pg_dump`. For example:
@@ -64,10 +68,8 @@ Make sure you're generating the database dump from PostgreSQL v16 and that [pg_d
 - **Export**: Download the current database as a dump file. You'll then receive a notification once the export is ready for download. Then, you can restore the database dump locally using `pg_restore`. For example:
 
 ```bash
-pg_restore --no-acl --no-owner --no-privileges --clean --if-exists -d 'postgres://postgres:secret@localhost:5432/mydatabase' <filename>
+pg_restore --no-acl --no-owner --no-privileges --clean --if-exists -d 'postgres://postgres:secret@localhost:5432/mydatabase' mydata.dump
 ```
-
-![Database dump section highlighted in the environment settings](https://res.cloudinary.com/dza7lstvk/image/upload/v1750169625/Cloud/CleanShot_2025-06-17_at_17.13.21_2x_l7vw3w.png)
 
 ### Option 2: Custom API Routes
 
@@ -105,6 +107,6 @@ This approach allows you to perform any database operations you need, such as re
 
 By default, when Cloud creates a [preview environment](../environments/page.mdx#preview-environments), it replicates the Production database. This allows you to test changes in a safe environment that mirrors production, without affecting the live data.
 
-Cloud also allows you to configure which environment's database to replicate from. For example, you can replicate the Staging environment's database instead of Production.
+Cloud also allows you to configure which environment's database to replicate the preview database from. For example, you can replicate the Staging environment's database instead of Production.
 
 Learn more in the [Environments](../environments/page.mdx#manage-shared-previews-settings) guide.
