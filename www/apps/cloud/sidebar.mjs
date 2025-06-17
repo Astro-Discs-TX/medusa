@@ -39,6 +39,11 @@ export const sidebar = [
           },
         ],
       },
+      {
+        type: "link",
+        title: "Notifications",
+        path: "/notifications",
+      },
     ],
   },
 ]
