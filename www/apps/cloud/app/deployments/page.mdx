@@ -14,13 +14,13 @@ Each [environment](../environments/page.mdx) has at least one deployment, which 
 
 A deployment is created from the latest source code of an [environment](../environments/page.mdx)'s branch. An environment can have only one live deployment at a time.
 
+The latest deployment of an environment is the live version of that environment, unless you [redeploy a previous deployment](#redeploy-a-deployment).
+
 ### How are Deployments Created?
 
 For long-lived environments, Cloud creates a new deployment every time you push a new commit to the environment's branch. For example, if your Production environment is connected to the `main` branch, Cloud will create a new Production deployment every time you push a new commit to the `main` branch.
 
 For short-lived preview environments, Cloud creates a new environment and deployment when you open a pull request. Cloud will redeploy the preview environment every time you push a new commit to the pull request branch.
-
-The latest deployment of an environment is the live version of that environment, unless you [redeploy a previous deployment](#redeploy-a-deployment).
 
 ---
 
@@ -41,7 +41,7 @@ For example, to find the deployments for the Production environment:
 
 ![Production environment details page with deployment cards highlighted](https://res.cloudinary.com/dza7lstvk/image/upload/v1750151060/Cloud/CleanShot_2025-06-17_at_10.57.49_2x_wqrfzf.png)
 
-These steps apply to all environments in your project, including custom environments (like Staging) and preview environments.
+The last step applies to all environments in your project, including custom environments (like Staging) and preview environments.
 
 ---
 
