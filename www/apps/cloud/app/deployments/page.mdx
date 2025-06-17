@@ -8,9 +8,9 @@ export const metadata = {
 
 In this guide, you'll learn about deployments, how they're created, and how you can troubleshoot them in Cloud.
 
-## What is a Deployment?
+## Deployments Overview
 
-A deployment is a live version of an environment that is publicly accessible. You can access it at the [environment's URL](#find-environments-url).
+Each [environment](../environments/page.mdx) has at least one deployment, which is publicly accessible at the [environment's URL](#find-environments-url).
 
 A deployment is created from the latest source code of an [environment](../environments/page.mdx)'s branch. An environment can have only one live deployment at a time.
 
@@ -20,7 +20,7 @@ For long-lived environments, Cloud creates a new deployment every time you push 
 
 For short-lived preview environments, Cloud creates a new environment and deployment when you open a pull request. Cloud will redeploy the preview environment every time you push a new commit to the pull request branch.
 
-Deployments can also be redeployed as explained in the [Redeploy a Deployment](#redeploy-a-deployment) section.
+The latest deployment of an environment is the live version of that environment, unless you [redeploy a previous deployment](#redeploy-a-deployment).
 
 ---
 
@@ -31,7 +31,7 @@ You can find the deployments for a project and its environments in the project a
 For example, to find the deployments for the Production environment:
 
 1. [Go to its project's dashboard](../projects/page.mdx#open-project-dashboard).
-2. You can go to the latest Production deployment by clicking the "Latest Deployment" link in the Production environment card.
+2. You can go to the latest Production deployment's details by clicking the "Latest Deployment" link in the Production environment card.
 
 ![Production card highlighted with the latest deployment link](https://res.cloudinary.com/dza7lstvk/image/upload/v1750146946/Cloud/CleanShot_2025-06-17_at_10.54.05_2x_ksw4nk.png)
 
@@ -65,7 +65,7 @@ On the deployment details page, you'll find:
 ![Deployment details page with key sections highlighted](https://res.cloudinary.com/dza7lstvk/image/upload/v1750147821/Cloud/CleanShot_2025-06-17_at_11.08.58_2x_ea1l8s.png)
 
 1. **Commit**: The commit that the deployment was created from.
-2. **Status**: The current status of the deployment. For example, "Live" or "Build Failed".
+2. **Status**: The current [status](#deployment-statuses-and-lifecycle) of the deployment. For example, "Live" or "Build Failed".
 3. **Author**: The GitHub user who pushed the commit that created the deployment.
 4. **Build Logs**: The logs from the build process. They are useful to understand why a deployment failed. Learn more in the [Logs](#) guide.
 
@@ -86,7 +86,7 @@ This will change the view to the selected deployment and you'll see its details 
 
 ## Access Live Deployment
 
-Once a deployment is live, you can access it through its environment's URL.
+You can only access a deployment once its status is "Live". You can access it through its environment's URL.
 
 ### Find Environment's URL
 
@@ -133,7 +133,7 @@ curl https://my-project.medusajs.app/health
 
 Where `my-project` is the subdomain you set either when [creating the project](../projects/page.mdx#create-a-project) or when [creating the environment](../environments/page.mdx#create-a-long-lived-environment).
 
-### Access Deployment Server through SSH
+### Access Deployment's Server through SSH
 
 Cloud doesn't support SSH access to the server instance of a deployment. However, you can still access the server's [runtime and build logs](#) to debug issues in your application.
 
@@ -170,7 +170,7 @@ A deployment can have one of the following statuses:
         Build canceled
       </Table.Cell>
       <Table.Cell>
-        The build process was canceled due to a newer commit pushed to the branch.
+        The build process was canceled due to a newer commit pushed to the branch, which resulted in a new deployment.
       </Table.Cell>
     </Table.Row>
     <Table.Row>
@@ -178,7 +178,7 @@ A deployment can have one of the following statuses:
         Build failed
       </Table.Cell>
       <Table.Cell>
-        The build process failed due to a build error. You can check the [Build Logs](#) to troubleshoot the issue.
+        The build process failed due to a build error. You can check the [build logs](#) to troubleshoot the issue.
       </Table.Cell>
     </Table.Row>
     <Table.Row>
@@ -218,7 +218,7 @@ A deployment can have one of the following statuses:
         Ready
       </Table.Cell>
       <Table.Cell>
-        The deployment was previously deployed, but it's not currently the live version of the environment. This happens when a new deployment became the live version.
+        The deployment was previously deployed, but it's not currently the live version of the environment. This happens when a new deployment becomes the live version.
       </Table.Cell>
     </Table.Row>
   </Table.Body>
@@ -254,7 +254,9 @@ You can also [contact support](#) for help with the issue, if necessary.
 
 ## Redeploy a Deployment
 
-You might need to redeploy a deployment if there are unexpected issues with the current live deployment. By redeploying a previous deployment, you revert or rollback the live version of its environment to the code in that deployment.
+You might need to redeploy an old deployment if there are unexpected issues with the current live deployment.
+
+By redeploying a previous deployment, you revert or rollback the live version of its environment to the code in that deployment's commit.
 
 <Note title="Important">
 
