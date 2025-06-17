@@ -280,6 +280,54 @@ medusaIntegrationTestRunner({
             metadata: null,
           })
         })
+
+        it("should retrieve a shipping option with metadata successfully", async () => {
+          const shippingOptionPayload = {
+            name: "Test shipping option with metadata",
+            service_zone_id: fulfillmentSet.service_zones[0].id,
+            shipping_profile_id: shippingProfile.id,
+            provider_id: "manual_test-provider",
+            price_type: "flat",
+            type: {
+              label: "Test type",
+              description: "Test description",
+              code: "test-code",
+            },
+            prices: [{ currency_code: "usd", amount: 1000 }],
+            metadata: {
+              priority: "high",
+              tracking: "enabled",
+              carrier: "express",
+              specialHandling: true,
+            },
+          }
+
+          const {
+            data: { shipping_option: shippingOption },
+          } = await api.post(
+            `/admin/shipping-options`,
+            shippingOptionPayload,
+            adminHeaders
+          )
+
+          const shippingOptionRes = await api.get(
+            `/admin/shipping-options/${shippingOption.id}`,
+            adminHeaders
+          )
+
+          expect(shippingOptionRes.data.shipping_option).toEqual(
+            expect.objectContaining({
+              id: expect.any(String),
+              name: "Test shipping option with metadata",
+              metadata: {
+                priority: "high",
+                tracking: "enabled",
+                carrier: "express",
+                specialHandling: true,
+              },
+            })
+          )
+        })
       })
 
       describe("POST /admin/shipping-options", () => {
@@ -400,6 +448,89 @@ medusaIntegrationTestRunner({
                   value: "old value",
                 }),
               ]),
+            })
+          )
+        })
+
+        it("should create a shipping option with metadata successfully", async () => {
+          const shippingOptionPayload = {
+            name: "Test shipping option with metadata",
+            service_zone_id: fulfillmentSet.service_zones[0].id,
+            shipping_profile_id: shippingProfile.id,
+            provider_id: "manual_test-provider",
+            price_type: "flat",
+            type: {
+              label: "Test type",
+              description: "Test description",
+              code: "test-code",
+            },
+            prices: [
+              {
+                currency_code: "usd",
+                amount: 1000,
+              },
+            ],
+            metadata: {
+              priority: "high",
+              tracking: "enabled",
+              carrier: "express",
+              specialHandling: true,
+            },
+          }
+
+          const response = await api.post(
+            `/admin/shipping-options`,
+            shippingOptionPayload,
+            adminHeaders
+          )
+
+          expect(response.status).toEqual(200)
+          expect(response.data.shipping_option).toEqual(
+            expect.objectContaining({
+              id: expect.any(String),
+              name: shippingOptionPayload.name,
+              metadata: {
+                priority: "high",
+                tracking: "enabled",
+                carrier: "express",
+                specialHandling: true,
+              },
+            })
+          )
+        })
+
+        it("should create a shipping option without metadata (null metadata)", async () => {
+          const shippingOptionPayload = {
+            name: "Test shipping option without metadata",
+            service_zone_id: fulfillmentSet.service_zones[0].id,
+            shipping_profile_id: shippingProfile.id,
+            provider_id: "manual_test-provider",
+            price_type: "flat",
+            type: {
+              label: "Test type",
+              description: "Test description",
+              code: "test-code",
+            },
+            prices: [
+              {
+                currency_code: "usd",
+                amount: 1000,
+              },
+            ],
+          }
+
+          const response = await api.post(
+            `/admin/shipping-options`,
+            shippingOptionPayload,
+            adminHeaders
+          )
+
+          expect(response.status).toEqual(200)
+          expect(response.data.shipping_option).toEqual(
+            expect.objectContaining({
+              id: expect.any(String),
+              name: shippingOptionPayload.name,
+              metadata: null,
             })
           )
         })
@@ -731,6 +862,176 @@ medusaIntegrationTestRunner({
                   value: "true",
                 }),
               ]),
+            })
+          )
+        })
+
+        it("should update a shipping option with metadata successfully", async () => {
+          const shippingOptionPayload = {
+            name: "Test shipping option",
+            service_zone_id: fulfillmentSet.service_zones[0].id,
+            shipping_profile_id: shippingProfile.id,
+            provider_id: "manual_test-provider",
+            price_type: "flat",
+            type: {
+              label: "Test type",
+              description: "Test description",
+              code: "test-code",
+            },
+            prices: [
+              {
+                currency_code: "usd",
+                amount: 1000,
+              },
+            ],
+            metadata: {
+              originalProperty: "originalValue",
+              toBeUpdated: "oldValue",
+            },
+          }
+
+          const response = await api.post(
+            `/admin/shipping-options`,
+            shippingOptionPayload,
+            adminHeaders
+          )
+
+          const shippingOptionId = response.data.shipping_option.id
+
+          const updateShippingOptionPayload = {
+            name: "Updated shipping option with metadata",
+            metadata: {
+              originalProperty: "originalValue",
+              toBeUpdated: "newValue",
+              newProperty: "newValue",
+              priority: "high",
+            },
+          }
+
+          const updateResponse = await api.post(
+            `/admin/shipping-options/${shippingOptionId}`,
+            updateShippingOptionPayload,
+            adminHeaders
+          )
+
+          expect(updateResponse.status).toEqual(200)
+          expect(updateResponse.data.shipping_option).toEqual(
+            expect.objectContaining({
+              id: shippingOptionId,
+              name: updateShippingOptionPayload.name,
+              metadata: {
+                originalProperty: "originalValue",
+                toBeUpdated: "newValue",
+                newProperty: "newValue",
+                priority: "high",
+              },
+            })
+          )
+        })
+
+        it("should update a shipping option to remove metadata (set to null)", async () => {
+          const shippingOptionPayload = {
+            name: "Test shipping option",
+            service_zone_id: fulfillmentSet.service_zones[0].id,
+            shipping_profile_id: shippingProfile.id,
+            provider_id: "manual_test-provider",
+            price_type: "flat",
+            type: {
+              label: "Test type",
+              description: "Test description",
+              code: "test-code",
+            },
+            prices: [
+              {
+                currency_code: "usd",
+                amount: 1000,
+              },
+            ],
+            metadata: {
+              someProperty: "someValue",
+              anotherProperty: "anotherValue",
+            },
+          }
+
+          const response = await api.post(
+            `/admin/shipping-options`,
+            shippingOptionPayload,
+            adminHeaders
+          )
+
+          const shippingOptionId = response.data.shipping_option.id
+
+          const updateShippingOptionPayload = {
+            metadata: null,
+          }
+
+          const updateResponse = await api.post(
+            `/admin/shipping-options/${shippingOptionId}`,
+            updateShippingOptionPayload,
+            adminHeaders
+          )
+
+          expect(updateResponse.status).toEqual(200)
+          expect(updateResponse.data.shipping_option).toEqual(
+            expect.objectContaining({
+              id: shippingOptionId,
+              metadata: null,
+            })
+          )
+        })
+
+        it("should update a shipping option by adding metadata to a shipping option that had none", async () => {
+          const shippingOptionPayload = {
+            name: "Test shipping option",
+            service_zone_id: fulfillmentSet.service_zones[0].id,
+            shipping_profile_id: shippingProfile.id,
+            provider_id: "manual_test-provider",
+            price_type: "flat",
+            type: {
+              label: "Test type",
+              description: "Test description",
+              code: "test-code",
+            },
+            prices: [
+              {
+                currency_code: "usd",
+                amount: 1000,
+              },
+            ],
+          }
+
+          const response = await api.post(
+            `/admin/shipping-options`,
+            shippingOptionPayload,
+            adminHeaders
+          )
+
+          const shippingOptionId = response.data.shipping_option.id
+
+          // Verify it starts without metadata
+          expect(response.data.shipping_option.metadata).toBeNull()
+
+          const updateShippingOptionPayload = {
+            metadata: {
+              newProperty: "newValue",
+              tracking: "enabled",
+            },
+          }
+
+          const updateResponse = await api.post(
+            `/admin/shipping-options/${shippingOptionId}`,
+            updateShippingOptionPayload,
+            adminHeaders
+          )
+
+          expect(updateResponse.status).toEqual(200)
+          expect(updateResponse.data.shipping_option).toEqual(
+            expect.objectContaining({
+              id: shippingOptionId,
+              metadata: {
+                newProperty: "newValue",
+                tracking: "enabled",
+              },
             })
           )
         })
