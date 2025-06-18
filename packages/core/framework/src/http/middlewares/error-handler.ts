@@ -24,12 +24,16 @@ export function errorHandler() {
       ? req.scope.resolve(ContainerRegistrationKeys.LOGGER)
       : console
 
-    err = formatException(err)
+    if (!req.scope) {
+      logger.error(
+        "req.scope is missing unexpectedly. It should be defined in all the cases"
+      )
+    }
 
+    err = formatException(err)
     logger.error(err)
 
     const errorType = err.type || err.name
-
     const errObj = {
       code: err.code,
       type: err.type,
