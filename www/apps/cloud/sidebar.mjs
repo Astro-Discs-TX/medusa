@@ -9,6 +9,60 @@ export const sidebar = [
         path: "/",
         title: "Introduction",
       },
+      {
+        type: "separator",
+      },
+      {
+        type: "category",
+        title: "Basics",
+        initialOpen: true,
+        children: [
+          {
+            type: "link",
+            title: "Organizations",
+            path: "/organizations",
+          },
+          {
+            type: "link",
+            title: "Projects",
+            path: "/projects",
+          },
+          {
+            type: "link",
+            title: "Environments",
+            path: "/environments",
+          },
+          {
+            type: "link",
+            title: "Deployments",
+            path: "/deployments",
+          },
+        ],
+      },
+      {
+        type: "category",
+        title: "Resources",
+        initialOpen: true,
+        children: [
+          {
+            type: "link",
+            title: "Database",
+            path: "/database",
+          },
+        ],
+      },
+      {
+        type: "category",
+        title: "Monitoring & Support",
+        initialOpen: true,
+        children: [
+          {
+            type: "link",
+            title: "Notifications",
+            path: "/notifications",
+          },
+        ],
+      },
     ],
   },
 ]
