@@ -20,7 +20,9 @@ export function errorHandler() {
     res: Response,
     _: NextFunction
   ) {
-    const logger = req.scope.resolve(ContainerRegistrationKeys.LOGGER)
+    const logger = req.scope
+      ? req.scope.resolve(ContainerRegistrationKeys.LOGGER)
+      : console
 
     err = formatException(err)
 
