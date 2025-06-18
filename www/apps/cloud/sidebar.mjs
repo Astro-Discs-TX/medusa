@@ -54,6 +54,28 @@ export const sidebar = [
             title: "Redis",
             path: "/redis",
           },
+          {
+            type: "link",
+            title: "S3",
+            path: "/s3",
+          },
+        ],
+      },
+      {
+        type: "category",
+        title: "Plugins",
+        initialOpen: true,
+        children: [
+          {
+            type: "link",
+            title: "Loyalty",
+            path: "/loyalty-plugin",
+          },
+          {
+            type: "link",
+            title: "Draft Orders",
+            path: "/draft-order-plugin",
+          },
         ],
       },
       {

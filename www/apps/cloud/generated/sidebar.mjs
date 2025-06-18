@@ -77,6 +77,39 @@ export const generatedSidebars = [
             "title": "Redis",
             "path": "/redis",
             "children": []
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "link",
+            "title": "S3",
+            "path": "/s3",
+            "children": []
+          }
+        ]
+      },
+      {
+        "loaded": true,
+        "isPathHref": true,
+        "type": "category",
+        "title": "Plugins",
+        "initialOpen": true,
+        "children": [
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "link",
+            "title": "Loyalty",
+            "path": "/loyalty-plugin",
+            "children": []
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "link",
+            "title": "Draft Orders",
+            "path": "/draft-order-plugin",
+            "children": []
           }
         ]
       },
