@@ -1,7 +1,7 @@
 import { Migration } from "@mikro-orm/migrations"
 import { ulid } from "ulid"
 
-export class Migration20250505101505 extends Migration {
+export class Migration20250505092459 extends Migration {
   override async up(): Promise<void> {
     this.addSql(
       `alter table if exists "workflow_execution" drop constraint if exists "workflow_execution_workflow_id_transaction_id_run_id_unique";`
