@@ -13,7 +13,7 @@ In this guide, you'll learn how to view and manage your environment's logs in Cl
 
 Logs are output messages from your Medusa application's build and runtime processes for an environment's deployments.
 
-They include messages logged throughout your application's lifecycle, including messages during build, application startup, and runtime operations.
+They include messages logged throughout your application's lifecycle, including messages during the build process, application startup, and runtime operations.
 
 Logs are essential for monitoring your application's health and debugging issues that may arise during development, deployment, or when the application is running in production.
 
@@ -73,7 +73,7 @@ In addition, you can expand or collapse individual steps by clicking the arrow n
 
 When you view the build logs while the build is still in progress, you can pause the logs to stop them from updating in real time. This is useful if you find a log message that you want to read more closely without it being pushed out of view by new log messages.
 
-To pause the build logs, click the "Pause" button at the bottom right of the page. This button is only shown when there are incoming logs. When you pause the logs, the button will change to "Resume", allowing you to resume the live log updates.
+To pause the build logs, click the "Pause" button at the bottom right of the page. This button is only shown when there are incoming log messages. When you pause the logs, the button will change to "Resume", allowing you to resume the live log updates.
 
 ![Pause button at the bottom right of the page](https://res.cloudinary.com/dza7lstvk/image/upload/v1750316962/Cloud/CleanShot_2025-06-19_at_10.08.43_2x_buricw.png)
 
@@ -91,9 +91,9 @@ To download build logs, click the <InlineIcon Icon={ArrowDownTray} alt="download
 
 Runtime logs are useful for debugging the live deployment of an environment, especially when the deployment's status is "Deploy failed". They include logs for:
 
-- Errors that occur during the application's startup process.
-- Errors that occur when handling HTTP requests, such as 404 errors or 500 server errors.
-- Scheduled jobs and subscribers not working as expected, if they log informational or error messages.
+- Errors that occur during application startup.
+- Errors that occur when handling incoming HTTP requests, such as 404 errors or 500 server errors.
+- Scheduled jobs, subscribers, and background workflow executions not working as expected (if they log informational or error messages).
 - Other runtime issues that may occur while the application is running.
 
 You can only view the runtime logs of an environment's live deployment, as older deployments are no longer running and do not produce runtime logs.
