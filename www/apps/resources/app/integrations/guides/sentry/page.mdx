@@ -11,7 +11,7 @@ In this tutorial, you'll learn how to integrate Sentry with your Medusa applicat
 
 When you install a Medusa application, you get a fully-fledged commerce platform with a Framework for customization. An essential part of building customizations is tracking errors in them and ensuring they have good performance.
 
-Medusa facilitates error tracking and performance monitoring by integrating instrumentation tools like [Sentry](https://sentry.io/). Sentry provides real-time tracking of errors and performance issues in your application, allowing you to identify and fix them quickly.
+Medusa facilitates error tracking and performance monitoring by integrating with instrumentation tools like [Sentry](https://sentry.io/). Sentry provides real-time tracking of errors and performance issues in your application, allowing you to identify and fix them quickly.
 
 In this tutorial, you'll integrate Sentry with Medusa to monitor your application's performance and errors.
 
@@ -20,8 +20,9 @@ In this tutorial, you'll integrate Sentry with Medusa to monitor your applicatio
 By following this tutorial, you'll learn how to:
 
 - Install and set up Medusa.
-- Set up instrumentation with Sentry. You'll be tracing HTTP requests, workflows, Query usages, and database operations.
-- Test out monitoring and error tracking.
+- Set up instrumentation with Sentry. You'll trace HTTP requests, workflows, Query usages, and database operations.
+- Capture HTTP request errors in Sentry.
+- Test monitoring and error tracking.
 
 You can follow this tutorial whether you're new to Medusa or an advanced Medusa developer.
 
@@ -188,11 +189,9 @@ SENTRY_DSN=your_sentry_dsn_here
 
 Replace `your_sentry_dsn_here` with the DSN you copied from Sentry.
 
----
+### Test Tracing in Sentry
 
-## Test Sentry Integration
-
-You can now test out your Sentry integration with your Medusa application.
+You can now test the integration to ensure operations are traced in Sentry.
 
 First, start your Medusa application by running the following command in your Medusa application's directory:
 
@@ -224,7 +223,7 @@ If you click on a trace, you can see more details about the trace. For example, 
 
 Tracing also works for your custom API routes, workflow executions, Query usages, and database operations.
 
-In this section, you'll test it out by creating a custom API route that throws an error, which you'll then view in Sentry.
+In this section, you'll test it by creating a custom API route that throws an error. For now, you'll only view its tracing in Sentry. Later, you'll configure capturing HTTP request errors in Sentry.
 
 <Note title="Tip">
 
@@ -256,9 +255,9 @@ Since you export a `GET` route handler function, you expose a `GET` API route at
 1. A request object with details and context on the request, such as body parameters.
 2. A response object to manipulate and send the response.
 
-In the route handler, you throw a `MedusaError` with a custom message. This error will be returned as a response to the request and will also be available in the Sentry tracing.
+In the route handler, you throw a `MedusaError` with a custom message. This error will be returned as a response to the request. Later, when you configure error capturing in Sentry, this error will be captured and displayed in the Sentry dashboard.
 
-To test out the API route, make sure your Medusa application is running, then go to `http://localhost:9000/test-sentry` in your browser or using `curl`:
+To test the API route, make sure your Medusa application is running, then go to `http://localhost:9000/test-sentry` in your browser or use `curl`:
 
 ```bash
 curl http://localhost:9000/test-sentry
@@ -283,15 +282,105 @@ It may take a few seconds for the trace to appear in Sentry, so if you don't see
 
 ![Trace dashboard with the test API route trace](https://res.cloudinary.com/dza7lstvk/image/upload/v1750066376/Medusa%20Resources/CleanShot_2025-06-16_at_12.32.37_2x_uox6r1.png)
 
-If you click on the Trace ID, you'll see the details of the trace. Click on the first span in the trace and scroll down to the "Breadcrumbs" section to see the error details.
+If you click on the Trace ID, you'll see the details of the trace.
 
 ![Sentry trace details with error breadcrumbs](https://res.cloudinary.com/dza7lstvk/image/upload/v1750066493/Medusa%20Resources/CleanShot_2025-06-16_at_12.34.33_2x_unzktq.png)
 
 ---
 
+## Step 3: Capture HTTP Request Errors in Sentry
+
+In the previous step, you tested tracing in Sentry by creating a custom API route that throws an error. However, the error was not captured by Sentry. So, you couldn't see the error details in the Sentry dashboard or get notified about it.
+
+In this step, you'll capture HTTP request errors in Sentry. You'll do that by customizing Medusa's default error handler that is used to handle errors in API routes.
+
+<Note>
+
+Refer to the [Throwing and Handling Errors](!docs!/learn/fundamentals/api-routes/errors) guide to learn more about Medusa's default error handling behavior.
+
+</Note>
+
+To customize the error handler, create the file `src/api/middlewares.ts` with the following content:
+
+export const errorHandlerHighlights = [
+  ["20", "captureException", "Capture the error in Sentry."],
+  ["21", "originalErrorHandler", "Call Medusa's default error handler."],
+]
+
+```ts title="src/api/middlewares.ts" highlights={errorHandlerHighlights}
+import { 
+  defineMiddlewares, 
+  errorHandler, 
+  MedusaNextFunction, 
+  MedusaRequest, 
+  MedusaResponse,
+} from "@medusajs/framework/http"
+import { MedusaError } from "@medusajs/framework/utils"
+import * as Sentry from "@sentry/node"
+
+const originalErrorHandler = errorHandler()
+
+export default defineMiddlewares({
+  errorHandler: (
+    error: MedusaError | any, 
+    req: MedusaRequest, 
+    res: MedusaResponse, 
+    next: MedusaNextFunction
+  ) => {
+    Sentry.captureException(error)
+    return originalErrorHandler(error, req, res, next)
+  },
+})
+```
+
+You export the `defineMiddlewares` function that allows you to apply middlewares and customize Medusa's default error handler.
+
+The function accepts an object with the `errorHandler` property, whose value is a custom function that handles errors thrown in API routes.
+
+In the custom error handler, you first capture the error in Sentry using `Sentry.captureException(error)`. This allows Sentry to track the error and its context.
+
+Then, you call the original error handler function that Medusa uses to handle errors in API routes. By using this function, you retain Medusa's default error handling behavior of returning the error response to the client.
+
+### Test Error Capturing in Sentry
+
+To test out error capturing in Sentry, start the Medusa application if it's not already running:
+
+```bash npm2yarn
+npm run dev
+```
+
+Then, send a `GET` request to the `/test-sentry` API route you created earlier:
+
+```bash
+curl http://localhost:9000/test-sentry
+```
+
+You'll receive the same error response as before:
+
+```json
+{
+  "type": "unexpected_state",
+  "message": "This is a test error for Sentry integration."
+}
+```
+
+If you check the tracing page in your Sentry dashboard, you'll see a new trace for the `/test-sentry` API route. Click on it to view the details.
+
+You'll find in the tracing page the thrown error highlighted in red, indicating that it was captured by Sentry.
+
+![Sentry trace details with error message](https://res.cloudinary.com/dza7lstvk/image/upload/v1750347022/Medusa%20Resources/CleanShot_2025-06-19_at_18.29.57_2x_aenvrd.png)
+
+If you click on the error, you can view more details about it, such as its stack trace, how many times it occurred, its breadcrumbs, and more.
+
+![Error details in Sentry](https://res.cloudinary.com/dza7lstvk/image/upload/v1750347022/Medusa%20Resources/CleanShot_2025-06-19_at_18.30.07_2x_oz5y9e.png)
+
+By capturing HTTP request errors in Sentry, you can now monitor and track errors in your Medusa application effectively. You can also set up alerts in Sentry to get notified about critical issues and handle them promptly.
+
+---
+
 ## Next Steps
 
-You've now integrated Sentry with your Medusa application. You can keep using Sentry moving forward to monitor your application's performance and track errors.
+You've now integrated Sentry with your Medusa application. You can continue using Sentry to monitor your application's performance and track errors.
 
 You can also expand on your Sentry integration by enabling more features, such as:
 
