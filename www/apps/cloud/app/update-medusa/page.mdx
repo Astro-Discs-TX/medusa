@@ -4,7 +4,7 @@ export const metadata = {
 
 # {metadata.title}
 
-In this guide, you'll learn how to update your Medusa application deployed on Cloud.
+In this guide, you'll learn how to update your Medusa application that is deployed on Cloud.
 
 <Note title="Looking for the general update guide?">
 
@@ -20,17 +20,17 @@ It's highly recommended to always keep your Medusa application up to date. You'l
 
 ---
 
-## How to Update Your Deployed Medusa Application
+## Update Your Deployed Medusa Application
 
-This section provides best practices for updating your Medusa application on Cloud, and how to update your application in a safe manner.
+This section provides best practices for updating your Medusa application on Cloud and how to update your application in a safe manner.
 
 ### Don't Push Directly to Production
 
-It's **strongly discouraged** to push a new update directly to your production branch. While the Medusa updates are generally safe and stable, it's always a good practice to test the update in a separate environment before deploying it to production.
+It's **strongly discouraged** to push a new update directly to your production branch. While Medusa updates are generally safe and stable, it's always a good practice to test the update in a separate environment before deploying it to production.
 
-By using a separate environment, you mitigate any unexpected issues that may arise during the update process. This allows you to ensure that your customizations and configurations work correctly with the new version of Medusa.
+By using a separate environment, you mitigate any unexpected issues that may arise during the update process. This way, you ensure that your customizations and configurations work correctly with the new version of Medusa.
 
-The **recommended** approach is to [create a long-lived environment](../environments/page.mdx#create-a-long-lived-environment), such as Staging, where you can push the new update and test it thoroughly in a production-like environment, before deploying it to production.
+The **recommended** approach is to [create a long-lived environment](../environments/page.mdx#create-a-long-lived-environment), such as Staging. You can push the new update and test it thoroughly in a production-like environment before deploying it to production.
 
 <Note title="Tip">
 
@@ -40,7 +40,7 @@ Each environment has its own database, so you can safely update other environmen
 
 ![Diagram showcasing process of deploying to staging then production](https://res.cloudinary.com/dza7lstvk/image/upload/v1750334010/Cloud/deploy-to-staging_d4oyys.jpg)
 
-Alternatively, you can open a pull request to the production branch, which will [create a preview environment](../environments/page.mdx#preview-environments). The preview environment will allow you to test the update before merging it into the production branch.
+Alternatively, you can open a pull request to the production branch, which will [create a preview environment](../environments/page.mdx#preview-environments). The preview environment allows you to test the update before merging it into the production branch.
 
 ![Diagram showcasing process of deploying to preview then production](https://res.cloudinary.com/dza7lstvk/image/upload/v1750334010/Cloud/deploy-to-preview_plpz9z.jpg)
 
@@ -48,21 +48,21 @@ Alternatively, you can open a pull request to the production branch, which will 
 
 When creating custom migrations, it's important to include both `up` and `down` methods. The `up` method should define the changes to be made to the database schema, while the `down` method should reverse those changes.
 
-By including both methods, you can easily roll back database changes if you need to roll back your application to a previous version.
+By including both methods, you can easily roll back database changes if you need to revert the application's update.
 
-If you use the [db\:generate](!resources!/medusa-cli/commands/db#dbgenerate) command to generate migrations, it will automatically create both `up` and `down` methods for you. If you're creating the migrations manually, you can learn more about both methods in the [Migrations](!docs!/learn/fundamentals/data-models/write-migration) guide.
+If you use the [db\:generate](!resources!/medusa-cli/commands/db#dbgenerate) command to generate migrations, it will automatically create both `up` and `down` methods for you. If you're creating the migrations manually, you can learn more in the [Migrations](!docs!/learn/fundamentals/data-models/write-migration) guide.
 
 ### Update Your Medusa Application
 
 To update your Medusa application deployed on Cloud:
 
 1. Update your Medusa application locally either on the long-lived environment's branch (for example, Staging) or in a new branch that will be used to create a pull request.
-    - To learn how to update your Medusa application, refer to the [Update guide](!docs!/learn/update). It will include all the details you need to update the Medusa application locally.
-2. Once you're done updating your application locally, push changes in `package.json`, lock file (for example, `yarn.lock`), and any other affected files to the branch.
+    - To learn how to update your Medusa application, refer to the [Update guide](!docs!/learn/update). It includes all the details you need to update the Medusa application locally.
+2. Once you're done updating your application locally, push the changes in `package.json`, lock file (for example, `yarn.lock`), and any other affected files to the branch.
     - If you're using a long-lived environment, Cloud will automatically deploy the changes to the branch's environment.
     - If you're using a new branch to create a pull request, open the pull request to the production branch. This will create a preview environment that you can use to test the update before merging it into the production branch.
 
-Then, you can access the environment's [live deployment](../deployments/page.mdx#access-live-deployment) to test the update. You can also debug the [build](../logs/page.mdx#view-build-logs) and [runtime](../logs/page.mdx#view-runtime-logs) logs of the environment if any issues arise during the update process or testing.
+Then, you can access the environment's [live deployment](../deployments/page.mdx#access-live-deployment) to test the update. You can also use the [build](../logs/page.mdx#view-build-logs) and [runtime](../logs/page.mdx#view-runtime-logs) logs of the environment to debug any issues that occur during the update process or testing.
 
 ### Push Update to Production
 
@@ -74,6 +74,6 @@ Cloud will automatically deploy the changes to the production environment. This 
 
 ## Rollback Medusa Application Update
 
-If you encounter any issues after updating your Medusa application, you can [redeploy a previous deployment](../deployments/page.mdx#redeploy-a-deployment) to roll back the code changes made by the update.
+If you encounter any issues after updating your deployed Medusa application, you can [redeploy a previous deployment](../deployments/page.mdx#redeploy-a-deployment) to roll back the code changes made by the update.
 
-However, redeploying a previous deployment will not roll back the database changes made by the update. If you need to roll back the database changes, [contact support](../support/page.mdx) for assistance. Our team can help you revert the database to a previous state if needed.
+However, redeploying a previous deployment will not roll back the database changes made by the update. If you need to roll back the database changes, [contact support](../support/page.mdx) for assistance.
