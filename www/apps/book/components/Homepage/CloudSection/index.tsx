@@ -20,7 +20,7 @@ export const HomepageCloudSection = () => {
           <div className="flex flex-col gap-0.5">
             <IconHeadline title="Cloud" icon={<IconCloudSolid />} />
             <h2 className="text-h1 text-medusa-fg-base">
-              Deploy scalable applications with Medusa Cloud
+              Deploy scalable applications with Cloud
             </h2>
             <div
               className={clsx(
@@ -30,27 +30,31 @@ export const HomepageCloudSection = () => {
             >
               <span>
                 Focus on building new features without worrying about
-                infrastructure with our PaaS offering, Medusa Cloud.
+                infrastructure with our PaaS Cloud offering.
               </span>
               <span>
                 Deploy directly from your GitHub repository on a
                 security-compliant infrastructure that is pre-configured for
                 optimal operation and scaling of your Medusa application.
               </span>
+              <span>
+                Access our support team and receive guidance as you build your
+                application and go live.
+              </span>
             </div>
           </div>
           <Link
-            href={"https://docs.medusajs.com/resources/recipes"}
+            href={"https://docs.medusajs.com/cloud"}
             className="flex gap-0.25 items-center text-compact-small-plus"
             withIcon
           >
-            <span>Learn about Medusa Cloud</span>
+            <span>Learn about Cloud</span>
           </Link>
         </div>
         <div className="hidden lg:block lg:w-2/3">
           <Image
             src={getLinkWithBasePath("/images/cloud.png")}
-            alt="Medusa Cloud"
+            alt="Cloud"
             className="w-full h-auto"
             width={700}
             height={400}
