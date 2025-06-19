@@ -11,15 +11,15 @@ In this guide, you'll learn how to view and manage your environment's logs in Cl
 
 ## Logs Overview
 
-Logs are output messages from your Medusa application's build and runtime processes for an environment.
+Logs are output messages from your Medusa application's build and runtime processes for an environment's deployments.
 
-They include messages throughout your application's lifecycle, including messages during build, application startup, and runtime operations.
+They include messages logged throughout your application's lifecycle, including messages during build, application startup, and runtime operations.
 
 Logs are essential for monitoring your application's health and debugging issues that may arise during development, deployment, or when the application is running in production.
 
 ### Log Types
 
-There are two log types in your environment:
+There are two types of logs for your environment's deployments:
 
 - **Build logs**: Messages generated during the build process before deploying and starting the application. These logs are useful for debugging when a deployment's build fails.
 - **Runtime logs**: Messages logged by the Medusa application when it starts and while it's running, such as informational startup messages, HTTP requests, errors, and more. These logs are useful for debugging the application's deployment and runtime errors.
@@ -39,13 +39,13 @@ To view the build logs for a deployment:
 3. Click on the environment that the deployment belongs to, such as "Production".
 4. Under the "Deployments" section, find the deployment you want to view the build logs for and click on it.
 
-This will open the deployment details page, where you can see the build logs.
+This will open the deployment details page, where you can see the build logs. The build logs are updated in real time as the build process runs, so you can see the progress and any errors that occur during the build.
 
 ![Build Logs for a deployment](https://res.cloudinary.com/dza7lstvk/image/upload/v1750248493/Cloud/CleanShot_2025-06-18_at_15.07.29_2x_i9ztnt.png)
 
 ### Search Build Logs
 
-You can search the build logs using the search bar at the top of the "Build logs" section. This is useful for finding specific messages or errors in the logs.
+You can search the build logs using the search bar at the top right of the "Build logs" section. This is useful for finding specific messages or errors in the logs.
 
 For example, you can search for keywords like "error" or "warning" to quickly locate issues in the build process.
 
@@ -65,7 +65,7 @@ You can also expand the logs of all steps in the build process by clicking the "
 
 ![Build logs expanded](https://res.cloudinary.com/dza7lstvk/image/upload/v1750316739/Cloud/CleanShot_2025-06-19_at_10.05.20_2x_ofyfej.png)
 
-In addition, you can expand or collapse individual steps by clicking the arrow next to step titles. This gives you more control over which parts of the logs you want to see or hide.
+In addition, you can expand or collapse individual steps by clicking the arrow next to a step's title. This gives you more control over which parts of the logs you want to see or hide.
 
 ![Build logs with one step collapsed](https://res.cloudinary.com/dza7lstvk/image/upload/v1750316810/Cloud/CleanShot_2025-06-19_at_10.06.36_2x_gfkkzj.png)
 
@@ -89,16 +89,16 @@ To download build logs, click the <InlineIcon Icon={ArrowDownTray} alt="download
 
 ## View Runtime Logs
 
-Runtime logs are useful for debugging:
+Runtime logs are useful for debugging the live deployment of an environment, especially when the deployment's status is "Deploy failed". They include logs for:
 
-- Application startup.
-- HTTP requests and their errors.
-- Messages or errors logged by scheduled jobs and subscribers.
+- Errors that occur during the application's startup process.
+- Errors that occur when handling HTTP requests, such as 404 errors or 500 server errors.
+- Scheduled jobs and subscribers not working as expected, if they log informational or error messages.
 - Other runtime issues that may occur while the application is running.
 
-You can only view the runtime logs of an environment's live deployment.
+You can only view the runtime logs of an environment's live deployment, as older deployments are no longer running and do not produce runtime logs.
 
-To view the runtime logs for an environment:
+To view the runtime logs for an environment's live deployment:
 
 1. Make sure you're viewing the [correct organization's dashboard in Cloud](../organizations/page.mdx#switch-organization).
 2. Click on the project that the environment belongs to.
@@ -113,7 +113,7 @@ This will open the runtime logs page, where you can see the logs for the live de
 
 You can search the runtime logs using the search bar at the top of the Logs page. This is useful for finding specific messages or errors in the logs.
 
-For example, you can search for keywords like "error" or HTTP request paths to quickly locate issues in the runtime logs.
+For example, you can search for keywords like "error" or an informational message that you log in your customizations to quickly locate issues in the runtime logs.
 
 When you enter the search term, you'll only see the logs that match your search.
 
@@ -125,18 +125,20 @@ The Filters sidebar of the Logs page allows you to filter the runtime logs based
 
 You can filter the runtime logs by:
 
-- **Timeline**: Select a specific time range to view logs from that period. For example, you can view the logs from the last hour, or select a custom time range.
+- **Timeline**: Select a specific time range to view logs from that period. For example, you can view the logs from the last hour. You can also select a custom time range.
 - **Level**: Filter logs by their severity level, such as "Info", "Warning", "Error", "Debug", or "HTTP". This helps you focus on specific types of logs that are relevant to your debugging needs.
 - **Status Code**: Filter logs by HTTP status codes, such as "200" or "500". This is useful to find problematic API routes and resolve their errors.
 - **Path**: Filter logs by an HTTP request path, such as `/admin/products`. This is useful to find logs related to specific API routes.
 
-You can apply filters from the "Filters" sidebar. You can select multiple filters at once to narrow down the logs further.
+Apply filters from the "Filters" sidebar. You can select multiple filters at once to narrow down the logs further.
 
 ![Filter Runtime Logs](https://res.cloudinary.com/dza7lstvk/image/upload/v1750317829/Cloud/CleanShot_2025-06-19_at_10.23.31_2x_xjfdbk.png)
 
 ### Refresh Runtime Logs
 
-You can refresh the shown logs by clicking the <InlineIcon Icon={ArrowPath} alt="refresh" /> button at the top right of the Logs page. This will fetch the latest logs from the live deployment and update the view.
+You can refresh the runtime logs to fetch the latest logs from the live deployment or to update the view after applying filters or search terms.
+
+To refresh the logs, click the <InlineIcon Icon={ArrowPath} alt="refresh" /> button at the top right of the Logs page. This will fetch the latest logs from the live deployment and update the view.
 
 ![Refresh Runtime Logs button](https://res.cloudinary.com/dza7lstvk/image/upload/v1750318063/Cloud/CleanShot_2025-06-19_at_10.27.10_2x_xtjj5l.png)
 
@@ -155,7 +157,7 @@ From the log details sidebar, you can also:
 
 ![Button at the bottom of the logs details sidebar](https://res.cloudinary.com/dza7lstvk/image/upload/v1750318514/Cloud/CleanShot_2025-06-19_at_10.33.22_2x_ra3gtg.png)
 
-Copying the log message or JSON details is useful for sharing with your team or when contacting support for help debugging an issue.
+You can copy the log message or JSON details to share them with your team or the Cloud support.
 
 ### Filter by Log Metadata
 
