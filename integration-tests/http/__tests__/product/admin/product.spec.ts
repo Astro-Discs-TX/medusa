@@ -445,7 +445,7 @@ medusaIntegrationTestRunner({
           }
         })
 
-        it.only("returns a list of deleted products with free text query", async () => {
+        it("returns a list of deleted products with free text query", async () => {
           // BREAKING: Comparison operators changed, so eg. `gt` became `$gt`
           const response = await api
             .get(
