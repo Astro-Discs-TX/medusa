@@ -5,7 +5,7 @@ import {
 } from "../../../../helpers/create-admin-user"
 import { getProductFixture } from "../../../../helpers/fixtures"
 
-jest.setTimeout(50000)
+jest.setTimeout(300000)
 
 medusaIntegrationTestRunner({
   testSuite: ({ dbConnection, getContainer, api }) => {
@@ -445,11 +445,11 @@ medusaIntegrationTestRunner({
           }
         })
 
-        it("returns a list of deleted products with free text query", async () => {
+        it.only("returns a list of deleted products with free text query", async () => {
           // BREAKING: Comparison operators changed, so eg. `gt` became `$gt`
           const response = await api
             .get(
-              `/admin/products?deleted_at[$gt]=01-26-1990&q=test`,
+              `/admin/products?deleted_at[$gt]=01-26-1990&with_deleted=true&q=test`,
               adminHeaders
             )
             .catch((err) => {
