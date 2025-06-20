@@ -44,7 +44,7 @@ const Homepage = () => {
               )}
             />
             <HomepageTopSection />
-            <HomepageCloudSection />
+            {/* <HomepageCloudSection /> */}
             <HomepageLinksSection />
             <HomepageRecipesSection />
             <HomepageModulesSection />
