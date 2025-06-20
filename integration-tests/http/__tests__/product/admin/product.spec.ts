@@ -519,7 +519,10 @@ medusaIntegrationTestRunner({
 
         it("returns a list of deleted products", async () => {
           const response = await api
-            .get(`/admin/products?deleted_at[$gt]=01-26-1990`, adminHeaders)
+            .get(
+              `/admin/products?deleted_at[$gt]=01-26-1990&with_deleted=true`,
+              adminHeaders
+            )
             .catch((err) => {
               console.log(err)
             })
