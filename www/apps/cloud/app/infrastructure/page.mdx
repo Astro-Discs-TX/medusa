@@ -8,7 +8,7 @@ In this guide, you'll learn about the infrastructure that powers your Cloud proj
 
 ## Project's Infrastructure
 
-Every Cloud project you create is made up of multiple [environments](../environments/page.mdx), each having their own infrastructure. The infrastructure is automatically provisioned and managed by the Cloud platform, so you don't have to worry about setting up servers or scaling.
+Every Cloud project you create is made up of multiple [environments](../environments/page.mdx), each having their own infrastructure. Cloud automatically provisions and manages the infrastructure of every environment, so you don't have to worry about setting up servers or scaling.
 
 Your project will have at least a production environment, which is your live application. You may create custom [long-lived environments](../environments/page.mdx#create-a-long-lived-environment) for staging or other uses. You may also create [short-lived preview environments](../environments/page.mdx#preview-environments) for testing changes before merging them into production.
 
@@ -18,10 +18,10 @@ This guide only covers the server specs for production, long-lived, and preview 
 
 ## Production (Long-Lived) Environment Infrastructure
 
-Production and long-lived environments are designed to handle production traffic and provide a stable platform for your application. Cloud ensures that they're:
+Production and long-lived environments are stable and scalable, making them ideal for hosting your Medusa applications. Cloud ensures that they're:
 
-- **Always available with zero-downtime deployments**: Your website will always be available for users, even during deployments. Cloud automatically handles rolling updates and ensures that there is no downtime during deployments.
-- **Automatically scaled to meet peak traffic**: Cloud automatically scales your application to handle traffic spikes, such as during flash sales or marketing campaigns. Your application can handle sudden increases in traffic without any manual intervention.
+- **Always available with zero-downtime deployments**: Your application will always be available for users, even during deployments. Cloud automatically handles rolling updates without interrupting your users.
+- **Automatically scaled to meet peak traffic**: Cloud automatically scales your servers to handle traffic spikes, such as during flash sales or marketing campaigns. Your application can handle sudden increases in traffic without manual intervention.
 - **Equipped with server and worker instances**: Your application runs on multiple server instances that handle incoming HTTP requests, while worker instances handle background tasks like scheduled jobs and subscribers. This separation allows your application to handle both web traffic and background processing efficiently.
 
 ---
