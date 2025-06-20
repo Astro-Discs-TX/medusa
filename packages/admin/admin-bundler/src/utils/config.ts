@@ -13,7 +13,9 @@ export async function getViteConfig(
   const { default: medusa } = await import("@medusajs/admin-vite-plugin")
 
   const getPort = await import("get-port")
-  const hmrPort = process.env.HMR_PORT || (await getPort.default())
+  const hmrPort = process.env.HMR_PORT
+    ? parseInt(process.env.HMR_PORT)
+    : await getPort.default()
 
   const root = path.resolve(process.cwd(), ".medusa/client")
 
@@ -51,6 +53,10 @@ export async function getViteConfig(
       },
       hmr: {
         port: hmrPort,
+        ...(process.env.HMR_PROTOCOL
+          ? { protocol: process.env.HMR_PROTOCOL }
+          : {}),
+        ...(process.env.HMR_HOST ? { host: process.env.HMR_HOST } : {}),
       },
     },
     plugins: [
