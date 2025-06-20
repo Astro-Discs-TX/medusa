@@ -57,6 +57,9 @@ export async function getViteConfig(
           ? { protocol: process.env.HMR_PROTOCOL }
           : {}),
         ...(process.env.HMR_HOST ? { host: process.env.HMR_HOST } : {}),
+        ...(process.env.HMR_CLIENT_PORT
+          ? { clientPort: parseInt(process.env.HMR_CLIENT_PORT) }
+          : {}),
       },
     },
     plugins: [
