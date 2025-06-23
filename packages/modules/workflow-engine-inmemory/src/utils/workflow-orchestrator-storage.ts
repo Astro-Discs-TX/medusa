@@ -629,7 +629,6 @@ export class InMemoryDistributedTransactionStorage
     }
   }
 
-  // TODO: Move
   async clearExpiredExecutions(): Promise<void> {
     await this.workflowExecutionService_.delete({
       retention_time: {
