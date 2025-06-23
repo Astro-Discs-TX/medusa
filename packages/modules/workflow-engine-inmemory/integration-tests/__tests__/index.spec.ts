@@ -815,16 +815,16 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
 
         it("should execute a scheduled workflow", async () => {
           const spy = createScheduled("standard", {
-            cron: "0 0 * * * *", // Runs at the start of every hour
+            interval: 1000,
           })
 
           expect(spy).toHaveBeenCalledTimes(0)
 
-          await jest.runOnlyPendingTimersAsync()
+          await jest.advanceTimersByTimeAsync(1100)
 
           expect(spy).toHaveBeenCalledTimes(1)
 
-          await jest.runOnlyPendingTimersAsync()
+          await jest.advanceTimersByTimeAsync(1100)
 
           expect(spy).toHaveBeenCalledTimes(2)
         })
