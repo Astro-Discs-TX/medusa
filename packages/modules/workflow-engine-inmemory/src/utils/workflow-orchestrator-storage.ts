@@ -27,6 +27,7 @@ import {
 import { WorkflowOrchestratorService } from "@services"
 import { type CronExpression, parseExpression } from "cron-parser"
 import { WorkflowExecution } from "../models/workflow-execution"
+import { raw } from "@mikro-orm/core"
 
 function parseNextExecution(
   optionsOrExpression: SchedulerOptions | CronExpression | string | number
@@ -74,6 +75,8 @@ export class InMemoryDistributedTransactionStorage
   private retries: Map<string, unknown> = new Map()
   private timeouts: Map<string, unknown> = new Map()
 
+  private clearTimeout_: NodeJS.Timeout
+
   constructor({
     workflowExecutionService,
     logger,
@@ -83,6 +86,18 @@ export class InMemoryDistributedTransactionStorage
   }) {
     this.workflowExecutionService_ = workflowExecutionService
     this.logger_ = logger
+  }
+
+  async onApplicationStart() {
+    this.clearTimeout_ = setInterval(async () => {
+      try {
+        await this.clearExpiredExecutions()
+      } catch {}
+    }, 1000 * 60 * 60)
+  }
+
+  async onApplicationShutdown() {
+    clearInterval(this.clearTimeout_)
   }
 
   setWorkflowOrchestratorService(workflowOrchestratorService) {
@@ -612,5 +627,27 @@ export class InMemoryDistributedTransactionStorage
 
       throw e
     }
+  }
+
+  // TODO: Move
+  async clearExpiredExecutions(): Promise<void> {
+    await this.workflowExecutionService_.delete({
+      retention_time: {
+        $ne: null,
+      },
+      created_at: {
+        $lte: raw(
+          (alias) =>
+            `CURRENT_TIMESTAMP - (INTERVAL '1 second' * retention_time)`
+        ),
+      },
+      state: {
+        $in: [
+          TransactionState.DONE,
+          TransactionState.FAILED,
+          TransactionState.REVERTED,
+        ],
+      },
+    })
   }
 }

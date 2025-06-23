@@ -150,4 +150,8 @@ export abstract class DistributedTransactionStorage
   ): Promise<void> {
     throw new Error("Method 'clearStepTimeout' not implemented.")
   }
+
+  async clearExpiredExecutions(): Promise<void> {
+    throw new Error("Method 'clearExpiredExecutions' not implemented.")
+  }
 }

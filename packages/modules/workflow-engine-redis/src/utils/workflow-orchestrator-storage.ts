@@ -773,15 +773,15 @@ export class RedisDistributedTransactionStorage
     }
   }
 
-  private async clearExpiredExecutions() {
+  async clearExpiredExecutions() {
     await this.workflowExecutionService_.delete({
       retention_time: {
         $ne: null,
       },
-      updated_at: {
+      created_at: {
         $lte: raw(
           (alias) =>
-            `CURRENT_TIMESTAMP - (INTERVAL '1 second' * retention_time)`
+            `CURRENT_TIMESTAMP - (INTERVAL '1 second' * "retention_time")`
         ),
       },
       state: {
