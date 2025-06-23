@@ -1013,7 +1013,7 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
             transactionId: trx_not_expired,
           })
 
-          let executions = await workflowOrcModule.listWorkflowExecutions()
+          const executions = await workflowOrcModule.listWorkflowExecutions()
           expect(executions).toHaveLength(5)
 
           await setTimeoutPromise(2000)
