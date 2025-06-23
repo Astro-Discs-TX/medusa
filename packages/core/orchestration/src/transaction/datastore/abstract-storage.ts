@@ -56,6 +56,7 @@ export interface IDistributedTransactionStorage {
     transaction: DistributedTransactionType,
     step: TransactionStep
   ): Promise<void>
+  clearExpiredExecutions(): Promise<void>
 }
 
 export abstract class DistributedSchedulerStorage

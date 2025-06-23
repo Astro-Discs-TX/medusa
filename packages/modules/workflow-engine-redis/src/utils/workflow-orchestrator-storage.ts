@@ -22,6 +22,7 @@ import {
   TransactionState,
   TransactionStepState,
 } from "@medusajs/framework/utils"
+import { raw } from "@mikro-orm/core"
 import { WorkflowOrchestratorService } from "@services"
 import { Queue, RepeatOptions, Worker } from "bullmq"
 import Redis from "ioredis"
@@ -32,6 +33,9 @@ enum JobType {
   STEP_TIMEOUT = "step_timeout",
   TRANSACTION_TIMEOUT = "transaction_timeout",
 }
+
+const ONE_HOUR_IN_MS = 1000 * 60 * 60
+const REPEATABLE_CLEARER_JOB_ID = "clear-expired-executions"
 
 export class RedisDistributedTransactionStorage
   implements IDistributedTransactionStorage, IDistributedSchedulerStorage
@@ -48,6 +52,9 @@ export class RedisDistributedTransactionStorage
   private jobQueue?: Queue
   private worker: Worker
   private jobWorker?: Worker
+  private cleanerQueueName: string
+  private cleanerWorker_: Worker
+  private cleanerQueue_?: Queue
 
   #isWorkerMode: boolean = false
 
@@ -72,11 +79,17 @@ export class RedisDistributedTransactionStorage
     this.logger_ = logger
     this.redisClient = redisConnection
     this.redisWorkerConnection = redisWorkerConnection
+    this.cleanerQueueName = "workflows-cleaner"
     this.queueName = redisQueueName
     this.jobQueueName = redisJobQueueName
     this.queue = new Queue(redisQueueName, { connection: this.redisClient })
     this.jobQueue = isWorkerMode
       ? new Queue(redisJobQueueName, {
+          connection: this.redisClient,
+        })
+      : undefined
+    this.cleanerQueue_ = isWorkerMode
+      ? new Queue(this.cleanerQueueName, {
           connection: this.redisClient,
         })
       : undefined
@@ -87,11 +100,21 @@ export class RedisDistributedTransactionStorage
     // Close worker gracefully, i.e. wait for the current jobs to finish
     await this.worker?.close()
     await this.jobWorker?.close()
+
+    const repeatableJobs = (await this.cleanerQueue_?.getRepeatableJobs()) ?? []
+    for (const job of repeatableJobs) {
+      if (job.id === REPEATABLE_CLEARER_JOB_ID) {
+        await this.cleanerQueue_?.removeRepeatableByKey(job.key)
+      }
+    }
+
+    await this.cleanerWorker_?.close()
   }
 
   async onApplicationShutdown() {
     await this.queue?.close()
     await this.jobQueue?.close()
+    await this.cleanerQueue_?.close()
   }
 
   async onApplicationStart() {
@@ -150,6 +173,27 @@ export class RedisDistributedTransactionStorage
           )
         },
         workerOptions
+      )
+
+      this.cleanerWorker_ = new Worker(
+        this.cleanerQueueName,
+        async () => {
+          await this.clearExpiredExecutions()
+        },
+        { connection: this.redisClient }
+      )
+
+      await this.cleanerQueue_?.add(
+        "cleaner",
+        {},
+        {
+          repeat: {
+            every: ONE_HOUR_IN_MS,
+          },
+          jobId: REPEATABLE_CLEARER_JOB_ID,
+          removeOnComplete: true,
+          removeOnFail: true,
+        }
       )
     }
   }
@@ -727,5 +771,26 @@ export class RedisDistributedTransactionStorage
     ) {
       throw new SkipExecutionError("Already finished by another execution")
     }
+  }
+
+  private async clearExpiredExecutions() {
+    await this.workflowExecutionService_.delete({
+      retention_time: {
+        $ne: null,
+      },
+      updated_at: {
+        $lte: raw(
+          (alias) =>
+            `CURRENT_TIMESTAMP - (INTERVAL '1 second' * retention_time)`
+        ),
+      },
+      state: {
+        $in: [
+          TransactionState.DONE,
+          TransactionState.FAILED,
+          TransactionState.REVERTED,
+        ],
+      },
+    })
   }
 }
