@@ -932,7 +932,7 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
         })
       })
 
-      describe.only("Cleaner job", function () {
+      describe("Cleaner job", function () {
         it("should remove expired executions of finished workflows and keep the others", async () => {
           const doneWorkflowId = "done-workflow-" + ulid()
           createWorkflow({ name: doneWorkflowId, retentionTime: 1 }, () => {
