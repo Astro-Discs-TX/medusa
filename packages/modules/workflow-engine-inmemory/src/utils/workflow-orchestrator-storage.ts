@@ -634,7 +634,7 @@ export class InMemoryDistributedTransactionStorage
       retention_time: {
         $ne: null,
       },
-      created_at: {
+      updated_at: {
         $lte: raw(
           (alias) =>
             `CURRENT_TIMESTAMP - (INTERVAL '1 second' * retention_time)`
