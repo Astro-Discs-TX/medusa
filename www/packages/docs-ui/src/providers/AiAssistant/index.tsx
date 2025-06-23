@@ -135,6 +135,10 @@ const AiAssistantInnerProvider = ({
     })
   }, [scrollToBottom])
 
+  /**
+   * This effect is required to avoid recaptcha messing up
+   * the page layout.
+   */
   useEffect(() => {
     if (!isBrowser) {
       return
