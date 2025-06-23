@@ -1,5 +1,4 @@
 import {
-  DistributedTransaction,
   DistributedTransactionType,
   IDistributedSchedulerStorage,
   IDistributedTransactionStorage,
@@ -274,14 +273,6 @@ export class RedisDistributedTransactionStorage
     key: string,
     options?: TransactionOptions & { isCancelling?: boolean }
   ): Promise<TransactionCheckpoint | undefined> {
-    const data = await this.redisClient.get(key)
-
-    if (data) {
-      const parsedData = JSON.parse(data) as TransactionCheckpoint
-      return parsedData
-    }
-
-    // Not in Redis either - check database if needed
     const { idempotent, store, retentionTime } = options ?? {}
     if (!idempotent && !(store && isDefined(retentionTime))) {
       return
@@ -340,38 +331,6 @@ export class RedisDistributedTransactionStorage
     return
   }
 
-  async list(): Promise<TransactionCheckpoint[]> {
-    // Replace Redis KEYS with SCAN to avoid blocking the server
-    const transactions: TransactionCheckpoint[] = []
-    let cursor = "0"
-
-    do {
-      // Use SCAN instead of KEYS to avoid blocking Redis
-      const [nextCursor, keys] = await this.redisClient.scan(
-        cursor,
-        "MATCH",
-        DistributedTransaction.keyPrefix + ":*",
-        "COUNT",
-        100 // Fetch in reasonable batches
-      )
-
-      cursor = nextCursor
-
-      if (keys.length) {
-        // Use mget to batch retrieve multiple keys at once
-        const values = await this.redisClient.mget(keys)
-
-        for (const value of values) {
-          if (value) {
-            transactions.push(JSON.parse(value))
-          }
-        }
-      }
-    } while (cursor !== "0")
-
-    return transactions
-  }
-
   async save(
     key: string,
     data: TransactionCheckpoint,
@@ -408,7 +367,11 @@ export class RedisDistributedTransactionStorage
     const shouldSetNX = isNotStarted && isManualTransactionId
 
     // Prepare operations to be executed in batch or pipeline
-    const stringifiedData = JSON.stringify(data)
+    const data_ = {
+      errors: data.errors,
+      flow: data.flow,
+    }
+    const stringifiedData = JSON.stringify(data_)
     const pipeline = this.redisClient.pipeline()
 
     // Execute Redis operations
@@ -658,14 +621,20 @@ export class RedisDistributedTransactionStorage
      */
     const currentFlow = data.flow
 
-    const getOptions = {
-      ...options,
-      isCancelling: !!data.flow.cancelledAt,
-    } as Parameters<typeof this.get>[1]
+    // const getOptions = {
+    //   ...options,
+    //   isCancelling: !!data.flow.cancelledAt,
+    // } as Parameters<typeof this.get>[1]
 
-    const { flow: latestUpdatedFlow } =
-      (await this.get(key, getOptions)) ??
-      ({ flow: {} } as { flow: TransactionFlow })
+    const rawData = await this.redisClient.get(key)
+    let data_ = {} as TransactionCheckpoint
+    if (rawData) {
+      data_ = JSON.parse(rawData)
+    } else {
+      data_ = { flow: {} } as TransactionCheckpoint
+    }
+
+    const { flow: latestUpdatedFlow } = data_
 
     if (!isInitialCheckpoint && !isPresent(latestUpdatedFlow)) {
       /**

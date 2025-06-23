@@ -21,7 +21,6 @@ export interface IDistributedTransactionStorage {
     key: string,
     options?: TransactionOptions & { isCancelling?: boolean }
   ): Promise<TransactionCheckpoint | undefined>
-  list(): Promise<TransactionCheckpoint[]>
   save(
     key: string,
     data: TransactionCheckpoint,
@@ -91,10 +90,6 @@ export abstract class DistributedTransactionStorage
 
   async get(key: string): Promise<TransactionCheckpoint | undefined> {
     throw new Error("Method 'get' not implemented.")
-  }
-
-  async list(): Promise<TransactionCheckpoint[]> {
-    throw new Error("Method 'list' not implemented.")
   }
 
   async save(

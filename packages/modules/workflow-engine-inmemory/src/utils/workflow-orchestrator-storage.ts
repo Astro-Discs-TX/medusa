@@ -62,7 +62,8 @@ export class InMemoryDistributedTransactionStorage
   private logger_: Logger
   private workflowOrchestratorService_: WorkflowOrchestratorService
 
-  private storage: Map<string, TransactionCheckpoint> = new Map()
+  private storage: Map<string, Omit<TransactionCheckpoint, "context">> =
+    new Map()
   private scheduled: Map<
     string,
     {
@@ -137,12 +138,6 @@ export class InMemoryDistributedTransactionStorage
       isCancelling?: boolean
     }
   ): Promise<TransactionCheckpoint | undefined> {
-    const data = this.storage.get(key)
-
-    if (data) {
-      return data
-    }
-
     const { idempotent, store, retentionTime } = options ?? {}
     if (!idempotent && !(store && isDefined(retentionTime))) {
       return
@@ -202,10 +197,6 @@ export class InMemoryDistributedTransactionStorage
     return
   }
 
-  async list(): Promise<TransactionCheckpoint[]> {
-    return Array.from(this.storage.values())
-  }
-
   async save(
     key: string,
     data: TransactionCheckpoint,
@@ -252,7 +243,11 @@ export class InMemoryDistributedTransactionStorage
       }
     }
 
-    this.storage.set(key, data)
+    const { flow, errors } = data
+    this.storage.set(key, {
+      flow,
+      errors,
+    })
 
     // Optimize DB operations - only perform when necessary
     if (hasFinished) {
