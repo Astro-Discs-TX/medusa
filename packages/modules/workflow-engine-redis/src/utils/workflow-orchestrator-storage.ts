@@ -14,7 +14,6 @@ import {
 } from "@medusajs/framework/orchestration"
 import { Logger, ModulesSdkTypes } from "@medusajs/framework/types"
 import {
-  isDefined,
   isPresent,
   MedusaError,
   promiseAll,
@@ -273,11 +272,6 @@ export class RedisDistributedTransactionStorage
     key: string,
     options?: TransactionOptions & { isCancelling?: boolean }
   ): Promise<TransactionCheckpoint | undefined> {
-    const { idempotent, store, retentionTime } = options ?? {}
-    if (!idempotent && !(store && isDefined(retentionTime))) {
-      return
-    }
-
     const [_, workflowId, transactionId] = key.split(":")
     const trx = await this.workflowExecutionService_
       .list(
@@ -297,6 +291,7 @@ export class RedisDistributedTransactionStorage
       .catch(() => undefined)
 
     if (trx) {
+      const { idempotent } = options ?? {}
       const execution = trx.execution as TransactionFlow
 
       if (!idempotent) {
@@ -621,17 +616,19 @@ export class RedisDistributedTransactionStorage
      */
     const currentFlow = data.flow
 
-    // const getOptions = {
-    //   ...options,
-    //   isCancelling: !!data.flow.cancelledAt,
-    // } as Parameters<typeof this.get>[1]
-
     const rawData = await this.redisClient.get(key)
     let data_ = {} as TransactionCheckpoint
     if (rawData) {
       data_ = JSON.parse(rawData)
     } else {
-      data_ = { flow: {} } as TransactionCheckpoint
+      const getOptions = {
+        ...options,
+        isCancelling: !!data.flow.cancelledAt,
+      } as Parameters<typeof this.get>[1]
+
+      data_ =
+        (await this.get(key, getOptions)) ??
+        ({ flow: {} } as TransactionCheckpoint)
     }
 
     const { flow: latestUpdatedFlow } = data_

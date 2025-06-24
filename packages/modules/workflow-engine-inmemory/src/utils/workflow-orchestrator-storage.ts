@@ -21,13 +21,12 @@ import {
   MedusaError,
   TransactionState,
   TransactionStepState,
-  isDefined,
   isPresent,
 } from "@medusajs/framework/utils"
+import { raw } from "@mikro-orm/core"
 import { WorkflowOrchestratorService } from "@services"
 import { type CronExpression, parseExpression } from "cron-parser"
 import { WorkflowExecution } from "../models/workflow-execution"
-import { raw } from "@mikro-orm/core"
 
 function parseNextExecution(
   optionsOrExpression: SchedulerOptions | CronExpression | string | number
@@ -138,11 +137,6 @@ export class InMemoryDistributedTransactionStorage
       isCancelling?: boolean
     }
   ): Promise<TransactionCheckpoint | undefined> {
-    const { idempotent, store, retentionTime } = options ?? {}
-    if (!idempotent && !(store && isDefined(retentionTime))) {
-      return
-    }
-
     const [_, workflowId, transactionId] = key.split(":")
     const trx: InferEntityType<typeof WorkflowExecution> | undefined =
       await this.workflowExecutionService_
@@ -163,6 +157,7 @@ export class InMemoryDistributedTransactionStorage
         .catch(() => undefined)
 
     if (trx) {
+      const { idempotent } = options ?? {}
       const execution = trx.execution as TransactionFlow
 
       if (!idempotent) {
@@ -282,14 +277,22 @@ export class InMemoryDistributedTransactionStorage
      */
     const currentFlow = data.flow
 
-    const getOptions = {
-      ...options,
-      isCancelling: !!data.flow.cancelledAt,
-    } as Parameters<typeof this.get>[1]
+    const rawData = this.storage.get(key)
+    let data_ = {} as TransactionCheckpoint
+    if (rawData) {
+      data_ = rawData as TransactionCheckpoint
+    } else {
+      const getOptions = {
+        ...options,
+        isCancelling: !!data.flow.cancelledAt,
+      } as Parameters<typeof this.get>[1]
 
-    const { flow: latestUpdatedFlow } =
-      (await this.get(key, getOptions)) ??
-      ({ flow: {} } as { flow: TransactionFlow })
+      data_ =
+        (await this.get(key, getOptions)) ??
+        ({ flow: {} } as TransactionCheckpoint)
+    }
+
+    const { flow: latestUpdatedFlow } = data_
 
     if (!isInitialCheckpoint && !isPresent(latestUpdatedFlow)) {
       /**
