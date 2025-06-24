@@ -44,9 +44,13 @@ export const AdminGetProductVariantsParams = createFindParams({
   .merge(applyAndAndOrOperators(AdminGetProductVariantsParamsFields))
 
 export const AdminGetProductsParamsDirectFields = z.object({
-  variants: AdminGetProductVariantsParamsFields.merge(
-    applyAndAndOrOperators(AdminGetProductVariantsParamsFields)
-  ).optional(),
+  variants: AdminGetProductVariantsParamsFields.omit({ q: true })
+    .merge(
+      applyAndAndOrOperators(
+        AdminGetProductVariantsParamsFields.omit({ q: true })
+      )
+    )
+    .optional(),
   status: statusEnum.array().optional(),
 })
 

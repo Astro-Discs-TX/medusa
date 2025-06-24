@@ -58,5 +58,5 @@ export interface AdminProductListParams
   /**
    * Apply filters on the product variants.
    */
-  variants?: AdminProductVariantParams
+  variants?: Omit<AdminProductVariantParams, "q">
 }
