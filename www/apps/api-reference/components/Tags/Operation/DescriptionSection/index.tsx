@@ -98,6 +98,7 @@ const TagsOperationDescriptionSection = ({
                 {badge.description}
               </MarkdownContent>
             }
+            clickable={true}
           >
             <Badge variant={badge.variant || "neutral"} className="ml-0.5">
               {badge.text}
