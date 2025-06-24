@@ -215,10 +215,10 @@ abstract class StripeBase extends AbstractPaymentProvider<StripeOptions> {
     }
   }
 
-  async getPaymentStatus({
-    data,
-  }: GetPaymentStatusInput): Promise<GetPaymentStatusOutput> {
-    const id = data?.id as string
+  async getPaymentStatus(
+    input: GetPaymentStatusInput
+  ): Promise<GetPaymentStatusOutput> {
+    const id = input?.data?.id as string
     if (!id) {
       throw this.buildError(
         "No payment intent ID provided while getting payment status",
@@ -227,31 +227,9 @@ abstract class StripeBase extends AbstractPaymentProvider<StripeOptions> {
     }
 
     const paymentIntent = await this.stripe_.paymentIntents.retrieve(id)
-    const dataResponse = paymentIntent as unknown as Record<string, unknown>
+    const statusResponse = this.getStatus(paymentIntent)
 
-    switch (paymentIntent.status) {
-      case "requires_payment_method":
-        if (paymentIntent.last_payment_error) {
-          return { status: PaymentSessionStatus.ERROR, data: dataResponse }
-        }
-        return { status: PaymentSessionStatus.PENDING, data: dataResponse }
-      case "requires_confirmation":
-      case "processing":
-        return { status: PaymentSessionStatus.PENDING, data: dataResponse }
-      case "requires_action":
-        return {
-          status: PaymentSessionStatus.REQUIRES_MORE,
-          data: dataResponse,
-        }
-      case "canceled":
-        return { status: PaymentSessionStatus.CANCELED, data: dataResponse }
-      case "requires_capture":
-        return { status: PaymentSessionStatus.AUTHORIZED, data: dataResponse }
-      case "succeeded":
-        return { status: PaymentSessionStatus.CAPTURED, data: dataResponse }
-      default:
-        return { status: PaymentSessionStatus.PENDING, data: dataResponse }
-    }
+    return statusResponse as unknown as GetPaymentStatusOutput
   }
 
   async initiatePayment({
@@ -281,15 +259,16 @@ abstract class StripeBase extends AbstractPaymentProvider<StripeOptions> {
     const isPaymentIntent = "id" in sessionData
     return {
       id: isPaymentIntent ? sessionData.id : (data?.session_id as string),
-      data: sessionData as unknown as Record<string, unknown>,
+      ...(this.getStatus(
+        sessionData as unknown as Stripe.PaymentIntent
+      ) as unknown as Pick<InitiatePaymentOutput, "data" | "status">),
     }
   }
 
   async authorizePayment(
     input: AuthorizePaymentInput
   ): Promise<AuthorizePaymentOutput> {
-    const statusResponse = await this.getPaymentStatus(input)
-    return statusResponse
+    return this.getPaymentStatus(input)
   }
 
   async cancelPayment({
@@ -396,7 +375,9 @@ abstract class StripeBase extends AbstractPaymentProvider<StripeOptions> {
   }: UpdatePaymentInput): Promise<UpdatePaymentOutput> {
     const amountNumeric = getSmallestUnit(amount, currency_code)
     if (isPresent(amount) && data?.amount === amountNumeric) {
-      return { data }
+      return this.getStatus(
+        data as unknown as Stripe.PaymentIntent
+      ) as unknown as UpdatePaymentOutput
     }
 
     try {
@@ -411,7 +392,9 @@ abstract class StripeBase extends AbstractPaymentProvider<StripeOptions> {
         }
       )) as unknown as Record<string, unknown>
 
-      return { data: sessionData }
+      return this.getStatus(
+        sessionData as unknown as Stripe.PaymentIntent
+      ) as unknown as UpdatePaymentOutput
     } catch (e) {
       throw this.buildError("An error occurred in updatePayment", e)
     }
@@ -603,6 +586,35 @@ abstract class StripeBase extends AbstractPaymentProvider<StripeOptions> {
     )
 
     return { id: resp.id, data: resp as unknown as Record<string, unknown> }
+  }
+
+  private getStatus(paymentIntent: Stripe.PaymentIntent): {
+    data: Stripe.PaymentIntent
+    status: PaymentSessionStatus
+  } {
+    switch (paymentIntent.status) {
+      case "requires_payment_method":
+        if (paymentIntent.last_payment_error) {
+          return { status: PaymentSessionStatus.ERROR, data: paymentIntent }
+        }
+        return { status: PaymentSessionStatus.PENDING, data: paymentIntent }
+      case "requires_confirmation":
+      case "processing":
+        return { status: PaymentSessionStatus.PENDING, data: paymentIntent }
+      case "requires_action":
+        return {
+          status: PaymentSessionStatus.REQUIRES_MORE,
+          data: paymentIntent,
+        }
+      case "canceled":
+        return { status: PaymentSessionStatus.CANCELED, data: paymentIntent }
+      case "requires_capture":
+        return { status: PaymentSessionStatus.AUTHORIZED, data: paymentIntent }
+      case "succeeded":
+        return { status: PaymentSessionStatus.CAPTURED, data: paymentIntent }
+      default:
+        return { status: PaymentSessionStatus.PENDING, data: paymentIntent }
+    }
   }
 
   async getWebhookActionAndData(

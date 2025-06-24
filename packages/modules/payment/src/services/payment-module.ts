@@ -363,6 +363,7 @@ export default class PaymentModuleService
         {
           id: paymentSession!.id,
           data: { ...input.data, ...providerPaymentSession.data },
+          status: providerPaymentSession.status ?? PaymentSessionStatus.PENDING,
         },
         sharedContext
       )
@@ -400,6 +401,7 @@ export default class PaymentModuleService
         currency_code: data.currency_code,
         context: data.context,
         data: data.data,
+        metadata: data.metadata,
       },
       sharedContext
     )
@@ -414,7 +416,7 @@ export default class PaymentModuleService
   ): Promise<PaymentSessionDTO> {
     const session = await this.paymentSessionService_.retrieve(
       data.id,
-      { select: ["id", "data", "provider_id"] },
+      { select: ["id", "status", "data", "provider_id"] },
       sharedContext
     )
 
@@ -434,6 +436,9 @@ export default class PaymentModuleService
         amount: data.amount,
         currency_code: data.currency_code,
         data: providerData.data,
+        // Allow the caller to explicitly set the status (eg. due to a webhook), fallback to the update response, and finally to the existing status.
+        status: data.status ?? providerData.status ?? session.status,
+        metadata: data.metadata,
       },
       sharedContext
     )
