@@ -30,7 +30,7 @@ properties:
     title: balance
     description: The transaction group's balance.
   account:
-    $ref: ./StoreStoreCreditAccount.yaml
+    type: object
   metadata:
     type: object
     description: The transaction group's metadata, can hold custom key-value pairs.

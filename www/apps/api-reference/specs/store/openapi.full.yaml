@@ -62,9 +62,9 @@ tags:
     description: |
       A gift card invitation is a way to send a gift card to a customer. They can be sent from one customer to another.
       These API routes allow logged-in customers to create and manage gift card invitations.
-      :::note
+      <Note>
       Gift Card Invitations are only available for Cloud users using the [Loyalty Plugin](https://docs.medusajs.com/cloud/loyalty-plugin).
-      :::
+      </Note>
     x-associatedSchema:
       $ref: '#/components/schemas/StoreGiftCardInvitation'
   - name: Gift Cards
@@ -72,9 +72,9 @@ tags:
       A gift card is a prepaid card that customers can use to purchase products in the store.
       Customers can purchase gift cards for themselves or others, and then use them to pay for their orders.
       These API routes allow logged-in customers to create and manage their gift cards.
-      :::note
+      <Note>
       Gift Cards are only available for Cloud users using the [Loyalty Plugin](https://docs.medusajs.com/cloud/loyalty-plugin).
-      :::
+      </Note>
     x-associatedSchema:
       $ref: '#/components/schemas/StoreGiftCard'
   - name: Orders
@@ -177,9 +177,9 @@ tags:
       description: |
         A store credit account is a way for customers to manage their store credit balance. Customers can use their store credit to pay for orders, and view their store credit balance.
         These API routes allow customers to view their store credit accounts.
-        :::note
+        <Note>
         Store Credit Accounts are only available for Cloud users using the [Loyalty Plugin](https://docs.medusajs.com/cloud/loyalty-plugin).
-        :::
+        </Note>
       $ref: '#/components/schemas/StoreStoreCreditAccount'
 paths:
   /auth/customer/{auth_provider}:
@@ -1442,6 +1442,10 @@ paths:
           $ref: '#/components/responses/invalid_request_error'
         '500':
           $ref: '#/components/responses/500_error'
+      x-badges:
+        - text: Cloud
+          description: |
+            This API route is only available in [Medusa Cloud](https://docs.medusajs.com/cloud/loyalty-plugin).
     delete:
       operationId: DeleteCartsIdGiftCards
       summary: Remove Gift Card from Cart
@@ -1513,6 +1517,10 @@ paths:
           $ref: '#/components/responses/invalid_request_error'
         '500':
           $ref: '#/components/responses/500_error'
+      x-badges:
+        - text: Cloud
+          description: |
+            This API route is only available in [Medusa Cloud](https://docs.medusajs.com/cloud/loyalty-plugin).
   /store/carts/{id}/line-items:
     post:
       operationId: PostCartsIdLineItems
@@ -2193,6 +2201,10 @@ paths:
           $ref: '#/components/responses/invalid_request_error'
         '500':
           $ref: '#/components/responses/500_error'
+      x-badges:
+        - text: Cloud
+          description: |
+            This API route is only available in [Medusa Cloud](https://docs.medusajs.com/cloud/loyalty-plugin).
   /store/carts/{id}/taxes:
     post:
       operationId: PostCartsIdTaxes
@@ -4226,6 +4238,10 @@ paths:
       security:
         - cookie_auth: []
         - jwt_token: []
+      x-badges:
+        - text: Cloud
+          description: |
+            This API route is only available in [Medusa Cloud](https://docs.medusajs.com/cloud/loyalty-plugin).
   /store/gift-card-invitations/{code}/reject:
     post:
       operationId: PostGiftCardInvitationsCodeReject
@@ -4292,6 +4308,10 @@ paths:
       security:
         - cookie_auth: []
         - jwt_token: []
+      x-badges:
+        - text: Cloud
+          description: |
+            This API route is only available in [Medusa Cloud](https://docs.medusajs.com/cloud/loyalty-plugin).
   /store/gift-cards:
     get:
       operationId: GetGiftCards
@@ -4427,6 +4447,10 @@ paths:
       security:
         - cookie_auth: []
         - jwt_token: []
+      x-badges:
+        - text: Cloud
+          description: |
+            This API route is only available in [Medusa Cloud](https://docs.medusajs.com/cloud/loyalty-plugin).
   /store/gift-cards/{id}:
     get:
       operationId: GetGiftCardsId
@@ -4489,6 +4513,10 @@ paths:
       security:
         - cookie_auth: []
         - jwt_token: []
+      x-badges:
+        - text: Cloud
+          description: |
+            This API route is only available in [Medusa Cloud](https://docs.medusajs.com/cloud/loyalty-plugin).
   /store/gift-cards/{id}/invitation:
     post:
       operationId: PostGiftCardsIdInvitation
@@ -4564,6 +4592,10 @@ paths:
       security:
         - cookie_auth: []
         - jwt_token: []
+      x-badges:
+        - text: Cloud
+          description: |
+            This API route is only available in [Medusa Cloud](https://docs.medusajs.com/cloud/loyalty-plugin).
   /store/gift-cards/{id}/redeem:
     post:
       operationId: PostGiftCardsIdRedeem
@@ -4630,6 +4662,10 @@ paths:
       security:
         - cookie_auth: []
         - jwt_token: []
+      x-badges:
+        - text: Cloud
+          description: |
+            This API route is only available in [Medusa Cloud](https://docs.medusajs.com/cloud/loyalty-plugin).
   /store/orders:
     get:
       operationId: GetOrders
@@ -9839,6 +9875,10 @@ paths:
       security:
         - cookie_auth: []
         - jwt_token: []
+      x-badges:
+        - text: Cloud
+          description: |
+            This API route is only available in [Medusa Cloud](https://docs.medusajs.com/cloud/loyalty-plugin).
   /store/store-credit-accounts/{id}:
     get:
       operationId: GetStoreCreditAccountsId
@@ -9905,6 +9945,10 @@ paths:
       security:
         - cookie_auth: []
         - jwt_token: []
+      x-badges:
+        - text: Cloud
+          description: |
+            This API route is only available in [Medusa Cloud](https://docs.medusajs.com/cloud/loyalty-plugin).
 components:
   schemas:
     AdminAddDraftOrderItems:
@@ -38511,7 +38555,7 @@ components:
           title: balance
           description: The transaction group's balance.
         account:
-          $ref: '#/components/schemas/StoreStoreCreditAccount'
+          type: object
         metadata:
           type: object
           description: The transaction group's metadata, can hold custom key-value pairs.

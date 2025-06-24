@@ -187,12 +187,12 @@ tags:
       These API routes allow admin users to manage gift cards, transfer gift
       cards between customers, and more.
 
-      :::note
+      <Note>
 
       Gift Card routes are only available for Cloud users using the [Loyalty
       Plugin](https://docs.medusajs.com/cloud/loyalty-plugin).
 
-      :::
+      </Note>
     x-associatedSchema:
       $ref: ./components/schemas/AdminGiftCard.yaml
   - name: Inventory Items
@@ -584,12 +584,12 @@ tags:
       These API routes allow admin users to manage store credit accounts, their
       transactions, and more.
 
-      :::note
+      <Note>
 
       Store Credit Account routes are only available for Cloud users using the
       [Loyalty Plugin](https://docs.medusajs.com/cloud/loyalty-plugin).
 
-      :::
+      </Note>
     x-associatedSchema:
       $ref: ./components/schemas/AdminStoreCreditAccount.yaml
   - name: Stores
@@ -661,12 +661,12 @@ tags:
 
       These API routes allow admin users to list transaction groups.
 
-      :::note
+      <Note>
 
       Transaction Group routes are only available for Cloud users using the
       [Loyalty Plugin](https://docs.medusajs.com/cloud/loyalty-plugin).
 
-      :::
+      </Note>
     x-associatedSchema:
       $ref: ./components/schemas/AdminTransactionGroup.yaml
   - name: Uploads

@@ -72,11 +72,11 @@ tags:
 
       These API routes allow logged-in customers to create and manage gift card invitations.
 
-      :::note
+      <Note>
 
       Gift Card Invitations are only available for Cloud users using the [Loyalty Plugin](https://docs.medusajs.com/cloud/loyalty-plugin).
 
-      :::
+      </Note>
     x-associatedSchema:
       $ref: "#/components/schemas/StoreGiftCardInvitation"
   - name: Gift Cards
@@ -88,11 +88,11 @@ tags:
 
       These API routes allow logged-in customers to create and manage their gift cards.
 
-      :::note
+      <Note>
 
       Gift Cards are only available for Cloud users using the [Loyalty Plugin](https://docs.medusajs.com/cloud/loyalty-plugin).
 
-      :::
+      </Note>
     x-associatedSchema:
       $ref: "#/components/schemas/StoreGiftCard"
   - name: Orders
@@ -211,11 +211,11 @@ tags:
 
         These API routes allow customers to view their store credit accounts.
 
-        :::note
+        <Note>
 
         Store Credit Accounts are only available for Cloud users using the [Loyalty Plugin](https://docs.medusajs.com/cloud/loyalty-plugin).
 
-        :::
+        </Note>
       $ref: "#/components/schemas/StoreStoreCreditAccount"
 servers:
   - url: http://localhost:9000

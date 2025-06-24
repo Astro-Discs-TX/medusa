@@ -63,5 +63,9 @@
  *   "500":
  *     $ref: "#/components/responses/500_error"
  * 
+ * x-badges:
+ *    - text: "Cloud"
+ *      description: > 
+ *        This API route is only available in [Medusa Cloud](https://docs.medusajs.com/cloud/loyalty-plugin).
 */
 

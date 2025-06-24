@@ -140,9 +140,9 @@ tags:
       A gift card is a prepaid card that can be used to pay for items during checkout.
       Gift cards can be purchased by customers, or created by admin users. When a gift card is redeemed, its amount is added to the customer's store credit account, which can then be used to pay for items during checkout.
       These API routes allow admin users to manage gift cards, transfer gift cards between customers, and more.
-      :::note
+      <Note>
       Gift Card routes are only available for Cloud users using the [Loyalty Plugin](https://docs.medusajs.com/cloud/loyalty-plugin).
-      :::
+      </Note>
     x-associatedSchema:
       $ref: '#/components/schemas/AdminGiftCard'
   - name: Inventory Items
@@ -433,9 +433,9 @@ tags:
       A store credit account is a ledger of store credit transactions for a customer. They hold the customer's store credit balance,  including their credit and debit amounts.
       Store credit accounts allow you to build features that let customers pay for items using their store credit balance, such as gift cards or loyalty points.
       These API routes allow admin users to manage store credit accounts, their transactions, and more.
-      :::note
+      <Note>
       Store Credit Account routes are only available for Cloud users using the [Loyalty Plugin](https://docs.medusajs.com/cloud/loyalty-plugin).
-      :::
+      </Note>
     x-associatedSchema:
       $ref: '#/components/schemas/AdminStoreCreditAccount'
   - name: Stores
@@ -487,9 +487,9 @@ tags:
     description: |
       A transaction group is a group of transactions that belong to a store credit account. It allows you to group transactions together, such as all transactions related to a specific gift card.
       These API routes allow admin users to list transaction groups.
-      :::note
+      <Note>
       Transaction Group routes are only available for Cloud users using the [Loyalty Plugin](https://docs.medusajs.com/cloud/loyalty-plugin).
-      :::
+      </Note>
     x-associatedSchema:
       $ref: '#/components/schemas/AdminTransactionGroup'
   - name: Uploads
@@ -19831,6 +19831,10 @@ paths:
           $ref: '#/components/responses/invalid_request_error'
         '500':
           $ref: '#/components/responses/500_error'
+      x-badges:
+        - text: Cloud
+          description: |
+            This API route is only available in [Medusa Cloud](https://docs.medusajs.com/cloud/loyalty-plugin).
     post:
       operationId: PostGiftCards
       summary: Create Gift Card
@@ -19899,6 +19903,10 @@ paths:
           $ref: '#/components/responses/invalid_request_error'
         '500':
           $ref: '#/components/responses/500_error'
+      x-badges:
+        - text: Cloud
+          description: |
+            This API route is only available in [Medusa Cloud](https://docs.medusajs.com/cloud/loyalty-plugin).
   /admin/gift-cards/{id}:
     get:
       operationId: GetGiftCardsId
@@ -19957,6 +19965,10 @@ paths:
           $ref: '#/components/responses/invalid_request_error'
         '500':
           $ref: '#/components/responses/500_error'
+      x-badges:
+        - text: Cloud
+          description: |
+            This API route is only available in [Medusa Cloud](https://docs.medusajs.com/cloud/loyalty-plugin).
     post:
       operationId: PostGiftCardsId
       summary: Update a Gift Card
@@ -20019,6 +20031,10 @@ paths:
           $ref: '#/components/responses/invalid_request_error'
         '500':
           $ref: '#/components/responses/500_error'
+      x-badges:
+        - text: Cloud
+          description: |
+            This API route is only available in [Medusa Cloud](https://docs.medusajs.com/cloud/loyalty-plugin).
   /admin/gift-cards/{id}/redeem:
     post:
       operationId: PostGiftCardsIdRedeem
@@ -20086,6 +20102,10 @@ paths:
           $ref: '#/components/responses/invalid_request_error'
         '500':
           $ref: '#/components/responses/500_error'
+      x-badges:
+        - text: Cloud
+          description: |
+            This API route is only available in [Medusa Cloud](https://docs.medusajs.com/cloud/loyalty-plugin).
   /admin/gift-cards/{id}/transfer:
     post:
       operationId: PostGiftCardsIdTransfer
@@ -20153,6 +20173,10 @@ paths:
           $ref: '#/components/responses/invalid_request_error'
         '500':
           $ref: '#/components/responses/500_error'
+      x-badges:
+        - text: Cloud
+          description: |
+            This API route is only available in [Medusa Cloud](https://docs.medusajs.com/cloud/loyalty-plugin).
   /admin/inventory-items:
     get:
       operationId: GetInventoryItems
@@ -47720,6 +47744,10 @@ paths:
           $ref: '#/components/responses/invalid_request_error'
         '500':
           $ref: '#/components/responses/500_error'
+      x-badges:
+        - text: Cloud
+          description: |
+            This API route is only available in [Medusa Cloud](https://docs.medusajs.com/cloud/loyalty-plugin).
     post:
       operationId: PostStoreCreditAccounts
       summary: Create Store Credit Account
@@ -47781,6 +47809,10 @@ paths:
           $ref: '#/components/responses/invalid_request_error'
         '500':
           $ref: '#/components/responses/500_error'
+      x-badges:
+        - text: Cloud
+          description: |
+            This API route is only available in [Medusa Cloud](https://docs.medusajs.com/cloud/loyalty-plugin).
   /admin/store-credit-accounts/{id}:
     get:
       operationId: GetStoreCreditAccountsId
@@ -48192,6 +48224,10 @@ paths:
           $ref: '#/components/responses/invalid_request_error'
         '500':
           $ref: '#/components/responses/500_error'
+      x-badges:
+        - text: Cloud
+          description: |
+            This API route is only available in [Medusa Cloud](https://docs.medusajs.com/cloud/loyalty-plugin).
   /admin/store-credit-accounts/{id}/transactions:
     get:
       operationId: GetStoreCreditAccountsIdTransactions
@@ -48571,6 +48607,10 @@ paths:
           $ref: '#/components/responses/invalid_request_error'
         '500':
           $ref: '#/components/responses/500_error'
+      x-badges:
+        - text: Cloud
+          description: |
+            This API route is only available in [Medusa Cloud](https://docs.medusajs.com/cloud/loyalty-plugin).
   /admin/stores:
     get:
       operationId: GetStores
@@ -51866,6 +51906,10 @@ paths:
           $ref: '#/components/responses/invalid_request_error'
         '500':
           $ref: '#/components/responses/500_error'
+      x-badges:
+        - text: Cloud
+          description: |
+            This API route is only available in [Medusa Cloud](https://docs.medusajs.com/cloud/loyalty-plugin).
   /admin/uploads:
     post:
       operationId: PostUploads

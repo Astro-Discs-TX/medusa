@@ -424,6 +424,11 @@ get:
       $ref: ../components/responses/invalid_request_error.yaml
     '500':
       $ref: ../components/responses/500_error.yaml
+  x-badges:
+    - text: Cloud
+      description: >
+        This API route is only available in [Medusa
+        Cloud](https://docs.medusajs.com/cloud/loyalty-plugin).
 post:
   operationId: PostGiftCards
   summary: Create Gift Card
@@ -486,3 +491,8 @@ post:
       $ref: ../components/responses/invalid_request_error.yaml
     '500':
       $ref: ../components/responses/500_error.yaml
+  x-badges:
+    - text: Cloud
+      description: >
+        This API route is only available in [Medusa
+        Cloud](https://docs.medusajs.com/cloud/loyalty-plugin).
