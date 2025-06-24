@@ -104,7 +104,7 @@ export const generatedEditDates = {
   "app/deployment/medusa-application/railway/page.mdx": "2025-04-17T08:28:58.981Z",
   "app/deployment/storefront/vercel/page.mdx": "2025-05-20T07:51:40.712Z",
   "app/deployment/page.mdx": "2025-06-20T08:36:52.947Z",
-  "app/integrations/page.mdx": "2025-05-26T14:47:43.842Z",
+  "app/integrations/page.mdx": "2025-06-24T08:22:10.766Z",
   "app/medusa-cli/page.mdx": "2024-08-28T11:25:32.382Z",
   "app/medusa-container-resources/page.mdx": "2025-04-17T08:48:10.255Z",
   "app/medusa-workflows-reference/page.mdx": "2025-01-20T08:21:29.962Z",
@@ -6483,7 +6483,7 @@ export const generatedEditDates = {
   "references/types/interfaces/types.WebhookActionResult/page.mdx": "2025-05-20T07:51:41.086Z",
   "references/types/interfaces/types.WebhookActionData/page.mdx": "2025-05-20T07:51:41.086Z",
   "app/commerce-modules/tax/tax-provider/page.mdx": "2025-05-20T07:51:40.711Z",
-  "app/recipes/bundled-products/examples/standard/page.mdx": "2025-05-20T07:51:40.718Z",
+  "app/recipes/bundled-products/examples/standard/page.mdx": "2025-06-23T15:54:25.807Z",
   "app/recipes/bundled-products/page.mdx": "2025-05-20T07:51:40.718Z",
   "app/infrastructure-modules/analytics/local/page.mdx": "2025-05-29T07:08:55.749Z",
   "app/infrastructure-modules/analytics/page.mdx": "2025-05-26T14:48:25.803Z",
@@ -6545,5 +6545,6 @@ export const generatedEditDates = {
   "references/utils/Payment/variables/utils.Payment.PaymentEvents/page.mdx": "2025-06-05T19:05:53.491Z",
   "references/utils/types/utils.NormalizedRow/page.mdx": "2025-06-05T19:05:53.365Z",
   "references/utils/utils.Payment/page.mdx": "2025-06-05T19:05:53.489Z",
-  "app/integrations/guides/slack/page.mdx": "2025-06-03T09:37:42.528Z"
+  "app/integrations/guides/slack/page.mdx": "2025-06-03T09:37:42.528Z",
+  "app/integrations/guides/mailchimp/page.mdx": "2025-06-24T08:08:35.034Z"
 }

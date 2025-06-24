@@ -114,6 +114,11 @@ export const integrationsSidebar = [
     children: [
       {
         type: "link",
+        path: "/integrations/guides/mailchimp",
+        title: "Mailchimp",
+      },
+      {
+        type: "link",
         path: "/integrations/guides/resend",
         title: "Resend",
       },
