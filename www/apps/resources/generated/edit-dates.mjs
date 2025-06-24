@@ -6546,5 +6546,6 @@ export const generatedEditDates = {
   "references/utils/types/utils.NormalizedRow/page.mdx": "2025-06-05T19:05:53.365Z",
   "references/utils/utils.Payment/page.mdx": "2025-06-05T19:05:53.489Z",
   "app/integrations/guides/slack/page.mdx": "2025-06-03T09:37:42.528Z",
-  "app/integrations/guides/sentry/page.mdx": "2025-06-16T10:11:29.955Z"
+  "app/integrations/guides/sentry/page.mdx": "2025-06-16T10:11:29.955Z",
+  "app/integrations/guides/mailchimp/page.mdx": "2025-06-24T08:08:35.034Z"
 }
