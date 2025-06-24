@@ -2,6 +2,7 @@ import {
   ExternalModuleDeclaration,
   InternalModuleDeclaration,
 } from "../modules-sdk"
+import type { SignOptions, Secret } from "jsonwebtoken"
 
 import type { RedisOptions } from "ioredis"
 import { ConnectionOptions } from "node:tls"
@@ -505,7 +506,50 @@ export type ProjectConfigOptions = {
      * })
      * ```
      */
-    jwtSecret?: string
+    jwtSecret?: Secret
+
+    /**
+     * The public key used to verify the JWT token in combination with the JWT secret and the JWT options.
+     * Only used when the JWT secret is a secret key for asymetric validation.
+     *
+     * @example
+     * ```js title="medusa-config.ts"
+     * module.exports = defineConfig({
+     *   projectConfig: {
+     *     http: {
+     *       jwtPublicKey: "public-key"
+     *     }
+     *     // ...
+     *   },
+     *   // ...
+     * })
+     * ```
+     */
+    jwtPublicKey?: Secret
+
+    /**
+     * Options for the JWT token when using asymetric validation private/public key.
+     *
+     * @example
+     * ```js title="medusa-config.ts"
+     * module.exports = defineConfig({
+     *   projectConfig: {
+     *     http: {
+     *       jwtOptions: {
+     *         algorithm: "RS256",
+     *         expiresIn: "1h",
+     *         issuer: "medusa",
+     *         keyid: "medusa",
+     *       }
+     *     }
+     *     // ...
+     *   },
+     *   // ...
+     * })
+     * ```
+     */
+    jwtOptions?: SignOptions
+
     /**
      * The expiration time for the JWT token. Its format is based off the [ms package](https://github.com/vercel/ms).
      *

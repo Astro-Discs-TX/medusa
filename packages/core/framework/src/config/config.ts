@@ -80,6 +80,10 @@ export class ConfigManager {
     http.storeCors = http.storeCors ?? ""
     http.adminCors = http.adminCors ?? ""
 
+    if (http?.jwtExpiresIn && http.jwtOptions) {
+      http.jwtOptions.expiresIn = http.jwtExpiresIn
+    }
+
     http.jwtSecret = http?.jwtSecret ?? process.env.JWT_SECRET
 
     if (!http.jwtSecret) {
