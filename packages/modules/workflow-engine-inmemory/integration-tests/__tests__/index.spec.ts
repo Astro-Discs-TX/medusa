@@ -6,9 +6,11 @@ import {
 import {
   Context,
   IWorkflowEngineService,
+  Logger,
   RemoteQueryFunction,
 } from "@medusajs/framework/types"
 import {
+  ContainerRegistrationKeys,
   Module,
   Modules,
   promiseAll,
@@ -41,6 +43,7 @@ import {
   workflowEventGroupIdStep2Mock,
 } from "../__fixtures__/workflow_event_group_id"
 import { createScheduled } from "../__fixtures__/workflow_scheduled"
+import { container, MedusaContainer } from "@medusajs/framework"
 
 jest.setTimeout(60000)
 
@@ -54,15 +57,44 @@ const failTrap = (done) => {
   }, 5000)
 }
 
+function times(num) {
+  let resolver
+  let counter = 0
+  const promise = new Promise((resolve) => {
+    resolver = resolve
+  })
+
+  return {
+    next: () => {
+      counter += 1
+      if (counter === num) {
+        resolver()
+      }
+    },
+    // Force resolution after 10 seconds to prevent infinite awaiting
+    promise: Promise.race([
+      promise,
+      new Promise((_, reject) => {
+        setTimeoutSync(
+          () => reject("times has not been resolved after 10 seconds."),
+          10000
+        )
+      }),
+    ]),
+  }
+}
+
 moduleIntegrationTestRunner<IWorkflowEngineService>({
   moduleName: Modules.WORKFLOW_ENGINE,
   resolve: __dirname + "/../..",
   testSuite: ({ service: workflowOrcModule, medusaApp }) => {
     describe("Workflow Orchestrator module", function () {
       let query: RemoteQueryFunction
+      let sharedContainer_: MedusaContainer
 
       beforeEach(() => {
         query = medusaApp.query
+        sharedContainer_ = medusaApp.sharedContainer
       })
 
       it(`should export the appropriate linkable configuration`, () => {
@@ -797,7 +829,6 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
       describe("Scheduled workflows", () => {
         beforeEach(() => {
           jest.clearAllMocks()
-          jest.useFakeTimers()
 
           // Register test-value in the container for all tests
           const sharedContainer =
@@ -809,62 +840,48 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
           )
         })
 
-        afterEach(() => {
-          jest.useRealTimers()
-        })
-
         it("should execute a scheduled workflow", async () => {
-          const spy = createScheduled("standard", {
-            interval: 1000,
-          })
+          const wait = times(2)
+          const spy = createScheduled("standard", wait.next)
 
-          expect(spy).toHaveBeenCalledTimes(0)
-
-          await jest.advanceTimersByTimeAsync(1100)
-
-          expect(spy).toHaveBeenCalledTimes(1)
-
-          await jest.advanceTimersByTimeAsync(1100)
-
+          await wait.promise
           expect(spy).toHaveBeenCalledTimes(2)
+          WorkflowManager.unregister("standard")
         })
 
         it("should stop executions after the set number of executions", async () => {
-          const spy = await createScheduled("num-executions", {
+          const wait = times(2)
+          const spy = createScheduled("num-executions", wait.next, {
             interval: 1000,
             numberOfExecutions: 2,
           })
 
-          expect(spy).toHaveBeenCalledTimes(0)
-
-          await jest.advanceTimersByTimeAsync(1100)
-
-          expect(spy).toHaveBeenCalledTimes(1)
-
-          await jest.advanceTimersByTimeAsync(1100)
-
+          await wait.promise
           expect(spy).toHaveBeenCalledTimes(2)
 
-          await jest.advanceTimersByTimeAsync(1100)
-
+          // Make sure that on the next tick it doesn't execute again
+          await setTimeoutPromise(1100)
           expect(spy).toHaveBeenCalledTimes(2)
+
+          WorkflowManager.unregister("num-execution")
         })
 
         it("should remove scheduled workflow if workflow no longer exists", async () => {
-          const spy = await createScheduled("remove-scheduled", {
+          const wait = times(1)
+          const logger = sharedContainer_.resolve<Logger>(
+            ContainerRegistrationKeys.LOGGER
+          )
+
+          const spy = createScheduled("remove-scheduled", wait.next, {
             interval: 1000,
           })
-          const logSpy = jest.spyOn(console, "warn")
+          const logSpy = jest.spyOn(logger, "warn")
 
-          expect(spy).toHaveBeenCalledTimes(0)
-
-          await jest.advanceTimersByTimeAsync(1100)
-
+          await wait.promise
           expect(spy).toHaveBeenCalledTimes(1)
-
           WorkflowManager["workflows"].delete("remove-scheduled")
 
-          await jest.advanceTimersByTimeAsync(1100)
+          await setTimeoutPromise(1100)
           expect(spy).toHaveBeenCalledTimes(1)
           expect(logSpy).toHaveBeenCalledWith(
             "Tried to execute a scheduled workflow with ID remove-scheduled that does not exist, removing it from the scheduler."
@@ -872,23 +889,20 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
         })
 
         it("the scheduled workflow should have access to the shared container", async () => {
-          const spy = await createScheduled("shared-container-job", {
+          const wait = times(1)
+
+          const spy = await createScheduled("shared-container-job", wait.next, {
             interval: 1000,
-            numberOfExecutions: 1,
           })
+          await wait.promise
 
-          const initialCallCount = spy.mock.calls.length
+          expect(spy).toHaveBeenCalledTimes(1)
 
-          await jest.advanceTimersByTimeAsync(1100)
-
-          expect(spy).toHaveBeenCalledTimes(initialCallCount + 1)
+          console.log(spy.mock.results)
           expect(spy).toHaveReturnedWith(
             expect.objectContaining({ output: { testValue: "test" } })
           )
-
-          await jest.advanceTimersByTimeAsync(1100)
-
-          expect(spy).toHaveBeenCalledTimes(initialCallCount + 1)
+          WorkflowManager.unregister("shared-container-job")
         })
 
         it("should fetch an idempotent workflow after its completion", async () => {

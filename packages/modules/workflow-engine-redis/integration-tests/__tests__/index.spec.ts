@@ -1072,7 +1072,6 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
           WorkflowManager["workflows"].delete("remove-scheduled")
 
           await setTimeout(1100)
-          0
           expect(spy).toHaveBeenCalledTimes(1)
           expect(logSpy).toHaveBeenCalledWith(
             "Tried to execute a scheduled workflow with ID remove-scheduled that does not exist, removing it from the scheduler."
