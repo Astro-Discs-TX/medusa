@@ -30,6 +30,12 @@ export interface RouteConfig {
    * The nested route to display under existing route in the sidebar.
    */
   nested?: NestedRoutePosition
+
+  /**
+   * The position of the nested route in the sidebar.
+   * @default "inside"
+   */
+  nestedPosition?: "after" | "before" | "inside"
 }
 
 export type CustomFormField<

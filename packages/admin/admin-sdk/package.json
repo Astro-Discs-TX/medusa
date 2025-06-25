@@ -16,7 +16,8 @@
     "package.json"
   ],
   "scripts": {
-    "build": "tsup"
+    "build": "tsup",
+    "watch": "tsup --watch"
   },
   "devDependencies": {
     "@types/react": "^18.3.2",

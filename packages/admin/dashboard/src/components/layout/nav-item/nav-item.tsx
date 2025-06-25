@@ -1,3 +1,4 @@
+import { NestedRoutePosition } from "@medusajs/admin-shared"
 import { Kbd, Text, clx } from "@medusajs/ui"
 import { Collapsible as RadixCollapsible } from "radix-ui"
 import {
@@ -26,7 +27,8 @@ export type INavItem = {
   items?: NestedItemProps[]
   type?: ItemType
   from?: string
-  nested?: string
+  nested?: NestedRoutePosition
+  nestedPosition?: "after" | "before" | "inside"
 }
 
 const BASE_NAV_LINK_CLASSES =

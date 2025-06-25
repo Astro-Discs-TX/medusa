@@ -290,9 +290,28 @@ const CoreRouteSection = () => {
   menuItems.forEach((item) => {
     if (item.nested) {
       const route = coreRoutes.find((route) => route.to === item.nested)
-      if (route) {
-        route.items?.push(item)
+      if (!route) return
+
+      if (item.nestedPosition === "after") {
+        const routeIndex = coreRoutes.findIndex(
+          (route) => route.to === item.nested
+        )
+        // Push menu item to position after core route
+        coreRoutes.splice(routeIndex + 1, 0, item)
+        return
       }
+
+      if (item.nestedPosition === "before") {
+        const routeIndex = coreRoutes.findIndex(
+          (route) => route.to === item.nested
+        )
+        // Push menu item to position before core route
+        coreRoutes.splice(routeIndex, 0, item)
+        return
+      }
+
+      // Push menu item to position inside core route
+      route.items?.push(item)
     }
   })
 

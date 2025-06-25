@@ -174,6 +174,7 @@ export class DashboardApp {
         icon: item.icon ? <item.icon /> : undefined,
         items: [],
         nested: item.nested,
+        nestedPosition: item.nestedPosition,
       }
 
       if (parentPath !== "/" && tempRegistry[parentPath]) {
