@@ -34,6 +34,13 @@ module.exports = {
 }
 ```
 
+if you are using tailwind v4+ then you can simply add the preset inside your global.css file 
+
+```css
+@config "@medusajs/ui-preset";
+```
+
+
 In order for the styles to be applied correctly to the components, you will also need to ensure that
 `@medusajs/ui` is included in the content field of your `tailwind.config.js` file:
 
@@ -45,6 +52,12 @@ module.exports = {
   ],
   // ...
 }
+```
+
+again if you are using the tailwind v4+ then you can simply add the content inside your global.css file 
+
+```css
+@import "tailwindcss" source("../node_modules/@medusajs/ui/dist/**/*.{js,jsx,ts,tsx}");
 ```
 
 If you are working within a monorepo, you may need to add the path to the `@medusajs/ui` package in your `tailwind.config.js` like so:
