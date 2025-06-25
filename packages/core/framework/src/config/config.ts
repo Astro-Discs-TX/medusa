@@ -88,11 +88,11 @@ export class ConfigManager {
 
     if (
       http?.jwtPublicKey &&
-      (!http.jwtVerifyOptions?.algorithms?.length ||
-        !http.jwtOptions?.algorithm)
+      ((http.jwtVerifyOptions && !http.jwtVerifyOptions.algorithms?.length) ||
+        (http.jwtOptions && !http.jwtOptions.algorithm))
     ) {
       this.rejectErrors(
-        `JWT public key is provided but no algorithm is set in the 'jwtVerifyOptions' or 'jwtOptions'. It means that the algorithm will be inferred from the public key which can lead to missmatch and invalid algorithm errors.`
+        `JWT public key is provided but no algorithm is set in the 'jwtVerifyOptions' or 'jwtOptions' if 'jwtVerifyOptions' is not provided. It means that the algorithm will be inferred from the public key which can lead to missmatch and invalid algorithm errors.`
       )
     }
 

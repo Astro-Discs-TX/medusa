@@ -23,10 +23,10 @@ import {
   UserEvents,
 } from "@medusajs/framework/utils"
 import jwt, { JwtPayload, SignOptions, VerifyOptions } from "jsonwebtoken"
-import timespan from "jsonwebtoken/lib/timespan"
 import crypto from "node:crypto"
 
 import { Invite, User } from "@models"
+import { getExpiresAt } from "../utils/utils"
 
 type InjectedDependencies = {
   baseRepository: DAL.RepositoryService
@@ -185,13 +185,7 @@ export default class UserModuleService
       }
     }
 
-    const expiresAt =
-      typeof this.config.jwtOptions.expiresIn === "number"
-        ? new Date(Date.now() + this.config.jwtOptions.expiresIn * 1000)
-        : new Date(
-            Math.floor(timespan(this.config.jwtOptions.expiresIn)) * 1000
-          )
-
+    const expiresAt = getExpiresAt(this.config.jwtOptions.expiresIn)
     const updates = invites.map((invite) => {
       return {
         id: invite.id,
@@ -354,12 +348,7 @@ export default class UserModuleService
       )
     }
 
-    const expiresAt =
-      typeof this.config.jwtOptions.expiresIn === "number"
-        ? new Date(Date.now() + this.config.jwtOptions.expiresIn * 1000)
-        : new Date(
-            Math.floor(timespan(this.config.jwtOptions.expiresIn)) * 1000
-          )
+    const expiresAt = getExpiresAt(this.config.jwtOptions.expiresIn)
 
     const toCreate = data.map((invite) => {
       const id = generateEntityId((invite as { id?: string }).id, "invite")
