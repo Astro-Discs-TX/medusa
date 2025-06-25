@@ -57,6 +57,7 @@ export default class UserModuleService
   protected readonly config: {
     jwtSecret: string
     jwtPublicKey?: string
+    jwt_verify_options: ProjectConfigOptions["http"]["jwtVerifyOptions"]
     jwtOptions: ProjectConfigOptions["http"]["jwtOptions"] & {
       expiresIn: number
     }
@@ -76,6 +77,7 @@ export default class UserModuleService
     this.config = {
       jwtSecret: moduleDeclaration["jwt_secret"],
       jwtPublicKey: moduleDeclaration["jwt_public_key"],
+      jwt_verify_options: moduleDeclaration["jwt_verify_options"],
       jwtOptions: {
         ...moduleDeclaration["jwt_options"],
         expiresIn:
@@ -99,15 +101,14 @@ export default class UserModuleService
     @MedusaContext() sharedContext: Context = {}
   ): Promise<UserTypes.InviteDTO> {
     const options = {
-      ...this.config.jwtOptions,
+      ...(this.config.jwt_verify_options ?? this.config.jwtOptions),
       complete: true,
     } as VerifyOptions & SignOptions
 
-    if (options.algorithm) {
+    if (!options.algorithms && options.algorithm) {
       options.algorithms = [options.algorithm]
+      delete options.algorithm
     }
-
-    delete options.algorithm
 
     const decoded = jwt.verify(
       token,

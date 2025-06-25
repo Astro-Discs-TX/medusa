@@ -84,7 +84,7 @@ export const authenticate = (
         authTypes,
         actorTypes,
         http.jwtPublicKey,
-        http.jwtOptions
+        http.jwtVerifyOptions ?? http.jwtOptions
       )
     }
 
@@ -184,7 +184,7 @@ export const getAuthContextFromJwtToken = (
   authTypes: AuthType[],
   actorTypes: string[],
   jwtPublicKey?: Secret,
-  jwtOptions?: SignOptions
+  jwtOptions?: VerifyOptions | SignOptions
 ): AuthContext | null => {
   if (!authTypes.includes(BEARER_AUTH)) {
     return null
@@ -207,11 +207,10 @@ export const getAuthContextFromJwtToken = (
       try {
         const options = { ...jwtOptions } as VerifyOptions & SignOptions
 
-        if (options.algorithm) {
+        if (!options.algorithms && options.algorithm) {
           options.algorithms = [options.algorithm]
+          delete options.algorithm
         }
-
-        delete options.algorithm
 
         const verified = verify(
           token,

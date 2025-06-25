@@ -169,6 +169,7 @@ function resolveModules(
       options: {
         jwt_secret: projectConfig?.http?.jwtSecret ?? DEFAULT_SECRET,
         jwt_options: projectConfig?.http?.jwtOptions,
+        jwt_verify_options: projectConfig?.http?.jwtVerifyOptions,
         jwt_public_key: projectConfig?.http?.jwtPublicKey,
       },
     },
