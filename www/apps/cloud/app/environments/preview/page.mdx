@@ -16,12 +16,16 @@ Learn more about what environments are and their types in the [Environments](../
 
 ## Preview (Short-Lived) Environment Infrastructure
 
-Preview environments are designed for testing changes before merging them into production. So, they have a simpler setup compared to production environments:
+Preview environments are designed for testing changes before merging them into production. So, they have a simpler setup compared to [production environments](../long-lived/page.mdx):
 
 - Medusa automatically scales preview environments to zero after ten minutes of inactivity. So, if no one is using the preview environment, it will automatically shut down to save resources.
 - Preview environments run on a single server instance, which is sufficient for testing changes.
 
-The simpler setup is sufficient for testing changes. However, some customizations like scheduled jobs and subscribers may not work as expected since the preview environment may be inactive. You can still use these customizations in long-lived environments normally.
+### Preview Environment Inactivity
+
+Since Preview environments are only meant for testing, they are put to sleep after ten minutes of inactivity.
+
+So, if you're testing scheduled jobs or events, they may not work as expected in preview environments. They will work as expected in long-lived environments, such as Staging or Production.
 
 ---
 
@@ -105,14 +109,6 @@ Each preview environment has its own resources, including its own database, sepa
 By default, the preview environment's database will be replicated from the Production environment's database. This means you can test changes in the preview environment with the same data in production, without actually affecting the production database.
 
 You can change the environment from which the preview environment's database is replicated in the [shared Previews settings](#manage-shared-previews-settings).
-
----
-
-## Preview Environment Inactivity
-
-Since Preview environments are only meant for testing, they are put to sleep after ten minutes of inactivity.
-
-So, if you're testing scheduled jobs or events, they may not work as expected in preview environments. They will work as expected in long-lived environments, such as Staging or Production.
 
 ---
 
