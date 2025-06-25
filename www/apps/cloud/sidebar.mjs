@@ -46,8 +46,52 @@ export const sidebar = [
         children: [
           {
             type: "link",
+            title: "Infrastructure",
+            path: "/infrastructure",
+          },
+          {
+            type: "link",
             title: "Database",
             path: "/database",
+          },
+          {
+            type: "link",
+            title: "Redis",
+            path: "/redis",
+          },
+          {
+            type: "link",
+            title: "S3",
+            path: "/s3",
+          },
+        ],
+      },
+      {
+        type: "category",
+        title: "Plugins",
+        initialOpen: true,
+        children: [
+          {
+            type: "link",
+            title: "Loyalty",
+            path: "/loyalty-plugin",
+          },
+          {
+            type: "link",
+            title: "Draft Orders",
+            path: "/draft-order-plugin",
+          },
+        ],
+      },
+      {
+        type: "category",
+        title: "Billing",
+        initialOpen: true,
+        children: [
+          {
+            type: "link",
+            title: "Billing & Usage",
+            path: "/billing-usage",
           },
         ],
       },
@@ -58,8 +102,35 @@ export const sidebar = [
         children: [
           {
             type: "link",
+            title: "Logs",
+            path: "/logs",
+          },
+          {
+            type: "link",
             title: "Notifications",
             path: "/notifications",
+          },
+          {
+            type: "link",
+            title: "Support",
+            path: "/support",
+          },
+        ],
+      },
+      {
+        type: "category",
+        title: "Best Practices",
+        initialOpen: true,
+        children: [
+          {
+            type: "link",
+            title: "Update Medusa",
+            path: "/update-medusa",
+          },
+          {
+            type: "link",
+            title: "Connect Storefront",
+            path: "/connect-storefront",
           },
         ],
       },
