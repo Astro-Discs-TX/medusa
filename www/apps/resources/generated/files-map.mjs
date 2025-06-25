@@ -876,6 +876,10 @@ export const filesMap = [
     "pathname": "/integrations/guides/magento"
   },
   {
+    "filePath": "/www/apps/resources/app/integrations/guides/mailchimp/page.mdx",
+    "pathname": "/integrations/guides/mailchimp"
+  },
+  {
     "filePath": "/www/apps/resources/app/integrations/guides/resend/page.mdx",
     "pathname": "/integrations/guides/resend"
   },
@@ -886,6 +890,10 @@ export const filesMap = [
   {
     "filePath": "/www/apps/resources/app/integrations/guides/segment/page.mdx",
     "pathname": "/integrations/guides/segment"
+  },
+  {
+    "filePath": "/www/apps/resources/app/integrations/guides/sentry/page.mdx",
+    "pathname": "/integrations/guides/sentry"
   },
   {
     "filePath": "/www/apps/resources/app/integrations/guides/shipstation/page.mdx",

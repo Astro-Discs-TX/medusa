@@ -3,6 +3,7 @@ import {
   isDefined,
   isPresent,
   MedusaError,
+  buildOrder,
   stringToSelectRelationObject,
 } from "@medusajs/utils"
 import { pick } from "lodash"
@@ -203,9 +204,8 @@ export function prepareListQuery<T extends RequestQueryFields, TEntity>(
   if (isDefined(order)) {
     let orderField = order
     if (order.startsWith("-")) {
-      const [, field] = order.split("-")
-      orderField = field
-      orderBy = { [field]: "DESC" }
+      orderField = order.slice(1)
+      orderBy = { [orderField]: "DESC" }
     } else {
       orderBy = { [order]: "ASC" }
     }
@@ -218,7 +218,7 @@ export function prepareListQuery<T extends RequestQueryFields, TEntity>(
     }
   }
 
-  const finalOrder = isPresent(orderBy) ? orderBy : undefined
+  const finalOrder = isPresent(orderBy) ? buildOrder(orderBy) : undefined
   return {
     listConfig: {
       select: select.length ? select : undefined,
