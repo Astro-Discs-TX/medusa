@@ -111,15 +111,6 @@
  *     $ref: "#/components/responses/500_error"
  * x-workflow: uploadFilesWorkflow
  * x-events: []
- * parameters:
- *   - name: with_deleted
- *     in: query
- *     description: Whether to include deleted records in the result.
- *     required: false
- *     schema:
- *       type: boolean
- *       title: with_deleted
- *       description: Whether to include deleted records in the result.
  * 
 */
 

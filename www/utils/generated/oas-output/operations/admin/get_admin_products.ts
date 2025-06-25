@@ -981,47 +981,10 @@
  *           items:
  *             type: object
  *           title: $or
- *         ean:
- *           oneOf:
- *             - type: string
- *               title: ean
- *               description: The variant's ean.
- *             - type: array
- *               description: The variant's ean.
- *               items:
- *                 type: string
- *                 title: ean
- *                 description: The ean's details.
- *         upc:
- *           oneOf:
- *             - type: string
- *               title: upc
- *               description: The variant's upc.
- *             - type: array
- *               description: The variant's upc.
- *               items:
- *                 type: string
- *                 title: upc
- *                 description: The upc's details.
- *         barcode:
- *           oneOf:
- *             - type: string
- *               title: barcode
- *               description: The variant's barcode.
- *             - type: array
- *               description: The variant's barcode.
- *               items:
- *                 type: string
- *                 title: barcode
- *                 description: The barcode's details.
- *   - name: with_deleted
- *     in: query
- *     description: Whether to include deleted records in the result.
- *     required: false
- *     schema:
- *       type: boolean
- *       title: with_deleted
- *       description: Whether to include deleted records in the result.
+ *         q:
+ *           type: string
+ *           title: q
+ *           description: The variant's q.
  * security:
  *   - api_token: []
  *   - cookie_auth: []
