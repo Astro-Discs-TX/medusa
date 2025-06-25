@@ -101,8 +101,8 @@
     "payload": "```ts\n{\n  id, // The ID of the order\n}\n```",
     "description": "Emitted when an order is placed, or when a draft order is converted to an\norder.",
     "workflows": [
-      "convertDraftOrderWorkflow",
-      "completeCartWorkflow"
+      "completeCartWorkflow",
+      "convertDraftOrderWorkflow"
     ],
     "deprecated": false
   },
