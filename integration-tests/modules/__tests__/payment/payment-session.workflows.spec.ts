@@ -219,7 +219,7 @@ medusaIntegrationTestRunner({
             expect(sessions).toHaveLength(0)
           })
 
-          it.only("should not delete account holder if it exists before creating payment sessions", async () => {
+          it("should not delete account holder if it exists before creating payment sessions", async () => {
             await createPaymentSessionsWorkflow(appContainer).run({
               input: {
                 payment_collection_id: paymentCollection.id,
