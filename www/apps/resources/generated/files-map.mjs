@@ -18848,6 +18848,10 @@ export const filesMap = [
     "pathname": "/references/types/CommonTypes/interfaces/types.CommonTypes.ConfigModule"
   },
   {
+    "filePath": "/www/apps/resources/references/types/CommonTypes/interfaces/types.CommonTypes.CookieOptions/page.mdx",
+    "pathname": "/references/types/CommonTypes/interfaces/types.CommonTypes.CookieOptions"
+  },
+  {
     "filePath": "/www/apps/resources/references/types/CommonTypes/interfaces/types.CommonTypes.DateComparisonOperator/page.mdx",
     "pathname": "/references/types/CommonTypes/interfaces/types.CommonTypes.DateComparisonOperator"
   },
@@ -21984,6 +21988,10 @@ export const filesMap = [
     "pathname": "/references/types/ModulesSdkTypes/types/types.ModulesSdkTypes.InternalModuleDeclaration"
   },
   {
+    "filePath": "/www/apps/resources/references/types/ModulesSdkTypes/types/types.ModulesSdkTypes.InternalRemoteQueryFilters/page.mdx",
+    "pathname": "/references/types/ModulesSdkTypes/types/types.ModulesSdkTypes.InternalRemoteQueryFilters"
+  },
+  {
     "filePath": "/www/apps/resources/references/types/ModulesSdkTypes/types/types.ModulesSdkTypes.LinkDefinition/page.mdx",
     "pathname": "/references/types/ModulesSdkTypes/types/types.ModulesSdkTypes.LinkDefinition"
   },
@@ -24200,6 +24208,10 @@ export const filesMap = [
     "pathname": "/references/types/types/types.ReadonlyPrimary"
   },
   {
+    "filePath": "/www/apps/resources/references/types/types/types.RemoteQueryFilterOperators/page.mdx",
+    "pathname": "/references/types/types/types.RemoteQueryFilterOperators"
+  },
+  {
     "filePath": "/www/apps/resources/references/types/types/types.RemoveFulfillmentShippingOptionRulesWorkflowDTO/page.mdx",
     "pathname": "/references/types/types/types.RemoveFulfillmentShippingOptionRulesWorkflowDTO"
   },
@@ -24980,6 +24992,10 @@ export const filesMap = [
     "pathname": "/references/workflows/DistributedTransaction/methods/workflows.DistributedTransaction.setTemporaryData"
   },
   {
+    "filePath": "/www/apps/resources/references/workflows/IDistributedTransactionStorage/methods/workflows.IDistributedTransactionStorage.clearExpiredExecutions/page.mdx",
+    "pathname": "/references/workflows/IDistributedTransactionStorage/methods/workflows.IDistributedTransactionStorage.clearExpiredExecutions"
+  },
+  {
     "filePath": "/www/apps/resources/references/workflows/IDistributedTransactionStorage/methods/workflows.IDistributedTransactionStorage.clearRetry/page.mdx",
     "pathname": "/references/workflows/IDistributedTransactionStorage/methods/workflows.IDistributedTransactionStorage.clearRetry"
   },
@@ -24994,10 +25010,6 @@ export const filesMap = [
   {
     "filePath": "/www/apps/resources/references/workflows/IDistributedTransactionStorage/methods/workflows.IDistributedTransactionStorage.get/page.mdx",
     "pathname": "/references/workflows/IDistributedTransactionStorage/methods/workflows.IDistributedTransactionStorage.get"
-  },
-  {
-    "filePath": "/www/apps/resources/references/workflows/IDistributedTransactionStorage/methods/workflows.IDistributedTransactionStorage.list/page.mdx",
-    "pathname": "/references/workflows/IDistributedTransactionStorage/methods/workflows.IDistributedTransactionStorage.list"
   },
   {
     "filePath": "/www/apps/resources/references/workflows/IDistributedTransactionStorage/methods/workflows.IDistributedTransactionStorage.save/page.mdx",
