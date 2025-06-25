@@ -66,7 +66,7 @@
  *   is_tax_inclusive:
  *     type: boolean
  *     title: is_tax_inclusive
- *     description: The promotion's is tax inclusive.
+ *     description: Whether the promotion is tax inclusive. If enabled, the promotion is applied after tax is calculated.
  * 
 */
 

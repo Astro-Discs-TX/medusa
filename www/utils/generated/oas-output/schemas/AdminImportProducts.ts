@@ -1,7 +1,7 @@
 /**
  * @schema AdminImportProducts
  * type: object
- * description: SUMMARY
+ * description: The details of the product's import file.
  * x-schemaName: AdminImportProducts
  * required:
  *   - file_key
@@ -13,23 +13,25 @@
  *   file_key:
  *     type: string
  *     title: file_key
- *     description: The product's file key.
+ *     description: The name of the file as stored in the configured File Module Provider.
  *   originalname:
  *     type: string
  *     title: originalname
- *     description: The product's originalname.
+ *     description: The file's original name.
  *   extension:
  *     type: string
  *     title: extension
- *     description: The product's extension.
+ *     description: The file's extension.
+ *     example: csv
  *   size:
  *     type: number
  *     title: size
- *     description: The product's size.
+ *     description: The file's size in bytes.
  *   mime_type:
  *     type: string
  *     title: mime_type
- *     description: The product's mime type.
+ *     description: The file's mime type.
+ *     example: text/csv
  * 
 */
 

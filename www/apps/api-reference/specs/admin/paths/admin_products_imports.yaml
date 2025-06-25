@@ -1,17 +1,11 @@
 post:
   operationId: PostProductsImports
-  summary: Create Product
-  description: Create a product.
+  summary: Create Product Import
+  description: >-
+    Create a new product import process. The products aren't imported until the
+    import is confirmed with the `/admin/products/:transaction-id/imports` API
+    route.
   x-authenticated: true
-  parameters:
-    - name: with_deleted
-      in: query
-      description: Whether to include deleted records in the result.
-      required: false
-      schema:
-        type: boolean
-        title: with_deleted
-        description: Whether to include deleted records in the result.
   security:
     - api_token: []
     - cookie_auth: []

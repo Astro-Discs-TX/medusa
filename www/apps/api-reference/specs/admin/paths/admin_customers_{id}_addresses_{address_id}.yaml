@@ -44,14 +44,6 @@ get:
           documentation.
         externalDocs:
           url: '#select-fields-and-relations'
-    - name: with_deleted
-      in: query
-      description: Whether to include deleted records in the result.
-      required: false
-      schema:
-        type: boolean
-        title: with_deleted
-        description: Whether to include deleted records in the result.
   security:
     - api_token: []
     - cookie_auth: []
@@ -133,14 +125,6 @@ post:
           documentation.
         externalDocs:
           url: '#select-fields-and-relations'
-    - name: with_deleted
-      in: query
-      description: Whether to include deleted records in the result.
-      required: false
-      schema:
-        type: boolean
-        title: with_deleted
-        description: Whether to include deleted records in the result.
   security:
     - api_token: []
     - cookie_auth: []
@@ -317,14 +301,6 @@ delete:
           documentation.
         externalDocs:
           url: '#select-fields-and-relations'
-    - name: with_deleted
-      in: query
-      description: Whether to include deleted records in the result.
-      required: false
-      schema:
-        type: boolean
-        title: with_deleted
-        description: Whether to include deleted records in the result.
   security:
     - api_token: []
     - cookie_auth: []

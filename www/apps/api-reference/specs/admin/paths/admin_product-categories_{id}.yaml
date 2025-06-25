@@ -78,14 +78,6 @@ get:
           `*category_children` to retreieve the fields of all child categories,
           or select specific fields to make the response size smaller. For
           example, `fields=category_children.id,category_children.name`.
-    - name: with_deleted
-      in: query
-      description: Whether to include deleted records in the result.
-      required: false
-      schema:
-        type: boolean
-        title: with_deleted
-        description: Whether to include deleted records in the result.
   security:
     - api_token: []
     - cookie_auth: []
@@ -158,14 +150,6 @@ post:
           documentation.
         externalDocs:
           url: '#select-fields-and-relations'
-    - name: with_deleted
-      in: query
-      description: Whether to include deleted records in the result.
-      required: false
-      schema:
-        type: boolean
-        title: with_deleted
-        description: Whether to include deleted records in the result.
   security:
     - api_token: []
     - cookie_auth: []
@@ -265,14 +249,6 @@ delete:
       required: true
       schema:
         type: string
-    - name: with_deleted
-      in: query
-      description: Whether to include deleted records in the result.
-      required: false
-      schema:
-        type: boolean
-        title: with_deleted
-        description: Whether to include deleted records in the result.
   security:
     - api_token: []
     - cookie_auth: []

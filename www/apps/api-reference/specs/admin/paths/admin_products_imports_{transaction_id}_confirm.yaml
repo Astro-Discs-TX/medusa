@@ -1,7 +1,9 @@
 post:
   operationId: PostProductsImportsTransaction_idConfirm
-  summary: Add Confirm to Product
-  description: Add a Confirm to a product
+  summary: Confirm Product Import
+  description: >-
+    Confirm that a created product import should start importing the products
+    into Medusa.
   x-authenticated: true
   parameters:
     - name: transaction_id
@@ -10,19 +12,16 @@ post:
       required: true
       schema:
         type: string
-    - name: with_deleted
-      in: query
-      description: Whether to include deleted records in the result.
-      required: false
-      schema:
-        type: boolean
-        title: with_deleted
-        description: Whether to include deleted records in the result.
   security:
     - api_token: []
     - cookie_auth: []
     - jwt_token: []
   x-codeSamples:
+    - lang: JavaScript
+      label: JS SDK
+      source:
+        $ref: >-
+          ../code_samples/JavaScript/admin_products_imports_{transaction_id}_confirm/post.js
     - lang: Shell
       label: cURL
       source:
