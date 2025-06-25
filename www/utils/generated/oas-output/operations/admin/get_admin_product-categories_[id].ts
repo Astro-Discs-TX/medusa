@@ -47,6 +47,14 @@
  *       description: Whether to retrieve a list of child categories. If you enable this, add to the `fields` query parameter `category_children` to set the children of a category in this field. You can either
  *         pass `*category_children` to retreieve the fields of all child categories, or select specific fields to make the response size smaller. For example,
  *         `fields=category_children.id,category_children.name`.
+ *   - name: with_deleted
+ *     in: query
+ *     description: Whether to include deleted records in the result.
+ *     required: false
+ *     schema:
+ *       type: boolean
+ *       title: with_deleted
+ *       description: Whether to include deleted records in the result.
  * security:
  *   - api_token: []
  *   - cookie_auth: []

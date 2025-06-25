@@ -97,6 +97,15 @@
  *       ```
  *     description: Emitted when products are deleted.
  *     deprecated: false
+ * parameters:
+ *   - name: with_deleted
+ *     in: query
+ *     description: Whether to include deleted records in the result.
+ *     required: false
+ *     schema:
+ *       type: boolean
+ *       title: with_deleted
+ *       description: Whether to include deleted records in the result.
  * 
 */
 

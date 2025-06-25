@@ -844,6 +844,14 @@ paths:
             description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
             externalDocs:
               url: '#select-fields-and-relations'
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       requestBody:
         content:
           application/json:
@@ -953,6 +961,14 @@ paths:
             description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
             externalDocs:
               url: '#select-fields-and-relations'
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       x-codeSamples:
         - lang: JavaScript
           label: JS SDK
@@ -1031,6 +1047,14 @@ paths:
             description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
             externalDocs:
               url: '#select-fields-and-relations'
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       requestBody:
         content:
           application/json:
@@ -1156,6 +1180,14 @@ paths:
             description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
             externalDocs:
               url: '#select-fields-and-relations'
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       x-codeSamples:
         - lang: JavaScript
           label: JS SDK
@@ -1309,6 +1341,14 @@ paths:
             description: Comma-separated fields that should be included in the returned data. If a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. Without prefix it will replace the entire default fields.
             externalDocs:
               url: '#select-fields-and-relations'
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       x-codeSamples:
         - lang: JavaScript
           label: JS SDK
@@ -1556,6 +1596,14 @@ paths:
             description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
             externalDocs:
               url: '#select-fields-and-relations'
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       requestBody:
         content:
           application/json:
@@ -1670,6 +1718,14 @@ paths:
             description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
             externalDocs:
               url: '#select-fields-and-relations'
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       requestBody:
         content:
           application/json:
@@ -1785,6 +1841,14 @@ paths:
             description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
             externalDocs:
               url: '#select-fields-and-relations'
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       x-codeSamples:
         - lang: JavaScript
           label: JS SDK
@@ -1897,6 +1961,14 @@ paths:
             description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
             externalDocs:
               url: '#select-fields-and-relations'
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       requestBody:
         content:
           application/json:
@@ -1967,6 +2039,14 @@ paths:
             description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
             externalDocs:
               url: '#select-fields-and-relations'
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       x-codeSamples:
         - lang: Shell
           label: cURL
@@ -2042,6 +2122,14 @@ paths:
             description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
             externalDocs:
               url: '#select-fields-and-relations'
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       requestBody:
         content:
           application/json:
@@ -2237,6 +2325,14 @@ paths:
             description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
             externalDocs:
               url: '#select-fields-and-relations'
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       x-codeSamples:
         - lang: Shell
           label: cURL
@@ -2840,6 +2936,14 @@ paths:
             items:
               type: object
             title: $or
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       x-codeSamples:
         - lang: JavaScript
           label: JS SDK
@@ -2951,6 +3055,14 @@ paths:
             description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
             externalDocs:
               url: '#select-fields-and-relations'
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       x-codeSamples:
         - lang: JavaScript
           label: JS SDK
@@ -3094,6 +3206,14 @@ paths:
             items:
               type: object
             title: $or
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       x-codeSamples:
         - lang: Shell
           label: cURL
@@ -3152,6 +3272,14 @@ paths:
             description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
             externalDocs:
               url: '#select-fields-and-relations'
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       x-codeSamples:
         - lang: Shell
           label: cURL
@@ -3207,6 +3335,14 @@ paths:
             description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields. This API route restricts the fields that can be selected. Learn how to override the retrievable fields in the [Retrieve Custom Links](https://docs.medusajs.com/learn/fundamentals/api-routes/retrieve-custom-links) documentation.
             externalDocs:
               url: '#select-fields-and-relations'
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       requestBody:
         content:
           application/json:
@@ -3325,6 +3461,14 @@ paths:
             description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields. This API route restricts the fields that can be selected. Learn how to override the retrievable fields in the [Retrieve Custom Links](https://docs.medusajs.com/learn/fundamentals/api-routes/retrieve-custom-links) documentation.
             externalDocs:
               url: '#select-fields-and-relations'
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       security:
         - cookie_auth: []
         - jwt_token: []
@@ -3404,6 +3548,14 @@ paths:
             description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields. This API route restricts the fields that can be selected. Learn how to override the retrievable fields in the [Retrieve Custom Links](https://docs.medusajs.com/learn/fundamentals/api-routes/retrieve-custom-links) documentation.
             externalDocs:
               url: '#select-fields-and-relations'
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       security:
         - cookie_auth: []
         - jwt_token: []
@@ -3591,6 +3743,14 @@ paths:
             type: string
             title: q
             description: Search term to filter the address's searchable properties.
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       security:
         - cookie_auth: []
         - jwt_token: []
@@ -3671,6 +3831,14 @@ paths:
             description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields. This API route restricts the fields that can be selected. Learn how to override the retrievable fields in the [Retrieve Custom Links](https://docs.medusajs.com/learn/fundamentals/api-routes/retrieve-custom-links) documentation.
             externalDocs:
               url: '#select-fields-and-relations'
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       security:
         - cookie_auth: []
         - jwt_token: []
@@ -3840,6 +4008,14 @@ paths:
             description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields. This API route restricts the fields that can be selected. Learn how to override the retrievable fields in the [Retrieve Custom Links](https://docs.medusajs.com/learn/fundamentals/api-routes/retrieve-custom-links) documentation.
             externalDocs:
               url: '#select-fields-and-relations'
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       security:
         - cookie_auth: []
         - jwt_token: []
@@ -3928,6 +4104,14 @@ paths:
             description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields. This API route restricts the fields that can be selected. Learn how to override the retrievable fields in the [Retrieve Custom Links](https://docs.medusajs.com/learn/fundamentals/api-routes/retrieve-custom-links) documentation.
             externalDocs:
               url: '#select-fields-and-relations'
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       security:
         - cookie_auth: []
         - jwt_token: []
@@ -4091,6 +4275,14 @@ paths:
             description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields. This API route restricts the fields that can be selected. Learn how to override the retrievable fields in the [Retrieve Custom Links](https://docs.medusajs.com/learn/fundamentals/api-routes/retrieve-custom-links) documentation.
             externalDocs:
               url: '#select-fields-and-relations'
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       security:
         - cookie_auth: []
         - jwt_token: []
@@ -4787,6 +4979,14 @@ paths:
                     - completed
                     - draft
                     - archived
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       x-codeSamples:
         - lang: JavaScript
           label: JS SDK
@@ -4900,6 +5100,14 @@ paths:
             description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
             externalDocs:
               url: '#select-fields-and-relations'
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       x-codeSamples:
         - lang: JavaScript
           label: JS SDK
@@ -4985,6 +5193,14 @@ paths:
             description: Comma-separated fields that should be included in the returned data. If a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. Without prefix it will replace the entire default fields.
             externalDocs:
               url: '#select-fields-and-relations'
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       requestBody:
         content:
           application/json:
@@ -5087,6 +5303,14 @@ paths:
             description: Comma-separated fields that should be included in the returned data. If a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. Without prefix it will replace the entire default fields.
             externalDocs:
               url: '#select-fields-and-relations'
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       x-codeSamples:
         - lang: JavaScript
           label: JS SDK
@@ -5181,6 +5405,14 @@ paths:
             description: Comma-separated fields that should be included in the returned data. If a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. Without prefix it will replace the entire default fields.
             externalDocs:
               url: '#select-fields-and-relations'
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       requestBody:
         content:
           application/json:
@@ -5283,6 +5515,14 @@ paths:
             description: Comma-separated fields that should be included in the returned data. If a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. Without prefix it will replace the entire default fields.
             externalDocs:
               url: '#select-fields-and-relations'
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       requestBody:
         content:
           application/json:
@@ -5378,6 +5618,14 @@ paths:
             description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
             externalDocs:
               url: '#select-fields-and-relations'
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       requestBody:
         content:
           application/json:
@@ -5480,6 +5728,14 @@ paths:
             description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
             externalDocs:
               url: '#select-fields-and-relations'
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       requestBody:
         content:
           application/json:
@@ -5582,6 +5838,14 @@ paths:
             type: string
             title: region_id
             description: Filter by a region ID.
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       x-codeSamples:
         - lang: JavaScript
           label: JS SDK
@@ -6291,6 +6555,14 @@ paths:
                   type: string
                   title: name
                   description: A product category name.
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       x-codeSamples:
         - lang: JavaScript
           label: JS SDK
@@ -6389,6 +6661,14 @@ paths:
             type: boolean
             title: include_descendants_tree
             description: Whether to retrieve a list of child categories. If you enable this, add to the `fields` query parameter `category_children` to set the children of a category in this field. You can either pass `*category_children` to retreieve the fields of all child categories, or select specific fields to make the response size smaller. For example, `fields=category_children.id,category_children.name`.
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       x-codeSamples:
         - lang: JavaScript
           label: JS SDK
@@ -7013,6 +7293,14 @@ paths:
                 type: boolean
                 title: $exists
                 description: Filter by whether a value for this parameter exists (not `null`).
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       x-codeSamples:
         - lang: Shell
           label: cURL
@@ -7074,6 +7362,14 @@ paths:
             description: Comma-separated fields that should be included in the returned data. If a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. Without prefix it will replace the entire default fields.
             externalDocs:
               url: '#select-fields-and-relations'
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       x-codeSamples:
         - lang: Shell
           label: cURL
@@ -7677,6 +7973,14 @@ paths:
                 type: boolean
                 title: $exists
                 description: Filter by whether a value for this parameter exists (not `null`).
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       x-codeSamples:
         - lang: Shell
           label: cURL
@@ -7738,6 +8042,14 @@ paths:
             description: Comma-separated fields that should be included in the returned data. If a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. Without prefix it will replace the entire default fields.
             externalDocs:
               url: '#select-fields-and-relations'
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       x-codeSamples:
         - lang: Shell
           label: cURL
@@ -8497,6 +8809,14 @@ paths:
             type: string
             title: cart_id
             description: The product's cart id.
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       x-codeSamples:
         - lang: JavaScript
           label: JS SDK
@@ -8677,6 +8997,14 @@ paths:
             description: The field to sort the data by. By default, the sort order is ascending. To change the order to descending, prefix the field name with `-`.
             externalDocs:
               url: '#pagination'
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       x-codeSamples:
         - lang: JavaScript
           label: JS SDK
@@ -8851,6 +9179,14 @@ paths:
             items:
               type: object
             title: $or
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       x-codeSamples:
         - lang: JavaScript
           label: JS SDK
@@ -8959,6 +9295,14 @@ paths:
             description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
             externalDocs:
               url: '#select-fields-and-relations'
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       x-codeSamples:
         - lang: JavaScript
           label: JS SDK
@@ -9064,6 +9408,14 @@ paths:
             type: string
             title: order
             description: The field to sort the data by. By default, the sort order is ascending. To change the order to descending, prefix the field name with `-`.
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       x-codeSamples:
         - lang: Shell
           label: cURL
@@ -9151,6 +9503,14 @@ paths:
             description: Comma-separated fields that should be included in the returned data. if a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. without prefix it will replace the entire default fields.
             externalDocs:
               url: '#select-fields-and-relations'
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       x-codeSamples:
         - lang: Shell
           label: cURL
@@ -9193,6 +9553,14 @@ paths:
             type: string
             externalDocs:
               url: https://docs.medusajs.com/api/store#publishable-api-key
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       requestBody:
         content:
           application/json:
@@ -9361,6 +9729,14 @@ paths:
             type: boolean
             title: is_return
             description: Whether the shipping option can be used for returns.
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       x-codeSamples:
         - lang: JavaScript
           label: JS SDK
@@ -9447,6 +9823,14 @@ paths:
             description: Comma-separated fields that should be included in the returned data. If a field is prefixed with `+` it will be added to the default fields, using `-` will remove it from the default fields. Without prefix it will replace the entire default fields.
             externalDocs:
               url: '#select-fields-and-relations'
+        - name: with_deleted
+          in: query
+          description: Whether to include deleted records in the result.
+          required: false
+          schema:
+            type: boolean
+            title: with_deleted
+            description: Whether to include deleted records in the result.
       requestBody:
         content:
           application/json:
@@ -13539,6 +13923,7 @@ components:
         - original_shipping_total
         - original_shipping_subtotal
         - original_shipping_tax_total
+        - credit_line_total
       properties:
         payment_collections:
           type: array
@@ -13747,6 +14132,10 @@ components:
           description: The draft order's credit lines.
           items:
             $ref: '#/components/schemas/OrderCreditLine'
+        credit_line_total:
+          type: number
+          title: credit_line_total
+          description: The draft order's credit line total.
     AdminDraftOrderListResponse:
       type: object
       description: The list of draft orders with pagination fields.
@@ -13822,6 +14211,7 @@ components:
         - original_shipping_total
         - original_shipping_subtotal
         - original_shipping_tax_total
+        - credit_line_total
       properties:
         return_requested_total:
           type: number
@@ -14409,6 +14799,10 @@ components:
           description: The order preview's credit lines.
           items:
             $ref: '#/components/schemas/OrderCreditLine'
+        credit_line_total:
+          type: number
+          title: credit_line_total
+          description: The draft order preview's credit line total.
     AdminDraftOrderPreviewResponse:
       type: object
       description: The details of the preview on the draft order.
@@ -15393,6 +15787,37 @@ components:
               type: number
               title: toUpdate
               description: The number of products that will be updated by this import.
+    AdminImportProducts:
+      type: object
+      description: SUMMARY
+      x-schemaName: AdminImportProducts
+      required:
+        - file_key
+        - originalname
+        - extension
+        - size
+        - mime_type
+      properties:
+        file_key:
+          type: string
+          title: file_key
+          description: The product's file key.
+        originalname:
+          type: string
+          title: originalname
+          description: The product's originalname.
+        extension:
+          type: string
+          title: extension
+          description: The product's extension.
+        size:
+          type: number
+          title: size
+          description: The product's size.
+        mime_type:
+          type: string
+          title: mime_type
+          description: The product's mime type.
     AdminInventoryItem:
       type: object
       description: The inventory item's details.
@@ -15759,6 +16184,7 @@ components:
         - original_shipping_total
         - original_shipping_subtotal
         - original_shipping_tax_total
+        - credit_line_total
       properties:
         payment_collections:
           type: array
@@ -15966,6 +16392,10 @@ components:
           description: The order's credit lines.
           items:
             $ref: '#/components/schemas/OrderCreditLine'
+        credit_line_total:
+          type: number
+          title: credit_line_total
+          description: The order's credit line total.
     AdminOrderAddress:
       type: object
       description: An order address.
@@ -16697,6 +17127,7 @@ components:
         - original_shipping_total
         - original_shipping_subtotal
         - original_shipping_tax_total
+        - credit_line_total
       properties:
         return_requested_total:
           type: number
@@ -17284,6 +17715,10 @@ components:
           description: The order preview's credit lines.
           items:
             $ref: '#/components/schemas/OrderCreditLine'
+        credit_line_total:
+          type: number
+          title: credit_line_total
+          description: The order preview's credit line total.
     AdminOrderPreviewResponse:
       type: object
       description: The preview of an order.
@@ -19988,6 +20423,10 @@ components:
             - draft
             - active
             - inactive
+        is_tax_inclusive:
+          type: boolean
+          title: is_tax_inclusive
+          description: The promotion's is tax inclusive.
     AdminPromotionResponse:
       type: object
       description: The promotion's details.
@@ -21043,7 +21482,7 @@ components:
           $ref: '#/components/schemas/AdminShippingOption'
     AdminShippingOptionRule:
       type: object
-      description: The shipping option rule's details.
+      description: The rule's rules.
       x-schemaName: AdminShippingOptionRule
       required:
         - id
@@ -21058,12 +21497,11 @@ components:
         id:
           type: string
           title: id
-          description: The shipping option rule's ID.
+          description: The rule's ID.
         attribute:
           type: string
           title: attribute
-          description: The shipping option rule's attribute.
-          example: is_return
+          description: The rule's attribute.
         operator:
           type: string
           description: The rule's operator.
@@ -21077,27 +21515,35 @@ components:
             - gte
             - nin
         value:
-          type: string
-          title: value
+          oneOf:
+            - type: string
+              title: value
+              description: The rule's value.
+            - type: array
+              description: The rule's value.
+              items:
+                type: string
+                title: value
+                description: The value's details.
         shipping_option_id:
           type: string
           title: shipping_option_id
-          description: The ID of the shipping option this rule is for.
+          description: The rule's shipping option id.
         created_at:
           type: string
           format: date-time
           title: created_at
-          description: The date the shipping option rule was created.
+          description: The rule's created at.
         updated_at:
           type: string
           format: date-time
           title: updated_at
-          description: The date the shipping option rule was updated.
+          description: The rule's updated at.
         deleted_at:
           type: string
           format: date-time
           title: deleted_at
-          description: The date the shipping option rule was deleted.
+          description: The rule's deleted at.
     AdminShippingOptionType:
       type: object
       description: The shipping option's details.
@@ -23065,6 +23511,69 @@ components:
           type: number
           title: required_quantity
           description: The number of units a single quantity is equivalent to. For example, if a customer orders one quantity of the variant, Medusa checks the availability of the quantity multiplied by the value set for `required_quantity`. When the customer orders the quantity, Medusa reserves the ordered quantity multiplied by the value set for `required_quantity`.
+    AdminUploadPreSignedUrl:
+      type: object
+      description: SUMMARY
+      x-schemaName: AdminUploadPreSignedUrl
+      required:
+        - originalname
+        - size
+        - mime_type
+      properties:
+        originalname:
+          type: string
+          title: originalname
+          description: The upload's originalname.
+        size:
+          type: number
+          title: size
+          description: The upload's size.
+        mime_type:
+          type: string
+          title: mime_type
+          description: The upload's mime type.
+        access:
+          type: string
+          description: The upload's access.
+          enum:
+            - public
+            - private
+    AdminUploadPreSignedUrlResponse:
+      type: object
+      description: SUMMARY
+      x-schemaName: AdminUploadPreSignedUrlResponse
+      required:
+        - url
+        - filename
+        - originalname
+        - mime_type
+        - extension
+        - size
+      properties:
+        url:
+          type: string
+          title: url
+          description: The upload's url.
+        filename:
+          type: string
+          title: filename
+          description: The upload's filename.
+        originalname:
+          type: string
+          title: originalname
+          description: The upload's originalname.
+        mime_type:
+          type: string
+          title: mime_type
+          description: The upload's mime type.
+        extension:
+          type: string
+          title: extension
+          description: The upload's extension.
+        size:
+          type: number
+          title: size
+          description: The upload's size.
     AdminUpsertStockLocationAddress:
       type: object
       description: The details of the stock location address to create.
@@ -23285,14 +23794,14 @@ components:
           description: The date the workflow execution was deleted.
     AdminWorkflowExecutionExecution:
       type: object
-      description: The workflow execution's steps details.
+      description: The workflow execution's execution.
       x-schemaName: AdminWorkflowExecutionExecution
       required:
         - steps
       properties:
         steps:
           type: object
-          description: The execution's steps. Each object key is a step ID, and the value is the object whose properties are shown below.
+          description: The execution's steps.
           required:
             - id
             - invoke
@@ -23309,7 +23818,7 @@ components:
                 description: The step's ID.
               invoke:
                 type: object
-                description: The state of the step's invokation function.
+                description: The step's invoke.
                 x-schemaName: WorkflowExecutionFn
                 required:
                   - state
@@ -23317,7 +23826,7 @@ components:
                 properties:
                   state:
                     type: string
-                    description: The invokation step's state.
+                    description: The invoke's state.
                     enum:
                       - failed
                       - not_started
@@ -23331,7 +23840,7 @@ components:
                       - timeout
                   status:
                     type: string
-                    description: The invokation step's state.
+                    description: The invoke's status.
                     enum:
                       - idle
                       - ok
@@ -23340,61 +23849,60 @@ components:
                       - permanent_failure
               definition:
                 type: object
-                description: The step's definition details.
+                description: The step's definition.
                 x-schemaName: WorkflowExecutionDefinition
                 properties:
                   async:
                     type: boolean
                     title: async
-                    description: Whether the step is async.
+                    description: The definition's async.
                   compensateAsync:
                     type: boolean
                     title: compensateAsync
-                    description: Whether the compensation function of the step is async.
+                    description: The definition's compensateasync.
                   noCompensation:
                     type: boolean
                     title: noCompensation
-                    description: Whether the step doesn't have a compensation function.
+                    description: The definition's nocompensation.
                   continueOnPermanentFailure:
                     type: boolean
                     title: continueOnPermanentFailure
-                    description: Whether the workflow should continue executing even if its status is changed to failed.
+                    description: The definition's continueonpermanentfailure.
                   skipOnPermanentFailure:
                     oneOf:
                       - type: string
                         title: skipOnPermanentFailure
-                        description: The ID of the step to skip to in case of a permanent failure.
+                        description: The definition's skiponpermanentfailure.
                       - type: boolean
                         title: skipOnPermanentFailure
-                        description: Whether the workflow should skip subsequent steps in case of a permanent failure.
+                        description: The definition's skiponpermanentfailure.
                   maxRetries:
                     type: number
                     title: maxRetries
-                    description: The maximum number of times to retry the step.
+                    description: The definition's maxretries.
                   noWait:
                     type: boolean
                     title: noWait
-                    description: Whether the workflow shouldn't wait for the step to finish before moving to the next step.
-                    default: false
+                    description: The definition's nowait.
                   retryInterval:
                     type: number
                     title: retryInterval
-                    description: The interval in seconds between retry attempts when the step fails.
+                    description: The definition's retryinterval.
                   retryIntervalAwaiting:
                     type: number
                     title: retryIntervalAwaiting
-                    description: The interval in seconds to retry a step even if its status is `waiting_response`.
+                    description: The definition's retryintervalawaiting.
                   saveResponse:
                     type: boolean
                     title: saveResponse
-                    description: Whether the step's response is stored.
+                    description: The definition's saveresponse.
                   timeout:
                     type: number
                     title: timeout
-                    description: The maximum time in seconds to wait for this step to complete. If the step exceeds this time, the step's state is changed to `timeout`, but the step continues executing.
+                    description: The definition's timeout.
               compensate:
                 type: object
-                description: The state of the step's compensation function.
+                description: The step's compensate.
                 x-schemaName: WorkflowExecutionFn
                 required:
                   - state
@@ -23402,7 +23910,7 @@ components:
                 properties:
                   state:
                     type: string
-                    description: The compensation function's state.
+                    description: The compensate's state.
                     enum:
                       - failed
                       - not_started
@@ -23416,7 +23924,7 @@ components:
                       - timeout
                   status:
                     type: string
-                    description: The compensation function's status.
+                    description: The compensate's status.
                     enum:
                       - idle
                       - ok
@@ -23426,11 +23934,11 @@ components:
               depth:
                 type: number
                 title: depth
-                description: The step's depth in the workflow's execution.
+                description: The step's depth.
               startedAt:
                 type: number
                 title: startedAt
-                description: The timestamp the step started executing.
+                description: The step's startedat.
     AdminWorkflowExecutionResponse:
       type: object
       description: The workflow execution's details.
@@ -24463,6 +24971,7 @@ components:
         - original_shipping_total
         - original_shipping_subtotal
         - original_shipping_tax_total
+        - credit_line_total
       properties:
         payment_collections:
           type: array
@@ -24659,6 +25168,10 @@ components:
           type: string
           title: status
           description: The order's status.
+        credit_line_total:
+          type: number
+          title: credit_line_total
+          description: The order's credit line total.
     BaseOrderAddress:
       type: object
       description: An order address.
@@ -27289,6 +27802,7 @@ components:
         - discount_subtotal
         - discount_total
         - discount_tax_total
+        - credit_line_total
         - gift_card_total
         - gift_card_tax_total
         - shipping_total
@@ -27564,6 +28078,10 @@ components:
           format: date-time
           title: deleted_at
           description: The date the order was deleted.
+        credit_line_total:
+          type: number
+          title: credit_line_total
+          description: The order's credit line total.
     OrderAddress:
       type: object
       description: The address's details.
@@ -31000,6 +31518,7 @@ components:
         - original_shipping_total
         - original_shipping_subtotal
         - original_shipping_tax_total
+        - credit_line_total
       properties:
         id:
           type: string
@@ -31195,6 +31714,10 @@ components:
           type: string
           title: status
           description: The order's status.
+        credit_line_total:
+          type: number
+          title: credit_line_total
+          description: The order's credit line total.
     StoreOrderAddress:
       type: object
       description: An order address
@@ -38005,10 +38528,10 @@ components:
         - deleted_at
         - sku
         - barcode
+        - manage_inventory
+        - allow_backorder
         - ean
         - upc
-        - allow_backorder
-        - manage_inventory
     StoreRegion:
       type: object
       description: The region's details.

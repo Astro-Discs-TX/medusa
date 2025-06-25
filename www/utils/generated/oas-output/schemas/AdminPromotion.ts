@@ -63,6 +63,10 @@
  *       - draft
  *       - active
  *       - inactive
+ *   is_tax_inclusive:
+ *     type: boolean
+ *     title: is_tax_inclusive
+ *     description: The promotion's is tax inclusive.
  * 
 */
 
