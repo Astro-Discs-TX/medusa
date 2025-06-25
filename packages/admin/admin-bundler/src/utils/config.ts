@@ -79,8 +79,10 @@ export async function getViteConfig(
 }
 
 function getHmrConfig(hmrPort: number): HmrOptions | boolean {
-  const options = {} as HmrOptions
-  options.port = hmrPort
+  const options: HmrOptions = {
+    port: hmrPort,
+  }
+
   if (process.env.HMR_PROTOCOL) {
     options.protocol = process.env.HMR_PROTOCOL
   }
@@ -90,5 +92,6 @@ function getHmrConfig(hmrPort: number): HmrOptions | boolean {
   if (process.env.HMR_CLIENT_PORT) {
     options.clientPort = parseInt(process.env.HMR_CLIENT_PORT)
   }
+
   return options
 }
