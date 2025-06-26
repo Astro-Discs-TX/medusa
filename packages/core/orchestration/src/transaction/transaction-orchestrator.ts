@@ -883,7 +883,7 @@ export class TransactionOrchestrator extends EventEmitter {
         }
       }
 
-      awaitingSteps = nextSteps.remaining
+      awaitingSteps = execution.length
       if (awaitingSteps > 0) {
         await promiseAll(execution)
       }
