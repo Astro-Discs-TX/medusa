@@ -33010,18 +33010,22 @@ Cloud offers a managed file storage solution with AWS S3 for your Medusa applica
    - Choose "Standard" for storage class
    - Confirm by clicking "Create bucket"
 3. Configure public access:
+   - Make sure you have a [domain configured in your Cloudflare account](https://developers.cloudflare.com/dns/manage-dns-records/how-to/create-dns-records/).
    - On your bucket's dashboard, click on the Settings tab.
-   - Scroll down to the Public Access section, and click on "Allow Access" in the "R2.dev subdomain" card.
-   - Type 'allow' to confirm
-   - Copy the Public R2.dev Bucket URL for your `S3_FILE_URL`
+   - In the General Section look for Custom Domains (recommended for production use)
+   - Click on the Add button to add your domain name.
+   - Enter the domain name you want to connect to and select Continue.
+   - Review the new record that will be added to the DNS table and select Connect Domain.
 4. Retrieve credentials:
    - [Go to API tokens page](https://dash.cloudflare.com/?to=/:account/r2/api-tokens):
-     - Select "Create API token"
+     - Click "Create User API token"
      - Edit the "R2 Token" name
      - Under Permissions, select Object Read & Write permission types
      - You can optionally specify the buckets that this API token has access to under the "Specify bucket(s)" section.
-     - Once done, click the "Create API Token" button.
-     - You'll receive an access key ID and a secret access key. Save them to use them later for the `S3_ACCESS_KEY_ID` and `S3_SECRET_ACCESS_KEY` environment variables.
+     - Once done, click the "Create User API Token" button.
+     - Copy the jurisdiction-specific endpoint for S3 clients to S3\_ENDPOINT into your environment variables.
+     - Copy the Access Key ID and Secret Access Key to the corresponding fields into your environment variables.
+     - Copy your custom domain to `S3_FILE_URL` with leading https:// into your environment variables.
 
 ### Supabase S3 Storage
 
@@ -33581,6 +33585,10 @@ Medusa provides other Notification Modules that actually send notifications, suc
 
 - [Local](https://docs.medusajs.com/infrastructure-modules/notification/local/index.html.md)
 - [SendGrid](https://docs.medusajs.com/infrastructure-modules/notification/sendgrid/index.html.md)
+- [Mailchimp](https://docs.medusajs.com/integrations/guides/mailchimp/index.html.md)
+- [Resend](https://docs.medusajs.com/integrations/guides/resend/index.html.md)
+- [Slack](https://docs.medusajs.com/integrations/guides/slack/index.html.md)
+- [Twilio SMS](https://docs.medusajs.com/how-to-tutorials/tutorials/phone-auth#step-3-integrate-twilio-sms/index.html.md)
 
 ***
 
@@ -47050,6 +47058,1233 @@ You have now implemented the logic to send abandoned cart notifications in Medus
 If you are new to Medusa, check out the [main documentation](https://docs.medusajs.com/docs/learn/index.html.md), where you will get a more in-depth learning of all the concepts you have used in this guide and more.
 
 To learn more about the commerce features that Medusa provides, check out Medusa's [Commerce Modules](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/commerce-modules/index.html.md).
+
+
+# Implement First-Purchase Discount in Medusa
+
+In this tutorial, you'll learn how to implement first-purchase discounts in Medusa.
+
+When you install a Medusa application, you get a fully-fledged commerce platform with a Framework for customization. The Medusa application's commerce features are built around [Commerce Modules](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/commerce-modules/index.html.md), which are available out-of-the-box. These features include promotion and cart management features.
+
+The first-purchase discount feature encourages customers to sign up and make their first purchase by offering them a discount. In this tutorial, you'll learn how to implement this feature in Medusa.
+
+## Summary
+
+By following this tutorial, you'll learn how to:
+
+- Install and set up Medusa.
+- Apply a first-purchase discount to a customer's cart if they are a first-time customer.
+- Add custom validation to ensure the discount is only used by first-time customers.
+- Customize the Next.js Starter Storefront to display a pop-up encouraging first-time customers to sign up and receive a discount.
+
+You can follow this tutorial whether you're new to Medusa or an advanced Medusa developer.
+
+![Diagram showcasing the flow of first-time purchase discounts](https://res.cloudinary.com/dza7lstvk/image/upload/v1750846212/Medusa%20Resources/first-purchase-promo-overview_jbiwa9.jpg)
+
+[View on Github](https://github.com/medusajs/examples/tree/main/first-purchase-discount): Find the full code for this tutorial.
+
+***
+
+## Step 1: Install a Medusa Application
+
+### Prerequisites
+
+- [Node.js v20+](https://nodejs.org/en/download)
+- [Git CLI tool](https://git-scm.com/downloads)
+- [PostgreSQL](https://www.postgresql.org/download/)
+
+Start by installing the Medusa application on your machine with the following command:
+
+```bash
+npx create-medusa-app@latest
+```
+
+First, you'll be asked for the project's name. Then, when prompted about installing the [Next.js Starter Storefront](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/nextjs-starter/index.html.md), choose "Yes."
+
+Afterward, the installation process will start, which will install the Medusa application in a directory with your project's name and the Next.js Starter Storefront in a separate directory named `{project-name}-storefront`.
+
+The Medusa application is composed of a headless Node.js server and an admin dashboard. The storefront is installed or custom-built separately and connects to the Medusa application through its REST endpoints, called [API routes](https://docs.medusajs.com/docs/learn/fundamentals/api-routes/index.html.md). Learn more in [Medusa's Architecture documentation](https://docs.medusajs.com/docs/learn/introduction/architecture/index.html.md).
+
+Once the installation finishes successfully, the Medusa Admin dashboard will open with a form to create a new user. Enter the user's credentials and submit the form. Afterward, you can log in with the new user and explore the dashboard.
+
+Check out the [troubleshooting guides](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/troubleshooting/create-medusa-app-errors/index.html.md) for help.
+
+***
+
+## Step 2: Create a First-Purchase Promotion
+
+Before you apply the first-purchase discount or promotion to a customer's cart, you need to create the promotion that will be applied.
+
+Start your Medusa application with the following command:
+
+```bash npm2yarn
+npm run dev
+```
+
+Then, open the Medusa Admin dashboard at `http://localhost:9000/app` and log in with the user you created in the previous step.
+
+Next, click on the "Promotions" tab in the left sidebar, then click on the "Create Promotion" button to create a new promotion.
+
+You can customize the promotion based on your use case. For example, it can be a `10%` off the entire order, or a fixed amount off specific items.
+
+Make sure to set the promotion's code to `FIRST_PURCHASE`, as you'll be using this code in your Medusa customization. If you want to use a different code, make sure to update the code in the next steps accordingly.
+
+Refer to the [Create Promotions User Guide](https://docs.medusajs.com/user-guide/promotions/create/index.html.md) to learn how to create promotions in Medusa.
+
+Once you create and publish the promotion, you can proceed to the next steps.
+
+![First-purchase promotion in Medusa Admin](https://res.cloudinary.com/dza7lstvk/image/upload/v1750846696/Medusa%20Resources/CleanShot_2025-06-25_at_13.18.00_2x_j46emw.png)
+
+***
+
+## Step 3: Apply the First-Purchase Discount to Cart
+
+In this step, you'll customize the Medusa application to automatically apply the first-purchase promotion to a cart.
+
+To build this feature, you need to:
+
+- Create a [workflow](https://docs.medusajs.com/docs/learn/fundamentals/workflows/index.html.md) that implements the logic to apply the first-purchase promotion to a cart.
+- Execute the workflow in a [subscriber](https://docs.medusajs.com/docs/learn/fundamentals/events-and-subscribers/index.html.md) that is triggered when a cart is created, or when it's transferred to a customer.
+
+### a. Store the First-Purchase Promotion Code
+
+Since you'll refer to the first-purchase promotion code in multiple places, it's a good idea to store it as a constant in your Medusa application.
+
+So, create the file `src/constants.ts` with the following content:
+
+```ts title="src/constants.ts"
+export const FIRST_PURCHASE_PROMOTION_CODE = "FIRST_PURCHASE"
+```
+
+You'll reference this constant in the next steps.
+
+### b. Create the Workflow
+
+Next, you'll create the workflow that implements the logic to apply the first-purchase promotion to a cart.
+
+A [workflow](https://docs.medusajs.com/docs/learn/fundamentals/workflows/index.html.md) is a series of actions, called steps, that complete a task with rollback and retry mechanisms. In Medusa, you build commerce features in workflows, then execute them in other customizations, such as subscribers, scheduled jobs, and API routes.
+
+The workflow you'll build will have the following steps:
+
+- [useQueryGraphStep](https://docs.medusajs.com/references/helper-steps/useQueryGraphStep/index.html.md): Retrieve the cart's details, including its promotions and customer.
+- [useQueryGraphStep](https://docs.medusajs.com/references/helper-steps/useQueryGraphStep/index.html.md): Retrieve the details of the first-purchase promotion.
+- [useQueryGraphStep](https://docs.medusajs.com/references/helper-steps/useQueryGraphStep/index.html.md): Retrieve the updated cart's details, including its promotions.
+
+Medusa provides all these steps in its `@medusajs/medusa/core-flows` package, so you can implement the workflow right away.
+
+To create the workflow, create the file `src/workflows/apply-first-purchase-promo.ts` with the following content:
+
+```ts title="src/workflows/apply-first-purchase-promo.ts" highlights={workflowHighlights}
+import { createWorkflow, when, WorkflowResponse } from "@medusajs/framework/workflows-sdk"
+import { updateCartPromotionsStep, useQueryGraphStep } from "@medusajs/medusa/core-flows"
+import { FIRST_PURCHASE_PROMOTION_CODE } from "../constants"
+import { PromotionActions } from "@medusajs/framework/utils"
+
+type WorkflowInput = {
+  cart_id: string
+}
+
+export const applyFirstPurchasePromoWorkflow = createWorkflow(
+  "apply-first-purchase-promo",
+  (input: WorkflowInput) => {
+    // @ts-ignore
+    const { data: carts } = useQueryGraphStep({
+      entity: "cart",
+      fields: ["promotions.*", "customer.*", "customer.orders.*"],
+      filters: {
+        id: input.cart_id,
+      },
+    })
+
+    // @ts-ignore
+    const { data: promotions } = useQueryGraphStep({
+      entity: "promotion",
+      fields: ["code"],
+      filters: {
+        // @ts-ignore
+        code: FIRST_PURCHASE_PROMOTION_CODE,
+      },
+    }).config({ name: "retrieve-promotions" })
+
+    when({ 
+      carts,
+      promotions,
+    }, (data) => {
+      return data.promotions.length > 0 && 
+        !data.carts[0].promotions?.some((promo) => promo?.id === data.promotions[0].id) && 
+        data.carts[0].customer !== null && 
+        data.carts[0].customer.orders?.length === 0
+    })
+    .then(() => {
+      updateCartPromotionsStep({
+        id: carts[0].id,
+        promo_codes: [promotions[0].code!],
+        action: PromotionActions.ADD,
+      })
+    })
+
+    // retrieve updated cart
+    // @ts-ignore
+    const { data: updatedCarts } = useQueryGraphStep({
+      entity: "cart",
+      fields: ["*", "promotions.*"],
+      filters: {
+        id: input.cart_id,
+      },
+    }).config({ name: "retrieve-updated-cart" })
+
+    return new WorkflowResponse(updatedCarts[0])
+  }
+)
+```
+
+You create a workflow using `createWorkflow` from the Workflows SDK. It accepts the workflow's unique name as a first parameter.
+
+`createWorkflow` accepts as a second parameter a constructor function, which is the workflow's implementation. The function accepts as an input an object with the ID of the cart to apply the first-purchase promotion to.
+
+In the workflow's constructor function, you:
+
+- Retrieve the cart's details, including its promotions and customer, using the [useQueryGraphStep](https://docs.medusajs.com/references/helper-steps/useQueryGraphStep/index.html.md).
+- Retrieve the details of the first-purchase promotion using the `useQueryGraphStep`.
+  - You pass the `FIRST_PURCHASE_PROMOTION_CODE` constant to the `filters` option to retrieve the promotion.
+- Use the [when-then](https://docs.medusajs.com/docs/learn/fundamentals/workflows/conditions/index.html.md) utility to only apply the promotion if the first-purchase promotion exists, the cart doesn't have the promotion, and the customer doesn't have any orders. `when` receives two parameters:
+  - An object to use in the condition function.
+  - A condition function that receives the first parameter object and returns a boolean indicating whether to execute the steps in the `then` block.
+- Retrieve the updated cart's details, including its promotions, using the `useQueryGraphStep` again.
+
+Finally, you return a `WorkflowResponse` with the updated cart's details.
+
+You can't perform data manipulation in a workflow's constructor function. Instead, the Workflows SDK includes utility functions like `when` to perform typical operations that require accessing data values. Learn more about workflow constraints in the [Workflow Constraints](https://docs.medusajs.com/docs/learn/fundamentals/workflows/constructor-constraints/index.html.md) documentation.
+
+### c. Create the Subscriber
+
+Next, you'll create a subscriber that executes the workflow when a cart is created or transferred to a customer.
+
+A cart can be transferred to a customer when they sign up or log in, or in B2B use cases.
+
+A [subscriber](https://docs.medusajs.com/docs/learn/fundamentals/events-and-subscribers/index.html.md) is an asynchronous function that listens to events to perform a task. In this case, you'll create a subscriber that listens to the `cart.created` and `cart.customer_transferred` events to execute the workflow.
+
+To create the subscriber, create the file `src/subscribers/apply-first-purchase.ts` with the following content:
+
+```ts title="src/subscribers/apply-first-purchase.ts"
+import { SubscriberArgs, type SubscriberConfig } from "@medusajs/framework"
+import { applyFirstPurchasePromoWorkflow } from "../workflows/apply-first-purchase-promo"
+
+export default async function cartCreatedHandler({
+  event: { data },
+  container,
+}: SubscriberArgs<{
+  id: string
+}>) {
+  await applyFirstPurchasePromoWorkflow(container)
+  .run({
+    input: {
+      cart_id: data.id,
+    },
+  })
+}
+
+export const config: SubscriberConfig = {
+  event: ["cart.created", "cart.customer_transferred"],
+}
+```
+
+A subscriber file must export:
+
+1. An asynchronous function, which is the subscriber that is executed when the event is emitted.
+2. A configuration object that holds the names of the events the subscriber listens to, which are `cart.created` and `cart.customer_transferred` in this case.
+
+The subscriber function receives an object as a parameter that has a `container` property, which is the [Medusa container](https://docs.medusajs.com/docs/learn/fundamentals/medusa-container/index.html.md). The Medusa container holds Framework and commerce tools that you can resolve and use in your customizations.
+
+In the subscriber function, you execute the `applyFirstPurchasePromoWorkflow` by invoking it, passing it the Medusa container, then calling its `run` method. You pass the `cart_id` from the event payload as an input to the workflow.
+
+### Test it Out
+
+You can now test the automatic application of the first-purchase promotion to a cart. To do that, you'll use the [Next.js Starter Storefront](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/nextjs-starter/index.html.md) you installed in the first step.
+
+The Next.js Starter Storefront was installed in a separate directory from Medusa. The directory's name is `{your-project}-storefront`.
+
+So, if your Medusa application's directory is `medusa-first-promo`, you can find the storefront by going back to the parent directory and changing to the `medusa-first-promo-storefront` directory:
+
+```bash
+cd ../medusa-first-promo-storefront # change based on your project name
+```
+
+First, start the Medusa application with the following command:
+
+```bash npm2yarn badgeLabel="Medusa Application" badgeColor="green"
+npm run dev
+```
+
+Then, start the Next.js Starter Storefront with the following command:
+
+```bash npm2yarn badgeLabel="Storefront" badgeColor="blue"
+npm run dev
+```
+
+The storefront will run at `http://localhost:8000`. Open it in your browser and click on Account at the top right to register.
+
+After you register, add a product to the cart, then go to the cart page. You'll find that the `FIRST_PURCHASE` promotion has been applied to the cart automatically.
+
+![Cart page with first-purchase promotion applied](https://res.cloudinary.com/dza7lstvk/image/upload/v1750842319/Medusa%20Resources/CleanShot_2025-06-25_at_12.02.17_2x_bbu8vt.png)
+
+***
+
+## Step 4: Validate First-Purchase Discount Usage
+
+You now automatically apply the first-purchase promotion to a cart, but any customer can use the promotion code at the moment.
+
+So, you need to add custom validation to ensure that the first-purchase promotion is only used by first-time customers.
+
+In this step, you'll customize Medusa's existing workflows to validate the first-purchase promotion usage. You can do that by consuming the [workflows' hooks](https://docs.medusajs.com/docs/learn/fundamentals/workflows/workflow-hooks/index.html.md). A workflow hook is a point in a workflow where you can inject custom functionality as a step function.
+
+You'll consume the hooks of the following workflows:
+
+- [updateCartPromotionsWorkflow](https://docs.medusajs.com/references/medusa-workflows/updateCartPromotionsWorkflow/index.html.md): This workflow is used to add or remove promotions from a cart. You'll check that the customer is a first-time customer before allowing the promotion to be added.
+- [completeCartWorkflow](https://docs.medusajs.com/references/medusa-workflows/completeCartWorkflow/index.html.md): This workflow is used to complete a cart and place an order. You'll validate that the first-purchase promotion is only used by first-time customers before allowing the order to be placed.
+
+### a. Consume `updateCartPromotionsWorkflow.validate` Hook
+
+You'll start by consuming the `validate` hook of the `updateCartPromotionsWorkflow`. This hook is called before any operations are performed in the workflow.
+
+To consume the hook, create the file `src/workflows/hooks/validate-promotion.ts` with the following content:
+
+```ts title="src/workflows/hooks/validate-promotion.ts" highlights={validatePromotionHighlights}
+import { 
+  updateCartPromotionsWorkflow,
+} from "@medusajs/medusa/core-flows"
+import { FIRST_PURCHASE_PROMOTION_CODE } from "../../constants"
+import { MedusaError } from "@medusajs/framework/utils"
+
+updateCartPromotionsWorkflow.hooks.validate(
+  (async ({ input, cart }, { container }) => {
+    const hasFirstPurchasePromo = input.promo_codes?.some(
+      (code) => code === FIRST_PURCHASE_PROMOTION_CODE
+    )
+
+    if (!hasFirstPurchasePromo) {
+      return
+    }
+
+    if (!cart.customer_id) {
+      throw new MedusaError(
+        MedusaError.Types.INVALID_DATA,
+        "First purchase discount can only be applied to carts with a customer"
+      )
+    }
+    const query = container.resolve("query")
+
+    const { data: [customer] } = await query.graph({
+      entity: "customer",
+      fields: ["orders.*", "has_account"],
+      filters: {
+        id: cart.customer_id,
+      },
+    })
+
+    if (!customer.has_account || (customer?.orders?.length || 0) > 0) {
+      throw new MedusaError(
+        MedusaError.Types.INVALID_DATA,
+        "First purchase discount can only be applied to carts with no previous orders"
+      )
+    }
+  })
+)
+```
+
+You consume a workflow's hook by calling the `hooks` property of the workflow, then calling the hook you want to consume. In this case, you call the `validate` hook of the `updateCartPromotionsWorkflow`.
+
+The `validate` hook receives a step function as a parameter. The function receives two parameters:
+
+- The hook's input, which differs based on the workflow. In this case, it receives the following properties:
+  - `input`: The input of the `updateCartPromotionsWorkflow`, which includes the `promo_codes` to add or remove from the cart.
+  - `cart`: The cart being updated.
+- The hook or step context object. Most notably, it has a `container` property, which is the Medusa container.
+
+In the step function, you check if the `FIRST_PURCHASE_PROMOTION_CODE` is being applied to the cart. If so, you validate that:
+
+- The cart is associated with a customer.
+- The customer has an account.
+- The customer has no previous orders.
+
+If any of these validations fail, you throw a `MedusaError` with the appropriate error message. This will prevent the promotion from being applied to the cart.
+
+To retrieve the customer's details, you use [Query](https://docs.medusajs.com/docs/learn/fundamentals/module-links/query/index.html.md). Query allows you to retrieve data across modules in your Medusa application.
+
+### b. Consume `completeCartWorkflow.validate` Hook
+
+Next, you'll consume the `validate` hook of the `completeCartWorkflow`. This workflow is used to complete a cart and place an order. You'll validate that the first-purchase promotion is only used by first-time customers before allowing the order to be placed.
+
+In the same `src/workflows/hooks/validate-promotion.ts` file, add the following import at the top of the file:
+
+```ts title="src/workflows/hooks/validate-promotion.ts"
+import { 
+  completeCartWorkflow,
+} from "@medusajs/medusa/core-flows"
+```
+
+Then, consume the hook at the end of the file:
+
+```ts title="src/workflows/hooks/validate-promotion.ts" highlights={validateCartCompletionHighlights}
+completeCartWorkflow.hooks.validate(
+  (async ({ input, cart }, { container }) => {
+    const hasFirstPurchasePromo = cart.promotions?.some(
+      (promo) => promo?.code === FIRST_PURCHASE_PROMOTION_CODE
+    )
+
+    if (!hasFirstPurchasePromo) {
+      return
+    }
+
+    if (!cart.customer_id) {
+      throw new MedusaError(
+        MedusaError.Types.INVALID_DATA,
+        "First purchase discount can only be applied to carts with a customer"
+      )
+    }
+
+    const query = container.resolve("query")
+
+    const { data: [customer] } = await query.graph({
+      entity: "customer",
+      fields: ["orders.*", "has_account"],
+      filters: {
+        id: cart.customer_id,
+      },
+    })
+
+    if (!customer.has_account || (customer?.orders?.length || 0) > 0) {
+      throw new MedusaError(
+        MedusaError.Types.INVALID_DATA,
+        "First purchase discount can only be applied to carts with no previous orders"
+      )
+    }
+  })
+)
+```
+
+You consume the `validate` hook of the `completeCartWorkflow` in the same way as the previous hook. The step function receives the cart being completed as an input.
+
+In the step function, you check if the `FIRST_PURCHASE_PROMOTION_CODE` is applied to the cart. If so, you validate that:
+
+- The cart is associated with a customer.
+- The customer has an account.
+- The customer has no previous orders.
+
+If any of these validations fail, you throw a `MedusaError` with the appropriate error message. This will prevent the order from being placed if the first-purchase promotion is used by a customer who is not a first-time customer.
+
+### Test it Out
+
+To test the custom validation, start the Medusa application and the Next.js Starter Storefront as you did in the previous steps.
+
+Then, register a new customer in the storefront, and place an order. The first-purchase promotion will be applied to the cart automatically and the order will be placed successfully.
+
+Try to place another order with the same customer. The first-purchase promotion will not be automatically applied to the cart. If you also try to apply the first-purchase promotion manually, you'll receive an error message indicating that the promotion can only be applied to first-time customers.
+
+***
+
+## Step 5: Show Discount Pop-Up in Storefront
+
+The first-time purchase promotion is now fully functional. However, you need to inform first-time customers about the discount and encourage them to sign up.
+
+To do that, you'll customize the Next.js Starter Storefront to show a pop-up when a first-time customer visits the storefront.
+
+### a. Create the Pop-Up Component
+
+You'll first create the pop-up component that will be displayed to first-time customers.
+
+Create the file `src/modules/common/components/discount-popup/index.tsx` with the following content:
+
+```tsx title="src/modules/common/components/discount-popup/index.tsx" badgeLabel="Storefront" badgeColor="blue"
+"use client"
+
+import { Button, Heading, Text } from "@medusajs/ui"
+import Modal from "@modules/common/components/modal"
+import useToggleState from "@lib/hooks/use-toggle-state"
+import { useEffect } from "react"
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
+
+const DISCOUNT_POPUP_KEY = "discount_popup_shown"
+
+const DiscountPopup = () => {
+  const { state, open, close } = useToggleState(false)
+
+  useEffect(() => {
+    // Check if the popup has been shown before
+    const hasBeenShown = localStorage.getItem(DISCOUNT_POPUP_KEY)
+    
+    if (!hasBeenShown) {
+      open()
+      // Mark as shown
+      localStorage.setItem(DISCOUNT_POPUP_KEY, "true")
+    }
+  }, [open])
+
+  return (
+    <Modal isOpen={state} close={close} size="small" data-testid="discount-popup">
+      <div className="relative overflow-hidden bg-gradient-to-br from-amber-50 to-amber-100 rounded-t-lg px-6 pt-8 pb-6">
+        {/* Decorative elements */}
+        <div className="absolute top-0 right-0 w-20 h-20 bg-amber-200 rounded-full -mr-10 -mt-10 opacity-50"></div>
+        <div className="absolute bottom-0 left-0 w-16 h-16 bg-amber-200 rounded-full -ml-8 -mb-8 opacity-40"></div>
+        
+        <div className="relative">
+          {/* Sale tag */}
+          <div className="absolute -top-2 -right-2 bg-rose-500 text-white text-xs font-bold px-3 py-1 rounded-full transform rotate-12 shadow-md">
+            SAVE 10%
+          </div>
+
+          <Heading level="h2" className="text-2xl font-bold text-center text-amber-900">
+            Limited Time Offer!
+          </Heading>
+          
+          <div className="flex justify-center my-4">
+            <div className="relative">
+              <div className="text-5xl font-bold text-rose-600">10%</div>
+              <div className="text-lg font-semibold text-amber-900 mt-1">OFF YOUR FIRST ORDER</div>
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-8xl text-amber-200 opacity-20 font-bold -z-10">
+                %
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <Modal.Body>
+        <div className="flex flex-col items-center gap-y-6 py-6 px-6 bg-white">
+          <Text className="text-center text-gray-700">
+            Sign up now to receive an exclusive 10% discount on your first purchase. Join our community of satisfied customers!
+          </Text>
+          
+          <div className="flex flex-col gap-y-4 w-full">
+            <LocalizedClientLink href="/account" className="w-full">
+              <Button 
+                variant="primary" 
+                className="w-full h-12 font-semibold text-base shadow-md hover:shadow-lg transition-all"
+                onClick={close}
+              >
+                Register & Save 10%
+              </Button>
+            </LocalizedClientLink>
+            
+            <Button 
+              variant="secondary" 
+              className="w-full h-10 font-medium"
+              onClick={close}
+            >
+              Maybe Later
+            </Button>
+          </div>
+
+          <div className="text-xs text-gray-400 text-center mt-2">
+            *Discount applies to your first order only
+          </div>
+        </div>
+      </Modal.Body>
+    </Modal>
+  )
+}
+
+export default DiscountPopup
+```
+
+This component uses the `Modal` component that is already available in the Next.js Starter Storefront. It displays a pop-up with a discount offer and two buttons: one to register and save the discount, and another to close the pop-up.
+
+The pop-up will only be shown to first-time customers. Once the pop-up is shown, a `discount_popup_shown` key is stored in the local storage to prevent it from being shown again.
+
+### b. Add the Pop-Up to Layout
+
+To ensure that the pop-up is displayed when the customer visits the storefront, you need to add the `DiscountPopup` component to the main layout of the Next.js Starter Storefront.
+
+In `src/app/[countryCode]/(main)/layout.tsx`, add the following import at the top of the file:
+
+```tsx title="src/app/[countryCode]/(main)/layout.tsx" badgeLabel="Storefront" badgeColor="blue"
+import DiscountPopup from "@modules/common/components/discount-popup"
+```
+
+Then, in the return statement of the `PageLayout` component, add the `DiscountPopup` component before rendering `props.children`:
+
+```tsx title="src/app/[countryCode]/(main)/layout.tsx" badgeLabel="Storefront" badgeColor="blue"
+<>
+  {/* ... */}
+  {!customer && <DiscountPopup />}
+  {props.children}
+  {/* ... */}
+</>
+```
+
+Notice that you only display the pop-up if the customer is not logged in. This way, the pop-up will only be shown to first-time customers.
+
+### c. Show Registration Form Before Login
+
+If you go to the `/account` page in the Next.js Starter Storefront as a guest customer, you'll see the login form. However, in this case, you want to show the registration form first instead.
+
+To change this behavior, in `src/modules/account/templates/login-template.tsx`, change the default value of `currentView` to `"register"`:
+
+```tsx title="src/modules/account/templates/login-template.tsx" badgeLabel="Storefront" badgeColor="blue"
+const [currentView, setCurrentView] = useState("register")
+```
+
+This way, when a guest customer visits the `/account` page, they will see the registration form instead of the login form.
+
+### Test it Out
+
+To test the pop-up, start the Medusa application and the Next.js Starter Storefront as you did in the previous steps.
+
+Then, open the storefront in your browser. If you're a first-time customer, you'll see the discount pop-up encouraging you to sign up and receive the first-purchase discount.
+
+If you don't see the pop-up, make sure that you're logged out.
+
+![Discount pop-up in the Next.js Starter Storefront](https://res.cloudinary.com/dza7lstvk/image/upload/v1750844087/Medusa%20Resources/CleanShot_2025-06-25_at_12.34.35_2x_f1f5jh.png)
+
+***
+
+## Next Steps
+
+You've now implemented the first-purchase discount feature in Medusa. You can add more features to build customer loyalty, such as a [loyalty points system](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/how-to-tutorials/tutorials/loyalty-points/index.html.md) or [product reviews](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/how-to-tutorials/tutorials/product-reviews/index.html.md).
+
+If you're new to Medusa, check out the [main documentation](https://docs.medusajs.com/docs/learn/index.html.md), where you'll get a more in-depth understanding of all the concepts you've used in this guide and more.
+
+To learn more about the commerce features that Medusa provides, check out Medusa's [Commerce Modules](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/commerce-modules/index.html.md).
+
+### Troubleshooting
+
+If you encounter issues during your development, check out the [troubleshooting guides](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/troubleshooting/index.html.md).
+
+### Getting Help
+
+If you encounter issues not covered in the troubleshooting guides:
+
+1. Visit the [Medusa GitHub repository](https://github.com/medusajs/medusa) to report issues or ask questions.
+2. Join the [Medusa Discord community](https://discord.gg/medusajs) for real-time support from community members.
+
+
+# Add Gift Message to Line Items in Medusa
+
+In this tutorial, you will learn how to add a gift message to items in carts and orders in Medusa.
+
+When you install a Medusa application, you get a fully-fledged commerce platform with a Framework for customization. The Medusa application's commerce features are built around [Commerce Modules](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/commerce-modules/index.html.md), which are available out-of-the-box. These features include cart and order management capabilities.
+
+You can customize the Medusa application and storefront to add a gift message to items in the cart. This feature allows customers to add a personalized message to their gifts, enhancing the shopping experience.
+
+## Summary
+
+By following this tutorial, you will learn how to:
+
+- Install and set up Medusa and the Next.js Starter Storefront.
+- Customize the storefront to support gift messages on cart items during checkout.
+- Customize the Medusa Admin to show gift items with messages in an order.
+
+You can follow this tutorial whether you're new to Medusa or an advanced Medusa developer.
+
+[View on Github](https://github.com/medusajs/examples/tree/main/order-gift-message): Find the full code for this tutorial.
+
+***
+
+## Step 1: Install a Medusa Application
+
+### Prerequisites
+
+- [Node.js v20+](https://nodejs.org/en/download)
+- [Git CLI tool](https://git-scm.com/downloads)
+- [PostgreSQL](https://www.postgresql.org/download/)
+
+Start by installing the Medusa application on your machine with the following command:
+
+```bash
+npx create-medusa-app@latest
+```
+
+First, you'll be asked for the project's name. Then, when prompted about installing the [Next.js Starter Storefront](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/nextjs-starter/index.html.md), choose "Yes."
+
+Afterward, the installation process will start, which will install the Medusa application in a directory with your project's name and the Next.js Starter Storefront in a separate directory named `{project-name}-storefront`.
+
+The Medusa application is composed of a headless Node.js server and an admin dashboard. The storefront is installed or custom-built separately and connects to the Medusa application through its REST endpoints, called [API routes](https://docs.medusajs.com/docs/learn/fundamentals/api-routes/index.html.md). Learn more in [Medusa's Architecture documentation](https://docs.medusajs.com/docs/learn/introduction/architecture/index.html.md).
+
+Once the installation finishes successfully, the Medusa Admin dashboard will open with a form to create a new user. Enter the user's credentials and submit the form. Afterward, you can log in with the new user and explore the dashboard.
+
+Check out the [troubleshooting guides](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/troubleshooting/create-medusa-app-errors/index.html.md) for help.
+
+***
+
+## Step 2: Add Gift Inputs to Cart Item
+
+In this step, you'll customize the Next.js Starter Storefront to allow customers to specify that an item is a gift and add a gift message to it.
+
+You'll store the gift option and message in the cart item's `metadata` property, which is a key-value `jsonb` object that can hold any additional information about the item. When the customer places the order, the `metadata` is copied to the `metadata` of the order's line items.
+
+So, you only need to customize the storefront to add the gift message input and update the cart item metadata.
+
+### a. Changes to Update Item Function
+
+The Next.js Starter Storefront has an `updateLineItem` function that sends a request to the Medusa server to update the cart item. However, it doesn't support updating the `metadata` property.
+
+So, in `src/lib/data/cart.ts`, find the `updateLineItem` function and add a `metadata` property to its object parameter:
+
+```ts title="src/lib/data/cart.ts" badgeLabel="Storefront" badgeColor="blue" highlights={[["4"], ["8"]]}
+export async function updateLineItem({
+  lineId,
+  quantity,
+  metadata,
+}: {
+  lineId: string
+  quantity: number
+  metadata?: Record<string, any>
+}) {
+  // ...
+}
+```
+
+Next, change the usage of `await sdk.store.cart.updateLineItem` in the function to pass the `metadata` property:
+
+```ts title="src/lib/data/cart.ts" badgeLabel="Storefront" badgeColor="blue"
+const updateData: any = { quantity }
+if (metadata) {
+  updateData.metadata = metadata
+}
+
+await sdk.store.cart
+  .updateLineItem(cartId, lineId, updateData, {}, headers)
+// ...
+```
+
+You pass the `metadata` property to the Medusa server, which will update the cart item with the new metadata.
+
+### b. Add Gift Inputs
+
+Next, you'll modify the cart item component that's shown in the cart and checkout pages to show two inputs: one to specify that the item is a gift and another to add a gift message.
+
+In `src/modules/cart/components/item/index.tsx`, add the following imports at the top of the file:
+
+```tsx title="src/modules/cart/components/item/index.tsx" badgeLabel="Storefront" badgeColor="blue"
+import { Checkbox, Textarea, Button, Label } from "@medusajs/ui"
+```
+
+You import components from the [Medusa UI library](https://docs.medusajs.com/ui/index.html.md) that will be useful for the gift inputs.
+
+Next, in the `Item` component, add the following variables before the `changeQuantity` function:
+
+```tsx title="src/modules/cart/components/item/index.tsx" badgeLabel="Storefront" badgeColor="blue" highlights={giftVarsHighlights}
+const [giftUpdating, setGiftUpdating] = useState(false)
+const [newGiftMessage, setNewGiftMessage] = useState(
+  item.metadata?.gift_message as string || ""
+)
+const [isEditingGiftMessage, setIsEditingGiftMessage] = useState(false)
+
+const isGift = item.metadata?.is_gift === "true"
+const giftMessage = item.metadata?.gift_message as string
+```
+
+You define the following variables:
+
+- `giftUpdating`: A state variable to track whether the gift message is being updated. This will be useful to handle loading and disabled states.
+- `newGiftMessage`: A state variable to hold the new gift message input value.
+- `isEditingGiftMessage`: A state variable to track whether the gift message input is being edited. This will be useful to show or hide the input field.
+- `isGift`: A boolean indicating whether the item is a gift based on the `metadata.is_gift` property.
+- `giftMessage`: The current gift message from the item's `metadata.gift_message` property.
+
+Next, add the following functions before the `return` statement to handle updates to the gift inputs:
+
+```tsx title="src/modules/cart/components/item/index.tsx" badgeLabel="Storefront" badgeColor="blue" highlights={giftFunctionsHighlights}
+const handleGiftToggle = async (checked: boolean) => {
+  setGiftUpdating(true)
+  
+  try {
+    const newMetadata = {
+      is_gift: checked.toString(),
+      gift_message: checked ? newGiftMessage : "",
+    }
+    
+    await updateLineItem({
+      lineId: item.id,
+      quantity: item.quantity,
+      metadata: newMetadata,
+    })
+  } catch (error) {
+    console.error("Error updating gift status:", error)
+  } finally {
+    setGiftUpdating(false)
+  }
+}
+
+const handleSaveGiftMessage = async () => {
+  setGiftUpdating(true)
+  
+  try {
+    const newMetadata = {
+      is_gift: "true",
+      gift_message: newGiftMessage,
+    }
+    
+    await updateLineItem({
+      lineId: item.id,
+      quantity: item.quantity,
+      metadata: newMetadata,
+    })
+    setIsEditingGiftMessage(false)
+  } catch (error) {
+    console.error("Error updating gift message:", error)
+  } finally {
+    setGiftUpdating(false)
+  }
+}
+
+const handleStartEdit = () => {
+  setIsEditingGiftMessage(true)
+}
+
+const handleCancelEdit = () => {
+  setNewGiftMessage(giftMessage || "")
+  setIsEditingGiftMessage(false)
+}
+```
+
+You define the following functions:
+
+- `handleGiftToggle`: Used when the gift checkbox is toggled. It updates the cart item's metadata to set the `is_gift` and `gift_message` properties based on the checkbox state.
+- `handleSaveGiftMessage`: Used to save the gift message when the customer clicks the "Save" button. It updates the cart item's metadata with the new gift message.
+- `handleStartEdit`: Used to start editing the gift message input by setting the `isEditingGiftMessage` state to `true`.
+- `handleCancelEdit`: Used to cancel the gift message editing and reset the input value to the current gift message.
+
+Finally, you'll change the `return` statement to include the gift inputs. Replace the existing return statement with the following:
+
+```tsx title="src/modules/cart/components/item/index.tsx" badgeLabel="Storefront" badgeColor="blue"
+return (
+  <div className="bg-white border border-gray-200 rounded-lg p-4">
+    <div className="flex gap-4">
+      {/* Product Image */}
+      <div className="flex-shrink-0">
+        <LocalizedClientLink
+          href={`/products/${item.product_handle}`}
+          className={clx("flex", {
+            "w-16": type === "preview",
+            "w-20": type === "full",
+          })}
+        >
+          <Thumbnail
+            thumbnail={item.thumbnail}
+            images={item.variant?.product?.images}
+            size="square"
+          />
+        </LocalizedClientLink>
+      </div>
+
+      {/* Product Details */}
+      <div className="flex-1 min-w-0">
+        <div className="flex justify-between items-start mb-2">
+          <div className="flex-1 min-w-0">
+            <Text
+              className="txt-medium-plus text-ui-fg-base truncate"
+              data-testid="product-title"
+            >
+              {item.product_title}
+            </Text>
+            <LineItemOptions variant={item.variant} data-testid="product-variant" />
+          </div>
+        </div>
+
+        {/* Gift Options */}
+        <div className="mb-3">
+          <div
+            className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-full border hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <Checkbox
+              checked={isGift}
+              onCheckedChange={handleGiftToggle}
+              disabled={giftUpdating}
+              className="w-4 h-4"
+              id="is-gift"
+            />
+            <Label htmlFor="is-gift">
+              This is a gift
+            </Label>
+          </div>
+          
+          {isGift && (
+            <div className="mt-3">
+              {isEditingGiftMessage ? (
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <Text className="text-sm font-medium text-ui-fg-base">
+                      Gift Message:
+                    </Text>
+                    <Text className="text-xs text-ui-fg-subtle">(optional)</Text>
+                  </div>
+                  <Textarea
+                    placeholder="Add a personal message..."
+                    value={newGiftMessage}
+                    onChange={(e) => setNewGiftMessage(e.target.value)}
+                    disabled={giftUpdating}
+                    className="w-full"
+                    rows={2}
+                  />
+                  <div className="flex justify-end gap-2">
+                    <Button
+                      size="small"
+                      variant="secondary"
+                      onClick={handleCancelEdit}
+                      disabled={giftUpdating}
+                      className="text-xs px-3 py-1"
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      size="small"
+                      variant="primary"
+                      onClick={handleSaveGiftMessage}
+                      disabled={giftUpdating || newGiftMessage === giftMessage}
+                      className="text-xs px-3 py-1"
+                    >
+                      {giftUpdating ? <Spinner /> : "Save"}
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Text className="text-sm font-medium text-ui-fg-base">
+                      Gift Message:
+                    </Text>
+                    {giftMessage ? (
+                      <Text className="text-sm text-ui-fg-subtle">
+                        {giftMessage}
+                      </Text>
+                    ) : (
+                      <Text className="text-sm text-ui-fg-subtle italic">
+                        No message added
+                      </Text>
+                    )}
+                  </div>
+                  <Button
+                    size="small"
+                    variant="secondary"
+                    onClick={handleStartEdit}
+                    className="text-xs px-2 py-1"
+                  >
+                    {giftMessage ? "Edit" : "Add"}
+                  </Button>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Quantity and Actions */}
+        {type === "full" && (
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <DeleteButton id={item.id} data-testid="product-delete-button" />
+              <CartItemSelect
+                value={item.quantity}
+                onChange={(value) => changeQuantity(parseInt(value.target.value))}
+                className="w-16 h-8 p-2"
+                data-testid="product-select-button"
+              >
+                {/* TODO: Update this with the v2 way of managing inventory */}
+                {Array.from(
+                  {
+                    length: Math.min(maxQuantity, 10),
+                  },
+                  (_, i) => (
+                    <option value={i + 1} key={i}>
+                      {i + 1}
+                    </option>
+                  )
+                )}
+              </CartItemSelect>
+              {updating && <Spinner />}
+            </div>
+          </div>
+        )}
+
+        {/* Preview Mode */}
+        {type === "preview" && (
+          <div className="flex items-center justify-between">
+            <Text className="text-sm text-ui-fg-subtle">
+              Qty: {item.quantity}
+            </Text>
+            <LineItemUnitPrice
+              item={item}
+              style="tight"
+              currencyCode={currencyCode}
+            />
+          </div>
+        )}
+
+        <ErrorMessage error={error} data-testid="product-error-message" />
+      </div>
+    </div>
+  </div>
+)
+```
+
+You replace the previous table row design with a card. In the card, you show the item's image, title, variant options, quantity, and price.
+
+You also show a checkbox to toggle the gift status of the item. If the item is a gift, you show a text area to add or edit the gift message. You only show the gift message input if the user clicks an "Add" or "Edit" button.
+
+The gift message input has a "Save" button to save the message and a "Cancel" button to cancel the editing.
+
+### c. Update Cart and Checkout Templates
+
+The items are previously shown on the cart and checkout pages in a table. However, since you've changed the item component to a card, you'll need to update the cart and checkout templates to replace the table with a list of items.
+
+In `src/modules/cart/templates/items.tsx`, which shows the items on the cart page, change the `return` statement to the following:
+
+```tsx title="src/modules/cart/templates/items.tsx" badgeLabel="Storefront" badgeColor="blue"
+return (
+  <div>
+    <div className="pb-3 flex items-center">
+      <Heading className="text-[2rem] leading-[2.75rem]">Cart</Heading>
+    </div>
+    <div className="space-y-4">
+      {items
+        ? items
+            .sort((a, b) => {
+              return (a.created_at ?? "") > (b.created_at ?? "") ? -1 : 1
+            })
+            .map((item) => {
+              return (
+                <Item
+                  key={item.id}
+                  item={item}
+                  currencyCode={cart?.currency_code}
+                />
+              )
+            })
+        : repeat(5).map((i) => {
+            return <SkeletonLineItem key={i} />
+          })}
+    </div>
+  </div>
+)
+```
+
+You replace the table that was wrapping the items with a `div` that contains a list of `Item` components.
+
+Next, in `src/modules/cart/templates/preview.tsx` that shows the items in the checkout summary, change the `return` statement to the following:
+
+```tsx title="src/modules/cart/templates/preview.tsx" badgeLabel="Storefront" badgeColor="blue"
+return (
+  <div
+    className={clx("space-y-3 mt-4", {
+      "pl-[1px] overflow-y-scroll overflow-x-hidden no-scrollbar max-h-[420px]":
+        hasOverflow,
+    })}
+  >
+    {items
+      ? items
+          .sort((a, b) => {
+            return (a.created_at ?? "") > (b.created_at ?? "") ? -1 : 1
+          })
+          .map((item) => {
+            return (
+              <Item
+                key={item.id}
+                item={item}
+                type="preview"
+                currencyCode={cart.currency_code}
+              />
+            )
+          })
+      : repeat(5).map((i) => {
+          return <SkeletonLineItem key={i} />
+        })}
+  </div>
+)
+```
+
+Similarly, you replace the table that was wrapping the items with a `div` that contains a list of `Item` components.
+
+### Test the Changes
+
+You can now test the gift inputs during checkout.
+
+First, start the Medusa application by running the following command in the Medusa application directory:
+
+```bash npm2yarn badgeLabel="Medusa Application" badgeColor="green"
+npm run dev
+```
+
+Then, start the Next.js Starter Storefront by running the following command in the storefront directory:
+
+```bash npm2yarn badgeLabel="Storefront" badgeColor="blue"
+npm run dev
+```
+
+Open the storefront in your browser at `http://localhost:8000`. Add a product to the cart, and proceed to the checkout page. You'll find a checkbox to mark the item as a gift for each item.
+
+![Gift checkbox on checkout page](https://res.cloudinary.com/dza7lstvk/image/upload/v1750923117/Medusa%20Resources/CleanShot_2025-06-26_at_10.31.25_2x_wcqiff.png)
+
+If you check the box, you can also add and edit the gift message. The gift message will be saved in the cart item's `metadata`.
+
+![Gift item with message added](https://res.cloudinary.com/dza7lstvk/image/upload/v1750924150/Medusa%20Resources/CleanShot_2025-06-26_at_10.32.52_2x_qir2t5.png)
+
+***
+
+## Step 3: Show Gift Options in Order Confirmation Page
+
+Next, you'll customize the storefront to show the gift message of items in the order confirmation page.
+
+In `src/modules/order/components/item/index.tsx`, add in the `Item` component the following variables:
+
+```tsx title="src/modules/order/components/item/index.tsx" badgeLabel="Storefront" badgeColor="blue"
+const isGift = item.metadata?.is_gift === "true"
+const giftMessage = item.metadata?.gift_message as string
+```
+
+You define the following variables:
+
+- `isGift`: A boolean indicating whether the item is a gift based on the `metadata.is_gift` property.
+- `giftMessage`: The item's gift message from the `metadata.gift_message` property.
+
+Next, in the `return` statement, add the following below the `LineItemOptions` component:
+
+```tsx title="src/modules/order/components/item/index.tsx" badgeLabel="Storefront" badgeColor="blue"
+{isGift && <Text
+  className="inline-block txt-medium text-ui-fg-subtle w-full overflow-hidden text-ellipsis"
+>
+  Gift Message: {giftMessage || "No gift message provided"}
+</Text>}
+```
+
+If the item is a gift, you show the gift message below the variant options. If no gift message is provided, you show "No gift message provided."
+
+### Test the Changes
+
+To test this change, place an order with a gift item. On the order confirmation page, you should see the gift message displayed below the variant options.
+
+![Gift message on order confirmation page](https://res.cloudinary.com/dza7lstvk/image/upload/v1750924429/Medusa%20Resources/CleanShot_2025-06-26_at_10.53.32_2x_htzvtw.png)
+
+***
+
+## Step 4: Show Gift Options in Admin Dashboard
+
+In this step, you'll customize the Medusa Admin dashboard to show the gift items with their messages in an order.
+
+### What is a Widget?
+
+The Medusa Admin dashboard's pages are customizable to insert [widgets](https://docs.medusajs.com/docs/learn/fundamentals/admin/widgets/index.html.md) of custom content in predefined injection zones. You create these widgets as React components that allow admin users to perform custom actions.
+
+So, to show the gift items with their messages in an order, you'll create a custom widget that shows the gift items in the order details page.
+
+### Create the Widget
+
+You create a widget in a `.tsx` file under the `src/admin/widgets` directory. So, in the Medusa application directory, create the file `src/admin/widgets/order-gift-items-widget.tsx` with the following content:
+
+```tsx title="src/admin/widgets/order-gift-items-widget.tsx" badgeLabel="Medusa Application" badgeColor="green"
+import { defineWidgetConfig } from "@medusajs/admin-sdk"
+import { Container, Text } from "@medusajs/ui"
+import { DetailWidgetProps, AdminOrder } from "@medusajs/framework/types"
+
+const OrderGiftItemsWidget = ({ data }: DetailWidgetProps<AdminOrder>) => {
+  const giftItems = data.items?.filter(
+    (item: any) => item.metadata?.is_gift === "true"
+  )
+
+  if (!giftItems?.length) {
+    return null
+  }
+
+  return (
+    <Container className="mb-4">
+      <Text className="font-medium h2-core mb-2">Gift Items & Messages</Text>
+      <div className="flex flex-col gap-4">
+        {giftItems.map((item: any) => (
+          <div key={item.id} className="border-b last:border-b-0 pb-2">
+            <Text className="font-medium">{item.title} (x{item.quantity})</Text>
+            <Text className="text-sm text-gray-600">
+              Gift Message: {item.metadata?.gift_message || "(No message)"}
+            </Text>
+          </div>
+        ))}
+      </div>
+    </Container>
+  )
+}
+
+export const config = defineWidgetConfig({
+  zone: "order.details.side.after",
+})
+
+export default OrderGiftItemsWidget 
+```
+
+A widget file must export:
+
+- A React component that renders the widget content.
+- A configuration object created with `defineWidgetConfig` that defines the widget's [injection zone](https://docs.medusajs.com/admin-widget-injection-zones/index.html.md).
+
+You define the `OrderGiftItemsWidget` component that is injected in the `order.details.side.after` zone. Because it's injected in the order details page, it receives the order details as a `data` prop.
+
+In the component, you filter the order items to get only the gift items by checking if the `metadata.is_gift` property is set to `"true"`. Then, you render the gift items with their messages in a new "Gift Items & Messages" section.
+
+### Test Medusa Admin Changes
+
+To test out the Medusa Admin widget, start the Medusa application by running the following command in the Medusa application directory:
+
+```bash npm2yarn badgeLabel="Medusa Application" badgeColor="green"
+npm run dev
+```
+
+Then, open the Medusa Admin at `http://localhost:9000/app` and log in with the user you created earlier.
+
+Go to the Orders page and click on an order that has gift items. You'll find a new section called "Gift Items & Messages" that shows the gift items with their messages.
+
+![Order details page in the Medusa Admin with the "Gift Items & Messages" section highlighted](https://res.cloudinary.com/dza7lstvk/image/upload/v1750925501/Medusa%20Resources/CleanShot_2025-06-26_at_11.11.18_2x_jrrc2s.png)
+
+***
+
+## Optional: Handle Gift Items in Fulfillment Provider
+
+If you have a custom fulfillment provider and you want to handle gift items in it, you can do so in the `createFulfillment` method of the [Fulfillment Module Provider's service](https://docs.medusajs.com/references/fulfillment/provider/index.html.md).
+
+For example:
+
+```ts title="Fulfillment Module Provider's Service" badgeLabel="Medusa Application" badgeColor="green" highlights={createFulfillmentHighlights}
+class ManualFulfillmentService extends utils_1.AbstractFulfillmentProviderService {
+  // ...
+  async createFulfillment(
+    data: Record<string, unknown>,
+    items: Partial<Omit<FulfillmentItemDTO, "fulfillment">>[],
+    order: Partial<FulfillmentOrderDTO> | undefined,
+    fulfillment: Partial<Omit<FulfillmentDTO, "provider_id" | "data" | "items">>
+  ): Promise<CreateFulfillmentResult> {
+    const itemsWithGiftMessage = order.items?.filter((lineItem) => {
+      const isInFulfillment = items.find(
+        (item) => item.line_item_id === lineItem.id
+      )
+      if (!isInFulfillment) {
+        return false
+      }
+      return lineItem.metadata?.is_gift === "true"
+    })
+
+    // TODO pass gift items to third-party provider
+  }
+}
+```
+
+You filter the order items to find the items that are part of the fulfillment and are gift items. You can then process or pass them differently to your third-party provider.
+
+***
+
+## Next Steps
+
+You've now added gift messages to items in carts and orders in Medusa.
+
+If you're new to Medusa, check out the [main documentation](https://docs.medusajs.com/docs/learn/index.html.md), where you'll get a more in-depth understanding of all the concepts you've used in this guide and more.
+
+To learn more about the commerce features that Medusa provides, check out Medusa's [Commerce Modules](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/commerce-modules/index.html.md).
+
+### Troubleshooting
+
+If you encounter issues during your development, check out the [troubleshooting guides](https://docs.medusajs.com/Users/shahednasser/medusa/www/apps/resources/app/troubleshooting/index.html.md).
+
+### Getting Help
+
+If you encounter issues not covered in the troubleshooting guides:
+
+1. Visit the [Medusa GitHub repository](https://github.com/medusajs/medusa) to report issues or ask questions.
+2. Join the [Medusa Discord community](https://discord.gg/medusajs) for real-time support from community members.
 
 
 # Implement Loyalty Points System in Medusa
@@ -72087,6 +73322,12 @@ Download this reference as an OpenApi YAML file. You can import this file to too
 - [POST /admin/fulfillments](https://docs.medusajs.com/api/admin#fulfillments_postfulfillments)
 - [POST /admin/fulfillments/{id}/cancel](https://docs.medusajs.com/api/admin#fulfillments_postfulfillmentsidcancel)
 - [POST /admin/fulfillments/{id}/shipment](https://docs.medusajs.com/api/admin#fulfillments_postfulfillmentsidshipment)
+- [GET /admin/gift-cards](https://docs.medusajs.com/api/admin#gift-cards_getgiftcards)
+- [POST /admin/gift-cards](https://docs.medusajs.com/api/admin#gift-cards_postgiftcards)
+- [GET /admin/gift-cards/{id}](https://docs.medusajs.com/api/admin#gift-cards_getgiftcardsid)
+- [POST /admin/gift-cards/{id}](https://docs.medusajs.com/api/admin#gift-cards_postgiftcardsid)
+- [POST /admin/gift-cards/{id}/redeem](https://docs.medusajs.com/api/admin#gift-cards_postgiftcardsidredeem)
+- [POST /admin/gift-cards/{id}/transfer](https://docs.medusajs.com/api/admin#gift-cards_postgiftcardsidtransfer)
 - [GET /admin/inventory-items](https://docs.medusajs.com/api/admin#inventory-items_getinventoryitems)
 - [POST /admin/inventory-items](https://docs.medusajs.com/api/admin#inventory-items_postinventoryitems)
 - [POST /admin/inventory-items/location-levels/batch](https://docs.medusajs.com/api/admin#inventory-items_postinventoryitemslocationlevelsbatch)
@@ -72177,6 +73418,8 @@ Download this reference as an OpenApi YAML file. You can import this file to too
 - [POST /admin/products/export](https://docs.medusajs.com/api/admin#products_postproductsexport)
 - [POST /admin/products/import](https://docs.medusajs.com/api/admin#products_postproductsimport)
 - [POST /admin/products/import/{transaction_id}/confirm](https://docs.medusajs.com/api/admin#products_postproductsimporttransaction_idconfirm)
+- [POST /admin/products/imports](https://docs.medusajs.com/api/admin#products_postproductsimports)
+- [POST /admin/products/imports/{transaction_id}/confirm](https://docs.medusajs.com/api/admin#products_postproductsimportstransaction_idconfirm)
 - [GET /admin/products/{id}](https://docs.medusajs.com/api/admin#products_getproductsid)
 - [POST /admin/products/{id}](https://docs.medusajs.com/api/admin#products_postproductsid)
 - [DELETE /admin/products/{id}](https://docs.medusajs.com/api/admin#products_deleteproductsid)
@@ -72273,6 +73516,10 @@ Download this reference as an OpenApi YAML file. You can import this file to too
 - [POST /admin/stock-locations/{id}/fulfillment-providers](https://docs.medusajs.com/api/admin#stock-locations_poststocklocationsidfulfillmentproviders)
 - [POST /admin/stock-locations/{id}/fulfillment-sets](https://docs.medusajs.com/api/admin#stock-locations_poststocklocationsidfulfillmentsets)
 - [POST /admin/stock-locations/{id}/sales-channels](https://docs.medusajs.com/api/admin#stock-locations_poststocklocationsidsaleschannels)
+- [GET /admin/store-credit-accounts](https://docs.medusajs.com/api/admin#store-credit-accounts_getstorecreditaccounts)
+- [POST /admin/store-credit-accounts](https://docs.medusajs.com/api/admin#store-credit-accounts_poststorecreditaccounts)
+- [GET /admin/store-credit-accounts/{id}](https://docs.medusajs.com/api/admin#store-credit-accounts_getstorecreditaccountsid)
+- [GET /admin/store-credit-accounts/{id}/transactions](https://docs.medusajs.com/api/admin#store-credit-accounts_getstorecreditaccountsidtransactions)
 - [GET /admin/stores](https://docs.medusajs.com/api/admin#stores_getstores)
 - [GET /admin/stores/{id}](https://docs.medusajs.com/api/admin#stores_getstoresid)
 - [POST /admin/stores/{id}](https://docs.medusajs.com/api/admin#stores_poststoresid)
@@ -72289,7 +73536,9 @@ Download this reference as an OpenApi YAML file. You can import this file to too
 - [GET /admin/tax-regions/{id}](https://docs.medusajs.com/api/admin#tax-regions_gettaxregionsid)
 - [POST /admin/tax-regions/{id}](https://docs.medusajs.com/api/admin#tax-regions_posttaxregionsid)
 - [DELETE /admin/tax-regions/{id}](https://docs.medusajs.com/api/admin#tax-regions_deletetaxregionsid)
+- [GET /admin/transaction-groups](https://docs.medusajs.com/api/admin#transaction-groups_gettransactiongroups)
 - [POST /admin/uploads](https://docs.medusajs.com/api/admin#uploads_postuploads)
+- [POST /admin/uploads/presigned-urls](https://docs.medusajs.com/api/admin#uploads_postuploadspresignedurls)
 - [GET /admin/uploads/{id}](https://docs.medusajs.com/api/admin#uploads_getuploadsid)
 - [DELETE /admin/uploads/{id}](https://docs.medusajs.com/api/admin#uploads_deleteuploadsid)
 - [GET /admin/users](https://docs.medusajs.com/api/admin#users_getusers)
@@ -72330,12 +73579,15 @@ Download this reference as an OpenApi YAML file. You can import this file to too
 - [POST /store/carts/{id}](https://docs.medusajs.com/api/store#carts_postcartsid)
 - [POST /store/carts/{id}/complete](https://docs.medusajs.com/api/store#carts_postcartsidcomplete)
 - [POST /store/carts/{id}/customer](https://docs.medusajs.com/api/store#carts_postcartsidcustomer)
+- [POST /store/carts/{id}/gift-cards](https://docs.medusajs.com/api/store#carts_postcartsidgiftcards)
+- [DELETE /store/carts/{id}/gift-cards](https://docs.medusajs.com/api/store#carts_deletecartsidgiftcards)
 - [POST /store/carts/{id}/line-items](https://docs.medusajs.com/api/store#carts_postcartsidlineitems)
 - [POST /store/carts/{id}/line-items/{line_id}](https://docs.medusajs.com/api/store#carts_postcartsidlineitemsline_id)
 - [DELETE /store/carts/{id}/line-items/{line_id}](https://docs.medusajs.com/api/store#carts_deletecartsidlineitemsline_id)
 - [POST /store/carts/{id}/promotions](https://docs.medusajs.com/api/store#carts_postcartsidpromotions)
 - [DELETE /store/carts/{id}/promotions](https://docs.medusajs.com/api/store#carts_deletecartsidpromotions)
 - [POST /store/carts/{id}/shipping-methods](https://docs.medusajs.com/api/store#carts_postcartsidshippingmethods)
+- [POST /store/carts/{id}/store-credits](https://docs.medusajs.com/api/store#carts_postcartsidstorecredits)
 - [POST /store/carts/{id}/taxes](https://docs.medusajs.com/api/store#carts_postcartsidtaxes)
 - [GET /store/collections](https://docs.medusajs.com/api/store#collections_getcollections)
 - [GET /store/collections/{id}](https://docs.medusajs.com/api/store#collections_getcollectionsid)
@@ -72349,6 +73601,12 @@ Download this reference as an OpenApi YAML file. You can import this file to too
 - [GET /store/customers/me/addresses/{address_id}](https://docs.medusajs.com/api/store#customers_getcustomersmeaddressesaddress_id)
 - [POST /store/customers/me/addresses/{address_id}](https://docs.medusajs.com/api/store#customers_postcustomersmeaddressesaddress_id)
 - [DELETE /store/customers/me/addresses/{address_id}](https://docs.medusajs.com/api/store#customers_deletecustomersmeaddressesaddress_id)
+- [POST /store/gift-card-invitations/{code}/accept](https://docs.medusajs.com/api/store#gift-card-invitations_postgiftcardinvitationscodeaccept)
+- [POST /store/gift-card-invitations/{code}/reject](https://docs.medusajs.com/api/store#gift-card-invitations_postgiftcardinvitationscodereject)
+- [GET /store/gift-cards](https://docs.medusajs.com/api/store#gift-cards_getgiftcards)
+- [GET /store/gift-cards/{id}](https://docs.medusajs.com/api/store#gift-cards_getgiftcardsid)
+- [POST /store/gift-cards/{id}/invitation](https://docs.medusajs.com/api/store#gift-cards_postgiftcardsidinvitation)
+- [POST /store/gift-cards/{id}/redeem](https://docs.medusajs.com/api/store#gift-cards_postgiftcardsidredeem)
 - [GET /store/orders](https://docs.medusajs.com/api/store#orders_getorders)
 - [GET /store/orders/{id}](https://docs.medusajs.com/api/store#orders_getordersid)
 - [POST /store/orders/{id}/transfer/accept](https://docs.medusajs.com/api/store#orders_postordersidtransferaccept)
@@ -72373,6 +73631,8 @@ Download this reference as an OpenApi YAML file. You can import this file to too
 - [POST /store/returns](https://docs.medusajs.com/api/store#returns_postreturns)
 - [GET /store/shipping-options](https://docs.medusajs.com/api/store#shipping-options_getshippingoptions)
 - [POST /store/shipping-options/{id}/calculate](https://docs.medusajs.com/api/store#shipping-options_postshippingoptionsidcalculate)
+- [GET /store/store-credit-accounts](https://docs.medusajs.com/api/store#store-credit-accounts_getstorecreditaccounts)
+- [GET /store/store-credit-accounts/{id}](https://docs.medusajs.com/api/store#store-credit-accounts_getstorecreditaccountsid)
 
 
 # Alert
