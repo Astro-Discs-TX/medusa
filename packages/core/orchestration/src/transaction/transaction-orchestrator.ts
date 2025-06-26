@@ -802,7 +802,7 @@ export class TransactionOrchestrator extends EventEmitter {
     transaction: DistributedTransactionType
   ): Promise<void> {
     let continueExecution = true
-    let awaitingSteps = -1
+
     while (continueExecution) {
       if (transaction.hasFinished()) {
         return
@@ -817,10 +817,6 @@ export class TransactionOrchestrator extends EventEmitter {
 
       if (nextSteps.remaining === 0) {
         await this.finalizeTransaction(transaction)
-        return
-      }
-
-      if (awaitingSteps === 0) {
         return
       }
 
@@ -883,12 +879,23 @@ export class TransactionOrchestrator extends EventEmitter {
         }
       }
 
-      awaitingSteps = execution.length
-      if (awaitingSteps > 0) {
+      const checkNextSteps = await this.computeCurrentTransactionState(
+        transaction
+      )
+
+      if (execution.length) {
         await promiseAll(execution)
+      } else {
+        const remaining = checkNextSteps.total - checkNextSteps.completed
+        if (remaining === 0) {
+          await this.finalizeTransaction(transaction)
+        }
       }
 
-      if (nextSteps.next.length === 0) {
+      if (
+        nextSteps.next.length === 0 ||
+        (!execution.length && checkNextSteps.next.length === 0)
+      ) {
         continueExecution = false
       }
     }
