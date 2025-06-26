@@ -1758,7 +1758,7 @@
         "header": "Provincie",
         "create": {
           "header": "Vytvořit daňový region provincie",
-          "hint": "Vytvořte nový daňový region pro čdefinování daňových sazeb pro konkrétní provincii."
+          "hint": "Vytvořte nový daňový region pro definování daňových sazeb pro konkrétní provincii."
         }
       },
       "provider": {
