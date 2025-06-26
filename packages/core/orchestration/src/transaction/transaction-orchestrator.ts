@@ -885,11 +885,6 @@ export class TransactionOrchestrator extends EventEmitter {
 
       if (execution.length) {
         await promiseAll(execution)
-      } else {
-        const remaining = checkNextSteps.total - checkNextSteps.completed
-        if (remaining === 0) {
-          await this.finalizeTransaction(transaction)
-        }
       }
 
       if (
