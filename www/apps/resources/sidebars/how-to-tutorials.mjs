@@ -102,6 +102,13 @@ While tutorials show you a specific use case, they also help you understand how 
       },
       {
         type: "link",
+        title: "First-Purchase Discounts",
+        path: "/how-to-tutorials/tutorials/first-purchase-discounts",
+        description:
+          "Learn how to implement first-purchase discounts in your Medusa store.",
+      },
+      {
+        type: "link",
         title: "Loyalty Points System",
         path: "/how-to-tutorials/tutorials/loyalty-points",
         description:
@@ -119,6 +126,13 @@ While tutorials show you a specific use case, they also help you understand how 
         title: "Magento Migration",
         path: "/integrations/guides/magento",
         description: "Learn how to migrate data from Magento to Medusa.",
+      },
+      {
+        type: "ref",
+        title: "Newsletter with Mailchimp",
+        path: "/integrations/guides/mailchimp",
+        description:
+          "Learn how to integrate Mailchimp with Medusa to manage and automate newsletters.",
       },
       {
         type: "link",
@@ -182,8 +196,8 @@ While tutorials show you a specific use case, they also help you understand how 
       },
       {
         type: "link",
-        title: "Medusa Cloud",
-        path: "https://medusajs.com/pricing",
+        title: "Cloud",
+        path: "https://docs.medusajs.com/cloud",
       },
       {
         type: "sub-category",

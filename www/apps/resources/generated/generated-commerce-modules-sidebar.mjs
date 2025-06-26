@@ -1107,6 +1107,14 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "loaded": true,
               "isPathHref": true,
               "type": "ref",
+              "title": "Implement First-Purchase Discount",
+              "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/first-purchase-discounts",
+              "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "ref",
               "title": "Implement Loyalty Points",
               "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/loyalty-points",
               "children": []
@@ -1307,14 +1315,6 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
                       "type": "ref",
                       "title": "deleteLineItemsWorkflow",
                       "path": "https://docs.medusajs.com/resources/references/medusa-workflows/deleteLineItemsWorkflow",
-                      "children": []
-                    },
-                    {
-                      "loaded": true,
-                      "isPathHref": true,
-                      "type": "ref",
-                      "title": "processPaymentWorkflow",
-                      "path": "https://docs.medusajs.com/resources/references/medusa-workflows/processPaymentWorkflow",
                       "children": []
                     },
                     {
@@ -2435,6 +2435,14 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "type": "link",
               "path": "/commerce-modules/customer/extend",
               "title": "Extend Module",
+              "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "ref",
+              "title": "Implement First-Purchase Discount",
+              "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/first-purchase-discounts",
               "children": []
             },
             {
@@ -5355,14 +5363,6 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
                       "loaded": true,
                       "isPathHref": true,
                       "type": "ref",
-                      "title": "processPaymentWorkflow",
-                      "path": "https://docs.medusajs.com/resources/references/medusa-workflows/processPaymentWorkflow",
-                      "children": []
-                    },
-                    {
-                      "loaded": true,
-                      "isPathHref": true,
-                      "type": "ref",
                       "title": "updateInventoryItemsWorkflow",
                       "path": "https://docs.medusajs.com/resources/references/medusa-workflows/updateInventoryItemsWorkflow",
                       "children": []
@@ -6620,6 +6620,14 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
                       "loaded": true,
                       "isPathHref": true,
                       "type": "ref",
+                      "title": "deleteDraftOrdersWorkflow",
+                      "path": "https://docs.medusajs.com/resources/references/medusa-workflows/deleteDraftOrdersWorkflow",
+                      "children": []
+                    },
+                    {
+                      "loaded": true,
+                      "isPathHref": true,
+                      "type": "ref",
                       "title": "deleteOrderChangeActionsWorkflow",
                       "path": "https://docs.medusajs.com/resources/references/medusa-workflows/deleteOrderChangeActionsWorkflow",
                       "children": []
@@ -7257,6 +7265,14 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
                       "type": "ref",
                       "title": "deleteClaimsStep",
                       "path": "https://docs.medusajs.com/resources/references/medusa-workflows/steps/deleteClaimsStep",
+                      "children": []
+                    },
+                    {
+                      "loaded": true,
+                      "isPathHref": true,
+                      "type": "ref",
+                      "title": "deleteDraftOrdersStep",
+                      "path": "https://docs.medusajs.com/resources/references/medusa-workflows/steps/deleteDraftOrdersStep",
                       "children": []
                     },
                     {
@@ -13114,6 +13130,14 @@ const generatedgeneratedCommerceModulesSidebarSidebar = {
               "type": "link",
               "path": "/commerce-modules/promotion/extend",
               "title": "Extend Module",
+              "children": []
+            },
+            {
+              "loaded": true,
+              "isPathHref": true,
+              "type": "ref",
+              "title": "Implement First-Purchase Discount",
+              "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/first-purchase-discounts",
               "children": []
             },
             {
