@@ -12181,6 +12181,35 @@ The method returns an object that has a `data` property, which holds an array of
 }
 ```
 
+### Query Usage in Workflows
+
+To retrieve data with Query in a [workflow](https://docs.medusajs.com/learn/fundamentals/workflows/index.html.md), use the [useQueryGraphStep](https://docs.medusajs.com/resources/references/helper-steps/useQueryGraphStep/index.html.md).
+
+For example:
+
+```ts title="src/workflows/query.ts"
+import { createWorkflow, WorkflowResponse } from "@medusajs/framework/workflows-sdk"
+import { useQueryGraphStep } from "@medusajs/medusa/core-flows"
+
+const myWorkflow = createWorkflow(
+  "my-workflow",
+  () => {
+    const { data: posts } = useQueryGraphStep({
+      entity: "post",
+      fields: ["id", "title"],
+    })
+
+    return new WorkflowResponse({
+      posts,
+    })
+  }
+)
+```
+
+You can learn more about this step in the [useQueryGraphStep](https://docs.medusajs.com/resources/references/helper-steps/useQueryGraphStep/index.html.md) reference.
+
+The rest of this chapter explains how to use Query's `graph` method to retrieve data from modules, but you can pass the same parameters to the `useQueryGraphStep` in workflows.
+
 ***
 
 ## Querying the Graph
@@ -12492,6 +12521,45 @@ The `order` property is an object whose keys are property names, and values are 
 
 - `ASC` to sort records by that property in ascending order.
 - `DESC` to sort records by that property in descending order.
+
+***
+
+## Retrieve Deleted Records
+
+By default, Query doesn't retrieve deleted records. To retrieve all records including deleted records, you can pass the `withDeleted` property to the `query.graph` method.
+
+The `withDeleted` property is available from [Medusa v2.8.5](https://github.com/medusajs/medusa/releases/tag/v2.8.5).
+
+For example:
+
+```ts highlights={[["4", "withDeleted", "Include deleted posts in the results."]]}
+const { data: posts } = await query.graph({
+  entity: "post",
+  fields: ["id", "title"],
+  withDeleted: true,
+})
+```
+
+In the example above, you retrieve all posts, including deleted ones.
+
+### Retrieve Only Deleted Records
+
+To retrieve only deleted records, you can add a `deleted_at` filter and set its value to not `null`. For example:
+
+```ts highlights={withDeletedHighlights}
+const { data: posts } = await query.graph({
+  entity: "post",
+  fields: ["id", "title"],
+  filters: {
+    deleted_at: {
+      $ne: null,
+    },
+  },
+  withDeleted: true,
+})
+```
+
+In the example above, you retrieve only deleted posts by enabling the `withDeleted` property and adding a filter to only retrieve records where the `deleted_at` property is not `null`.
 
 ***
 
@@ -72664,8 +72732,8 @@ Download this reference as an OpenApi YAML file. You can import this file to too
 - [POST /admin/gift-cards](https://docs.medusajs.com/api/admin#gift-cards_postgiftcards)
 - [GET /admin/gift-cards/{id}](https://docs.medusajs.com/api/admin#gift-cards_getgiftcardsid)
 - [POST /admin/gift-cards/{id}](https://docs.medusajs.com/api/admin#gift-cards_postgiftcardsid)
+- [GET /admin/gift-cards/{id}/orders](https://docs.medusajs.com/api/admin#gift-cards_getgiftcardsidorders)
 - [POST /admin/gift-cards/{id}/redeem](https://docs.medusajs.com/api/admin#gift-cards_postgiftcardsidredeem)
-- [POST /admin/gift-cards/{id}/transfer](https://docs.medusajs.com/api/admin#gift-cards_postgiftcardsidtransfer)
 - [GET /admin/inventory-items](https://docs.medusajs.com/api/admin#inventory-items_getinventoryitems)
 - [POST /admin/inventory-items](https://docs.medusajs.com/api/admin#inventory-items_postinventoryitems)
 - [POST /admin/inventory-items/location-levels/batch](https://docs.medusajs.com/api/admin#inventory-items_postinventoryitemslocationlevelsbatch)
@@ -72939,12 +73007,8 @@ Download this reference as an OpenApi YAML file. You can import this file to too
 - [GET /store/customers/me/addresses/{address_id}](https://docs.medusajs.com/api/store#customers_getcustomersmeaddressesaddress_id)
 - [POST /store/customers/me/addresses/{address_id}](https://docs.medusajs.com/api/store#customers_postcustomersmeaddressesaddress_id)
 - [DELETE /store/customers/me/addresses/{address_id}](https://docs.medusajs.com/api/store#customers_deletecustomersmeaddressesaddress_id)
-- [POST /store/gift-card-invitations/{code}/accept](https://docs.medusajs.com/api/store#gift-card-invitations_postgiftcardinvitationscodeaccept)
-- [POST /store/gift-card-invitations/{code}/reject](https://docs.medusajs.com/api/store#gift-card-invitations_postgiftcardinvitationscodereject)
-- [GET /store/gift-cards](https://docs.medusajs.com/api/store#gift-cards_getgiftcards)
-- [GET /store/gift-cards/{id}](https://docs.medusajs.com/api/store#gift-cards_getgiftcardsid)
-- [POST /store/gift-cards/{id}/invitation](https://docs.medusajs.com/api/store#gift-cards_postgiftcardsidinvitation)
-- [POST /store/gift-cards/{id}/redeem](https://docs.medusajs.com/api/store#gift-cards_postgiftcardsidredeem)
+- [GET /store/gift-cards/{idOrCode}](https://docs.medusajs.com/api/store#gift-cards_getgiftcardsidorcode)
+- [POST /store/gift-cards/{idOrCode}/redeem](https://docs.medusajs.com/api/store#gift-cards_postgiftcardsidorcoderedeem)
 - [GET /store/orders](https://docs.medusajs.com/api/store#orders_getorders)
 - [GET /store/orders/{id}](https://docs.medusajs.com/api/store#orders_getordersid)
 - [POST /store/orders/{id}/transfer/accept](https://docs.medusajs.com/api/store#orders_postordersidtransferaccept)

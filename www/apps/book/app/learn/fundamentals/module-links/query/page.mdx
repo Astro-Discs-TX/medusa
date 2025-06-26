@@ -71,6 +71,35 @@ The method returns an object that has a `data` property, which holds an array of
 }
 ```
 
+### Query Usage in Workflows
+
+To retrieve data with Query in a [workflow](../../workflows/page.mdx), use the [useQueryGraphStep](!resources!/references/helper-steps/useQueryGraphStep).
+
+For example:
+
+```ts title="src/workflows/query.ts"
+import { createWorkflow, WorkflowResponse } from "@medusajs/framework/workflows-sdk"
+import { useQueryGraphStep } from "@medusajs/medusa/core-flows"
+
+const myWorkflow = createWorkflow(
+  "my-workflow",
+  () => {
+    const { data: posts } = useQueryGraphStep({
+      entity: "post",
+      fields: ["id", "title"],
+    })
+
+    return new WorkflowResponse({
+      posts,
+    })
+  }
+)
+```
+
+You can learn more about this step in the [useQueryGraphStep](!resources!/references/helper-steps/useQueryGraphStep) reference.
+
+The rest of this chapter explains how to use Query's `graph` method to retrieve data from modules, but you can pass the same parameters to the `useQueryGraphStep` in workflows.
+
 ---
 
 ## Querying the Graph
@@ -415,6 +444,54 @@ The `order` property is an object whose keys are property names, and values are 
 
 - `ASC` to sort records by that property in ascending order.
 - `DESC` to sort records by that property in descending order.
+
+---
+
+## Retrieve Deleted Records
+
+By default, Query doesn't retrieve deleted records. To retrieve all records including deleted records, you can pass the `withDeleted` property to the `query.graph` method.
+
+<Note>
+
+The `withDeleted` property is available from [Medusa v2.8.5](https://github.com/medusajs/medusa/releases/tag/v2.8.5).
+
+</Note>
+
+For example:
+
+```ts highlights={[["4", "withDeleted", "Include deleted posts in the results."]]}
+const { data: posts } = await query.graph({
+  entity: "post",
+  fields: ["id", "title"],
+  withDeleted: true,
+})
+```
+
+In the example above, you retrieve all posts, including deleted ones.
+
+### Retrieve Only Deleted Records
+
+To retrieve only deleted records, you can add a `deleted_at` filter and set its value to not `null`. For example:
+
+export const withDeletedHighlights = [
+  ["5", "deleted_at", "Filter to retrieve posts whose `deleted_at` property is not `null`."],
+  ["9", "withDeleted", "Include deleted posts in the results."],
+]
+
+```ts highlights={withDeletedHighlights}
+const { data: posts } = await query.graph({
+  entity: "post",
+  fields: ["id", "title"],
+  filters: {
+    deleted_at: {
+      $ne: null,
+    },
+  },
+  withDeleted: true,
+})
+```
+
+In the example above, you retrieve only deleted posts by enabling the `withDeleted` property and adding a filter to only retrieve records where the `deleted_at` property is not `null`.
 
 ---
 
