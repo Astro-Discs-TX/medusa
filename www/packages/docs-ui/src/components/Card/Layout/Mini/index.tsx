@@ -118,7 +118,7 @@ export const CardLayoutMini = ({
           <Button
             variant="transparent-clear"
             onClick={onClose}
-            className="!p-[2.5px] z-[2] hover:!bg-transparent focus:!shadow-none focus:!bg-transparent"
+            className="!p-[2.5px] z-[2] hover:!bg-medusa-button-transparent-hover focus:!shadow-none focus:!bg-transparent"
           >
             <XMark />
           </Button>

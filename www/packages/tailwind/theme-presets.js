@@ -49,7 +49,7 @@ const light = {
   "--docs-button-danger-hover": "rgba(190, 18, 60, 1)",
   "--docs-button-danger-pressed": "rgba(159, 18, 57, 1)",
   "--docs-button-transparent": "rgba(255, 255, 255, 0)",
-  "--docs-button-transparent-hover": "rgba(244, 244, 245, 1)",
+  "--docs-button-transparent-hover": "rgba(24, 24, 27, 0.06)",
   "--docs-button-transparent-pressed": "rgba(228, 228, 231, 1)",
 
   "--docs-tags-neutral-bg": "rgba(244, 244, 245, 1)",

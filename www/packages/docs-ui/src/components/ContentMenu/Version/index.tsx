@@ -59,7 +59,7 @@ export const ContentMenuVersion = () => {
         height: 40,
       }}
       className={clsx(
-        "!border-0 !bg-medusa-bg-component !shadow-elevation-flyout",
+        "!border-0 !bg-medusa-bg-component hover:!bg-medusa-bg-component-hover",
         "hover:!bg-medusa-bg-component-hover animation-fill-forwards",
         "opacity-0"
       )}

@@ -68,7 +68,7 @@ export const ContentMenuToc = () => {
 
   return (
     <div className="h-max max-h-full overflow-y-hidden flex relative flex-col">
-      <div className="absolute left-0 top-0 h-full w-[1.5px] bg-medusa-border-base" />
+      <div className="absolute left-0 top-docs_0.5 h-[calc(100%-8px)] w-[1.5px] bg-medusa-border-base" />
       {items !== null && (
         <TocList
           items={items}
