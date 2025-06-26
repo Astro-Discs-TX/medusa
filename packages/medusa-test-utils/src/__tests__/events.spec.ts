@@ -1,8 +1,6 @@
 import { EventEmitter } from "events"
 import { waitSubscribersExecution } from "../events"
 
-jest.setTimeout(200000)
-
 // Mock the IEventBusModuleService
 class MockEventBus {
   public eventEmitter_: EventEmitter
