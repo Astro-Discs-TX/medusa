@@ -18,8 +18,11 @@ export const ContentMenuToc = () => {
     maxLevel: 4,
   })
 
-  const formatHeadingContent = (content: string | null): string => {
-    return content?.replaceAll(/#$/g, "") || ""
+  const formatHeadingContent = (heading: HTMLHeadingElement): string => {
+    return Array.from(heading.childNodes)
+      .filter((child) => child.nodeType === Node.TEXT_NODE && child.textContent)
+      .map((textNode) => textNode.textContent!.trim())
+      .join("")
   }
 
   const formatHeadingObject = ({
@@ -28,7 +31,7 @@ export const ContentMenuToc = () => {
   }: ActiveOnScrollItem): ToCItemUi => {
     const level = parseInt(heading.tagName.replace("H", ""))
     return {
-      title: formatHeadingContent(heading.textContent),
+      title: formatHeadingContent(heading),
       id: heading.id,
       level,
       children: children?.map(formatHeadingObject),
