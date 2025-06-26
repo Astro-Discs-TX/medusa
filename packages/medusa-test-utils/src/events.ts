@@ -57,9 +57,9 @@ const doWaitSubscribersExecution = (
     })
     subscriberPromises.push(promise)
 
-    const newListener = async () => {
+    const newListener = async (...args: any[]) => {
       eventEmitter.removeListener(eventName, newListener)
-      ok()
+      ok(...args)
     }
 
     Object.defineProperty(newListener, "__isSubscribersExecutionWrapper", {
@@ -137,18 +137,37 @@ export const waitSubscribersExecution = (
   eventBus: EventBus,
   options?: WaitSubscribersExecutionOptions
 ): Promise<any> => {
-  const chain = waits.get(eventName) || Promise.resolve()
+  const chain = waits.get(eventName)
+
+  if (!chain) {
+    const newPromise = doWaitSubscribersExecution(
+      eventName,
+      eventBus,
+      options
+    ).finally(() => {
+      // Once this chain is done, remove it from the map
+      // if it's still the same promise. This prevents race conditions
+      // where a new wait is queued before this one is removed.
+      if (waits.get(eventName) === newPromise) {
+        waits.delete(eventName)
+      }
+    })
+    waits.set(eventName, newPromise)
+    return newPromise
+  }
 
   const runner = () => {
     return doWaitSubscribersExecution(eventName, eventBus, options)
   }
 
-  const newPromise = chain
-    .then(runner)
-    .catch(runner) // Still execute the runner on error to prevent cascading tests failing because the previous wait failed
-    .finally(() => {
+  const newPromise = chain.then(runner, runner).finally(() => {
+    // Once this chain is done, remove it from the map
+    // if it's still the same promise. This prevents race conditions
+    // where a new wait is queued before this one is removed.
+    if (waits.get(eventName) === newPromise) {
       waits.delete(eventName)
-    })
+    }
+  })
 
   waits.set(eventName, newPromise)
 

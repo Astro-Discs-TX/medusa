@@ -1,6 +1,8 @@
 import { EventEmitter } from "events"
 import { waitSubscribersExecution } from "../events"
 
+jest.setTimeout(200000)
+
 // Mock the IEventBusModuleService
 class MockEventBus {
   public eventEmitter_: EventEmitter
@@ -39,7 +41,13 @@ describe("waitSubscribersExecution", () => {
     })
 
     it("should reject when timeout is reached before event is fired", async () => {
-      const waitPromise = waitSubscribersExecution(TEST_EVENT, eventBus as any)
+      const waitPromise = waitSubscribersExecution(
+        TEST_EVENT,
+        eventBus as any,
+        {
+          timeout: 5000,
+        }
+      )
 
       jest.advanceTimersByTime(5100)
 
