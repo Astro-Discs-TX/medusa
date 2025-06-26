@@ -802,7 +802,7 @@ export class TransactionOrchestrator extends EventEmitter {
     transaction: DistributedTransactionType
   ): Promise<void> {
     let continueExecution = true
-
+    let awaitingSteps = -1
     while (continueExecution) {
       if (transaction.hasFinished()) {
         return
@@ -817,6 +817,10 @@ export class TransactionOrchestrator extends EventEmitter {
 
       if (nextSteps.remaining === 0) {
         await this.finalizeTransaction(transaction)
+        return
+      }
+
+      if (awaitingSteps === 0) {
         return
       }
 
@@ -879,9 +883,12 @@ export class TransactionOrchestrator extends EventEmitter {
         }
       }
 
-      await promiseAll(execution)
+      awaitingSteps = nextSteps.remaining
+      if (awaitingSteps > 0) {
+        await promiseAll(execution)
+      }
 
-      if (nextSteps.next.length === 0 || !execution.length) {
+      if (nextSteps.next.length === 0) {
         continueExecution = false
       }
     }
@@ -1287,6 +1294,16 @@ export class TransactionOrchestrator extends EventEmitter {
       throw new MedusaError(
         MedusaError.Types.NOT_ALLOWED,
         `Cannot revert a permanent failed transaction.`
+      )
+    }
+
+    if (
+      flow.state === TransactionState.COMPENSATING ||
+      flow.state === TransactionState.WAITING_TO_COMPENSATE
+    ) {
+      throw new MedusaError(
+        MedusaError.Types.NOT_ALLOWED,
+        `Cannot revert a transaction that is already compensating.`
       )
     }
 
