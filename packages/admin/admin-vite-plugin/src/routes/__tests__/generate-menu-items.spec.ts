@@ -61,6 +61,22 @@ const mockFileContents = [
 
     export default Page
   `,
+  `
+    import { defineRouteConfig } from "@medusajs/admin-sdk"
+
+    const Page = () => {
+        return <div>Page 4</div>
+    }
+
+    export const config = defineRouteConfig({
+        label: "Page 4",
+        icon: "icon1",
+        nested: "/products",
+        nestedPosition: "after"
+    })
+
+    export default Page
+  `,
 ]
 
 const expectedMenuItems = `
@@ -69,19 +85,29 @@ const expectedMenuItems = `
             label: RouteConfig0.label,
             icon: RouteConfig0.icon,
             path: "/one",
-            nested: undefined
+            nested: undefined,
+            nestedPosition: undefined
           },
           {
             label: RouteConfig1.label,
             icon: undefined,
             path: "/two",
-            nested: undefined
+            nested: undefined,
+            nestedPosition: undefined
           },
           {
             label: RouteConfig2.label,
             icon: RouteConfig2.icon,
             path: "/three",
-            nested: "/products"
+            nested: "/products",
+            nestedPosition: undefined
+          },
+          {
+            label: RouteConfig3.label,
+            icon: RouteConfig3.icon,
+            path: "/four",
+            nested: "/products",
+            nestedPosition: RouteConfig3.nestedPosition
           }
         ]
       `
@@ -92,6 +118,7 @@ describe("generateMenuItems", () => {
       "Users/user/medusa/src/admin/routes/one/page.tsx",
       "Users/user/medusa/src/admin/routes/two/page.tsx",
       "Users/user/medusa/src/admin/routes/three/page.tsx",
+      "Users/user/medusa/src/admin/routes/four/page.tsx",
     ]
     vi.mocked(utils.crawl).mockResolvedValue(mockFiles)
 
@@ -107,6 +134,7 @@ describe("generateMenuItems", () => {
       `import { config as RouteConfig0 } from "Users/user/medusa/src/admin/routes/one/page.tsx"`,
       `import { config as RouteConfig1 } from "Users/user/medusa/src/admin/routes/two/page.tsx"`,
       `import { config as RouteConfig2 } from "Users/user/medusa/src/admin/routes/three/page.tsx"`,
+      `import { config as RouteConfig3 } from "Users/user/medusa/src/admin/routes/four/page.tsx"`,
     ])
     expect(utils.normalizeString(result.code)).toEqual(
       utils.normalizeString(expectedMenuItems)
@@ -119,6 +147,7 @@ describe("generateMenuItems", () => {
       "C:\\medusa\\src\\admin\\routes\\one\\page.tsx",
       "C:\\medusa\\src\\admin\\routes\\two\\page.tsx",
       "C:\\medusa\\src\\admin\\routes\\three\\page.tsx",
+      "C:\\medusa\\src\\admin\\routes\\four\\page.tsx",
     ]
     vi.mocked(utils.crawl).mockResolvedValue(mockFiles)
 
@@ -132,6 +161,7 @@ describe("generateMenuItems", () => {
       `import { config as RouteConfig0 } from "C:/medusa/src/admin/routes/one/page.tsx"`,
       `import { config as RouteConfig1 } from "C:/medusa/src/admin/routes/two/page.tsx"`,
       `import { config as RouteConfig2 } from "C:/medusa/src/admin/routes/three/page.tsx"`,
+      `import { config as RouteConfig3 } from "C:/medusa/src/admin/routes/four/page.tsx"`,
     ])
     expect(utils.normalizeString(result.code)).toEqual(
       utils.normalizeString(expectedMenuItems)
