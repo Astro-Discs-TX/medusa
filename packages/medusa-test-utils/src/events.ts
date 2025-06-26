@@ -134,7 +134,7 @@ const doWaitSubscribersExecution = (
  */
 export const waitSubscribersExecution = (
   eventName: string | symbol,
-  eventBus: EventBus,
+  eventBus: any,
   options?: WaitSubscribersExecutionOptions
 ): Promise<any> => {
   const chain = waits.get(eventName)
