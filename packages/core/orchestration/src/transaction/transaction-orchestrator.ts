@@ -881,7 +881,7 @@ export class TransactionOrchestrator extends EventEmitter {
 
       await promiseAll(execution)
 
-      if (nextSteps.next.length === 0) {
+      if (nextSteps.next.length === 0 || !execution.length) {
         continueExecution = false
       }
     }
