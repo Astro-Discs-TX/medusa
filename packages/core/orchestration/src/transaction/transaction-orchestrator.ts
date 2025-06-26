@@ -841,6 +841,7 @@ export class TransactionOrchestrator extends EventEmitter {
       const execution: Promise<void | unknown>[] = []
 
       let i = 0
+      let hasAsyncSteps = false
       for (const step of nextSteps.next) {
         const stepIndex = i++
         if (!stepsShouldContinueExecution[stepIndex]) {
@@ -876,21 +877,13 @@ export class TransactionOrchestrator extends EventEmitter {
         } else {
           // Execute async step in background and continue the execution of the transaction
           this.executeAsyncStep(promise, transaction, step, nextSteps)
+          hasAsyncSteps = true
         }
       }
 
-      const checkNextSteps = await this.computeCurrentTransactionState(
-        transaction
-      )
+      await promiseAll(execution)
 
-      if (execution.length) {
-        await promiseAll(execution)
-      }
-
-      if (
-        nextSteps.next.length === 0 ||
-        (!execution.length && checkNextSteps.next.length === 0)
-      ) {
+      if (nextSteps.next.length === 0 || (hasAsyncSteps && !execution.length)) {
         continueExecution = false
       }
     }
