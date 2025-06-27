@@ -3,7 +3,7 @@ import { MedusaContainer } from "@medusajs/types"
 
 /**
  * Waits for all workflow executions to finish. When relying on workflows but not necessarily
- * waiting for them to finish, this can be used to ensure that the test runner is not blocked.
+ * waiting for them to finish, this can be used to ensure that a test is not considered done while background executions are still running and can interfere with the other tests.
  * @param container - The container instance.
  * @returns A promise that resolves when all workflow executions have finished.
  */
