@@ -24,9 +24,11 @@ export async function waitWorkflowExecutions(container: MedusaContainer) {
     const executions = await wfe.listWorkflowExecutions({
       state: { $nin: ["not_started", "done", "reverted", "failed"] },
     })
+
     if (executions.length === 0) {
       waitWorkflowsToFinish = false
       clearTimeout(timeout)
+      break
     }
     await new Promise((resolve) => setTimeout(resolve, 50))
   }
