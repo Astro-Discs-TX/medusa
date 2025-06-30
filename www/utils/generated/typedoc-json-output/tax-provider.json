@@ -24,7 +24,7 @@
 					"fileName": "provider.ts",
 					"line": 14,
 					"character": 12,
-					"url": "https://github.com/medusajs/medusa/blob/e0b5bb0b224458ebc8c93111e72f9a10aecf0275/packages/core/types/src/tax/provider.ts#L14"
+					"url": "https://github.com/medusajs/medusa/blob/ac76e19194a4b1b7f6c8e4fbcfc956c981a572f7/packages/core/types/src/tax/provider.ts#L14"
 				}
 			],
 			"type": {
@@ -55,7 +55,7 @@
 									"fileName": "provider.ts",
 									"line": 18,
 									"character": 2,
-									"url": "https://github.com/medusajs/medusa/blob/e0b5bb0b224458ebc8c93111e72f9a10aecf0275/packages/core/types/src/tax/provider.ts#L18"
+									"url": "https://github.com/medusajs/medusa/blob/ac76e19194a4b1b7f6c8e4fbcfc956c981a572f7/packages/core/types/src/tax/provider.ts#L18"
 								}
 							],
 							"type": {
@@ -87,7 +87,7 @@
 									"fileName": "provider.ts",
 									"line": 22,
 									"character": 2,
-									"url": "https://github.com/medusajs/medusa/blob/e0b5bb0b224458ebc8c93111e72f9a10aecf0275/packages/core/types/src/tax/provider.ts#L22"
+									"url": "https://github.com/medusajs/medusa/blob/ac76e19194a4b1b7f6c8e4fbcfc956c981a572f7/packages/core/types/src/tax/provider.ts#L22"
 								}
 							],
 							"type": {
@@ -118,7 +118,7 @@
 							"fileName": "provider.ts",
 							"line": 14,
 							"character": 41,
-							"url": "https://github.com/medusajs/medusa/blob/e0b5bb0b224458ebc8c93111e72f9a10aecf0275/packages/core/types/src/tax/provider.ts#L14"
+							"url": "https://github.com/medusajs/medusa/blob/ac76e19194a4b1b7f6c8e4fbcfc956c981a572f7/packages/core/types/src/tax/provider.ts#L14"
 						}
 					]
 				}
@@ -143,7 +143,7 @@
 					"fileName": "provider.ts",
 					"line": 29,
 					"character": 12,
-					"url": "https://github.com/medusajs/medusa/blob/e0b5bb0b224458ebc8c93111e72f9a10aecf0275/packages/core/types/src/tax/provider.ts#L29"
+					"url": "https://github.com/medusajs/medusa/blob/ac76e19194a4b1b7f6c8e4fbcfc956c981a572f7/packages/core/types/src/tax/provider.ts#L29"
 				}
 			],
 			"type": {
@@ -174,7 +174,7 @@
 									"fileName": "provider.ts",
 									"line": 33,
 									"character": 2,
-									"url": "https://github.com/medusajs/medusa/blob/e0b5bb0b224458ebc8c93111e72f9a10aecf0275/packages/core/types/src/tax/provider.ts#L33"
+									"url": "https://github.com/medusajs/medusa/blob/ac76e19194a4b1b7f6c8e4fbcfc956c981a572f7/packages/core/types/src/tax/provider.ts#L33"
 								}
 							],
 							"type": {
@@ -206,7 +206,7 @@
 									"fileName": "provider.ts",
 									"line": 37,
 									"character": 2,
-									"url": "https://github.com/medusajs/medusa/blob/e0b5bb0b224458ebc8c93111e72f9a10aecf0275/packages/core/types/src/tax/provider.ts#L37"
+									"url": "https://github.com/medusajs/medusa/blob/ac76e19194a4b1b7f6c8e4fbcfc956c981a572f7/packages/core/types/src/tax/provider.ts#L37"
 								}
 							],
 							"type": {
@@ -237,7 +237,7 @@
 							"fileName": "provider.ts",
 							"line": 29,
 							"character": 37,
-							"url": "https://github.com/medusajs/medusa/blob/e0b5bb0b224458ebc8c93111e72f9a10aecf0275/packages/core/types/src/tax/provider.ts#L29"
+							"url": "https://github.com/medusajs/medusa/blob/ac76e19194a4b1b7f6c8e4fbcfc956c981a572f7/packages/core/types/src/tax/provider.ts#L29"
 						}
 					]
 				}
@@ -325,7 +325,7 @@
 							"fileName": "provider.ts",
 							"line": 145,
 							"character": 2,
-							"url": "https://github.com/medusajs/medusa/blob/e0b5bb0b224458ebc8c93111e72f9a10aecf0275/packages/core/types/src/tax/provider.ts#L145"
+							"url": "https://github.com/medusajs/medusa/blob/ac76e19194a4b1b7f6c8e4fbcfc956c981a572f7/packages/core/types/src/tax/provider.ts#L145"
 						}
 					],
 					"signatures": [
@@ -404,7 +404,7 @@
 									"fileName": "provider.ts",
 									"line": 145,
 									"character": 2,
-									"url": "https://github.com/medusajs/medusa/blob/e0b5bb0b224458ebc8c93111e72f9a10aecf0275/packages/core/types/src/tax/provider.ts#L145"
+									"url": "https://github.com/medusajs/medusa/blob/ac76e19194a4b1b7f6c8e4fbcfc956c981a572f7/packages/core/types/src/tax/provider.ts#L145"
 								}
 							],
 							"parameters": [
@@ -535,7 +535,7 @@
 					"fileName": "provider.ts",
 					"line": 83,
 					"character": 17,
-					"url": "https://github.com/medusajs/medusa/blob/e0b5bb0b224458ebc8c93111e72f9a10aecf0275/packages/core/types/src/tax/provider.ts#L83"
+					"url": "https://github.com/medusajs/medusa/blob/ac76e19194a4b1b7f6c8e4fbcfc956c981a572f7/packages/core/types/src/tax/provider.ts#L83"
 				}
 			]
 		}
