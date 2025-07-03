@@ -25,6 +25,7 @@ medusaIntegrationTestRunner({
     let inventoryItem
     let inventoryItemExtra
     let location
+    let locationTwo
     let productExtra
     const shippingProviderId = "manual_test-provider"
 
@@ -212,6 +213,16 @@ medusaIntegrationTestRunner({
         )
       ).data.stock_location
 
+      locationTwo = (
+        await api.post(
+          `/admin/stock-locations`,
+          {
+            name: "Test location two",
+          },
+          adminHeaders
+        )
+      ).data.stock_location
+
       fulfillmentSet = (
         await api.post(
           `/admin/fulfillment-sets/${location.fulfillment_sets[0].id}/service-zones`,
@@ -240,6 +251,15 @@ medusaIntegrationTestRunner({
         adminHeaders
       )
 
+      // await api.post(
+      //   `/admin/inventory-items/${inventoryItem.id}/location-levels`,
+      //   {
+      //     location_id: locationTwo.id,
+      //     stocked_quantity: 0,
+      //   },
+      //   adminHeaders
+      // )
+
       inventoryItemExtra = (
         await api.get(`/admin/inventory-items?sku=variant-sku`, adminHeaders)
       ).data.inventory_items[0]
@@ -266,6 +286,14 @@ medusaIntegrationTestRunner({
             fulfillment_provider_id: shippingProviderId,
           },
         },
+        // {
+        //   [Modules.STOCK_LOCATION]: {
+        //     stock_location_id: locationTwo.id,
+        //   },
+        //   [Modules.FULFILLMENT]: {
+        //     fulfillment_provider_id: shippingProviderId,
+        //   },
+        // },
         {
           [Modules.STOCK_LOCATION]: {
             stock_location_id: location.id,
@@ -280,6 +308,14 @@ medusaIntegrationTestRunner({
           },
           [Modules.STOCK_LOCATION]: {
             stock_location_id: location.id,
+          },
+        },
+        {
+          [Modules.SALES_CHANNEL]: {
+            sales_channel_id: salesChannel.id,
+          },
+          [Modules.STOCK_LOCATION]: {
+            stock_location_id: locationTwo.id,
           },
         },
         {
@@ -553,10 +589,29 @@ medusaIntegrationTestRunner({
           )
         ).data.stock_location
 
+        locationTwo = (
+          await api.post(
+            `/admin/stock-locations`,
+            {
+              name: "Test location two",
+            },
+            adminHeaders
+          )
+        ).data.stock_location
+
         await api.post(
           `/admin/inventory-items/${inventoryItemLarge.id}/location-levels`,
           {
             location_id: location.id,
+            stocked_quantity: 0,
+          },
+          adminHeaders
+        )
+
+        await api.post(
+          `/admin/inventory-items/${inventoryItemLarge.id}/location-levels`,
+          {
+            location_id: locationTwo.id,
             stocked_quantity: 10,
           },
           adminHeaders
@@ -856,6 +911,62 @@ medusaIntegrationTestRunner({
             expect.objectContaining({
               inventory_item_id: inventoryItemSmall.id,
               quantity: 1,
+            }),
+          ])
+        )
+      })
+
+      it.only("should manage inventory across locations in order edit", async () => {
+        let edit = (
+          await api.post(
+            `/admin/order-edits`,
+            { order_id: order.id },
+            adminHeaders
+          )
+        ).data.order_change
+
+        // Add item
+        await api.post(
+          `/admin/order-edits/${order.id}/items`,
+          {
+            items: [
+              {
+                variant_id: product.variants.find((v) => v.title === "L shirt")
+                  .id,
+                quantity: 1,
+              },
+            ],
+          },
+          adminHeaders
+        )
+
+        edit = (
+          await api.post(
+            `/admin/order-edits/${order.id}/request`,
+            {},
+            adminHeaders
+          )
+        ).data.order_change
+
+        edit = (
+          await api.post(
+            `/admin/order-edits/${order.id}/confirm`,
+            {},
+            adminHeaders
+          )
+        ).data.order_change
+
+        order = (await api.get(`/admin/orders/${order.id}`, adminHeaders)).data
+          .order
+
+        console.log(JSON.stringify(order.items, null, 2))
+
+        expect(order.items.length).toBe(2)
+        expect(order.items).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              subtitle: "L shirt",
+              quantity: 2,
             }),
           ])
         )
