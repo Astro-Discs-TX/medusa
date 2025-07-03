@@ -118,6 +118,7 @@ export const completeCartFields = [
   "items.variant.inventory_items.inventory.location_levels.reserved_quantity",
   "items.variant.inventory_items.inventory.location_levels.raw_stocked_quantity",
   "items.variant.inventory_items.inventory.location_levels.raw_reserved_quantity",
+  "items.variant.inventory_items.inventory.location_levels.location_id",
   "items.variant.inventory_items.inventory.location_levels.stock_locations.id",
   "items.variant.inventory_items.inventory.location_levels.stock_locations.name",
   "items.variant.inventory_items.inventory.location_levels.stock_locations.sales_channels.id",
