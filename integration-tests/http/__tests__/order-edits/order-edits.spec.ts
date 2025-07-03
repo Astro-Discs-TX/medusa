@@ -213,16 +213,6 @@ medusaIntegrationTestRunner({
         )
       ).data.stock_location
 
-      locationTwo = (
-        await api.post(
-          `/admin/stock-locations`,
-          {
-            name: "Test location two",
-          },
-          adminHeaders
-        )
-      ).data.stock_location
-
       fulfillmentSet = (
         await api.post(
           `/admin/fulfillment-sets/${location.fulfillment_sets[0].id}/service-zones`,
@@ -251,15 +241,6 @@ medusaIntegrationTestRunner({
         adminHeaders
       )
 
-      // await api.post(
-      //   `/admin/inventory-items/${inventoryItem.id}/location-levels`,
-      //   {
-      //     location_id: locationTwo.id,
-      //     stocked_quantity: 0,
-      //   },
-      //   adminHeaders
-      // )
-
       inventoryItemExtra = (
         await api.get(`/admin/inventory-items?sku=variant-sku`, adminHeaders)
       ).data.inventory_items[0]
@@ -286,14 +267,6 @@ medusaIntegrationTestRunner({
             fulfillment_provider_id: shippingProviderId,
           },
         },
-        // {
-        //   [Modules.STOCK_LOCATION]: {
-        //     stock_location_id: locationTwo.id,
-        //   },
-        //   [Modules.FULFILLMENT]: {
-        //     fulfillment_provider_id: shippingProviderId,
-        //   },
-        // },
         {
           [Modules.STOCK_LOCATION]: {
             stock_location_id: location.id,
@@ -308,14 +281,6 @@ medusaIntegrationTestRunner({
           },
           [Modules.STOCK_LOCATION]: {
             stock_location_id: location.id,
-          },
-        },
-        {
-          [Modules.SALES_CHANNEL]: {
-            sales_channel_id: salesChannel.id,
-          },
-          [Modules.STOCK_LOCATION]: {
-            stock_location_id: locationTwo.id,
           },
         },
         {
@@ -821,6 +786,14 @@ medusaIntegrationTestRunner({
               stock_location_id: location.id,
             },
           },
+          {
+            [Modules.SALES_CHANNEL]: {
+              sales_channel_id: salesChannel.id,
+            },
+            [Modules.STOCK_LOCATION]: {
+              stock_location_id: locationTwo.id,
+            },
+          },
         ])
       })
 
@@ -916,7 +889,7 @@ medusaIntegrationTestRunner({
         )
       })
 
-      it.only("should manage inventory across locations in order edit", async () => {
+      it("should manage inventory across locations in order edit", async () => {
         let edit = (
           await api.post(
             `/admin/order-edits`,
@@ -959,9 +932,7 @@ medusaIntegrationTestRunner({
         order = (await api.get(`/admin/orders/${order.id}`, adminHeaders)).data
           .order
 
-        console.log(JSON.stringify(order.items, null, 2))
-
-        expect(order.items.length).toBe(2)
+        expect(order.items.length).toBe(3)
         expect(order.items).toEqual(
           expect.arrayContaining([
             expect.objectContaining({
