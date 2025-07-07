@@ -369,6 +369,24 @@ const generatedgeneratedHowToTutorialsSidebarSidebar = {
         {
           "loaded": true,
           "isPathHref": true,
+          "type": "link",
+          "title": "Add Gift Message",
+          "path": "/how-to-tutorials/tutorials/gift-message",
+          "description": "Learn how to add a gift option and message to items in the cart.",
+          "children": []
+        },
+        {
+          "loaded": true,
+          "isPathHref": true,
+          "type": "ref",
+          "title": "Analytics with Segment",
+          "path": "/integrations/guides/segment",
+          "description": "Learn how to integrate Segment with Medusa to track user interactions and events.",
+          "children": []
+        },
+        {
+          "loaded": true,
+          "isPathHref": true,
           "type": "ref",
           "title": "Bundled Products",
           "path": "/recipes/bundled-products/examples/standard",
@@ -430,6 +448,15 @@ const generatedgeneratedHowToTutorialsSidebarSidebar = {
         {
           "loaded": true,
           "isPathHref": true,
+          "type": "link",
+          "title": "First-Purchase Discounts",
+          "path": "/how-to-tutorials/tutorials/first-purchase-discounts",
+          "description": "Learn how to implement first-purchase discounts in your Medusa store.",
+          "children": []
+        },
+        {
+          "loaded": true,
+          "isPathHref": true,
           "type": "ref",
           "title": "Localization with Contentful",
           "path": "/integrations/guides/contentful",
@@ -452,6 +479,24 @@ const generatedgeneratedHowToTutorialsSidebarSidebar = {
           "title": "Magento Migration",
           "path": "/integrations/guides/magento",
           "description": "Learn how to migrate data from Magento to Medusa.",
+          "children": []
+        },
+        {
+          "loaded": true,
+          "isPathHref": true,
+          "type": "ref",
+          "title": "Newsletter with Mailchimp",
+          "path": "/integrations/guides/mailchimp",
+          "description": "Learn how to integrate Mailchimp with Medusa to manage and automate newsletters.",
+          "children": []
+        },
+        {
+          "loaded": true,
+          "isPathHref": true,
+          "type": "link",
+          "title": "Phone Authentication",
+          "path": "/how-to-tutorials/tutorials/phone-auth",
+          "description": "Learn how to allow users to authenticate using their phone numbers.",
           "children": []
         },
         {
@@ -519,8 +564,8 @@ const generatedgeneratedHowToTutorialsSidebarSidebar = {
           "loaded": true,
           "isPathHref": true,
           "type": "link",
-          "title": "Medusa Cloud",
-          "path": "https://medusajs.com/pricing",
+          "title": "Cloud",
+          "path": "https://docs.medusajs.com/cloud",
           "children": []
         },
         {

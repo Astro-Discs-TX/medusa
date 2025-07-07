@@ -16,8 +16,16 @@ export const customer = [
     "path": "https://docs.medusajs.com/resources/commerce-modules/customer/extend"
   },
   {
+    "title": "Implement First-Purchase Discount",
+    "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/first-purchase-discounts"
+  },
+  {
     "title": "Implement Loyalty Points",
     "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/loyalty-points"
+  },
+  {
+    "title": "Implement Phone Authentication",
+    "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/phone-auth"
   },
   {
     "title": "Manage Customer Addresses in Storefront",
