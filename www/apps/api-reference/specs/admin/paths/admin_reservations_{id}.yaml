@@ -35,6 +35,10 @@ get:
     - cookie_auth: []
     - jwt_token: []
   x-codeSamples:
+    - lang: JavaScript
+      label: JS SDK
+      source:
+        $ref: ../code_samples/JavaScript/admin_reservations_{id}/get.js
     - lang: Shell
       label: cURL
       source:
@@ -117,6 +121,10 @@ post:
               type: object
               description: The reservation's metadata. Can hold custom key-value pairs.
   x-codeSamples:
+    - lang: JavaScript
+      label: JS SDK
+      source:
+        $ref: ../code_samples/JavaScript/admin_reservations_{id}/post.js
     - lang: Shell
       label: cURL
       source:
@@ -143,6 +151,7 @@ post:
     '500':
       $ref: ../components/responses/500_error.yaml
   x-workflow: updateReservationsWorkflow
+  x-events: []
 delete:
   operationId: DeleteReservationsId
   summary: Delete a Reservation
@@ -160,6 +169,10 @@ delete:
     - cookie_auth: []
     - jwt_token: []
   x-codeSamples:
+    - lang: JavaScript
+      label: JS SDK
+      source:
+        $ref: ../code_samples/JavaScript/admin_reservations_{id}/delete.js
     - lang: Shell
       label: cURL
       source:
@@ -205,3 +218,4 @@ delete:
     '500':
       $ref: ../components/responses/500_error.yaml
   x-workflow: deleteReservationsWorkflow
+  x-events: []

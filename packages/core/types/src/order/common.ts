@@ -21,12 +21,15 @@ export type ChangeActionType =
   | "RETURN_ITEM"
   | "SHIPPING_ADD"
   | "SHIPPING_REMOVE"
+  | "SHIPPING_UPDATE"
   | "SHIP_ITEM"
   | "WRITE_OFF_ITEM"
   | "REINSTATE_ITEM"
   | "TRANSFER_CUSTOMER"
   | "UPDATE_ORDER_PROPERTIES"
   | "CREDIT_LINE_ADD"
+  | "PROMOTION_ADD"
+  | "PROMOTION_REMOVE"
 
 export type OrderChangeStatus =
   | "confirmed"
@@ -327,7 +330,7 @@ export interface OrderAddressDTO {
   country_code?: string
 
   /**
-   * The province/state of the address.
+   * The lower-case [ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2) province/state of the address.
    */
   province?: string
 
@@ -1120,6 +1123,11 @@ export interface OrderDTO {
   summary?: OrderSummaryDTO
 
   /**
+   * Whether the order is a draft order.
+   */
+  is_draft_order?: boolean
+
+  /**
    * Holds custom data in key-value pairs.
    */
   metadata?: Record<string, unknown> | null
@@ -1138,6 +1146,11 @@ export interface OrderDTO {
    * When the order was updated.
    */
   updated_at: string | Date
+
+  /**
+   * When the order was deleted.
+   */
+  deleted_at?: string | Date
 
   /**
    * The original item total of the order.
@@ -1213,6 +1226,11 @@ export interface OrderDTO {
    * The discount tax total of the order.
    */
   discount_tax_total: BigNumberValue
+
+  /**
+   * The credit line total of the order.
+   */
+  credit_line_total: BigNumberValue
 
   /**
    * The gift card total of the order.
@@ -1351,6 +1369,13 @@ export interface OrderDTO {
    * @ignore
    */
   raw_discount_tax_total: BigNumberRawValue
+
+  /**
+   * The raw credit line total of the order.
+   *
+   * @ignore
+   */
+  raw_credit_line_total: BigNumberRawValue
 
   /**
    * The raw gift card total of the order.

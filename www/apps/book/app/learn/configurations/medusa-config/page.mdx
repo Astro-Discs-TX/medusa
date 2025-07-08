@@ -207,23 +207,6 @@ module.exports = defineConfig({
 })
 ```
 
-### databaseSchema
-
-The `projectConfig.databaseSchema` configuration specifies the PostgreSQL database schema to connect to, which is `public` by default. Use this configuration only if you want to connect to a different schema.
-
-#### Example
-
-```ts title="medusa-config.ts"
-module.exports = defineConfig({
-  projectConfig: {
-    databaseSchema: process.env.DATABASE_SCHEMA ||
-      "custom",
-    // ...
-  },
-  // ...
-})
-```
-
 ### databaseUrl
 
 The `projectConfig.databaseUrl` configuration specifies the PostgreSQL connection URL of the database to connect to. Its format is:
@@ -636,7 +619,7 @@ The value of this configuration is prepended to `sess:`. For example, if you set
 
 <Note>
 
-This configuration is not used for modules that also connect to Redis, such as the [Redis Cache Module](!resources!/architectural-modules/cache/redis).
+This configuration is not used for modules that also connect to Redis, such as the [Redis Cache Module](!resources!/infrastructure-modules/cache/redis).
 
 </Note>
 
@@ -656,7 +639,7 @@ module.exports = defineConfig({
 
 The `projectConfig.redisUrl` configuration specifies the connection URL to Redis to store the Medusa server session. When specified, the Medusa server uses Redis to store the session data. Otherwie, the session data is stored in-memory.
 
-This configuration is not used for modules that also connect to Redis, such as the [Redis Cache Module](!resources!/architectural-modules/cache/redis). You'll have to configure the Redis connection for those modules separately.
+This configuration is not used for modules that also connect to Redis, such as the [Redis Cache Module](!resources!/infrastructure-modules/cache/redis). You'll have to configure the Redis connection for those modules separately.
 
 <Note>
 
@@ -699,7 +682,7 @@ The `projectConfig.sessionOptions` configuration defines additional options to p
 
 <Note>
 
-This configuration is not used for modules that also connect to Redis, such as the [Redis Cache Module](!resources!/architectural-modules/cache/redis).
+This configuration is not used for modules that also connect to Redis, such as the [Redis Cache Module](!resources!/infrastructure-modules/cache/redis).
 
 </Note>
 
@@ -895,7 +878,7 @@ module.exports = defineConfig({
 
 ## Module Configurations (`modules`)
 
-The `modules` configuration allows you to register and configure the [modules](../../fundamentals/modules/page.mdx) registered in the Medusa application. Medusa's commerce and architectural modules are configured by default. So, you only need to pass your custom modules, or override the default configurations of the existing modules.
+The `modules` configuration allows you to register and configure the [modules](../../fundamentals/modules/page.mdx) registered in the Medusa application. Medusa's commerce and Infrastructure Modules are configured by default. So, you only need to pass your custom modules, or override the default configurations of the existing modules.
 
 `modules` is an array of objects for the modules to register. Each object has the following properties:
 

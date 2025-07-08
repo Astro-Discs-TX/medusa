@@ -3,21 +3,30 @@ import {
   IDistributedSchedulerStorage,
   IDistributedTransactionStorage,
   SchedulerOptions,
+  SkipCancelledExecutionError,
   SkipExecutionError,
   TransactionCheckpoint,
+  TransactionContext,
   TransactionFlow,
   TransactionOptions,
   TransactionStep,
+  TransactionStepError,
 } from "@medusajs/framework/orchestration"
-import { Logger, ModulesSdkTypes } from "@medusajs/framework/types"
+import {
+  InferEntityType,
+  Logger,
+  ModulesSdkTypes,
+} from "@medusajs/framework/types"
 import {
   MedusaError,
   TransactionState,
   TransactionStepState,
   isPresent,
 } from "@medusajs/framework/utils"
+import { raw } from "@mikro-orm/core"
 import { WorkflowOrchestratorService } from "@services"
 import { type CronExpression, parseExpression } from "cron-parser"
+import { WorkflowExecution } from "../models/workflow-execution"
 
 function parseNextExecution(
   optionsOrExpression: SchedulerOptions | CronExpression | string | number
@@ -52,7 +61,8 @@ export class InMemoryDistributedTransactionStorage
   private logger_: Logger
   private workflowOrchestratorService_: WorkflowOrchestratorService
 
-  private storage: Map<string, TransactionCheckpoint> = new Map()
+  private storage: Map<string, Omit<TransactionCheckpoint, "context">> =
+    new Map()
   private scheduled: Map<
     string,
     {
@@ -65,6 +75,8 @@ export class InMemoryDistributedTransactionStorage
   private retries: Map<string, unknown> = new Map()
   private timeouts: Map<string, unknown> = new Map()
 
+  private clearTimeout_: NodeJS.Timeout
+
   constructor({
     workflowExecutionService,
     logger,
@@ -76,6 +88,18 @@ export class InMemoryDistributedTransactionStorage
     this.logger_ = logger
   }
 
+  async onApplicationStart() {
+    this.clearTimeout_ = setInterval(async () => {
+      try {
+        await this.clearExpiredExecutions()
+      } catch {}
+    }, 1000 * 60 * 60)
+  }
+
+  async onApplicationShutdown() {
+    clearInterval(this.clearTimeout_)
+  }
+
   setWorkflowOrchestratorService(workflowOrchestratorService) {
     this.workflowOrchestratorService_ = workflowOrchestratorService
   }
@@ -85,6 +109,7 @@ export class InMemoryDistributedTransactionStorage
       {
         workflow_id: data.flow.modelId,
         transaction_id: data.flow.transactionId,
+        run_id: data.flow.runId,
         execution: data.flow,
         context: {
           data: data.context,
@@ -101,51 +126,71 @@ export class InMemoryDistributedTransactionStorage
       {
         workflow_id: data.flow.modelId,
         transaction_id: data.flow.transactionId,
+        run_id: data.flow.runId,
       },
     ])
   }
 
   async get(
     key: string,
-    options?: TransactionOptions
+    options?: TransactionOptions & {
+      isCancelling?: boolean
+    }
   ): Promise<TransactionCheckpoint | undefined> {
-    const data = this.storage.get(key)
-
-    if (data) {
-      return data
-    }
-
-    const { idempotent } = options ?? {}
-    if (!idempotent) {
-      return
-    }
-
     const [_, workflowId, transactionId] = key.split(":")
-    const trx = await this.workflowExecutionService_
-      .retrieve(
-        {
-          workflow_id: workflowId,
-          transaction_id: transactionId,
-        },
-        {
-          select: ["execution", "context"],
-        }
-      )
-      .catch(() => undefined)
+    const trx: InferEntityType<typeof WorkflowExecution> | undefined =
+      await this.workflowExecutionService_
+        .list(
+          {
+            workflow_id: workflowId,
+            transaction_id: transactionId,
+          },
+          {
+            select: ["execution", "context"],
+            order: {
+              id: "desc",
+            },
+            take: 1,
+          }
+        )
+        .then((trx) => trx[0])
+        .catch(() => undefined)
 
     if (trx) {
+      const { flow, errors } = this.storage.get(key) ?? {}
+      const { idempotent } = options ?? {}
+      const execution = trx.execution as TransactionFlow
+
+      if (!idempotent) {
+        const isFailedOrReverted = [
+          TransactionState.REVERTED,
+          TransactionState.FAILED,
+        ].includes(execution.state)
+
+        const isDone = execution.state === TransactionState.DONE
+
+        const isCancellingAndFailedOrReverted =
+          options?.isCancelling && isFailedOrReverted
+
+        const isNotCancellingAndDoneOrFailedOrReverted =
+          !options?.isCancelling && (isDone || isFailedOrReverted)
+
+        if (
+          isCancellingAndFailedOrReverted ||
+          isNotCancellingAndDoneOrFailedOrReverted
+        ) {
+          return
+        }
+      }
+
       return {
-        flow: trx.execution,
-        context: trx.context.data,
-        errors: trx.context.errors,
+        flow: flow ?? (trx.execution as TransactionFlow),
+        context: trx.context?.data as TransactionContext,
+        errors: errors ?? (trx.context?.errors as TransactionStepError[]),
       }
     }
 
     return
-  }
-
-  async list(): Promise<TransactionCheckpoint[]> {
-    return Array.from(this.storage.values())
   }
 
   async save(
@@ -172,19 +217,45 @@ export class InMemoryDistributedTransactionStorage
       options,
     })
 
-    Object.assign(data, {
-      retention_time: retentionTime,
-    })
-    this.storage.set(key, data)
-
-    if (hasFinished && !retentionTime && !idempotent) {
-      await this.deleteFromDb(data)
-    } else {
-      await this.saveToDb(data, retentionTime)
+    // Only store retention time if it's provided
+    if (retentionTime) {
+      Object.assign(data, {
+        retention_time: retentionTime,
+      })
     }
 
+    // Store in memory
+    const isNotStarted = data.flow.state === TransactionState.NOT_STARTED
+    const isManualTransactionId = !data.flow.transactionId.startsWith("auto-")
+
+    if (isNotStarted && isManualTransactionId) {
+      const storedData = this.storage.get(key)
+      if (storedData) {
+        throw new MedusaError(
+          MedusaError.Types.INVALID_ARGUMENT,
+          "Transaction already started for transactionId: " +
+            data.flow.transactionId
+        )
+      }
+    }
+
+    const { flow, errors } = data
+    this.storage.set(key, {
+      flow,
+      errors,
+    })
+
+    // Optimize DB operations - only perform when necessary
     if (hasFinished) {
+      if (!retentionTime && !idempotent) {
+        await this.deleteFromDb(data)
+      } else {
+        await this.saveToDb(data, retentionTime)
+      }
+
       this.storage.delete(key)
+    } else {
+      await this.saveToDb(data, retentionTime)
     }
   }
 
@@ -197,20 +268,32 @@ export class InMemoryDistributedTransactionStorage
     key: string
     options?: TransactionOptions
   }) {
-    let isInitialCheckpoint = false
-
-    if (data.flow.state === TransactionState.NOT_STARTED) {
-      isInitialCheckpoint = true
-    }
+    const isInitialCheckpoint = [TransactionState.NOT_STARTED].includes(
+      data.flow.state
+    )
 
     /**
      * In case many execution can succeed simultaneously, we need to ensure that the latest
      * execution does continue if a previous execution is considered finished
      */
     const currentFlow = data.flow
-    const { flow: latestUpdatedFlow } =
-      (await this.get(key, options)) ??
-      ({ flow: {} } as { flow: TransactionFlow })
+
+    const rawData = this.storage.get(key)
+    let data_ = {} as TransactionCheckpoint
+    if (rawData) {
+      data_ = rawData as TransactionCheckpoint
+    } else {
+      const getOptions = {
+        ...options,
+        isCancelling: !!data.flow.cancelledAt,
+      } as Parameters<typeof this.get>[1]
+
+      data_ =
+        (await this.get(key, getOptions)) ??
+        ({ flow: {} } as TransactionCheckpoint)
+    }
+
+    const { flow: latestUpdatedFlow } = data_
 
     if (!isInitialCheckpoint && !isPresent(latestUpdatedFlow)) {
       /**
@@ -222,49 +305,58 @@ export class InMemoryDistributedTransactionStorage
       throw new SkipExecutionError("Already finished by another execution")
     }
 
-    const currentFlowLastInvokingStepIndex = Object.values(
-      currentFlow.steps
-    ).findIndex((step) => {
-      return [
-        TransactionStepState.INVOKING,
-        TransactionStepState.NOT_STARTED,
-      ].includes(step.invoke?.state)
-    })
+    // First ensure that the latest execution was not cancelled, otherwise we skip the execution
+    const latestTransactionCancelledAt = latestUpdatedFlow.cancelledAt
+    const currentTransactionCancelledAt = currentFlow.cancelledAt
+
+    if (
+      !!latestTransactionCancelledAt &&
+      currentTransactionCancelledAt == null
+    ) {
+      throw new SkipCancelledExecutionError(
+        "Workflow execution has been cancelled during the execution"
+      )
+    }
+
+    const currentFlowSteps = Object.values(currentFlow.steps || {})
+    const latestUpdatedFlowSteps = latestUpdatedFlow.steps
+      ? Object.values(
+          latestUpdatedFlow.steps as Record<string, TransactionStep>
+        )
+      : []
+
+    // Predefined states for quick lookup
+    const invokingStates = [
+      TransactionStepState.INVOKING,
+      TransactionStepState.NOT_STARTED,
+    ]
+
+    const compensatingStates = [
+      TransactionStepState.COMPENSATING,
+      TransactionStepState.NOT_STARTED,
+    ]
+
+    const isInvokingState = (step: TransactionStep) =>
+      invokingStates.includes(step.invoke?.state)
+
+    const isCompensatingState = (step: TransactionStep) =>
+      compensatingStates.includes(step.compensate?.state)
+
+    const currentFlowLastInvokingStepIndex =
+      currentFlowSteps.findIndex(isInvokingState)
 
     const latestUpdatedFlowLastInvokingStepIndex = !latestUpdatedFlow.steps
       ? 1 // There is no other execution, so the current execution is the latest
-      : Object.values(
-          (latestUpdatedFlow.steps as Record<string, TransactionStep>) ?? {}
-        ).findIndex((step) => {
-          return [
-            TransactionStepState.INVOKING,
-            TransactionStepState.NOT_STARTED,
-          ].includes(step.invoke?.state)
-        })
+      : latestUpdatedFlowSteps.findIndex(isInvokingState)
 
-    const currentFlowLastCompensatingStepIndex = Object.values(
-      currentFlow.steps
-    )
-      .reverse()
-      .findIndex((step) => {
-        return [
-          TransactionStepState.COMPENSATING,
-          TransactionStepState.NOT_STARTED,
-        ].includes(step.compensate?.state)
-      })
+    const reversedCurrentFlowSteps = [...currentFlowSteps].reverse()
+    const currentFlowLastCompensatingStepIndex =
+      reversedCurrentFlowSteps.findIndex(isCompensatingState)
 
+    const reversedLatestUpdatedFlowSteps = [...latestUpdatedFlowSteps].reverse()
     const latestUpdatedFlowLastCompensatingStepIndex = !latestUpdatedFlow.steps
       ? -1 // There is no other execution, so the current execution is the latest
-      : Object.values(
-          (latestUpdatedFlow.steps as Record<string, TransactionStep>) ?? {}
-        )
-          .reverse()
-          .findIndex((step) => {
-            return [
-              TransactionStepState.COMPENSATING,
-              TransactionStepState.NOT_STARTED,
-            ].includes(step.compensate?.state)
-          })
+      : reversedLatestUpdatedFlowSteps.findIndex(isCompensatingState)
 
     const isLatestExecutionFinishedIndex = -1
     const invokeShouldBeSkipped =
@@ -281,20 +373,29 @@ export class InMemoryDistributedTransactionStorage
       latestUpdatedFlowLastCompensatingStepIndex !==
         isLatestExecutionFinishedIndex
 
+    const isCompensatingMismatch =
+      latestUpdatedFlow.state === TransactionState.COMPENSATING &&
+      ![TransactionState.REVERTED, TransactionState.FAILED].includes(
+        currentFlow.state
+      ) &&
+      currentFlow.state !== latestUpdatedFlow.state
+
+    const isRevertedMismatch =
+      latestUpdatedFlow.state === TransactionState.REVERTED &&
+      currentFlow.state !== TransactionState.REVERTED
+
+    const isFailedMismatch =
+      latestUpdatedFlow.state === TransactionState.FAILED &&
+      currentFlow.state !== TransactionState.FAILED
+
     if (
       (data.flow.state !== TransactionState.COMPENSATING &&
         invokeShouldBeSkipped) ||
       (data.flow.state === TransactionState.COMPENSATING &&
         compensateShouldBeSkipped) ||
-      (latestUpdatedFlow.state === TransactionState.COMPENSATING &&
-        ![TransactionState.REVERTED, TransactionState.FAILED].includes(
-          currentFlow.state
-        ) &&
-        currentFlow.state !== latestUpdatedFlow.state) ||
-      (latestUpdatedFlow.state === TransactionState.REVERTED &&
-        currentFlow.state !== TransactionState.REVERTED) ||
-      (latestUpdatedFlow.state === TransactionState.FAILED &&
-        currentFlow.state !== TransactionState.FAILED)
+      isCompensatingMismatch ||
+      isRevertedMismatch ||
+      isFailedMismatch
     ) {
       throw new SkipExecutionError("Already finished by another execution")
     }
@@ -309,10 +410,16 @@ export class InMemoryDistributedTransactionStorage
     const { modelId: workflowId, transactionId } = transaction
 
     const inter = setTimeout(async () => {
+      const context = transaction.getFlow().metadata ?? {}
       await this.workflowOrchestratorService_.run(workflowId, {
         transactionId,
         logOnError: true,
         throwOnError: false,
+        context: {
+          eventGroupId: context.eventGroupId,
+          parentStepIdempotencyKey: context.parentStepIdempotencyKey,
+          preventReleaseEvents: context.preventReleaseEvents,
+        },
       })
     }, interval * 1e3)
 
@@ -342,9 +449,16 @@ export class InMemoryDistributedTransactionStorage
     const { modelId: workflowId, transactionId } = transaction
 
     const inter = setTimeout(async () => {
+      const context = transaction.getFlow().metadata ?? {}
       await this.workflowOrchestratorService_.run(workflowId, {
         transactionId,
+        logOnError: true,
         throwOnError: false,
+        context: {
+          eventGroupId: context.eventGroupId,
+          parentStepIdempotencyKey: context.parentStepIdempotencyKey,
+          preventReleaseEvents: context.preventReleaseEvents,
+        },
       })
     }, interval * 1e3)
 
@@ -374,9 +488,16 @@ export class InMemoryDistributedTransactionStorage
     const { modelId: workflowId, transactionId } = transaction
 
     const inter = setTimeout(async () => {
+      const context = transaction.getFlow().metadata ?? {}
       await this.workflowOrchestratorService_.run(workflowId, {
         transactionId,
+        logOnError: true,
         throwOnError: false,
+        context: {
+          eventGroupId: context.eventGroupId,
+          parentStepIdempotencyKey: context.parentStepIdempotencyKey,
+          preventReleaseEvents: context.preventReleaseEvents,
+        },
       })
     }, interval * 1e3)
 
@@ -407,12 +528,13 @@ export class InMemoryDistributedTransactionStorage
       typeof jobDefinition === "string" ? jobDefinition : jobDefinition.jobId
 
     // In order to ensure that the schedule configuration is always up to date, we first cancel an existing job, if there was one
-    // any only then we add the new one.
     await this.remove(jobId)
+
     let expression: CronExpression | number
     let nextExecution = parseNextExecution(schedulerOptions)
 
     if ("cron" in schedulerOptions) {
+      // Cache the parsed expression to avoid repeated parsing
       expression = parseExpression(schedulerOptions.cron)
     } else if ("interval" in schedulerOptions) {
       expression = schedulerOptions.interval
@@ -426,6 +548,9 @@ export class InMemoryDistributedTransactionStorage
     const timer = setTimeout(async () => {
       this.jobHandler(jobId)
     }, nextExecution)
+
+    // Set the timer's unref to prevent it from keeping the process alive
+    timer.unref()
 
     this.scheduled.set(jobId, {
       timer,
@@ -467,22 +592,27 @@ export class InMemoryDistributedTransactionStorage
 
     const nextExecution = parseNextExecution(job.expression)
 
-    const timer = setTimeout(async () => {
-      this.jobHandler(jobId)
-    }, nextExecution)
-
-    this.scheduled.set(jobId, {
-      timer,
-      expression: job.expression,
-      numberOfExecutions: (job.numberOfExecutions ?? 0) + 1,
-      config: job.config,
-    })
-
     try {
-      // With running the job after setting a new timer we basically allow for concurrent runs, unless we add idempotency keys once they are supported.
       await this.workflowOrchestratorService_.run(jobId, {
         logOnError: true,
         throwOnError: false,
+      })
+
+      // Only schedule the next job execution after the current one completes successfully
+      const timer = setTimeout(async () => {
+        setImmediate(() => {
+          this.jobHandler(jobId)
+        })
+      }, nextExecution)
+
+      // Prevent timer from keeping the process alive
+      timer.unref()
+
+      this.scheduled.set(jobId, {
+        timer,
+        expression: job.expression,
+        numberOfExecutions: (job.numberOfExecutions ?? 0) + 1,
+        config: job.config,
       })
     } catch (e) {
       if (e instanceof MedusaError && e.type === MedusaError.Types.NOT_FOUND) {
@@ -496,5 +626,26 @@ export class InMemoryDistributedTransactionStorage
 
       throw e
     }
+  }
+
+  async clearExpiredExecutions(): Promise<void> {
+    await this.workflowExecutionService_.delete({
+      retention_time: {
+        $ne: null,
+      },
+      updated_at: {
+        $lte: raw(
+          (alias) =>
+            `CURRENT_TIMESTAMP - (INTERVAL '1 second' * retention_time)`
+        ),
+      },
+      state: {
+        $in: [
+          TransactionState.DONE,
+          TransactionState.FAILED,
+          TransactionState.REVERTED,
+        ],
+      },
+    })
   }
 }

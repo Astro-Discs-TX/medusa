@@ -7,10 +7,15 @@ import {
   cloudinaryImgRehypePlugin,
   pageNumberRehypePlugin,
   crossProjectLinksPlugin,
+  recmaInjectMdxDataPlugin,
+  remarkAttachFrontmatterDataPlugin,
 } from "remark-rehype-plugins"
 import path from "path"
 import redirects from "./utils/redirects.mjs"
 import { generatedSidebars } from "./generated/sidebar.mjs"
+import { catchBadRedirects } from "build-scripts"
+import remarkFrontmatter from "remark-frontmatter"
+import withExtractedTableOfContents from "@stefanprobst/rehype-extract-toc"
 
 const withMDX = mdx({
   extension: /\.mdx?$/,
@@ -31,6 +36,13 @@ const withMDX = mdx({
             "user-guide": {
               projectPath: path.resolve("..", "user-guide"),
             },
+            api: {
+              projectPath: path.resolve("..", "api-reference"),
+              skipSlugValidation: true,
+            },
+            cloud: {
+              projectPath: path.resolve("..", "cloud"),
+            },
           },
         },
       ],
@@ -43,13 +55,16 @@ const withMDX = mdx({
               url: process.env.NEXT_PUBLIC_RESOURCES_URL,
             },
             "user-guide": {
-              url: process.env.NEXT_PUBLIC_RESOURCES_URL,
+              url: process.env.NEXT_PUBLIC_USER_GUIDE_URL,
             },
             ui: {
-              url: process.env.NEXT_PUBLIC_RESOURCES_URL,
+              url: process.env.NEXT_PUBLIC_UI_URL,
             },
             api: {
-              url: process.env.NEXT_PUBLIC_RESOURCES_URL,
+              url: process.env.NEXT_PUBLIC_API_URL,
+            },
+            cloud: {
+              url: process.env.NEXT_PUBLIC_CLOUD_URL,
             },
           },
           useBaseUrl:
@@ -85,7 +100,10 @@ const withMDX = mdx({
           sidebar: generatedSidebars[0].items,
         },
       ],
+      [withExtractedTableOfContents],
     ],
+    remarkPlugins: [[remarkFrontmatter], [remarkAttachFrontmatterDataPlugin]],
+    recmaPlugins: [[recmaInjectMdxDataPlugin]],
     jsx: true,
   },
 })
@@ -165,10 +183,27 @@ const nextConfig = {
           destination: `${process.env.NEXT_PUBLIC_USER_GUIDE_URL || "https://localhost:3001"}/user-guide/:path*`,
           basePath: false,
         },
+        {
+          source: "/cloud",
+          destination: `${process.env.NEXT_PUBLIC_CLOUD_URL || "https://localhost:3001"}/cloud`,
+          basePath: false,
+        },
+        {
+          source: "/cloud/:path*",
+          destination: `${process.env.NEXT_PUBLIC_CLOUD_URL || "https://localhost:3001"}/cloud/:path*`,
+          basePath: false,
+        },
       ],
     }
   },
-  redirects,
+  redirects: async () => {
+    const result = await redirects()
+
+    return catchBadRedirects(result)
+  },
+  outputFileTracingIncludes: {
+    "/md\\-content/\\[\\.\\.\\.slug\\]": ["./app/**/*.mdx"],
+  },
   outputFileTracingExcludes: {
     "*": ["node_modules/@medusajs/icons"],
   },

@@ -1,3 +1,14 @@
+---
+products:
+  - customer
+  - order
+  - payment
+  - product
+  - promotion
+  - region
+  - sales channel
+---
+
 import { CodeTabs, CodeTab, Table } from "docs-ui"
 
 export const metadata = {
@@ -6,7 +17,7 @@ export const metadata = {
 
 # {metadata.title}
 
-This document showcases the module links defined between the Cart Module and other commerce modules.
+This document showcases the module links defined between the Cart Module and other Commerce Modules.
 
 ## Summary
 
@@ -44,7 +55,7 @@ Read-only links are used to query data across modules, but the relations aren't 
         [Customer](/references/customer/models/Customer) in [Customer Module](../../customer/page.mdx)
       </Table.Cell>
       <Table.Cell>
-        Read-only
+        Read-only - has one
       </Table.Cell>
       <Table.Cell>
         [Learn more](#customer-module)
@@ -58,7 +69,7 @@ Read-only links are used to query data across modules, but the relations aren't 
         [Cart](/references/cart/models/Cart)
       </Table.Cell>
       <Table.Cell>
-        Stored
+        Stored - one-to-one
       </Table.Cell>
       <Table.Cell>
         [Learn more](#order-module)
@@ -72,7 +83,7 @@ Read-only links are used to query data across modules, but the relations aren't 
         [PaymentCollection](/references/payment/models/PaymentCollection) in [Payment Module](../../payment/page.mdx)
       </Table.Cell>
       <Table.Cell>
-        Stored
+        Stored - one-to-one
       </Table.Cell>
       <Table.Cell>
         [Learn more](#payment-module)
@@ -86,7 +97,7 @@ Read-only links are used to query data across modules, but the relations aren't 
         [Product](/references/product/models/Product) in [Product Module](../../product/page.mdx)
       </Table.Cell>
       <Table.Cell>
-        Read-only
+        Read-only - has one
       </Table.Cell>
       <Table.Cell>
         [Learn more](#product-module)
@@ -100,7 +111,7 @@ Read-only links are used to query data across modules, but the relations aren't 
         [ProductVariant](/references/product/models/ProductVariant) in [Product Module](../../product/page.mdx)
       </Table.Cell>
       <Table.Cell>
-        Read-only
+        Read-only - has one
       </Table.Cell>
       <Table.Cell>
         [Learn more](#product-module)
@@ -114,7 +125,7 @@ Read-only links are used to query data across modules, but the relations aren't 
         [Promotion](/references/promotion/models/Promotion) in [Promotion Module](../../promotion/page.mdx)
       </Table.Cell>
       <Table.Cell>
-        Stored
+        Stored - many-to-many
       </Table.Cell>
       <Table.Cell>
         [Learn more](#promotion-module)
@@ -128,7 +139,7 @@ Read-only links are used to query data across modules, but the relations aren't 
         [Region](/references/region/models/Region) in [Region Module](../../region/page.mdx)
       </Table.Cell>
       <Table.Cell>
-        Read-only
+        Read-only - has one
       </Table.Cell>
       <Table.Cell>
         [Learn more](#region-module)
@@ -142,7 +153,7 @@ Read-only links are used to query data across modules, but the relations aren't 
         [SalesChannel](/references/sales-channel/models/SalesChannel) in [Sales Channel Module](../../sales-channel/page.mdx)
       </Table.Cell>
       <Table.Cell>
-        Read-only
+        Read-only - has one
       </Table.Cell>
       <Table.Cell>
         [Learn more](#sales-channel-module)
@@ -174,7 +185,7 @@ const { data: carts } = await query.graph({
   ],
 })
 
-// carts.order
+// carts[0].customer
 ```
 
   </CodeTab>
@@ -192,7 +203,7 @@ const { data: carts } = useQueryGraphStep({
   ],
 })
 
-// carts.order
+// carts[0].customer
 ```
 
   </CodeTab>
@@ -223,7 +234,7 @@ const { data: carts } = await query.graph({
   ],
 })
 
-// carts.order
+// carts[0].order
 ```
 
   </CodeTab>
@@ -241,7 +252,7 @@ const { data: carts } = useQueryGraphStep({
   ],
 })
 
-// carts.order
+// carts[0].order
 ```
 
   </CodeTab>
@@ -316,7 +327,7 @@ const { data: carts } = await query.graph({
   ],
 })
 
-// carts.payment_collection
+// carts[0].payment_collection
 ```
 
   </CodeTab>
@@ -334,7 +345,7 @@ const { data: carts } = useQueryGraphStep({
   ],
 })
 
-// carts.payment_collection
+// carts[0].payment_collection
 ```
 
   </CodeTab>
@@ -470,7 +481,7 @@ const { data: carts } = await query.graph({
   ],
 })
 
-// carts.promotions
+// carts[0].promotions
 ```
 
   </CodeTab>
@@ -488,7 +499,7 @@ const { data: carts } = useQueryGraphStep({
   ],
 })
 
-// carts.promotions
+// carts[0].promotions
 ```
 
   </CodeTab>
@@ -559,7 +570,7 @@ const { data: carts } = await query.graph({
   ],
 })
 
-// carts.region
+// carts[0].region
 ```
 
   </CodeTab>
@@ -577,7 +588,7 @@ const { data: carts } = useQueryGraphStep({
   ],
 })
 
-// carts.region
+// carts[0].region
 ```
 
   </CodeTab>
@@ -604,7 +615,7 @@ const { data: carts } = await query.graph({
   ],
 })
 
-// carts.sales_channel
+// carts[0].sales_channel
 ```
 
   </CodeTab>
@@ -622,7 +633,7 @@ const { data: carts } = useQueryGraphStep({
   ],
 })
 
-// carts.sales_channel
+// carts[0].sales_channel
 ```
 
   </CodeTab>

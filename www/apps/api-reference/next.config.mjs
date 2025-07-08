@@ -7,6 +7,7 @@ import {
   crossProjectLinksPlugin,
 } from "remark-rehype-plugins"
 import path from "path"
+import { catchBadRedirects } from "build-scripts"
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -23,13 +24,13 @@ const nextConfig = {
     optimizePackageImports: ["docs-utils"],
   },
   async redirects() {
-    return [
+    return catchBadRedirects([
       {
         source: "/api/download/:path",
         destination: "/download/:path",
         permanent: true,
       },
-    ]
+    ])
   },
 }
 
@@ -54,6 +55,9 @@ const withMDX = createMDX({
             "user-guide": {
               projectPath: path.resolve("..", "user-guide"),
             },
+            cloud: {
+              projectPath: path.resolve("..", "cloud"),
+            },
           },
         },
       ],
@@ -74,6 +78,9 @@ const withMDX = createMDX({
             },
             ui: {
               url: process.env.NEXT_PUBLIC_UI_URL,
+            },
+            cloud: {
+              url: process.env.NEXT_PUBLIC_CLOUD_URL,
             },
           },
           useBaseUrl:

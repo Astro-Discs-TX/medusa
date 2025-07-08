@@ -6,6 +6,7 @@ import {
   OrderItemDTO,
   OrderLineItemDTO,
   OrderReturnReasonDTO,
+  OrderStatus,
   OrderTransactionDTO,
   ReturnDTO,
 } from "./common"
@@ -66,7 +67,7 @@ export interface UpsertOrderAddressDTO {
   country_code?: string
 
   /**
-   * The province of the address.
+   * The lower-case [ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2) province of the address.
    */
   province?: string
 
@@ -224,6 +225,16 @@ export interface UpdateOrderDTO {
   sales_channel_id?: string
 
   /**
+   * The status of the order.
+   */
+  status?: OrderStatus
+
+  /**
+   * Whether the order is a draft order.
+   */
+  is_draft_order?: boolean
+
+  /**
    * The items of the order.
    */
   items?: CreateOrderLineItemDTO[]
@@ -285,6 +296,11 @@ export interface CreateOrderAdjustmentDTO {
    * The associated provider's ID.
    */
   provider_id?: string
+
+  /**
+   * Whether the adjustment is tax inclusive.
+   */
+  is_tax_inclusive?: boolean
 }
 
 /**
@@ -2286,12 +2302,12 @@ export interface CreateOrderCreditLineDTO {
   /**
    * The reference model name that the credit line is generated from
    */
-  reference: string | null
+  reference?: string | null
 
   /**
    * The reference model id that the credit line is generated from
    */
-  reference_id: string | null
+  reference_id?: string | null
 
   /**
    * The metadata of the order detail

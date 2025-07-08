@@ -1,3 +1,11 @@
+---
+products:
+  - order
+  - pricing
+  - product
+  - stock location
+---
+
 import { CodeTabs, CodeTab, Table } from "docs-ui"
 
 export const metadata = {
@@ -6,7 +14,7 @@ export const metadata = {
 
 # {metadata.title}
 
-This document showcases the module links defined between the Fulfillment Module and other commerce modules.
+This document showcases the module links defined between the Fulfillment Module and other Commerce Modules.
 
 ## Summary
 
@@ -38,7 +46,7 @@ The Fulfillment Module has the following links to other modules:
         [Fulfillment](/references/fulfillment/models/Fulfillment)
       </Table.Cell>
       <Table.Cell>
-        Stored
+        Stored - one-to-many
       </Table.Cell>
       <Table.Cell>
         [Learn more](#order-module)
@@ -52,7 +60,7 @@ The Fulfillment Module has the following links to other modules:
         [Fulfillment](/references/fulfillment/models/Fulfillment)
       </Table.Cell>
       <Table.Cell>
-        Stored
+        Stored - one-to-many
       </Table.Cell>
       <Table.Cell>
         [Learn more](#order-module)
@@ -66,7 +74,7 @@ The Fulfillment Module has the following links to other modules:
         [ShippingOption](/references/fulfillment/models/ShippingOption)
       </Table.Cell>
       <Table.Cell>
-        Stored
+        Stored - many-to-one
       </Table.Cell>
       <Table.Cell>
         [Learn more](#pricing-module)
@@ -80,7 +88,7 @@ The Fulfillment Module has the following links to other modules:
         [ShippingProfile](/references/fulfillment/models/ShippingProfile)
       </Table.Cell>
       <Table.Cell>
-        Stored
+        Stored - many-to-one
       </Table.Cell>
       <Table.Cell>
         [Learn more](#product-module)
@@ -88,13 +96,13 @@ The Fulfillment Module has the following links to other modules:
     </Table.Row>
     <Table.Row>
       <Table.Cell>
-        [StockLocation](/references/stock-location/models/StockLocation) in [Stock Location Module](../../stock-location/page.mdx)
+        [StockLocation](/references/stock-location-next/models/StockLocation) in [Stock Location Module](../../stock-location/page.mdx)
       </Table.Cell>
       <Table.Cell>
         [FulfillmentProvider](/references/fulfillment/models/FulfillmentProvider)
       </Table.Cell>
       <Table.Cell>
-        Stored
+        Stored - one-to-many
       </Table.Cell>
       <Table.Cell>
         [Learn more](#stock-location-module)
@@ -102,13 +110,13 @@ The Fulfillment Module has the following links to other modules:
     </Table.Row>
     <Table.Row>
       <Table.Cell>
-        [StockLocation](/references/stock-location/models/StockLocation) in [Stock Location Module](../../stock-location/page.mdx)
+        [StockLocation](/references/stock-location-next/models/StockLocation) in [Stock Location Module](../../stock-location/page.mdx)
       </Table.Cell>
       <Table.Cell>
         [FulfillmentSet](/references/fulfillment/models/FulfillmentSet)
       </Table.Cell>
       <Table.Cell>
-        Stored
+        Stored - one-to-many
       </Table.Cell>
       <Table.Cell>
         [Learn more](#stock-location-module)
@@ -241,11 +249,11 @@ To retrieve the price set of a shipping option with [Query](!docs!/learn/fundame
 const { data: shippingOptions } = await query.graph({
   entity: "shipping_option",
   fields: [
-    "price_set.*",
+    "price_set_link.*",
   ],
 })
 
-// shippingOptions.price_set
+// shippingOptions[0].price_set_link?.price_set_id
 ```
 
   </CodeTab>
@@ -259,11 +267,11 @@ import { useQueryGraphStep } from "@medusajs/medusa/core-flows"
 const { data: shippingOptions } = useQueryGraphStep({
   entity: "shipping_option",
   fields: [
-    "price_set.*",
+    "price_set_link.*",
   ],
 })
 
-// shippingOptions.price_set
+// shippingOptions[0].price_set_link?.price_set_id
 ```
 
   </CodeTab>
@@ -340,7 +348,7 @@ const { data: shippingProfiles } = await query.graph({
   ],
 })
 
-// shippingProfiles.products
+// shippingProfiles[0].products
 ```
 
   </CodeTab>
@@ -358,7 +366,7 @@ const { data: shippingProfiles } = useQueryGraphStep({
   ],
 })
 
-// shippingProfiles.products
+// shippingProfiles[0].products
 ```
 
   </CodeTab>
@@ -443,7 +451,7 @@ const { data: fulfillmentSets } = await query.graph({
   ],
 })
 
-// fulfillmentSets.location
+// fulfillmentSets[0].location
 ```
 
   </CodeTab>
@@ -461,7 +469,7 @@ const { data: fulfillmentSets } = useQueryGraphStep({
   ],
 })
 
-// fulfillmentSets.location
+// fulfillmentSets[0].location
 ```
 
   </CodeTab>

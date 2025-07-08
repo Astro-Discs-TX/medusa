@@ -47,6 +47,23 @@
  *             title: note
  *             description: A note to attach to the refund.
  * x-codeSamples:
+ *   - lang: JavaScript
+ *     label: JS SDK
+ *     source: |-
+ *       import Medusa from "@medusajs/js-sdk"
+ * 
+ *       export const sdk = new Medusa({
+ *         baseUrl: import.meta.env.VITE_BACKEND_URL || "/",
+ *         debug: import.meta.env.DEV,
+ *         auth: {
+ *           type: "session",
+ *         },
+ *       })
+ * 
+ *       sdk.admin.payment.refund("paycol_123", {})
+ *       .then(({ payment }) => {
+ *         console.log(payment)
+ *       })
  *   - lang: Shell
  *     label: cURL
  *     source: |-
@@ -74,6 +91,16 @@
  *   "500":
  *     $ref: "#/components/responses/500_error"
  * x-workflow: refundPaymentWorkflow
+ * x-events:
+ *   - name: payment.refunded
+ *     payload: |-
+ *       ```ts
+ *       {
+ *         id, // the ID of the payment
+ *       }
+ *       ```
+ *     description: Emitted when a payment is refunded.
+ *     deprecated: false
  * 
 */
 

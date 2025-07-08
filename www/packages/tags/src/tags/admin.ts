@@ -72,6 +72,10 @@ export const admin = [
     "path": "https://docs.medusajs.com/resources/references/js-sdk/admin/paymentCollection"
   },
   {
+    "title": "plugin",
+    "path": "https://docs.medusajs.com/resources/references/js-sdk/admin/plugin"
+  },
+  {
     "title": "priceList",
     "path": "https://docs.medusajs.com/resources/references/js-sdk/admin/priceList"
   },
@@ -146,6 +150,10 @@ export const admin = [
   {
     "title": "store",
     "path": "https://docs.medusajs.com/resources/references/js-sdk/admin/store"
+  },
+  {
+    "title": "taxProvider",
+    "path": "https://docs.medusajs.com/resources/references/js-sdk/admin/taxProvider"
   },
   {
     "title": "taxRate",

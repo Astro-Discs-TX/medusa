@@ -23,6 +23,11 @@ export const sidebars = [
             title: "Architecture",
             path: "/learn/introduction/architecture",
           },
+          {
+            type: "link",
+            title: "AI Assistants and LLMs",
+            path: "/learn/introduction/build-with-llms-ai",
+          },
         ],
       },
       {
@@ -130,6 +135,11 @@ export const sidebars = [
         children: [
           {
             type: "link",
+            path: "/learn/fundamentals/framework",
+            title: "Overview",
+          },
+          {
+            type: "link",
             path: "/learn/fundamentals/medusa-container",
             title: "Medusa Container",
           },
@@ -190,8 +200,8 @@ export const sidebars = [
               },
               {
                 type: "link",
-                path: "/learn/fundamentals/modules/architectural-modules",
-                title: "Architectural Modules",
+                path: "/learn/fundamentals/modules/infrastructure-modules",
+                title: "Infrastructure Modules",
               },
             ],
           },
@@ -214,6 +224,11 @@ export const sidebars = [
                 type: "link",
                 path: "/learn/fundamentals/module-links/query",
                 title: "Query",
+              },
+              {
+                type: "link",
+                path: "/learn/fundamentals/module-links/index-module",
+                title: "Index Module",
               },
               {
                 type: "link",
@@ -327,7 +342,17 @@ export const sidebars = [
               {
                 type: "link",
                 path: "/learn/fundamentals/api-routes/additional-data",
-                title: "Additional Data",
+                title: "Pass Additional Data",
+              },
+              {
+                type: "link",
+                path: "/learn/fundamentals/api-routes/retrieve-custom-links",
+                title: "Retrieve Custom Links",
+              },
+              {
+                type: "link",
+                path: "/learn/fundamentals/api-routes/override",
+                title: "Override API Routes",
               },
             ],
           },
@@ -343,8 +368,13 @@ export const sidebars = [
               },
               {
                 type: "link",
+                path: "/learn/fundamentals/workflows/compensation-function",
+                title: "Compensation Function",
+              },
+              {
+                type: "link",
                 path: "/learn/fundamentals/workflows/variable-manipulation",
-                title: "Transform Variables",
+                title: "Transform Data",
               },
               {
                 type: "link",
@@ -353,8 +383,8 @@ export const sidebars = [
               },
               {
                 type: "link",
-                path: "/learn/fundamentals/workflows/compensation-function",
-                title: "Compensation Function",
+                path: "/learn/fundamentals/workflows/errors",
+                title: "Error Handling",
               },
               {
                 type: "link",
@@ -365,11 +395,6 @@ export const sidebars = [
                 type: "link",
                 path: "/learn/fundamentals/workflows/add-workflow-hook",
                 title: "Expose a Hook",
-              },
-              {
-                type: "link",
-                path: "/learn/fundamentals/workflows/access-workflow-errors",
-                title: "Access Workflow Errors",
               },
               {
                 type: "link",
@@ -573,6 +598,13 @@ export const sidebars = [
             type: "link",
             path: "/learn/debugging-and-testing/instrumentation",
             title: "Instrumentation",
+            children: [
+              {
+                type: "ref",
+                path: "/resources/integrations/guides/sentry",
+                title: "Guide: Sentry",
+              },
+            ],
           },
           {
             type: "link",

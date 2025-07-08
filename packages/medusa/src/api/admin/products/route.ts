@@ -43,7 +43,8 @@ async function getProducts(
     req.filterableFields,
     req.scope,
     selectFields,
-    req.queryConfig.pagination
+    req.queryConfig.pagination,
+    req.queryConfig.withDeleted
   )
 
   res.json({
@@ -75,11 +76,13 @@ async function getProductsWithIndexEngine(
     fields: req.queryConfig.fields ?? [],
     filters: filters,
     pagination: req.queryConfig.pagination,
+    withDeleted: req.queryConfig.withDeleted,
   })
 
   res.json({
     products: products.map(remapProductResponse),
-    count: metadata!.count,
+    count: metadata!.estimate_count,
+    estimate_count: metadata!.estimate_count,
     offset: metadata!.skip,
     limit: metadata!.take,
   })

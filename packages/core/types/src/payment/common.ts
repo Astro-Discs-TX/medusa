@@ -9,6 +9,7 @@ export type PaymentCollectionStatus =
   | "awaiting"
   | "authorized"
   | "partially_authorized"
+  | "partially_captured"
   | "canceled"
   | "failed"
   | "completed"
@@ -580,6 +581,11 @@ export interface PaymentSessionDTO {
    * @expandable
    */
   payment?: PaymentDTO
+
+  /**
+   * Holds custom data in key-value pairs.
+   */
+  metadata?: Record<string, unknown>
 }
 
 /**

@@ -12,6 +12,7 @@ import {
 } from "../modules-sdk"
 import { isObject } from "./is-object"
 import { isString } from "./is-string"
+import { tryConvertToNumber } from "./try-convert-to-number"
 import { normalizeImportPathWithSource } from "./normalize-import-path-with-source"
 import { resolveExports } from "./resolve-exports"
 
@@ -47,7 +48,7 @@ export function defineConfig(config: InputConfig = {}): ConfigModule {
 
   const projectConfig = normalizeProjectConfig(config.projectConfig, options)
   const adminConfig = normalizeAdminConfig(config.admin)
-  const modules = resolveModules(config.modules, options)
+  const modules = resolveModules(config.modules, options, config.projectConfig)
 
   return {
     projectConfig,
@@ -131,7 +132,8 @@ export function transformModules(
  */
 function resolveModules(
   configModules: InputConfig["modules"],
-  { isCloud }: { isCloud: boolean }
+  { isCloud }: { isCloud: boolean },
+  projectConfig: InputConfig["projectConfig"]
 ): Exclude<ConfigModule["modules"], undefined> {
   const sharedModules = [
     { resolve: MODULE_PACKAGE_NAMES[Modules.STOCK_LOCATION] },
@@ -165,7 +167,10 @@ function resolveModules(
     {
       resolve: MODULE_PACKAGE_NAMES[Modules.USER],
       options: {
-        jwt_secret: process.env.JWT_SECRET ?? DEFAULT_SECRET,
+        jwt_secret: projectConfig?.http?.jwtSecret ?? DEFAULT_SECRET,
+        jwt_options: projectConfig?.http?.jwtOptions,
+        jwt_verify_options: projectConfig?.http?.jwtVerifyOptions,
+        jwt_public_key: projectConfig?.http?.jwtPublicKey,
       },
     },
     {
@@ -310,13 +315,14 @@ function normalizeProjectConfig(
   projectConfig: InputConfig["projectConfig"],
   { isCloud }: { isCloud: boolean }
 ): ConfigModule["projectConfig"] {
-  const { http, redisOptions, ...restOfProjectConfig } = projectConfig || {}
+  const { http, redisOptions, sessionOptions, ...restOfProjectConfig } =
+    projectConfig || {}
 
   /**
    * The defaults to use for the project config. They are shallow merged
    * with the user defined config.
    */
-  return {
+  const config = {
     ...(isCloud ? { redisUrl: process.env.REDIS_URL } : {}),
     databaseUrl: process.env.DATABASE_URL || DEFAULT_DATABASE_URL,
     http: {
@@ -324,6 +330,7 @@ function normalizeProjectConfig(
       adminCors: process.env.ADMIN_CORS || DEFAULT_ADMIN_CORS,
       authCors: process.env.AUTH_CORS || DEFAULT_ADMIN_CORS,
       jwtSecret: process.env.JWT_SECRET || DEFAULT_SECRET,
+      jwtPublicKey: process.env.JWT_PUBLIC_KEY,
       cookieSecret: process.env.COOKIE_SECRET || DEFAULT_SECRET,
       restrictedFields: {
         store: DEFAULT_STORE_RESTRICTED_FIELDS,
@@ -347,8 +354,34 @@ function normalizeProjectConfig(
       },
       ...redisOptions,
     },
+    sessionOptions: {
+      ...(isCloud && process.env.SESSION_STORE === "dynamodb"
+        ? {
+            dynamodbOptions: {
+              prefix: process.env.DYNAMO_DB_SESSIONS_PREFIX ?? "sess:",
+              hashKey: process.env.DYNAMO_DB_SESSIONS_HASH_KEY ?? "id",
+              initialized: process.env.DYNAMO_DB_SESSIONS_CREATE_TABLE
+                ? false
+                : true,
+              table: process.env.DYNAMO_DB_SESSIONS_TABLE ?? "medusa-sessions",
+              readCapacityUnits: tryConvertToNumber(
+                process.env.DYNAMO_DB_SESSIONS_READ_UNITS,
+                5
+              ),
+              writeCapacityUnits: tryConvertToNumber(
+                process.env.DYNAMO_DB_SESSIONS_WRITE_UNITS,
+                5
+              ),
+              skipThrowMissingSpecialKeys: true,
+            },
+          }
+        : {}),
+      ...sessionOptions,
+    },
     ...restOfProjectConfig,
-  }
+  } satisfies ConfigModule["projectConfig"]
+
+  return config
 }
 
 function normalizeAdminConfig(

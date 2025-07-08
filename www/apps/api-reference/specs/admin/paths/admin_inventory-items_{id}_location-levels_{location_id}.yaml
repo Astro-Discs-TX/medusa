@@ -57,6 +57,11 @@ post:
               title: incoming_quantity
               description: The inventory level's incoming quantity.
   x-codeSamples:
+    - lang: JavaScript
+      label: JS SDK
+      source:
+        $ref: >-
+          ../code_samples/JavaScript/admin_inventory-items_{id}_location-levels_{location_id}/post.js
     - lang: Shell
       label: cURL
       source:
@@ -84,6 +89,7 @@ post:
     '500':
       $ref: ../components/responses/500_error.yaml
   x-workflow: updateInventoryLevelsWorkflow
+  x-events: []
 delete:
   operationId: DeleteInventoryItemsIdLocationLevelsLocation_id
   summary: Remove Inventory Level of Inventory Item
@@ -131,6 +137,11 @@ delete:
     - cookie_auth: []
     - jwt_token: []
   x-codeSamples:
+    - lang: JavaScript
+      label: JS SDK
+      source:
+        $ref: >-
+          ../code_samples/JavaScript/admin_inventory-items_{id}_location-levels_{location_id}/delete.js
     - lang: Shell
       label: cURL
       source:
@@ -183,3 +194,4 @@ delete:
     '500':
       $ref: ../components/responses/500_error.yaml
   x-workflow: deleteInventoryLevelsWorkflow
+  x-events: []
