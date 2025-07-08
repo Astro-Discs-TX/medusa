@@ -113,6 +113,13 @@ export class TransactionOrchestrator extends EventEmitter {
     }
   }
 
+  private static isExpectedError(error: Error): boolean {
+    return (
+      SkipCancelledExecutionError.isSkipCancelledExecutionError(error) ||
+      SkipExecutionError.isSkipExecutionError(error)
+    )
+  }
+
   static clone(orchestrator: TransactionOrchestrator): TransactionOrchestrator {
     return new TransactionOrchestrator({
       id: orchestrator.id,
@@ -525,10 +532,7 @@ export class TransactionOrchestrator extends EventEmitter {
     try {
       await transaction.saveCheckpoint()
     } catch (error) {
-      if (
-        !SkipCancelledExecutionError.isSkipCancelledExecutionError(error) &&
-        !SkipExecutionError.isSkipExecutionError(error)
-      ) {
+      if (!TransactionOrchestrator.isExpectedError(error)) {
         throw error
       }
 
@@ -583,10 +587,7 @@ export class TransactionOrchestrator extends EventEmitter {
     try {
       await transaction.saveCheckpoint()
     } catch (error) {
-      if (
-        !SkipCancelledExecutionError.isSkipCancelledExecutionError(error) &&
-        !SkipExecutionError.isSkipExecutionError(error)
-      ) {
+      if (!TransactionOrchestrator.isExpectedError(error)) {
         throw error
       }
 
@@ -764,10 +765,7 @@ export class TransactionOrchestrator extends EventEmitter {
     try {
       await transaction.saveCheckpoint()
     } catch (error) {
-      if (
-        !SkipCancelledExecutionError.isSkipCancelledExecutionError(error) &&
-        !SkipExecutionError.isSkipExecutionError(error)
-      ) {
+      if (!TransactionOrchestrator.isExpectedError(error)) {
         throw error
       }
 
@@ -830,7 +828,7 @@ export class TransactionOrchestrator extends EventEmitter {
       })
 
       await transaction.saveCheckpoint().catch((error) => {
-        if (SkipExecutionError.isSkipExecutionError(error)) {
+        if (TransactionOrchestrator.isExpectedError(error)) {
           continueExecution = false
           return
         }
@@ -841,6 +839,7 @@ export class TransactionOrchestrator extends EventEmitter {
       const execution: Promise<void | unknown>[] = []
 
       let i = 0
+      let hasAsyncSteps = false
       for (const step of nextSteps.next) {
         const stepIndex = i++
         if (!stepsShouldContinueExecution[stepIndex]) {
@@ -876,12 +875,13 @@ export class TransactionOrchestrator extends EventEmitter {
         } else {
           // Execute async step in background and continue the execution of the transaction
           this.executeAsyncStep(promise, transaction, step, nextSteps)
+          hasAsyncSteps = true
         }
       }
 
       await promiseAll(execution)
 
-      if (nextSteps.next.length === 0) {
+      if (nextSteps.next.length === 0 || (hasAsyncSteps && !execution.length)) {
         continueExecution = false
       }
     }
@@ -898,7 +898,7 @@ export class TransactionOrchestrator extends EventEmitter {
     }
 
     await transaction.saveCheckpoint().catch((error) => {
-      if (!SkipExecutionError.isSkipExecutionError(error)) {
+      if (!TransactionOrchestrator.isExpectedError(error)) {
         throw error
       }
     })
@@ -1061,7 +1061,7 @@ export class TransactionOrchestrator extends EventEmitter {
         await this.handleStepSuccess(transaction, step, response)
       })
       .catch(async (error) => {
-        if (SkipExecutionError.isSkipExecutionError(error)) {
+        if (TransactionOrchestrator.isExpectedError(error)) {
           return
         }
 
@@ -1110,7 +1110,7 @@ export class TransactionOrchestrator extends EventEmitter {
         }
       })
       .catch(async (error) => {
-        if (SkipExecutionError.isSkipExecutionError(error)) {
+        if (TransactionOrchestrator.isExpectedError(error)) {
           return
         }
 
@@ -1287,6 +1287,16 @@ export class TransactionOrchestrator extends EventEmitter {
       throw new MedusaError(
         MedusaError.Types.NOT_ALLOWED,
         `Cannot revert a permanent failed transaction.`
+      )
+    }
+
+    if (
+      flow.state === TransactionState.COMPENSATING ||
+      flow.state === TransactionState.WAITING_TO_COMPENSATE
+    ) {
+      throw new MedusaError(
+        MedusaError.Types.NOT_ALLOWED,
+        `Cannot revert a transaction that is already compensating.`
       )
     }
 

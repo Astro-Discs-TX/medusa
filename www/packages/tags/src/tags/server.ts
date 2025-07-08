@@ -48,6 +48,14 @@ export const server = [
     "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/abandoned-cart"
   },
   {
+    "title": "First-Purchase Discount",
+    "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/first-purchase-discounts"
+  },
+  {
+    "title": "Add Gift Message",
+    "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/gift-message"
+  },
+  {
     "title": "Loyalty Points",
     "path": "https://docs.medusajs.com/resources/how-to-tutorials/tutorials/loyalty-points"
   },
@@ -88,8 +96,16 @@ export const server = [
     "path": "https://docs.medusajs.com/resources/integrations/guides/contentful"
   },
   {
+    "title": "Integrate Mailchimp",
+    "path": "https://docs.medusajs.com/resources/integrations/guides/mailchimp"
+  },
+  {
     "title": "Integrate Segment",
     "path": "https://docs.medusajs.com/resources/integrations/guides/segment"
+  },
+  {
+    "title": "Integrate Slack",
+    "path": "https://docs.medusajs.com/resources/integrations/guides/slack"
   },
   {
     "title": "Build Wishlist Plugin",
