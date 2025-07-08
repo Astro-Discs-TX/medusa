@@ -172,7 +172,8 @@ export const EditPromotionDetailsForm = ({
               }}
             />
 
-            {promotion.type !== "buyget" ? (
+            {promotion?.type === "standard" &&
+            promotion.application_method?.type === "fixed" ? (
               <SwitchBox
                 control={form.control}
                 name="is_tax_inclusive"
