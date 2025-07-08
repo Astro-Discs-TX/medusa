@@ -2,6 +2,7 @@ const commonHiddenFields = [
   "type",
   "application_method.type",
   "application_method.allocation",
+  "is_tax_inclusive",
 ]
 
 export const templates = [
@@ -10,7 +11,9 @@ export const templates = [
     type: "standard",
     title: "Amount off products",
     description: "Discount specific products or collection of products",
-    hiddenFields: [...commonHiddenFields],
+    hiddenFields: [
+      ...commonHiddenFields.filter((field) => field !== "is_tax_inclusive"),
+    ],
     defaults: {
       is_automatic: "false",
       type: "standard",
@@ -26,7 +29,9 @@ export const templates = [
     type: "standard",
     title: "Amount off order",
     description: "Discounts the total order amount",
-    hiddenFields: [...commonHiddenFields],
+    hiddenFields: [
+      ...commonHiddenFields.filter((field) => field !== "is_tax_inclusive"),
+    ],
     defaults: {
       is_automatic: "false",
       type: "standard",
