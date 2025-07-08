@@ -1,5 +1,31 @@
 # @medusajs/framework
 
+## 2.8.7
+
+### Patch Changes
+
+- Updated dependencies [[`e9a33d0700c47c3d2357bb325791bc272a4d4569`](https://github.com/medusajs/medusa/commit/e9a33d0700c47c3d2357bb325791bc272a4d4569), [`42be9a88d61a11db7aebde2d6f4d96d43f54ea79`](https://github.com/medusajs/medusa/commit/42be9a88d61a11db7aebde2d6f4d96d43f54ea79)]:
+  - @medusajs/orchestration@2.8.7
+  - @medusajs/types@2.8.7
+  - @medusajs/modules-sdk@2.8.7
+  - @medusajs/workflows-sdk@2.8.7
+  - @medusajs/utils@2.8.7
+  - @medusajs/cli@2.8.7
+  - @medusajs/telemetry@2.8.7
+
+## 2.8.6
+
+### Patch Changes
+
+- Updated dependencies [[`9a62f359f1c954bcc09c57e4660f90d4b010e51c`](https://github.com/medusajs/medusa/commit/9a62f359f1c954bcc09c57e4660f90d4b010e51c), [`95d282e8ef8f2185737d493dea8b6f1677684543`](https://github.com/medusajs/medusa/commit/95d282e8ef8f2185737d493dea8b6f1677684543)]:
+  - @medusajs/workflows-sdk@2.8.6
+  - @medusajs/utils@2.8.6
+  - @medusajs/orchestration@2.8.6
+  - @medusajs/cli@2.8.6
+  - @medusajs/modules-sdk@2.8.6
+  - @medusajs/types@2.8.6
+  - @medusajs/telemetry@2.8.6
+
 ## 2.8.5
 
 ### Patch Changes

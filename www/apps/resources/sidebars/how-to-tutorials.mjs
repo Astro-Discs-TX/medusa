@@ -73,6 +73,13 @@ export const howToTutorialsSidebar = [
 While tutorials show you a specific use case, they also help you understand how to implement similar use cases in your own projects. Also, you can implement the use case in a tutorial differently to fit your business requirements.`,
     children: [
       {
+        type: "link",
+        title: "Add Gift Message",
+        path: "/how-to-tutorials/tutorials/gift-message",
+        description:
+          "Learn how to add a gift option and message to items in the cart.",
+      },
+      {
         type: "ref",
         title: "Analytics with Segment",
         path: "/integrations/guides/segment",
@@ -99,6 +106,13 @@ While tutorials show you a specific use case, they also help you understand how 
         path: "/examples/guides/custom-item-price",
         description:
           "Learn how to use prices from external systems for products.",
+      },
+      {
+        type: "link",
+        title: "First-Purchase Discounts",
+        path: "/how-to-tutorials/tutorials/first-purchase-discounts",
+        description:
+          "Learn how to implement first-purchase discounts in your Medusa store.",
       },
       {
         type: "link",

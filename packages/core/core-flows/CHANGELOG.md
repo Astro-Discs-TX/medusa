@@ -1,5 +1,23 @@
 # @medusajs/core-flows
 
+## 2.8.7
+
+### Patch Changes
+
+- [#12881](https://github.com/medusajs/medusa/pull/12881) [`46bf7ae7aead3f33485ce8adebb602eda305088c`](https://github.com/medusajs/medusa/commit/46bf7ae7aead3f33485ce8adebb602eda305088c) Thanks [@olivermrbl](https://github.com/olivermrbl)! - fix(core-flows): Locations levels check in draft order and order edit flows
+
+- Updated dependencies []:
+  - @medusajs/framework@2.8.7
+
+## 2.8.6
+
+### Patch Changes
+
+- [#12825](https://github.com/medusajs/medusa/pull/12825) [`9a62f359f1c954bcc09c57e4660f90d4b010e51c`](https://github.com/medusajs/medusa/commit/9a62f359f1c954bcc09c57e4660f90d4b010e51c) Thanks [@riqwan](https://github.com/riqwan)! - fix(core-flows,workflows-sdk): compensate account holders only when its created
+
+- Updated dependencies []:
+  - @medusajs/framework@2.8.6
+
 ## 2.8.5
 
 ### Patch Changes
