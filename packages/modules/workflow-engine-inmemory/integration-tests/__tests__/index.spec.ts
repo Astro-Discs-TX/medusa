@@ -1,3 +1,4 @@
+import { MedusaContainer } from "@medusajs/framework"
 import {
   DistributedTransactionType,
   TransactionState,
@@ -43,7 +44,6 @@ import {
   workflowEventGroupIdStep2Mock,
 } from "../__fixtures__/workflow_event_group_id"
 import { createScheduled } from "../__fixtures__/workflow_scheduled"
-import { container, MedusaContainer } from "@medusajs/framework"
 
 jest.setTimeout(60000)
 
@@ -912,7 +912,6 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
 
           expect(spy).toHaveBeenCalledTimes(1)
 
-          console.log(spy.mock.results)
           expect(spy).toHaveReturnedWith(
             expect.objectContaining({ output: { testValue: "test" } })
           )
@@ -957,6 +956,35 @@ moduleIntegrationTestRunner<IWorkflowEngineService>({
           )
           expect(executionsList).toHaveLength(1)
           expect(executionsListAfter).toHaveLength(1)
+        })
+
+        it("should display error when multple async steps are running in parallel", (done) => {
+          void workflowOrcModule.run("workflow_parallel_async", {
+            input: {},
+            throwOnError: false,
+          })
+
+          void workflowOrcModule.subscribe({
+            workflowId: "workflow_parallel_async",
+            subscriber: (event) => {
+              if (event.eventType === "onFinish") {
+                done()
+                expect(event.errors).toEqual(
+                  expect.arrayContaining([
+                    expect.objectContaining({
+                      action: "step_2",
+                      handlerType: "invoke",
+                      error: expect.objectContaining({
+                        message: "Error in parallel step",
+                      }),
+                    }),
+                  ])
+                )
+              }
+            },
+          })
+
+          failTrap(done)
         })
       })
 

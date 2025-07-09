@@ -1192,6 +1192,10 @@ export class TransactionOrchestrator extends EventEmitter {
     isPermanent: boolean,
     response?: unknown
   ): Promise<void> {
+    const isAsync = step.isCompensating()
+      ? step.definition.compensateAsync
+      : step.definition.async
+
     if (isDefined(response) && step.saveResponse) {
       transaction.addResponse(
         step.definition.action!,
@@ -1210,9 +1214,14 @@ export class TransactionOrchestrator extends EventEmitter {
     )
 
     if (ret.transactionIsCancelling) {
-      return await this.cancelTransaction(transaction, {
+      await this.cancelTransaction(transaction, {
         preventExecuteNext: true,
       })
+    }
+
+    if (isAsync && !ret.stopExecution) {
+      // Schedule to continue the execution of async steps because they are not awaited on purpose and can be handled by another machine
+      await transaction.scheduleRetry(step, 0)
     }
   }
 
