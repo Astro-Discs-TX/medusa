@@ -161,14 +161,13 @@ export class MiddlewareFileLoader {
    */
   async scanDir(sourceDir: string) {
     const fs = new FileSystem(sourceDir)
-    if (await fs.exists(`${MIDDLEWARE_FILE_NAME}.ts`)) {
-      await this.#processMiddlewareFile(
-        join(sourceDir, `${MIDDLEWARE_FILE_NAME}.ts`)
-      )
-    } else if (await fs.exists(`${MIDDLEWARE_FILE_NAME}.js`)) {
-      await this.#processMiddlewareFile(
-        join(sourceDir, `${MIDDLEWARE_FILE_NAME}.js`)
-      )
+    const extensions = [".ts", ".js"]
+    for (const extension of extensions) {
+      const fileName = `${MIDDLEWARE_FILE_NAME}${extension}`
+      if (await fs.exists(fileName)) {
+        await this.#processMiddlewareFile(join(sourceDir, fileName))
+        break
+      }
     }
   }
 
