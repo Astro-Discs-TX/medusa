@@ -15,7 +15,6 @@ import { useRemoteQueryStep } from "../../common"
 import {
   createOrderChangeActionsWorkflow,
   previewOrderChangeStep,
-  updateOrderTaxLinesWorkflow,
 } from "../../order"
 import { validateDraftOrderChangeStep } from "../steps/validate-draft-order-change"
 import { draftOrderFieldsForRefreshSteps } from "../utils/fields"
@@ -41,10 +40,10 @@ export interface RemoveDraftOrderShippingMethodWorkflowInput {
 /**
  * This workflow removes an existing shipping method from a draft order edit. It's used by the
  * [Remove Shipping Method from Draft Order Edit Admin API Route](https://docs.medusajs.com/api/admin#draft-orders_deletedraftordersideditshippingmethodsmethodmethod_id).
- * 
+ *
  * You can use this workflow within your customizations or your own custom workflows, allowing you to wrap custom logic around
  * removing a shipping method from a draft order edit.
- * 
+ *
  * @example
  * const { result } = await removeDraftOrderShippingMethodWorkflow(container)
  * .run({
@@ -53,9 +52,9 @@ export interface RemoveDraftOrderShippingMethodWorkflowInput {
  *     shipping_method_id: "sm_123",
  *   }
  * })
- * 
+ *
  * @summary
- * 
+ *
  * Remove an existing shipping method from a draft order edit.
  */
 export const removeDraftOrderShippingMethodWorkflow = createWorkflow(
@@ -82,12 +81,6 @@ export const removeDraftOrderShippingMethodWorkflow = createWorkflow(
     }).config({ name: "order-change-query" })
 
     validateDraftOrderChangeStep({ order, orderChange })
-
-    updateOrderTaxLinesWorkflow.runAsStep({
-      input: {
-        order_id: order.id,
-      },
-    })
 
     const appliedPromoCodes = transform(order, (order) => {
       const promotionLink = (order as any).promotion_link
