@@ -39,7 +39,8 @@ describe("waitSubscribersExecution", () => {
 
       jest.advanceTimersByTime(100)
 
-      await expect(waitPromise).resolves.toEqual([["test-data"]])
+      const res = await waitPromise
+      expect(res).toEqual(["test-data"])
     })
 
     it("should reject when timeout is reached before event is fired", async () => {

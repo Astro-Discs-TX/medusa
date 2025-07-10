@@ -69,8 +69,11 @@ const doWaitSubscribersExecution = (
 
       if (currentCount >= triggerCount) {
         eventEmitter.removeListener(eventName, newListener)
-        const res_ = triggerCount === 1 ? res[0] : res
-        ok(res_)
+        if (triggerCount === 1) {
+          ok(...args)
+        } else {
+          ok(res)
+        }
       }
     }
 
