@@ -19,6 +19,7 @@
     ]
   },
   "devDependencies": {
+    "@react-email/preview-server": "4.1.1",
     "@typescript-eslint/eslint-plugin": "^6.19.0",
     "@typescript-eslint/parser": "^6.19.0",
     "axios": "^0.21.4",
@@ -43,6 +44,7 @@
     "pg-god": "^1.0.12",
     "prettier": "^2.7.1",
     "prettier-plugin-tailwindcss": "^0.2.3",
+    "react-email": "^4.1.1",
     "resolve-cwd": "^3.0.0",
     "ts-jest": "^29.1.1",
     "ts-node": "^10.9.1",
@@ -53,6 +55,7 @@
     "*.{md,yaml,yml}": "prettier --write"
   },
   "scripts": {
+    "dev:email": "email dev --dir ./smarttact-medusa-bakend-prj/src/resend/emails",
     "build": "turbo run build --concurrency=50% --no-daemon",
     "lint": "eslint --ignore-path .eslintignore --ext .js,.ts,.tsx .",
     "lint:path": "eslint --ignore-path .eslintignore --ext .js,.ts,.tsx",
@@ -75,8 +78,10 @@
   "dependencies": {
     "@changesets/changelog-github": "^0.4.8",
     "@changesets/cli": "^2.26.0",
+    "@react-email/components": "0.2.0",
     "global": "^4.4.0",
-    "import-from": "^3.0.0"
+    "import-from": "^3.0.0",
+    "resend": "^4.6.0"
   },
   "packageManager": "yarn@3.2.1",
   "resolutions": {
