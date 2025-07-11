@@ -1,5 +1,5 @@
 ---
-"@medusajs/admin-vite-plugin": patch
+"@medusajs/admin-bundler": patch
 ---
 
-bump @medusajs/admin-vite-plugnin
+bump @medusajs/admin-bundler
