@@ -2,7 +2,24 @@ import { loadEnv, defineConfig, Modules } from '@medusajs/framework/utils'
 
 loadEnv(process.env.NODE_ENV || 'development', process.cwd())
 
-const dynamicModules = {};
+const dynamicModules = {
+  notification:  {
+      resolve: "@medusajs/medusa/notification",
+      options: {
+        providers: [
+          {
+            resolve: "./src/resend",
+            id: "resend",
+            options: {
+              channels: ["email"],
+              api_key: process.env.RESEND_API_KEY,
+              from: process.env.RESEND_FROM_EMAIL,
+            },
+          },
+        ],
+      },
+    },
+};
 
 const stripeApiKey = process.env.STRIPE_API_KEY;
 const stripeWebhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -31,7 +48,7 @@ if (isStripeConfigured) {
 
 const modules = {
 
-  [Modules.FILE]: {
+  ...(process.env.DO_SPACE_URL && {[Modules.FILE]: {
     resolve: '@medusajs/medusa/file',
     options: {
       providers: [
@@ -49,7 +66,7 @@ const modules = {
         },
       ],
     },
-  },
+  }} || {}),
 
   [Modules.CACHE]: {
     resolve: '@medusajs/medusa/cache-redis',
