@@ -11,6 +11,7 @@ const LOG_FILE = process.env.LOG_FILE || ""
 const NODE_ENV = process.env.NODE_ENV || "development"
 const IS_DEV = NODE_ENV.startsWith("dev")
 
+const npmLevels = winston.config.npm.levels
 let transports: winston.transport[] = []
 
 if (!IS_DEV) {
@@ -20,7 +21,7 @@ if (!IS_DEV) {
     new winston.transports.Console({
       format: winston.format.combine(
         winston.format.cli({
-          levels: winston.config.npm.levels,
+          levels: npmLevels,
         }),
         winston.format.splat()
       ),
@@ -38,7 +39,7 @@ if (LOG_FILE) {
 
 const loggerInstance = winston.createLogger({
   level: LOG_LEVEL,
-  levels: winston.config.npm.levels,
+  levels: npmLevels,
   format: winston.format.combine(
     winston.format.timestamp({
       format: "YYYY-MM-DD HH:mm:ss",
