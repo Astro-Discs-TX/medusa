@@ -8,7 +8,7 @@ const dynamicModules = {
       options: {
         providers: [
           {
-            resolve: "./src/resend",
+            resolve: "./src/modules/resend",
             id: "resend",
             options: {
               channels: ["email"],
