@@ -243,9 +243,8 @@ export function MedusaService<
           data = [],
           sharedContext: Context = {}
         ): Promise<T | T[]> {
-          const serviceData = data
           const service = this.__container__[serviceRegistrationName]
-          const response = await service.update(serviceData, sharedContext)
+          const response = await service.update(data, sharedContext)
 
           klassPrototype.aggregatedEvents.bind(this)({
             action: CommonEvents.UPDATED,
