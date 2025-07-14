@@ -185,6 +185,7 @@ export const AiAssistantProvider = ({
           onQuerySubmit: () => setPreventAutoScroll(false),
         },
       }}
+      userTrackingMode="none"
     >
       <AiAssistantInnerProvider
         {...props}
