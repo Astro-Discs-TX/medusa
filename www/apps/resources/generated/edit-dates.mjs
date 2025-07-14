@@ -569,7 +569,7 @@ export const generatedEditDates = {
   "app/medusa-cli/commands/start/page.mdx": "2025-04-08T11:56:15.522Z",
   "app/medusa-cli/commands/telemtry/page.mdx": "2025-01-16T09:51:24.323Z",
   "app/medusa-cli/commands/user/page.mdx": "2024-08-28T10:44:52.489Z",
-  "app/recipes/marketplace/examples/restaurant-delivery/page.mdx": "2025-07-14T08:47:57.706Z",
+  "app/recipes/marketplace/examples/restaurant-delivery/page.mdx": "2025-07-14T10:32:58.301Z",
   "references/types/HttpTypes/interfaces/types.HttpTypes.AdminCreateCustomerGroup/page.mdx": "2024-12-09T13:21:33.569Z",
   "references/types/HttpTypes/interfaces/types.HttpTypes.AdminCreateReservation/page.mdx": "2025-04-11T09:04:47.498Z",
   "references/types/HttpTypes/interfaces/types.HttpTypes.AdminCustomerGroup/page.mdx": "2025-05-20T07:51:41.059Z",

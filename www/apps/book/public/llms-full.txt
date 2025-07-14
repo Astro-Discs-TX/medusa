@@ -17342,9 +17342,6 @@ export const setStepSuccessStep = createStep(
         workflowId: "hello-world",
       },
       stepResponse: new StepResponse("Done!"),
-      options: {
-        container,
-      },
     })
   }
 )
@@ -17364,9 +17361,6 @@ The `setStepSuccess` method of the workflow engine's main service accepts as a p
 
   - workflowId: (\`string\`) The ID of the workflow. This is the first parameter passed to \`createWorkflow\` when creating the workflow.
 - stepResponse: (\`StepResponse\`) Set the response of the step. This is similar to the response you return in a step's definition, but since the \`async\` step doesn't have a response, you set its response when changing its status.
-- options: (\`Record\<string, any>\`) Options to pass to the step.
-
-  - container: (\`MedusaContainer\`) An instance of the Medusa Container
 
 ### Change Step Status to Failed
 
@@ -17408,9 +17402,6 @@ export const setStepFailureStep = createStep(
         workflowId: "hello-world",
       },
       stepResponse: new StepResponse("Failed!"),
-      options: {
-        container,
-      },
     })
   }
 )
@@ -91698,9 +91689,6 @@ export const setStepSuccessStep = createStep(
         workflowId: handleDeliveryWorkflowId,
       },
       stepResponse: new StepResponse(updatedDelivery, updatedDelivery.id),
-      options: {
-        container,
-      },
     })
   }
 )
@@ -91745,9 +91733,6 @@ export const setStepFailedStep = createStep(
         workflowId: handleDeliveryWorkflowId,
       },
       stepResponse: new StepResponse(updatedDelivery, updatedDelivery.id),
-      options: {
-        container,
-      },
     })
   }
 )
