@@ -2,7 +2,14 @@
 
 import React, { useEffect } from "react"
 import clsx from "clsx"
-import { MainNav, useIsBrowser, useLayout, useSidebar, useSiteConfig } from ".."
+import {
+  MainNav,
+  useAiAssistant,
+  useIsBrowser,
+  useLayout,
+  useSidebar,
+  useSiteConfig,
+} from ".."
 import { ContentMenu } from "../components/ContentMenu"
 
 export type MainContentLayoutProps = {
@@ -20,8 +27,9 @@ export const MainContentLayout = ({
 }: MainContentLayoutProps) => {
   const { isBrowser } = useIsBrowser()
   const { desktopSidebarOpen } = useSidebar()
-  const { mainContentRef } = useLayout()
+  const { mainContentRef, showCollapsedNavbar } = useLayout()
   const { frontmatter } = useSiteConfig()
+  const { chatOpened } = useAiAssistant()
 
   useEffect(() => {
     if (!isBrowser) {
@@ -63,7 +71,9 @@ export const MainContentLayout = ({
           className={clsx(
             "pt-docs_4 lg:pt-docs_6 pb-docs_8 lg:pb-docs_4",
             showContentMenu &&
-              "grid grid-cols-1 lg:mx-auto lg:grid-cols-[1fr_221px]",
+              "grid grid-cols-1 lg:mx-auto",
+            desktopSidebarOpen && "lg:grid-cols-[1fr_221px]",
+            chatOpened && showCollapsedNavbar && "pl-docs_1",
             contentClassName
           )}
           id="content"
