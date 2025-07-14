@@ -2160,14 +2160,6 @@ medusaIntegrationTestRunner({
         })
 
         it("should recreate a variant with the same sku after deletion", async () => {
-          // const inventoryItem = (
-          //   await api.post(
-          //     "/admin/inventory-items",
-          //     { sku: "test-inventory-item-sku" },
-          //     adminHeaders
-          //   )
-          // ).data.inventory_item
-
           const payload = {
             title: "Test sku",
             shipping_profile_id: shippingProfile.id,
