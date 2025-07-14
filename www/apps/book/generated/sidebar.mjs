@@ -38,6 +38,16 @@ export const generatedSidebars = [
             "children": [],
             "chapterTitle": "1.3. Architecture",
             "number": "1.3."
+          },
+          {
+            "loaded": true,
+            "isPathHref": true,
+            "type": "link",
+            "title": "AI Assistants and LLMs",
+            "path": "/learn/introduction/build-with-llms-ai",
+            "children": [],
+            "chapterTitle": "1.4. AI Assistants and LLMs",
+            "number": "1.4."
           }
         ],
         "chapterTitle": "1. Getting Started",
@@ -415,11 +425,21 @@ export const generatedSidebars = [
                 "loaded": true,
                 "isPathHref": true,
                 "type": "link",
+                "path": "/learn/fundamentals/module-links/index-module",
+                "title": "Index Module",
+                "children": [],
+                "chapterTitle": "3.4.4. Index Module",
+                "number": "3.4.4."
+              },
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "link",
                 "path": "/learn/fundamentals/module-links/custom-columns",
                 "title": "Add Custom Columns",
                 "children": [],
-                "chapterTitle": "3.4.4. Add Custom Columns",
-                "number": "3.4.4."
+                "chapterTitle": "3.4.5. Add Custom Columns",
+                "number": "3.4.5."
               },
               {
                 "loaded": true,
@@ -428,8 +448,8 @@ export const generatedSidebars = [
                 "path": "/learn/fundamentals/module-links/read-only",
                 "title": "Read-Only Links",
                 "children": [],
-                "chapterTitle": "3.4.5. Read-Only Links",
-                "number": "3.4.5."
+                "chapterTitle": "3.4.6. Read-Only Links",
+                "number": "3.4.6."
               },
               {
                 "loaded": true,
@@ -438,8 +458,8 @@ export const generatedSidebars = [
                 "path": "/learn/fundamentals/module-links/query-context",
                 "title": "Query Context",
                 "children": [],
-                "chapterTitle": "3.4.6. Query Context",
-                "number": "3.4.6."
+                "chapterTitle": "3.4.7. Query Context",
+                "number": "3.4.7."
               }
             ],
             "chapterTitle": "3.4. Module Links",
@@ -1118,7 +1138,18 @@ export const generatedSidebars = [
             "type": "link",
             "path": "/learn/debugging-and-testing/instrumentation",
             "title": "Instrumentation",
-            "children": [],
+            "children": [
+              {
+                "loaded": true,
+                "isPathHref": true,
+                "type": "ref",
+                "path": "/resources/integrations/guides/sentry",
+                "title": "Guide: Sentry",
+                "children": [],
+                "chapterTitle": "7.4.1. Guide: Sentry",
+                "number": "7.4.1."
+              }
+            ],
             "chapterTitle": "7.4. Instrumentation",
             "number": "7.4."
           },
