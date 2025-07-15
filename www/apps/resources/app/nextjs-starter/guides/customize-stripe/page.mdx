@@ -179,7 +179,7 @@ Do this for all regions you want to enable Stripe for.
 
 ## Step 2: Update Payment Step in Checkout
 
-You'll start customizing the Next.js Starter Storefront by updating the payment step in the checkout process. By default, the payment step is implemented to show all available payment methods in the region the user is in, and allows the user to select one of them.
+You'll start customizing the Next.js Starter Storefront by updating the payment step in the checkout process. By default, the payment step is implemented to show all available payment methods in the region the customer is in, and allows the customer to select one of them.
 
 In this step, you'll replace the current payment method selection with Stripe's Payment Element. You'll no longer need to handle different payment methods separately, as the Payment Element will automatically adapt to the available methods configured in your Stripe account.
 
@@ -260,7 +260,7 @@ const handlePaymentElementChange = async (
 
 This function will be called on every change in Stripe's Payment Element, such as when the customer selects a payment method.
 
-In the function, you update the `selectedPaymentMethod` state with the type of payment method selected by the user, set `stripeComplete` to true when the payment element is complete, and clear any error messages when the payment element is complete.
+In the function, you update the `selectedPaymentMethod` state with the type of payment method selected by the customer, set `stripeComplete` to true when the payment element is complete, and clear any error messages when the payment element is complete.
 
 Then, to customize the payment step's submission, replace the `handleSubmit` function with the following:
 
@@ -295,9 +295,9 @@ const handleSubmit = async () => {
 }
 ```
 
-In this function, you use the `elements.submit()` method to submit the payment method details entered by the user in the Payment Element. This doesn't actually confirm the payment yet; it just prepares the payment method for confirmation.
+In this function, you use the `elements.submit()` method to submit the payment method details entered by the customer in the Payment Element. This doesn't actually confirm the payment yet; it just prepares the payment method for confirmation.
 
-Once the payment method is submitted successfully, you navigate the user to the Review step of the checkout process.
+Once the payment method is submitted successfully, you navigate the customer to the Review step of the checkout process.
 
 Next, to make sure a payment session is initialized when the customer reaches the payment step, add the following to the `Payment` component:
 
@@ -890,7 +890,7 @@ In the function, you:
 
 - Ensure that the `stripe`, `elements`, and `cart` are available before proceeding.
 - Set the `submitting` state to true to indicate that the payment is being processed.
-- Use `elements.submit()` to submit the payment method details entered by the user in the Payment Element. This ensures all necessary payment details are entered.
+- Use `elements.submit()` to submit the payment method details that the customer enters in the Payment Element. This ensures all necessary payment details are entered.
 - Use `stripe.confirmPayment()` to confirm the payment with Stripe. You pass it the following details:
     - `elements`: The Stripe Elements instance that contains the Payment Element.
     - `clientSecret`: The client secret from the payment session, which is used to confirm the payment.
@@ -926,7 +926,7 @@ useEffect(() => {
 You add two effects:
 
 - An effect that runs when the status of the cart's payment collection changes. It triggers the `onPaymentCompleted` function to finalize the order placement when the payment collection status is `authorized`.
-- An effect that listens for changes in the Payment Element. If the payment element is not complete, it redirects the user back to the payment step. This is useful if the user refreshes the page or navigates away, leading to incomplete payment details.
+- An effect that listens for changes in the Payment Element. If the payment element is not complete, it redirects the customer back to the payment step. This is useful if the customer refreshes the page or navigates away, leading to incomplete payment details.
 
 You've finalized changes to the `PaymentButton` component. Feel free to remove unused imports, variables, and functions in the file.
 
@@ -1223,9 +1223,9 @@ export async function GET(req: NextRequest, { params }: { params: Params }) {
 }
 ```
 
-In this route, you validate that the payment intent and client secret match the cart's payment session data. If so, you place the order and redirect the user to the order confirmation page.
+In this route, you validate that the payment intent and client secret match the cart's payment session data. If so, you place the order and redirect the customer to the order confirmation page.
 
-If the payment failed or other validation checks fail, you redirect the user back to the cart page with an error message.
+If the payment failed or other validation checks fail, you redirect the customer back to the cart page with an error message.
 
 Stripe will redirect the customer back to this route when using payment methods like PayPal.
 
