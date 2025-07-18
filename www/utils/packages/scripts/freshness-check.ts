@@ -76,7 +76,7 @@ async function scanDirectory(startPath: string) {
             gte: subtractMonths(monthsSinceEdited - monthsThreshold, today),
           },
           title: {
-            containsIgnoreCase: `Freshness check for ${filePath}`,
+            containsIgnoreCase: relativeFilePath,
           },
           labels: {
             some: {
