@@ -103,27 +103,17 @@ So, always rollback the migration before deleting it.
 
 ---
 
+## More Database Commands
+
+To learn more about the Medusa CLI's database commands, refer to [this CLI reference](!resources!/medusa-cli/commands/db).
+
+---
+
 ## Data Migration Scripts
 
 In some use cases, you may need to perform data migration after updates to the database. For example, after you added a `Site` data model to the Blog Module, you want to assign all existing posts and authors to a default site. Another example is updating data stored in a third-party system.
 
 In those scenarios, you can instead create a data migration script. They are asynchronous function that the Medusa application executes once when you run the `npx medusa db:migrate command`.
-
-### How they work
-
-The Medusa project, its plugins, and the core are scoured for files in the `src/migration-scripts` folder, which are then executed. The files should export a default function. These scripts are only run once, provided they succeed.
-
-The flow is as follows:
-
-- Find files
-- Ensure the `script_migrations` table exists. If not, create it
-- Identify pending migration scripts (scripts that have not been ran previously)
-- Acquire a lock on the table
-- Begin loop, for each script
-  - Insert migration script in the database
-  - Execute script
-  - Mark script as finished
-- Release lock
 
 ### How to Create a Data Migration Script
 
@@ -180,9 +170,3 @@ Medusa will run any pending migrations and migration scripts, including your scr
 If the script runs successfully, Medusa won't run the script again.
 
 If there are errors in the script, you'll receive an error in the migration script logs. Medusa will keep running the script every time you run the migration command until it runs successfully.
-
----
-
-## More Database Commands
-
-To learn more about the Medusa CLI's database commands, refer to [this CLI reference](!resources!/medusa-cli/commands/db).
