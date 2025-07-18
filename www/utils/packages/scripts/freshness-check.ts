@@ -94,14 +94,14 @@ async function scanDirectory(startPath: string) {
         continue
       }
 
-      console.log(`Creating an issue for ${filePath}...`)
+      console.log(`Creating an issue for ${relativeFilePath}...`)
 
       //there are no issues in the past 6 months. Create an issue
       await linearClient.createIssue({
         teamId: documentationTeamId,
-        title: `Freshness check for ${filePath}`,
+        title: `Freshness check for ${relativeFilePath}`,
         labelIds: [freshnessCheckLabelId],
-        description: `File \`${filePath}\` was last edited on ${lastEditedDate.toDateString()}. Please review and update the content if necessary.`,
+        description: `File \`${relativeFilePath}\` was last edited on ${lastEditedDate.toDateString()}. Please review and update the content if necessary.`,
       })
     }
   }
