@@ -473,10 +473,6 @@ moduleIntegrationTestRunner<IPricingModuleService>({
             { context }
           )
 
-          console.log(
-            "calculatedPrice - ",
-            JSON.stringify(calculatedPrice, null, 2)
-          )
 
           expect(calculatedPrice).toEqual([
             {
