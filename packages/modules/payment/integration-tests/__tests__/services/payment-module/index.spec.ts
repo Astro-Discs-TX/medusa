@@ -39,7 +39,6 @@ moduleIntegrationTestRunner<IPaymentModuleService>({
           delete linkable[key].toJSON
         })
 
-        console.log(JSON.stringify(linkable, null, 2))
         expect(linkable).toEqual({
           paymentCollection: {
             id: {
