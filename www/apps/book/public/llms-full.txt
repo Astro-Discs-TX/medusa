@@ -19040,7 +19040,7 @@ You can add new lines using the `Shift + Enter` shortcut.
 
 ## MCP Remote Server
 
-The Medusa documentation provides a remove Model Context Protocol (MCP) server that allows you to find information in the Medusa documentation right in your IDEs or AI tools, such as Cursor.
+The Medusa documentation provides a remote Model Context Protocol (MCP) server that allows you to find information from the Medusa documentation right in your IDEs or AI tools, such as Cursor.
 
 Medusa hosts a Streamable HTTP MCP server available at `https://docs.medusajs.com/mcp`. you can add it to AI agents that support connecting to MCP servers.
 
