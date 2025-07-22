@@ -78,5 +78,9 @@ export const tutorial = [
   {
     "title": "Bundled Products",
     "path": "https://docs.medusajs.com/resources/recipes/bundled-products/examples/standard"
+  },
+  {
+    "title": "Personalized Products",
+    "path": "https://docs.medusajs.com/resources/recipes/personalized-products/example"
   }
 ]
