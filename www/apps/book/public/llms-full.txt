@@ -1524,7 +1524,7 @@ In the upcoming chapters, you'll follow step-by-step guides to build custom feat
 
 By following these guides, you'll add brands to the Medusa application that you can associate with products.
 
-To build a custom feature in Medusa, you need three main tools:
+To build a custom feature in Medusa, you need three main [Framework](https://docs.medusajs.com/learn/fundamentals/framework/index.html.md) tools:
 
 - [Module](https://docs.medusajs.com/learn/fundamentals/modules/index.html.md): a package with commerce logic for a single domain. It defines new tables to add to the database, and a class of methods to manage these tables.
 - [Workflow](https://docs.medusajs.com/learn/fundamentals/workflows/index.html.md): a tool to perform an operation comprising multiple steps with built-in rollback and retry mechanisms.
@@ -1687,10 +1687,10 @@ In the previous chapters, you've customized your Medusa application to [add bran
 
 After customizing and extending your application with new features, you may need to provide an interface for admin users to utilize these features. The Medusa Admin dashboard is extendable, allowing you to:
 
-- Insert components, called [widgets](https://docs.medusajs.com/learn/fundamentals/admin/widgets/index.html.md), on existing pages.
-- Add new pages, called [UI Routes](https://docs.medusajs.com/learn/fundamentals/admin/ui-routes/index.html.md).
+- Insert components, called [widgets](https://docs.medusajs.com/learn/fundamentals/admin/widgets/index.html.md), into existing pages. For example, you can add a widget to the product details page that shows the product's brand.
+- Add new pages, called [UI Routes](https://docs.medusajs.com/learn/fundamentals/admin/ui-routes/index.html.md). For example, you can create a new page in the dashboard that lists all brands in the store.
 
-From these customizations, you can send requests to custom API routes, allowing admin users to manage custom resources on the dashboard
+Within these customizations, you can send requests to custom API routes, allowing admin users to view and manage custom resources on the dashboard.
 
 ***
 
@@ -5195,11 +5195,11 @@ Refer to [this reference](https://docs.medusajs.com/resources/deployment/index.h
 
 # Admin Development Constraints
 
-This chapter lists some constraints of admin widgets and UI routes.
+This chapter lists some development constraints of admin widgets and UI routes.
 
 ## Arrow Functions
 
-Widget and UI route components must be created as arrow functions.
+Widget and UI route components must be created as arrow functions. Otherwise, Medusa doesn't register them correctly.
 
 ```ts highlights={arrowHighlights}
 // Don't
@@ -5217,7 +5217,7 @@ const ProductWidget = () => {
 
 ## Widget Zone
 
-A widget zone's value must be wrapped in double or single quotes. It can't be a template literal or a variable.
+A widget zone's value must be wrapped in double or single quotes. It can't be a template literal or a variable. Otherwise, Medusa doesn't register the widget correctly.
 
 ```ts highlights={zoneHighlights}
 // Don't
@@ -5358,7 +5358,7 @@ In this chapter, you'll learn about the Medusa Admin dashboard and the possible 
 
 ## What is the Medusa Admin?
 
-The Medusa Admin is an intuitive dashboard that allows merchants to manage their ecommerce store. It provides management featuers related to products, orders, customers, and more.
+The Medusa Admin is an intuitive dashboard that allows merchants to manage their ecommerce store. It provides management features related to products, orders, customers, and more.
 
 To explore more what you can do with the Medusa Admin, check out the [User Guide](https://docs.medusajs.com/user-guide/index.html.md). These user guides are designed for merchants and provide the steps to perform any task within the Medusa Admin.
 
@@ -19038,6 +19038,32 @@ You can add new lines using the `Shift + Enter` shortcut.
 
 ***
 
+## MCP Remote Server
+
+The Medusa documentation provides a remote Model Context Protocol (MCP) server that allows you to find information from the Medusa documentation right in your IDEs or AI tools, such as Cursor.
+
+Medusa hosts a Streamable HTTP MCP server available at `https://docs.medusajs.com/mcp`. you can add it to AI agents that support connecting to MCP servers.
+
+### Cursor
+
+<Link href="https://cursor.com/install-mcp?name=medusa&config=eyJ1cmwiOiJodHRwczovL2RvY3MubWVkdXNhanMuY29tL21jcCJ9" target="_blank" rel="noopener noreferrer" variant="content">Click here</Link> to add the Medusa MCP server to Cursor.
+
+To manually connect to the Medusa MCP server in Cursor, add the following to your `.cursor/mcp.json` file or Cursor settings, as explained in the [Cursor documentation](https://docs.cursor.com/context/model-context-protocol):
+
+```json
+{
+  "mcpServers": {
+    "medusa": {
+      "url": "https://docs.medusajs.com/mcp"
+    }
+  }
+}
+```
+
+### VSCode
+
+***
+
 ## Plain Text Documentation
 
 The Medusa documentation is available in plain text format, which allows LLMs and AI tools to easily parse and understand the content.
@@ -19061,7 +19087,7 @@ Medusa ships with three main tools:
 2. A [Framework](https://docs.medusajs.com/learn/fundamentals/framework/index.html.md) for building custom functionalities specific to your business, product, or industry. This includes tools for introducing custom API endpoints, business logic, and data models; building workflows and automations; and integrating with third-party services.
 3. A customizable admin dashboard for merchants to configure and operate their store.
 
-When you install Medusa, you get a fully fledged commerce platform with all the features you need to get off the ground. However, unlike other platforms, Medusa is built with customization in mind. You don't need to build hacky workarounds that are difficult to maintain and scale. Your efforts go into building features that brings your business's vision to life.
+When you install Medusa, you get a fully fledged commerce platform with all the features you need to get off the ground. However, unlike other platforms, Medusa is built with customization in mind. You don't need to build hacky workarounds that are difficult to maintain and scale. Your efforts go into building features that bring your business's vision to life.
 
 ***
 
@@ -81370,7 +81396,7 @@ Medusa’s Commerce Modules, including [Sales Channel](https://docs.medusajs.com
 - **Customer**: Use customer groups to organize your customers into different groups. Then, you can apply different prices for each group.
 - **Pricing**: Use price lists to set different prices for each B2B customer group, among other conditions.
 
-In addition, Medusa’s extensible architecture and Framework for customization allow you to scope existing and custom featuers to specific customer groups or sales channels.
+In addition, Medusa’s extensible architecture and Framework for customization allow you to scope existing and custom features to specific customer groups or sales channels.
 
 [Visionary: Frictionless B2B ecommerce with Medusa](https://medusajs.com/blog/visionary/)
 
@@ -81378,9 +81404,9 @@ In addition, Medusa’s extensible architecture and Framework for customization 
 
 ## Create B2B Sales Channel
 
-Sales channls allow you to set product availability per channel. For B2B use cases, you can create a B2B sales channel that includes only B2B products.
+Sales channels allow you to set product availability per channel. For B2B use cases, you can create a B2B sales channel that includes only B2B products.
 
-Then, on the storefront, your retrieve only the B2B products for B2B customers, which is explained more in the next section.
+Then, on the storefront, you retrieve only the B2B products for B2B customers, which is explained more in the next section.
 
 You can create a sales channel through the Medusa Admin or Admin REST APIs.
 
@@ -81495,7 +81521,7 @@ The Medusa Admin is an extensible application within your Medusa application. Yo
 
 ## Customize or Build Storefront
 
-Medusa provides a Next.js Starter Storefront to use with your application. You can customize it to for your B2B use case, such as adding a login page for B2B customers or expanding the profile page to show the company associated with the customer.
+Medusa provides a Next.js Starter Storefront to use with your application. You can customize it for your B2B use case, such as adding a login page for B2B customers or expanding the profile page to show the company associated with the customer.
 
 Alternatively, you can build your own storefront using the Medusa APIs. This headless approach gives you the flexibility to build a custom storefront without limitations on which tech stack you use, or the design of the storefront.
 
@@ -95299,7 +95325,7 @@ In that case, you can build a custom dashboard for vendors that allows them to m
 
 ## Customize or Build Storefront
 
-Medusa provides a Next.js Starter Storefront to use with your application. You can customize it to for your marketplace use case, such as showing products by vendor.
+Medusa provides a Next.js Starter Storefront to use with your application. You can customize it for your marketplace use case, such as showing products by vendor.
 
 Alternatively, you can build your own storefront using the Medusa APIs. This headless approach gives you the flexibility to build a custom storefront without limitations on which tech stack you use, or the design of the storefront.
 
@@ -99370,7 +99396,7 @@ The Medusa Admin is an extensible application within your Medusa application. Yo
 
 ## Customize or Build Storefront
 
-Medusa provides a Next.js Starter Storefront to use with your application. You can customize it to for your subscription use case, such as allowing customers to manage their subscriptions.
+Medusa provides a Next.js Starter Storefront to use with your application. You can customize it for your subscription use case, such as allowing customers to manage their subscriptions.
 
 Alternatively, you can build your own storefront using the Medusa APIs. This headless approach gives you the flexibility to build a custom storefront without limitations on which tech stack you use, or the design of the storefront.
 
