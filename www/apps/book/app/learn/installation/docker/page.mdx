@@ -299,23 +299,23 @@ Where:
 
 ## 7. Update Medusa Configuration
 
-If you try to run the Medusa server now with Docker, you'll encounter an SSL error as the server tries to connect to the PostgreSQL database.
+If you try to run the Medusa application now with Docker, you'll encounter an SSL error as the server tries to connect to the PostgreSQL database.
 
 To resolve the error, add the following configurations in `medusa-config.ts`:
 
 ```ts title="medusa-config.ts"
-import { loadEnv, defineConfig } from '@medusajs/framework/utils'
+import { loadEnv, defineConfig } from "@medusajs/framework/utils"
 
-loadEnv(process.env.NODE_ENV || 'development', process.cwd())
+loadEnv(process.env.NODE_ENV || "development", process.cwd())
 
 module.exports = defineConfig({
   projectConfig: {
     // ...
     databaseDriverOptions: {
       ssl: false,
-      sslmode: 'disable'
+      sslmode: "disable",
     },
-  }
+  },
 })
 ```
 
@@ -356,9 +356,9 @@ Otherwise, copy the `.env.template` file to `.env` and update the values as need
 
 ---
 
-## 10. Start the Medusa Server with Docker
+## 10. Start the Medusa Application with Docker
 
-All configurations are now ready. You can start the Medusa server using Docker by running the following command:
+All configurations are now ready. You can start the Medusa application using Docker by running the following command:
 
 ```bash npm2yarn
 npm run docker:up
@@ -372,10 +372,11 @@ You can check the logs to ensure everything is running smoothly with the followi
 docker compose logs -f
 ```
 
-Once you see the following message, the Medusa server is ready:
+Once you see the following message, the Medusa server and admin are ready:
 
 ```shell
-Medusa server is running on http://localhost:9000
+✔ Server is ready on port: 9000 – 3ms
+info:    Admin URL → http://localhost:9000/app
 ```
 
 You can now access the Medusa server at `http://localhost:9000` and the Medusa admin dashboard at `http://localhost:9000/app`.
@@ -404,9 +405,9 @@ You can now log in to the Medusa admin dashboard at `http://localhost:9000/app` 
 
 ---
 
-## Stop the Medusa Server Running in Docker
+## Stop the Medusa Application Running in Docker
 
-To stop the Medusa server running in Docker, run the following command:
+To stop the Medusa application running in Docker, run the following command:
 
 ```bash npm2yarn
 npm run docker:down
@@ -420,13 +421,13 @@ This doesn't delete any data in your application or its database. You can start 
 
 ## Check Logs
 
-You can check the logs of the Medusa server running in Docker using the following command:
+You can check the logs of the Medusa application running in Docker using the following command:
 
 ```bash
 docker compose logs -f medusa
 ```
 
-This command shows the logs of the `medusa` service, allowing you to see any errors or messages from the Medusa server.
+This command shows the logs of the `medusa` service, allowing you to see any errors or messages from the Medusa application.
 
 ---
 
