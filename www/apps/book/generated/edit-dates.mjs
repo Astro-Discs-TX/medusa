@@ -96,7 +96,7 @@ export const generatedEditDates = {
   "app/learn/build/page.mdx": "2025-04-25T12:34:33.914Z",
   "app/learn/deployment/general/page.mdx": "2025-06-20T08:36:05.063Z",
   "app/learn/fundamentals/workflows/multiple-step-usage/page.mdx": "2024-11-25T16:19:32.169Z",
-  "app/learn/installation/page.mdx": "2025-07-18T15:53:43.544Z",
+  "app/learn/installation/page.mdx": "2025-07-23T14:28:50.404Z",
   "app/learn/fundamentals/data-models/check-constraints/page.mdx": "2024-12-06T14:34:50.384Z",
   "app/learn/fundamentals/module-links/link/page.mdx": "2025-04-07T08:03:14.513Z",
   "app/learn/fundamentals/workflows/store-executions/page.mdx": "2025-04-17T08:29:10.166Z",
@@ -122,5 +122,6 @@ export const generatedEditDates = {
   "app/learn/fundamentals/api-routes/override/page.mdx": "2025-05-09T08:01:24.493Z",
   "app/learn/fundamentals/module-links/index/page.mdx": "2025-05-23T07:57:58.958Z",
   "app/learn/fundamentals/module-links/index-module/page.mdx": "2025-06-19T16:02:05.665Z",
-  "app/learn/introduction/build-with-llms-ai/page.mdx": "2025-07-22T16:19:11.668Z"
+  "app/learn/introduction/build-with-llms-ai/page.mdx": "2025-07-22T16:19:11.668Z",
+  "app/learn/installation/docker/page.mdx": "2025-07-23T14:30:46.691Z"
 }
