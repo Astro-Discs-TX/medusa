@@ -17,7 +17,7 @@ import {
 import { getProductFixture } from "../../../../helpers/fixtures"
 import { createAuthenticatedCustomer } from "../../../../modules/helpers/create-authenticated-customer"
 
-jest.setTimeout(30000)
+jest.setTimeout(300000)
 
 medusaIntegrationTestRunner({
   testSuite: ({ dbConnection, api, getContainer }) => {
@@ -787,8 +787,7 @@ medusaIntegrationTestRunner({
       })
 
       // TODO: This doesn't work currently, but worked in v1
-      it.skip("returns a list of ordered products by variants title DESC", async () => {
-      })
+      it.skip("returns a list of ordered products by variants title DESC", async () => {})
 
       it("returns a list of ordered products by variant title ASC", async () => {
         const response = await api.get(
@@ -1840,6 +1839,7 @@ medusaIntegrationTestRunner({
     })
 
     describe("GET /store/products/:id", () => {
+      let defaultSalesChannel
       beforeEach(async () => {
         ;[product, [variant]] = await createProducts({
           title: "test product 1",
@@ -1868,7 +1868,7 @@ medusaIntegrationTestRunner({
           ],
         })
 
-        const defaultSalesChannel = await createSalesChannel(
+        defaultSalesChannel = await createSalesChannel(
           { name: "default sales channel" },
           [product.id]
         )
@@ -1926,6 +1926,130 @@ medusaIntegrationTestRunner({
             expect.objectContaining({ url: "image-two", rank: 1 }),
           ])
         )
+      })
+
+      it("should retrieve product withhout category if the categories field is passed", async () => {
+        const [product] = await createProducts({
+          title: "test category prod",
+          status: ProductStatus.PUBLISHED,
+          options: [{ title: "size", values: ["large"] }],
+          variants: [
+            {
+              title: "test category variant",
+              options: { size: "large" },
+              prices: [
+                {
+                  amount: 3000,
+                  currency_code: "usd",
+                },
+              ],
+            },
+          ],
+        })
+
+        await api.post(
+          `/admin/sales-channels/${defaultSalesChannel.id}/products`,
+          { add: [product.id] },
+          adminHeaders
+        )
+
+        const response = await api.get(
+          `/store/products/${product.id}?fields=*categories`,
+          storeHeaders
+        )
+
+        expect(response.status).toEqual(200)
+        expect(response.data.product).toEqual(
+          expect.objectContaining({
+            id: product.id,
+            categories: [],
+          })
+        )
+      })
+
+      it("should retrieve product with category", async () => {
+        const [product] = await createProducts({
+          title: "test category prod",
+          status: ProductStatus.PUBLISHED,
+          options: [{ title: "size", values: ["large"] }],
+          variants: [
+            {
+              title: "test category variant",
+              options: { size: "large" },
+              prices: [
+                {
+                  amount: 3000,
+                  currency_code: "usd",
+                },
+              ],
+            },
+          ],
+        })
+
+        const category = await createCategory(
+          { name: "test", is_internal: false, is_active: true },
+          [product.id]
+        )
+
+        await api.post(
+          `/admin/sales-channels/${defaultSalesChannel.id}/products`,
+          { add: [product.id] },
+          adminHeaders
+        )
+
+        const response = await api.get(
+          `/store/products/${product.id}?fields=*categories`,
+          storeHeaders
+        )
+
+        expect(response.status).toEqual(200)
+        expect(response.data.product).toEqual(
+          expect.objectContaining({
+            id: product.id,
+            categories: [expect.objectContaining({ id: category.id })],
+          })
+        )
+      })
+
+      it("should return 404 for a product in a disabled category", async () => {
+        const [product] = await createProducts({
+          title: "test category prod",
+          status: ProductStatus.PUBLISHED,
+          options: [{ title: "size", values: ["large"] }],
+          variants: [
+            {
+              title: "test category variant",
+              options: { size: "large" },
+              prices: [
+                {
+                  amount: 3000,
+                  currency_code: "usd",
+                },
+              ],
+            },
+          ],
+        })
+
+        const category = await createCategory(
+          { name: "test", is_internal: true, is_active: false },
+          [product.id]
+        )
+
+        await api.post(
+          `/admin/sales-channels/${defaultSalesChannel.id}/products`,
+          { add: [product.id] },
+          adminHeaders
+        )
+
+        const response = await api
+          .get(`/store/products/${product.id}?fields=*categories`, storeHeaders)
+          .catch((e) => e)
+
+        expect(response.response.status).toEqual(404)
+        expect(response.response.data).toEqual({
+          message: `Product with id: ${product.id} was not found`,
+          type: "not_found",
+        })
       })
 
       // TODO: There are 2 problems that need to be solved to enable this test

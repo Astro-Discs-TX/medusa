@@ -97,7 +97,9 @@ export const storeProductRoutesMiddlewares: MiddlewareRoute[] = [
             return
           }
 
-          return { is_internal: false, is_active: true }
+          return {
+            $or: [{ id: null }, { is_internal: false, is_active: true }],
+          }
         },
       }),
       normalizeDataForContext(),
