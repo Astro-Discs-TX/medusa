@@ -282,9 +282,8 @@ class MedusaTestRunner {
   public async afterEach(): Promise<void> {
     try {
       await waitWorkflowExecutions(this.globalContainer as MedusaContainer)
-      await this.dbUtils.teardown({ schema: this.schema })
     } catch (error) {
-      logger.error("Error tearing down database:", error?.message)
+      logger.error("Error running after each:", error?.message)
       throw error
     }
   }
