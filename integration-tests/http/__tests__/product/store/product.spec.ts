@@ -2011,7 +2011,7 @@ medusaIntegrationTestRunner({
         )
       })
 
-      it("should return 404 for a product in a disabled category", async () => {
+      it("should return product without internal category", async () => {
         const [product] = await createProducts({
           title: "test category prod",
           status: ProductStatus.PUBLISHED,
@@ -2031,7 +2031,7 @@ medusaIntegrationTestRunner({
         })
 
         const category = await createCategory(
-          { name: "test", is_internal: true, is_active: false },
+          { name: "test", is_internal: true, is_active: true },
           [product.id]
         )
 
@@ -2041,15 +2041,69 @@ medusaIntegrationTestRunner({
           adminHeaders
         )
 
-        const response = await api
-          .get(`/store/products/${product.id}?fields=*categories`, storeHeaders)
-          .catch((e) => e)
+        const response = await api.get(
+          `/store/products/${product.id}?fields=*categories`,
+          storeHeaders
+        )
 
-        expect(response.response.status).toEqual(404)
-        expect(response.response.data).toEqual({
-          message: `Product with id: ${product.id} was not found`,
-          type: "not_found",
+        expect(response.status).toEqual(200)
+        expect(response.data.product).toEqual(
+          expect.objectContaining({
+            id: product.id,
+            categories: [],
+          })
+        )
+      })
+
+      it("should return product without internal category (multicategory example)", async () => {
+        const [product] = await createProducts({
+          title: "test category prod",
+          status: ProductStatus.PUBLISHED,
+          options: [{ title: "size", values: ["large"] }],
+          variants: [
+            {
+              title: "test category variant",
+              options: { size: "large" },
+              prices: [
+                {
+                  amount: 3000,
+                  currency_code: "usd",
+                },
+              ],
+            },
+          ],
         })
+
+        const categoryInternal = await createCategory(
+          { name: "test", is_internal: true, is_active: true },
+          [product.id]
+        )
+
+        const categoryPublic = await createCategory(
+          { name: "test_public", is_internal: false, is_active: true },
+          [product.id]
+        )
+
+        await api.post(
+          `/admin/sales-channels/${defaultSalesChannel.id}/products`,
+          { add: [product.id] },
+          adminHeaders
+        )
+
+        const response = await api.get(
+          `/store/products/${product.id}?fields=*categories`,
+          storeHeaders
+        )
+
+        expect(response.status).toEqual(200)
+        expect(response.data.product.categories.length).toEqual(1)
+
+        expect(response.data.product).toEqual(
+          expect.objectContaining({
+            id: product.id,
+            categories: [expect.objectContaining({ id: categoryPublic.id })],
+          })
+        )
       })
 
       // TODO: There are 2 problems that need to be solved to enable this test
