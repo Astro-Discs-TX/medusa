@@ -17,6 +17,13 @@ export const sidebars = [
             type: "link",
             path: "/learn/installation",
             title: "Installation",
+            children: [
+              {
+                type: "link",
+                path: "/learn/installation/docker",
+                title: "Install with Docker",
+              },
+            ],
           },
           {
             type: "link",
@@ -586,13 +593,6 @@ export const sidebars = [
             type: "link",
             path: "/learn/debugging-and-testing/testing-tools/modules-tests",
             title: "Modules Tests",
-            children: [
-              {
-                type: "link",
-                path: "/learn/debugging-and-testing/testing-tools/modules-tests/module-example",
-                title: "Example",
-              },
-            ],
           },
           {
             type: "link",
