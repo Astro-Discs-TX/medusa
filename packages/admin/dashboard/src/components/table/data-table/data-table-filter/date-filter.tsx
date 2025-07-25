@@ -319,7 +319,7 @@ const getDateFromComparison = (
 
   if (key === "$lte") {
     // offset to the end of the day so the $lte operator is inclusive of the day
-    compareDate.setTime(compareDate.getTime() + 24 * 60 * 60 * 1000)
+    compareDate.setTime(compareDate.getTime() - 24 * 60 * 60 * 1000)
   }
 
   return compareDate
