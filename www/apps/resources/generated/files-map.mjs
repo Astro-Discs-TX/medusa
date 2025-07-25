@@ -760,6 +760,10 @@ export const filesMap = [
     "pathname": "/how-to-tutorials/tutorials/phone-auth"
   },
   {
+    "filePath": "/www/apps/resources/app/how-to-tutorials/tutorials/preorder/page.mdx",
+    "pathname": "/how-to-tutorials/tutorials/preorder"
+  },
+  {
     "filePath": "/www/apps/resources/app/how-to-tutorials/tutorials/product-reviews/page.mdx",
     "pathname": "/how-to-tutorials/tutorials/product-reviews"
   },
@@ -1058,6 +1062,10 @@ export const filesMap = [
   {
     "filePath": "/www/apps/resources/app/recipes/page.mdx",
     "pathname": "/recipes"
+  },
+  {
+    "filePath": "/www/apps/resources/app/recipes/personalized-products/example/page.mdx",
+    "pathname": "/recipes/personalized-products/example"
   },
   {
     "filePath": "/www/apps/resources/app/recipes/personalized-products/page.mdx",
@@ -12420,6 +12428,10 @@ export const filesMap = [
     "pathname": "/references/js_sdk/admin/Notification/properties/js_sdk.admin.Notification.client"
   },
   {
+    "filePath": "/www/apps/resources/references/js_sdk/admin/Order/methods/js_sdk.admin.Order.archive/page.mdx",
+    "pathname": "/references/js_sdk/admin/Order/methods/js_sdk.admin.Order.archive"
+  },
+  {
     "filePath": "/www/apps/resources/references/js_sdk/admin/Order/methods/js_sdk.admin.Order.cancel/page.mdx",
     "pathname": "/references/js_sdk/admin/Order/methods/js_sdk.admin.Order.cancel"
   },
@@ -12430,6 +12442,10 @@ export const filesMap = [
   {
     "filePath": "/www/apps/resources/references/js_sdk/admin/Order/methods/js_sdk.admin.Order.cancelTransfer/page.mdx",
     "pathname": "/references/js_sdk/admin/Order/methods/js_sdk.admin.Order.cancelTransfer"
+  },
+  {
+    "filePath": "/www/apps/resources/references/js_sdk/admin/Order/methods/js_sdk.admin.Order.complete/page.mdx",
+    "pathname": "/references/js_sdk/admin/Order/methods/js_sdk.admin.Order.complete"
   },
   {
     "filePath": "/www/apps/resources/references/js_sdk/admin/Order/methods/js_sdk.admin.Order.createCreditLine/page.mdx",
