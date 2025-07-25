@@ -267,7 +267,7 @@ export const handle = {
 }
 ```
 
-The `breadcrumb`'s value is a function that returns the breadcrumb label.
+The `breadcrumb`'s value is a function that returns the breadcrumb label as a string, or a React JSX element.
 
 ### Set Breadcrumbs for Nested UI Routes
 
@@ -278,17 +278,17 @@ For example, if you have the following UI route at `src/admin/routes/custom/nest
 ```tsx title="src/admin/routes/custom/nested/page.tsx" highlights={[["16", "breadcrumb", "Set the breadcrumbs of the nested UI route."]]}
 import { Container, Heading } from "@medusajs/ui"
 
-const CustomPage = () => {
+const NestedCustomPage = () => {
   return (
     <Container className="divide-y p-0">
       <div className="flex items-center justify-between px-6 py-4">
-        <Heading level="h2">This is my custom route</Heading>
+        <Heading level="h2">This is my nested custom route</Heading>
       </div>
     </Container>
   )
 }
 
-export default CustomPage
+export default NestedCustomPage
 
 export const handle = {
   breadcrumb: () => "Nested Custom Route",
@@ -296,6 +296,76 @@ export const handle = {
 ```
 
 Then, when you open the nested route at `http://localhost:9000/app/custom/nested`, you'll see the breadcrumbs as `Custom Route > Nested Custom Route`. Each breadcrumb is clickable, allowing users to navigate back to the parent route.
+
+### Set Breadcrumbs Dynamically
+
+In some use cases, you may want to show a dynamic breadcrumb for a UI route. For example, if you have a UI route that displays a brand's details, you can set the breadcrumb to show the brand's name dynamically.
+
+To do that, you can:
+
+1. Define and export a `loader` function in the UI route file that fetches the data needed for the breadcrumb.
+2. Receive the data in the `breadcrumb` function and return the dynamic label.
+
+For example, create a UI route at `src/admin/routes/brands/[id]/page.tsx` with the following content:
+
+export const dynamicBreadcrumbsHighlights = [
+  ["25", "loader", "Define a loader function to fetch the brand data."],
+  ["35", "breadcrumb", "Set the breadcrumb using the fetched brand data."],
+  ["36", "data", "The data returned by the loader function is passed as props to the breadcrumb function."],
+]
+
+```tsx title="src/admin/routes/brands/[id]/page.tsx" highlights={dynamicBreadcrumbsHighlights}
+import { Container, Heading } from "@medusajs/ui"
+import { LoaderFunctionArgs, UIMatch, useLoaderData } from "react-router-dom"
+import { sdk } from "../../../lib/sdk"
+
+type BrandResponse = {
+  brand: {
+    name: string
+  }
+}
+
+const BrandPage = () => {
+  const { brand } = useLoaderData() as Awaited<BrandResponse>
+
+  return (
+    <Container className="divide-y p-0">
+      <div className="flex items-center justify-between px-6 py-4">
+        <Heading level="h2">{brand.name}</Heading>
+      </div>
+    </Container>
+  )
+}
+
+export default BrandPage
+
+export async function loader({ params }: LoaderFunctionArgs) {
+  const { id } = params
+  const { brand } = await sdk.client.fetch<BrandResponse>(`/admin/brands/${id}`)
+
+  return {
+    brand,
+  }
+}
+
+export const handle = {
+  breadcrumb: (
+    { data }: UIMatch<BrandResponse>
+  ) => data.brand.name || "Brand",
+}
+```
+
+In the `loader` function, you retrieve the brands from a custom API route and return them.
+
+Then, in the `handle.breadcrumb` function, you receive `data` prop containing the brand information returned by the `loader` function. You can use this data to return a dynamic breadcrumb label.
+
+When you open the UI route at `http://localhost:9000/app/brands/123`, the breadcrumb will show the brand's name, such as `Acme`.
+
+<Note title="Tip">
+
+You also use the `useLoaderData` hook to access the data returned by the `loader` function in the UI route component. Learn more in the [Routing Customizations](../routing/page.mdx#fetch-data-with-route-loaders) chapter.
+
+</Note>
 
 ---
 
