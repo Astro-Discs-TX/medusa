@@ -1,5 +1,14 @@
 # @medusajs/core-flows
 
+## 2.8.9
+
+### Patch Changes
+
+- [#13037](https://github.com/medusajs/medusa/pull/13037) [`9fb5baa912674b6d35492b147e0f22d8f8330a24`](https://github.com/medusajs/medusa/commit/9fb5baa912674b6d35492b147e0f22d8f8330a24) Thanks [@fPolic](https://github.com/fPolic)! - fix(core-flows): guest email change to another guest email
+
+- Updated dependencies []:
+  - @medusajs/framework@2.8.9
+
 ## 2.8.8
 
 ### Patch Changes
