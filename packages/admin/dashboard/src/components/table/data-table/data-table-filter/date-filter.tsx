@@ -69,7 +69,12 @@ export const DateFilter = ({
 
   const handleCustomDateChange = (value: Date | null, pos: "start" | "end") => {
     const key = pos === "start" ? "$gte" : "$lte"
-    const dateValue = value ? value.toISOString() : undefined
+
+    const dateValue = value
+      ? key === "$lte"
+        ? new Date(value.getTime() + 24 * 60 * 60 * 1000).toISOString() // offset to the end of the day so the $lte operator is inclusive of the day
+        : value.toISOString()
+      : undefined
 
     selectedParams.add(
       JSON.stringify({
@@ -306,5 +311,16 @@ const getDateFromComparison = (
   comparison: DateComparisonOperator | null,
   key: "$gte" | "$lte"
 ) => {
-  return comparison?.[key] ? new Date(comparison[key] as string) : undefined
+  if (!comparison?.[key]) {
+    return undefined
+  }
+
+  const compareDate = new Date(comparison[key] as string)
+
+  if (key === "$lte") {
+    // offset to the end of the day so the $lte operator is inclusive of the day
+    compareDate.setTime(compareDate.getTime() + 24 * 60 * 60 * 1000)
+  }
+
+  return compareDate
 }
