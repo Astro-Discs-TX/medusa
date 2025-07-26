@@ -42,6 +42,7 @@
     "typescript": "^4.4.4"
   },
   "scripts": {
+    "start": "medusa start",
     "watch": "tsc --build --watch",
     "prepublishOnly": "cross-env NODE_ENV=production tsc --build",
     "build": "rimraf dist && tsc --build",
