@@ -43,7 +43,7 @@
   },
   "scripts": {
     "start": "medusa start",
-    "migrate": "medusa migrations",
+    "migrate": "medusa migrations run",
     "watch": "tsc --build --watch",
     "prepublishOnly": "cross-env NODE_ENV=production tsc --build",
     "build": "rimraf dist && tsc --build",
