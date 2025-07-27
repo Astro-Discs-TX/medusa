@@ -37,6 +37,7 @@
   "author": "Sebastian Rindom",
   "license": "MIT",
   "scripts": {
+    "start": "medusa start",
     "watch": "tsc --build --watch",
     "build": "rimraf dist && tsc --build",
     "serve": "node dist/app.js",
